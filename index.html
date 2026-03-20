@@ -1,363 +1,366 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>EdgeBreak Intelligence</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>EdgeBreak Intelligence</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      background: radial-gradient(circle at top, #0f1620, #05080c);
-      color: #e6edf3;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
-    }
+<style>
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #0f1620, #05080c);
+  color: #e6edf3;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+}
 
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 60px 20px;
-    }
+/* CONTAINER */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 60px 20px;
+}
 
-    /* HEADER */
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      margin-bottom: 50px;
-    }
+/* HEADER */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 50px;
+}
 
-    .logo {
-      height: 80px;
-      filter: drop-shadow(0 0 10px rgba(0,255,156,0.6));
-    }
+.logo {
+  height: 90px;
+  filter: drop-shadow(0 0 12px rgba(0,255,156,0.7));
+}
 
-    .header h1 {
-      margin: 0;
-      font-size: 48px;
-    }
+.header h1 {
+  margin: 0;
+  font-size: 48px;
+}
 
-    .tagline {
-      color: #00ff9c;
-      font-size: 16px;
-      margin-top: 5px;
-    }
+.tagline {
+  color: #00ff9c;
+  font-size: 16px;
+  margin-top: 5px;
+}
 
-    /* CARD */
-    .card {
-      background: rgba(17, 24, 33, 0.85);
-      border: 1px solid #1f2a36;
-      border-radius: 14px;
-      padding: 25px;
-      margin-bottom: 30px;
-      backdrop-filter: blur(10px);
-    }
+/* CARD */
+.card {
+  background: rgba(17, 24, 33, 0.85);
+  border: 1px solid #1f2a36;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 40px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
 
-    h2 {
-      margin-bottom: 15px;
-    }
+h2 {
+  margin-bottom: 15px;
+}
 
-    .status {
-      font-size: 18px;
-      font-weight: bold;
-    }
+/* MARKET */
+.status {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
 
-    .weak { color: #ff4d4d; }
+.weak { color: #ff4d4d; }
 
-    .subtle {
-      color: #9da7b3;
-      margin-top: 10px;
-      line-height: 1.6;
-    }
+/* TEXT */
+.subtle {
+  color: #9da7b3;
+  margin-top: 10px;
+  line-height: 1.6;
+}
 
-    /* SIGNATURE GRID */
-    .trade-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
+/* SIGNATURE SECTION */
+.trade-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  margin-top: 30px;
+}
 
-    .trade-card {
-      background: #020617;
-      padding: 15px;
-      border-radius: 10px;
-      border-left: 4px solid #00ff9c;
-    }
+/* TRADE CARD */
+.trade-card {
+  background: #020617;
+  padding: 25px;
+  border-radius: 16px;
+  border-left: 4px solid #00ff9c;
+  max-width: 900px;
+  margin: auto;
+  transition: transform 0.2s ease;
+}
 
-    .trade-header {
-      display: flex;
-      justify-content: space-between;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
+.trade-card:hover {
+  transform: translateY(-5px);
+}
 
-    .gain {
-      color: #00ff9c;
-    }
+/* HEADER */
+.trade-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
 
-    .trade-details {
-      font-size: 12px;
-      color: #9da7b3;
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-    }
+.gain {
+  color: #00ff9c;
+}
 
-    .chart-img {
-      width: 100%;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
+/* DETAILS */
+.trade-details {
+  font-size: 13px;
+  color: #9da7b3;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
 
-    .chart-note {
-      color: #6b7685;
-      font-size: 12px;
-      margin-top: 10px;
-      margin-bottom: 20px;
-    }
+/* IMAGE (FIXED PROPERLY) */
+.chart-img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-top: 15px;
+  display: block;
+}
 
-    /* TABLE */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
+/* OPTIONAL ZOOM ON HOVER */
+.chart-img:hover {
+  transform: scale(1.02);
+  transition: 0.3s;
+}
 
-    th, td {
-      padding: 14px;
-    }
+/* NOTE */
+.chart-note {
+  color: #6b7685;
+  font-size: 12px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
 
-    th {
-      border-bottom: 1px solid #1f2a36;
-      color: #9da7b3;
-    }
+/* TABLE */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
 
-    tr:hover {
-      background: rgba(255,255,255,0.03);
-    }
+th, td {
+  padding: 14px;
+}
 
-    .badge {
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: bold;
-    }
+th {
+  border-bottom: 1px solid #1f2a36;
+  color: #9da7b3;
+}
 
-    .Aplus { background: #00ff9c; color: black; }
-    .A { background: #66ffcc; color: black; }
-    .B { background: #ffaa00; color: black; }
+tr:hover {
+  background: rgba(255,255,255,0.03);
+}
 
-    .blur {
-      filter: blur(6px);
-    }
+.badge {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+}
 
-    /* CTA */
-    .cta {
-      margin-top: 25px;
-      padding: 14px 24px;
-      background: linear-gradient(90deg, #00ff9c, #00cc88);
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      border: none;
-    }
+.Aplus { background: #00ff9c; color: black; }
+.A { background: #66ffcc; color: black; }
+.B { background: #ffaa00; color: black; }
 
-    .email-box {
-      margin-top: 20px;
-      display: none;
-    }
+.blur {
+  filter: blur(6px);
+}
 
-    input {
-      padding: 12px;
-      border-radius: 6px;
-      border: none;
-      margin-right: 10px;
-    }
+/* CTA */
+.cta {
+  margin-top: 25px;
+  padding: 14px 24px;
+  background: linear-gradient(90deg, #00ff9c, #00cc88);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  border: none;
+  transition: 0.2s;
+}
 
-    .submit-btn {
-      padding: 12px 18px;
-      background: #00ff9c;
-      border-radius: 6px;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.cta:hover {
+  transform: scale(1.05);
+}
 
-    .success {
-      margin-top: 15px;
-      color: #00ff9c;
-      display: none;
-    }
+/* EMAIL */
+.email-box {
+  margin-top: 20px;
+  display: none;
+}
 
-    .footer {
-      text-align: center;
-      color: #666;
-      margin-top: 50px;
-    }
+input {
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  margin-right: 10px;
+}
 
-  </style>
+.submit-btn {
+  padding: 12px 18px;
+  background: #00ff9c;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.success {
+  margin-top: 15px;
+  color: #00ff9c;
+  display: none;
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  color: #666;
+  margin-top: 60px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="container">
 
-  <!-- HEADER -->
-  <div class="header">
-    <img src="logo.png" class="logo">
-    <div>
-      <h1>EdgeBreak</h1>
-      <div class="tagline">Measure the move. Not the hype.</div>
-    </div>
+<!-- HEADER -->
+<div class="header">
+  <img src="logo.png" class="logo">
+  <div>
+    <h1>EdgeBreak</h1>
+    <div class="tagline">Measure the move. Not the hype.</div>
   </div>
+</div>
 
-  <!-- PITCH -->
-  <div class="card">
-    <h2>🚀 Breakout Intelligence, Engineered</h2>
+<!-- PITCH -->
+<div class="card">
+  <h2>🚀 Breakout Intelligence, Engineered</h2>
+  <p class="subtle">EdgeBreak is a proprietary breakout intelligence platform built to detect high-quality market opportunities with precision.</p>
+  <p class="subtle">Our state-of-the-art search engine continuously scans thousands of securities, identifying structural pressure, breakout formations, and momentum shifts as they emerge.</p>
+  <p class="subtle">Every signal is ranked and tracked post-breakout — providing a clear view of performance, not just potential.</p>
+  <p class="subtle">In a market driven by noise, EdgeBreak delivers measured insight.</p>
+</div>
 
-    <p class="subtle">
-      EdgeBreak is a proprietary breakout intelligence platform built to detect high-quality market opportunities with precision.
-    </p>
+<!-- MARKET -->
+<div class="card">
+  <h2>🧠 Market Analysis</h2>
+  <div class="status weak">🔴 Weak Market — Low breakout follow-through</div>
+  <p class="subtle">Breakouts are currently failing to hold above key levels. Momentum is weak and continuation is limited.</p>
+  <p class="subtle"><strong>We wait for strength — not hope.</strong></p>
+</div>
 
-    <p class="subtle">
-      Our state-of-the-art search engine continuously scans thousands of securities, identifying structural pressure, breakout formations, and momentum shifts as they emerge.
-    </p>
+<!-- SIGNATURE MOVES -->
+<div class="card">
+  <h2>🚀 Signature Breakout Moves</h2>
 
-    <p class="subtle">
-      Every signal is ranked and tracked post-breakout — providing a clear view of performance, not just potential.
-    </p>
+  <p class="chart-note">Visualised using proprietary breakout structure analysis.</p>
 
-    <p class="subtle">
-      In a market driven by noise, EdgeBreak delivers measured insight.
-    </p>
-  </div>
+  <div class="trade-grid">
 
-  <!-- MARKET -->
-  <div class="card">
-    <h2>🧠 Market Analysis</h2>
-
-    <div class="status weak">
-      🔴 Weak Market — Low breakout follow-through
-    </div>
-
-    <p class="subtle">
-      Current conditions reflect a lack of sustained buying pressure. Breakouts are struggling to hold above key levels, and continuation is limited.
-    </p>
-
-    <p class="subtle">
-      This is a low-quality environment for momentum.<br><br>
-      <strong>We wait for strength — not hope.</strong>
-    </p>
-  </div>
-
-  <!-- SIGNATURE MOVES -->
-  <div class="card">
-    <h2>🚀 Signature Breakout Moves</h2>
-
-    <p class="subtle">
-      These moves were identified using the same breakout structure EdgeBreak scans for — highlighting how powerful clean setups can be in the right conditions.
-    </p>
-
-    <p class="chart-note">
-      Visualised using institutional-grade charting tools.
-    </p>
-
-    <div class="trade-grid">
-
-      <div class="trade-card">
-        <div class="trade-header">
-          <span>SMCI</span>
-          <span class="gain">+68%</span>
-        </div>
-        <div class="trade-details">
-          <span>A+ Structure</span>
-          <span>9 Days</span>
-        </div>
-        <p>Compression breakout followed by aggressive expansion.</p>
-        <img src="smci-chart.png" class="chart-img">
+    <div class="trade-card">
+      <div class="trade-header">
+        <span>SMCI</span>
+        <span class="gain">+68%</span>
       </div>
-
-      <div class="trade-card">
-        <div class="trade-header">
-          <span>NVDA</span>
-          <span class="gain">+42%</span>
-        </div>
-        <div class="trade-details">
-          <span>A+ Structure</span>
-          <span>7 Days</span>
-        </div>
-        <p>Clean breakout with sustained institutional buying.</p>
-        <img src="nvda-chart.png" class="chart-img">
+      <div class="trade-details">
+        <span>A+ Structure</span>
+        <span>9 Days</span>
       </div>
+      <p>Compression breakout followed by aggressive expansion.</p>
+      <img src="smci-chart.png" class="chart-img">
+    </div>
 
-      <div class="trade-card">
-        <div class="trade-header">
-          <span>ARM</span>
-          <span class="gain">+55%</span>
-        </div>
-        <div class="trade-details">
-          <span>A Structure</span>
-          <span>8 Days</span>
-        </div>
-        <p>Strong continuation after breakout from consolidation.</p>
-        <img src="arm-chart.png" class="chart-img">
+    <div class="trade-card">
+      <div class="trade-header">
+        <span>NVDA</span>
+        <span class="gain">+42%</span>
       </div>
+      <div class="trade-details">
+        <span>A+ Structure</span>
+        <span>7 Days</span>
+      </div>
+      <p>Clean breakout with sustained institutional buying.</p>
+      <img src="nvda-chart.png" class="chart-img">
+    </div>
 
+    <div class="trade-card">
+      <div class="trade-header">
+        <span>ARM</span>
+        <span class="gain">+55%</span>
+      </div>
+      <div class="trade-details">
+        <span>A Structure</span>
+        <span>8 Days</span>
+      </div>
+      <p>Strong continuation after breakout from consolidation.</p>
+      <img src="arm-chart.png" class="chart-img">
     </div>
 
   </div>
+</div>
 
-  <!-- SIGNALS -->
-  <div class="card">
-    <h2>📊 Sample Breakout Signals</h2>
+<!-- SIGNALS -->
+<div class="card">
+  <h2>📊 Sample Breakout Signals</h2>
 
-    <table>
-      <tr>
-        <th>Symbol</th>
-        <th>Grade</th>
-        <th>Break %</th>
-        <th>Status</th>
-      </tr>
+  <table>
+    <tr>
+      <th>Symbol</th>
+      <th>Grade</th>
+      <th>Break %</th>
+      <th>Status</th>
+    </tr>
 
-      <tr>
-        <td><span class="blur">NN</span></td>
-        <td><span class="badge Aplus">A+</span></td>
-        <td>3.16%</td>
-        <td style="color:#00ff9c;">🚀 Strong Move</td>
-      </tr>
+    <tr>
+      <td><span class="blur">NN</span></td>
+      <td><span class="badge Aplus">A+</span></td>
+      <td>3.16%</td>
+      <td style="color:#00ff9c;">🚀 Strong Move</td>
+    </tr>
 
-      <tr>
-        <td><span class="blur">OSS</span></td>
-        <td><span class="badge A">A</span></td>
-        <td>2.27%</td>
-        <td style="color:#ffaa00;">⏳ Tracking</td>
-      </tr>
+    <tr>
+      <td><span class="blur">OSS</span></td>
+      <td><span class="badge A">A</span></td>
+      <td>2.27%</td>
+      <td style="color:#ffaa00;">⏳ Tracking</td>
+    </tr>
 
-      <tr>
-        <td><span class="blur">ADTN</span></td>
-        <td><span class="badge B">B</span></td>
-        <td>5.50%</td>
-        <td style="color:#ff4d4d;">❌ Failed</td>
-      </tr>
-    </table>
+    <tr>
+      <td><span class="blur">ADTN</span></td>
+      <td><span class="badge B">B</span></td>
+      <td>5.50%</td>
+      <td style="color:#ff4d4d;">❌ Failed</td>
+    </tr>
+  </table>
 
-    <button class="cta" onclick="showForm()">🔒 Unlock Full Access</button>
+  <button class="cta" onclick="showForm()">🔒 Unlock Full Access</button>
 
-    <div class="email-box" id="emailBox">
-      <input type="email" placeholder="Enter your email">
-      <button class="submit-btn" onclick="submitEmail()">Join</button>
-    </div>
-
-    <div class="success" id="successMsg">
-      ✅ You're on the list — early access coming soon
-    </div>
-
+  <div class="email-box" id="emailBox">
+    <input type="email" placeholder="Enter your email">
+    <button class="submit-btn" onclick="submitEmail()">Join</button>
   </div>
 
-  <div class="footer">
-    EdgeBreak Intelligence • Pre-launch
+  <div class="success" id="successMsg">
+    ✅ You're on the list — early access coming soon
   </div>
+</div>
+
+<div class="footer">
+  EdgeBreak Intelligence • Pre-launch
+</div>
 
 </div>
 
