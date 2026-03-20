@@ -8,34 +8,43 @@
   <style>
     body {
       margin: 0;
-      background: #0b0f14;
+      background: radial-gradient(circle at top, #0f1620, #05080c);
       color: #e6edf3;
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
     }
 
     .container {
       max-width: 1100px;
       margin: auto;
-      padding: 40px 20px;
+      padding: 60px 20px;
     }
 
     h1 {
-      font-size: 42px;
+      font-size: 48px;
       margin-bottom: 10px;
+      letter-spacing: -1px;
     }
 
     .tagline {
       color: #00ff9c;
       font-size: 18px;
-      margin-bottom: 40px;
+      margin-bottom: 50px;
+      opacity: 0.9;
     }
 
     .card {
-      background: #111821;
+      background: rgba(17, 24, 33, 0.85);
       border: 1px solid #1f2a36;
-      border-radius: 10px;
-      padding: 20px;
+      border-radius: 14px;
+      padding: 25px;
       margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 22px;
     }
 
     .status {
@@ -50,27 +59,33 @@
     table {
       width: 100%;
       border-collapse: collapse;
+      margin-top: 15px;
     }
 
     th, td {
-      padding: 12px;
+      padding: 14px;
       text-align: left;
     }
 
     th {
       border-bottom: 1px solid #1f2a36;
       color: #9da7b3;
-      font-weight: normal;
+      font-weight: 500;
+    }
+
+    tr {
+      transition: 0.2s;
     }
 
     tr:hover {
-      background: #0f1620;
+      background: rgba(255,255,255,0.03);
     }
 
     .badge {
-      padding: 4px 8px;
-      border-radius: 6px;
+      padding: 6px 10px;
+      border-radius: 8px;
       font-size: 12px;
+      font-weight: bold;
     }
 
     .Aplus { background: #00ff9c; color: #000; }
@@ -82,23 +97,36 @@
       user-select: none;
     }
 
-    .button {
-      margin-top: 20px;
-      padding: 12px 20px;
-      background: #00ff9c;
+    .cta {
+      margin-top: 25px;
+      padding: 14px 24px;
+      background: linear-gradient(90deg, #00ff9c, #00cc88);
       color: black;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: bold;
+      font-size: 15px;
+      transition: 0.2s;
+    }
+
+    .cta:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(0,255,156,0.4);
+    }
+
+    .subtle {
+      color: #9da7b3;
+      margin-top: 10px;
     }
 
     .footer {
       text-align: center;
       color: #666;
-      margin-top: 40px;
-      font-size: 14px;
+      margin-top: 50px;
+      font-size: 13px;
     }
+
   </style>
 </head>
 
@@ -110,25 +138,25 @@
   <h1>🔥 EdgeBreak</h1>
   <div class="tagline">Measure the move. Not the hype.</div>
 
-  <!-- MARKET ANALYSIS -->
+  <!-- MARKET -->
   <div class="card">
     <h2>🧠 Market Analysis</h2>
 
-    <p class="weak">
-      🔴 Weak Market — Breakouts are struggling. Few winners, high failure rate.
-    </p>
+    <div class="status weak">
+      🔴 Weak Market — Low breakout follow-through
+    </div>
 
-    <p style="color:#9da7b3;">
-      EdgeBreak identifies the rare setups that continue to perform in difficult conditions.
+    <p class="subtle">
+      Most breakouts are failing. EdgeBreak highlights the rare setups still performing.
     </p>
   </div>
 
-  <!-- SAMPLE OUTPUT -->
+  <!-- TABLE -->
   <div class="card">
     <h2>📊 Sample Breakout Signals</h2>
 
-    <p style="color:#9da7b3;">
-      Sample output — full signals and top-ranked setups are available to members only.
+    <p class="subtle">
+      Preview signals shown — full access reserved for members.
     </p>
 
     <table>
@@ -162,16 +190,12 @@
 
     </table>
 
-    <!-- POSITIONING -->
-    <p style="color:#9da7b3; margin-top:20px;">
-      Unlock full access to EdgeBreak’s breakout signals and curated watchlists.
+    <p class="subtle">
+      Unlock full breakout signals, high-conviction setups, and curated watchlists.
     </p>
 
-    <p style="color:#9da7b3;">
-      Preview signals are provided for transparency — our highest-conviction opportunities are available exclusively to members.
-    </p>
+    <button class="cta">🔒 Unlock Full Access</button>
 
-    <button class="button">🔒 Unlock Full Access</button>
   </div>
 
   <!-- FOOTER -->
