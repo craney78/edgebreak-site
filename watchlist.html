@@ -20,6 +20,23 @@ body {
   padding: 20px;
 }
 
+h1 {
+  margin-bottom: 10px;
+}
+
+/* BACK LINK */
+.back {
+  display: inline-block;
+  margin-bottom: 15px;
+  color: #8b949e;
+  text-decoration: none;
+}
+
+.back:hover {
+  text-decoration: underline;
+}
+
+/* MARKET BAR */
 .market-bar {
   padding: 15px;
   border-radius: 10px;
@@ -29,6 +46,7 @@ body {
 
 .market-weak { background: #2a1010; color: #ff6b6b; }
 
+/* TABLE */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -41,25 +59,50 @@ body {
 
 .table th {
   border-bottom: 1px solid #222;
+  font-size: 14px;
   color: #8b949e;
+}
+
+.table tr {
+  border-bottom: 1px solid #161b22;
 }
 
 .table tr:hover {
   background: #11161c;
 }
 
+/* SCORE */
 .score-elite { color: #3ddc97; font-weight: bold; }
 .score-strong { color: #58a6ff; }
 .score-watch { color: #f0c674; }
 
-.status {
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 6px;
+/* GRADE BADGE */
+.grade {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 6px;
+  font-size: 11px;
+  border-radius: 4px;
+  font-weight: bold;
 }
 
-.status-breaking { background: #1f6feb33; color: #58a6ff; }
+.grade-Aplus { background: #00ff9c; color: black; }
+.grade-A { background: #66ffcc; color: black; }
+.grade-Bplus { background: #ffaa00; color: black; }
+.grade-B { background: #ff8800; color: black; }
+.grade-C { background: #666; color: white; }
 
+/* LINKS */
+a {
+  color: #58a6ff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* FOOTER */
 .footer {
   margin-top: 40px;
   font-size: 12px;
@@ -72,17 +115,19 @@ body {
 
 <div class="container">
 
-<a href="index.html" style="color:#8b949e;">← Back</a>
+<a href="index.html" class="back">← Back to Home</a>
 
 <h1>💎 EdgeBreak Watchlist</h1>
 
+<!-- MARKET STATUS -->
 <div class="market-bar market-weak">
 🇺🇸 US MARKET: 🔴 WEAK<br>
-<span style="color:#8b949e;">
-Breakouts are showing low follow-through.
+<span style="font-weight: normal; color: #8b949e;">
+Breakouts are showing low follow-through. Focus on high-quality setups only.
 </span>
 </div>
 
+<!-- TABLE -->
 <table class="table" id="watchlistTable">
 <thead>
 <tr>
@@ -96,19 +141,19 @@ Breakouts are showing low follow-through.
 </table>
 
 <div class="footer">
-EdgeBreak Intelligence — Not financial advice.
+EdgeBreak Intelligence — High-quality breakout setups. Not financial advice.
 </div>
 
 </div>
 
 <script>
 
-// 🔥 LOAD DATA
+// 🔥 LOAD LIVE DATA
 fetch("watchlist.json")
   .then(res => res.json())
   .then(data => {
 
-    // 🔥 GRADE-BASED SORT (MATCHES ENGINE)
+    // 🔥 MATCH ENGINE RANKING
     const gradeOrder = {
       "A+": 5,
       "A": 4,
@@ -126,6 +171,9 @@ fetch("watchlist.json")
     const tbody = document.querySelector("#watchlistTable tbody");
 
     data.forEach(item => {
+
+      const gradeClass = getGradeClass(item.grade);
+
       const row = document.createElement("tr");
 
       row.innerHTML = `
@@ -136,10 +184,10 @@ fetch("watchlist.json")
         </td>
 
         <td class="${getScoreClass(item.score)}">
-          ${item.score}<br>
-          <span style="font-size:12px; color:#8b949e;">
-            ${item.grade}
-          </span>
+          ${item.score}
+          <div class="grade ${gradeClass}">
+            ${item.grade || ""}
+          </div>
         </td>
 
         <td>${item.break}%</td>
@@ -157,10 +205,19 @@ fetch("watchlist.json")
   });
 
 // HELPERS
+
 function getScoreClass(score) {
   if (score >= 50) return "score-elite";
   if (score >= 40) return "score-strong";
   return "score-watch";
+}
+
+function getGradeClass(grade) {
+  if (grade === "A+") return "grade-Aplus";
+  if (grade === "A") return "grade-A";
+  if (grade === "B+") return "grade-Bplus";
+  if (grade === "B") return "grade-B";
+  return "grade-C";
 }
 
 </script>
