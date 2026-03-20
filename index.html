@@ -19,19 +19,32 @@
       padding: 60px 20px;
     }
 
-    h1 {
-      font-size: 48px;
-      margin-bottom: 10px;
+    /* HEADER */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 40px;
+    }
+
+    .logo {
+      height: 60px;
+      filter: drop-shadow(0 0 6px rgba(0,255,156,0.4));
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 42px;
       letter-spacing: -1px;
     }
 
     .tagline {
       color: #00ff9c;
-      font-size: 18px;
-      margin-bottom: 50px;
-      opacity: 0.9;
+      font-size: 16px;
+      margin-top: 5px;
     }
 
+    /* CARD */
     .card {
       background: rgba(17, 24, 33, 0.85);
       border: 1px solid #1f2a36;
@@ -47,6 +60,7 @@
       font-size: 22px;
     }
 
+    /* MARKET STATUS */
     .status {
       font-size: 18px;
       font-weight: bold;
@@ -56,6 +70,12 @@
     .neutral { color: #ffaa00; }
     .strong { color: #00ff9c; }
 
+    .subtle {
+      color: #9da7b3;
+      margin-top: 10px;
+    }
+
+    /* TABLE */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -73,14 +93,11 @@
       font-weight: 500;
     }
 
-    tr {
-      transition: 0.2s;
-    }
-
     tr:hover {
       background: rgba(255,255,255,0.03);
     }
 
+    /* BADGES */
     .badge {
       padding: 6px 10px;
       border-radius: 8px;
@@ -92,11 +109,13 @@
     .A { background: #66ffcc; color: #000; }
     .B { background: #ffaa00; color: #000; }
 
+    /* BLUR */
     .blur {
       filter: blur(6px);
       user-select: none;
     }
 
+    /* CTA */
     .cta {
       margin-top: 25px;
       padding: 14px 24px;
@@ -115,11 +134,7 @@
       box-shadow: 0 0 20px rgba(0,255,156,0.4);
     }
 
-    .subtle {
-      color: #9da7b3;
-      margin-top: 10px;
-    }
-
+    /* FOOTER */
     .footer {
       text-align: center;
       color: #666;
@@ -134,11 +149,16 @@
 
 <div class="container">
 
-  <!-- HERO -->
-  <h1>🔥 EdgeBreak</h1>
-  <div class="tagline">Measure the move. Not the hype.</div>
+  <!-- HEADER -->
+  <div class="header">
+    <img src="logo.png" class="logo">
+    <div>
+      <h1>EdgeBreak</h1>
+      <div class="tagline">Measure the move. Not the hype.</div>
+    </div>
+  </div>
 
-  <!-- MARKET -->
+  <!-- MARKET ANALYSIS -->
   <div class="card">
     <h2>🧠 Market Analysis</h2>
 
@@ -147,16 +167,16 @@
     </div>
 
     <p class="subtle">
-      Most breakouts are failing. EdgeBreak highlights the rare setups still performing.
+      Breakouts are currently struggling. EdgeBreak identifies the rare high-quality setups still performing in these conditions.
     </p>
   </div>
 
-  <!-- TABLE -->
+  <!-- SAMPLE SIGNALS -->
   <div class="card">
     <h2>📊 Sample Breakout Signals</h2>
 
     <p class="subtle">
-      Preview signals shown — full access reserved for members.
+      Preview signals shown — full breakout intelligence and top-ranked setups are available to members only.
     </p>
 
     <table>
@@ -187,15 +207,18 @@
         <td>5.50%</td>
         <td style="color:#ff4d4d;">❌ Failed</td>
       </tr>
-
     </table>
 
+    <!-- POSITIONING -->
     <p class="subtle">
-      Unlock full breakout signals, high-conviction setups, and curated watchlists.
+      Unlock full access to EdgeBreak’s breakout signals, high-conviction setups, and curated watchlists.
+    </p>
+
+    <p class="subtle">
+      A limited preview is available — premium opportunities are reserved for members.
     </p>
 
     <button class="cta">🔒 Unlock Full Access</button>
-
   </div>
 
   <!-- FOOTER -->
