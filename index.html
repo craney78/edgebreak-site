@@ -2,49 +2,184 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>EdgeBreak</title>
+  <title>EdgeBreak Intelligence</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
+      margin: 0;
       background: #0b0f14;
       color: #e6edf3;
       font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 60px 20px;
     }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
     h1 {
-      font-size: 48px;
+      font-size: 42px;
       margin-bottom: 10px;
     }
-    p {
-      font-size: 18px;
-      color: #9da7b3;
-    }
+
     .tagline {
-      margin-top: 20px;
-      font-size: 20px;
       color: #00ff9c;
+      font-size: 18px;
+      margin-bottom: 40px;
     }
-    .box {
-      margin-top: 40px;
-      padding: 20px;
+
+    .card {
+      background: #111821;
       border: 1px solid #1f2a36;
       border-radius: 10px;
-      display: inline-block;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+
+    .status {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .weak { color: #ff4d4d; }
+    .neutral { color: #ffaa00; }
+    .strong { color: #00ff9c; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      border-bottom: 1px solid #1f2a36;
+      color: #9da7b3;
+      font-weight: normal;
+    }
+
+    tr:hover {
+      background: #0f1620;
+    }
+
+    .badge {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+
+    .Aplus { background: #00ff9c; color: #000; }
+    .A { background: #66ffcc; color: #000; }
+    .B { background: #ffaa00; color: #000; }
+
+    .blur {
+      filter: blur(6px);
+      user-select: none;
+    }
+
+    .button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      background: #00ff9c;
+      color: black;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .footer {
+      text-align: center;
+      color: #666;
+      margin-top: 40px;
+      font-size: 14px;
     }
   </style>
 </head>
+
 <body>
 
-  <h1>🔥 EdgeBreak</h1>
-  <p class="tagline">Measure the move. Not the hype.</p>
+<div class="container">
 
-  <div class="box">
-    <p>Breakout Intelligence Platform</p>
-    <p>Live signals. Real performance. Market truth.</p>
+  <!-- HERO -->
+  <h1>🔥 EdgeBreak</h1>
+  <div class="tagline">Measure the move. Not the hype.</div>
+
+  <!-- MARKET ANALYSIS -->
+  <div class="card">
+    <h2>🧠 Market Analysis</h2>
+
+    <p class="weak">
+      🔴 Weak Market — Breakouts are struggling. Few winners, high failure rate.
+    </p>
+
+    <p style="color:#9da7b3;">
+      EdgeBreak identifies the rare setups that continue to perform in difficult conditions.
+    </p>
   </div>
 
-  <p style="margin-top:50px;">🚀 System running. Data collecting.</p>
+  <!-- SAMPLE OUTPUT -->
+  <div class="card">
+    <h2>📊 Sample Breakout Signals</h2>
+
+    <p style="color:#9da7b3;">
+      Sample output — full signals and top-ranked setups are available to members only.
+    </p>
+
+    <table>
+      <tr>
+        <th>Symbol</th>
+        <th>Grade</th>
+        <th>Break %</th>
+        <th>Status</th>
+      </tr>
+
+      <tr>
+        <td><span class="blur">NN</span></td>
+        <td><span class="badge Aplus">A+</span></td>
+        <td>3.16%</td>
+        <td style="color:#00ff9c;">🚀 Strong Move</td>
+      </tr>
+
+      <tr>
+        <td><span class="blur">OSS</span></td>
+        <td><span class="badge A">A</span></td>
+        <td>2.27%</td>
+        <td style="color:#ffaa00;">⏳ Tracking</td>
+      </tr>
+
+      <tr>
+        <td><span class="blur">ADTN</span></td>
+        <td><span class="badge B">B</span></td>
+        <td>5.50%</td>
+        <td style="color:#ff4d4d;">❌ Failed</td>
+      </tr>
+
+    </table>
+
+    <!-- POSITIONING -->
+    <p style="color:#9da7b3; margin-top:20px;">
+      Unlock full access to EdgeBreak’s breakout signals and curated watchlists.
+    </p>
+
+    <p style="color:#9da7b3;">
+      Preview signals are provided for transparency — our highest-conviction opportunities are available exclusively to members.
+    </p>
+
+    <button class="button">🔒 Unlock Full Access</button>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    EdgeBreak Intelligence • Pre-launch
+  </div>
+
+</div>
 
 </body>
 </html>
