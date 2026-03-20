@@ -99,6 +99,11 @@ a:hover {
 
 <div class="container">
 
+<!-- BACK LINK -->
+<a href="index.html" style="color:#8b949e; text-decoration:none; font-size:14px;">
+  ← Back to Home
+</a>
+
 <h1>💎 EdgeBreak Watchlist</h1>
 
 <!-- MARKET STATUS -->
@@ -149,6 +154,12 @@ function getScoreClass(score) {
   return "score-watch";
 }
 
+function getTier(score) {
+  if (score >= 50) return "💎 Elite";
+  if (score >= 40) return "🔥 Strong";
+  return "⚡ Watch";
+}
+
 function getAgeLabel(age) {
   return [
     "<span class='age-day0'>🔥 Day 0</span>",
@@ -182,8 +193,15 @@ data.forEach(item => {
   const row = document.createElement("tr");
 
   row.innerHTML = `
-    <td>${item.symbol}</td>
-    <td class="${getScoreClass(item.score)}">${item.score}</td>
+    <td>
+      <a href="https://www.tradingview.com/chart/?symbol=NASDAQ:${item.symbol}" target="_blank">
+        ${item.symbol}
+      </a>
+    </td>
+    <td class="${getScoreClass(item.score)}">
+      ${item.score}<br>
+      <span style="font-size:12px; color:#8b949e;">${getTier(item.score)}</span>
+    </td>
     <td>${item.break}%</td>
     <td>${getAgeLabel(item.age)}</td>
     <td>${getStatusLabel(item.status)}</td>
