@@ -19,7 +19,6 @@
       padding: 60px 20px;
     }
 
-    /* HEADER */
     .header {
       display: flex;
       align-items: center;
@@ -43,7 +42,6 @@
       margin-top: 5px;
     }
 
-    /* CARD */
     .card {
       background: rgba(17, 24, 33, 0.85);
       border: 1px solid #1f2a36;
@@ -70,7 +68,7 @@
       line-height: 1.6;
     }
 
-    /* SIGNATURE GRID */
+    /* GRID */
     .trade-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -104,10 +102,10 @@
       justify-content: space-between;
     }
 
-    .chart-img {
-      width: 100%;
-      border-radius: 8px;
+    .chart-box {
+      height: 240px;
       margin-top: 10px;
+      pointer-events: none;
     }
 
     .chart-note {
@@ -140,10 +138,6 @@
       color: #9da7b3;
     }
 
-    tr:hover {
-      background: rgba(255,255,255,0.03);
-    }
-
     .badge {
       padding: 6px 10px;
       border-radius: 8px;
@@ -159,7 +153,6 @@
       filter: blur(6px);
     }
 
-    /* CTA */
     .cta {
       margin-top: 25px;
       padding: 14px 24px;
@@ -197,7 +190,6 @@
       display: none;
     }
 
-    /* FOOTER */
     .footer {
       text-align: center;
       color: #666;
@@ -220,34 +212,10 @@
     </div>
   </div>
 
-  <!-- PITCH -->
-  <div class="card">
-    <h2>🚀 Breakout Intelligence, Engineered</h2>
-
-    <p class="subtle">
-      EdgeBreak is a proprietary breakout intelligence platform built to detect high-quality market opportunities with precision.
-    </p>
-
-    <p class="subtle">
-      Our state-of-the-art search engine continuously scans thousands of securities, identifying structural pressure, breakout formations, and momentum shifts as they emerge.
-    </p>
-
-    <p class="subtle">
-      Every signal is ranked and tracked post-breakout — providing a clear view of performance, not just potential.
-    </p>
-
-    <p class="subtle">
-      In a market driven by noise, EdgeBreak delivers measured insight.
-    </p>
-  </div>
-
   <!-- MARKET -->
   <div class="card">
     <h2>🧠 Market Analysis</h2>
-
-    <div class="status weak">
-      🔴 Weak Market — Low breakout follow-through
-    </div>
+    <div class="status weak">🔴 Market Status: Weak</div>
 
     <p class="subtle">
       Current conditions reflect a lack of sustained buying pressure. Breakouts are struggling to hold above key levels, and continuation is limited.
@@ -284,7 +252,8 @@
           <span>9 Days</span>
         </div>
         <p>Tight compression breakout with explosive continuation.</p>
-        <img src="smci-chart.png" class="chart-img">
+
+        <div class="chart-box" id="chart-smci"></div>
       </div>
 
       <!-- NVDA -->
@@ -298,7 +267,8 @@
           <span>7 Days</span>
         </div>
         <p>Strong breakout with sustained institutional momentum.</p>
-        <img src="nvda-chart.png" class="chart-img">
+
+        <div class="chart-box" id="chart-nvda"></div>
       </div>
 
       <!-- ARM -->
@@ -312,7 +282,8 @@
           <span>8 Days</span>
         </div>
         <p>Breakout from consolidation with strong follow-through.</p>
-        <img src="arm-chart.png" class="chart-img">
+
+        <div class="chart-box" id="chart-arm"></div>
       </div>
 
     </div>
@@ -322,68 +293,31 @@
     </p>
   </div>
 
-  <!-- SIGNALS -->
-  <div class="card">
-    <h2>📊 Sample Breakout Signals</h2>
-
-    <table>
-      <tr>
-        <th>Symbol</th>
-        <th>Grade</th>
-        <th>Break %</th>
-        <th>Status</th>
-      </tr>
-
-      <tr>
-        <td><span class="blur">NN</span></td>
-        <td><span class="badge Aplus">A+</span></td>
-        <td>3.16%</td>
-        <td style="color:#00ff9c;">🚀 Strong Move</td>
-      </tr>
-
-      <tr>
-        <td><span class="blur">OSS</span></td>
-        <td><span class="badge A">A</span></td>
-        <td>2.27%</td>
-        <td style="color:#ffaa00;">⏳ Tracking</td>
-      </tr>
-
-      <tr>
-        <td><span class="blur">ADTN</span></td>
-        <td><span class="badge B">B</span></td>
-        <td>5.50%</td>
-        <td style="color:#ff4d4d;">❌ Failed</td>
-      </tr>
-    </table>
-
-    <button class="cta" onclick="showForm()">🔒 Unlock Full Access</button>
-
-    <div class="email-box" id="emailBox">
-      <input type="email" placeholder="Enter your email">
-      <button class="submit-btn" onclick="submitEmail()">Join</button>
-    </div>
-
-    <div class="success" id="successMsg">
-      ✅ You're on the list — early access coming soon
-    </div>
-
-  </div>
-
-  <!-- FOOTER -->
-  <div class="footer">
-    EdgeBreak Intelligence • Pre-launch
-  </div>
-
 </div>
 
+<!-- 🔥 TRADINGVIEW SCRIPT -->
+<script src="https://s3.tradingview.com/tv.js"></script>
+
 <script>
-function showForm() {
-  document.getElementById("emailBox").style.display = "block";
+function loadChart(containerId, symbol) {
+  new TradingView.widget({
+    container_id: containerId,
+    autosize: true,
+    symbol: symbol,
+    interval: "D",
+    range: "12M",
+    theme: "dark",
+    style: "1",
+    hide_top_toolbar: true,
+    hide_legend: true,
+    allow_symbol_change: false,
+    save_image: false
+  });
 }
 
-function submitEmail() {
-  document.getElementById("successMsg").style.display = "block";
-}
+loadChart("chart-smci", "NASDAQ:SMCI");
+loadChart("chart-nvda", "NASDAQ:NVDA");
+loadChart("chart-arm", "NASDAQ:ARM");
 </script>
 
 </body>
