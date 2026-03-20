@@ -53,7 +53,6 @@ h1 {
 
 .table tr {
   border-bottom: 1px solid #161b22;
-  cursor: pointer;
 }
 
 .table tr:hover {
@@ -79,23 +78,13 @@ h1 {
 .status-holding { background: #23863633; color: #3ddc97; }
 .status-fading { background: #da363333; color: #ff6b6b; }
 
-.panel {
-  margin-top: 30px;
-  padding: 20px;
-  background: #11161c;
-  border-radius: 10px;
-  display: none;
+a {
+  color: #58a6ff;
+  text-decoration: none;
 }
 
-.panel img {
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 15px;
-}
-
-.insight {
-  margin-top: 10px;
-  color: #8b949e;
+a:hover {
+  text-decoration: underline;
 }
 
 .footer {
@@ -113,10 +102,11 @@ h1 {
 <h1>💎 EdgeBreak Watchlist</h1>
 
 <!-- MARKET STATUS -->
-<div id="marketBar" class="market-bar market-weak">
-🇺🇸 US MARKET: 🔴 WEAK  
-<br>
-<span class="insight">Breakouts are showing low follow-through. Focus on high-quality setups only.</span>
+<div class="market-bar market-weak">
+🇺🇸 US MARKET: 🔴 WEAK<br>
+<span style="font-weight: normal; color: #8b949e;">
+Breakouts are showing low follow-through. Focus on high-quality setups only.
+</span>
 </div>
 
 <!-- WATCHLIST TABLE -->
@@ -128,18 +118,12 @@ h1 {
 <th>Break %</th>
 <th>Age</th>
 <th>Status</th>
-<th>Action</th>
+<th>Chart</th>
 </tr>
 </thead>
 <tbody>
 </tbody>
 </table>
-
-<!-- DETAIL PANEL -->
-<div class="panel" id="detailPanel">
-<img id="chartImage" src="" alt="Chart">
-<div id="details"></div>
-</div>
 
 <div class="footer">
 EdgeBreak Intelligence — High-quality breakout setups. Not financial advice.
@@ -148,12 +132,15 @@ EdgeBreak Intelligence — High-quality breakout setups. Not financial advice.
 </div>
 
 <script>
-// SAMPLE DATA (REPLACE LATER WITH REAL DATA)
+// 🔥 SAMPLE DATA (REPLACE WITH REAL DATA LATER)
 const data = [
-  { symbol: "NN", score: 52, break: 3.16, age: 0, status: "breaking" },
-  { symbol: "OSS", score: 41, break: 2.27, age: 1, status: "holding" },
-  { symbol: "ADTN", score: 38, break: 5.5, age: 2, status: "fading" }
+  { symbol: "NVDA", score: 52, break: 3.1, age: 0, status: "breaking" },
+  { symbol: "ARM", score: 45, break: 2.4, age: 1, status: "holding" },
+  { symbol: "SMCI", score: 41, break: 1.9, age: 2, status: "fading" }
 ];
+
+// 🔥 SORT BEST FIRST
+data.sort((a, b) => b.score - a.score);
 
 // HELPERS
 function getScoreClass(score) {
@@ -180,10 +167,12 @@ function getStatusLabel(status) {
   return map[status];
 }
 
-function getAction(status) {
-  if (status === "breaking") return "Watch for entry";
-  if (status === "holding") return "Manage position";
-  return "Avoid chasing";
+function getChartLink(symbol) {
+  return `
+    <a href="https://www.tradingview.com/chart/?symbol=NASDAQ:${symbol}" target="_blank">
+      View Chart ↗
+    </a>
+  `;
 }
 
 // RENDER TABLE
@@ -198,35 +187,11 @@ data.forEach(item => {
     <td>${item.break}%</td>
     <td>${getAgeLabel(item.age)}</td>
     <td>${getStatusLabel(item.status)}</td>
-    <td>${getAction(item.status)}</td>
+    <td>${getChartLink(item.symbol)}</td>
   `;
-
-  row.onclick = () => showDetails(item);
 
   tbody.appendChild(row);
 });
-
-// DETAILS PANEL
-function showDetails(item) {
-  document.getElementById("detailPanel").style.display = "block";
-
-  document.getElementById("chartImage").src =
-    `charts/${item.symbol}.png`; // your screenshots go here
-
-  document.getElementById("details").innerHTML = `
-    <strong>${item.symbol}</strong><br><br>
-    Score: ${item.score}<br>
-    Breakout: ${item.break}%<br><br>
-
-    <strong>Structure:</strong><br>
-    ✔ Resistance respected<br>
-    ✔ Rising pressure<br>
-    ✔ Tight consolidation<br><br>
-
-    <strong>Interpretation:</strong><br>
-    High-quality breakout setup — monitor closely.
-  `;
-}
 </script>
 
 </body>
