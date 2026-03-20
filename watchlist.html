@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EdgeBreak Watchlist</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b0f14;
+  color: #e6edf3;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+.market-bar {
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  font-weight: bold;
+}
+
+.market-strong { background: #0f2a1d; color: #3ddc97; }
+.market-mixed { background: #2a260f; color: #f0c674; }
+.market-weak  { background: #2a1010; color: #ff6b6b; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 12px;
+  text-align: left;
+}
+
+.table th {
+  border-bottom: 1px solid #222;
+  font-size: 14px;
+  color: #8b949e;
+}
+
+.table tr {
+  border-bottom: 1px solid #161b22;
+  cursor: pointer;
+}
+
+.table tr:hover {
+  background: #11161c;
+}
+
+.score-elite { color: #3ddc97; font-weight: bold; }
+.score-strong { color: #58a6ff; }
+.score-watch { color: #f0c674; }
+
+.age-day0 { color: #3ddc97; }
+.age-day1 { color: #58a6ff; }
+.age-day2 { color: #f0c674; }
+.age-day3 { color: #8b949e; }
+
+.status {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.status-breaking { background: #1f6feb33; color: #58a6ff; }
+.status-holding { background: #23863633; color: #3ddc97; }
+.status-fading { background: #da363333; color: #ff6b6b; }
+
+.panel {
+  margin-top: 30px;
+  padding: 20px;
+  background: #11161c;
+  border-radius: 10px;
+  display: none;
+}
+
+.panel img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.insight {
+  margin-top: 10px;
+  color: #8b949e;
+}
+
+.footer {
+  margin-top: 40px;
+  font-size: 12px;
+  color: #6e7681;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>💎 EdgeBreak Watchlist</h1>
+
+<!-- MARKET STATUS -->
+<div id="marketBar" class="market-bar market-weak">
+🇺🇸 US MARKET: 🔴 WEAK  
+<br>
+<span class="insight">Breakouts are showing low follow-through. Focus on high-quality setups only.</span>
+</div>
+
+<!-- WATCHLIST TABLE -->
+<table class="table" id="watchlistTable">
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Score</th>
+<th>Break %</th>
+<th>Age</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+
+<!-- DETAIL PANEL -->
+<div class="panel" id="detailPanel">
+<img id="chartImage" src="" alt="Chart">
+<div id="details"></div>
+</div>
+
+<div class="footer">
+EdgeBreak Intelligence — High-quality breakout setups. Not financial advice.
+</div>
+
+</div>
+
+<script>
+// SAMPLE DATA (REPLACE LATER WITH REAL DATA)
+const data = [
+  { symbol: "NN", score: 52, break: 3.16, age: 0, status: "breaking" },
+  { symbol: "OSS", score: 41, break: 2.27, age: 1, status: "holding" },
+  { symbol: "ADTN", score: 38, break: 5.5, age: 2, status: "fading" }
+];
+
+// HELPERS
+function getScoreClass(score) {
+  if (score >= 50) return "score-elite";
+  if (score >= 40) return "score-strong";
+  return "score-watch";
+}
+
+function getAgeLabel(age) {
+  return [
+    "<span class='age-day0'>🔥 Day 0</span>",
+    "<span class='age-day1'>✅ Day 1</span>",
+    "<span class='age-day2'>⚠️ Day 2</span>",
+    "<span class='age-day3'>💤 Day 3</span>"
+  ][age];
+}
+
+function getStatusLabel(status) {
+  const map = {
+    breaking: "<span class='status status-breaking'>Breaking Now</span>",
+    holding: "<span class='status status-holding'>Holding</span>",
+    fading: "<span class='status status-fading'>Fading</span>"
+  };
+  return map[status];
+}
+
+function getAction(status) {
+  if (status === "breaking") return "Watch for entry";
+  if (status === "holding") return "Manage position";
+  return "Avoid chasing";
+}
+
+// RENDER TABLE
+const tbody = document.querySelector("#watchlistTable tbody");
+
+data.forEach(item => {
+  const row = document.createElement("tr");
+
+  row.innerHTML = `
+    <td>${item.symbol}</td>
+    <td class="${getScoreClass(item.score)}">${item.score}</td>
+    <td>${item.break}%</td>
+    <td>${getAgeLabel(item.age)}</td>
+    <td>${getStatusLabel(item.status)}</td>
+    <td>${getAction(item.status)}</td>
+  `;
+
+  row.onclick = () => showDetails(item);
+
+  tbody.appendChild(row);
+});
+
+// DETAILS PANEL
+function showDetails(item) {
+  document.getElementById("detailPanel").style.display = "block";
+
+  document.getElementById("chartImage").src =
+    `charts/${item.symbol}.png`; // your screenshots go here
+
+  document.getElementById("details").innerHTML = `
+    <strong>${item.symbol}</strong><br><br>
+    Score: ${item.score}<br>
+    Breakout: ${item.break}%<br><br>
+
+    <strong>Structure:</strong><br>
+    ✔ Resistance respected<br>
+    ✔ Rising pressure<br>
+    ✔ Tight consolidation<br><br>
+
+    <strong>Interpretation:</strong><br>
+    High-quality breakout setup — monitor closely.
+  `;
+}
+</script>
+
+</body>
+</html>
