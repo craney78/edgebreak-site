@@ -55,18 +55,19 @@ body {
   box-shadow: 0 10px 40px rgba(0,0,0,0.4);
 }
 
-h2 {
-  margin-bottom: 15px;
+/* ANIMATION */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s ease forwards;
 }
 
-/* MARKET */
-.status {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 10px;
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-
-.weak { color: #ff4d4d; }
 
 /* TEXT */
 .subtle {
@@ -75,7 +76,14 @@ h2 {
   line-height: 1.6;
 }
 
-/* SIGNATURE SECTION */
+/* MARKET */
+.status {
+  font-size: 20px;
+  font-weight: bold;
+}
+.weak { color: #ff4d4d; }
+
+/* TRADE GRID */
 .trade-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -104,7 +112,6 @@ h2 {
   justify-content: space-between;
   font-size: 20px;
   font-weight: bold;
-  margin-bottom: 8px;
 }
 
 .gain {
@@ -120,28 +127,39 @@ h2 {
   justify-content: space-between;
 }
 
-/* IMAGE (FIXED PROPERLY) */
+/* IMAGE */
 .chart-img {
   width: 100%;
-  max-width: 100%;
   height: auto;
   border-radius: 10px;
   margin-top: 15px;
-  display: block;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* OPTIONAL ZOOM ON HOVER */
 .chart-img:hover {
   transform: scale(1.02);
-  transition: 0.3s;
+  box-shadow: 0 10px 40px rgba(0,255,156,0.2);
 }
 
-/* NOTE */
-.chart-note {
-  color: #6b7685;
-  font-size: 12px;
-  margin-top: 10px;
-  margin-bottom: 20px;
+/* LIGHTBOX */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.95);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 12px;
 }
 
 /* TABLE */
@@ -188,14 +206,8 @@ tr:hover {
   cursor: pointer;
   font-weight: bold;
   border: none;
-  transition: 0.2s;
 }
 
-.cta:hover {
-  transform: scale(1.05);
-}
-
-/* EMAIL */
 .email-box {
   margin-top: 20px;
   display: none;
@@ -237,8 +249,8 @@ input {
 <div class="container">
 
 <!-- HEADER -->
-<div class="header">
-  <img src="logo.png" class="logo">
+<div class="header fade-in">
+  <img src="/logo.png" class="logo">
   <div>
     <h1>EdgeBreak</h1>
     <div class="tagline">Measure the move. Not the hype.</div>
@@ -246,31 +258,28 @@ input {
 </div>
 
 <!-- PITCH -->
-<div class="card">
+<div class="card fade-in">
   <h2>🚀 Breakout Intelligence, Engineered</h2>
   <p class="subtle">EdgeBreak is a proprietary breakout intelligence platform built to detect high-quality market opportunities with precision.</p>
-  <p class="subtle">Our state-of-the-art search engine continuously scans thousands of securities, identifying structural pressure, breakout formations, and momentum shifts as they emerge.</p>
-  <p class="subtle">Every signal is ranked and tracked post-breakout — providing a clear view of performance, not just potential.</p>
-  <p class="subtle">In a market driven by noise, EdgeBreak delivers measured insight.</p>
+  <p class="subtle">Our engine scans thousands of securities to identify structural pressure and breakout formations.</p>
+  <p class="subtle">Every signal is tracked post-breakout — showing performance, not just potential.</p>
 </div>
 
 <!-- MARKET -->
-<div class="card">
+<div class="card fade-in">
   <h2>🧠 Market Analysis</h2>
-  <div class="status weak">🔴 Weak Market — Low breakout follow-through</div>
-  <p class="subtle">Breakouts are currently failing to hold above key levels. Momentum is weak and continuation is limited.</p>
+  <div class="status weak">🔴 Weak Market — Low follow-through</div>
+  <p class="subtle">Breakouts are currently failing to sustain momentum.</p>
   <p class="subtle"><strong>We wait for strength — not hope.</strong></p>
 </div>
 
 <!-- SIGNATURE MOVES -->
-<div class="card">
+<div class="card fade-in">
   <h2>🚀 Signature Breakout Moves</h2>
-
-  <p class="chart-note">Visualised using proprietary breakout structure analysis.</p>
 
   <div class="trade-grid">
 
-    <div class="trade-card">
+    <div class="trade-card fade-in">
       <div class="trade-header">
         <span>SMCI</span>
         <span class="gain">+68%</span>
@@ -280,10 +289,10 @@ input {
         <span>9 Days</span>
       </div>
       <p>Compression breakout followed by aggressive expansion.</p>
-      <img src="smci-chart.png" class="chart-img">
+      <img src="/smci-chart.png" class="chart-img" onclick="openLightbox(this.src)">
     </div>
 
-    <div class="trade-card">
+    <div class="trade-card fade-in">
       <div class="trade-header">
         <span>NVDA</span>
         <span class="gain">+42%</span>
@@ -293,10 +302,10 @@ input {
         <span>7 Days</span>
       </div>
       <p>Clean breakout with sustained institutional buying.</p>
-      <img src="nvda-chart.png" class="chart-img">
+      <img src="/nvda-chart.png" class="chart-img" onclick="openLightbox(this.src)">
     </div>
 
-    <div class="trade-card">
+    <div class="trade-card fade-in">
       <div class="trade-header">
         <span>ARM</span>
         <span class="gain">+55%</span>
@@ -306,14 +315,14 @@ input {
         <span>8 Days</span>
       </div>
       <p>Strong continuation after breakout from consolidation.</p>
-      <img src="arm-chart.png" class="chart-img">
+      <img src="/arm-chart.png" class="chart-img" onclick="openLightbox(this.src)">
     </div>
 
   </div>
 </div>
 
 <!-- SIGNALS -->
-<div class="card">
+<div class="card fade-in">
   <h2>📊 Sample Breakout Signals</h2>
 
   <table>
@@ -364,6 +373,11 @@ input {
 
 </div>
 
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img">
+</div>
+
 <script>
 function showForm() {
   document.getElementById("emailBox").style.display = "block";
@@ -371,6 +385,15 @@ function showForm() {
 
 function submitEmail() {
   document.getElementById("successMsg").style.display = "block";
+}
+
+function openLightbox(src) {
+  document.getElementById("lightbox-img").src = src;
+  document.getElementById("lightbox").style.display = "flex";
+}
+
+function closeLightbox() {
+  document.getElementById("lightbox").style.display = "none";
 }
 </script>
 
