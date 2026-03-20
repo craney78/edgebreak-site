@@ -101,7 +101,7 @@ def sort_signals(signals):
 
 
 # =========================
-# 📊 SAVE WATCHLIST TXT
+# 💾 SAVE WATCHLIST TXT
 # =========================
 
 def save_watchlist(signals):
@@ -116,34 +116,35 @@ def save_watchlist(signals):
                 f"→ {s['insight']}\n\n"
             )
 
-    print("📄 Watchlist saved")
+    print("📄 Watchlist TXT saved")
 
 
 # =========================
-# 🌐 SAVE JSON FOR WEBSITE (FINAL)
+# 💾 SAVE WATCHLIST JSON (🔥 THIS FIXES YOUR ISSUE)
 # =========================
 
 def save_watchlist_json(signals):
-    clean = []
+
+    watchlist = []
 
     for s in signals:
-        clean.append({
+        watchlist.append({
             "symbol": s["symbol"],
-            "score": round(s["score"], 2),
-            "grade": s["grade"],  # 🔥 THIS FIXES YOUR ISSUE
+            "score": s["score"],
+            "grade": s.get("grade", "C"),  # 🔥 KEY FIX
             "break": s["breakout_strength"],
             "age": 0,
             "status": "breaking"
         })
 
     with open("watchlist.json", "w") as f:
-        json.dump(clean, f, indent=2)
+        json.dump(watchlist, f, indent=2)
 
-    print("🌐 watchlist.json updated")
+    print("✅ watchlist.json saved with grades")
 
 
 # =========================
-# 📈 PERFORMANCE TRACKING
+# 📊 PERFORMANCE TRACKING
 # =========================
 
 FIELDNAMES = [
@@ -193,71 +194,6 @@ def log_to_csv(signals, filename="breakout_history.csv"):
 
 
 # =========================
-# 📊 UPDATE FOLLOW-THROUGH
-# =========================
-
-def update_follow_through(filename="breakout_history.csv"):
-    if not os.path.isfile(filename):
-        return
-
-    print("\n📊 Updating follow-through...")
-
-    updated_rows = []
-
-    with open(filename, "r", encoding="utf-8") as f:
-        reader = list(csv.DictReader(f))
-
-    for row in reader:
-        try:
-            if row["day1_return"] and row["day2_return"]:
-                updated_rows.append(row)
-                continue
-
-            symbol = row["symbol"]
-
-            url = (
-                f"https://api.twelvedata.com/time_series"
-                f"?symbol={symbol}"
-                f"&interval=1day"
-                f"&outputsize=5"
-                f"&apikey={API_KEY}"
-            )
-
-            data = requests.get(url, timeout=10).json()
-            values = data.get("values", [])
-
-            if len(values) < 3:
-                updated_rows.append(row)
-                continue
-
-            day1_close = float(values[1]["close"])
-            day2_close = float(values[2]["close"])
-            entry_price = float(row["price"])
-
-            day1_return = ((day1_close - entry_price) / entry_price) * 100
-            day2_return = ((day2_close - entry_price) / entry_price) * 100
-
-            row["day1_return"] = round(day1_return, 2)
-            row["day2_return"] = round(day2_return, 2)
-
-            row["result"] = "Win" if day1_return > 0 else "Loss"
-
-            print(f"Updated {symbol}: Day1 {row['day1_return']}%")
-
-        except Exception as e:
-            print(f"Error updating {row.get('symbol')}: {e}")
-
-        updated_rows.append(row)
-
-    with open(filename, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
-        writer.writeheader()
-        writer.writerows(updated_rows)
-
-    print("✅ Follow-through updated")
-
-
-# =========================
 # 🚀 MAIN RUNNER
 # =========================
 
@@ -279,27 +215,27 @@ def run():
 
         time.sleep(SLEEP_TIME)
 
+    # 🔥 SORT
     all_signals = sort_signals(all_signals)
 
     print("\n💎 BREAKOUTS (RANKED):\n")
 
     for s in all_signals:
         print(
-            f"{s['symbol']} | {s['grade']} | {s['setup_type']} | "
-            f"Score {s['score']} | "
-            f"Break {s['breakout_strength']}%"
+            f"{s['symbol']} | {s['grade']} | Score {s['score']} | Break {s['breakout_strength']}%"
         )
 
+    # 🔥 SAVE EVERYTHING
     save_watchlist(all_signals)
-    save_watchlist_json(all_signals)  # 🔥 CRITICAL LINE
+    save_watchlist_json(all_signals)   # 🚨 THIS IS THE KEY LINE
     log_to_csv(all_signals)
 
-    update_follow_through()
-
+    # 🧠 MARKET CONDITION
     market = calculate_market_strength()
     save_market_status_json(market)
 
-    print(f"\nTOTAL BREAKOUTS: {len(all_signals)}")
+    print("\n🧠 MARKET:", market.get("label"))
+    print(f"TOTAL BREAKOUTS: {len(all_signals)}")
 
 
 if __name__ == "__main__":
