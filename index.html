@@ -53,17 +53,6 @@ body {
   box-shadow: 0 10px 40px rgba(0,0,0,0.4);
 }
 
-/* ANIMATION */
-.fade-in {
-  opacity: 0;
-  transform: translateY(30px);
-  animation: fadeInUp 0.8s ease forwards;
-}
-
-@keyframes fadeInUp {
-  to { opacity: 1; transform: translateY(0); }
-}
-
 /* TEXT */
 .subtle {
   color: #9da7b3;
@@ -81,6 +70,9 @@ body {
   font-weight: bold;
   border: none;
   transition: 0.2s;
+  display: inline-block;
+  text-decoration: none;
+  color: black;
 }
 
 .cta:hover { transform: scale(1.05); }
@@ -103,13 +95,6 @@ body {
   margin-bottom: 5px;
 }
 
-/* GRID */
-.trade-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 40px;
-}
-
 /* TRADE CARD */
 .trade-card {
   background: #020617;
@@ -120,33 +105,11 @@ body {
   margin: auto;
 }
 
-.trade-header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.gain { color: #00ff9c; }
-
-.trade-details {
-  font-size: 13px;
-  color: #9da7b3;
-  display: flex;
-  justify-content: space-between;
-}
-
-/* IMAGE */
 .chart-img {
   width: 100%;
   border-radius: 10px;
   margin-top: 15px;
   cursor: pointer;
-}
-
-.chart-img:hover {
-  transform: scale(1.02);
-  box-shadow: 0 10px 40px rgba(0,255,156,0.2);
 }
 
 /* LIGHTBOX */
@@ -160,41 +123,12 @@ body {
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 999;
 }
 
 .lightbox img {
   max-width: 90%;
   max-height: 90%;
 }
-
-/* TABLE */
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 14px;
-}
-
-th {
-  border-bottom: 1px solid #1f2a36;
-  color: #9da7b3;
-}
-
-.blur { filter: blur(6px); }
-
-.badge {
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.Aplus { background: #00ff9c; color: black; }
-.A { background: #66ffcc; color: black; }
-.B { background: #ffaa00; color: black; }
 
 /* EMAIL */
 .email-box { display: none; margin-top:20px; }
@@ -227,8 +161,8 @@ input {
 <div class="container">
 
 <!-- HEADER -->
-<div class="header fade-in">
-  <img src="/logo.png" class="logo">
+<div class="header">
+  <img src="logo.png" class="logo">
   <div>
     <h1>EdgeBreak</h1>
     <div class="tagline">Measure the move. Not the hype.</div>
@@ -236,10 +170,10 @@ input {
 </div>
 
 <!-- HERO -->
-<div class="card fade-in" style="text-align:center">
+<div class="card" style="text-align:center">
 
   <h1 style="font-size:42px;">
-    High-Quality Breakouts.  
+    High-Quality Breakouts.<br>
     Measured Performance.
   </h1>
 
@@ -251,17 +185,24 @@ input {
     No chart-hopping. No noise. Just the setups that matter — and the data behind them.
   </p>
 
+  <!-- BUTTONS -->
+  <a href="watchlist.html" class="cta">📊 View Live Watchlist</a>
+
   <button class="cta" onclick="showForm()">🚀 Get Early Access</button>
 
+  <div id="emailBox" class="email-box">
+    <input type="email" placeholder="Enter your email">
+    <button class="submit-btn">Join</button>
+  </div>
+
   <p class="subtle" style="margin-top:10px;">
-    Limited early access • Performance tracking in progress
+    Not a broker. You trade on your own platform — full control.
   </p>
 
 </div>
 
 <!-- WHY -->
-<div class="card fade-in">
-
+<div class="card">
   <h2>🧠 Why EdgeBreak Is Different</h2>
 
   <p class="subtle" style="color:#00ff9c;">
@@ -279,85 +220,61 @@ input {
   <p class="subtle">
     Every breakout is tracked after it triggers — revealing what actually works.
   </p>
-
 </div>
 
 <!-- WORKFLOW -->
-<div class="card fade-in">
-
+<div class="card">
   <h2>⚙️ How EdgeBreak Is Used</h2>
 
-  <p class="subtle" style="color:#00ff9c;">
-    A structured approach to breakout trading.
-  </p>
-
-  <div style="margin-top:25px;">
-
-    <div class="step">
-      <div class="step-title">🔍 Identify High-Quality Setups</div>
-      <p class="subtle">EdgeBreak scans thousands of stocks daily.</p>
-    </div>
-
-    <div class="step">
-      <div class="step-title">🎯 Refine Your Focus</div>
-      <p class="subtle">Work from a short list instead of the entire market.</p>
-    </div>
-
-    <div class="step">
-      <div class="step-title">⏳ Wait for Confirmation</div>
-      <p class="subtle">Let breakouts trigger — not anticipate them.</p>
-    </div>
-
-    <div class="step">
-      <div class="step-title">🌍 Assess Market Conditions</div>
-      <p class="subtle">Understand when breakouts are working.</p>
-    </div>
-
-    <div class="step">
-      <div class="step-title">⚡ Act with Context</div>
-      <p class="subtle">Make decisions with structure and data.</p>
-    </div>
-
+  <div class="step">
+    <div class="step-title">🔍 Identify High-Quality Setups</div>
+    <p class="subtle">EdgeBreak scans thousands of stocks daily.</p>
   </div>
 
-  <p class="subtle">
-    We do the hard work — you stay in control.
-  </p>
+  <div class="step">
+    <div class="step-title">🎯 Refine Your Focus</div>
+    <p class="subtle">Work from a short list instead of the entire market.</p>
+  </div>
 
+  <div class="step">
+    <div class="step-title">⏳ Wait for Confirmation</div>
+    <p class="subtle">Let breakouts trigger — not anticipate them.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-title">🌍 Assess Market Conditions</div>
+    <p class="subtle">Understand when breakouts are working.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-title">⚡ Act with Context</div>
+    <p class="subtle">Make decisions with structure and data.</p>
+  </div>
 </div>
 
 <!-- MARKET -->
-<div class="card fade-in">
+<div class="card">
   <h2>🇺🇸 Current US Market Conditions</h2>
-
   <div class="status weak">🔴 Weak Market — Low breakout follow-through</div>
-
-  <p class="subtle">
-    Breakouts across US markets are currently showing weak follow-through and limited continuation.
-  </p>
-
-  <p class="subtle">
-    <strong>We wait for strength — not hope.</strong>
-  </p>
 </div>
 
 <!-- SIGNATURE -->
-<div class="card fade-in">
+<div class="card">
   <h2>🚀 Signature Breakout Moves</h2>
 
   <div class="trade-card">
-    <p>SMCI — compression breakout → +68%</p>
-    <img src="/smci-chart.png" class="chart-img" onclick="openLightbox(this.src)">
+    <p><strong>SMCI</strong> — Compression Breakout → +68%</p>
+    <img src="smci-chart.png" class="chart-img" onclick="openLightbox(this.src)">
   </div>
 
   <div class="trade-card">
-    <p>NVDA — resistance breakout → +42%</p>
-    <img src="/nvda-chart.png" class="chart-img" onclick="openLightbox(this.src)">
+    <p><strong>NVDA</strong> — Resistance Breakout → +42%</p>
+    <img src="nvda-chart.png" class="chart-img" onclick="openLightbox(this.src)">
   </div>
 
   <div class="trade-card">
-    <p>ARM — consolidation breakout → +55%</p>
-    <img src="/arm-chart.png" class="chart-img" onclick="openLightbox(this.src)">
+    <p><strong>ARM</strong> — Consolidation Breakout → +55%</p>
+    <img src="arm-chart.png" class="chart-img" onclick="openLightbox(this.src)">
   </div>
 
 </div>
@@ -372,7 +289,9 @@ input {
 </div>
 
 <script>
-function showForm(){document.getElementById("emailBox").style.display="block";}
+function showForm(){
+  document.getElementById("emailBox").style.display="block";
+}
 function openLightbox(src){
   document.getElementById("lightbox-img").src=src;
   document.getElementById("lightbox").style.display="flex";
