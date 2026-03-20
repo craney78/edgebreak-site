@@ -25,7 +25,7 @@ body {
   display: flex;
   align-items: center;
   gap: 18px;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 .logo {
@@ -35,13 +35,12 @@ body {
 
 .header h1 {
   margin: 0;
-  font-size: 48px;
+  font-size: 42px;
 }
 
 .tagline {
   color: #00ff9c;
-  font-size: 16px;
-  margin-top: 5px;
+  font-size: 14px;
 }
 
 /* CARD */
@@ -72,8 +71,22 @@ body {
 /* TEXT */
 .subtle {
   color: #9da7b3;
-  margin-top: 10px;
   line-height: 1.6;
+}
+
+/* CTA */
+.cta {
+  margin-top: 25px;
+  padding: 14px 26px;
+  background: linear-gradient(90deg, #00ff9c, #00cc88);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  border: none;
+}
+
+.cta:hover {
+  transform: scale(1.05);
 }
 
 /* MARKET */
@@ -88,7 +101,6 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   gap: 40px;
-  margin-top: 30px;
 }
 
 /* TRADE CARD */
@@ -99,14 +111,8 @@ body {
   border-left: 4px solid #00ff9c;
   max-width: 900px;
   margin: auto;
-  transition: transform 0.2s ease;
 }
 
-.trade-card:hover {
-  transform: translateY(-5px);
-}
-
-/* HEADER */
 .trade-header {
   display: flex;
   justify-content: space-between;
@@ -114,15 +120,11 @@ body {
   font-weight: bold;
 }
 
-.gain {
-  color: #00ff9c;
-}
+.gain { color: #00ff9c; }
 
-/* DETAILS */
 .trade-details {
   font-size: 13px;
   color: #9da7b3;
-  margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
 }
@@ -130,11 +132,9 @@ body {
 /* IMAGE */
 .chart-img {
   width: 100%;
-  height: auto;
   border-radius: 10px;
   margin-top: 15px;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .chart-img:hover {
@@ -153,20 +153,17 @@ body {
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 999;
 }
 
 .lightbox img {
   max-width: 90%;
   max-height: 90%;
-  border-radius: 12px;
 }
 
 /* TABLE */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
 }
 
 th, td {
@@ -178,9 +175,7 @@ th {
   color: #9da7b3;
 }
 
-tr:hover {
-  background: rgba(255,255,255,0.03);
-}
+.blur { filter: blur(6px); }
 
 .badge {
   padding: 6px 10px;
@@ -193,31 +188,13 @@ tr:hover {
 .A { background: #66ffcc; color: black; }
 .B { background: #ffaa00; color: black; }
 
-.blur {
-  filter: blur(6px);
-}
-
-/* CTA */
-.cta {
-  margin-top: 25px;
-  padding: 14px 24px;
-  background: linear-gradient(90deg, #00ff9c, #00cc88);
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  border: none;
-}
-
-.email-box {
-  margin-top: 20px;
-  display: none;
-}
+/* EMAIL */
+.email-box { display: none; margin-top:20px; }
 
 input {
   padding: 12px;
   border-radius: 6px;
   border: none;
-  margin-right: 10px;
 }
 
 .submit-btn {
@@ -225,21 +202,14 @@ input {
   background: #00ff9c;
   border-radius: 6px;
   border: none;
-  font-weight: bold;
-  cursor: pointer;
 }
 
-.success {
-  margin-top: 15px;
-  color: #00ff9c;
-  display: none;
-}
+.success { display:none; color:#00ff9c; margin-top:10px; }
 
-/* FOOTER */
 .footer {
-  text-align: center;
-  color: #666;
-  margin-top: 60px;
+  text-align:center;
+  color:#666;
+  margin-top:60px;
 }
 </style>
 </head>
@@ -257,12 +227,18 @@ input {
   </div>
 </div>
 
-<!-- PITCH -->
+<!-- HERO -->
+<div class="card fade-in" style="text-align:center">
+  <h1>Find Breakouts Before They Explode</h1>
+  <p class="subtle">Scan thousands of stocks. Detect real setups. Track what actually works.</p>
+  <button class="cta" onclick="showForm()">🚀 Get Early Access</button>
+</div>
+
+<!-- WHY -->
 <div class="card fade-in">
-  <h2>🚀 Breakout Intelligence, Engineered</h2>
-  <p class="subtle">EdgeBreak is a proprietary breakout intelligence platform built to detect high-quality market opportunities with precision.</p>
-  <p class="subtle">Our engine scans thousands of securities to identify structural pressure and breakout formations.</p>
-  <p class="subtle">Every signal is tracked post-breakout — showing performance, not just potential.</p>
+  <h2>🧠 Why EdgeBreak Is Different</h2>
+  <p class="subtle">We don’t predict breakouts — we measure when they work.</p>
+  <p class="subtle">Every signal is tracked after it triggers, giving real performance data.</p>
 </div>
 
 <!-- MARKET -->
@@ -270,106 +246,72 @@ input {
   <h2>🧠 Market Analysis</h2>
   <div class="status weak">🔴 Weak Market — Low follow-through</div>
   <p class="subtle">Breakouts are currently failing to sustain momentum.</p>
-  <p class="subtle"><strong>We wait for strength — not hope.</strong></p>
 </div>
 
-<!-- SIGNATURE MOVES -->
+<!-- SIGNATURE -->
 <div class="card fade-in">
   <h2>🚀 Signature Breakout Moves</h2>
 
   <div class="trade-grid">
 
     <div class="trade-card fade-in">
-      <div class="trade-header">
-        <span>SMCI</span>
-        <span class="gain">+68%</span>
-      </div>
-      <div class="trade-details">
-        <span>A+ Structure</span>
-        <span>9 Days</span>
-      </div>
-      <p>Compression breakout followed by aggressive expansion.</p>
+      <div class="trade-header"><span>SMCI</span><span class="gain">+68%</span></div>
+      <div class="trade-details"><span>A+</span><span>9 Days</span></div>
       <img src="/smci-chart.png" class="chart-img" onclick="openLightbox(this.src)">
     </div>
 
     <div class="trade-card fade-in">
-      <div class="trade-header">
-        <span>NVDA</span>
-        <span class="gain">+42%</span>
-      </div>
-      <div class="trade-details">
-        <span>A+ Structure</span>
-        <span>7 Days</span>
-      </div>
-      <p>Clean breakout with sustained institutional buying.</p>
+      <div class="trade-header"><span>NVDA</span><span class="gain">+42%</span></div>
+      <div class="trade-details"><span>A+</span><span>7 Days</span></div>
       <img src="/nvda-chart.png" class="chart-img" onclick="openLightbox(this.src)">
     </div>
 
     <div class="trade-card fade-in">
-      <div class="trade-header">
-        <span>ARM</span>
-        <span class="gain">+55%</span>
-      </div>
-      <div class="trade-details">
-        <span>A Structure</span>
-        <span>8 Days</span>
-      </div>
-      <p>Strong continuation after breakout from consolidation.</p>
+      <div class="trade-header"><span>ARM</span><span class="gain">+55%</span></div>
+      <div class="trade-details"><span>A</span><span>8 Days</span></div>
       <img src="/arm-chart.png" class="chart-img" onclick="openLightbox(this.src)">
     </div>
 
   </div>
 </div>
 
+<!-- PROOF -->
+<div class="card fade-in">
+  <h2>📊 Built on Real Data</h2>
+  <p class="subtle">We track every breakout’s performance — wins, losses, and follow-through.</p>
+</div>
+
 <!-- SIGNALS -->
 <div class="card fade-in">
-  <h2>📊 Sample Breakout Signals</h2>
+  <h2>📊 Sample Signals</h2>
 
   <table>
-    <tr>
-      <th>Symbol</th>
-      <th>Grade</th>
-      <th>Break %</th>
-      <th>Status</th>
-    </tr>
-
-    <tr>
-      <td><span class="blur">NN</span></td>
-      <td><span class="badge Aplus">A+</span></td>
-      <td>3.16%</td>
-      <td style="color:#00ff9c;">🚀 Strong Move</td>
-    </tr>
-
-    <tr>
-      <td><span class="blur">OSS</span></td>
-      <td><span class="badge A">A</span></td>
-      <td>2.27%</td>
-      <td style="color:#ffaa00;">⏳ Tracking</td>
-    </tr>
-
-    <tr>
-      <td><span class="blur">ADTN</span></td>
-      <td><span class="badge B">B</span></td>
-      <td>5.50%</td>
-      <td style="color:#ff4d4d;">❌ Failed</td>
-    </tr>
+    <tr><th>Symbol</th><th>Grade</th><th>Status</th></tr>
+    <tr><td class="blur">NN</td><td class="badge Aplus">A+</td><td>🚀 Strong</td></tr>
+    <tr><td class="blur">OSS</td><td class="badge A">A</td><td>⏳ Tracking</td></tr>
+    <tr><td class="blur">ADTN</td><td class="badge B">B</td><td>❌ Failed</td></tr>
   </table>
 
-  <button class="cta" onclick="showForm()">🔒 Unlock Full Access</button>
+  <button class="cta" onclick="showForm()">🔒 Join Waitlist</button>
 
   <div class="email-box" id="emailBox">
-    <input type="email" placeholder="Enter your email">
+    <input type="email" placeholder="Enter email">
     <button class="submit-btn" onclick="submitEmail()">Join</button>
   </div>
 
   <div class="success" id="successMsg">
-    ✅ You're on the list — early access coming soon
+    ✅ You're in — early access coming soon
   </div>
 </div>
 
-<div class="footer">
-  EdgeBreak Intelligence • Pre-launch
+<!-- SCARCITY -->
+<div class="card fade-in" style="text-align:center">
+  <h2>⚠️ Early Access Only</h2>
+  <p class="subtle">Limited onboarding while performance data builds.</p>
+  <button class="cta" onclick="showForm()">🚀 Join Early Access</button>
 </div>
+
+<div class="footer">EdgeBreak Intelligence • Pre-launch</div>
 
 </div>
 
@@ -379,21 +321,14 @@ input {
 </div>
 
 <script>
-function showForm() {
-  document.getElementById("emailBox").style.display = "block";
+function showForm(){document.getElementById("emailBox").style.display="block";}
+function submitEmail(){document.getElementById("successMsg").style.display="block";}
+function openLightbox(src){
+  document.getElementById("lightbox-img").src=src;
+  document.getElementById("lightbox").style.display="flex";
 }
-
-function submitEmail() {
-  document.getElementById("successMsg").style.display = "block";
-}
-
-function openLightbox(src) {
-  document.getElementById("lightbox-img").src = src;
-  document.getElementById("lightbox").style.display = "flex";
-}
-
-function closeLightbox() {
-  document.getElementById("lightbox").style.display = "none";
+function closeLightbox(){
+  document.getElementById("lightbox").style.display="none";
 }
 </script>
 
