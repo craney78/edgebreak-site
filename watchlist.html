@@ -20,11 +20,6 @@ body {
   padding: 20px;
 }
 
-h1 {
-  margin-bottom: 10px;
-}
-
-/* BACK LINK */
 .back {
   display: inline-block;
   margin-bottom: 15px;
@@ -32,11 +27,6 @@ h1 {
   text-decoration: none;
 }
 
-.back:hover {
-  text-decoration: underline;
-}
-
-/* MARKET BAR */
 .market-bar {
   padding: 15px;
   border-radius: 10px;
@@ -46,7 +36,6 @@ h1 {
 
 .market-weak { background: #2a1010; color: #ff6b6b; }
 
-/* TABLE */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -54,35 +43,27 @@ h1 {
 
 .table th, .table td {
   padding: 12px;
-  text-align: left;
 }
 
 .table th {
   border-bottom: 1px solid #222;
-  font-size: 14px;
   color: #8b949e;
-}
-
-.table tr {
-  border-bottom: 1px solid #161b22;
 }
 
 .table tr:hover {
   background: #11161c;
 }
 
-/* SCORE */
 .score-elite { color: #3ddc97; font-weight: bold; }
 .score-strong { color: #58a6ff; }
 .score-watch { color: #f0c674; }
 
-/* GRADE BADGE */
 .grade {
-  display: inline-block;
   margin-top: 4px;
+  display: inline-block;
   padding: 2px 6px;
-  font-size: 11px;
   border-radius: 4px;
+  font-size: 11px;
   font-weight: bold;
 }
 
@@ -92,17 +73,8 @@ h1 {
 .grade-B { background: #ff8800; color: black; }
 .grade-C { background: #666; color: white; }
 
-/* LINKS */
-a {
-  color: #58a6ff;
-  text-decoration: none;
-}
+a { color: #58a6ff; text-decoration: none; }
 
-a:hover {
-  text-decoration: underline;
-}
-
-/* FOOTER */
 .footer {
   margin-top: 40px;
   font-size: 12px;
@@ -115,19 +87,17 @@ a:hover {
 
 <div class="container">
 
-<a href="index.html" class="back">← Back to Home</a>
+<a href="index.html" class="back">← Back</a>
 
 <h1>💎 EdgeBreak Watchlist</h1>
 
-<!-- MARKET STATUS -->
 <div class="market-bar market-weak">
 🇺🇸 US MARKET: 🔴 WEAK<br>
-<span style="font-weight: normal; color: #8b949e;">
-Breakouts are showing low follow-through. Focus on high-quality setups only.
+<span style="color:#8b949e;">
+Breakouts showing low follow-through
 </span>
 </div>
 
-<!-- TABLE -->
 <table class="table" id="watchlistTable">
 <thead>
 <tr>
@@ -141,19 +111,20 @@ Breakouts are showing low follow-through. Focus on high-quality setups only.
 </table>
 
 <div class="footer">
-EdgeBreak Intelligence — High-quality breakout setups. Not financial advice.
+EdgeBreak Intelligence
 </div>
 
 </div>
 
 <script>
 
-// 🔥 LOAD LIVE DATA (CACHE FIX INCLUDED)
-fetch("watchlist.json?v=" + new Date().getTime())
+// 🔥 FORCE FRESH DATA (CACHE FIX)
+fetch("/watchlist.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
 
-    // 🔥 MATCH ENGINE RANKING
+    console.log("🔥 LIVE DATA:", data); // DEBUG
+
     const gradeOrder = {
       "A+": 5,
       "A": 4,
@@ -172,8 +143,6 @@ fetch("watchlist.json?v=" + new Date().getTime())
 
     data.forEach(item => {
 
-      const gradeClass = getGradeClass(item.grade);
-
       const row = document.createElement("tr");
 
       row.innerHTML = `
@@ -185,8 +154,8 @@ fetch("watchlist.json?v=" + new Date().getTime())
 
         <td class="${getScoreClass(item.score)}">
           ${item.score}
-          <div class="grade ${gradeClass}">
-            ${item.grade || ""}
+          <div class="grade ${getGradeClass(item.grade)}">
+            ${item.grade || "NO GRADE"}
           </div>
         </td>
 
@@ -202,6 +171,9 @@ fetch("watchlist.json?v=" + new Date().getTime())
       tbody.appendChild(row);
     });
 
+  })
+  .catch(err => {
+    console.error("❌ FETCH ERROR:", err);
   });
 
 // HELPERS
