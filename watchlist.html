@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EdgeBreak Watchlist</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b0f14;
+  color: #e6edf3;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 15px;
+  color: #8b949e;
+  text-decoration: none;
+}
+
+.market-bar {
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  font-weight: bold;
+}
+
+.market-weak { background: #2a1010; color: #ff6b6b; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 12px;
+}
+
+.table th {
+  border-bottom: 1px solid #222;
+  color: #8b949e;
+}
+
+.table tr:hover {
+  background: #11161c;
+}
+
+.score-elite { color: #3ddc97; font-weight: bold; }
+.score-strong { color: #58a6ff; }
+.score-watch { color: #f0c674; }
+
+.grade {
+  margin-top: 4px;
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.grade-Aplus { background: #00ff9c; color: black; }
+.grade-A { background: #66ffcc; color: black; }
+.grade-Bplus { background: #ffaa00; color: black; }
+.grade-B { background: #ff8800; color: black; }
+.grade-C { background: #666; color: white; }
+
+a { color: #58a6ff; text-decoration: none; }
+
+.footer {
+  margin-top: 40px;
+  font-size: 12px;
+  color: #6e7681;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<a href="index.html" class="back">← Back</a>
+
+<h1>💎 EdgeBreak Watchlist</h1>
+
+<div class="market-bar market-weak">
+🇺🇸 US MARKET: 🔴 WEAK<br>
+<span style="color:#8b949e;">
+Breakouts showing low follow-through
+</span>
+</div>
+
+<table class="table" id="watchlistTable">
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Score</th>
+<th>Break %</th>
+<th>Chart</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+<div class="footer">
+EdgeBreak Intelligence
+</div>
+
+</div>
+
+<script>
+
+// 🔥 FORCE FRESH DATA (CACHE FIX)
+fetch("/watchlist.json?v=" + new Date().getTime())
+  .then(res => res.json())
+  .then(data => {
+
+    console.log("🔥 LIVE DATA:", data); // DEBUG
+
+    const gradeOrder = {
+      "A+": 5,
+      "A": 4,
+      "B+": 3,
+      "B": 2,
+      "C": 1
+    };
+
+    data.sort((a, b) => {
+      const gradeDiff = (gradeOrder[b.grade] || 0) - (gradeOrder[a.grade] || 0);
+      if (gradeDiff !== 0) return gradeDiff;
+      return b.score - a.score;
+    });
+
+    const tbody = document.querySelector("#watchlistTable tbody");
+
+    data.forEach(item => {
+
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>
+          <a href="https://www.tradingview.com/chart/?symbol=NASDAQ:${item.symbol}" target="_blank">
+            ${item.symbol}
+          </a>
+        </td>
+
+        <td class="${getScoreClass(item.score)}">
+          ${item.score}
+          <div class="grade ${getGradeClass(item.grade)}">
+            ${item.grade || "NO GRADE"}
+          </div>
+        </td>
+
+        <td>${item.break}%</td>
+
+        <td>
+          <a href="https://www.tradingview.com/chart/?symbol=NASDAQ:${item.symbol}" target="_blank">
+            View ↗
+          </a>
+        </td>
+      `;
+
+      tbody.appendChild(row);
+    });
+
+  })
+  .catch(err => {
+    console.error("❌ FETCH ERROR:", err);
+  });
+
+// HELPERS
+
+function getScoreClass(score) {
+  if (score >= 50) return "score-elite";
+  if (score >= 40) return "score-strong";
+  return "score-watch";
+}
+
+function getGradeClass(grade) {
+  if (grade === "A+") return "grade-Aplus";
+  if (grade === "A") return "grade-A";
+  if (grade === "B+") return "grade-Bplus";
+  if (grade === "B") return "grade-B";
+  return "grade-C";
+}
+
+</script>
+
+</body>
+</html>
