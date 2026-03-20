@@ -61,10 +61,7 @@ body {
 }
 
 @keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* TEXT */
@@ -86,9 +83,7 @@ body {
   transition: 0.2s;
 }
 
-.cta:hover {
-  transform: scale(1.05);
-}
+.cta:hover { transform: scale(1.05); }
 
 /* MARKET */
 .status {
@@ -96,6 +91,17 @@ body {
   font-weight: bold;
 }
 .weak { color: #ff4d4d; }
+
+/* WORKFLOW */
+.step {
+  margin-bottom: 20px;
+}
+
+.step-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
 
 /* GRID */
 .trade-grid {
@@ -114,7 +120,6 @@ body {
   margin: auto;
 }
 
-/* HEADER */
 .trade-header {
   display: flex;
   justify-content: space-between;
@@ -264,119 +269,97 @@ input {
   </p>
 
   <p class="subtle">
-    EdgeBreak is built to identify high-quality breakout setups — not just any signal.
+    EdgeBreak identifies high-quality breakout setups — not just any signal.
   </p>
 
   <p class="subtle">
-    Our engine scans thousands of stocks each day, filtering for structural pressure, clean resistance, and compression.
+    Our engine scans thousands of stocks daily, removing the need to manually review charts.
   </p>
 
   <p class="subtle">
-    Instead of manually reviewing hundreds of charts, the engine surfaces only the structures that matter.
+    Every breakout is tracked after it triggers — revealing what actually works.
   </p>
 
-  <p class="subtle">
-    But detection alone isn’t enough.
+</div>
+
+<!-- WORKFLOW -->
+<div class="card fade-in">
+
+  <h2>⚙️ How EdgeBreak Is Used</h2>
+
+  <p class="subtle" style="color:#00ff9c;">
+    A structured approach to breakout trading.
   </p>
 
-  <p class="subtle">
-    Every breakout is tracked after it triggers — follow-through, failure, and behaviour across different market conditions.
-  </p>
+  <div style="margin-top:25px;">
+
+    <div class="step">
+      <div class="step-title">🔍 Identify High-Quality Setups</div>
+      <p class="subtle">EdgeBreak scans thousands of stocks daily.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-title">🎯 Refine Your Focus</div>
+      <p class="subtle">Work from a short list instead of the entire market.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-title">⏳ Wait for Confirmation</div>
+      <p class="subtle">Let breakouts trigger — not anticipate them.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-title">🌍 Assess Market Conditions</div>
+      <p class="subtle">Understand when breakouts are working.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-title">⚡ Act with Context</div>
+      <p class="subtle">Make decisions with structure and data.</p>
+    </div>
+
+  </div>
 
   <p class="subtle">
-    👉 This creates a clear picture of when breakout strategies are actually working.
-  </p>
-
-  <p class="subtle">
-    <strong>
-      EdgeBreak delivers both — high-quality setups, and the data to understand their performance.
-    </strong>
+    We do the hard work — you stay in control.
   </p>
 
 </div>
 
 <!-- MARKET -->
 <div class="card fade-in">
-  <h2>🧠 Market Analysis</h2>
+  <h2>🇺🇸 Current US Market Conditions</h2>
+
   <div class="status weak">🔴 Weak Market — Low breakout follow-through</div>
-  <p class="subtle">Breakouts are currently failing to sustain momentum.</p>
-  <p class="subtle"><strong>We wait for strength — not hope.</strong></p>
+
+  <p class="subtle">
+    Breakouts across US markets are currently showing weak follow-through and limited continuation.
+  </p>
+
+  <p class="subtle">
+    <strong>We wait for strength — not hope.</strong>
+  </p>
 </div>
 
-<!-- SIGNATURE BREAKOUT STORIES -->
+<!-- SIGNATURE -->
 <div class="card fade-in">
   <h2>🚀 Signature Breakout Moves</h2>
 
-  <p class="subtle">
-    👉 These are not random winners — they follow repeatable breakout structures our engine detects.
-  </p>
-
-  <div class="trade-grid">
-
-    <div class="trade-card fade-in">
-      <div class="trade-header"><span>SMCI</span><span class="gain">+68%</span></div>
-      <div class="trade-details"><span>A+ Structure</span><span>9 Days</span></div>
-
-      <p class="subtle">Tight compression with multiple resistance tests and rising support.</p>
-      <p class="subtle">Stable volume indicated accumulation.</p>
-      <p class="subtle">👉 Breakout triggered with expansion, leading to a rapid move.</p>
-
-      <img src="/smci-chart.png" class="chart-img" onclick="openLightbox(this.src)">
-    </div>
-
-    <div class="trade-card fade-in">
-      <div class="trade-header"><span>NVDA</span><span class="gain">+42%</span></div>
-      <div class="trade-details"><span>A+ Structure</span><span>7 Days</span></div>
-
-      <p class="subtle">Repeated resistance tests with higher lows building pressure.</p>
-      <p class="subtle">Structure showed strong institutional interest.</p>
-      <p class="subtle">👉 Breakout led to sustained follow-through.</p>
-
-      <img src="/nvda-chart.png" class="chart-img" onclick="openLightbox(this.src)">
-    </div>
-
-    <div class="trade-card fade-in">
-      <div class="trade-header"><span>ARM</span><span class="gain">+55%</span></div>
-      <div class="trade-details"><span>A Structure</span><span>8 Days</span></div>
-
-      <p class="subtle">Extended consolidation with tightening volatility.</p>
-      <p class="subtle">Energy built within the structure.</p>
-      <p class="subtle">👉 Breakout triggered strong continuation.</p>
-
-      <img src="/arm-chart.png" class="chart-img" onclick="openLightbox(this.src)">
-    </div>
-
-  </div>
-</div>
-
-<!-- SIGNALS -->
-<div class="card fade-in">
-  <h2>📊 Sample Signals</h2>
-
-  <table>
-    <tr><th>Symbol</th><th>Grade</th><th>Status</th></tr>
-    <tr><td class="blur">NN</td><td class="badge Aplus">A+</td><td>🚀 Strong</td></tr>
-    <tr><td class="blur">OSS</td><td class="badge A">A</td><td>⏳ Tracking</td></tr>
-    <tr><td class="blur">ADTN</td><td class="badge B">B</td><td>❌ Failed</td></tr>
-  </table>
-
-  <button class="cta" onclick="showForm()">🔒 Join Waitlist</button>
-
-  <div class="email-box" id="emailBox">
-    <input type="email" placeholder="Enter email">
-    <button class="submit-btn" onclick="submitEmail()">Join</button>
+  <div class="trade-card">
+    <p>SMCI — compression breakout → +68%</p>
+    <img src="/smci-chart.png" class="chart-img" onclick="openLightbox(this.src)">
   </div>
 
-  <div class="success" id="successMsg">
-    ✅ You're in — early access coming soon
+  <div class="trade-card">
+    <p>NVDA — resistance breakout → +42%</p>
+    <img src="/nvda-chart.png" class="chart-img" onclick="openLightbox(this.src)">
   </div>
-</div>
 
-<!-- SCARCITY -->
-<div class="card fade-in" style="text-align:center">
-  <h2>⚠️ Early Access Only</h2>
-  <p class="subtle">Limited onboarding while performance data builds.</p>
-  <button class="cta" onclick="showForm()">🚀 Join Early Access</button>
+  <div class="trade-card">
+    <p>ARM — consolidation breakout → +55%</p>
+    <img src="/arm-chart.png" class="chart-img" onclick="openLightbox(this.src)">
+  </div>
+
 </div>
 
 <div class="footer">EdgeBreak Intelligence • Pre-launch</div>
@@ -390,7 +373,6 @@ input {
 
 <script>
 function showForm(){document.getElementById("emailBox").style.display="block";}
-function submitEmail(){document.getElementById("successMsg").style.display="block";}
 function openLightbox(src){
   document.getElementById("lightbox-img").src=src;
   document.getElementById("lightbox").style.display="flex";
