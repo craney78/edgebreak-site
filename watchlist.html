@@ -148,8 +148,8 @@ EdgeBreak Intelligence — High-quality breakout setups. Not financial advice.
 
 <script>
 
-// 🔥 LOAD LIVE DATA
-fetch("watchlist.json")
+// 🔥 LOAD LIVE DATA (CACHE FIX INCLUDED)
+fetch("watchlist.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
 
