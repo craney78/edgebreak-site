@@ -5,15 +5,12 @@
 <title>EdgeBreak Intelligence</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
 <style>
-
 body {
   margin: 0;
   background: radial-gradient(circle at top, #0f1620, #05080c);
   color: #e6edf3;
-  font-family: 'Inter', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
 }
 
 .container {
@@ -22,6 +19,7 @@ body {
   padding: 60px 20px;
 }
 
+/* HEADER */
 .header {
   display: flex;
   align-items: center;
@@ -36,38 +34,12 @@ body {
 
 .header h1 {
   margin: 0;
-  font-size: 40px;
-  font-weight: 600;
+  font-size: 42px;
 }
 
 .tagline {
   color: #00ff9c;
-  font-size: 13px;
-}
-
-/* HERO */
-.hero-title {
-  font-size: clamp(28px, 4vw, 42px);
-  font-weight: 600;
-  letter-spacing: -1px;
-}
-
-/* HEADINGS */
-h2 {
-  font-weight: 600;
-  font-size: clamp(20px, 2.2vw, 26px);
-  position: relative;
-  padding-bottom: 8px;
-}
-
-h2::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 40px;
-  height: 2px;
-  background: rgba(0,255,156,0.4);
+  font-size: 14px;
 }
 
 /* CARD */
@@ -76,37 +48,30 @@ h2::after {
   border: 1px solid #1f2a36;
   border-radius: 16px;
   padding: 30px;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
   backdrop-filter: blur(12px);
   box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-  transition: 0.25s ease;
 }
 
-.card:hover {
-  transform: translateY(-3px);
-}
-
+/* TEXT */
 .subtle {
   color: #9da7b3;
   line-height: 1.6;
   margin-top: 10px;
 }
 
-/* BUTTON */
+/* CTA */
 .cta {
   margin-top: 25px;
   padding: 14px 26px;
   background: linear-gradient(90deg, #00ff9c, #00cc88);
   border-radius: 8px;
-  font-weight: 600;
+  cursor: pointer;
+  font-weight: bold;
+  border: none;
+  display: inline-block;
   text-decoration: none;
   color: black;
-  display: inline-block;
-}
-
-.cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 15px rgba(0,255,156,0.4);
 }
 
 /* WORKFLOW */
@@ -115,15 +80,15 @@ h2::after {
 }
 
 .step-title {
-  font-weight: 600;
-  font-size: 15px;
+  font-weight: bold;
+  font-size: 16px;
   margin-bottom: 5px;
 }
 
 /* MARKET */
 .status {
   font-size: 20px;
-  font-weight: 600;
+  font-weight: bold;
 }
 
 .status-red { color: #ff4d4d; }
@@ -141,33 +106,23 @@ h2::after {
   margin-bottom: 6px;
 }
 
-/* TRADE CARDS */
-.trade-card {
+/* CHART PLACEHOLDER */
+.chart-placeholder {
   background: #020617;
-  padding: 25px;
-  border-radius: 16px;
-  border-left: 4px solid #00ff9c;
-  margin: 20px auto;
-}
-
-.data {
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.chart-img {
-  width: 100%;
-  border-radius: 10px;
+  border: 1px solid #1f2a36;
+  border-radius: 12px;
+  padding: 20px;
   margin-top: 15px;
-  cursor: pointer;
+  text-align: center;
+  color: #666;
+  font-size: 13px;
 }
 
 .footer {
   text-align:center;
   color:#666;
   margin-top:60px;
-  font-size: 13px;
 }
-
 </style>
 </head>
 
@@ -186,73 +141,88 @@ h2::after {
 
 <!-- HERO -->
 <div class="card" style="text-align:center">
-
-  <h1 class="hero-title">
+  <h1 style="font-size:42px;">
     High-Quality Breakouts.<br>
     Measured Performance.
   </h1>
 
-  <p class="subtle" style="font-size:18px; max-width:640px; margin:auto;">
+  <p class="subtle" style="max-width:700px;margin:auto;">
     EdgeBreak scans thousands of stocks to identify high-quality breakout setups — then tracks what happens next.
   </p>
 
-  <p class="subtle" style="max-width:640px; margin:auto;">
-    No chart-hopping. No noise. Just the setups that matter — and the data behind them.
-  </p>
-
-  <a href="watchlist.html" class="cta">View Live Watchlist</a>
-
+  <a href="watchlist.html" class="cta">View Watchlist Preview</a>
 </div>
 
 <!-- WHY -->
 <div class="card">
   <h2>Why EdgeBreak Is Different</h2>
+  <p class="subtle">Not all breakouts are equal.</p>
+  <p class="subtle">EdgeBreak identifies high-quality breakout setups — not just any signal.</p>
+</div>
 
-  <p class="subtle" style="color:#00ff9c;">
-    Not all breakouts are equal.
-  </p>
-
+<!-- FOUNDER -->
+<div class="card">
+  <h2>Why EdgeBreak Exists</h2>
   <p class="subtle">
-    EdgeBreak identifies high-quality breakout setups — not just any signal.
-  </p>
+EdgeBreak was built from real experience over time.
 
-  <p class="subtle">
-    Our engine scans thousands of stocks daily, removing the need to manually review charts.
-  </p>
+When I first started trading, I believed the share market was a straightforward way to make money. It didn’t take long to realise that simply picking stocks and hoping for the best was not a strategy.
 
-  <p class="subtle">
-    Every breakout is tracked after it triggers — revealing what actually works.
+Over the next several years, I worked through different approaches, trying to understand what actually leads to consistent outcomes. Much of what I learned early on added complexity without improving results — layers of indicators, conflicting signals, and tools that were difficult to apply in a practical way.
+
+Many platforms and strategies promised an edge, but in reality, they often introduced more noise. The challenge was not finding information — it was filtering it.
+
+The turning point came when focusing on breakout structures. Not all breakouts are equal — some lead to strong continuation, while others fail quickly. Learning to recognise that difference was where consistency began to improve.
+
+It took time to move from inconsistency, to break-even, and eventually to profitable outcomes. The common factor was not activity, but selectivity — focusing only on high-quality setups and aligning with market conditions.
+
+EdgeBreak was created to apply that process consistently.
+
+It removes unnecessary complexity, filters out noise, and focuses on structured breakout setups — allowing attention to remain on what actually matters.
+
+The objective is not to generate more trades, but to improve clarity — prioritising structure, selectivity, and alignment with current market conditions.
   </p>
 </div>
 
-<!-- WORKFLOW -->
+<!-- HOW TO USE -->
 <div class="card">
   <h2>How EdgeBreak Is Used</h2>
 
   <div class="step">
-    <div class="step-title">Identify High-Quality Setups</div>
-    <p class="subtle">EdgeBreak scans thousands of stocks daily to surface structured breakout opportunities.</p>
-  </div>
-
-  <div class="step">
-    <div class="step-title">Refine Your Focus</div>
-    <p class="subtle">Work from a focused watchlist instead of manually reviewing the entire market.</p>
+    <div class="step-title">Identify Setups</div>
+    <p class="subtle">Focus on structured breakout opportunities.</p>
   </div>
 
   <div class="step">
     <div class="step-title">Wait for Confirmation</div>
-    <p class="subtle">Allow breakouts to trigger and confirm, rather than anticipating moves prematurely.</p>
+    <p class="subtle">Allow breakouts to trigger and confirm.</p>
   </div>
 
   <div class="step">
-    <div class="step-title">Assess Market Conditions</div>
-    <p class="subtle">Use market context to understand when breakouts are more or less likely to succeed.</p>
+    <div class="step-title">Stay Selective</div>
+    <p class="subtle">Prioritise quality setups over activity.</p>
   </div>
+</div>
 
-  <div class="step">
-    <div class="step-title">Act with Context</div>
-    <p class="subtle">Make decisions based on structure, confirmation, and current market conditions.</p>
-  </div>
+<!-- UNDERSTANDING -->
+<div class="card">
+  <h2>Understanding EdgeBreak Setups</h2>
+
+  <p class="subtle">Breakouts occur when price moves above resistance.</p>
+  <div class="chart-placeholder">Chart: Breakout above resistance</div>
+
+  <p class="subtle">Stronger setups hold above support.</p>
+  <div class="chart-placeholder">Chart: Retest and continuation</div>
+
+  <p class="subtle">Some setups dip below support before continuing.</p>
+  <div class="chart-placeholder">Chart: Imperfect retest</div>
+
+  <p class="subtle">Even messy structures can continue.</p>
+  <div class="chart-placeholder">Chart: Volatile continuation</div>
+
+  <p class="subtle" style="margin-top:20px;">
+    This section is for educational context only and reflects how structured breakout setups are assessed within EdgeBreak.
+  </p>
 </div>
 
 <!-- MARKET -->
@@ -266,7 +236,7 @@ h2::after {
 
   <div class="market-block">
     <div class="market-label">CONTEXT</div>
-    <p class="subtle" id="marketMessage">Loading market data...</p>
+    <p class="subtle" id="marketMessage"></p>
   </div>
 
   <div class="market-block">
@@ -278,28 +248,22 @@ h2::after {
     <div class="market-label">LAST UPDATED</div>
     <p class="subtle" id="marketDate"></p>
   </div>
-
 </div>
 
-<!-- SIGNATURE -->
-<div class="card">
-  <h2>Signature Breakout Moves</h2>
+<!-- CTA -->
+<div class="card" style="text-align:center">
+  <h2>Start Using EdgeBreak</h2>
+  <p class="subtle">A structured approach to identifying high-quality breakout setups — without the noise.</p>
 
-  <div class="trade-card">
-    <p class="data"><strong>SMCI</strong> — Compression Breakout → +68%</p>
-    <img src="smci-chart.png" class="chart-img">
-  </div>
+  <a href="#" class="cta">Access EdgeBreak</a>
 
-  <div class="trade-card">
-    <p class="data"><strong>NVDA</strong> — Resistance Breakout → +42%</p>
-    <img src="nvda-chart.png" class="chart-img">
-  </div>
+  <p class="subtle" style="margin-top:10px;">
+    Unlock A+, A and B grade setups, tracking, and market context.
+  </p>
 
-  <div class="trade-card">
-    <p class="data"><strong>ARM</strong> — Consolidation Breakout → +55%</p>
-    <img src="arm-chart.png" class="chart-img">
-  </div>
-
+  <p class="subtle">
+    Not a broker. You trade using your own platform.
+  </p>
 </div>
 
 <div class="footer">EdgeBreak Intelligence • Pre-launch</div>
@@ -308,40 +272,18 @@ h2::after {
 
 <script>
 fetch("/market_status.json?v=" + new Date().getTime())
-  .then(res => res.json())
-  .then(data => {
+.then(res => res.json())
+.then(data => {
+  document.getElementById("marketStatus").textContent = data.label;
+  document.getElementById("marketMessage").textContent = data.message;
+  document.getElementById("marketMode").textContent = data.mode;
+  document.getElementById("marketDate").textContent = data.timestamp;
 
-    const statusEl = document.getElementById("marketStatus");
-    const messageEl = document.getElementById("marketMessage");
-    const modeEl = document.getElementById("marketMode");
-    const dateEl = document.getElementById("marketDate");
-
-    statusEl.textContent = data.label;
-
-    statusEl.classList.remove("status-red", "status-yellow", "status-green");
-
-    if (data.status === "RED") {
-      statusEl.classList.add("status-red");
-    } else if (data.status === "YELLOW") {
-      statusEl.classList.add("status-yellow");
-    } else if (data.status === "GREEN") {
-      statusEl.classList.add("status-green");
-    }
-
-    messageEl.textContent = data.message;
-    modeEl.textContent = data.mode;
-
-    const date = new Date(data.timestamp);
-    dateEl.textContent = date.toLocaleDateString(undefined, {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric'
-    });
-
-  })
-  .catch(() => {
-    document.getElementById("marketStatus").textContent = "Unavailable";
-  });
+  const el = document.getElementById("marketStatus");
+  if (data.status === "RED") el.classList.add("status-red");
+  if (data.status === "YELLOW") el.classList.add("status-yellow");
+  if (data.status === "GREEN") el.classList.add("status-green");
+});
 </script>
 
 </body>
