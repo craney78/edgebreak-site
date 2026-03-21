@@ -5,14 +5,20 @@
 <title>EdgeBreak Intelligence</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
+
+/* BASE */
 body {
   margin: 0;
   background: radial-gradient(circle at top, #0f1620, #05080c);
   color: #e6edf3;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+  font-family: 'Inter', sans-serif;
 }
 
+/* CONTAINER */
 .container {
   max-width: 1100px;
   margin: auto;
@@ -34,12 +40,42 @@ body {
 
 .header h1 {
   margin: 0;
-  font-size: 42px;
+  font-size: 40px;
+  font-weight: 600;
 }
 
+/* TAGLINE */
 .tagline {
   color: #00ff9c;
-  font-size: 14px;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+/* HERO TITLE */
+.hero-title {
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 600;
+  letter-spacing: -1px;
+}
+
+/* HEADINGS */
+h2 {
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  font-size: clamp(20px, 2.2vw, 26px);
+  position: relative;
+  padding-bottom: 8px;
+}
+
+/* SUBTLE UNDERLINE (HIGH-END TOUCH) */
+h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: rgba(0,255,156,0.4);
 }
 
 /* CARD */
@@ -51,6 +87,11 @@ body {
   margin-bottom: 40px;
   backdrop-filter: blur(12px);
   box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  transition: 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
 }
 
 /* TEXT */
@@ -67,7 +108,7 @@ body {
   background: linear-gradient(90deg, #00ff9c, #00cc88);
   border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
   border: none;
   transition: 0.2s;
   display: inline-block;
@@ -75,13 +116,17 @@ body {
   color: black;
 }
 
-.cta:hover { transform: scale(1.05); }
+.cta:hover { 
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(0,255,156,0.4);
+}
 
 /* MARKET */
 .status {
   font-size: 20px;
-  font-weight: bold;
+  font-weight: 600;
 }
+
 .weak { color: #ff4d4d; }
 
 /* WORKFLOW */
@@ -90,8 +135,8 @@ body {
 }
 
 .step-title {
-  font-weight: bold;
-  font-size: 16px;
+  font-weight: 600;
+  font-size: 15px;
   margin-bottom: 5px;
 }
 
@@ -102,14 +147,30 @@ body {
   border-radius: 16px;
   border-left: 4px solid #00ff9c;
   max-width: 900px;
-  margin: auto;
+  margin: 20px auto;
+  transition: 0.2s;
 }
 
+.trade-card:hover {
+  background: #0b1220;
+}
+
+/* DATA FONT */
+.data {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* CHART */
 .chart-img {
   width: 100%;
   border-radius: 10px;
   margin-top: 15px;
   cursor: pointer;
+  transition: 0.2s;
+}
+
+.chart-img:hover {
+  opacity: 0.9;
 }
 
 /* LIGHTBOX */
@@ -146,13 +207,13 @@ input {
   border: none;
 }
 
-.success { display:none; color:#00ff9c; margin-top:10px; }
-
 .footer {
   text-align:center;
   color:#666;
   margin-top:60px;
+  font-size: 13px;
 }
+
 </style>
 </head>
 
@@ -172,7 +233,7 @@ input {
 <!-- HERO -->
 <div class="card" style="text-align:center">
 
-  <h1 style="font-size:42px;">
+  <h1 class="hero-title">
     High-Quality Breakouts.<br>
     Measured Performance.
   </h1>
@@ -186,9 +247,9 @@ input {
   </p>
 
   <!-- BUTTONS -->
-  <a href="watchlist.html" class="cta">📊 View Live Watchlist</a>
+  <a href="watchlist.html" class="cta">View Live Watchlist</a>
 
-  <button class="cta" onclick="showForm()">🚀 Get Early Access</button>
+  <button class="cta" onclick="showForm()">Get Early Access</button>
 
   <div id="emailBox" class="email-box">
     <input type="email" placeholder="Enter your email">
@@ -203,7 +264,7 @@ input {
 
 <!-- WHY -->
 <div class="card">
-  <h2>🧠 Why EdgeBreak Is Different</h2>
+  <h2>Why EdgeBreak Is Different</h2>
 
   <p class="subtle" style="color:#00ff9c;">
     Not all breakouts are equal.
@@ -224,30 +285,30 @@ input {
 
 <!-- WORKFLOW -->
 <div class="card">
-  <h2>⚙️ How EdgeBreak Is Used</h2>
+  <h2>How EdgeBreak Is Used</h2>
 
   <div class="step">
-    <div class="step-title">🔍 Identify High-Quality Setups</div>
+    <div class="step-title">Identify High-Quality Setups</div>
     <p class="subtle">EdgeBreak scans thousands of stocks daily.</p>
   </div>
 
   <div class="step">
-    <div class="step-title">🎯 Refine Your Focus</div>
+    <div class="step-title">Refine Your Focus</div>
     <p class="subtle">Work from a short list instead of the entire market.</p>
   </div>
 
   <div class="step">
-    <div class="step-title">⏳ Wait for Confirmation</div>
+    <div class="step-title">Wait for Confirmation</div>
     <p class="subtle">Let breakouts trigger — not anticipate them.</p>
   </div>
 
   <div class="step">
-    <div class="step-title">🌍 Assess Market Conditions</div>
+    <div class="step-title">Assess Market Conditions</div>
     <p class="subtle">Understand when breakouts are working.</p>
   </div>
 
   <div class="step">
-    <div class="step-title">⚡ Act with Context</div>
+    <div class="step-title">Act with Context</div>
     <p class="subtle">Make decisions with structure and data.</p>
   </div>
 </div>
@@ -255,25 +316,25 @@ input {
 <!-- MARKET -->
 <div class="card">
   <h2>🇺🇸 Current US Market Conditions</h2>
-  <div class="status weak">🔴 Weak Market — Low breakout follow-through</div>
+  <div class="status weak">Weak Market — Low breakout follow-through</div>
 </div>
 
 <!-- SIGNATURE -->
 <div class="card">
-  <h2>🚀 Signature Breakout Moves</h2>
+  <h2>Signature Breakout Moves</h2>
 
   <div class="trade-card">
-    <p><strong>SMCI</strong> — Compression Breakout → +68%</p>
+    <p class="data"><strong>SMCI</strong> — Compression Breakout → +68%</p>
     <img src="smci-chart.png" class="chart-img" onclick="openLightbox(this.src)">
   </div>
 
   <div class="trade-card">
-    <p><strong>NVDA</strong> — Resistance Breakout → +42%</p>
+    <p class="data"><strong>NVDA</strong> — Resistance Breakout → +42%</p>
     <img src="nvda-chart.png" class="chart-img" onclick="openLightbox(this.src)">
   </div>
 
   <div class="trade-card">
-    <p><strong>ARM</strong> — Consolidation Breakout → +55%</p>
+    <p class="data"><strong>ARM</strong> — Consolidation Breakout → +55%</p>
     <img src="arm-chart.png" class="chart-img" onclick="openLightbox(this.src)">
   </div>
 
