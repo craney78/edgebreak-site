@@ -35,10 +35,18 @@ body {
 }
 
 .market-weak { background: #2a1010; color: #ff6b6b; }
+.market-strong { background: #0f2a1f; color: #3ddc97; }
+.market-neutral { background: #2a260f; color: #f0c674; }
+
+.section-title {
+  margin: 30px 0 10px;
+  font-size: 18px;
+}
 
 .table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 30px;
 }
 
 .table th, .table td {
@@ -73,12 +81,36 @@ body {
 .grade-B { background: #ff8800; color: black; }
 .grade-C { background: #666; color: white; }
 
-a { color: #58a6ff; text-decoration: none; }
+.up { color: #3ddc97; }
+.down { color: #ff6b6b; }
+.neutral { color: #8b949e; }
+
+.locked {
+  opacity: 0.35;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.subscribe-box {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.subscribe-btn {
+  background: #00ff9c;
+  color: black;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+}
 
 .footer {
   margin-top: 40px;
   font-size: 12px;
   color: #6e7681;
+  text-align: center;
 }
 </style>
 </head>
@@ -91,24 +123,64 @@ a { color: #58a6ff; text-decoration: none; }
 
 <h1>💎 EdgeBreak Watchlist</h1>
 
-<div class="market-bar market-weak">
-🇺🇸 US MARKET: 🔴 WEAK<br>
-<span style="color:#8b949e;">
-Breakouts showing low follow-through
-</span>
-</div>
+<div id="marketBar" class="market-bar"></div>
 
-<table class="table" id="watchlistTable">
+<!-- TODAY -->
+<div class="section-title">🔥 Today's Breakouts</div>
+<table class="table" id="todayTable">
 <thead>
 <tr>
 <th>Symbol</th>
 <th>Score</th>
 <th>Break %</th>
+<th>Performance</th>
+<th>Found</th>
 <th>Chart</th>
 </tr>
 </thead>
 <tbody></tbody>
 </table>
+
+<!-- ACTIVE -->
+<div class="section-title">📊 Active Watchlist</div>
+<table class="table" id="activeTable">
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Score</th>
+<th>Break %</th>
+<th>Performance</th>
+<th>Found</th>
+<th>Chart</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+<!-- ARCHIVE -->
+<details>
+  <summary style="cursor:pointer; color:#8b949e;">📁 View Archived Signals</summary>
+  <table class="table" id="archiveTable">
+    <thead>
+      <tr>
+        <th>Symbol</th>
+        <th>Score</th>
+        <th>Break %</th>
+        <th>Performance</th>
+        <th>Found</th>
+        <th>Chart</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</details>
+
+<!-- SUBSCRIBE -->
+<div class="subscribe-box">
+  <a href="pricing.html" class="subscribe-btn">
+    Unlock Full Access 🔓
+  </a>
+</div>
 
 <div class="footer">
 EdgeBreak Intelligence
@@ -118,66 +190,133 @@ EdgeBreak Intelligence
 
 <script>
 
-// 🔥 FORCE FRESH DATA (CACHE FIX)
+// =========================
+// MARKET STATUS
+// =========================
+fetch("/market_status.json?v=" + new Date().getTime())
+  .then(res => res.json())
+  .then(market => {
+
+    const bar = document.getElementById("marketBar");
+
+    let className = "market-weak";
+    if (market.status === "GREEN") className = "market-strong";
+    if (market.status === "YELLOW") className = "market-neutral";
+
+    bar.className = "market-bar " + className;
+
+    bar.innerHTML = `
+      🇺🇸 US MARKET: ${market.label}<br>
+      <span style="color:#8b949e;">${market.message}</span>
+    `;
+  });
+
+
+// =========================
+// WATCHLIST
+// =========================
 fetch("/watchlist.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
 
-    console.log("🔥 LIVE DATA:", data); // DEBUG
+    if (!data || data.length === 0) {
+      renderEmpty("#todayTable tbody");
+      return;
+    }
 
-    const gradeOrder = {
-      "A+": 5,
-      "A": 4,
-      "B+": 3,
-      "B": 2,
-      "C": 1
-    };
+    const gradeOrder = { "A+":5,"A":4,"B+":3,"B":2,"C":1 };
 
-    data.sort((a, b) => {
-      const gradeDiff = (gradeOrder[b.grade] || 0) - (gradeOrder[a.grade] || 0);
-      if (gradeDiff !== 0) return gradeDiff;
+    data.sort((a,b)=>{
+      const g = (gradeOrder[b.grade]||0)-(gradeOrder[a.grade]||0);
+      if(g!==0) return g;
       return b.score - a.score;
     });
 
-    const tbody = document.querySelector("#watchlistTable tbody");
+    const today = data.filter(x => x.age === 0 && x.status !== "failed");
+    const active = data.filter(x => x.age > 0 && x.status !== "failed");
+    const archived = data.filter(x => x.status === "failed" || x.age > 5);
 
-    data.forEach(item => {
+    renderRows(today, "#todayTable tbody");
+    renderRows(active, "#activeTable tbody");
+    renderRows(archived, "#archiveTable tbody");
 
-      const row = document.createElement("tr");
-
-      row.innerHTML = `
-        <td>
-          <a href="https://www.tradingview.com/chart/?symbol=NASDAQ:${item.symbol}" target="_blank">
-            ${item.symbol}
-          </a>
-        </td>
-
-        <td class="${getScoreClass(item.score)}">
-          ${item.score}
-          <div class="grade ${getGradeClass(item.grade)}">
-            ${item.grade || "NO GRADE"}
-          </div>
-        </td>
-
-        <td>${item.break}%</td>
-
-        <td>
-          <a href="https://www.tradingview.com/chart/?symbol=NASDAQ:${item.symbol}" target="_blank">
-            View ↗
-          </a>
-        </td>
-      `;
-
-      tbody.appendChild(row);
-    });
-
-  })
-  .catch(err => {
-    console.error("❌ FETCH ERROR:", err);
   });
 
-// HELPERS
 
+// =========================
+// RENDER FUNCTIONS
+// =========================
+function renderRows(list, selector) {
+
+  const tbody = document.querySelector(selector);
+  tbody.innerHTML = "";
+
+  if (!list || list.length === 0) {
+    renderEmpty(selector);
+    return;
+  }
+
+  list.forEach(item => {
+
+    const change = item.change_percent || 0;
+
+    let perfClass = "neutral";
+    if (change > 0) perfClass = "up";
+    if (change < 0) perfClass = "down";
+
+    const locked = isLocked(item.grade) ? "locked" : "";
+
+    const row = document.createElement("tr");
+
+    row.className = locked;
+
+    row.innerHTML = `
+      <td>
+        <a href="https://www.tradingview.com/chart/?symbol=NASDAQ:${item.symbol}" target="_blank">
+          ${item.symbol}
+        </a>
+      </td>
+
+      <td class="${getScoreClass(item.score)}">
+        ${item.score}
+        <div class="grade ${getGradeClass(item.grade)}">
+          ${item.grade || "-"}
+        </div>
+      </td>
+
+      <td>${item.break ? item.break + "%" : "-"}</td>
+
+      <td class="${perfClass}">
+        ${change ? change.toFixed(2) + "%" : "-"}
+      </td>
+
+      <td>${formatDate(item.signal_date)}</td>
+
+      <td>
+        <a href="https://www.tradingview.com/chart/?symbol=NASDAQ:${item.symbol}" target="_blank">
+          View ↗
+        </a>
+      </td>
+    `;
+
+    tbody.appendChild(row);
+  });
+}
+
+function renderEmpty(selector) {
+  document.querySelector(selector).innerHTML = `
+    <tr>
+      <td colspan="6" style="text-align:center; color:#8b949e;">
+        No setups available
+      </td>
+    </tr>
+  `;
+}
+
+
+// =========================
+// HELPERS
+// =========================
 function getScoreClass(score) {
   if (score >= 50) return "score-elite";
   if (score >= 40) return "score-strong";
@@ -190,6 +329,15 @@ function getGradeClass(grade) {
   if (grade === "B+") return "grade-Bplus";
   if (grade === "B") return "grade-B";
   return "grade-C";
+}
+
+function isLocked(grade) {
+  return grade === "A+" || grade === "A";
+}
+
+function formatDate(date) {
+  if (!date) return "-";
+  return date;
 }
 
 </script>

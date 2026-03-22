@@ -4,6 +4,8 @@ import csv
 import os
 import json
 
+from datetime import datetime
+
 from breakout_logic import detect_breakout_today
 from market_index import calculate_market_strength, save_market_status_json
 
@@ -16,18 +18,16 @@ SCAN_LIMIT = 9999
 
 
 # =========================
-# 📂 LOAD SYMBOLS
+# LOAD SYMBOLS
 # =========================
-
 def load_symbols():
     with open(SYMBOL_FILE, "r") as f:
         return [line.strip() for line in f if line.strip()]
 
 
 # =========================
-# 🌐 FETCH DATA
+# FETCH DATA
 # =========================
-
 def fetch_batch(symbols):
     url = (
         f"https://api.twelvedata.com/time_series"
@@ -45,10 +45,9 @@ def fetch_batch(symbols):
 
 
 # =========================
-# 🧠 PROCESS DATA
+# PROCESS DATA
 # =========================
-
-def process_data(data, debug=False):
+def process_data(data):
     signals = []
 
     for symbol, content in data.items():
@@ -63,14 +62,15 @@ def process_data(data, debug=False):
         try:
             window = values[:50]
 
-            result = detect_breakout_today(symbol, window, debug)
+            result = detect_breakout_today(symbol, window)
 
             if result:
                 print(
-                    f"{result['symbol']} | {result['grade']} | {result['setup_type']} | "
+                    f"{result['symbol']} | {result['grade']} | "
                     f"Score {result['score']} | "
                     f"Break {result['breakout_strength']}%"
                 )
+
                 signals.append(result)
 
         except Exception as e:
@@ -80,9 +80,8 @@ def process_data(data, debug=False):
 
 
 # =========================
-# 🏆 SORTING (GRADE FIRST)
+# SORT SIGNALS
 # =========================
-
 GRADE_ORDER = {
     "A+": 5,
     "A": 4,
@@ -90,7 +89,6 @@ GRADE_ORDER = {
     "B": 2,
     "C": 1
 }
-
 
 def sort_signals(signals):
     return sorted(
@@ -101,16 +99,27 @@ def sort_signals(signals):
 
 
 # =========================
-# 💾 SAVE WATCHLIST TXT
+# GET LATEST PRICE
 # =========================
+def get_latest_price(symbol):
+    try:
+        url = f"https://api.twelvedata.com/price?symbol={symbol}&apikey={API_KEY}"
+        data = requests.get(url, timeout=5).json()
+        return float(data["price"])
+    except:
+        return None
 
+
+# =========================
+# SAVE TXT WATCHLIST
+# =========================
 def save_watchlist(signals):
     with open("watchlist.txt", "w", encoding="utf-8") as f:
         f.write("💎 RANKED BREAKOUTS\n\n")
 
         for s in signals:
             f.write(
-                f"{s['symbol']} | {s['grade']} | {s['setup_type']} | "
+                f"{s['symbol']} | {s['grade']} | "
                 f"Score {s['score']} | "
                 f"Break {s['breakout_strength']}%\n"
                 f"→ {s['insight']}\n\n"
@@ -120,33 +129,111 @@ def save_watchlist(signals):
 
 
 # =========================
-# 💾 SAVE WATCHLIST JSON (🔥 THIS FIXES YOUR ISSUE)
+# SAVE WATCHLIST JSON (UPGRADED)
 # =========================
+def save_watchlist_json(new_signals):
 
-def save_watchlist_json(signals):
+    existing = []
 
-    watchlist = []
+    if os.path.exists("watchlist.json"):
+        with open("watchlist.json", "r") as f:
+            try:
+                existing = json.load(f)
+            except:
+                existing = []
 
-    for s in signals:
-        watchlist.append({
-            "symbol": s["symbol"],
-            "score": s["score"],
-            "grade": s.get("grade", "C"),  # 🔥 KEY FIX
-            "break": s["breakout_strength"],
-            "age": 0,
-            "status": "breaking"
-        })
+    existing_map = {item["symbol"]: item for item in existing}
 
+    added = 0
+    updated = 0
+
+    # =========================
+    # UPDATE EXISTING SIGNALS
+    # =========================
+    for item in existing:
+
+        # AGE
+        item["age"] = item.get("age", 0) + 1
+
+        # PRICE UPDATE
+        latest_price = get_latest_price(item["symbol"])
+        if latest_price:
+            item["current_price"] = latest_price
+
+            start_price = item.get("start_price", latest_price)
+
+            change = ((latest_price - start_price) / start_price) * 100
+            item["change_percent"] = round(change, 2)
+
+        # DEFAULT STATUS
+        if "status" not in item:
+            item["status"] = "holding"
+
+        # =========================
+        # FAILURE LOGIC
+        # =========================
+        if item["age"] >= 2:
+
+            resistance = item.get("resistance", item.get("start_price"))
+            price = item.get("current_price")
+
+            if resistance and price:
+
+                if price < resistance:
+                    item["below_resistance"] = item.get("below_resistance", 0) + 1
+                else:
+                    item["below_resistance"] = 0
+
+                if item["below_resistance"] >= 2:
+                    item["status"] = "failed"
+
+    # =========================
+    # ADD NEW SIGNALS
+    # =========================
+    for s in new_signals:
+
+        if s["symbol"] not in existing_map:
+
+            existing.append({
+                "symbol": s["symbol"],
+                "score": s["score"],
+                "grade": s["grade"],
+                "break": s["breakout_strength"],
+
+                "age": 0,
+                "status": "breaking",
+                "signal_date": s.get("date"),
+                "start_price": s.get("price"),
+                "resistance": s.get("resistance"),
+                "current_price": s.get("price"),
+                "change_percent": 0
+            })
+
+            added += 1
+
+        else:
+            if "grade" not in existing_map[s["symbol"]]:
+                existing_map[s["symbol"]]["grade"] = s["grade"]
+                updated += 1
+
+    # =========================
+    # CLEAN OLD FAILED
+    # =========================
+    existing = [
+        x for x in existing
+        if not (x.get("status") == "failed" and x.get("age", 0) > 10)
+    ]
+
+    # SAVE
     with open("watchlist.json", "w") as f:
-        json.dump(watchlist, f, indent=2)
+        json.dump(existing, f, indent=2)
 
-    print("✅ watchlist.json saved with grades")
+    print(f"✅ watchlist.json updated — {added} new, {updated} fixed")
 
 
 # =========================
-# 📊 PERFORMANCE TRACKING
+# CSV LOGGING
 # =========================
-
 FIELDNAMES = [
     "date",
     "symbol",
@@ -162,7 +249,6 @@ FIELDNAMES = [
     "day2_return",
     "result"
 ]
-
 
 def log_to_csv(signals, filename="breakout_history.csv"):
     file_exists = os.path.isfile(filename)
@@ -194,11 +280,10 @@ def log_to_csv(signals, filename="breakout_history.csv"):
 
 
 # =========================
-# 🚀 MAIN RUNNER
+# MAIN RUN
 # =========================
-
 def run():
-    print("🚀 SCANNING NASDAQ...\n")
+    print("🚀 SCANNING...\n")
 
     symbols = load_symbols()[:SCAN_LIMIT]
     all_signals = []
@@ -215,7 +300,6 @@ def run():
 
         time.sleep(SLEEP_TIME)
 
-    # 🔥 SORT
     all_signals = sort_signals(all_signals)
 
     print("\n💎 BREAKOUTS (RANKED):\n")
@@ -225,17 +309,17 @@ def run():
             f"{s['symbol']} | {s['grade']} | Score {s['score']} | Break {s['breakout_strength']}%"
         )
 
-    # 🔥 SAVE EVERYTHING
-    save_watchlist(all_signals)
-    save_watchlist_json(all_signals)   # 🚨 THIS IS THE KEY LINE
-    log_to_csv(all_signals)
+    if len(all_signals) > 0:
+        save_watchlist(all_signals)
+        save_watchlist_json(all_signals)
+        log_to_csv(all_signals)
+    else:
+        print("⚠️ No new signals — watchlist unchanged")
 
-    # 🧠 MARKET CONDITION
     market = calculate_market_strength()
     save_market_status_json(market)
 
-    print("\n🧠 MARKET:", market.get("label"))
-    print(f"TOTAL BREAKOUTS: {len(all_signals)}")
+    print(f"\nTOTAL NEW SIGNALS: {len(all_signals)}")
 
 
 if __name__ == "__main__":
