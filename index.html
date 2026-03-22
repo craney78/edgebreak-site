@@ -16,9 +16,34 @@ body {
 .container {
   max-width: 1100px;
   margin: auto;
-  padding: 60px 20px;
+  padding: 40px 20px;
 }
 
+/* NAVBAR */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.nav-left {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.nav-right a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #9da7b3;
+  font-size: 14px;
+}
+
+.nav-right a:hover {
+  color: #00ff9c;
+}
+
+/* HEADER */
 .header {
   display: flex;
   align-items: center;
@@ -41,6 +66,7 @@ body {
   font-size: 14px;
 }
 
+/* CARD */
 .card {
   background: rgba(17, 24, 33, 0.85);
   border: 1px solid #1f2a36;
@@ -51,17 +77,20 @@ body {
   box-shadow: 0 10px 40px rgba(0,0,0,0.4);
 }
 
+/* MARKET EMPHASIS */
 .market-card {
   border: 1px solid #00ff9c;
   box-shadow: 0 0 25px rgba(0,255,156,0.15);
 }
 
+/* TEXT */
 .subtle {
   color: #9da7b3;
   line-height: 1.6;
   margin-top: 10px;
 }
 
+/* CTA */
 .cta {
   margin-top: 25px;
   padding: 14px 26px;
@@ -73,6 +102,7 @@ body {
   display: inline-block;
 }
 
+/* WORKFLOW */
 .step {
   margin-bottom: 20px;
 }
@@ -82,6 +112,7 @@ body {
   font-size: 16px;
 }
 
+/* MARKET */
 .status {
   font-size: 22px;
   font-weight: bold;
@@ -102,6 +133,7 @@ body {
   color: #00FF9C;
 }
 
+/* CHART PLACEHOLDER */
 .chart-placeholder {
   background: #020617;
   border: 1px solid #1f2a36;
@@ -112,10 +144,17 @@ body {
   color: #666;
 }
 
+/* FOOTER */
 .footer {
   text-align:center;
   color:#666;
   margin-top:60px;
+}
+
+.footer a {
+  color:#00ff9c;
+  text-decoration:none;
+  margin:0 10px;
 }
 </style>
 </head>
@@ -123,6 +162,16 @@ body {
 <body>
 
 <div class="container">
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="nav-left">EdgeBreak</div>
+
+  <div class="nav-right">
+    <a href="watchlist.html">Watchlist</a>
+    <a href="faq.html">FAQ</a>
+  </div>
+</div>
 
 <!-- HEADER -->
 <div class="header">
@@ -133,7 +182,7 @@ body {
   </div>
 </div>
 
-<!-- HERO (FINAL) -->
+<!-- HERO -->
 <div class="card" style="text-align:center">
 
   <h1 style="font-size:42px;">
@@ -165,16 +214,16 @@ body {
 
 </div>
 
-<!-- WHY DIFFERENT -->
+<!-- WHY -->
 <div class="card">
   <h2>Why EdgeBreak Is Different</h2>
   <p class="subtle">EdgeBreak is built around one core principle: context matters.</p>
   <p class="subtle">The same pattern can perform very differently depending on the environment.</p>
   <p class="subtle">EdgeBreak evaluates both the setup and the environment it exists within.</p>
-  <p class="subtle">The system weighs current market performance and filters out noise — leaving only high-quality charts to review.</p>
+  <p class="subtle">The system filters out noise — leaving only high-quality charts to review.</p>
 </div>
 
-<!-- HOW TO USE -->
+<!-- HOW -->
 <div class="card">
   <h2>How EdgeBreak Is Used</h2>
 
@@ -238,7 +287,15 @@ body {
   <p class="subtle">EdgeBreak was built from real experience — focusing on what actually works.</p>
 </div>
 
-<div class="footer">EdgeBreak Intelligence • Pre-launch</div>
+<!-- FOOTER -->
+<div class="footer">
+  <div>EdgeBreak Intelligence • Pre-launch</div>
+
+  <div style="margin-top:10px;">
+    <a href="watchlist.html">Watchlist</a>
+    <a href="faq.html">FAQ</a>
+  </div>
+</div>
 
 </div>
 
