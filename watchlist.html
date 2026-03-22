@@ -14,17 +14,35 @@ body {
   color: #e6edf3;
 }
 
+/* NAVBAR */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  border-bottom: 1px solid #1f2933;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.nav-links a {
+  margin-left: 25px;
+  color: #9ca3af;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+}
+
 .container {
   max-width: 1200px;
   margin: auto;
   padding: 20px;
-}
-
-.back {
-  display: inline-block;
-  margin-bottom: 15px;
-  color: #8b949e;
-  text-decoration: none;
 }
 
 .market-bar {
@@ -35,6 +53,15 @@ body {
 }
 
 .market-weak { background: #2a1010; color: #ff6b6b; }
+
+.free-note {
+  background: #111827;
+  border: 1px solid #1f2933;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  color: #9ca3af;
+}
 
 .table {
   width: 100%;
@@ -50,14 +77,55 @@ body {
   color: #8b949e;
 }
 
+.table tr {
+  position: relative;
+}
+
 .table tr:hover {
   background: #11161c;
 }
 
+/* LOCKED ROW */
+.locked-row {
+  filter: blur(4px);
+  opacity: 0.5;
+}
+
+.lock-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(11,15,20,0.85);
+}
+
+.lock-box {
+  background: #0b0f14;
+  border: 1px solid #22c55e;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 6px 10px;
+  background: #22c55e;
+  color: black;
+  border-radius: 4px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* SCORES */
 .score-elite { color: #3ddc97; font-weight: bold; }
 .score-strong { color: #58a6ff; }
 .score-watch { color: #f0c674; }
 
+/* GRADES */
 .grade {
   margin-top: 4px;
   display: inline-block;
@@ -85,9 +153,19 @@ a { color: #58a6ff; text-decoration: none; }
 
 <body>
 
-<div class="container">
+<!-- ✅ CLEAN NAVBAR -->
+<div class="nav">
+  <div class="logo">EdgeBreak</div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="watchlist.html">Watchlist</a>
+    <a href="how-it-works.html">How It Works</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="faq.html">FAQ</a>
+  </div>
+</div>
 
-<a href="index.html" class="back">← Back</a>
+<div class="container">
 
 <h1>💎 EdgeBreak Watchlist</h1>
 
@@ -96,6 +174,11 @@ a { color: #58a6ff; text-decoration: none; }
 <span style="color:#8b949e;">
 Breakouts showing low follow-through
 </span>
+</div>
+
+<div class="free-note">
+You are viewing the <strong>free version</strong>.  
+Only C-grade setups are visible. Upgrade to unlock high-quality breakouts.
 </div>
 
 <table class="table" id="watchlistTable">
@@ -118,12 +201,9 @@ EdgeBreak Intelligence
 
 <script>
 
-// 🔥 FORCE FRESH DATA (CACHE FIX)
 fetch("/watchlist.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
-
-    console.log("🔥 LIVE DATA:", data); // DEBUG
 
     const gradeOrder = {
       "A+": 5,
@@ -143,7 +223,14 @@ fetch("/watchlist.json?v=" + new Date().getTime())
 
     data.forEach(item => {
 
+      const grade = item.grade || deriveGrade(item.score);
+      const isLocked = grade !== "C";
+
       const row = document.createElement("tr");
+
+      if (isLocked) {
+        row.classList.add("locked-row");
+      }
 
       row.innerHTML = `
         <td>
@@ -154,8 +241,8 @@ fetch("/watchlist.json?v=" + new Date().getTime())
 
         <td class="${getScoreClass(item.score)}">
           ${item.score}
-          <div class="grade ${getGradeClass(item.grade)}">
-            ${item.grade || "NO GRADE"}
+          <div class="grade ${getGradeClass(grade)}">
+            ${grade}
           </div>
         </td>
 
@@ -168,15 +255,30 @@ fetch("/watchlist.json?v=" + new Date().getTime())
         </td>
       `;
 
+      if (isLocked) {
+        const overlay = document.createElement("div");
+        overlay.className = "lock-overlay";
+        overlay.innerHTML = `
+          <div class="lock-box">
+            🔒 Premium Setup<br>
+            <a href="pricing.html" class="btn">Unlock</a>
+          </div>
+        `;
+        row.appendChild(overlay);
+      }
+
       tbody.appendChild(row);
     });
 
-  })
-  .catch(err => {
-    console.error("❌ FETCH ERROR:", err);
   });
 
-// HELPERS
+function deriveGrade(score) {
+  if (score >= 50) return "A+";
+  if (score >= 45) return "A";
+  if (score >= 40) return "B+";
+  if (score >= 35) return "B";
+  return "C";
+}
 
 function getScoreClass(score) {
   if (score >= 50) return "score-elite";
