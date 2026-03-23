@@ -186,7 +186,7 @@ a {
 <!-- NAV -->
 <div class="nav">
   <div class="logo">
-    <img src="logo.png">
+    <img src="logo.png" alt="EdgeBreak Logo">
   </div>
 
   <div class="nav-links">
@@ -201,8 +201,7 @@ a {
 
 <!-- HERO -->
 <div class="hero">
-
-  <img src="logo.png" class="hero-logo">
+  <img src="logo.png" class="hero-logo" alt="EdgeBreak Logo">
 
   <h1>Find High-Quality Breakouts — Without the Noise</h1>
 
@@ -216,7 +215,7 @@ a {
 
 <!-- ARROW -->
 <div class="arrow-divider">
-  <img src="arrow.png">
+  <img src="arrow.png" alt="Breakout Arrow">
 </div>
 
 <!-- WHY -->
@@ -224,9 +223,16 @@ a {
   <h2>Why EdgeBreak Is Different</h2>
 
   <div class="box">
-    <p>Most traders waste hours scanning charts or chasing noise.</p>
+    <p>Most traders spend hours scanning charts, chasing breakouts, and reacting too late.</p>
     <p>EdgeBreak removes that process completely.</p>
-    <p>We scan thousands of stocks daily and return only structured breakout setups — ranked by quality.</p>
+    <p>
+      We scan thousands of stocks daily and surface only structured breakout setups — 
+      ranked by quality, so you can focus on what actually matters.
+    </p>
+    <p style="margin-top:12px;">
+      Alongside this, EdgeBreak tracks real-time market conditions — helping you understand 
+      when breakouts are performing well and when conditions become more challenging.
+    </p>
   </div>
 </div>
 
@@ -242,8 +248,13 @@ a {
   <div class="box">
     <p>1. We scan the market</p>
     <p>2. Identify breakout structures</p>
-    <p>3. Rank them (C → A+)</p>
-    <p>4. Deliver a clean watchlist</p>
+    <p>3. Rank each setup (C → A+)</p>
+    <p>4. Track market conditions in real time</p>
+    <p>5. Deliver a clean, structured watchlist</p>
+
+    <p style="margin-top:10px;">
+      The market indicator provides context — helping you understand when breakout conditions are favourable and when they are not.
+    </p>
   </div>
 </div>
 
@@ -268,21 +279,22 @@ a {
   <img src="arrow.png">
 </div>
 
-<!-- POSITION -->
+<!-- NOT SIGNALS -->
 <div class="section">
   <h2>Not Signals. Not Advice.</h2>
 
   <div class="box">
     <p>EdgeBreak is not a signal service.</p>
     <p>EdgeBreak is not a broker.</p>
-    <p>We provide structured breakout intelligence — you stay in control.</p>
+    <p style="margin-top:10px;">
+      We provide structured breakout intelligence — you stay in control of every decision.
+    </p>
   </div>
 </div>
 
 <!-- FOOTER -->
 <div class="footer">
 © 2026 EdgeBreak — Breakout Intelligence Platform
-
 <p style="margin-top:20px; font-size:12px; color:#6b7280;">
 EdgeBreak provides market insights and data for informational purposes only. It does not constitute financial advice. Users are responsible for their own trading decisions.
 </p>
@@ -296,22 +308,26 @@ fetch("/market_status.json?v=" + new Date().getTime())
 
     const box = document.getElementById("marketBox");
 
+    let message = "";
     let actionText = "";
 
     if (data.status === "GREEN") {
-      actionText = "🟢 Breakouts are currently performing well — conditions are favourable";
+      message = "Breakouts are performing well across the market, with strong momentum and consistent follow-through.";
+      actionText = "🟢 Breakout conditions are favourable — performance is strong";
       box.style.borderColor = "#22c55e";
       box.style.boxShadow = "0 0 25px rgba(34,197,94,0.4)";
     }
 
     if (data.status === "YELLOW") {
-      actionText = "🟡 Mixed conditions — breakouts are less consistent";
+      message = "Conditions are mixed, with inconsistent breakout performance and varying levels of follow-through.";
+      actionText = "🟡 Breakout conditions are mixed — performance is less consistent";
       box.style.borderColor = "#f59e0b";
       box.style.boxShadow = "0 0 25px rgba(245,158,11,0.4)";
     }
 
     if (data.status === "RED") {
-      actionText = "🔴 Breakouts are currently failing at a higher rate — caution required";
+      message = "Breakouts are currently underperforming, with higher failure rates across the market. Momentum is limited and follow-through is inconsistent.";
+      actionText = "🔴 Breakout conditions are challenging — performance is reduced";
       box.style.borderColor = "#ef4444";
       box.style.boxShadow = "0 0 25px rgba(239,68,68,0.4)";
     }
@@ -321,7 +337,7 @@ fetch("/market_status.json?v=" + new Date().getTime())
         🇺🇸 US Market: ${data.label}
       </div>
       <div class="market-message">
-        ${data.message}
+        ${message}
       </div>
       <div class="market-action">
         ${actionText}

@@ -7,7 +7,7 @@ import json
 from breakout_logic import detect_breakout_today
 from market_index import calculate_market_strength, save_market_status_json
 
-API_KEY = "YOUR_API_KEY_HERE"
+API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
 SYMBOL_FILE = "nasdaq_symbols.txt"
 
 BATCH_SIZE = 20
@@ -97,7 +97,7 @@ def sort_signals(signals):
 
 
 # =========================
-# 🔥 SAFE FLOAT (FIX)
+# SAFE FLOAT
 # =========================
 def safe_float(value):
     try:
@@ -107,7 +107,7 @@ def safe_float(value):
 
 
 # =========================
-# 🔥 REBUILD FROM HISTORY (FIXED)
+# REBUILD FROM HISTORY
 # =========================
 def rebuild_from_history():
 
@@ -136,7 +136,7 @@ def rebuild_from_history():
                     "age": 1,
                     "status": "holding",
                     "signal_date": row.get("date"),
-                    "start_price": safe_float(row.get("price")),
+                    "entry_price": safe_float(row.get("price")),
                     "current_price": safe_float(row.get("price")),
                     "change_percent": 0
                 }
@@ -180,7 +180,7 @@ def save_watchlist(signals):
 
 
 # =========================
-# SAVE WATCHLIST JSON (FINAL)
+# SAVE WATCHLIST JSON
 # =========================
 def save_watchlist_json(new_signals):
 
@@ -193,16 +193,12 @@ def save_watchlist_json(new_signals):
             except:
                 existing = []
 
-    # 🔥 AUTO RECOVER IF EMPTY
     if not existing:
         print("⚠️ watchlist empty — rebuilding from history...")
         existing = rebuild_from_history()
 
     existing_map = {item["symbol"]: item for item in existing}
 
-    # =========================
-    # UPDATE EXISTING
-    # =========================
     for item in existing:
 
         item["age"] = item.get("age", 0) + 1
@@ -211,17 +207,16 @@ def save_watchlist_json(new_signals):
         if latest_price:
             item["current_price"] = latest_price
 
-            start_price = item.get("start_price", latest_price)
-            change = ((latest_price - start_price) / start_price) * 100
+            entry_price = item.get("entry_price", latest_price)
+            change = ((latest_price - entry_price) / entry_price) * 100
             item["change_percent"] = round(change, 2)
 
         if "status" not in item:
             item["status"] = "holding"
 
-        # FAILURE LOGIC
         if item["age"] >= 2:
 
-            resistance = item.get("resistance", item.get("start_price"))
+            resistance = item.get("resistance", item.get("entry_price"))
             price = item.get("current_price")
 
             if resistance and price:
@@ -234,9 +229,6 @@ def save_watchlist_json(new_signals):
                 if item["below_resistance"] >= 2:
                     item["status"] = "failed"
 
-    # =========================
-    # ADD NEW SIGNALS
-    # =========================
     for s in new_signals:
 
         if s["symbol"] not in existing_map:
@@ -250,13 +242,12 @@ def save_watchlist_json(new_signals):
                 "age": 0,
                 "status": "breaking",
                 "signal_date": s.get("date"),
-                "start_price": s.get("price"),
+                "entry_price": s.get("price"),
                 "resistance": s.get("resistance"),
                 "current_price": s.get("price"),
                 "change_percent": 0
             })
 
-    # CLEAN OLD FAILED
     existing = [
         x for x in existing
         if not (x.get("status") == "failed" and x.get("age", 0) > 10)
@@ -317,7 +308,7 @@ def log_to_csv(signals, filename="breakout_history.csv"):
 
 
 # =========================
-# MAIN RUN (FIXED)
+# MAIN RUN (FINAL FIXED DISPLAY)
 # =========================
 def run():
     print("🚀 SCANNING...\n")
@@ -339,14 +330,25 @@ def run():
 
     all_signals = sort_signals(all_signals)
 
+    # =========================
+    # DISPLAY FIX
+    # =========================
+    if len(all_signals) > 0:
+        display_list = all_signals
+    else:
+        display_list = rebuild_from_history()
+
+    display_list = sort_signals(display_list)
+
     print("\n💎 BREAKOUTS (RANKED):\n")
 
-    for s in all_signals:
+    for s in display_list:
         print(
-            f"{s['symbol']} | {s['grade']} | Score {s['score']} | Break {s['breakout_strength']}%"
+            f"{s['symbol']} | {s['grade']} | "
+            f"Score {s['score']} | "
+            f"Break {s.get('break', s.get('breakout_strength', 0))}%"
         )
 
-    # 🔥 ALWAYS UPDATE WATCHLIST (CRITICAL FIX)
     if len(all_signals) > 0:
         save_watchlist(all_signals)
         log_to_csv(all_signals)
@@ -355,7 +357,6 @@ def run():
 
     save_watchlist_json(all_signals)
 
-    # MARKET STATUS
     market = calculate_market_strength()
     save_market_status_json(market)
 
