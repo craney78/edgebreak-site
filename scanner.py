@@ -4,12 +4,10 @@ import csv
 import os
 import json
 
-from datetime import datetime
-
 from breakout_logic import detect_breakout_today
 from market_index import calculate_market_strength, save_market_status_json
 
-API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
+API_KEY = "YOUR_API_KEY_HERE"
 SYMBOL_FILE = "nasdaq_symbols.txt"
 
 BATCH_SIZE = 20
@@ -99,6 +97,59 @@ def sort_signals(signals):
 
 
 # =========================
+# 🔥 SAFE FLOAT (FIX)
+# =========================
+def safe_float(value):
+    try:
+        return float(value)
+    except:
+        return 0
+
+
+# =========================
+# 🔥 REBUILD FROM HISTORY (FIXED)
+# =========================
+def rebuild_from_history():
+
+    if not os.path.exists("breakout_history.csv"):
+        print("❌ No CSV found")
+        return []
+
+    latest = {}
+
+    with open("breakout_history.csv", newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+
+        for row in reader:
+            try:
+                symbol = row.get("symbol")
+
+                if not symbol:
+                    continue
+
+                latest[symbol] = {
+                    "symbol": symbol,
+                    "score": safe_float(row.get("score")),
+                    "grade": row.get("grade", "C"),
+                    "break": safe_float(row.get("breakout_strength")),
+
+                    "age": 1,
+                    "status": "holding",
+                    "signal_date": row.get("date"),
+                    "start_price": safe_float(row.get("price")),
+                    "current_price": safe_float(row.get("price")),
+                    "change_percent": 0
+                }
+
+            except Exception as e:
+                print("Row error:", e)
+
+    print(f"✅ Rebuilt {len(latest)} stocks from history")
+
+    return list(latest.values())
+
+
+# =========================
 # GET LATEST PRICE
 # =========================
 def get_latest_price(symbol):
@@ -111,7 +162,7 @@ def get_latest_price(symbol):
 
 
 # =========================
-# SAVE TXT WATCHLIST
+# SAVE WATCHLIST TXT
 # =========================
 def save_watchlist(signals):
     with open("watchlist.txt", "w", encoding="utf-8") as f:
@@ -129,7 +180,7 @@ def save_watchlist(signals):
 
 
 # =========================
-# SAVE WATCHLIST JSON (UPGRADED)
+# SAVE WATCHLIST JSON (FINAL)
 # =========================
 def save_watchlist_json(new_signals):
 
@@ -142,36 +193,32 @@ def save_watchlist_json(new_signals):
             except:
                 existing = []
 
+    # 🔥 AUTO RECOVER IF EMPTY
+    if not existing:
+        print("⚠️ watchlist empty — rebuilding from history...")
+        existing = rebuild_from_history()
+
     existing_map = {item["symbol"]: item for item in existing}
 
-    added = 0
-    updated = 0
-
     # =========================
-    # UPDATE EXISTING SIGNALS
+    # UPDATE EXISTING
     # =========================
     for item in existing:
 
-        # AGE
         item["age"] = item.get("age", 0) + 1
 
-        # PRICE UPDATE
         latest_price = get_latest_price(item["symbol"])
         if latest_price:
             item["current_price"] = latest_price
 
             start_price = item.get("start_price", latest_price)
-
             change = ((latest_price - start_price) / start_price) * 100
             item["change_percent"] = round(change, 2)
 
-        # DEFAULT STATUS
         if "status" not in item:
             item["status"] = "holding"
 
-        # =========================
         # FAILURE LOGIC
-        # =========================
         if item["age"] >= 2:
 
             resistance = item.get("resistance", item.get("start_price"))
@@ -209,26 +256,16 @@ def save_watchlist_json(new_signals):
                 "change_percent": 0
             })
 
-            added += 1
-
-        else:
-            if "grade" not in existing_map[s["symbol"]]:
-                existing_map[s["symbol"]]["grade"] = s["grade"]
-                updated += 1
-
-    # =========================
     # CLEAN OLD FAILED
-    # =========================
     existing = [
         x for x in existing
         if not (x.get("status") == "failed" and x.get("age", 0) > 10)
     ]
 
-    # SAVE
     with open("watchlist.json", "w") as f:
         json.dump(existing, f, indent=2)
 
-    print(f"✅ watchlist.json updated — {added} new, {updated} fixed")
+    print(f"✅ watchlist.json updated — total {len(existing)} stocks")
 
 
 # =========================
@@ -280,7 +317,7 @@ def log_to_csv(signals, filename="breakout_history.csv"):
 
 
 # =========================
-# MAIN RUN
+# MAIN RUN (FIXED)
 # =========================
 def run():
     print("🚀 SCANNING...\n")
@@ -309,13 +346,16 @@ def run():
             f"{s['symbol']} | {s['grade']} | Score {s['score']} | Break {s['breakout_strength']}%"
         )
 
+    # 🔥 ALWAYS UPDATE WATCHLIST (CRITICAL FIX)
     if len(all_signals) > 0:
         save_watchlist(all_signals)
-        save_watchlist_json(all_signals)
         log_to_csv(all_signals)
     else:
-        print("⚠️ No new signals — watchlist unchanged")
+        print("⚠️ No new signals — rebuilding watchlist")
 
+    save_watchlist_json(all_signals)
+
+    # MARKET STATUS
     market = calculate_market_strength()
     save_market_status_json(market)
 
