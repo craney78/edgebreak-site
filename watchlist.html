@@ -27,6 +27,42 @@ body {
   text-decoration: none;
 }
 
+/* LOGO */
+.logo-top {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.logo-top img {
+  height: 60px;
+  filter: drop-shadow(0 0 10px rgba(0,255,150,0.6));
+}
+
+/* TOP CTA */
+.top-cta {
+  text-align: center;
+  margin: 20px 0 20px;
+}
+
+.top-cta a {
+  background: #00ff9c;
+  color: black;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 0 15px rgba(0,255,150,0.4);
+}
+
+/* LOCK MESSAGE */
+.lock-message {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #ffcc00;
+  font-size: 14px;
+}
+
+/* MARKET */
 .market-bar {
   padding: 15px;
   border-radius: 10px;
@@ -43,6 +79,7 @@ body {
   font-size: 18px;
 }
 
+/* TABLE */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -50,7 +87,7 @@ body {
 }
 
 .table th, .table td {
-  padding: 12px;
+  padding: 14px;
 }
 
 .table th {
@@ -62,10 +99,12 @@ body {
   background: #11161c;
 }
 
+/* SCORES */
 .score-elite { color: #3ddc97; font-weight: bold; }
 .score-strong { color: #58a6ff; }
 .score-watch { color: #f0c674; }
 
+/* GRADE */
 .grade {
   margin-top: 4px;
   display: inline-block;
@@ -81,19 +120,22 @@ body {
 .grade-B { background: #ff8800; color: black; }
 .grade-C { background: #666; color: white; }
 
-.up { color: #3ddc97; }
-.down { color: #ff6b6b; }
+/* PERFORMANCE */
+.up { color: #3ddc97; font-weight: bold; }
+.down { color: #ff6b6b; font-weight: bold; }
 .neutral { color: #8b949e; }
 
+/* LOCKED */
 .locked {
   opacity: 0.35;
   filter: blur(2px);
   pointer-events: none;
 }
 
+/* SUBSCRIBE */
 .subscribe-box {
   text-align: center;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .subscribe-btn {
@@ -106,6 +148,30 @@ body {
   display: inline-block;
 }
 
+/* URGENCY */
+.urgency {
+  text-align: center;
+  color: #8b949e;
+  font-size: 13px;
+  margin-top: 20px;
+}
+
+/* STICKY CTA */
+.sticky-cta {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #00ff9c;
+  color: black;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 0 15px rgba(0,255,150,0.5);
+  z-index: 999;
+}
+
+/* FOOTER */
 .footer {
   margin-top: 40px;
   font-size: 12px;
@@ -119,9 +185,24 @@ body {
 
 <div class="container">
 
+<!-- LOGO -->
+<div class="logo-top">
+  <img src="images/logo.png">
+</div>
+
 <a href="index.html" class="back">← Back</a>
 
 <h1>💎 EdgeBreak Watchlist</h1>
+
+<!-- TOP CTA -->
+<div class="top-cta">
+  <a href="pricing.html">Unlock Full Watchlist Access 🔓</a>
+</div>
+
+<!-- LOCK MESSAGE -->
+<div class="lock-message">
+  🔒 B-grade and above setups are premium — upgrade to unlock
+</div>
 
 <div id="marketBar" class="market-bar"></div>
 
@@ -175,6 +256,11 @@ body {
   </table>
 </details>
 
+<!-- URGENCY -->
+<div class="urgency">
+  Most traders never see these setups in time
+</div>
+
 <!-- SUBSCRIBE -->
 <div class="subscribe-box">
   <a href="pricing.html" class="subscribe-btn">
@@ -188,11 +274,12 @@ EdgeBreak Intelligence
 
 </div>
 
+<!-- STICKY -->
+<a href="pricing.html" class="sticky-cta">Unlock 🔓</a>
+
 <script>
 
-// =========================
-// MARKET STATUS
-// =========================
+// MARKET
 fetch("/market_status.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(market => {
@@ -212,9 +299,7 @@ fetch("/market_status.json?v=" + new Date().getTime())
   });
 
 
-// =========================
 // WATCHLIST
-// =========================
 fetch("/watchlist.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
@@ -243,9 +328,7 @@ fetch("/watchlist.json?v=" + new Date().getTime())
   });
 
 
-// =========================
-// RENDER FUNCTIONS
-// =========================
+// RENDER
 function renderRows(list, selector) {
 
   const tbody = document.querySelector(selector);
@@ -267,7 +350,6 @@ function renderRows(list, selector) {
     const locked = isLocked(item.grade) ? "locked" : "";
 
     const row = document.createElement("tr");
-
     row.className = locked;
 
     row.innerHTML = `
@@ -313,10 +395,11 @@ function renderEmpty(selector) {
   `;
 }
 
+// UPDATED LOCK RULE
+function isLocked(grade) {
+  return grade === "A+" || grade === "A" || grade === "B+" || grade === "B";
+}
 
-// =========================
-// HELPERS
-// =========================
 function getScoreClass(score) {
   if (score >= 50) return "score-elite";
   if (score >= 40) return "score-strong";
@@ -329,10 +412,6 @@ function getGradeClass(grade) {
   if (grade === "B+") return "grade-Bplus";
   if (grade === "B") return "grade-B";
   return "grade-C";
-}
-
-function isLocked(grade) {
-  return grade === "A+" || grade === "A";
 }
 
 function formatDate(date) {
