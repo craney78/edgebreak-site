@@ -1,224 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Pricing — EdgeBreak</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0b0f14;
-      color: #e6edf3;
-    }
+<title>EdgeBreak Pricing</title>
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle at top, #0f1720, #0b0f14);
+  color: #e6edf3;
+}
 
-    /* NAVBAR */
-    .nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
-      border-bottom: 1px solid #1f2933;
-    }
+/* NAV STYLE TOP */
+.top {
+  text-align: center;
+  padding: 30px 20px 10px;
+}
 
-    .logo {
-      font-weight: bold;
-      font-size: 18px;
-    }
+.logo img {
+  height: 70px;
+  filter: drop-shadow(0 0 15px rgba(0,255,150,0.6));
+}
 
-    .nav-links a {
-      margin-left: 25px;
-      color: #9ca3af;
-      font-size: 14px;
-    }
+.back {
+  display: inline-block;
+  margin-top: 15px;
+  color: #8b949e;
+  text-decoration: none;
+}
 
-    .nav-links a:hover {
-      color: #ffffff;
-    }
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 40px 20px;
+}
 
-    /* HERO */
-    .hero {
-      text-align: center;
-      padding: 80px 20px 40px;
-    }
+.hero h1 {
+  font-size: 44px;
+  margin-bottom: 15px;
+}
 
-    .hero h2 {
-      font-size: 34px;
-      margin-bottom: 10px;
-    }
+.hero p {
+  color: #9ca3af;
+  max-width: 600px;
+  margin: auto;
+  line-height: 1.6;
+}
 
-    .hero p {
-      color: #9ca3af;
-      font-size: 16px;
-    }
+/* SECTION */
+.section {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
 
-    /* PRICING */
-    .pricing {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      padding: 40px 20px 80px;
-      flex-wrap: wrap;
-    }
+.box {
+  background: linear-gradient(145deg, #111827, #0d131a);
+  border: 1px solid #1f2933;
+  padding: 25px;
+  border-radius: 12px;
+}
 
-    .card {
-      background: #111827;
-      border: 1px solid #1f2933;
-      border-radius: 12px;
-      padding: 30px;
-      width: 300px;
-      text-align: center;
-      position: relative;
-    }
+/* PRICING CARD */
+.card {
+  background: linear-gradient(145deg, #111827, #0d131a);
+  border: 1px solid #1f2933;
+  padding: 30px;
+  border-radius: 14px;
+  text-align: center;
+}
 
-    .card h3 {
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
+.price {
+  font-size: 50px;
+  margin: 20px 0;
+}
 
-    .price {
-      font-size: 36px;
-      margin: 20px 0;
-    }
+.price span {
+  font-size: 16px;
+  color: #9ca3af;
+}
 
-    .features {
-      text-align: left;
-      margin: 20px 0;
-      padding-left: 18px;
-    }
+/* FEATURES */
+.features {
+  text-align: left;
+  margin-top: 20px;
+}
 
-    .features li {
-      margin: 10px 0;
-      color: #9ca3af;
-    }
+.features p {
+  margin: 10px 0;
+}
 
-    .btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 12px 20px;
-      border-radius: 6px;
-      background: #22c55e;
-      color: #000;
-      font-weight: bold;
-    }
+/* CTA */
+.cta {
+  display: inline-block;
+  margin-top: 25px;
+  padding: 16px 30px;
+  background: #00ff9c;
+  color: black;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 0 15px rgba(0,255,150,0.4);
+}
 
-    .btn.secondary {
-      background: #1f2933;
-      color: #e6edf3;
-    }
-
-    .highlight {
-      border: 1px solid #22c55e;
-      box-shadow: 0 0 20px rgba(34,197,94,0.2);
-    }
-
-    .badge {
-      position: absolute;
-      top: -10px;
-      right: 20px;
-      background: #22c55e;
-      color: #000;
-      padding: 4px 10px;
-      font-size: 12px;
-      border-radius: 4px;
-      font-weight: bold;
-    }
-
-    /* TRUST */
-    .trust {
-      text-align: center;
-      padding: 40px 20px;
-      max-width: 700px;
-      margin: auto;
-      color: #9ca3af;
-    }
-
-    /* FOOTER */
-    .footer {
-      text-align: center;
-      padding: 40px 20px;
-      border-top: 1px solid #1f2933;
-      color: #6b7280;
-      font-size: 13px;
-    }
-  </style>
+/* FOOTER */
+.footer {
+  text-align: center;
+  margin: 60px 0 30px;
+  font-size: 12px;
+  color: #6e7681;
+}
+</style>
 </head>
 
 <body>
 
-  <!-- ✅ CLEAN NAVBAR -->
-  <div class="nav">
-    <div class="logo">EdgeBreak</div>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="watchlist.html">Watchlist</a>
-      <a href="how-it-works.html">How It Works</a>
-      <a href="pricing.html">Pricing</a>
-      <a href="faq.html">FAQ</a>
+<!-- TOP -->
+<div class="top">
+  <div class="logo">
+    <a href="index.html">
+      <img src="images/logo.png">
+    </a>
+  </div>
+  <a href="index.html" class="back">Back</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Unlock EdgeBreak</h1>
+  <p>
+    Access high-quality breakout setups ranked and structured — 
+    without scanning hundreds of charts.
+  </p>
+</div>
+
+<!-- VALUE -->
+<div class="section">
+  <div class="box">
+    Most users only see lower-grade setups.
+    <br><br>
+    The highest quality breakouts (B and above) are locked — 
+    this is where the strongest opportunities exist.
+  </div>
+</div>
+
+<!-- WHAT YOU GET -->
+<div class="section">
+  <div class="box">
+    <h2>What You Unlock</h2>
+    <div class="features">
+      <p>Full access to B, B+, A and A+ setups</p>
+      <p>Highest quality breakout opportunities</p>
+      <p>Live performance tracking</p>
+      <p>Market condition intelligence</p>
+      <p>Structured daily watchlist</p>
     </div>
   </div>
+</div>
 
-  <!-- HERO -->
-  <div class="hero">
-    <h2>Simple Pricing. Real Edge.</h2>
-    <p>
-      Access high-quality breakout setups without the noise, guesswork, or hype.
-    </p>
-  </div>
+<!-- PRICING -->
+<div class="section">
+  <div class="card">
 
-  <!-- PRICING -->
-  <div class="pricing">
+    <h2>EdgeBreak Pro</h2>
 
-    <!-- FREE -->
-    <div class="card">
-      <h3>Free</h3>
-      <div class="price">$0</div>
-
-      <ul class="features">
-        <li>✔ C-grade breakout setups</li>
-        <li>✔ Delayed watchlist access</li>
-        <li>✔ Market condition insights</li>
-        <li>✔ Educational content</li>
-      </ul>
-
-      <a href="watchlist.html" class="btn secondary">Start Free</a>
+    <div class="price">
+      $19<span>/month</span>
     </div>
 
-    <!-- PRO -->
-    <div class="card highlight">
-      <div class="badge">MOST POPULAR</div>
-      <h3>Pro</h3>
-      <div class="price">$29<span style="font-size:16px;">/mo</span></div>
-
-      <ul class="features">
-        <li>✔ A / B / A+ breakout setups</li>
-        <li>✔ Real-time watchlist updates</li>
-        <li>✔ Full access to all setups</li>
-        <li>✔ Priority market condition signals</li>
-        <li>✔ Clean, structured watchlist</li>
-      </ul>
-
-      <a href="#" class="btn">Upgrade to Pro</a>
-    </div>
+    <a href="#" class="cta">Start Subscription</a>
 
   </div>
+</div>
 
-  <!-- TRUST -->
-  <div class="trust">
-    EdgeBreak does not provide financial advice or signals.  
-    We deliver structured breakout intelligence so you can make your own decisions with clarity.
+<!-- TRUST -->
+<div class="section">
+  <div class="box">
+    EdgeBreak provides structured breakout data only.
+    <br><br>
+    It is not a broker and does not provide financial advice.
+    <br><br>
+    You remain in full control of all trading decisions.
   </div>
+</div>
 
-  <!-- FOOTER -->
-  <div class="footer">
-    © 2026 EdgeBreak — Breakout Intelligence Platform
-  </div>
+<!-- FOOTER -->
+<div class="footer">
+EdgeBreak Intelligence Platform
+</div>
 
 </body>
 </html>
