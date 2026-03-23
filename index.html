@@ -186,7 +186,7 @@ a {
 <!-- NAV -->
 <div class="nav">
   <div class="logo">
-    <img src="logo.png" alt="EdgeBreak Logo">
+    <img src="logo.png">
   </div>
 
   <div class="nav-links">
@@ -201,7 +201,7 @@ a {
 
 <!-- HERO -->
 <div class="hero">
-  <img src="logo.png" class="hero-logo" alt="EdgeBreak Logo">
+  <img src="logo.png" class="hero-logo">
 
   <h1>Find High-Quality Breakouts — Without the Noise</h1>
 
@@ -215,13 +215,12 @@ a {
 
 <!-- ARROW -->
 <div class="arrow-divider">
-  <img src="arrow.png" alt="Breakout Arrow">
+  <img src="arrow.png">
 </div>
 
 <!-- WHY -->
 <div class="section">
   <h2>Why EdgeBreak Is Different</h2>
-
   <div class="box">
     <p>Most traders spend hours scanning charts, chasing breakouts, and reacting too late.</p>
     <p>EdgeBreak removes that process completely.</p>
@@ -244,7 +243,6 @@ a {
 <!-- HOW -->
 <div class="section">
   <h2>How It Works</h2>
-
   <div class="box">
     <p>1. We scan the market</p>
     <p>2. Identify breakout structures</p>
@@ -279,15 +277,43 @@ a {
   <img src="arrow.png">
 </div>
 
+<!-- TECH SECTION -->
+<div class="section">
+  <h2>Built for Precision. Backed by Technology.</h2>
+
+  <div class="box">
+    <p>
+      EdgeBreak is powered by a structured breakout engine designed to scan thousands of stocks and identify high-quality setups with consistency.
+    </p>
+
+    <p>
+      Every signal is generated using defined rules, scoring systems, and market structure — not guesswork or subjective analysis.
+    </p>
+
+    <p style="margin-top:12px;">
+      Combined with real-time market condition tracking, EdgeBreak provides a clear, data-driven view of breakout performance across the market.
+    </p>
+  </div>
+</div>
+
+<!-- ARROW -->
+<div class="arrow-divider">
+  <img src="arrow.png">
+</div>
+
 <!-- NOT SIGNALS -->
 <div class="section">
   <h2>Not Signals. Not Advice.</h2>
 
   <div class="box">
-    <p>EdgeBreak is not a signal service.</p>
-    <p>EdgeBreak is not a broker.</p>
+    <p>EdgeBreak is not a signal service and does not execute trades.</p>
+
+    <p>
+      We provide structured breakout intelligence — giving you clear, data-driven setups and real-time market context.
+    </p>
+
     <p style="margin-top:10px;">
-      We provide structured breakout intelligence — you stay in control of every decision.
+      You stay in control of every decision, using your own strategy and preferred trading platform.
     </p>
   </div>
 </div>
@@ -296,7 +322,7 @@ a {
 <div class="footer">
 © 2026 EdgeBreak — Breakout Intelligence Platform
 <p style="margin-top:20px; font-size:12px; color:#6b7280;">
-EdgeBreak provides market insights and data for informational purposes only. It does not constitute financial advice. Users are responsible for their own trading decisions.
+EdgeBreak provides market insights and data for informational purposes only. It does not constitute financial advice.
 </p>
 </div>
 
@@ -334,14 +360,11 @@ fetch("/market_status.json?v=" + new Date().getTime())
 
     box.innerHTML = `
       <div class="market-label">
-        🇺🇸 US Market: ${data.label}
+        <img src="https://flagcdn.com/us.svg" style="height:14px; vertical-align:middle; margin-right:6px;">
+        US Market: ${data.label}
       </div>
-      <div class="market-message">
-        ${message}
-      </div>
-      <div class="market-action">
-        ${actionText}
-      </div>
+      <div class="market-message">${message}</div>
+      <div class="market-action">${actionText}</div>
     `;
   });
 </script>
