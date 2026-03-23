@@ -38,7 +38,7 @@ body {
   filter: drop-shadow(0 0 10px rgba(0,255,150,0.6));
 }
 
-/* TOP CTA */
+/* CTA */
 .top-cta {
   text-align: center;
   margin: 20px 0 20px;
@@ -51,7 +51,6 @@ body {
   border-radius: 8px;
   font-weight: bold;
   text-decoration: none;
-  box-shadow: 0 0 15px rgba(0,255,150,0.4);
 }
 
 /* LOCK MESSAGE */
@@ -156,7 +155,7 @@ body {
   margin-top: 20px;
 }
 
-/* STICKY CTA */
+/* STICKY */
 .sticky-cta {
   position: fixed;
   bottom: 20px;
@@ -167,8 +166,6 @@ body {
   border-radius: 8px;
   font-weight: bold;
   text-decoration: none;
-  box-shadow: 0 0 15px rgba(0,255,150,0.5);
-  z-index: 999;
 }
 
 /* FOOTER */
@@ -185,29 +182,25 @@ body {
 
 <div class="container">
 
-<!-- LOGO -->
 <div class="logo-top">
   <img src="images/logo.png">
 </div>
 
 <a href="index.html" class="back">← Back</a>
 
-<h1>💎 EdgeBreak Watchlist</h1>
+<h1>EdgeBreak Watchlist</h1>
 
-<!-- TOP CTA -->
 <div class="top-cta">
-  <a href="pricing.html">Unlock Full Watchlist Access 🔓</a>
+  <a href="pricing.html">Unlock Full Watchlist Access</a>
 </div>
 
-<!-- LOCK MESSAGE -->
 <div class="lock-message">
-  🔒 B-grade and above setups are premium — upgrade to unlock
+  B-grade and above setups are premium — upgrade to unlock
 </div>
 
 <div id="marketBar" class="market-bar"></div>
 
-<!-- TODAY -->
-<div class="section-title">🔥 Today's Breakouts</div>
+<div class="section-title">Today's Breakouts</div>
 <table class="table" id="todayTable">
 <thead>
 <tr>
@@ -222,8 +215,7 @@ body {
 <tbody></tbody>
 </table>
 
-<!-- ACTIVE -->
-<div class="section-title">📊 Active Watchlist</div>
+<div class="section-title">Active Watchlist</div>
 <table class="table" id="activeTable">
 <thead>
 <tr>
@@ -238,9 +230,8 @@ body {
 <tbody></tbody>
 </table>
 
-<!-- ARCHIVE -->
 <details>
-  <summary style="cursor:pointer; color:#8b949e;">📁 View Archived Signals</summary>
+  <summary style="cursor:pointer; color:#8b949e;">View Archived Signals</summary>
   <table class="table" id="archiveTable">
     <thead>
       <tr>
@@ -256,15 +247,13 @@ body {
   </table>
 </details>
 
-<!-- URGENCY -->
 <div class="urgency">
   Most traders never see these setups in time
 </div>
 
-<!-- SUBSCRIBE -->
 <div class="subscribe-box">
   <a href="pricing.html" class="subscribe-btn">
-    Unlock Full Access 🔓
+    Unlock Full Access
   </a>
 </div>
 
@@ -274,12 +263,11 @@ EdgeBreak Intelligence
 
 </div>
 
-<!-- STICKY -->
-<a href="pricing.html" class="sticky-cta">Unlock 🔓</a>
+<a href="pricing.html" class="sticky-cta">Unlock</a>
 
 <script>
 
-// MARKET
+// MARKET STATUS
 fetch("/market_status.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(market => {
@@ -293,11 +281,10 @@ fetch("/market_status.json?v=" + new Date().getTime())
     bar.className = "market-bar " + className;
 
     bar.innerHTML = `
-      🇺🇸 US MARKET: ${market.label}<br>
+      US MARKET: ${market.label}<br>
       <span style="color:#8b949e;">${market.message}</span>
     `;
   });
-
 
 // WATCHLIST
 fetch("/watchlist.json?v=" + new Date().getTime())
@@ -326,7 +313,6 @@ fetch("/watchlist.json?v=" + new Date().getTime())
     renderRows(archived, "#archiveTable tbody");
 
   });
-
 
 // RENDER
 function renderRows(list, selector) {
@@ -376,7 +362,7 @@ function renderRows(list, selector) {
 
       <td>
         <a href="https://www.tradingview.com/chart/?symbol=NASDAQ:${item.symbol}" target="_blank">
-          View ↗
+          View
         </a>
       </td>
     `;
@@ -395,7 +381,7 @@ function renderEmpty(selector) {
   `;
 }
 
-// UPDATED LOCK RULE
+// LOCK RULE UPDATED
 function isLocked(grade) {
   return grade === "A+" || grade === "A" || grade === "B+" || grade === "B";
 }
