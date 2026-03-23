@@ -170,13 +170,79 @@ a {
   font-size: 16px;
 }
 
-/* FOOTER */
+/* NEW FOOTER */
 .footer {
-  text-align: center;
-  padding: 50px 20px;
-  border-top: 1px solid #1f2933;
-  color: #6b7280;
+  background: #0a0f1c;
+  color: #ccc;
+  padding: 60px 20px 20px;
+  margin-top: 80px;
+  border-top: 1px solid rgba(0,255,150,0.1);
+}
+
+.footer-container {
+  max-width: 1100px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+}
+
+.footer-logo {
+  color: #22c55e;
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.footer-tagline {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 10px;
+}
+
+.footer-type {
   font-size: 13px;
+  color: #22c55e;
+  opacity: 0.8;
+}
+
+.footer-col h3 {
+  margin-bottom: 15px;
+  color: #fff;
+  font-size: 16px;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+  color: #ccc;
+  font-size: 14px;
+}
+
+.footer-col ul li a:hover {
+  color: #22c55e;
+}
+
+.footer-note {
+  font-size: 13px;
+  color: #aaa;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  font-size: 13px;
+  color: #777;
 }
 </style>
 </head>
@@ -318,13 +384,45 @@ a {
   </div>
 </div>
 
-<!-- FOOTER -->
-<div class="footer">
-© 2026 EdgeBreak — Breakout Intelligence Platform
-<p style="margin-top:20px; font-size:12px; color:#6b7280;">
-EdgeBreak provides market insights and data for informational purposes only. It does not constitute financial advice.
-</p>
-</div>
+<!-- NEW FOOTER -->
+<footer class="footer">
+  <div class="footer-container">
+
+    <div class="footer-col">
+      <h2 class="footer-logo">EdgeBreak</h2>
+      <p class="footer-tagline">High-quality breakouts without noise.</p>
+      <p class="footer-type">Breakout Intelligence Platform</p>
+    </div>
+
+    <div class="footer-col">
+      <h3>Platform</h3>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/watchlist.html">Watchlist</a></li>
+        <li><a href="/results.html">Results</a></li>
+        <li><a href="/how-it-works.html">How It Works</a></li>
+        <li><a href="/pricing.html">Pricing</a></li>
+        <li><a href="/faq.html">FAQ</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h3>Important</h3>
+      <p class="footer-note">
+        EdgeBreak provides structured market data and breakout analysis.
+        We do not provide financial advice or execute trades.
+      </p>
+      <p class="footer-note">
+        Always conduct your own research before making trading decisions.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 EdgeBreak. All rights reserved.</p>
+  </div>
+</footer>
 
 <!-- MARKET SCRIPT -->
 <script>
