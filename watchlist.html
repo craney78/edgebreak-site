@@ -218,12 +218,12 @@ body {
 <div class="summary-bar" id="summaryBar">Loading stats...</div>
 
 <div class="filters">
-  <button onclick="setFilter('ALL')" class="active">ALL</button>
-  <button onclick="setFilter('A+')">A+</button>
-  <button onclick="setFilter('A')">A</button>
-  <button onclick="setFilter('B+')">B+</button>
-  <button onclick="setFilter('B')">B</button>
-  <button onclick="setFilter('C')">C</button>
+  <button onclick="setFilter(event,'ALL')" class="active">ALL</button>
+  <button onclick="setFilter(event,'A+')">A+</button>
+  <button onclick="setFilter(event,'A')">A</button>
+  <button onclick="setFilter(event,'B+')">B+</button>
+  <button onclick="setFilter(event,'B')">B</button>
+  <button onclick="setFilter(event,'C')">C</button>
 </div>
 
 <div class="section-title">Today's Breakouts</div>
@@ -284,9 +284,7 @@ body {
 </div>
 
 <div class="subscribe-box">
-  <a href="pricing.html" class="subscribe-btn">
-    Unlock Full Access
-  </a>
+  <a href="pricing.html" class="subscribe-btn">Unlock Full Access</a>
 </div>
 
 <div class="footer">
@@ -299,13 +297,31 @@ EdgeBreak Intelligence
 
 <script>
 let currentFilter = "ALL";
-function setFilter(filter){
+let todayData = [];
+let activeData = [];
+let archiveData = [];
+
+function setFilter(e, filter){
   currentFilter = filter;
-  location.reload();
+
+  document.querySelectorAll(".filters button").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  e.target.classList.add("active");
+
+  applyFilters();
+}
+
+function applyFilters(){
+  renderRows(todayData, "#todayTable tbody");
+  renderRows(activeData, "#activeTable tbody");
+  renderRows(archiveData, "#archiveTable tbody");
 }
 </script>
 
 <script>
+
 // MARKET
 fetch("/market_status.json?v=" + new Date().getTime())
 .then(res => res.json())
@@ -327,11 +343,13 @@ fetch("/watchlist.json?v=" + new Date().getTime())
   const active = data.filter(x => x.age > 0 && x.status !== "failed");
   const archived = data.filter(x => x.status === "failed" || x.age > 5);
 
+  todayData = today;
+  activeData = active;
+  archiveData = archived;
+
   updateSummary(data);
 
-  renderRows(today, "#todayTable tbody");
-  renderRows(active, "#activeTable tbody");
-  renderRows(archived, "#archiveTable tbody");
+  applyFilters();
 
 });
 
