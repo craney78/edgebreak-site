@@ -351,6 +351,8 @@ a {
   Scanning market...
 </p>
 
+<div id="topBreakout" style="text-align:center; margin-top:10px; font-size:14px; color:#e6edf3;"></div>
+
   <a href="market.html" style="text-decoration:none;">
   <div class="market-box" id="marketBox">
     <div class="market-label">Loading market conditions...</div>
@@ -492,21 +494,42 @@ fetch("/market_status.json?v=" + new Date().getTime())
   });
 
 
-// 📊 TODAY BREAKOUT COUNT
+// 📊 TODAY BREAKOUT COUNT + TOP BREAKOUT LOGIC
 fetch("/watchlist.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
 
     const today = data.filter(x => x.age === 0 && x.status !== "failed");
 
+    const top = [...today].sort((a, b) => b.score - a.score)[0];
+
     const el = document.getElementById("todayCount");
 
     if (!el) return;
 
+    // COUNT DISPLAY
     if (today.length > 0) {
       el.innerText = `${today.length} new breakout setups detected today`;
     } else {
       el.innerText = "No new breakouts today — monitoring market conditions";
+    }
+
+    // TOP BREAKOUT DISPLAY
+    const topEl = document.getElementById("topBreakout");
+
+    if (top && topEl) {
+
+      const grade = top.grade || "A";
+
+      const fastMove = top.change_percent >= 15 && top.age <= 3;
+      const strongMove = top.change_percent >= 20;
+
+      if (fastMove || strongMove) {
+        topEl.innerHTML = `💎 Top Breakout Today: ${grade} Setup → +${top.change_percent.toFixed(1)}% in ${top.age} days`;
+      } else {
+        topEl.innerHTML = `💎 Top Breakout Today: ${grade} Setup Detected`;
+      }
+
     }
 
   })
@@ -514,7 +537,7 @@ fetch("/watchlist.json?v=" + new Date().getTime())
     const el = document.getElementById("todayCount");
     if (el) el.innerText = "";
   });
-
+  
 </script>
 
 </body>
