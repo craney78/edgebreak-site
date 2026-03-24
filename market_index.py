@@ -12,6 +12,12 @@ def calculate_market_strength():
 
     df = pd.read_csv(CSV_FILE)
 
+    # ✅ ADD DATE FILTER (NEW - SAFE)
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
+
+    # 🔥 ONLY USE LAST 7 DAYS (RECENT MARKET CONDITIONS)
+    df = df[df["date"] >= (datetime.now() - pd.Timedelta(days=7))]
+
     # Only use completed trades
     df = df[df["day1_return"].notna()]
 
