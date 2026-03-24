@@ -347,6 +347,9 @@ a {
   <p style="text-align:center; font-size:13px; color:#6e7681; margin-top:-10px;">
   Updated Today • Based on latest breakout performance data
 </p>
+<p id="todayCount" style="text-align:center; font-size:13px; color:#22c55e; margin-top:5px;">
+  Scanning market...
+</p>
 
   <a href="market.html" style="text-decoration:none;">
   <div class="market-box" id="marketBox">
@@ -446,6 +449,8 @@ a {
 
 <!-- MARKET SCRIPT (UNCHANGED) -->
 <script>
+
+// 🧠 MARKET STATUS
 fetch("/market_status.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
@@ -485,6 +490,31 @@ fetch("/market_status.json?v=" + new Date().getTime())
       <div class="market-action">${actionText}</div>
     `;
   });
+
+
+// 📊 TODAY BREAKOUT COUNT
+fetch("/watchlist.json?v=" + new Date().getTime())
+  .then(res => res.json())
+  .then(data => {
+
+    const today = data.filter(x => x.age === 0 && x.status !== "failed");
+
+    const el = document.getElementById("todayCount");
+
+    if (!el) return;
+
+    if (today.length > 0) {
+      el.innerText = `${today.length} new breakout setups detected today`;
+    } else {
+      el.innerText = "No new breakouts today — monitoring market conditions";
+    }
+
+  })
+  .catch(() => {
+    const el = document.getElementById("todayCount");
+    if (el) el.innerText = "";
+  });
+
 </script>
 
 </body>
