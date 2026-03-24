@@ -517,27 +517,35 @@ fetch("/watchlist.json?v=" + new Date().getTime())
     // TOP BREAKOUT DISPLAY
     const topEl = document.getElementById("topBreakout");
 
-    if (top && topEl) {
+    const topEl = document.getElementById("topBreakout");
 
-      const grade = top.grade || "A";
+if (topEl) {
 
-      const fastMove = top.change_percent >= 15 && top.age <= 3;
-      const strongMove = top.change_percent >= 20;
+  if (!top) {
+    topEl.innerHTML = "💎 Monitoring breakout conditions...";
+  } else {
 
-      if (fastMove || strongMove) {
-        topEl.innerHTML = `💎 Top Breakout Today: ${grade} Setup → +${top.change_percent.toFixed(1)}% in ${top.age} days`;
-      } else {
-        topEl.innerHTML = `💎 Top Breakout Today: ${grade} Setup Detected`;
-      }
+    const grade = top.grade || "A";
 
+    const fastMove = top.change_percent >= 15 && top.age <= 3;
+    const strongMove = top.change_percent >= 20;
+
+    if (fastMove || strongMove) {
+      topEl.innerHTML = `💎 Top Breakout Today: ${grade} Setup → +${top.change_percent.toFixed(1)}% in ${top.age} days`;
+    } else {
+      topEl.innerHTML = `💎 Top Breakout Today: ${grade} Setup Detected`;
     }
+
+  }
+
+}
 
   })
   .catch(() => {
     const el = document.getElementById("todayCount");
     if (el) el.innerText = "";
   });
-  
+
 </script>
 
 </body>
