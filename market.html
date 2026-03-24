@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Market Conditions | EdgeBreak</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b0f14;
+  color: #e6edf3;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.logo img {
+  height: 60px;
+  filter: drop-shadow(0 0 10px rgba(0,255,150,0.6));
+}
+
+.back {
+  color: #8b949e;
+  text-decoration: none;
+}
+
+h1 {
+  text-align: center;
+}
+
+.market-box {
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+  text-align: center;
+  font-size: 18px;
+}
+
+.market-strong { background: #0f2a1f; color: #3ddc97; }
+.market-neutral { background: #2a260f; color: #f0c674; }
+.market-weak { background: #2a1010; color: #ff6b6b; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.stat {
+  background: #11161c;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.stat strong {
+  display: block;
+  font-size: 18px;
+}
+
+.bar {
+  height: 12px;
+  background: #222;
+  border-radius: 6px;
+  margin: 15px 0;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  width: 0%;
+  background: #00ff9c;
+  transition: width 0.5s;
+}
+
+.section {
+  margin: 30px 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+}
+
+.card {
+  background: #11161c;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.cta {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.cta a {
+  background: #00ff9c;
+  color: black;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.footer {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 12px;
+  color: #6e7681;
+}
+
+@media (max-width: 768px) {
+  .stats { grid-template-columns: 1fr 1fr; }
+  .grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">
+  <img src="images/logo.png">
+</div>
+
+<a href="index.html" class="back">← Back</a>
+
+<h1>Market Conditions</h1>
+
+<div id="marketBox" class="market-box">Loading...</div>
+
+<div class="bar">
+  <div id="marketBarFill" class="bar-fill"></div>
+</div>
+
+<div id="marketScore" style="text-align:center; margin-bottom:20px;">
+  Market Score: --
+</div>
+
+<div id="statsContainer" class="stats"></div>
+
+<div class="section">
+<h2>Trader Behaviour</h2>
+
+<div class="grid">
+
+<div class="card">
+<strong>STRONG</strong><br>
+Trade aggressively<br>
+Increase size<br>
+Let winners run
+</div>
+
+<div class="card">
+<strong>MIXED</strong><br>
+Be selective<br>
+Reduce size<br>
+Take profits quicker
+</div>
+
+<div class="card">
+<strong>WEAK</strong><br>
+Avoid breakouts<br>
+Protect capital<br>
+Wait for better conditions
+</div>
+
+</div>
+</div>
+
+<div class="section">
+<h2>Why This Matters</h2>
+
+<div class="card">
+Breakouts only work when the environment supports them.
+
+EdgeBreak measures real performance — not opinion — so you know when to press and when to step back.
+</div>
+
+</div>
+
+<div class="cta">
+  <a href="watchlist.html">View Live Watchlist</a>
+</div>
+
+<div class="footer">
+EdgeBreak Intelligence
+</div>
+
+</div>
+
+<script>
+
+fetch("/market_status.json?v=" + new Date().getTime())
+.then(res => res.json())
+.then(data => {
+
+  const box = document.getElementById("marketBox");
+  const barFill = document.getElementById("marketBarFill");
+  const scoreText = document.getElementById("marketScore");
+  const statsContainer = document.getElementById("statsContainer");
+
+  let cls = "market-weak";
+  if (data.status === "GREEN") cls = "market-strong";
+  if (data.status === "YELLOW") cls = "market-neutral";
+
+  box.className = "market-box " + cls;
+
+  box.innerHTML = `
+    <strong>${data.label}</strong><br>
+    ${data.message || ""}
+  `;
+
+  // CONDITIONAL MODE (hide stats)
+  if (data.mode !== "FULL") {
+    statsContainer.innerHTML = "";
+    barFill.style.width = "20%";
+    scoreText.innerHTML = "Market Score: LOW";
+    return;
+  }
+
+  // DISPLAY STATS
+  statsContainer.innerHTML = `
+    <div class="stat"><strong>${data.success_rate}%</strong>Success</div>
+    <div class="stat"><strong>${data.follow_through_rate}%</strong>Follow Through</div>
+    <div class="stat"><strong>${data.failure_rate}%</strong>Failure</div>
+    <div class="stat"><strong>${data.total_trades}</strong>Trades</div>
+  `;
+
+  // MARKET SCORE CALCULATION
+  const score = Math.round(
+    (data.success_rate * 0.6) +
+    (data.follow_through_rate * 0.4)
+  );
+
+  scoreText.innerHTML = `Market Score: ${score} / 100`;
+
+  barFill.style.width = score + "%";
+
+});
+
+</script>
+
+</body>
+</html>
