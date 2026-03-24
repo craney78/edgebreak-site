@@ -380,7 +380,7 @@ function renderRows(list, selector){
     row.className = locked;
 
     row.innerHTML = `
-      <td>${item.symbol}</td>
+      <td>${isLocked(item.grade) ? "████" : item.symbol}</td>
       <td>${item.score}<div class="grade ${getGradeClass(item.grade)}">${item.grade}</div></td>
       <td>${item.break ? item.break + "%" : "-"}</td>
       <td class="${perfClass}">${perfText}</td>
