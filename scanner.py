@@ -207,9 +207,17 @@ def save_watchlist_json(new_signals):
         if latest_price:
             item["current_price"] = latest_price
 
-            entry_price = item.get("entry_price", latest_price)
-            change = ((latest_price - entry_price) / entry_price) * 100
-            item["change_percent"] = round(change, 2)
+            # ✅ FIXED PERFORMANCE CALCULATION
+            entry_price = item.get("entry_price") or item.get("start_price") or latest_price
+
+            entry_price = safe_float(entry_price)
+            latest_price = safe_float(latest_price)
+
+            if entry_price > 0:
+                change = ((latest_price - entry_price) / entry_price) * 100
+                item["change_percent"] = round(change, 2)
+            else:
+                item["change_percent"] = 0
 
         if "status" not in item:
             item["status"] = "holding"
@@ -308,7 +316,7 @@ def log_to_csv(signals, filename="breakout_history.csv"):
 
 
 # =========================
-# MAIN RUN (FINAL FIXED DISPLAY)
+# MAIN RUN
 # =========================
 def run():
     print("🚀 SCANNING...\n")
@@ -330,9 +338,6 @@ def run():
 
     all_signals = sort_signals(all_signals)
 
-    # =========================
-    # DISPLAY FIX
-    # =========================
     if len(all_signals) > 0:
         display_list = all_signals
     else:
