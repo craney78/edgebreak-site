@@ -488,44 +488,76 @@ a {
 <!-- MARKET SCRIPT (UNCHANGED) -->
 <script>
 
-// 🧠 MARKET STATUS
+  // 🧠 MARKET STATUS
 fetch("/market_status.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
 
     const box = document.getElementById("marketBox");
+    if (!box) return;
 
     let message = "";
     let actionText = "";
 
     if (data.status === "GREEN") {
-      message = "Breakouts are performing well across the market, with strong momentum and consistent follow-through.";
-      actionText = "🟢 Breakout conditions are favourable — performance is strong";
+      message = "Breakouts are performing well with strong follow-through.";
+      actionText = "HIGH EDGE ENVIRONMENT — Conditions are favourable for breakout strategies.";
       box.style.borderColor = "#22c55e";
       box.style.boxShadow = "0 0 25px rgba(34,197,94,0.4)";
     }
 
     if (data.status === "YELLOW") {
-      message = "Conditions are mixed, with inconsistent breakout performance and varying levels of follow-through.";
-      actionText = "🟡 Breakout conditions are mixed — performance is less consistent";
+      message = "Breakout performance is mixed and less consistent.";
+      actionText = "SELECTIVE ENVIRONMENT — Focus on higher-quality setups and reduce exposure.";
       box.style.borderColor = "#f59e0b";
       box.style.boxShadow = "0 0 25px rgba(245,158,11,0.4)";
     }
 
     if (data.status === "RED") {
-      message = "Breakouts are currently underperforming, with higher failure rates across the market. Momentum is limited and follow-through is inconsistent.";
-      actionText = "🔴 Breakout conditions are challenging — performance is reduced";
+      message = "Breakout success rates are currently low across the market. Most traders overtrade in these conditions.";
+      actionText = "LOW EDGE ENVIRONMENT — EdgeBreak is filtering aggressively to preserve capital.";
       box.style.borderColor = "#ef4444";
       box.style.boxShadow = "0 0 25px rgba(239,68,68,0.4)";
     }
 
+    // 🔥 Fallback (NEW)
+    if (!message) {
+      message = "Market data is updating...";
+      actionText = "Awaiting latest breakout performance data.";
+    }
+
+    // 🔥 Market Score
+    const score = Math.round(
+      (data.win_rate || 0) * 0.7 +
+      (data.strength_rate || 0) * 0.3
+    );
+
+    // 🔥 Score Color
+    let scoreColor = "#ef4444";
+    if (score >= 65) scoreColor = "#22c55e";
+    else if (score >= 45) scoreColor = "#f59e0b";
+
     box.innerHTML = `
       <div class="market-label">
         <img src="https://flagcdn.com/us.svg" style="height:14px; vertical-align:middle; margin-right:6px;">
-        US Market: ${data.label}
+        US Market — ${data.label}
       </div>
-      <div class="market-message">${message}</div>
-      <div class="market-action">${actionText}</div>
+
+      <div style="margin-top:10px; font-size:18px; font-weight:bold;">
+        <span style="color:${scoreColor};">Market Score: ${score} / 100</span>
+      </div>
+
+      <div style="font-size:12px; color:#8b949e; margin-top:4px;">
+        Based on ${data.total_trades || 0} active breakout trades
+      </div>
+
+      <div class="market-message" style="margin-top:12px;">
+        ${message}
+      </div>
+
+      <div class="market-action" style="margin-top:10px;">
+        ${actionText}
+      </div>
     `;
   });
 
@@ -551,12 +583,13 @@ fetch("/watchlist.json?v=" + new Date().getTime())
     }
 
    // TOP BREAKOUT DISPLAY
+
 const topEl = document.getElementById("topBreakout");
 
 if (topEl) {
 
   if (!top) {
-    topEl.innerHTML = "💎 Monitoring breakout conditions...";
+    topEl.innerHTML = "Monitoring breakout conditions...";
   } else {
 
     const grade = top.grade || "A";
@@ -565,16 +598,14 @@ if (topEl) {
     const strongMove = top.change_percent >= 20;
 
     if (fastMove || strongMove) {
-      topEl.innerHTML = ` Top Breakout Today: ${grade} Setup → +${top.change_percent.toFixed(1)}% in ${top.age} days`;
+      topEl.innerHTML = `${grade} Breakout → +${top.change_percent.toFixed(1)}% in ${top.age} days`;
     } else {
-      topEl.innerHTML = ` Top Breakout Today: ${grade} Setup Detected`;
+      topEl.innerHTML = `${grade} Setup Detected`;
     }
 
   }
-
 }
 
-  })
   .catch(() => {
     const el = document.getElementById("todayCount");
     if (el) el.innerText = "";
