@@ -5,7 +5,7 @@ import os
 import json
 
 from breakout_logic import detect_breakout_today
-from market_index import calculate_market_strength, save_market_status_json
+from market_index import calculate_live_market_strength, save_market_status_json
 
 API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
 SYMBOL_FILE = "nasdaq_symbols.txt"
@@ -362,7 +362,7 @@ def run():
 
     save_watchlist_json(all_signals)
 
-    market = calculate_market_strength()
+    market = calculate_live_market_strength()
     save_market_status_json(market)
 
     print(f"\nTOTAL NEW SIGNALS: {len(all_signals)}")
