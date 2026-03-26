@@ -208,22 +208,67 @@ EdgeBreak Intelligence
 fetch("/market_status.json?v=" + new Date().getTime())
 .then(res => res.json())
 .then(data => {
+  
+ // 🔥 HANDLE CONDITIONAL MODE (ADD THIS)
+if (data.mode === "CONDITIONAL") {
 
   const box = document.getElementById("marketBox");
-  const barFill = document.getElementById("marketBarFill");
-  const scoreText = document.getElementById("marketScore");
-  const statsContainer = document.getElementById("statsContainer");
 
-  let cls = "market-weak";
-  if (data.status === "GREEN") cls = "market-strong";
-  if (data.status === "YELLOW") cls = "market-neutral";
+  if (box) {
+    box.innerHTML = `
+      <strong>${data.label}</strong><br>
+      ${data.message || ""}
 
-  box.className = "market-box " + cls;
+      <div style="margin-top:10px; color:#8b949e;">
+        Limited data — market conditions are still forming.
+      </div>
+    `;
+  }
 
-  box.innerHTML = `
+  return; // 🔥 STOP SCRIPT HERE SAFELY
+}
+
+
+const box = document.getElementById("marketBox");
+const barFill = document.getElementById("marketBarFill");
+const scoreText = document.getElementById("marketScore");
+const statsContainer = document.getElementById("statsContainer");
+
+let cls = "market-weak";
+if (data.status === "GREEN") cls = "market-strong";
+if (data.status === "YELLOW") cls = "market-neutral";
+
+box.className = "market-box " + cls;
+
+
+// 🔥 SAFE VALUES
+let success = data.success_rate || 0;
+let follow = data.follow_through_rate || 0;
+let failure = data.failure_rate || 0;
+let trades = data.total_trades || 0;
+
+
+// 🔥 SCORE CALCULATION
+let score = Math.round(
+  success * 0.7 +
+  follow * 0.3
+);
+
+
+// 🔥 LOW DATA PROTECTION
+let lowData = false;
+
+if (trades < 5) {
+  score = 35;
+  lowData = true;
+}
+
+
+// 🔥 MAIN DISPLAY
+box.innerHTML = `
   <strong>${data.label}</strong><br>
   ${data.message || ""}
-  
+
   ${lowData ? `
     <div style="margin-top:10px; color:#8b949e;">
       Limited data — market conditions are still forming.
@@ -231,32 +276,34 @@ fetch("/market_status.json?v=" + new Date().getTime())
   ` : ""}
 `;
 
-  // DISPLAY STATS
-  statsContainer.innerHTML = `
-    <div class="stat"><strong>${data.success_rate}%</strong>Success</div>
-    <div class="stat"><strong>${data.follow_through_rate}%</strong>Follow Through</div>
-    <div class="stat"><strong>${data.failure_rate}%</strong>Failure</div>
-    <div class="stat"><strong>${data.total_trades}</strong>Trades</div>
-  `;
 
-  // MARKET SCORE CALCULATION
-  let score = Math.round(
-  (data.success_rate || 0) * 0.7 +
-  (data.follow_through_rate || 0) * 0.3
-);
+// 🔥 STATS DISPLAY
+statsContainer.innerHTML = `
+  <div class="stat"><strong>${success}%</strong>Success</div>
+  <div class="stat"><strong>${follow}%</strong>Follow Through</div>
+  <div class="stat"><strong>${failure}%</strong>Failure</div>
+  <div class="stat"><strong>${trades}</strong>Trades</div>
+`;
 
-// 🔥 PROTECT AGAINST LOW DATA
-if ((data.total_trades || 0) < 5) {
-  score = 35; // neutral baseline
-}
 
-  scoreText.innerHTML = `
+// 🔥 SCORE DISPLAY
+scoreText.innerHTML = `
   Market Score: ${score} / 100
   ${lowData ? `<div style="font-size:12px; color:#8b949e;">Low confidence</div>` : ""}
 `;
 
-  barFill.style.width = score + "%";
 
+// 🔥 BAR UPDATE
+barFill.style.width = score + "%";
+
+})
+.catch(err => {
+  console.error("MARKET LOAD ERROR:", err);
+
+  const box = document.getElementById("marketBox");
+  if (box) {
+    box.innerHTML = "Error loading market data";
+  }
 });
 
 </script>
