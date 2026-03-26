@@ -607,29 +607,6 @@ let score = Math.round(
   follow * 0.3
 );
 
-// 🔥 EDGE METER CONTROL
-const fill = document.getElementById("edgeMeterFill");
-const label = document.getElementById("edgeMeterLabel");
-
-if (fill && label) {
-
-  // smooth animation
-  setTimeout(() => {
-    fill.style.width = score + "%";
-  }, 200);
-
-  let text = "WEAK CONDITIONS";
-  if (score >= 65) text = "STRONG CONDITIONS";
-  else if (score >= 45) text = "MIXED CONDITIONS";
-
-  label.innerHTML = `${text} • ${score}%`;
-
-  // dynamic glow
-  if (score >= 65) fill.style.boxShadow = "0 0 25px rgba(34,197,94,0.8)";
-  else if (score >= 45) fill.style.boxShadow = "0 0 25px rgba(245,158,11,0.7)";
-  else fill.style.boxShadow = "0 0 25px rgba(239,68,68,0.7)";
-}
-
 // 🔥 LOW DATA DETECTION (CRITICAL ALIGNMENT)
 let lowData = false;
 
@@ -638,12 +615,28 @@ if (success === 0 && follow === 0) {
   lowData = true;
 }
 
-    const confidence = Math.min((data.total_trades || 0) / 20, 1);
-    const confidencePct = Math.round(confidence * 100);
+// 🔥 EDGE METER CONTROL (RUN AFTER FINAL SCORE)
+setTimeout(() => {
 
-    let trend = "STABLE";
-    if ((data.success_rate || 0) > 60) trend = "IMPROVING";
-    if ((data.success_rate || 0) < 40) trend = "WEAKENING";
+  const fill = document.getElementById("edgeMeterFill");
+  const label = document.getElementById("edgeMeterLabel");
+
+  if (fill && label) {
+
+    fill.style.width = score + "%";
+
+    let text = "WEAK CONDITIONS";
+    if (score >= 65) text = "STRONG CONDITIONS";
+    else if (score >= 45) text = "MIXED CONDITIONS";
+
+    label.innerHTML = `${text} • ${score}%`;
+
+    if (score >= 65) fill.style.boxShadow = "0 0 25px rgba(34,197,94,0.8)";
+    else if (score >= 45) fill.style.boxShadow = "0 0 25px rgba(245,158,11,0.7)";
+    else fill.style.boxShadow = "0 0 25px rgba(239,68,68,0.7)";
+  }
+
+}, 300);
 
     // 🔥 NEW: Trend Colour
     let trendColor = "#8b949e";
