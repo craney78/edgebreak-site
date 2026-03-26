@@ -56,7 +56,6 @@ a {
   max-width: 850px;
   margin: auto;
 
-  /* 🔥 LIGHTER OVERLAY */
   background: 
     linear-gradient(rgba(11,15,20,0.75), rgba(11,15,20,0.9)),
     url("/images/hero-bg.png");
@@ -67,7 +66,10 @@ a {
 
   border-radius: 12px;
 
-  box-shadow: 0 0 60px rgba(0,255,150,0.12);
+  /* 🔥 NEW GLOW EFFECT */
+  box-shadow: 
+    0 0 60px rgba(0,255,150,0.12),
+    inset 0 0 80px rgba(0,255,150,0.05);
 }
 
 .hero-logo {
@@ -80,6 +82,9 @@ a {
   font-size: 48px;
   margin-bottom: 20px;
   line-height: 1.2;
+
+  /* 🔥 ADD THIS LINE */
+  text-shadow: 0 0 15px rgba(34,197,94,0.25);
 }
 
 .hero p {
@@ -99,7 +104,7 @@ a {
   font-weight: bold;
   font-size: 16px;
   transition: all 0.25s ease;
-  box-shadow: 0 0 15px rgba(34,197,94,0.4);
+  box-shadow: 0 0 25px rgba(34,197,94,0.6);
 }
 
 .cta-btn:hover {
