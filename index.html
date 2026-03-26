@@ -724,7 +724,7 @@ if (data.mode === "CONDITIONAL") {
 fetch("watchlist.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
-
+console.log("MARKET DATA RECEIVED:", data);
     const today = data.filter(x => x.age === 0 && x.status !== "failed");
     const top = [...today].sort((a, b) => b.score - a.score)[0];
 
@@ -758,3 +758,5 @@ fetch("watchlist.json?v=" + new Date().getTime())
     const el = document.getElementById("todayCount");
     if (el) el.innerText = "";
   });
+
+  </script>
