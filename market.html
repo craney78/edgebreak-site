@@ -225,14 +225,6 @@ fetch("/market_status.json?v=" + new Date().getTime())
     ${data.message || ""}
   `;
 
-  // CONDITIONAL MODE (hide stats)
-  if (data.mode !== "FULL") {
-    statsContainer.innerHTML = "";
-    barFill.style.width = "20%";
-    scoreText.innerHTML = "Market Score: LOW";
-    return;
-  }
-
   // DISPLAY STATS
   statsContainer.innerHTML = `
     <div class="stat"><strong>${data.success_rate}%</strong>Success</div>
