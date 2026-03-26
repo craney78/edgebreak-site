@@ -443,41 +443,44 @@ a {
 
 <div class="section">
   <h2 style="text-align:center;">Current US Market Conditions</h2>
-  <p style="text-align:center; font-size:14px; color:#9ca3af; margin-top:5px;">
-  Breakout performance is driven by market conditions — not just setup quality.
-</p>
-<p style="text-align:center; font-size:13px; color:#6e7681; margin-top:10px;">
-  EdgeBreak measures how recent breakout setups are performing to determine whether conditions are favourable, mixed, or weak.
-</p>
-  <p style="text-align:center; font-size:13px; color:#6e7681; margin-top:5px;">
-  Updated Today • Based on latest breakout performance data
-</p>
-<p id="todayCount" style="text-align:center; font-size:13px; color:#22c55e; margin-top:5px;">
-  Scanning market...
-</p>
 
-<div id="topBreakout" style="text-align:center; margin-top:10px; font-size:14px; color:#e6edf3;"></div>
+  <p style="text-align:center; font-size:14px; color:#9ca3af; margin-top:5px;">
+    Breakout performance is driven by market conditions — not just setup quality.
+  </p>
+
+  <p style="text-align:center; font-size:13px; color:#6e7681; margin-top:10px;">
+    EdgeBreak measures how recent breakout setups are performing to determine whether conditions are favourable, mixed, or weak.
+  </p>
+
+  <p style="text-align:center; font-size:13px; color:#6e7681; margin-top:5px;">
+    Updated Today • Based on latest breakout performance data
+  </p>
+
+  <p id="todayCount" style="text-align:center; font-size:13px; color:#22c55e; margin-top:5px;">
+    Scanning market...
+  </p>
+
+  <div id="topBreakout" style="text-align:center; margin-top:10px; font-size:14px; color:#e6edf3;"></div>
 
   <a href="market.html" style="text-decoration:none;">
-  <div class="market-box" id="marketBox">
-    <div class="market-label">Loading market conditions...</div>
-    <div class="market-message"></div>
-    <div class="market-action"></div>
-  </div>
-</a>
+    <div class="market-box" id="marketBox">
+      <div class="market-label">Loading market conditions...</div>
+      <div class="market-message"></div>
+      <div class="market-action"></div>
+    </div>
+  </a>
 
-<!-- 🔥 EDGE METER -->
-<div class="edge-meter">
-  <div class="edge-meter-bar">
-    <div id="edgeMeterFill" class="edge-meter-fill"></div>
+  <!-- 🔥 EDGE METER -->
+  <div class="edge-meter">
+    <div class="edge-meter-bar">
+      <div id="edgeMeterFill" class="edge-meter-fill"></div>
+    </div>
+    <div id="edgeMeterLabel" class="edge-meter-label">
+      Market Strength
+    </div>
   </div>
 
-  <div id="edgeMeterLabel" class="edge-meter-label">
-    Market Strength
-  </div>
-</div>
-
-<div style="text-align:center; margin-top:15px;">
+  <div style="text-align:center; margin-top:15px;">
     <a href="market.html" style="color:#22c55e; font-weight:bold;">
       View Full Market Analysis →
     </a>
@@ -575,7 +578,7 @@ fetch("./market_status.json?v=" + new Date().getTime())
     return res.json();
   })
   .then(data => {
-    
+
 // 🔥 HANDLE CONDITIONAL MODE (MATCH MARKET PAGE)
 if (data.mode === "CONDITIONAL") {
 
