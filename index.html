@@ -529,16 +529,16 @@ fetch("market_status.json?v=" + new Date().getTime())
     }
 
     const score = Math.round(
-      (data.win_rate || 0) * 0.7 +
-      (data.strength_rate || 0) * 0.3
-    );
+  (data.success_rate || 0) * 0.7 +
+  (data.follow_through_rate || 0) * 0.3
+);
 
     const confidence = Math.min((data.total_trades || 0) / 20, 1);
     const confidencePct = Math.round(confidence * 100);
 
     let trend = "STABLE";
-    if ((data.win_rate || 0) > 60) trend = "IMPROVING";
-    if ((data.win_rate || 0) < 40) trend = "WEAKENING";
+    if ((data.success_rate || 0) > 60) trend = "IMPROVING";
+    if ((data.success_rate || 0) < 40) trend = "WEAKENING";
 
     // 🔥 NEW: Trend Colour
     let trendColor = "#8b949e";
@@ -577,7 +577,7 @@ fetch("market_status.json?v=" + new Date().getTime())
       </div>
     `;
   })
-  .catch(err => {
+    .catch(err => {
     console.error("MARKET LOAD ERROR:", err);
 
     const box = document.getElementById("marketBox");
@@ -585,3 +585,54 @@ fetch("market_status.json?v=" + new Date().getTime())
       box.innerHTML = "Error loading market data";
     }
   });
+
+
+// 📊 TODAY BREAKOUT COUNT + TOP BREAKOUT LOGIC
+fetch("watchlist.json?v=" + new Date().getTime())
+  .then(res => res.json())
+  .then(data => {
+
+    const today = data.filter(x => x.age === 0 && x.status !== "failed");
+    const top = [...today].sort((a, b) => b.score - a.score)[0];
+
+    const el = document.getElementById("todayCount");
+    if (el) {
+      if (today.length > 0) {
+        el.innerText = `${today.length} new breakout setups detected today`;
+      } else {
+        el.innerText = "No new breakouts today — monitoring market conditions";
+      }
+    }
+
+// 🔥 TOP BREAKOUT DISPLAY
+const topEl = document.getElementById("topBreakout");
+
+if (topEl) {
+
+  if (!top) {
+    topEl.innerHTML = "Monitoring breakout conditions...";
+  } else {
+
+    const grade = top.grade || "A";
+    const change = Number(top.change_percent || 0);
+    const age = Number(top.age || 0);
+
+    const fastMove = change >= 15 && age <= 3;
+    const strongMove = change >= 20;
+
+    if (fastMove || strongMove) {
+      topEl.innerHTML = `${grade} Breakout → +${change.toFixed(1)}% in ${age} days`;
+    } else {
+      topEl.innerHTML = `${grade} Setup Detected`;
+    }
+
+  }
+}
+
+  }) // ✅ closes .then(data => { ... })
+  .catch(() => {
+    const el = document.getElementById("todayCount");
+    if (el) el.innerText = "";
+  });
+
+</script>
