@@ -178,6 +178,33 @@ def save_watchlist(signals):
 
     print("📄 Watchlist TXT saved")
 
+# =========================
+# ARCHIVE COMPLETED TRADES (NEW 🔥)
+# =========================
+
+def archive_trade(item):
+
+    file_exists = os.path.isfile("trade_history.csv")
+
+    percent_move = item.get("change_percent", 0)
+
+    row = {
+        "date": item.get("signal_date"),
+        "ticker": item.get("symbol"),
+        "result": item.get("status"),
+        "breakout_price": item.get("entry_price"),
+        "exit_price": item.get("current_price"),
+        "percent_move": percent_move,
+        "duration_days": item.get("age")
+    }
+
+    with open("trade_history.csv", "a", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=row.keys())
+
+        if not file_exists:
+            writer.writeheader()
+
+        writer.writerow(row)
 
 # =========================
 # SAVE WATCHLIST JSON
@@ -199,6 +226,9 @@ def save_watchlist_json(new_signals):
 
     existing_map = {item["symbol"]: item for item in existing}
 
+    # =========================
+    # 🔄 UPDATE EXISTING TRADES
+    # =========================
     for item in existing:
 
         item["age"] = item.get("age", 0) + 1
@@ -207,7 +237,6 @@ def save_watchlist_json(new_signals):
         if latest_price:
             item["current_price"] = latest_price
 
-            # ✅ FIXED PERFORMANCE CALCULATION
             entry_price = item.get("entry_price") or item.get("start_price") or latest_price
 
             entry_price = safe_float(entry_price)
@@ -222,21 +251,55 @@ def save_watchlist_json(new_signals):
         if "status" not in item:
             item["status"] = "holding"
 
+        # =========================
+        # 🧠 WIN / LOSS LOGIC
+        # =========================
         if item["age"] >= 2:
 
             resistance = item.get("resistance", item.get("entry_price"))
-            price = item.get("current_price")
+            entry = safe_float(item.get("entry_price"))
+            price = safe_float(item.get("current_price"))
 
             if resistance and price:
 
+                # 🔴 LOSS
                 if price < resistance:
                     item["below_resistance"] = item.get("below_resistance", 0) + 1
                 else:
                     item["below_resistance"] = 0
 
                 if item["below_resistance"] >= 2:
-                    item["status"] = "failed"
+                    item["status"] = "LOSS"
 
+                # 🟢 WIN
+                peak = item.get("peak_price", entry)
+
+                if price > peak:
+                    item["peak_price"] = price
+
+                peak = item.get("peak_price", entry)
+
+                pullback = ((price - peak) / peak) * 100 if peak > 0 else 0
+
+                if peak >= entry * 1.12 and pullback <= -5:
+                    item["status"] = "WIN"
+
+    # =========================
+    # 📦 ARCHIVE COMPLETED TRADES
+    # =========================
+    completed = []
+
+    for item in existing:
+        if item.get("status") in ["WIN", "LOSS"]:
+            archive_trade(item)
+            completed.append(item)
+
+    # REMOVE completed trades
+    existing = [x for x in existing if x not in completed]
+
+    # =========================
+    # ➕ ADD NEW SIGNALS
+    # =========================
     for s in new_signals:
 
         if s["symbol"] not in existing_map:
@@ -256,17 +319,14 @@ def save_watchlist_json(new_signals):
                 "change_percent": 0
             })
 
-    existing = [
-        x for x in existing
-        if not (x.get("status") == "failed" and x.get("age", 0) > 10)
-    ]
-
+    # =========================
+    # 💾 SAVE JSON
+    # =========================
     with open("watchlist.json", "w") as f:
         json.dump(existing, f, indent=2)
 
     print(f"✅ watchlist.json updated — total {len(existing)} stocks")
-
-
+    
 # =========================
 # CSV LOGGING
 # =========================
