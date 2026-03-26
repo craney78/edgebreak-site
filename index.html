@@ -595,14 +595,17 @@ if (success === 0 && follow === 0) {
     ${actionText}
   </div>
 `;
-    .catch(err => {
-    console.error("MARKET LOAD ERROR:", err);
 
-    const box = document.getElementById("marketBox");
-    if (box) {
-      box.innerHTML = "Error loading market data";
-    }
-  });
+}) // ✅ CLOSES .then(data => { ... })
+
+.catch(err => {
+  console.error("MARKET LOAD ERROR:", err);
+
+  const box = document.getElementById("marketBox");
+  if (box) {
+    box.innerHTML = "Error loading market data";
+  }
+});
 
 
 // 📊 TODAY BREAKOUT COUNT + TOP BREAKOUT LOGIC
