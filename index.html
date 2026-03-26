@@ -528,10 +528,23 @@ fetch("market_status.json?v=" + new Date().getTime())
       actionText = "Awaiting latest breakout performance data.";
     }
 
-    const score = Math.round(
-  (data.success_rate || 0) * 0.7 +
-  (data.follow_through_rate || 0) * 0.3
+    // 🔥 SAFE VALUES
+let success = data.success_rate || 0;
+let follow = data.follow_through_rate || 0;
+
+// 🔥 SCORE CALCULATION (MATCH MARKET PAGE)
+let score = Math.round(
+  success * 0.7 +
+  follow * 0.3
 );
+
+// 🔥 LOW DATA DETECTION (CRITICAL ALIGNMENT)
+let lowData = false;
+
+if (success === 0 && follow === 0) {
+  score = 35;
+  lowData = true;
+}
 
     const confidence = Math.min((data.total_trades || 0) / 20, 1);
     const confidencePct = Math.round(confidence * 100);
@@ -550,33 +563,38 @@ fetch("market_status.json?v=" + new Date().getTime())
     else if (score >= 45) scoreColor = "#f59e0b";
 
     box.innerHTML = `
-      <div class="market-label">
-        <img src="https://flagcdn.com/us.svg" style="height:14px; vertical-align:middle; margin-right:6px;">
-        US Market — ${data.label}
-      </div>
+  <div class="market-label">
+    <img src="https://flagcdn.com/us.svg" style="height:14px; vertical-align:middle; margin-right:6px;">
+    US Market — ${data.label}
+  </div>
 
-      <div style="margin-top:10px; font-size:18px; font-weight:bold;">
-        <span style="color:${scoreColor};">Market Score: ${score} / 100</span>
-      </div>
+  <div style="margin-top:10px; font-size:18px; font-weight:bold;">
+    <span style="color:${scoreColor};">Market Score: ${score} / 100</span>
+  </div>
 
-      <div style="font-size:12px; color:#8b949e; margin-top:4px;">
-        Confidence: ${confidencePct}% • 
-        <span style="color:${trendColor};">Trend: ${trend}</span>
-      </div>
+  <div style="font-size:12px; color:#8b949e; margin-top:4px;">
+    Confidence: ${confidencePct}% • 
+    <span style="color:${trendColor};">Trend: ${trend}</span>
+  </div>
 
-      <div style="font-size:12px; color:#8b949e; margin-top:4px;">
-        Based on ${data.total_trades || 0} active breakout trades
-      </div>
+  <div style="font-size:12px; color:#8b949e; margin-top:4px;">
+    Based on ${data.total_trades || 0} active breakout trades
+  </div>
 
-      <div class="market-message" style="margin-top:12px;">
-        ${message}
-      </div>
+  ${lowData ? `
+    <div style="margin-top:10px; color:#8b949e;">
+      Limited data — market conditions are still forming.
+    </div>
+  ` : ""}
 
-      <div class="market-action" style="margin-top:10px;">
-        ${actionText}
-      </div>
-    `;
-  })
+  <div class="market-message" style="margin-top:12px;">
+    ${message}
+  </div>
+
+  <div class="market-action" style="margin-top:10px;">
+    ${actionText}
+  </div>
+`;
     .catch(err => {
     console.error("MARKET LOAD ERROR:", err);
 
