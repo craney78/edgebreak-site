@@ -575,7 +575,26 @@ fetch("./market_status.json?v=" + new Date().getTime())
     return res.json();
   })
   .then(data => {
+    
+// 🔥 HANDLE CONDITIONAL MODE (MATCH MARKET PAGE)
+if (data.mode === "CONDITIONAL") {
 
+  const box = document.getElementById("marketBox");
+
+  if (box) {
+    box.innerHTML = `
+      <div class="market-label">
+        US Market — ${data.label}
+      </div>
+
+      <div style="margin-top:10px; color:#8b949e;">
+        ${data.message || "Limited data — market conditions are still forming."}
+      </div>
+    `;
+  }
+
+  return; // STOP HERE
+}
     const box = document.getElementById("marketBox");
     if (!box) return;
 
