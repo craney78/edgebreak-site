@@ -268,6 +268,57 @@ a {
   font-size: 13px;
   color: #777;
 }
+
+/* 🔥 EDGE METER */
+.edge-meter {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.edge-meter-bar {
+  height: 16px;
+  background: #1f2933;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.edge-meter-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ef4444, #f59e0b, #22c55e);
+  transition: width 1s ease-out;
+  position: relative;
+}
+
+/* 🔥 SHIMMER EFFECT */
+.edge-meter-fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.3),
+    transparent
+  );
+  animation: shimmer 2.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -50%; }
+  100% { left: 120%; }
+}
+
+.edge-meter-label {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #9ca3af;
+  letter-spacing: 0.5px;
+}
 </style>
 </head>
 
@@ -555,6 +606,29 @@ let score = Math.round(
   success * 0.7 +
   follow * 0.3
 );
+
+// 🔥 EDGE METER CONTROL
+const fill = document.getElementById("edgeMeterFill");
+const label = document.getElementById("edgeMeterLabel");
+
+if (fill && label) {
+
+  // smooth animation
+  setTimeout(() => {
+    fill.style.width = score + "%";
+  }, 200);
+
+  let text = "WEAK CONDITIONS";
+  if (score >= 65) text = "STRONG CONDITIONS";
+  else if (score >= 45) text = "MIXED CONDITIONS";
+
+  label.innerHTML = `${text} • ${score}%`;
+
+  // dynamic glow
+  if (score >= 65) fill.style.boxShadow = "0 0 25px rgba(34,197,94,0.8)";
+  else if (score >= 45) fill.style.boxShadow = "0 0 25px rgba(245,158,11,0.7)";
+  else fill.style.boxShadow = "0 0 25px rgba(239,68,68,0.7)";
+}
 
 // 🔥 LOW DATA DETECTION (CRITICAL ALIGNMENT)
 let lowData = false;
