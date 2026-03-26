@@ -489,7 +489,7 @@ a {
 <script>
 
 // 🧠 MARKET STATUS
-fetch("market_status.json?v=" + new Date().getTime())
+fetch("/market_status.json?v=" + new Date().getTime())
   .then(res => {
     if (!res.ok) throw new Error("Failed to load market_status.json");
     return res.json();
