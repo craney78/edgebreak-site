@@ -579,43 +579,14 @@ fetch("/market_status.json?v=" + new Date().getTime())
     const box = document.getElementById("marketBox");
     if (!box) return;
 
-    let message = "";
-    let actionText = "";
-
-    if (data.status === "GREEN") {
-      message = "Breakouts are performing well with strong follow-through.";
-      actionText = "HIGH EDGE ENVIRONMENT — Conditions are favourable for breakout strategies.";
-      box.style.borderColor = "#22c55e";
-      box.style.boxShadow = "0 0 25px rgba(34,197,94,0.4)";
-    }
-
-    if (data.status === "YELLOW") {
-      message = "Breakout performance is mixed and less consistent.";
-      actionText = "SELECTIVE ENVIRONMENT — Focus on higher-quality setups and reduce exposure.";
-      box.style.borderColor = "#f59e0b";
-      box.style.boxShadow = "0 0 25px rgba(245,158,11,0.4)";
-    }
-
-    if (data.status === "RED") {
-      message = "Breakout success rates are currently low across the market.";
-      actionText = "LOW EDGE ENVIRONMENT — EdgeBreak is filtering aggressively to preserve capital.";
-      box.style.borderColor = "#ef4444";
-      box.style.boxShadow = "0 0 25px rgba(239,68,68,0.4)";
-    }
-
-    if (!message) {
-      message = "Market data is updating...";
-      actionText = "Awaiting latest breakout performance data.";
-    }
-
     // 🔥 SAFE VALUES
     let success = data.success_rate || 0;
     let follow = data.follow_through_rate || 0;
 
-    // 🔥 SCORE CALCULATION
+    // 🔥 SCORE
     let score = Math.round(success * 0.7 + follow * 0.3);
 
-    // 🔥 LOW DATA DETECTION
+    // 🔥 LOW DATA
     let lowData = false;
     if (success === 0 && follow === 0) {
       score = 35;
@@ -639,7 +610,67 @@ fetch("/market_status.json?v=" + new Date().getTime())
     if (score >= 65) scoreColor = "#22c55e";
     else if (score >= 45) scoreColor = "#f59e0b";
 
-    // 🔥 EDGE METER (RUN AFTER FINAL SCORE)
+    // 🔥 MESSAGE + STYLE
+    let message = "";
+    let actionText = "";
+
+    if (data.status === "GREEN") {
+      message = "Breakouts are performing well with strong follow-through.";
+      actionText = "HIGH EDGE ENVIRONMENT — Conditions are favourable.";
+      box.style.borderColor = "#22c55e";
+      box.style.boxShadow = "0 0 25px rgba(34,197,94,0.4)";
+    }
+
+    if (data.status === "YELLOW") {
+      message = "Breakout performance is mixed and less consistent.";
+      actionText = "SELECTIVE ENVIRONMENT — Focus on quality.";
+      box.style.borderColor = "#f59e0b";
+      box.style.boxShadow = "0 0 25px rgba(245,158,11,0.4)";
+    }
+
+    if (data.status === "RED") {
+      message = "Breakout success rates are currently low.";
+      actionText = "LOW EDGE ENVIRONMENT — Reduce exposure.";
+      box.style.borderColor = "#ef4444";
+      box.style.boxShadow = "0 0 25px rgba(239,68,68,0.4)";
+    }
+
+    // 🔥 RENDER MARKET BOX FIRST
+    box.innerHTML = `
+      <div class="market-label">
+        <img src="https://flagcdn.com/us.svg" style="height:14px; vertical-align:middle; margin-right:6px;">
+        US Market — ${data.label}
+      </div>
+
+      <div style="margin-top:10px; font-size:18px; font-weight:bold;">
+        <span style="color:${scoreColor};">Market Score: ${score} / 100</span>
+      </div>
+
+      <div style="font-size:12px; color:#8b949e; margin-top:4px;">
+        Confidence: ${confidencePct}% • 
+        <span style="color:${trendColor};">Trend: ${trend}</span>
+      </div>
+
+      <div style="font-size:12px; color:#8b949e; margin-top:4px;">
+        Based on ${data.total_trades || 0} trades
+      </div>
+
+      ${lowData ? `
+        <div style="margin-top:10px; color:#8b949e;">
+          Limited data — conditions forming
+        </div>
+      ` : ""}
+
+      <div class="market-message" style="margin-top:12px;">
+        ${message}
+      </div>
+
+      <div class="market-action" style="margin-top:10px;">
+        ${actionText}
+      </div>
+    `;
+
+    // 🔥 EDGE METER (RUN AFTER RENDER — THIS WAS THE BUG)
     setTimeout(() => {
       const fill = document.getElementById("edgeMeterFill");
       const label = document.getElementById("edgeMeterLabel");
@@ -657,42 +688,7 @@ fetch("/market_status.json?v=" + new Date().getTime())
         else if (score >= 45) fill.style.boxShadow = "0 0 25px rgba(245,158,11,0.7)";
         else fill.style.boxShadow = "0 0 25px rgba(239,68,68,0.7)";
       }
-    }, 300);
-
-    // 🔥 RENDER MARKET BOX
-    box.innerHTML = `
-      <div class="market-label">
-        <img src="https://flagcdn.com/us.svg" style="height:14px; vertical-align:middle; margin-right:6px;">
-        US Market — ${data.label}
-      </div>
-
-      <div style="margin-top:10px; font-size:18px; font-weight:bold;">
-        <span style="color:${scoreColor};">Market Score: ${score} / 100</span>
-      </div>
-
-      <div style="font-size:12px; color:#8b949e; margin-top:4px;">
-        Confidence: ${confidencePct}% • 
-        <span style="color:${trendColor};">Trend: ${trend}</span>
-      </div>
-
-      <div style="font-size:12px; color:#8b949e; margin-top:4px;">
-        Based on ${data.total_trades || 0} active breakout trades
-      </div>
-
-      ${lowData ? `
-        <div style="margin-top:10px; color:#8b949e;">
-          Limited data — market conditions are still forming.
-        </div>
-      ` : ""}
-
-      <div class="market-message" style="margin-top:12px;">
-        ${message}
-      </div>
-
-      <div class="market-action" style="margin-top:10px;">
-        ${actionText}
-      </div>
-    `;
+    }, 200);
 
   })
   .catch(err => {
@@ -702,7 +698,7 @@ fetch("/market_status.json?v=" + new Date().getTime())
   });
 
 
-// 📊 TODAY BREAKOUT COUNT + TOP BREAKOUT LOGIC
+// 📊 TODAY BREAKOUT COUNT + TOP BREAKOUT
 fetch("watchlist.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
@@ -712,11 +708,9 @@ fetch("watchlist.json?v=" + new Date().getTime())
 
     const el = document.getElementById("todayCount");
     if (el) {
-      if (today.length > 0) {
-        el.innerText = `${today.length} new breakout setups detected today`;
-      } else {
-        el.innerText = "No new breakouts today — monitoring market conditions";
-      }
+      el.innerText = today.length > 0
+        ? `${today.length} new breakout setups detected today`
+        : "No new breakouts today — monitoring";
     }
 
     const topEl = document.getElementById("topBreakout");
@@ -729,10 +723,7 @@ fetch("watchlist.json?v=" + new Date().getTime())
         const change = Number(top.change_percent || 0);
         const age = Number(top.age || 0);
 
-        const fastMove = change >= 15 && age <= 3;
-        const strongMove = change >= 20;
-
-        if (fastMove || strongMove) {
+        if ((change >= 15 && age <= 3) || change >= 20) {
           topEl.innerHTML = `${grade} Breakout → +${change.toFixed(1)}% in ${age} days`;
         } else {
           topEl.innerHTML = `${grade} Setup Detected`;
@@ -745,4 +736,3 @@ fetch("watchlist.json?v=" + new Date().getTime())
     const el = document.getElementById("todayCount");
     if (el) el.innerText = "";
   });
-
