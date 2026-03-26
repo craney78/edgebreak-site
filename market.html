@@ -255,10 +255,10 @@ let score = Math.round(
 );
 
 
-// 🔥 LOW DATA PROTECTION
+// 🔥 DETECT NO PERFORMANCE DATA
 let lowData = false;
 
-if (trades < 5) {
+if (success === 0 && follow === 0) {
   score = 35;
   lowData = true;
 }
