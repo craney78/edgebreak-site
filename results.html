@@ -46,6 +46,27 @@ p {
   color: #9ca3af;
 }
 
+/* FILTER BUTTONS */
+.filters {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.filters button {
+  margin-right: 10px;
+  padding: 8px 14px;
+  border: 1px solid #1f2933;
+  background: #111827;
+  color: #9ca3af;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.filters button:hover {
+  color: #fff;
+  border-color: #22c55e;
+}
+
 /* RESULTS */
 .result {
   background: #111827;
@@ -69,9 +90,11 @@ p {
 .move {
   margin-top: 10px;
   font-weight: bold;
-  color: #22c55e;
   font-size: 18px;
 }
+
+.up { color: #22c55e; }
+.down { color: #ef4444; }
 
 .structure {
   margin-top: 10px;
@@ -120,39 +143,22 @@ p {
 
 <div class="container">
 
-<h1>Clean Breakout Expansions</h1>
+<h1>Trade Results</h1>
 
 <p>
-Examples of clean, structured breakout setups and their expansion following breakout.
+Real completed trades tracked by the EdgeBreak system.
 </p>
 
-<div class="result">
-  <div class="symbol">SMCI</div>
-  <div class="grade">Grade: A+</div>
-  <div class="move">+48% expansion (12 days)</div>
-  <div class="structure">Tight compression → breakout → explosive continuation</div>
+<!-- 🔥 FILTER BUTTONS -->
+<div class="filters">
+  <button onclick="filterMarket('ALL')">ALL</button>
+  <button onclick="filterMarket('GREEN')" style="color:#22c55e;">🟢 GREEN</button>
+  <button onclick="filterMarket('YELLOW')" style="color:#facc15;">🟡 YELLOW</button>
+  <button onclick="filterMarket('RED')" style="color:#ef4444;">🔴 RED</button>
 </div>
 
-<div class="result">
-  <div class="symbol">NVDA</div>
-  <div class="grade">Grade: A+</div>
-  <div class="move">+42% expansion (15 days)</div>
-  <div class="structure">Clean base → breakout → institutional momentum</div>
-</div>
-
-<div class="result">
-  <div class="symbol">ANF</div>
-  <div class="grade">Grade: A+</div>
-  <div class="move">+55% expansion (18 days)</div>
-  <div class="structure">Multi-touch resistance → breakout → strong continuation</div>
-</div>
-
-<div class="result">
-  <div class="symbol">CELH</div>
-  <div class="grade">Grade: A</div>
-  <div class="move">+38% expansion (14 days)</div>
-  <div class="structure">Repeated breakout legs → trend continuation</div>
-</div>
+<!-- RESULTS CONTAINER -->
+<div id="resultsContainer"></div>
 
 <div class="cta">
   <h2>Access High-Quality Breakouts</h2>
@@ -164,6 +170,68 @@ Examples of clean, structured breakout setups and their expansion following brea
 </div>
 
 </div>
+
+<script>
+
+let allTrades = [];
+
+// LOAD DATA
+fetch("./trade_history.json?v=" + new Date().getTime())
+.then(res => res.json())
+.then(data => {
+  allTrades = data;
+  renderResults(data);
+});
+
+// RENDER FUNCTION
+function renderResults(data){
+
+  const container = document.getElementById("resultsContainer");
+  container.innerHTML = "";
+
+  if(!data || data.length === 0){
+    container.innerHTML = "<p>No trades found</p>";
+    return;
+  }
+
+  data.forEach(trade => {
+
+    const moveClass = trade.percent_move >= 0 ? "up" : "down";
+
+    const div = document.createElement("div");
+    div.className = "result";
+
+    div.innerHTML = `
+      <div class="symbol">${trade.ticker}</div>
+      <div class="grade">Grade: ${trade.grade} | ${trade.market}</div>
+      <div class="move ${moveClass}">
+        ${trade.percent_move >= 0 ? "+" : ""}${trade.percent_move.toFixed(2)}%
+      </div>
+      <div class="structure">
+        ${trade.result}
+      </div>
+    `;
+
+    container.appendChild(div);
+
+  });
+}
+
+// FILTER FUNCTION
+function filterMarket(type){
+
+  if(type === "ALL"){
+    renderResults(allTrades);
+    return;
+  }
+
+  const filtered = allTrades.filter(t => t.market === type);
+
+  renderResults(filtered);
+
+}
+
+</script>
 
 </body>
 </html>

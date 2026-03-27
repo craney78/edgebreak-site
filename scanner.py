@@ -14,7 +14,6 @@ BATCH_SIZE = 20
 SLEEP_TIME = 1.5
 SCAN_LIMIT = 9999
 
-
 # =========================
 # LOAD SYMBOLS
 # =========================
@@ -22,11 +21,11 @@ def load_symbols():
     with open(SYMBOL_FILE, "r") as f:
         return [line.strip() for line in f if line.strip()]
 
-
 # =========================
-# FETCH DATA
+# FETCH DATA (STABLE EOD VERSION ✅)
 # =========================
 def fetch_batch(symbols):
+
     url = (
         f"https://api.twelvedata.com/time_series"
         f"?symbol={','.join(symbols)}"
@@ -36,11 +35,33 @@ def fetch_batch(symbols):
     )
 
     try:
-        return requests.get(url, timeout=10).json()
+        headers = {
+            "User-Agent": "Mozilla/5.0"
+        }
+
+        response = requests.get(url, headers=headers, timeout=20)
+
+        text = response.text.strip()
+
+        # 🔥 if empty or blocked → return empty safely
+        if not text:
+            print("⚠️ Empty batch response")
+            return {}
+
+        try:
+            data = response.json()
+        except:
+            print("⚠️ Batch JSON decode failed")
+            return {}
+
+        # ✅ return whatever we got (like original system)
+        if isinstance(data, dict):
+            return data
+
     except Exception as e:
         print(f"API error: {e}")
-        return {}
 
+    return {}
 
 # =========================
 # PROCESS DATA
@@ -148,19 +169,6 @@ def rebuild_from_history():
 
     return list(latest.values())
 
-
-# =========================
-# GET LATEST PRICE
-# =========================
-def get_latest_price(symbol):
-    try:
-        url = f"https://api.twelvedata.com/price?symbol={symbol}&apikey={API_KEY}"
-        data = requests.get(url, timeout=5).json()
-        return float(data["price"])
-    except:
-        return None
-
-
 # =========================
 # SAVE WATCHLIST TXT
 # =========================
@@ -179,6 +187,21 @@ def save_watchlist(signals):
     print("📄 Watchlist TXT saved")
 
 # =========================
+# 🧠 GET MARKET CONDITION
+# =========================
+def get_current_market_label():
+
+    if not os.path.exists("market_status.json"):
+        return "UNKNOWN"
+
+    try:
+        with open("market_status.json", "r") as f:
+            data = json.load(f)
+            return data.get("label", "UNKNOWN")
+    except:
+        return "UNKNOWN"
+
+# =========================
 # ARCHIVE COMPLETED TRADES (NEW 🔥)
 # =========================
 def archive_trade(item):
@@ -187,11 +210,14 @@ def archive_trade(item):
 
     percent_move = item.get("change_percent", 0)
 
+    market_label = get_current_market_label()
+
     row = {
         "date": item.get("signal_date"),
         "ticker": item.get("symbol"),
-        "grade": item.get("grade"),  # ✅ ADDED
+        "grade": item.get("grade"),
         "result": item.get("status"),
+        "market": market_label,
         "breakout_price": item.get("entry_price"),
         "exit_price": item.get("current_price"),
         "percent_move": percent_move,
@@ -206,6 +232,41 @@ def archive_trade(item):
 
         writer.writerow(row)
 
+# =========================
+# 🔄 CONVERT CSV → JSON
+# =========================
+def convert_trade_history_to_json():
+
+    if not os.path.exists("trade_history.csv"):
+        print("⚠️ No trade_history.csv found")
+        return
+
+    trades = []
+
+    with open("trade_history.csv", newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+
+        for row in reader:
+            try:
+                trades.append({
+                    "date": row.get("date"),
+                    "ticker": row.get("ticker"),
+                    "grade": row.get("grade"),
+                    "result": row.get("result"),
+                    "market": row.get("market"),  # 🔥 important
+                    "percent_move": float(row.get("percent_move", 0)),
+                    "duration_days": int(float(row.get("duration_days", 0)))
+                })
+            except:
+                continue
+
+    # newest first
+    trades.reverse()
+
+    with open("trade_history.json", "w") as f:
+        json.dump(trades, f, indent=2)
+
+    print(f"✅ trade_history.json updated — {len(trades)} trades")
 
 # =========================
 # SAVE WATCHLIST JSON
@@ -228,26 +289,20 @@ def save_watchlist_json(new_signals):
     existing_map = {item["symbol"]: item for item in existing}
 
     # =========================
-    # 🔄 UPDATE EXISTING TRADES
+    # 🔄 UPDATE EXISTING TRADES (EOD)
     # =========================
     for item in existing:
 
         item["age"] = item.get("age", 0) + 1
 
-        latest_price = get_latest_price(item["symbol"])
-        if latest_price:
-            item["current_price"] = latest_price
+        entry_price = safe_float(item.get("entry_price"))
+        current_price = safe_float(item.get("current_price"))
 
-            entry_price = item.get("entry_price") or item.get("start_price") or latest_price
-
-            entry_price = safe_float(entry_price)
-            latest_price = safe_float(latest_price)
-
-            if entry_price > 0:
-                change = ((latest_price - entry_price) / entry_price) * 100
-                item["change_percent"] = round(change, 2)
-            else:
-                item["change_percent"] = 0
+        if entry_price > 0 and current_price > 0:
+            change = ((current_price - entry_price) / entry_price) * 100
+            item["change_percent"] = round(change, 2)
+        else:
+            item["change_percent"] = 0
 
         if "status" not in item:
             item["status"] = "holding"
@@ -384,7 +439,6 @@ def log_to_csv(signals, filename="breakout_history.csv"):
 
     print("📊 Logged to breakout_history.csv")
 
-
 # =========================
 # MAIN RUN
 # =========================
@@ -431,6 +485,7 @@ def run():
         print("⚠️ No new signals — rebuilding watchlist")
 
     save_watchlist_json(all_signals)
+    convert_trade_history_to_json()
 
     market = calculate_live_market_strength()
     save_market_status_json(market)
