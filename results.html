@@ -124,6 +124,50 @@ p {
   font-size: 12px;
   color: #6e7681;
 }
+
+.stats-bar {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.stat-box {
+  flex: 1;
+  min-width: 140px;
+  background: #11161c;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+}
+
+.stat-title {
+  font-size: 12px;
+  color: #8b949e;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.best-trade {
+  background: #11161c;
+  border: 1px solid #30363d;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  margin: 30px 0 10px;
+  font-size: 16px;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+}
+
 </style>
 </head>
 
@@ -145,6 +189,10 @@ p {
 
 <h1>Trade Results</h1>
 
+<div class="stats-bar" id="statsBar">
+  Loading performance...
+</div>
+
 <p>
 Real completed trades tracked by the EdgeBreak system.
 </p>
@@ -156,6 +204,9 @@ Real completed trades tracked by the EdgeBreak system.
   <button onclick="filterMarket('YELLOW')" style="color:#facc15;">🟡 YELLOW</button>
   <button onclick="filterMarket('RED')" style="color:#ef4444;">🔴 RED</button>
 </div>
+
+<div class="section-title">Top Performing Trades</div>
+<div id="bestTrades"></div>
 
 <!-- RESULTS CONTAINER -->
 <div id="resultsContainer"></div>
@@ -179,8 +230,14 @@ let allTrades = [];
 fetch("./trade_history.json?v=" + new Date().getTime())
 .then(res => res.json())
 .then(data => {
+
   allTrades = data;
+
   renderResults(data);
+
+  updateStats(data);       // 🔥 ADD THIS
+  showBestTrades(data);    // 🔥 ADD THIS
+
 });
 
 // RENDER FUNCTION
@@ -229,6 +286,56 @@ function filterMarket(type){
 
   renderResults(filtered);
 
+}
+
+function updateStats(data){
+
+  const total = data.length;
+
+  const wins = data.filter(x => x.result === "WIN").length;
+  const losses = data.filter(x => x.result === "LOSS").length;
+
+  const winRate = total ? ((wins / total) * 100).toFixed(1) : 0;
+
+  const avgGain = total
+    ? (data.reduce((sum, x) => sum + (x.percent_move || 0), 0) / total).toFixed(1)
+    : 0;
+
+  document.getElementById("statsBar").innerHTML = `
+    <div class="stat-box">
+      <div class="stat-title">Win Rate</div>
+      <div class="stat-value">${winRate}%</div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-title">Avg Move</div>
+      <div class="stat-value">${avgGain}%</div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-title">Total Trades</div>
+      <div class="stat-value">${total}</div>
+    </div>
+  `;
+}
+
+function showBestTrades(data){
+
+  const sorted = [...data]
+    .sort((a,b) => (b.percent_move || 0) - (a.percent_move || 0))
+    .slice(0,5);
+
+  let html = "";
+
+  sorted.forEach(t => {
+    html += `
+      <div class="best-trade">
+        ${t.ticker} — ${t.percent_move >= 0 ? "+" : ""}${t.percent_move.toFixed(2)}% (${t.duration} days)
+      </div>
+    `;
+  });
+
+  document.getElementById("bestTrades").innerHTML = html;
 }
 
 </script>
