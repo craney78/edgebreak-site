@@ -190,6 +190,45 @@ body {
   color: #6e7681;
   text-align: center;
 }
+
+@media (max-width: 768px) {
+
+  .table thead {
+    display: none;
+  }
+
+  .table, 
+  .table tbody, 
+  .table tr, 
+  .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .table tr {
+    margin-bottom: 15px;
+    padding: 12px;
+    background: #11161c;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+  }
+
+  .table td {
+    padding: 6px 0;
+    font-size: 13px;
+    border: none;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: block;
+    color: #8b949e;
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+
+}
 </style>
 </head>
 
@@ -398,15 +437,27 @@ function renderRows(list, selector){
     row.className = locked;
 
     row.innerHTML = `
-      <td>${isLocked(item.grade) ? "████" : item.symbol}</td>
-      <td>${item.score}<div class="grade ${getGradeClass(item.grade)}">${item.grade}</div></td>
-      <td>${item.break ? item.break + "%" : "-"}</td>
-      <td class="${perfClass}">${perfText}</td>
-      <td>${item.status || "-"}</td>
-      <td>${item.age}</td>
-      <td>${item.signal_date}</td>
-      <td><a href="https://www.tradingview.com/chart/?symbol=NASDAQ:${item.symbol}" target="_blank">View</a></td>
-    `;
+  <td data-label="Symbol">${isLocked(item.grade) ? "████" : item.symbol}</td>
+
+  <td data-label="Score">
+    ${item.score}
+    <div class="grade ${getGradeClass(item.grade)}">${item.grade}</div>
+  </td>
+
+  <td data-label="Break %">${item.break ? item.break + "%" : "-"}</td>
+
+  <td data-label="Performance" class="${perfClass}">${perfText}</td>
+
+  <td data-label="Status">${item.status || "-"}</td>
+
+  <td data-label="Age">${item.age}</td>
+
+  <td data-label="Found">${item.signal_date}</td>
+
+  <td data-label="Chart">
+    <a href="https://www.tradingview.com/chart/?symbol=NASDAQ:${item.symbol}" target="_blank">View</a>
+  </td>
+`;
 
     tbody.appendChild(row);
 
