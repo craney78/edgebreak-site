@@ -496,12 +496,14 @@ function updateGradeStats(data){
 
     html += `
       <div class="grade-box" data-grade="${g}" onclick="setFilter(event, '${g}')">
-       <div class="grade-title">${g}</div>
-       <div class="win">+ ${wins}</div>
-       <div class="loss">- ${losses}</div>
-     </div>
-  `;
+        <div class="grade-title">${g}</div>
+        <div class="win">+ ${wins}</div>
+        <div class="loss">- ${losses}</div>
+      </div>
+    `;
+  });
 
+  // 🔥 IMPORTANT: THIS MUST BE OUTSIDE THE LOOP
   document.getElementById("gradeStats").innerHTML = html;
 }
 
