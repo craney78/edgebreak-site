@@ -10,8 +10,8 @@ from market_index import calculate_live_market_strength, save_market_status_json
 API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
 SYMBOL_FILE = "nasdaq_symbols.txt"
 
-BATCH_SIZE = 20
-SLEEP_TIME = 1.5
+BATCH_SIZE = 10
+SLEEP_TIME = 2
 SCAN_LIMIT = 9999
 
 # =========================
@@ -41,22 +41,23 @@ def fetch_batch(symbols):
 
         response = requests.get(url, headers=headers, timeout=20)
 
-        text = response.text.strip()
-
-        # 🔥 if empty or blocked → return empty safely
-        if not text:
-            print("⚠️ Empty batch response")
+        if response.status_code != 200:
+            print(f"⚠️ HTTP {response.status_code}")
             return {}
 
         try:
             data = response.json()
         except:
-            print("⚠️ Batch JSON decode failed")
+            print("⚠️ JSON decode failed")
             return {}
 
-        # ✅ return whatever we got (like original system)
-        if isinstance(data, dict):
-            return data
+        # 🔥 HANDLE API LIMIT / ERROR RESPONSE
+        if "code" in data:
+            print(f"⚠️ API Error: {data.get('message')}")
+            return {}
+
+        # ✅ VALID RESPONSE
+        return data if isinstance(data, dict) else {}
 
     except Exception as e:
         print(f"API error: {e}")
