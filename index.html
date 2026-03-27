@@ -377,20 +377,18 @@ a {
   border: 1px solid #1f2933;
   border-radius: 12px;
   padding: 18px;
-  transition: 0.25s;
+  transition: all 0.25s ease;
   cursor: default;
+  position: relative;
 }
 
+/* 🔥 STRONG HOVER EFFECT */
 .step-card:hover {
   border-color: #22c55e;
-  box-shadow: 0 0 20px rgba(34,197,94,0.2);
+  box-shadow: 
+    0 0 0 1px #22c55e,               /* crisp green outline */
+    0 0 25px rgba(34,197,94,0.25);  /* glow */
   transform: translateY(-3px);
-}
-
-.step-card p {
-  font-size: 14px;
-  line-height: 1.5;
-  margin: 0;
 }
 
 .step-number {
