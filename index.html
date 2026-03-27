@@ -429,20 +429,28 @@ a {
 
 @media (max-width: 768px) {
 
-  .nav-links {
-    display: flex;
-    overflow-x: auto;
-    gap: 15px;
-    padding-bottom: 5px;
+  .nav {
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 10px;
   }
 
-  .nav-links::-webkit-scrollbar {
-    display: none;
+  .logo img {
+    height: 38px;
+    margin-bottom: 10px;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;           /* 🔥 allows wrapping */
+    justify-content: center;
+    gap: 10px;
   }
 
   .nav-links a {
-    flex: 0 0 auto;
+    margin: 0;
     font-size: 13px;
+    padding: 6px 10px;
   }
 
 }
