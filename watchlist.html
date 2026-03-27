@@ -249,6 +249,20 @@ body {
 .win { color: #3ddc97; }
 .loss { color: #ff6b6b; }
 
+.system-note {
+  font-size: 13px;
+  color: #8b949e;
+  margin: 10px auto 20px;
+  text-align: center;
+  max-width: 700px;
+  line-height: 1.5;
+
+  padding: 12px;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  background: #0d131a;
+}
+
 @media (max-width: 768px) {
 
   .table thead {
@@ -319,6 +333,12 @@ body {
 <div class="summary-bar" id="summaryBar">Loading stats...</div>
 
 <div class="grade-stats" id="gradeStats"></div>
+
+<p class="system-note">
+  All trades are generated and executed using a consistent, rule-based algorithm. 
+  Performance is influenced by overall market conditions — weaker environments may reduce follow-through. 
+  Incorporating active monitoring and disciplined trade management can enhance results.
+</p>
 
 <div class="filters">
   <button onclick="setFilter(event,'ALL')" class="active">ALL</button>
