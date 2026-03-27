@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>EdgeBreak Market Intelligence Engine</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+/* BASE */
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, sans-serif;
+  background: #0d1117;
+  color: #e6edf3;
+}
+
+/* NAV */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 30px;
+  border-bottom: 1px solid #30363d;
+}
+
+.nav a {
+  color: #e6edf3;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 14px;
+}
+
+.nav a:hover {
+  color: #00ff99;
+}
+
+/* CONTAINER */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.hero h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: #8b949e;
+}
+
+/* STAT BAR */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.stat {
+  background: #161b22;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #30363d;
+  text-align: center;
+}
+
+.stat h3 {
+  margin: 0;
+  font-size: 22px;
+  color: #00ff99;
+}
+
+.stat p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  color: #8b949e;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+/* CARD */
+.card {
+  background: #161b22;
+  border-radius: 12px;
+  border: 1px solid #30363d;
+  padding: 25px;
+  transition: 0.3s;
+}
+
+.card:hover {
+  border-color: #00ff99;
+  box-shadow: 0 0 20px rgba(0,255,153,0.15);
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+/* COLOR BOXES */
+.color-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.color-box {
+  padding: 18px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.green {
+  border: 1px solid #00ff99;
+  background: rgba(0,255,153,0.05);
+}
+
+.yellow {
+  border: 1px solid #ffc107;
+  background: rgba(255,193,7,0.05);
+}
+
+.red {
+  border: 1px solid #ff4d4d;
+  background: rgba(255,77,77,0.05);
+}
+
+.color-box p {
+  font-weight: normal;
+  margin-top: 8px;
+  color: #8b949e;
+}
+
+/* HIGHLIGHT */
+.highlight {
+  color: #00ff99;
+  font-weight: bold;
+}
+
+/* FINAL PANEL */
+.final {
+  text-align: center;
+  margin-top: 40px;
+  padding: 30px;
+  border: 1px solid #00ff99;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0,255,153,0.1);
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  padding: 30px;
+  margin-top: 40px;
+  border-top: 1px solid #30363d;
+  color: #8b949e;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <strong>EdgeBreak</strong>
+  <div>
+    <a href="index.html">Home</a>
+    <a href="watchlist.html">Watchlist</a>
+    <a href="results.html">Results</a>
+    <a href="market.html">Market</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Market Intelligence Engine</h1>
+    <p>Real market conditions. Measured through real trades.</p>
+  </div>
+
+  <!-- STAT BAR -->
+  <div class="stats">
+    <div class="stat">
+      <h3>Real Data</h3>
+      <p>No predictions</p>
+    </div>
+    <div class="stat">
+      <h3>Closed Trades</h3>
+      <p>Only verified outcomes</p>
+    </div>
+    <div class="stat">
+      <h3>Adaptive</h3>
+      <p>Responds to conditions</p>
+    </div>
+    <div class="stat">
+      <h3>Market-Aware</h3>
+      <p>Environment first</p>
+    </div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- WHAT IT IS -->
+    <div class="card">
+      <h2>What It Is</h2>
+      <p>
+        The EdgeBreak Market Intelligence Engine evaluates breakout performance using 
+        <span class="highlight">real completed trades</span>.
+      </p>
+      <p>
+        It reflects what the market is actually doing — not what it might do.
+      </p>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="card">
+      <h2>How It Works</h2>
+      <p>
+        The system continuously measures:
+      </p>
+      <p>
+        • Win rate<br>
+        • Follow-through strength<br>
+        • Failure behaviour
+      </p>
+      <p>
+        All calculations are based strictly on <span class="highlight">closed trades</span>.
+      </p>
+    </div>
+
+    <!-- COLORS -->
+    <div class="card">
+      <h2>Market Conditions</h2>
+
+      <div class="color-section">
+
+        <div class="color-box green">
+          🟢 GREEN — Strong
+          <p>High win rate. Clean continuation. Momentum is strong.</p>
+        </div>
+
+        <div class="color-box yellow">
+          🟡 YELLOW — Mixed
+          <p>Inconsistent results. Selectivity required.</p>
+        </div>
+
+        <div class="color-box red">
+          🔴 RED — Weak
+          <p>Breakouts failing. High risk environment.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- WHY -->
+    <div class="card">
+      <h2>Why It Matters</h2>
+      <p>
+        Most traders focus on setups.
+      </p>
+      <p>
+        EdgeBreak focuses on the <span class="highlight">environment those setups operate in</span>.
+      </p>
+      <p>
+        This reduces risk and improves timing.
+      </p>
+    </div>
+
+    <!-- DIFFERENCE -->
+    <div class="card">
+      <h2>The EdgeBreak Difference</h2>
+      <p>
+        Other systems try to predict.
+      </p>
+      <p class="highlight">
+        EdgeBreak reads real behaviour and adapts.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- FINAL -->
+  <div class="final">
+    <h2>Final Insight</h2>
+    <p class="highlight" style="font-size:20px;">
+      Trade harder when conditions are strong.<br>
+      Trade smarter when they’re not.
+    </p>
+  </div>
+
+</div>
+
+<div class="footer">
+  © EdgeBreak — Trading Intelligence Platform
+</div>
+
+</body>
+</html>
