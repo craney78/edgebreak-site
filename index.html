@@ -79,12 +79,13 @@ a {
 }
 
 .hero h1 {
-  font-size: 48px;
+  font-size: 52px;
   margin-bottom: 20px;
   line-height: 1.2;
-
-  /* 🔥 ADD THIS LINE */
   text-shadow: 0 0 15px rgba(34,197,94,0.25);
+
+  /* 🔥 ADD THIS */
+  letter-spacing: -0.5px;
 }
 
 .hero p {
@@ -144,7 +145,12 @@ a {
 
 .section h2 {
   margin-bottom: 15px;
-  font-size: 26px;
+  font-size: 28px;
+  font-weight: 600;
+
+  /* 🔥 NEW */
+  color: #ffffff;
+  letter-spacing: -0.3px;
 }
 
 .section p {
@@ -160,11 +166,9 @@ a {
   border-radius: 12px;
   margin-top: 20px;
   transition: 0.3s;
-}
 
-.box:hover {
-  border-color: #22c55e;
-  box-shadow: 0 0 25px rgba(34,197,94,0.15);
+  /* 🔥 ADD */
+  box-shadow: 0 0 30px rgba(0,255,150,0.04);
 }
 
 /* MARKET */
@@ -176,6 +180,9 @@ a {
   text-align: center;
   margin-top: 20px;
   transition: 0.3s;
+}
+.market-box:hover {
+  transform: scale(1.01);
 }
 
 .market-label {
@@ -196,11 +203,11 @@ a {
 
 /* NEW FOOTER */
 .footer {
-  background: #0a0f1c;
+  background: linear-gradient(180deg, #0a0f1c, #06090f);
   color: #ccc;
-  padding: 60px 20px 20px;
-  margin-top: 80px;
-  border-top: 1px solid rgba(0,255,150,0.1);
+  padding: 70px 20px 25px;
+  margin-top: 100px;
+  border-top: 1px solid rgba(0,255,150,0.15);
 }
 
 .footer-container {
@@ -213,13 +220,15 @@ a {
 
 .footer-logo {
   color: #22c55e;
-  font-size: 22px;
+  font-size: 24px;
+  font-weight: 700;
   margin-bottom: 10px;
+  letter-spacing: -0.5px;
 }
 
 .footer-tagline {
   font-size: 14px;
-  color: #aaa;
+  color: #9ca3af;
   margin-bottom: 10px;
 }
 
@@ -231,8 +240,9 @@ a {
 
 .footer-col h3 {
   margin-bottom: 15px;
-  color: #fff;
-  font-size: 16px;
+  color: #ffffff;
+  font-size: 15px;
+  letter-spacing: 0.3px;
 }
 
 .footer-col ul {
@@ -245,28 +255,30 @@ a {
 }
 
 .footer-col ul li a {
-  color: #ccc;
+  color: #9ca3af;
   font-size: 14px;
+  transition: 0.2s;
 }
 
 .footer-col ul li a:hover {
   color: #22c55e;
+  transform: translateX(2px);
 }
 
 .footer-note {
   font-size: 13px;
-  color: #aaa;
-  line-height: 1.5;
-  margin-bottom: 10px;
+  color: #8b949e;
+  line-height: 1.6;
+  margin-bottom: 12px;
 }
 
 .footer-bottom {
   text-align: center;
-  margin-top: 40px;
+  margin-top: 50px;
   padding-top: 20px;
   border-top: 1px solid rgba(255,255,255,0.05);
-  font-size: 13px;
-  color: #777;
+  font-size: 12px;
+  color: #6e7681;
 }
 
 /* 🔥 EDGE METER */
@@ -326,6 +338,10 @@ a {
   margin-top: 10px;
   line-height: 1.5;
 }
+
+.hero-sub strong {
+  color: #22c55e;
+}
 /* INFO BLOCKS (IMPROVED) */
 .info-block {
   margin-top: 30px;
@@ -362,6 +378,13 @@ a {
   border-radius: 12px;
   padding: 18px;
   transition: 0.25s;
+  cursor: default;
+}
+
+.step-card:hover {
+  border-color: #22c55e;
+  box-shadow: 0 0 20px rgba(34,197,94,0.2);
+  transform: translateY(-3px);
 }
 
 .step-card p {
