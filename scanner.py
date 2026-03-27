@@ -181,7 +181,6 @@ def save_watchlist(signals):
 # =========================
 # ARCHIVE COMPLETED TRADES (NEW 🔥)
 # =========================
-
 def archive_trade(item):
 
     file_exists = os.path.isfile("trade_history.csv")
@@ -191,6 +190,7 @@ def archive_trade(item):
     row = {
         "date": item.get("signal_date"),
         "ticker": item.get("symbol"),
+        "grade": item.get("grade"),  # ✅ ADDED
         "result": item.get("status"),
         "breakout_price": item.get("entry_price"),
         "exit_price": item.get("current_price"),
@@ -205,6 +205,7 @@ def archive_trade(item):
             writer.writeheader()
 
         writer.writerow(row)
+
 
 # =========================
 # SAVE WATCHLIST JSON
@@ -285,12 +286,21 @@ def save_watchlist_json(new_signals):
                     item["status"] = "WIN"
 
     # =========================
-    # 📦 ARCHIVE COMPLETED TRADES
+    # 📦 ARCHIVE COMPLETED TRADES (NO C GRADE)
     # =========================
     completed = []
 
     for item in existing:
+
         if item.get("status") in ["WIN", "LOSS"]:
+
+            grade = item.get("grade", "C")
+
+            # ❌ REMOVE C COMPLETELY
+            if grade == "C":
+                completed.append(item)
+                continue
+
             archive_trade(item)
             completed.append(item)
 
@@ -326,7 +336,7 @@ def save_watchlist_json(new_signals):
         json.dump(existing, f, indent=2)
 
     print(f"✅ watchlist.json updated — total {len(existing)} stocks")
-    
+
 # =========================
 # CSV LOGGING
 # =========================
