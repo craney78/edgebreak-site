@@ -236,6 +236,11 @@ body {
   font-size: 13px;
 }
 
+.grade-box.active {
+  border-color: #00ff9c;
+  box-shadow: 0 0 25px rgba(0,255,150,0.5);
+}
+
 .grade-title {
   font-weight: bold;
   margin-bottom: 5px;
@@ -400,13 +405,29 @@ let activeData = [];
 let archiveData = [];
 
 function setFilter(e, filter){
+
   currentFilter = filter;
 
+  // 🔥 RESET BUTTON STATES
   document.querySelectorAll(".filters button").forEach(btn => {
     btn.classList.remove("active");
   });
 
-  e.target.classList.add("active");
+  // 🔥 RESET GRADE BOX STATES
+  document.querySelectorAll(".grade-box").forEach(box => {
+    box.classList.remove("active");
+  });
+
+  // 🔥 HANDLE CLICK SOURCE (IMPORTANT)
+  const target = e.currentTarget;
+
+  if (target.classList.contains("grade-box")) {
+    target.classList.add("active");
+  }
+
+  if (target.tagName === "BUTTON") {
+    target.classList.add("active");
+  }
 
   applyFilters();
 }
@@ -474,13 +495,12 @@ function updateGradeStats(data){
     const losses = trades.filter(x => (x.change_percent || 0) < 0).length;
 
     html += `
-      <div class="grade-box">
-        <div class="grade-title">${g}</div>
-        <div class="win">+ ${wins}</div>
-        <div class="loss">- ${losses}</div>
-      </div>
-    `;
-  });
+      <div class="grade-box" data-grade="${g}" onclick="setFilter(event, '${g}')">
+       <div class="grade-title">${g}</div>
+       <div class="win">+ ${wins}</div>
+       <div class="loss">- ${losses}</div>
+     </div>
+  `;
 
   document.getElementById("gradeStats").innerHTML = html;
 }
