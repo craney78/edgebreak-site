@@ -219,6 +219,31 @@ body {
   text-align: center;
 }
 
+.grade-stats {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.grade-box {
+  flex: 1;
+  min-width: 120px;
+  background: #11161c;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+}
+
+.grade-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.win { color: #3ddc97; }
+.loss { color: #ff6b6b; }
+
 @media (max-width: 768px) {
 
   .table thead {
@@ -287,6 +312,8 @@ body {
 <div id="marketBar" class="market-bar"></div>
 
 <div class="summary-bar" id="summaryBar">Loading stats...</div>
+
+<div class="grade-stats" id="gradeStats"></div>
 
 <div class="filters">
   <button onclick="setFilter(event,'ALL')" class="active">ALL</button>
@@ -419,8 +446,8 @@ fetch("/watchlist.json?v=" + new Date().getTime())
   archiveData = archived;
 
   updateSummary(data);
-
-  applyFilters();
+updateGradeStats(data);   // 🔥 ADD THIS LINE
+applyFilters();
 
 });
 
@@ -430,7 +457,32 @@ function updateSummary(data){
   const losers = data.filter(x=>x.change_percent<0).length;
 
   document.getElementById("summaryBar").innerHTML =
-    `Total: ${total} | Winners: ${winners} | Losers: ${losers}`;
+    `Active Trades: ${total} • ${winners} Positive • ${losers} Negative`
+}
+
+function updateGradeStats(data){
+
+  const grades = ["A+", "A", "B+", "B"];
+
+  let html = "";
+
+  grades.forEach(g => {
+
+    const trades = data.filter(x => x.grade === g);
+
+    const wins = trades.filter(x => (x.change_percent || 0) > 0).length;
+    const losses = trades.filter(x => (x.change_percent || 0) < 0).length;
+
+    html += `
+      <div class="grade-box">
+        <div class="grade-title">${g}</div>
+        <div class="win">+ ${wins}</div>
+        <div class="loss">- ${losses}</div>
+      </div>
+    `;
+  });
+
+  document.getElementById("gradeStats").innerHTML = html;
 }
 
 function renderRows(list, selector){
