@@ -465,11 +465,6 @@ function applyFilters(){
   renderRows(activeData, "#activeTable tbody");
   renderRows(archiveData, "#archiveTable tbody");
 }
-</script>
-
-<script>
-
-<script>
 
 // 🧠 MARKET (COMPACT — SYSTEM ALIGNED)
 fetch("/market_status.json?v=" + new Date().getTime())
@@ -527,8 +522,6 @@ fetch("/market_status.json?v=" + new Date().getTime())
     const bar = document.getElementById("marketBar");
     if (bar) bar.innerHTML = "Market data unavailable";
   });
-
-</script>
 
 // DATA
 fetch("/watchlist.json?v=" + new Date().getTime())
