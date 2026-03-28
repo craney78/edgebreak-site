@@ -471,15 +471,44 @@ function applyFilters(){
 
 // MARKET
 fetch("/market_status.json?v=" + new Date().getTime())
-.then(res => res.json())
-.then(market => {
-  const bar = document.getElementById("marketBar");
-  let className = "market-weak";
-  if (market.status === "GREEN") className = "market-strong";
-  if (market.status === "YELLOW") className = "market-neutral";
-  bar.className = "market-bar " + className;
-  bar.innerHTML = `US MARKET: ${market.label}<br><span style="color:#8b949e;">${market.message}</span>`;
-});
+  .then(res => {
+    if (!res.ok) throw new Error("Failed to load market_status.json");
+    return res.json();
+  })
+  .then(data => {
+
+    const bar = document.getElementById("marketBar");
+    if (!bar) return;
+
+    // 🔥 SCORE (same logic as system)
+    let success = data.success_rate || 0;
+    let follow = data.follow_through_rate || 0;
+    let score = Math.round(success * 0.7 + follow * 0.3);
+
+    // 🔥 CLASS
+    let className = "market-weak";
+    if (data.status === "GREEN") className = "market-strong";
+    if (data.status === "YELLOW") className = "market-neutral";
+
+    bar.className = "market-bar " + className;
+
+    // 🔥 TREND TEXT
+    let trend = "STABLE";
+    if (success > 60) trend = "IMPROVING";
+    if (success < 40) trend = "WEAKENING";
+
+    // 🔥 COMPACT OUTPUT
+    bar.innerHTML = `
+      US MARKET — ${data.label} • ${score}/100
+      <div style="font-size:12px; color:#8b949e; margin-top:4px;">
+        ${trend} • ${data.total_trades || 0} trades
+      </div>
+    `;
+  })
+  .catch(() => {
+    const bar = document.getElementById("marketBar");
+    if (bar) bar.innerHTML = "Market data unavailable";
+  });
 
 // DATA
 fetch("/watchlist.json?v=" + new Date().getTime())
