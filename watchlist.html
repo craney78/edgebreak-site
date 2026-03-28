@@ -652,33 +652,34 @@ function renderRows(list, selector){
     row.className = locked;
 
     row.innerHTML = `
-  <td data-label="Symbol">${isLocked(item.grade) ? "████" : item.symbol}</td>
+      <td data-label="Symbol">${isLocked(item.grade) ? "████" : item.symbol}</td>
 
-  <td data-label="Score">
-    ${item.score}
-    <div class="grade ${getGradeClass(item.grade)}">${item.grade}</div>
-  </td>
+      <td data-label="Score">
+        ${item.score}
+        <div class="grade ${getGradeClass(item.grade)}">${item.grade}</div>
+      </td>
 
-  <td data-label="Break %">${item.break ? item.break + "%" : "-"}</td>
+      <td data-label="Break %">${item.break ? item.break + "%" : "-"}</td>
 
-  <td data-label="Performance" class="${perfClass}">${perfText}</td>
+      <td data-label="Performance" class="${perfClass}">${perfText}</td>
 
-  <td data-label="Status">${item.status || "-"}</td>
+      <td data-label="Status">${item.status || "-"}</td>
 
-  <td data-label="Age">${item.age}</td>
+      <td data-label="Age">${item.age}</td>
 
-  <td data-label="Found">${item.signal_date}</td>
+      <td data-label="Found">${item.signal_date}</td>
 
-  <td data-label="Chart">
-  <button onclick="openChart(
-    '${item.symbol}',
-    ${item.break || 0},
-    ${item.price || 0},
-    ${item.change_percent || 0}
-  )">
-    View
-  </button>
-</td>
+      <td data-label="Chart">
+        <button onclick="openChart(
+          '${item.symbol}',
+          ${item.break || 0},
+          0,
+          ${item.change_percent || 0}
+        )">
+          View
+        </button>
+      </td>
+    `;
 
     tbody.appendChild(row);
 
@@ -696,7 +697,6 @@ function getGradeClass(grade){
   if (grade === "B") return "grade-B";
   return "grade-C";
 }
-});
 
 function openChart(symbol, breakout, current, change){
 
