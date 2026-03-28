@@ -670,9 +670,15 @@ function renderRows(list, selector){
   <td data-label="Found">${item.signal_date}</td>
 
   <td data-label="Chart">
-    <a href="https://www.tradingview.com/chart/?symbol=NASDAQ:${item.symbol}" target="_blank">View</a>
-  </td>
-`;
+  <button onclick="openChart(
+    '${item.symbol}',
+    ${item.break || 0},
+    ${item.price || 0},
+    ${item.change_percent || 0}
+  )">
+    View
+  </button>
+</td>
 
     tbody.appendChild(row);
 
@@ -691,6 +697,51 @@ function getGradeClass(grade){
   return "grade-C";
 }
 });
+
+function openChart(symbol, breakout, current, change){
+
+  const modal = document.getElementById("chartModal");
+  const container = document.getElementById("chartContainer");
+
+  modal.style.display = "flex";
+
+  let color = "#3ddc97"; // green
+  if(change < 0) color = "#ff6b6b";
+  else if(change < 5) color = "#f0c674";
+
+  const overlay = `
+    <div style="
+      position:absolute;
+      top:15px;
+      left:15px;
+      background:rgba(0,0,0,0.85);
+      padding:12px;
+      border-radius:8px;
+      border:1px solid #30363d;
+      z-index:10;
+    ">
+      <div style="color:#8b949e;">Breakout</div>
+      <div style="font-weight:bold;">$${breakout || "-"}</div>
+
+      <div style="margin-top:6px;color:#8b949e;">Move</div>
+      <div style="color:${color}; font-weight:bold;">
+        ${change >= 0 ? "+" : ""}${change.toFixed(2)}%
+      </div>
+    </div>
+  `;
+
+  container.innerHTML = `
+    ${overlay}
+    <iframe 
+      src="https://s.tradingview.com/widgetembed/?symbol=NASDAQ:${symbol}&interval=D&theme=dark"
+      style="width:100%; height:500px; border:none;">
+    </iframe>
+  `;
+}
+
+function closeChart(){
+  document.getElementById("chartModal").style.display = "none";
+}
 </script>
 </body>
 </html>
