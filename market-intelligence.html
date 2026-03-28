@@ -18,9 +18,9 @@ body {
 /* NAV */
 .nav {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   padding: 18px 30px;
-  border-bottom: 1px solid #30363d;
 }
 
 .nav a {
@@ -168,6 +168,49 @@ body {
   color: #8b949e;
 }
 
+.market-box {
+  margin: 30px 0;
+  padding: 25px;
+  border-radius: 12px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.market-box strong {
+  font-size: 22px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.market-green {
+  border-color: #00ff99;
+  box-shadow: 0 0 15px rgba(0,255,153,0.2);
+}
+
+.market-yellow {
+  border-color: #ffc107;
+}
+
+.market-red {
+  border-color: #ff4d4d;
+}
+
+.logo img {
+  height: 32px;
+  transition: 0.3s;
+}
+
+.logo img:hover {
+  filter: drop-shadow(0 0 6px #00ff99);
+  transform: scale(1.05);
+}
+
+.market-box {
+  margin: 40px 0;
+}
+
 </style>
 </head>
 
@@ -175,12 +218,15 @@ body {
 
 <!-- NAV -->
 <div class="nav">
-  <strong>EdgeBreak</strong>
+  <div class="logo">
+  <img src="images/logo.png" alt="EdgeBreak Logo">
+</div>
   <div>
     <a href="index.html">Home</a>
     <a href="watchlist.html">Watchlist</a>
     <a href="results.html">Results</a>
     <a href="market.html">Market</a>
+    <a href="market-intelligence.html">Intelligence</a>
   </div>
 </div>
 
@@ -188,9 +234,13 @@ body {
 
   <!-- HERO -->
   <div class="hero">
-    <h1>Market Intelligence Engine</h1>
+    <h1>EdgeBreak Market Intelligence Engine</h1>
     <p>Real market conditions. Measured through real trades.</p>
   </div>
+
+  <div id="marketBox" class="market-box">
+  Loading market conditions...
+</div>
 
   <!-- STAT BAR -->
   <div class="stats">
@@ -308,6 +358,49 @@ body {
 <div class="footer">
   © EdgeBreak — Trading Intelligence Platform
 </div>
+
+<script>
+    fetch("market_status.json?v=" + new Date().getTime())
+  .then(res => {
+    if (!res.ok) throw new Error("Failed to load market_status.json");
+    return res.json();
+  })
+  .then(data => {
+
+    const box = document.getElementById("marketBox");
+    if (!box) return;
+
+    // Reset classes (prevents stacking bugs)
+    box.classList.remove("market-green", "market-yellow", "market-red");
+
+    // Determine colour
+    let colorClass = "";
+    if (data.status === "STRONG") colorClass = "market-green";
+    else if (data.status === "MIXED") colorClass = "market-yellow";
+    else if (data.status === "WEAK") colorClass = "market-red";
+
+    if (colorClass) {
+      box.classList.add(colorClass);
+    }
+
+    // Update UI
+    box.innerHTML = `
+      <strong>US Market — ${data.label || "Unknown"}</strong>
+      <div style="margin-top:10px; color:#8b949e;">
+        ${data.message || "No market message available."}
+      </div>
+    `;
+  })
+  .catch(err => {
+    console.error(err);
+
+    const box = document.getElementById("marketBox");
+    if (box) {
+      box.innerHTML = "Unable to load market conditions.";
+    }
+  });
+
+</script>
 
 </body>
 </html>
