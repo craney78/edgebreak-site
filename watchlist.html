@@ -566,7 +566,11 @@ function renderRows(list, selector){
       <td data-label="Found">${item.signal_date}</td>
 
       <td data-label="Chart">
-        <button onclick="openChart('${item.symbol}', ${item.break || 0}, ${item.change_percent || 0})">
+        <button onclick="openChart(
+  '${item.symbol}',
+  ${item.entry_price || item.start_price || 0},
+  ${item.change_percent || 0}
+)">
           View
         </button>
       </td>
@@ -730,7 +734,12 @@ function openChart(symbol, entryValue, changeValue){
   // =========================
   // FORCE SAFE NUMBERS
   // =========================
-  const entry = Number(entryValue);
+  const entry = Number(entry_price);
+
+if (!entry || entry <= 0) {
+  console.warn("Invalid entry price", { symbol, entry_price });
+  return;
+}
   const move = Number(changeValue);
 
   const hasEntry = !isNaN(entry) && entry > 0;
