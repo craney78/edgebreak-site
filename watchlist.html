@@ -563,45 +563,64 @@ fetch("market_status.json?v=" + new Date().getTime())
 // =========================
 // WATCHLIST DATA
 // =========================
-fetch("watchlist.json?v=" + new Date().getTime())
-  .then(res => res.text())   // 🔥 read as text first
-  .then(text => {
+const possiblePaths = [
+  "watchlist.json",
+  "./watchlist.json",
+  "/watchlist.json",
+  "data/watchlist.json"
+];
 
-    // 🔥 DEBUG: check what we actually got
-    console.log("RAW RESPONSE:", text.substring(0, 100));
+function loadWatchlist(paths, index = 0){
 
-    let data;
+  if(index >= paths.length){
+    console.error("❌ Could not load watchlist.json from any path");
+    return;
+  }
 
-    try {
-      data = JSON.parse(text);   // 🔥 safely parse
-    } catch (e) {
-      console.error("❌ NOT JSON — wrong path or file:", e);
-      return;
-    }
+  fetch(paths[index] + "?v=" + new Date().getTime())
+    .then(res => {
+      if (!res.ok) throw new Error("Bad response");
+      return res.text();
+    })
+    .then(text => {
 
-    if (!Array.isArray(data)) {
-      console.error("❌ Data is not an array:", data);
-      return;
-    }
+      console.log("Trying:", paths[index]);
+      console.log("RAW:", text.substring(0, 80));
 
-    // ✅ NOW YOUR NORMAL LOGIC
-    const today = data.filter(x => x.age === 0 && x.status !== "failed");
-    const active = data.filter(x => x.age > 0 && x.status !== "failed");
-    const archived = data.filter(x => x.status === "failed" || x.age > 5);
+      let data;
 
-    todayData = today;
-    activeData = active;
-    archiveData = archived;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error("Not JSON");
+      }
 
-    console.log("✅ DATA OK:", data.length, "items");
+      if (!Array.isArray(data)) {
+        throw new Error("Not array");
+      }
 
-    updateSummary(data);
-    updateGradeStats(data);
-    applyFilters();
-  })
-  .catch(err => {
-    console.error("🔥 FETCH FAILED:", err);
-  });
+      console.log("✅ SUCCESS using:", paths[index]);
+
+      const today = data.filter(x => x.age === 0 && x.status !== "failed");
+      const active = data.filter(x => x.age > 0 && x.status !== "failed");
+      const archived = data.filter(x => x.status === "failed" || x.age > 5);
+
+      todayData = today;
+      activeData = active;
+      archiveData = archived;
+
+      updateSummary(data);
+      updateGradeStats(data);
+      applyFilters();
+
+    })
+    .catch(() => {
+      loadWatchlist(paths, index + 1); // 🔥 try next path
+    });
+}
+
+// 🔥 RUN IT
+loadWatchlist(possiblePaths);
 
 // =========================
 // SUMMARY
