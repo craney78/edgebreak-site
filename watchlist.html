@@ -802,57 +802,32 @@ function updateGradeStats(data){
 }
 
 // =========================
-// CHART SYSTEM (FULL FIXED)
+// CHART SYSTEM (CLEAN FINAL)
 // =========================
 
-// 🔥 HELPER — GET CURRENT PRICE (REQUIRED)
 function getCurrentPrice(symbol){
-
   const allData = [...todayData, ...activeData, ...archiveData];
-
   const match = allData.find(x => x.symbol === symbol);
-
   if(!match) return null;
-
   return Number(match.current_price) || null;
 }
 
-
-// 🔥 MAIN CHART FUNCTION
 function openChart(symbol, entryValue, changeValue){
-
-  console.log("Opening chart:", symbol, entryValue, changeValue);
 
   const modal = document.getElementById("chartModal");
   const container = document.getElementById("chartContainer");
 
-  if(!modal || !container) {
-    console.warn("Chart modal or container missing");
-    return;
-  }
+  if(!modal || !container) return;
 
-  // ✅ ALWAYS SHOW MODAL
   modal.style.display = "flex";
 
-  // =========================
-  // SAFE VALUES
-  // =========================
   let entry = Number(entryValue);
   let move = Number(changeValue);
 
-  // 🔒 SAFE ENTRY
-  if (isNaN(entry) || entry <= 0) {
-    console.warn("Invalid entry — fallback disabled calculations");
-    entry = 0;
-  }
+  if (isNaN(entry) || entry <= 0) entry = 0;
 
-  // =========================
-  // 🔥 FIX MOVE (AUTO CALC)
-  // =========================
   if (!move || move === 0) {
-
     const current = getCurrentPrice(symbol);
-
     if (current && entry > 0) {
       move = ((current - entry) / entry) * 100;
     } else {
@@ -860,21 +835,12 @@ function openChart(symbol, entryValue, changeValue){
     }
   }
 
-  // =========================
-  // STOP LOSS
-  // =========================
   const stop = entry > 0 ? entry * 0.90 : 0;
 
-  // =========================
-  // DISPLAY VALUES
-  // =========================
   const entryText = entry > 0 ? "$" + entry.toFixed(2) : "N/A";
   const stopText = entry > 0 ? "$" + stop.toFixed(2) : "N/A";
   const moveText = (move >= 0 ? "+" : "") + move.toFixed(2) + "%";
 
-  // =========================
-  // COLORS
-  // =========================
   let moveColor = "#3ddc97";
   if(move < 0) moveColor = "#ff6b6b";
   else if(move < 5) moveColor = "#f0c674";
@@ -891,41 +857,17 @@ function openChart(symbol, entryValue, changeValue){
     statusColor = "#ff6b6b";
   }
 
-  // =========================
-  // RENDER CHART + PANEL
-  // =========================
   container.innerHTML = `
-
-    <div style="
-      position:absolute;
-      bottom:15px;
-      left:15px;
-      background:rgba(0,0,0,0.9);
-      padding:16px;
-      border-radius:10px;
-      border:1px solid #30363d;
-      z-index:10;
-      min-width:200px;
-    ">
-
-      <div style="font-weight:bold;margin-bottom:8px;">
-        ${symbol}
-      </div>
-
+    <div style="position:absolute;bottom:15px;left:15px;background:rgba(0,0,0,0.9);padding:16px;border-radius:10px;border:1px solid #30363d;z-index:10;min-width:200px;">
+      <div style="font-weight:bold;margin-bottom:8px;">${symbol}</div>
       <div style="font-size:12px;color:#8b949e;">Entry</div>
       <div>${entryText}</div>
-
       <div style="margin-top:6px;font-size:12px;color:#8b949e;">Stop</div>
       <div style="color:#ff6b6b;">${stopText}</div>
-
       <div style="margin-top:6px;font-size:12px;color:#8b949e;">Move</div>
       <div style="color:${moveColor};">${moveText}</div>
-
       <div style="margin-top:6px;font-size:12px;color:#8b949e;">Status</div>
-      <div style="color:${statusColor};font-weight:bold;">
-        ${status}
-      </div>
-
+      <div style="color:${statusColor};font-weight:bold;">${status}</div>
     </div>
 
     <iframe 
@@ -935,8 +877,6 @@ function openChart(symbol, entryValue, changeValue){
   `;
 }
 
-
-// 🔥 CLOSE FUNCTION (ENSURE THIS EXISTS)
 function closeChart(){
   const modal = document.getElementById("chartModal");
   if(modal) modal.style.display = "none";
