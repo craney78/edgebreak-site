@@ -564,25 +564,37 @@ fetch("/market_status.json?v=" + new Date().getTime())
 // WATCHLIST DATA
 // =========================
 fetch("watchlist.json?v=" + new Date().getTime())
-  .then(res => res.json())
+  .then(res => {
+    console.log("FETCH STATUS:", res.status);   // 🔥 ADD
+    return res.json();
+  })
   .then(data => {
 
-  const today = data.filter(x => x.age === 0 && x.status !== "failed");
-  const active = data.filter(x => x.age > 0 && x.status !== "failed");
-  const archived = data.filter(x => x.status === "failed" || x.age > 5);
+    console.log("DATA LOADED:", data);   // 🔥 ADD
 
-  todayData = today;
-  activeData = active;
-  archiveData = archived;
+    if (!Array.isArray(data)) {
+      console.error("❌ Data is not an array:", data);
+      return;
+    }
 
-  console.log("DATA LOADED:", data);   // 
+    if (data.length === 0) {
+      console.warn("⚠️ watchlist.json is empty");
+    }
 
-  updateSummary(data);
-  updateGradeStats(data);
-  applyFilters();
-})
+    const today = data.filter(x => x.age === 0 && x.status !== "failed");
+    const active = data.filter(x => x.age > 0 && x.status !== "failed");
+    const archived = data.filter(x => x.status === "failed" || x.age > 5);
+
+    todayData = today;
+    activeData = active;
+    archiveData = archived;
+
+    updateSummary(data);
+    updateGradeStats(data);
+    applyFilters();
+  })
   .catch(err => {
-    console.error("Watchlist load error:", err);
+    console.error("🔥 WATCHLIST ERROR:", err);
   });
 
 // =========================
