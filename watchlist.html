@@ -728,13 +728,44 @@ fetch("watchlist.json?v=" + new Date().getTime())
     activeData = active;
     archiveData = archived;
 
-    updateSummary(data);
-    updateGradeStats(data);
+    // =========================
+    // 🔴 RED MARKET BEHAVIOUR
+    // =========================
+    if (marketStatus === "RED") {
+
+      // 🔒 SUMMARY BAR
+      const summaryBar = document.getElementById("summaryBar");
+      if (summaryBar) {
+        summaryBar.innerHTML = `
+          🚫 Trading paused — no active trades displayed
+        `;
+      }
+
+      // 🔒 GRADE STATS
+      const gradeStats = document.getElementById("gradeStats");
+      if (gradeStats) {
+        gradeStats.innerHTML = `
+          <div style="text-align:center;color:#8b949e;padding:15px;">
+            Market conditions are unfavourable — performance metrics hidden
+          </div>
+        `;
+      }
+
+    } else {
+
+      // ✅ NORMAL BEHAVIOUR
+      updateSummary(data);
+      updateGradeStats(data);
+    }
+
+    // =========================
+    // ALWAYS APPLY TABLE RENDER
+    // =========================
     applyFilters();
+  })
+  .catch(err => {
+    console.error("Watchlist error:", err);
   });
-
-});
-
 // =========================
 // SUMMARY
 // =========================
