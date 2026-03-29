@@ -519,19 +519,20 @@ function renderRows(list, selector){
   const tbody = document.querySelector(selector);
   if(!tbody) return;
 
-  // =========================
-// 🔴 RED MARKET — WARNING ONLY (DO NOT BLOCK)
 // =========================
+// 🔴 RED MARKET — WARNING ONLY
+// =========================
+tbody.innerHTML = "";
+
 if (marketStatus === "RED") {
 
   const warningRow = document.createElement("tr");
 
   warningRow.innerHTML = `
-    <td colspan="8" style="text-align:center;color:#ff6b6b;padding:30px;">
-      🚫 Trading paused — conditions are unfavourable<br><br>
+    <td colspan="8" style="text-align:center;color:#ff6b6b;padding:20px;">
+      🚫 Trading paused — conditions are unfavourable<br>
       <span style="color:#8b949e;">
-        EdgeBreak continues scanning and tracking setups in the background<br>
-        Charts remain available for independent analysis
+        Trade at your own risk
       </span>
     </td>
   `;
