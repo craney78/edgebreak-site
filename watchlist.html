@@ -740,44 +740,41 @@ function openChart(symbol, entryValue, changeValue){
   modal.style.display = "flex";
 
   // =========================
-  // ✅ BASE VALUES
+  // SAFE VALUES (NO BREAKING)
   // =========================
-  const entry = Number(entryValue);
+  let entry = Number(entryValue);
   let move = Number(changeValue);
 
-  const hasEntry = !isNaN(entry) && entry > 0;
-  const hasMove = !isNaN(move);
-
-  if (!hasEntry) {
-    console.warn("Invalid entry price", { symbol, entryValue });
-    return;
+  if (isNaN(entry) || entry <= 0) {
+    console.warn("Bad entry — fallback to 0");
+    entry = 0;
   }
 
   // =========================
-  // 🔥 FIX MOVE (REBUILD IF WRONG)
+  // FIX MOVE (SAFE)
   // =========================
-  if ((!hasMove || move === 0)) {
+  if (!move || move === 0) {
 
     const current = getCurrentPrice(symbol);
 
-    if (current && current > 0) {
+    if (current && entry > 0) {
       move = ((current - entry) / entry) * 100;
+    } else {
+      move = 0; // fallback safe
     }
   }
 
   // =========================
   // STOP LOSS
   // =========================
-  const stop = entry * 0.90;
+  const stop = entry > 0 ? entry * 0.90 : 0;
 
   // =========================
-  // DISPLAY VALUES
+  // DISPLAY
   // =========================
-  const entryText = "$" + entry.toFixed(2);
-  const stopText = "$" + stop.toFixed(2);
-  const moveText = (!isNaN(move)) 
-    ? (move >= 0 ? "+" : "") + move.toFixed(2) + "%" 
-    : "0.00%";
+  const entryText = entry > 0 ? "$" + entry.toFixed(2) : "N/A";
+  const stopText = entry > 0 ? "$" + stop.toFixed(2) : "N/A";
+  const moveText = (move >= 0 ? "+" : "") + move.toFixed(2) + "%";
 
   // =========================
   // COLORS
@@ -799,7 +796,7 @@ function openChart(symbol, entryValue, changeValue){
   }
 
   // =========================
-  // RENDER PANEL + CHART
+  // RENDER
   // =========================
   container.innerHTML = `
 
