@@ -309,6 +309,26 @@ body {
   }
 
 }
+
+/* 🔴 DANGER MODE */
+.danger-mode {
+  box-shadow: 0 0 25px rgba(255, 0, 0, 0.25);
+  background: linear-gradient(90deg, #1a0000, #2a0000);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+}
+
+/* 🔥 STRONG TRADE */
+.strong-trade {
+  background: rgba(0, 255, 120, 0.06);
+  border-left: 3px solid #00ff88;
+}
+
+/* ⚡ FAST MOVE */
+.fast-move {
+  color: #00ff88;
+  font-weight: bold;
+}
+
 </style>
 </head>
 
@@ -577,8 +597,15 @@ if (marketStatus === "RED") {
     // 🔒 LOCKED STATE
     const locked = isLocked(item.grade) ? "locked" : "";
 
-    const row = document.createElement("tr");
-    row.className = locked;
+    const isStrong = change >= 10;
+const isFast = change >= 8 && item.age <= 2;
+
+let rowClass = locked;
+
+if (isStrong) rowClass += " strong-trade";
+
+const row = document.createElement("tr");
+row.className = rowClass;
 
     row.innerHTML = `
       <td data-label="Symbol">${locked ? "████" : symbol}</td>
@@ -592,7 +619,7 @@ if (marketStatus === "RED") {
         ${item.break ? Number(item.break).toFixed(2) + "%" : "-"}
       </td>
 
-      <td data-label="Performance" class="${perfClass}">
+      <td data-label="Performance" class="${perfClass} ${isFast ? "fast-move" : ""}">
         ${perfText}
       </td>
 
@@ -691,8 +718,16 @@ fetch("market_status.json?v=" + new Date().getTime())
           `;
         }
 
-        bar.className = "market-bar " + className;
+        // 🔥 CLEAN CLASS LOGIC (WITH DANGER MODE)
+        let fullClass = "market-bar " + className;
 
+        if (data.status === "RED") {
+          fullClass += " danger-mode";
+        }
+
+        bar.className = fullClass;
+
+        // 🔥 FINAL OUTPUT
         bar.innerHTML = `
           ${message}
           <div style="font-size:12px;color:#8b949e;margin-top:6px;">
@@ -703,23 +738,23 @@ fetch("market_status.json?v=" + new Date().getTime())
     }
 
     // =========================
-    // WATCHLIST LOAD (CHAINED CORRECTLY)
-    // =========================
-    return fetch("watchlist.json?v=" + new Date().getTime());
-  })
-  .then(res => {
-    if (!res.ok) throw new Error("Watchlist load fail");
-    return res.json();
-  })
-  .then(data => {
+// WATCHLIST LOAD (CHAINED CORRECTLY)
+// =========================
+return fetch("watchlist.json?v=" + new Date().getTime());
+})
+.then(res => {
+  if (!res.ok) throw new Error("Watchlist load fail");
+  return res.json();
+})
+.then(data => {
 
-    const today = data.filter(x => x.age === 0 && x.status !== "failed");
-    const active = data.filter(x => x.age > 0 && x.status !== "failed");
-    const archived = data.filter(x => x.status === "failed" || x.age > 5);
+  const today = data.filter(x => x.age === 0 && x.status !== "failed");
+  const active = data.filter(x => x.age > 0 && x.status !== "failed");
+  const archived = data.filter(x => x.status === "failed" || x.age > 5);
 
-    todayData = today;
-    activeData = active;
-    archiveData = archived;
+  todayData = today;
+  activeData = active;
+  archiveData = archived;
 
     // =========================
     // 🔴 RED MARKET UI CONTROL
