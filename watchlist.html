@@ -740,35 +740,27 @@ function openChart(symbol, entryValue, changeValue){
   modal.style.display = "flex";
 
   // =========================
-  // FORCE SAFE NUMBERS
+  // ✅ USE CORRECT VARIABLES
   // =========================
-  const entry = Number(entry_price);
-const move = Number(change_percent);
+  const entry = Number(entryValue);
+  const move = Number(changeValue);
 
-// ✅ VALIDATION
-const hasEntry = !isNaN(entry) && entry > 0;
-const hasMove = !isNaN(move);
+  const hasEntry = !isNaN(entry) && entry > 0;
+  const hasMove = !isNaN(move);
 
-// 🚨 HARD STOP IF ENTRY INVALID
-if (!hasEntry) {
-  console.warn("Invalid entry price", { symbol, entry_price });
-  return;
-}
+  if (!hasEntry) {
+    console.warn("Invalid entry price", { symbol, entryValue });
+    return;
+  }
 
-// ✅ STOP LOSS (LOCKED RULE)
-const stop = entry * 0.90;
-
-// ✅ DISPLAY VALUES (ROUNDED ONLY FOR UI)
-const entryDisplay = entry.toFixed(2);
-const stopDisplay = stop.toFixed(2);
-const moveDisplay = hasMove ? move.toFixed(2) : "0.00";
+  const stop = entry * 0.90;
 
   // =========================
-  // DISPLAY TEXT (FORCED SAFE)
+  // DISPLAY VALUES
   // =========================
-  const entryText = hasEntry ? "$" + entry.toFixed(2) : "N/A";
-  const stopText = hasEntry ? "$" + stop.toFixed(2) : "N/A";
-  const moveText = hasMove ? (move >= 0 ? "+" : "") + move.toFixed(2) + "%" : "N/A";
+  const entryText = "$" + entry.toFixed(2);
+  const stopText = "$" + stop.toFixed(2);
+  const moveText = hasMove ? (move >= 0 ? "+" : "") + move.toFixed(2) + "%" : "0.00%";
 
   // =========================
   // COLORS
@@ -790,7 +782,7 @@ const moveDisplay = hasMove ? move.toFixed(2) : "0.00";
   }
 
   // =========================
-  // RENDER PANEL (BOTTOM LEFT)
+  // RENDER
   // =========================
   container.innerHTML = `
 
@@ -832,5 +824,4 @@ const moveDisplay = hasMove ? move.toFixed(2) : "0.00";
     </iframe>
   `;
 }
-
 </script>
