@@ -465,13 +465,15 @@ EdgeBreak Intelligence
 
 <script>
 
-// 🔥 GLOBAL STATE (MOVED OUT)
+// 🔥 GLOBAL STATE
 let todayData = [];
 let activeData = [];
 let archiveData = [];
 let currentFilter = "ALL";
 
-// 🔥 GLOBAL FUNCTIONS (MOVED OUT)
+// =========================
+// FILTER SYSTEM
+// =========================
 function setFilter(e, filter){
 
   currentFilter = filter;
@@ -504,11 +506,13 @@ function applyFilters(){
 }
 
 // =========================
-// RENDER TABLES
+// TABLE RENDER
 // =========================
 function renderRows(list, selector){
 
   const tbody = document.querySelector(selector);
+  if(!tbody) return;
+
   tbody.innerHTML = "";
 
   if(!list || list.length === 0){
@@ -560,12 +564,7 @@ function renderRows(list, selector){
       <td data-label="Found">${item.signal_date}</td>
 
       <td data-label="Chart">
-        <button onclick="openChart(
-          '${item.symbol}',
-          ${item.break || 0},
-          0,
-          ${item.change_percent || 0}
-        )">
+        <button onclick="openChart('${item.symbol}', ${item.break || 0}, 0, ${item.change_percent || 0})">
           View
         </button>
       </td>
@@ -596,11 +595,11 @@ function getGradeClass(grade){
 document.addEventListener("DOMContentLoaded", function(){
 
 // =========================
-// MARKET (COMPACT)
+// MARKET
 // =========================
 fetch("market_status.json?v=" + new Date().getTime())
   .then(res => {
-    if (!res.ok) throw new Error("Failed to load market_status.json");
+    if (!res.ok) throw new Error("Market load fail");
     return res.json();
   })
   .then(data => {
@@ -612,7 +611,7 @@ fetch("market_status.json?v=" + new Date().getTime())
       bar.className = "market-bar market-neutral";
       bar.innerHTML = `
         US MARKET — ${data.label}
-        <div style="font-size:12px; color:#8b949e; margin-top:4px;">
+        <div style="font-size:12px;color:#8b949e;">
           ${data.message || "Conditions forming — limited data"}
         </div>
       `;
@@ -623,91 +622,48 @@ fetch("market_status.json?v=" + new Date().getTime())
     let follow = data.follow_through_rate || 0;
     let score = Math.round(success * 0.7 + follow * 0.3);
 
-    if (success === 0 && follow === 0) score = 35;
-
     let className = "market-weak";
     if (data.status === "GREEN") className = "market-strong";
     else if (data.status === "YELLOW") className = "market-neutral";
 
     bar.className = "market-bar " + className;
 
-    let trend = "STABLE";
-    if (success > 60) trend = "IMPROVING";
-    else if (success < 40) trend = "WEAKENING";
-
     bar.innerHTML = `
       US MARKET — ${data.label} • ${score}/100
-      <div style="font-size:12px; color:#8b949e; margin-top:4px;">
-        ${trend} • ${data.total_trades || 0} trades
+      <div style="font-size:12px;color:#8b949e;">
+        ${data.total_trades || 0} trades
       </div>
     `;
   })
-  .catch(() => {
+  .catch(()=>{
     const bar = document.getElementById("marketBar");
-    if (bar) bar.innerHTML = "Market data unavailable";
+    if(bar) bar.innerHTML = "Market unavailable";
   });
 
 // =========================
-// WATCHLIST DATA
+// WATCHLIST LOAD
 // =========================
-const possiblePaths = [
-  "watchlist.json",
-  "./watchlist.json",
-  "/watchlist.json",
-  "data/watchlist.json"
-];
+fetch("watchlist.json?v=" + new Date().getTime())
+  .then(res => {
+    if (!res.ok) throw new Error("Watchlist load fail");
+    return res.json();
+  })
+  .then(data => {
 
-function loadWatchlist(paths, index = 0){
+    const today = data.filter(x => x.age === 0 && x.status !== "failed");
+    const active = data.filter(x => x.age > 0 && x.status !== "failed");
+    const archived = data.filter(x => x.status === "failed" || x.age > 5);
 
-  if(index >= paths.length){
-    console.error("❌ Could not load watchlist.json from any path");
-    return;
-  }
+    todayData = today;
+    activeData = active;
+    archiveData = archived;
 
-  fetch(paths[index] + "?v=" + new Date().getTime())
-    .then(res => {
-      if (!res.ok) throw new Error("Bad response");
-      return res.text();
-    })
-    .then(text => {
+    updateSummary(data);
+    updateGradeStats(data);
+    applyFilters();
+  });
 
-      console.log("Trying:", paths[index]);
-      console.log("RAW:", text.substring(0, 80));
-
-      let data;
-
-      try {
-        data = JSON.parse(text);
-      } catch {
-        throw new Error("Not JSON");
-      }
-
-      if (!Array.isArray(data)) {
-        throw new Error("Not array");
-      }
-
-      console.log("✅ SUCCESS using:", paths[index]);
-
-      const today = data.filter(x => x.age === 0 && x.status !== "failed");
-      const active = data.filter(x => x.age > 0 && x.status !== "failed");
-      const archived = data.filter(x => x.status === "failed" || x.age > 5);
-
-      todayData = today;
-      activeData = active;
-      archiveData = archived;
-
-      updateSummary(data);
-      updateGradeStats(data);
-      applyFilters();
-
-    })
-    .catch(() => {
-      loadWatchlist(paths, index + 1);
-    });
-}
-
-// 🔥 RUN IT
-loadWatchlist(possiblePaths);
+});
 
 // =========================
 // SUMMARY
@@ -718,7 +674,6 @@ function updateSummary(data){
   if (!bar) return;
 
   const total = data.length;
-
   const winners = data.filter(x => (x.change_percent || 0) > 0).length;
   const losers = data.filter(x => (x.change_percent || 0) < 0).length;
 
@@ -745,7 +700,7 @@ function updateGradeStats(data){
     const losses = trades.filter(x => (x.change_percent || 0) < 0).length;
 
     html += `
-      <div class="grade-box" data-grade="${g}" onclick="setFilter(event, '${g}')">
+      <div class="grade-box" onclick="setFilter(event,'${g}')">
         <div class="grade-title">${g}</div>
         <div class="win">+ ${wins}</div>
         <div class="loss">- ${losses}</div>
@@ -756,6 +711,54 @@ function updateGradeStats(data){
   container.innerHTML = html;
 }
 
-});
+// =========================
+// CHART SYSTEM (FINAL FIXED)
+// =========================
+function openChart(symbol, breakout, current, change){
+
+  console.log("Opening chart:", symbol);
+
+  const modal = document.getElementById("chartModal");
+  const container = document.getElementById("chartContainer");
+
+  if(!modal || !container) return;
+
+  modal.style.display = "flex";
+
+  let color = "#3ddc97";
+  if(change < 0) color = "#ff6b6b";
+  else if(change < 5) color = "#f0c674";
+
+  container.innerHTML = `
+    <div style="
+      position:absolute;
+      top:15px;
+      left:15px;
+      background:rgba(0,0,0,0.85);
+      padding:12px;
+      border-radius:8px;
+      border:1px solid #30363d;
+      z-index:10;
+    ">
+      <div style="color:#8b949e;">Breakout</div>
+      <div style="font-weight:bold;">$${breakout || "-"}</div>
+
+      <div style="margin-top:6px;color:#8b949e;">Move</div>
+      <div style="color:${color}; font-weight:bold;">
+        ${change >= 0 ? "+" : ""}${change.toFixed(2)}%
+      </div>
+    </div>
+
+    <iframe 
+      src="https://s.tradingview.com/widgetembed/?symbol=${symbol}&interval=D&theme=dark"
+      style="width:100%; height:500px; border:none;">
+    </iframe>
+  `;
+}
+
+function closeChart(){
+  const modal = document.getElementById("chartModal");
+  if(modal) modal.style.display = "none";
+}
 
 </script>
