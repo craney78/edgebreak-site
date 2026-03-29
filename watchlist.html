@@ -526,51 +526,60 @@ function renderRows(list, selector){
 
   list.forEach(item=>{
 
+    // 🔒 FILTER
     if(currentFilter !== "ALL" && item.grade !== currentFilter) return;
 
-    const change = item.change_percent || 0;
+    // 🔒 SAFE VALUES
+    const symbol = item.symbol || "UNKNOWN";
+    const change = Number(item.change_percent) || 0;
+    const entry = Number(item.entry_price || item.start_price) || 0;
 
+    // 🔒 PERFORMANCE DISPLAY
     let perfClass = "neutral";
     let perfText = "-";
 
     if(change > 0){
       perfClass = "up";
       perfText = "+" + change.toFixed(2) + "%";
-    }
-    if(change < 0){
+    } else if(change < 0){
       perfClass = "down";
       perfText = change.toFixed(2) + "%";
     }
 
+    // 🔒 LOCKED STATE
     const locked = isLocked(item.grade) ? "locked" : "";
 
     const row = document.createElement("tr");
     row.className = locked;
 
     row.innerHTML = `
-      <td data-label="Symbol">${isLocked(item.grade) ? "████" : item.symbol}</td>
+      <td data-label="Symbol">${locked ? "████" : symbol}</td>
 
       <td data-label="Score">
-        ${item.score}
+        ${item.score || "-"}
         <div class="grade ${getGradeClass(item.grade)}">${item.grade}</div>
       </td>
 
-      <td data-label="Break %">${item.break ? item.break + "%" : "-"}</td>
+      <td data-label="Break %">
+        ${item.break ? Number(item.break).toFixed(2) + "%" : "-"}
+      </td>
 
-      <td data-label="Performance" class="${perfClass}">${perfText}</td>
+      <td data-label="Performance" class="${perfClass}">
+        ${perfText}
+      </td>
 
       <td data-label="Status">${item.status || "-"}</td>
 
-      <td data-label="Age">${item.age}</td>
+      <td data-label="Age">${item.age ?? "-"}</td>
 
-      <td data-label="Found">${item.signal_date}</td>
+      <td data-label="Found">${item.signal_date || "-"}</td>
 
       <td data-label="Chart">
         <button onclick="openChart(
-  '${item.symbol}',
-  ${item.entry_price || item.start_price || 0},
-  ${item.change_percent || 0}
-)">
+          '${symbol}',
+          ${entry},
+          ${change}
+        )">
           View
         </button>
       </td>
@@ -579,7 +588,6 @@ function renderRows(list, selector){
     tbody.appendChild(row);
   });
 }
-
 // =========================
 // HELPERS
 // =========================
@@ -735,17 +743,25 @@ function openChart(symbol, entryValue, changeValue){
   // FORCE SAFE NUMBERS
   // =========================
   const entry = Number(entry_price);
+const move = Number(change_percent);
 
-if (!entry || entry <= 0) {
+// ✅ VALIDATION
+const hasEntry = !isNaN(entry) && entry > 0;
+const hasMove = !isNaN(move);
+
+// 🚨 HARD STOP IF ENTRY INVALID
+if (!hasEntry) {
   console.warn("Invalid entry price", { symbol, entry_price });
   return;
 }
-  const move = Number(changeValue);
 
-  const hasEntry = !isNaN(entry) && entry > 0;
-  const hasMove = !isNaN(move);
+// ✅ STOP LOSS (LOCKED RULE)
+const stop = entry * 0.90;
 
-  const stop = hasEntry ? entry * 0.90 : null;
+// ✅ DISPLAY VALUES (ROUNDED ONLY FOR UI)
+const entryDisplay = entry.toFixed(2);
+const stopDisplay = stop.toFixed(2);
+const moveDisplay = hasMove ? move.toFixed(2) : "0.00";
 
   // =========================
   // DISPLAY TEXT (FORCED SAFE)
