@@ -520,24 +520,24 @@ function renderRows(list, selector){
   if(!tbody) return;
 
   // =========================
-  // 🔴 RED MARKET — HIDE TRADES
-  // =========================
-  if (marketStatus === "RED") {
+// 🔴 RED MARKET — WARNING ONLY (DO NOT BLOCK)
+// =========================
+if (marketStatus === "RED") {
 
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="8" style="text-align:center;color:#ff6b6b;padding:30px;">
-          🚫 Trading paused — conditions are unfavourable<br><br>
-          <span style="color:#8b949e;">
-            EdgeBreak continues scanning and tracking setups in the background<br>
-            Charts remain available for independent analysis
-          </span>
-        </td>
-      </tr>
-    `;
+  const warningRow = document.createElement("tr");
 
-    return;
-  }
+  warningRow.innerHTML = `
+    <td colspan="8" style="text-align:center;color:#ff6b6b;padding:30px;">
+      🚫 Trading paused — conditions are unfavourable<br><br>
+      <span style="color:#8b949e;">
+        EdgeBreak continues scanning and tracking setups in the background<br>
+        Charts remain available for independent analysis
+      </span>
+    </td>
+  `;
+
+  tbody.appendChild(warningRow);
+}
 
   // =========================
   // NORMAL FLOW
