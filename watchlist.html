@@ -716,141 +716,95 @@ function updateGradeStats(data){
 // =========================
 function openChart(symbol, breakout, current, change){
 
-  console.log("Opening chart:", symbol);
+  try {
 
-  const modal = document.getElementById("chartModal");
-  const container = document.getElementById("chartContainer");
+    console.log("Opening chart:", symbol);
 
-  if(!modal || !container) return;
+    const modal = document.getElementById("chartModal");
+    const container = document.getElementById("chartContainer");
 
-  modal.style.display = "flex";
+    if(!modal || !container) return;
 
-  // =========================
-  // 🎯 SAFE DATA HANDLING
-  // =========================
-  const entryRaw = Number(breakout);
-  const moveRaw = Number(change);
+    modal.style.display = "flex";
 
-  const entry = !isNaN(entryRaw) ? entryRaw : null;
-  const move = !isNaN(moveRaw) ? moveRaw : null;
-  const stop = entry !== null ? entry * 0.90 : null;
+    // =========================
+    // SAFE DATA HANDLING
+    // =========================
+    const entry = Number(breakout);
+    const move = Number(change);
 
-  let status = "ACTIVE";
-  let statusColor = "#f0c674";
+    const hasEntry = !isNaN(entry);
+    const hasMove = !isNaN(move);
 
-  if(move !== null && move >= 15){
-    status = "STRONG";
-    statusColor = "#3ddc97";
-  }
-  else if(move !== null && move < -5){
-    status = "FAILED";
-    statusColor = "#ff6b6b";
-  }
+    const stop = hasEntry ? entry * 0.90 : null;
 
-  let moveColor = "#3ddc97";
-  if(move !== null && move < 0) moveColor = "#ff6b6b";
-  else if(move !== null && move < 5) moveColor = "#f0c674";
+    // =========================
+    // STATUS
+    // =========================
+    let status = "ACTIVE";
+    let statusColor = "#f0c674";
 
-  // =========================
-  // 🧠 PANEL UI
-  // =========================
-  container.innerHTML = `
+    if(hasMove && move >= 15){
+      status = "STRONG";
+      statusColor = "#3ddc97";
+    }
+    else if(hasMove && move < -5){
+      status = "FAILED";
+      statusColor = "#ff6b6b";
+    }
 
-    <!-- 🔥 TRADE INTELLIGENCE PANEL -->
-    <div style="
-      position:absolute;
-      top:15px;
-      left:15px;
-      background:rgba(0,0,0,0.9);
-      padding:16px;
-      border-radius:12px;
-      border:1px solid #30363d;
-      z-index:10;
-      min-width:200px;
-      box-shadow:0 0 25px rgba(0,0,0,0.6);
-    ">
+    let moveColor = "#3ddc97";
+    if(hasMove && move < 0) moveColor = "#ff6b6b";
+    else if(hasMove && move < 5) moveColor = "#f0c674";
 
-      <div style="font-size:14px;font-weight:bold;margin-bottom:10px;">
-        ${symbol || "-"}
-      </div>
+    // =========================
+    // SAFE DISPLAY VALUES
+    // =========================
+    const entryText = hasEntry ? "$" + entry.toFixed(2) : "-";
+    const stopText = hasEntry ? "$" + stop.toFixed(2) : "-";
+    const moveText = hasMove ? (move >= 0 ? "+" : "") + move.toFixed(2) + "%" : "-";
 
-      <div style="font-size:12px;color:#8b949e;">Entry (Breakout)</div>
-      <div style="font-weight:bold;">
-        ${entry !== null ? "$" + entry.toFixed(2) : "-"}
-      </div>
-
-      <div style="margin-top:8px;font-size:12px;color:#8b949e;">Stop Level</div>
-      <div style="color:#ff6b6b;font-weight:bold;">
-        ${stop !== null ? "$" + stop.toFixed(2) : "-"}
-      </div>
-
-      <div style="margin-top:8px;font-size:12px;color:#8b949e;">Current Move</div>
-      <div style="color:${moveColor}; font-weight:bold;">
-        ${move !== null ? (move >= 0 ? "+" : "") + move.toFixed(2) + "%" : "-"}
-      </div>
-
-      <div style="margin-top:10px;font-size:12px;color:#8b949e;">Status</div>
+    // =========================
+    // RENDER
+    // =========================
+    container.innerHTML = `
       <div style="
-        color:${statusColor};
-        font-weight:bold;
-        font-size:13px;
+        position:absolute;
+        top:15px;
+        left:15px;
+        background:rgba(0,0,0,0.9);
+        padding:16px;
+        border-radius:12px;
+        border:1px solid #30363d;
+        z-index:10;
+        min-width:200px;
       ">
-        ${status}
+
+        <div style="font-weight:bold;margin-bottom:10px;">
+          ${symbol || "-"}
+        </div>
+
+        <div style="color:#8b949e;font-size:12px;">Entry</div>
+        <div>${entryText}</div>
+
+        <div style="margin-top:6px;color:#8b949e;font-size:12px;">Stop</div>
+        <div style="color:#ff6b6b;">${stopText}</div>
+
+        <div style="margin-top:6px;color:#8b949e;font-size:12px;">Move</div>
+        <div style="color:${moveColor};">${moveText}</div>
+
+        <div style="margin-top:6px;color:#8b949e;font-size:12px;">Status</div>
+        <div style="color:${statusColor};font-weight:bold;">${status}</div>
+
       </div>
 
-    </div>
+      <iframe 
+        src="https://s.tradingview.com/widgetembed/?symbol=${symbol}&interval=D&theme=dark"
+        style="width:100%; height:500px; border:none;">
+      </iframe>
+    `;
 
-    <!-- 🔥 ENTRY LINE -->
-    <div style="
-      position:absolute;
-      top:50%;
-      left:0;
-      width:100%;
-      border-top:2px dashed #00ff9c;
-      opacity:0.6;
-      z-index:5;
-    "></div>
-
-    <!-- 🔥 STOP LINE -->
-    <div style="
-      position:absolute;
-      top:70%;
-      left:0;
-      width:100%;
-      border-top:2px dashed #ff6b6b;
-      opacity:0.5;
-      z-index:5;
-    "></div>
-
-    <!-- 🔥 LABELS -->
-    <div style="
-      position:absolute;
-      top:calc(50% - 10px);
-      right:15px;
-      background:#00ff9c;
-      color:black;
-      padding:4px 8px;
-      font-size:11px;
-      border-radius:4px;
-      z-index:6;
-    ">Entry</div>
-
-    <div style="
-      position:absolute;
-      top:calc(70% - 10px);
-      right:15px;
-      background:#ff6b6b;
-      color:white;
-      padding:4px 8px;
-      font-size:11px;
-      border-radius:4px;
-      z-index:6;
-    ">Stop</div>
-
-    <!-- 🔥 CHART -->
-    <iframe 
-      src="https://s.tradingview.com/widgetembed/?symbol=${symbol}&interval=D&theme=dark"
-      style="width:100%; height:500px; border:none;">
-    </iframe>
-  `;
+  } catch (err) {
+    console.error("Chart error:", err);
+  }
 }
