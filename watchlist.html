@@ -633,7 +633,7 @@ function getGradeClass(grade){
 document.addEventListener("DOMContentLoaded", function(){
 
 // =========================
-// MARKET + WATCHLIST (FINAL CLEAN)
+// MARKET + WATCHLIST (FINAL FIXED)
 // =========================
 fetch("market_status.json?v=" + new Date().getTime())
   .then(res => {
@@ -642,71 +642,72 @@ fetch("market_status.json?v=" + new Date().getTime())
   })
   .then(data => {
 
+    // 🔒 STORE STATUS (CRITICAL)
     marketStatus = data.status || "UNKNOWN";
     marketLabel = data.label || "";
 
     const bar = document.getElementById("marketBar");
 
-    // 🔥 SAFE UI GUARD (FIXED)
+    // =========================
+    // SAFE UI (DO NOT BREAK FLOW)
+    // =========================
     if (bar) {
 
-  // =========================
-  // CONDITIONAL MODE
-  // =========================
-  if (data.mode === "CONDITIONAL") {
-    bar.className = "market-bar market-neutral";
-    bar.innerHTML = `
-      MARKET — ${data.label}
-      <div style="font-size:12px;color:#8b949e;">
-        ${data.message || "Conditions forming — limited data"}
-      </div>
-    `;
-    return fetch("watchlist.json?v=" + new Date().getTime());
-  }
-
-  // =========================
-  // FINAL MARKET MESSAGING
-  // =========================
-  let message = "";
-  let className = "market-weak";
-
-  if (data.status === "GREEN") {
-    className = "market-strong";
-    message = `
-      ✅ Market conditions are favourable<br>
-      Breakouts are showing strong follow-through<br>
-      Conditions support active participation
-    `;
-  }
-  else if (data.status === "YELLOW") {
-    className = "market-neutral";
-    message = `
-      ⚠️ Market conditions are mixed<br>
-      Follow-through is inconsistent<br>
-      Selectivity and caution are required
-    `;
-  }
-  else if (data.status === "RED") {
-    className = "market-weak";
-    message = `
-      🚫 Market conditions are unfavourable<br>
-      Breakouts are failing at a higher rate<br>
-      Activity is paused while conditions stabilise
-    `;
-  }
-
-  bar.className = "market-bar " + className;
-
+      // CONDITIONAL MODE
+      if (data.mode === "CONDITIONAL") {
+  bar.className = "market-bar market-neutral";
   bar.innerHTML = `
-    ${message}
-    <div style="font-size:12px;color:#8b949e;margin-top:6px;">
-      ${data.total_trades || 0} trades tracked
+    MARKET — ${data.label}
+    <div style="font-size:12px;color:#8b949e;">
+      ${data.message || "Conditions forming — limited data"}
     </div>
   `;
+
+  // 🔥 CRITICAL — LOAD WATCHLIST
+  return fetch("watchlist.json?v=" + new Date().getTime());
 }
 
-// 🔥 ALWAYS CONTINUE TO WATCHLIST
-return fetch("watchlist.json?v=" + new Date().getTime());
+        let message = "";
+        let className = "market-weak";
+
+        if (data.status === "GREEN") {
+          className = "market-strong";
+          message = `
+            ✅ Market conditions are favourable<br>
+            Breakouts are showing strong follow-through<br>
+            Conditions support active participation
+          `;
+        }
+        else if (data.status === "YELLOW") {
+          className = "market-neutral";
+          message = `
+            ⚠️ Market conditions are mixed<br>
+            Follow-through is inconsistent<br>
+            Selectivity and caution are required
+          `;
+        }
+        else if (data.status === "RED") {
+          className = "market-weak";
+          message = `
+            🚫 Market conditions are unfavourable<br>
+            Breakouts are failing at a higher rate<br>
+            Activity is paused while conditions stabilise
+          `;
+        }
+
+        bar.className = "market-bar " + className;
+
+        bar.innerHTML = `
+          ${message}
+          <div style="font-size:12px;color:#8b949e;margin-top:6px;">
+            ${data.total_trades || 0} trades tracked
+          </div>
+        `;
+      }
+    }
+
+    // 🔥 ALWAYS LOAD WATCHLIST (CRITICAL)
+    return fetch("watchlist.json?v=" + new Date().getTime());
   })
   .then(res => {
     if (!res.ok) throw new Error("Watchlist load fail");
@@ -723,7 +724,7 @@ return fetch("watchlist.json?v=" + new Date().getTime());
     archiveData = archived;
 
     // =========================
-    // RED MARKET UI CONTROL
+    // 🔴 RED MARKET UI CONTROL
     // =========================
     if (marketStatus === "RED") {
 
