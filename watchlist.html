@@ -651,21 +651,61 @@ fetch("market_status.json?v=" + new Date().getTime())
     // =========================
     // SAFE UI (DO NOT BREAK FLOW)
     // =========================
-    if (bar) {
+   if (bar) {
 
-      // CONDITIONAL MODE
-      if (data.mode === "CONDITIONAL") {
-  bar.className = "market-bar market-neutral";
-  bar.innerHTML = `
-    MARKET — ${data.label}
-    <div style="font-size:12px;color:#8b949e;">
-      ${data.message || "Conditions forming — limited data"}
-    </div>
-  `;
+  // CONDITIONAL MODE
+  if (data.mode === "CONDITIONAL") {
+    bar.className = "market-bar market-neutral";
+    bar.innerHTML = `
+      MARKET — ${data.label}
+      <div style="font-size:12px;color:#8b949e;">
+        ${data.message || "Conditions forming — limited data"}
+      </div>
+    `;
+  } else {
 
-  // 🔥 CRITICAL — LOAD WATCHLIST
-  return fetch("watchlist.json?v=" + new Date().getTime());
+    // 🔥 NORMAL MARKET MESSAGING (MISSING PART)
+    let message = "";
+    let className = "market-weak";
+
+    if (data.status === "GREEN") {
+      className = "market-strong";
+      message = `
+        ✅ Market conditions are favourable<br>
+        Breakouts are showing strong follow-through<br>
+        Conditions support active participation
+      `;
+    }
+    else if (data.status === "YELLOW") {
+      className = "market-neutral";
+      message = `
+        ⚠️ Market conditions are mixed<br>
+        Follow-through is inconsistent<br>
+        Selectivity and caution are required
+      `;
+    }
+    else if (data.status === "RED") {
+      className = "market-weak";
+      message = `
+        🚫 Market conditions are unfavourable<br>
+        Breakouts are failing at a higher rate<br>
+        Activity is paused while conditions stabilise
+      `;
+    }
+
+    bar.className = "market-bar " + className;
+
+    bar.innerHTML = `
+      ${message}
+      <div style="font-size:12px;color:#8b949e;margin-top:6px;">
+        ${data.total_trades || 0} trades tracked
+      </div>
+    `;
+  }
 }
+
+// 🔥 ALWAYS LOAD WATCHLIST (CORRECT POSITION)
+return fetch("watchlist.json?v=" + new Date().getTime());
 
         let message = "";
         let className = "market-weak";
