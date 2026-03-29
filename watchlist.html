@@ -726,8 +726,23 @@ function updateGradeStats(data){
 }
 
 // =========================
-// CHART SYSTEM (FINAL FIXED)
+// CHART SYSTEM (FULL FIXED)
 // =========================
+
+// 🔥 HELPER — GET CURRENT PRICE (REQUIRED)
+function getCurrentPrice(symbol){
+
+  const allData = [...todayData, ...activeData, ...archiveData];
+
+  const match = allData.find(x => x.symbol === symbol);
+
+  if(!match) return null;
+
+  return Number(match.current_price) || null;
+}
+
+
+// 🔥 MAIN CHART FUNCTION
 function openChart(symbol, entryValue, changeValue){
 
   console.log("Opening chart:", symbol, entryValue, changeValue);
@@ -735,23 +750,28 @@ function openChart(symbol, entryValue, changeValue){
   const modal = document.getElementById("chartModal");
   const container = document.getElementById("chartContainer");
 
-  if(!modal || !container) return;
+  if(!modal || !container) {
+    console.warn("Chart modal or container missing");
+    return;
+  }
 
+  // ✅ ALWAYS SHOW MODAL
   modal.style.display = "flex";
 
   // =========================
-  // SAFE VALUES (NO BREAKING)
+  // SAFE VALUES
   // =========================
   let entry = Number(entryValue);
   let move = Number(changeValue);
 
+  // 🔒 SAFE ENTRY
   if (isNaN(entry) || entry <= 0) {
-    console.warn("Bad entry — fallback to 0");
+    console.warn("Invalid entry — fallback disabled calculations");
     entry = 0;
   }
 
   // =========================
-  // FIX MOVE (SAFE)
+  // 🔥 FIX MOVE (AUTO CALC)
   // =========================
   if (!move || move === 0) {
 
@@ -760,7 +780,7 @@ function openChart(symbol, entryValue, changeValue){
     if (current && entry > 0) {
       move = ((current - entry) / entry) * 100;
     } else {
-      move = 0; // fallback safe
+      move = 0;
     }
   }
 
@@ -770,7 +790,7 @@ function openChart(symbol, entryValue, changeValue){
   const stop = entry > 0 ? entry * 0.90 : 0;
 
   // =========================
-  // DISPLAY
+  // DISPLAY VALUES
   // =========================
   const entryText = entry > 0 ? "$" + entry.toFixed(2) : "N/A";
   const stopText = entry > 0 ? "$" + stop.toFixed(2) : "N/A";
@@ -796,7 +816,7 @@ function openChart(symbol, entryValue, changeValue){
   }
 
   // =========================
-  // RENDER
+  // RENDER CHART + PANEL
   // =========================
   container.innerHTML = `
 
@@ -837,5 +857,12 @@ function openChart(symbol, entryValue, changeValue){
       style="width:100%; height:500px; border:none;">
     </iframe>
   `;
+}
+
+
+// 🔥 CLOSE FUNCTION (ENSURE THIS EXISTS)
+function closeChart(){
+  const modal = document.getElementById("chartModal");
+  if(modal) modal.style.display = "none";
 }
 </script>
