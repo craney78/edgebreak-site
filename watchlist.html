@@ -726,26 +726,27 @@ function openChart(symbol, breakout, current, change){
   modal.style.display = "flex";
 
   // =========================
-  // 🎯 CORE CALCULATIONS
+  // 🎯 CORE CALCULATIONS (SAFE)
   // =========================
-  const entry = breakout || 0;
-  const stop = entry * 0.90;
+  const entry = Number(breakout) || 0;
+  const move = Number(change) || 0;
+  const stop = entry ? entry * 0.90 : 0;
 
   let status = "ACTIVE";
   let statusColor = "#f0c674";
 
-  if(change >= 15){
+  if(move >= 15){
     status = "STRONG";
     statusColor = "#3ddc97";
   }
-  else if(change < -5){
+  else if(move < -5){
     status = "FAILED";
     statusColor = "#ff6b6b";
   }
 
   let moveColor = "#3ddc97";
-  if(change < 0) moveColor = "#ff6b6b";
-  else if(change < 5) moveColor = "#f0c674";
+  if(move < 0) moveColor = "#ff6b6b";
+  else if(move < 5) moveColor = "#f0c674";
 
   // =========================
   // 🧠 PANEL UI
@@ -771,16 +772,18 @@ function openChart(symbol, breakout, current, change){
       </div>
 
       <div style="font-size:12px;color:#8b949e;">Entry (Breakout)</div>
-      <div style="font-weight:bold;">$${entry.toFixed(2)}</div>
+      <div style="font-weight:bold;">
+        ${entry ? "$" + entry.toFixed(2) : "-"}
+      </div>
 
       <div style="margin-top:8px;font-size:12px;color:#8b949e;">Stop Level</div>
       <div style="color:#ff6b6b;font-weight:bold;">
-        $${stop.toFixed(2)}
+        ${entry ? "$" + stop.toFixed(2) : "-"}
       </div>
 
       <div style="margin-top:8px;font-size:12px;color:#8b949e;">Current Move</div>
       <div style="color:${moveColor}; font-weight:bold;">
-        ${change >= 0 ? "+" : ""}${change.toFixed(2)}%
+        ${move ? (move >= 0 ? "+" : "") + move.toFixed(2) + "%" : "-"}
       </div>
 
       <div style="margin-top:10px;font-size:12px;color:#8b949e;">Status</div>
