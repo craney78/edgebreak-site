@@ -329,6 +329,29 @@ body {
   font-weight: bold;
 }
 
+/* 🧠 SIGNAL SYSTEM */
+.signal {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.signal-strong {
+  background: rgba(0,255,120,0.15);
+  color: #00ff88;
+}
+
+.signal-developing {
+  background: rgba(255,200,0,0.15);
+  color: #f0c674;
+}
+
+.signal-weak {
+  background: rgba(255,80,80,0.15);
+  color: #ff6b6b;
+}
+
 </style>
 </head>
 
@@ -385,6 +408,7 @@ body {
 <th>Score</th>
 <th>Break %</th>
 <th>Performance</th>
+<th>Signal</th>
 <th>Status</th>
 <th>Age</th>
 <th>Found</th>
@@ -402,6 +426,7 @@ body {
 <th>Score</th>
 <th>Break %</th>
 <th>Performance</th>
+<th>Signal</th>
 <th>Status</th>
 <th>Age</th>
 <th>Found</th>
@@ -420,6 +445,7 @@ body {
         <th>Score</th>
         <th>Break %</th>
         <th>Performance</th>
+        <th>Signal</th>
         <th>Status</th>
         <th>Age</th>
         <th>Found</th>
@@ -581,6 +607,21 @@ if (marketStatus === "RED") {
     const change = Number(item.change_percent) || 0;
     const entry = Number(item.entry_price || item.start_price) || 0;
 
+    // =========================
+// 🧠 TRADE SIGNAL
+// =========================
+let signal = "WEAK";
+let signalClass = "signal-weak";
+
+if (change >= 10 && item.age <= 3) {
+  signal = "STRONG";
+  signalClass = "signal-strong";
+}
+else if (change >= 3) {
+  signal = "DEVELOPING";
+  signalClass = "signal-developing";
+}
+
     // 🔒 PERFORMANCE DISPLAY
     let perfClass = "neutral";
     let perfText = "-";
@@ -622,6 +663,10 @@ row.className = rowClass;
       <td data-label="Performance" class="${perfClass} ${isFast ? "fast-move" : ""}">
         ${perfText}
       </td>
+
+      <td data-label="Signal">
+  <span class="signal ${signalClass}">${signal}</span>
+</td>
 
       <td data-label="Status">${item.status || "-"}</td>
 
