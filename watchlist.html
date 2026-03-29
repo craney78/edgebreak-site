@@ -643,7 +643,11 @@ fetch("market_status.json?v=" + new Date().getTime())
   .then(data => {
 
     const bar = document.getElementById("marketBar");
-    if (!bar) return;
+
+// 🔥 DO NOT STOP EXECUTION — JUST SKIP UI IF MISSING
+if (!bar) {
+  console.warn("marketBar not found — continuing without UI");
+}
 
     // 🔒 STORE STATUS
     marketStatus = data.status || "UNKNOWN";
