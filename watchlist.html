@@ -465,30 +465,25 @@ EdgeBreak Intelligence
 
 <script>
 
-// 🔥 MOVE THIS OUTSIDE (GLOBAL)
-let currentFilter = "ALL";
-
-document.addEventListener("DOMContentLoaded", function(){
-
+// 🔥 GLOBAL STATE (MOVED OUT)
 let todayData = [];
 let activeData = [];
 let archiveData = [];
+let currentFilter = "ALL";
 
+// 🔥 GLOBAL FUNCTIONS (MOVED OUT)
 function setFilter(e, filter){
 
   currentFilter = filter;
 
-  // 🔥 RESET BUTTON STATES
   document.querySelectorAll(".filters button").forEach(btn => {
     btn.classList.remove("active");
   });
 
-  // 🔥 RESET GRADE BOX STATES
   document.querySelectorAll(".grade-box").forEach(box => {
     box.classList.remove("active");
   });
 
-  // 🔥 HANDLE CLICK SOURCE (IMPORTANT)
   const target = e.currentTarget;
 
   if (target.classList.contains("grade-box")) {
@@ -507,6 +502,98 @@ function applyFilters(){
   renderRows(activeData, "#activeTable tbody");
   renderRows(archiveData, "#archiveTable tbody");
 }
+
+// =========================
+// RENDER TABLES
+// =========================
+function renderRows(list, selector){
+
+  const tbody = document.querySelector(selector);
+  tbody.innerHTML = "";
+
+  if(!list || list.length === 0){
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#8b949e;">
+    ⚠️ No new breakouts — monitoring conditions
+    </td></tr>`;
+    return;
+  }
+
+  list.forEach(item=>{
+
+    if(currentFilter !== "ALL" && item.grade !== currentFilter) return;
+
+    const change = item.change_percent || 0;
+
+    let perfClass = "neutral";
+    let perfText = "-";
+
+    if(change > 0){
+      perfClass = "up";
+      perfText = "+" + change.toFixed(2) + "%";
+    }
+    if(change < 0){
+      perfClass = "down";
+      perfText = change.toFixed(2) + "%";
+    }
+
+    const locked = isLocked(item.grade) ? "locked" : "";
+
+    const row = document.createElement("tr");
+    row.className = locked;
+
+    row.innerHTML = `
+      <td data-label="Symbol">${isLocked(item.grade) ? "████" : item.symbol}</td>
+
+      <td data-label="Score">
+        ${item.score}
+        <div class="grade ${getGradeClass(item.grade)}">${item.grade}</div>
+      </td>
+
+      <td data-label="Break %">${item.break ? item.break + "%" : "-"}</td>
+
+      <td data-label="Performance" class="${perfClass}">${perfText}</td>
+
+      <td data-label="Status">${item.status || "-"}</td>
+
+      <td data-label="Age">${item.age}</td>
+
+      <td data-label="Found">${item.signal_date}</td>
+
+      <td data-label="Chart">
+        <button onclick="openChart(
+          '${item.symbol}',
+          ${item.break || 0},
+          0,
+          ${item.change_percent || 0}
+        )">
+          View
+        </button>
+      </td>
+    `;
+
+    tbody.appendChild(row);
+  });
+}
+
+// =========================
+// HELPERS
+// =========================
+function isLocked(grade){
+  return grade === "A+" || grade === "A" || grade === "B+" || grade === "B";
+}
+
+function getGradeClass(grade){
+  if (grade === "A+") return "grade-Aplus";
+  if (grade === "A") return "grade-A";
+  if (grade === "B+") return "grade-Bplus";
+  if (grade === "B") return "grade-B";
+  return "grade-C";
+}
+
+// =========================
+// MAIN INIT
+// =========================
+document.addEventListener("DOMContentLoaded", function(){
 
 // =========================
 // MARKET (COMPACT)
@@ -615,7 +702,7 @@ function loadWatchlist(paths, index = 0){
 
     })
     .catch(() => {
-      loadWatchlist(paths, index + 1); // 🔥 try next path
+      loadWatchlist(paths, index + 1);
     });
 }
 
@@ -669,139 +756,6 @@ function updateGradeStats(data){
   container.innerHTML = html;
 }
 
-// =========================
-// RENDER TABLES
-// =========================
-function renderRows(list, selector){
-
-  const tbody = document.querySelector(selector);
-  tbody.innerHTML = "";
-
-  if(!list || list.length === 0){
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#8b949e;">
-    ⚠️ No new breakouts — monitoring conditions
-    </td></tr>`;
-    return;
-  }
-
-  list.forEach(item=>{
-
-    if(currentFilter !== "ALL" && item.grade !== currentFilter) return;
-
-    const change = item.change_percent || 0;
-
-    let perfClass = "neutral";
-    let perfText = "-";
-
-    if(change > 0){
-      perfClass = "up";
-      perfText = "+" + change.toFixed(2) + "%";
-    }
-    if(change < 0){
-      perfClass = "down";
-      perfText = change.toFixed(2) + "%";
-    }
-
-    const locked = isLocked(item.grade) ? "locked" : "";
-
-    const row = document.createElement("tr");
-    row.className = locked;
-
-    row.innerHTML = `
-      <td data-label="Symbol">${isLocked(item.grade) ? "████" : item.symbol}</td>
-
-      <td data-label="Score">
-        ${item.score}
-        <div class="grade ${getGradeClass(item.grade)}">${item.grade}</div>
-      </td>
-
-      <td data-label="Break %">${item.break ? item.break + "%" : "-"}</td>
-
-      <td data-label="Performance" class="${perfClass}">${perfText}</td>
-
-      <td data-label="Status">${item.status || "-"}</td>
-
-      <td data-label="Age">${item.age}</td>
-
-      <td data-label="Found">${item.signal_date}</td>
-
-      <td data-label="Chart">
-        <button onclick="openChart(
-          '${item.symbol}',
-          ${item.break || 0},
-          0,
-          ${item.change_percent || 0}
-        )">
-          View
-        </button>
-      </td>
-    `;
-
-    tbody.appendChild(row);
-  });
-}
-
-// =========================
-// HELPERS
-// =========================
-function isLocked(grade){
-  return grade === "A+" || grade === "A" || grade === "B+" || grade === "B";
-}
-
-function getGradeClass(grade){
-  if (grade === "A+") return "grade-Aplus";
-  if (grade === "A") return "grade-A";
-  if (grade === "B+") return "grade-Bplus";
-  if (grade === "B") return "grade-B";
-  return "grade-C";
-}
-
 });
 
-// =========================
-// CHART SYSTEM (GLOBAL)
-// =========================
-function openChart(symbol, breakout, current, change){
-
-  const modal = document.getElementById("chartModal");
-  const container = document.getElementById("chartContainer");
-
-  modal.style.display = "flex";
-
-  let color = "#3ddc97"; // green
-  if(change < 0) color = "#ff6b6b";
-  else if(change < 5) color = "#f0c674";
-
-  const overlay = `
-    <div style="
-      position:absolute;
-      top:15px;
-      left:15px;
-      background:rgba(0,0,0,0.85);
-      padding:12px;
-      border-radius:8px;
-      border:1px solid #30363d;
-      z-index:10;
-    ">
-      <div style="color:#8b949e;">Breakout</div>
-      <div style="font-weight:bold;">$${breakout || "-"}</div>
-
-      <div style="margin-top:6px;color:#8b949e;">Move</div>
-      <div style="color:${color}; font-weight:bold;">
-        ${change >= 0 ? "+" : ""}${change.toFixed(2)}%
-      </div>
-    </div>
-  `;
-
-  container.innerHTML = `
-    ${overlay}
-    <iframe 
-      src="https://s.tradingview.com/widgetembed/?symbol=NASDAQ:${symbol}&interval=D&theme=dark"
-      style="width:100%; height:500px; border:none;">
-    </iframe>
-  `;
-}
-
-function closeChart(){
-  document.getElementById("chartModal").style.display = "none";
-}
+</script>
