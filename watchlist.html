@@ -564,23 +564,27 @@ fetch("/market_status.json?v=" + new Date().getTime())
 // WATCHLIST DATA
 // =========================
 fetch("watchlist.json?v=" + new Date().getTime())
-  .then(res => {
-    console.log("FETCH STATUS:", res.status);   // 🔥 ADD
-    return res.json();
-  })
-  .then(data => {
+  .then(res => res.text())   // 🔥 read as text first
+  .then(text => {
 
-    console.log("DATA LOADED:", data);   // 🔥 ADD
+    // 🔥 DEBUG: check what we actually got
+    console.log("RAW RESPONSE:", text.substring(0, 100));
+
+    let data;
+
+    try {
+      data = JSON.parse(text);   // 🔥 safely parse
+    } catch (e) {
+      console.error("❌ NOT JSON — wrong path or file:", e);
+      return;
+    }
 
     if (!Array.isArray(data)) {
       console.error("❌ Data is not an array:", data);
       return;
     }
 
-    if (data.length === 0) {
-      console.warn("⚠️ watchlist.json is empty");
-    }
-
+    // ✅ NOW YOUR NORMAL LOGIC
     const today = data.filter(x => x.age === 0 && x.status !== "failed");
     const active = data.filter(x => x.age > 0 && x.status !== "failed");
     const archived = data.filter(x => x.status === "failed" || x.age > 5);
@@ -589,12 +593,14 @@ fetch("watchlist.json?v=" + new Date().getTime())
     activeData = active;
     archiveData = archived;
 
+    console.log("✅ DATA OK:", data.length, "items");
+
     updateSummary(data);
     updateGradeStats(data);
     applyFilters();
   })
   .catch(err => {
-    console.error("🔥 WATCHLIST ERROR:", err);
+    console.error("🔥 FETCH FAILED:", err);
   });
 
 // =========================
