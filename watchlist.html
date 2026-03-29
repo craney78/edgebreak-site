@@ -633,7 +633,7 @@ function getGradeClass(grade){
 document.addEventListener("DOMContentLoaded", function(){
 
 // =========================
-// MARKET
+// MARKET + WATCHLIST (FINAL CLEAN)
 // =========================
 fetch("market_status.json?v=" + new Date().getTime())
   .then(res => {
@@ -645,12 +645,12 @@ fetch("market_status.json?v=" + new Date().getTime())
     const bar = document.getElementById("marketBar");
     if (!bar) return;
 
-    // 🔥 STORE GLOBAL STATUS (REQUIRED FOR RED LOGIC)
+    // 🔒 STORE STATUS
     marketStatus = data.status || "UNKNOWN";
     marketLabel = data.label || "";
 
     // =========================
-    // CONDITIONAL MODE (UNCHANGED)
+    // CONDITIONAL MODE
     // =========================
     if (data.mode === "CONDITIONAL") {
       bar.className = "market-bar market-neutral";
@@ -660,7 +660,7 @@ fetch("market_status.json?v=" + new Date().getTime())
           ${data.message || "Conditions forming — limited data"}
         </div>
       `;
-      return;
+      return fetch("watchlist.json?v=" + new Date().getTime());
     }
 
     // =========================
@@ -695,7 +695,7 @@ fetch("market_status.json?v=" + new Date().getTime())
     }
 
     // =========================
-    // APPLY UI
+    // APPLY MARKET UI
     // =========================
     bar.className = "market-bar " + className;
 
@@ -705,15 +705,12 @@ fetch("market_status.json?v=" + new Date().getTime())
         ${data.total_trades || 0} trades tracked
       </div>
     `;
+
+    // =========================
+    // 🔥 LOAD WATCHLIST AFTER MARKET
+    // =========================
+    return fetch("watchlist.json?v=" + new Date().getTime());
   })
-  .catch(() => {
-    const bar = document.getElementById("marketBar");
-    if(bar) bar.innerHTML = "Market unavailable";
-  });
-// =========================
-// WATCHLIST LOAD
-// =========================
-fetch("watchlist.json?v=" + new Date().getTime())
   .then(res => {
     if (!res.ok) throw new Error("Watchlist load fail");
     return res.json();
@@ -729,11 +726,10 @@ fetch("watchlist.json?v=" + new Date().getTime())
     archiveData = archived;
 
     // =========================
-    // 🔴 RED MARKET BEHAVIOUR
+    // RED MARKET UI CONTROL
     // =========================
     if (marketStatus === "RED") {
 
-      // 🔒 SUMMARY BAR
       const summaryBar = document.getElementById("summaryBar");
       if (summaryBar) {
         summaryBar.innerHTML = `
@@ -741,7 +737,6 @@ fetch("watchlist.json?v=" + new Date().getTime())
         `;
       }
 
-      // 🔒 GRADE STATS
       const gradeStats = document.getElementById("gradeStats");
       if (gradeStats) {
         gradeStats.innerHTML = `
@@ -752,19 +747,17 @@ fetch("watchlist.json?v=" + new Date().getTime())
       }
 
     } else {
-
-      // ✅ NORMAL BEHAVIOUR
       updateSummary(data);
       updateGradeStats(data);
     }
 
     // =========================
-    // ALWAYS APPLY TABLE RENDER
+    // ALWAYS RENDER TABLES
     // =========================
     applyFilters();
   })
   .catch(err => {
-    console.error("Watchlist error:", err);
+    console.error("System load error:", err);
   });
 // =========================
 // SUMMARY
