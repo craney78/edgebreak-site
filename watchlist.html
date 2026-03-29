@@ -520,7 +520,7 @@ function renderRows(list, selector){
   if(!tbody) return;
 
 // =========================
-// 🔴 RED MARKET — WARNING ONLY
+// 🔴 RED MARKET — WARNING ONLY (NO BLOCKING)
 // =========================
 tbody.innerHTML = "";
 
@@ -530,9 +530,9 @@ if (marketStatus === "RED") {
 
   warningRow.innerHTML = `
     <td colspan="8" style="text-align:center;color:#ff6b6b;padding:20px;">
-      🚫 Trading paused — conditions are unfavourable<br>
+      ⚠️ Unfavourable market conditions — trade cautiously<br>
       <span style="color:#8b949e;">
-        Trade at your own risk
+        Breakouts may fail at a higher rate
       </span>
     </td>
   `;
@@ -543,7 +543,6 @@ if (marketStatus === "RED") {
   // =========================
   // NORMAL FLOW
   // =========================
-  tbody.innerHTML = "";
 
   if(!list || list.length === 0){
     tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#8b949e;">
