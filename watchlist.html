@@ -626,11 +626,16 @@ loadWatchlist(possiblePaths);
 // SUMMARY
 // =========================
 function updateSummary(data){
-  const total = data.length;
-  const winners = data.filter(x => x.change_percent > 0).length;
-  const losers = data.filter(x => x.change_percent < 0).length;
 
-  document.getElementById("summaryBar").innerHTML =
+  const bar = document.getElementById("summaryBar");
+  if (!bar) return;
+
+  const total = data.length;
+
+  const winners = data.filter(x => (x.change_percent || 0) > 0).length;
+  const losers = data.filter(x => (x.change_percent || 0) < 0).length;
+
+  bar.innerHTML =
     `Active Trades: ${total} • ${winners} Positive • ${losers} Negative`;
 }
 
@@ -638,6 +643,9 @@ function updateSummary(data){
 // GRADE STATS
 // =========================
 function updateGradeStats(data){
+
+  const container = document.getElementById("gradeStats");
+  if (!container) return;
 
   const grades = ["A+", "A", "B+", "B"];
   let html = "";
@@ -658,7 +666,7 @@ function updateGradeStats(data){
     `;
   });
 
-  document.getElementById("gradeStats").innerHTML = html;
+  container.innerHTML = html;
 }
 
 // =========================
