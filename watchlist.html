@@ -473,6 +473,10 @@ let activeData = [];
 let archiveData = [];
 let currentFilter = "ALL";
 
+// 🔥 ADD THESE
+let marketStatus = "UNKNOWN";
+let marketLabel = "";
+
 // =========================
 // FILTER SYSTEM
 // =========================
@@ -515,6 +519,29 @@ function renderRows(list, selector){
   const tbody = document.querySelector(selector);
   if(!tbody) return;
 
+  // =========================
+  // 🔴 RED MARKET — HIDE TRADES
+  // =========================
+  if (marketStatus === "RED") {
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" style="text-align:center;color:#ff6b6b;padding:30px;">
+          🚫 Trading paused — conditions are unfavourable<br><br>
+          <span style="color:#8b949e;">
+            EdgeBreak continues scanning and tracking setups in the background<br>
+            Charts remain available for independent analysis
+          </span>
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  // =========================
+  // NORMAL FLOW
+  // =========================
   tbody.innerHTML = "";
 
   if(!list || list.length === 0){
@@ -541,7 +568,8 @@ function renderRows(list, selector){
     if(change > 0){
       perfClass = "up";
       perfText = "+" + change.toFixed(2) + "%";
-    } else if(change < 0){
+    } 
+    else if(change < 0){
       perfClass = "down";
       perfText = change.toFixed(2) + "%";
     }
@@ -575,11 +603,7 @@ function renderRows(list, selector){
       <td data-label="Found">${item.signal_date || "-"}</td>
 
       <td data-label="Chart">
-        <button onclick="openChart(
-          '${symbol}',
-          ${entry},
-          ${change}
-        )">
+        <button onclick="openChart('${symbol}', ${entry}, ${change})">
           View
         </button>
       </td>
@@ -621,10 +645,17 @@ fetch("market_status.json?v=" + new Date().getTime())
     const bar = document.getElementById("marketBar");
     if (!bar) return;
 
+    // 🔥 STORE GLOBAL STATUS (REQUIRED FOR RED LOGIC)
+    marketStatus = data.status || "UNKNOWN";
+    marketLabel = data.label || "";
+
+    // =========================
+    // CONDITIONAL MODE (UNCHANGED)
+    // =========================
     if (data.mode === "CONDITIONAL") {
       bar.className = "market-bar market-neutral";
       bar.innerHTML = `
-        US MARKET — ${data.label}
+        MARKET — ${data.label}
         <div style="font-size:12px;color:#8b949e;">
           ${data.message || "Conditions forming — limited data"}
         </div>
@@ -632,28 +663,53 @@ fetch("market_status.json?v=" + new Date().getTime())
       return;
     }
 
-    let success = data.success_rate || 0;
-    let follow = data.follow_through_rate || 0;
-    let score = Math.round(success * 0.7 + follow * 0.3);
-
+    // =========================
+    // FINAL MARKET MESSAGING
+    // =========================
+    let message = "";
     let className = "market-weak";
-    if (data.status === "GREEN") className = "market-strong";
-    else if (data.status === "YELLOW") className = "market-neutral";
 
+    if (data.status === "GREEN") {
+      className = "market-strong";
+      message = `
+        ✅ Market conditions are favourable<br>
+        Breakouts are showing strong follow-through<br>
+        Conditions support active participation
+      `;
+    }
+    else if (data.status === "YELLOW") {
+      className = "market-neutral";
+      message = `
+        ⚠️ Market conditions are mixed<br>
+        Follow-through is inconsistent<br>
+        Selectivity and caution are required
+      `;
+    }
+    else if (data.status === "RED") {
+      className = "market-weak";
+      message = `
+        🚫 Market conditions are unfavourable<br>
+        Breakouts are failing at a higher rate<br>
+        Activity is paused while conditions stabilise
+      `;
+    }
+
+    // =========================
+    // APPLY UI
+    // =========================
     bar.className = "market-bar " + className;
 
     bar.innerHTML = `
-      US MARKET — ${data.label} • ${score}/100
-      <div style="font-size:12px;color:#8b949e;">
-        ${data.total_trades || 0} trades
+      ${message}
+      <div style="font-size:12px;color:#8b949e;margin-top:6px;">
+        ${data.total_trades || 0} trades tracked
       </div>
     `;
   })
-  .catch(()=>{
+  .catch(() => {
     const bar = document.getElementById("marketBar");
     if(bar) bar.innerHTML = "Market unavailable";
   });
-
 // =========================
 // WATCHLIST LOAD
 // =========================
