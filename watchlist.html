@@ -464,9 +464,12 @@ EdgeBreak Intelligence
 </div>
 
 <script>
+
+// 🔥 MOVE THIS OUTSIDE (GLOBAL)
+let currentFilter = "ALL";
+
 document.addEventListener("DOMContentLoaded", function(){
 
-let currentFilter = "ALL";
 let todayData = [];
 let activeData = [];
 let archiveData = [];
@@ -505,7 +508,9 @@ function applyFilters(){
   renderRows(archiveData, "#archiveTable tbody");
 }
 
-// 🧠 MARKET (COMPACT — SYSTEM ALIGNED)
+// =========================
+// MARKET (COMPACT)
+// =========================
 fetch("/market_status.json?v=" + new Date().getTime())
   .then(res => {
     if (!res.ok) throw new Error("Failed to load market_status.json");
@@ -516,7 +521,6 @@ fetch("/market_status.json?v=" + new Date().getTime())
     const bar = document.getElementById("marketBar");
     if (!bar) return;
 
-    // 🔥 CONDITIONAL MODE
     if (data.mode === "CONDITIONAL") {
       bar.className = "market-bar market-neutral";
       bar.innerHTML = `
@@ -528,28 +532,22 @@ fetch("/market_status.json?v=" + new Date().getTime())
       return;
     }
 
-    // 🔥 SCORE
     let success = data.success_rate || 0;
     let follow = data.follow_through_rate || 0;
     let score = Math.round(success * 0.7 + follow * 0.3);
 
-    if (success === 0 && follow === 0) {
-      score = 35;
-    }
+    if (success === 0 && follow === 0) score = 35;
 
-    // 🔥 CLASS
     let className = "market-weak";
     if (data.status === "GREEN") className = "market-strong";
     else if (data.status === "YELLOW") className = "market-neutral";
 
     bar.className = "market-bar " + className;
 
-    // 🔥 TREND
     let trend = "STABLE";
     if (success > 60) trend = "IMPROVING";
     else if (success < 40) trend = "WEAKENING";
 
-    // 🔥 OUTPUT
     bar.innerHTML = `
       US MARKET — ${data.label} • ${score}/100
       <div style="font-size:12px; color:#8b949e; margin-top:4px;">
@@ -562,38 +560,47 @@ fetch("/market_status.json?v=" + new Date().getTime())
     if (bar) bar.innerHTML = "Market data unavailable";
   });
 
-// DATA
+// =========================
+// WATCHLIST DATA
+// =========================
 fetch("/watchlist.json?v=" + new Date().getTime())
-.then(res => res.json())
-.then(data => {
+  .then(res => res.json())
+  .then(data => {
 
-  const today = data.filter(x => x.age === 0 && x.status !== "failed");
-  const active = data.filter(x => x.age > 0 && x.status !== "failed");
-  const archived = data.filter(x => x.status === "failed" || x.age > 5);
+    const today = data.filter(x => x.age === 0 && x.status !== "failed");
+    const active = data.filter(x => x.age > 0 && x.status !== "failed");
+    const archived = data.filter(x => x.status === "failed" || x.age > 5);
 
-  todayData = today;
-  activeData = active;
-  archiveData = archived;
+    todayData = today;
+    activeData = active;
+    archiveData = archived;
 
-  updateSummary(data);
-updateGradeStats(data);   // 🔥 ADD THIS LINE
-applyFilters();
+    updateSummary(data);
+    updateGradeStats(data);
+    applyFilters();
+  })
+  .catch(err => {
+    console.error("Watchlist load error:", err);
+  });
 
-});
-
+// =========================
+// SUMMARY
+// =========================
 function updateSummary(data){
   const total = data.length;
-  const winners = data.filter(x=>x.change_percent>0).length;
-  const losers = data.filter(x=>x.change_percent<0).length;
+  const winners = data.filter(x => x.change_percent > 0).length;
+  const losers = data.filter(x => x.change_percent < 0).length;
 
   document.getElementById("summaryBar").innerHTML =
-    `Active Trades: ${total} • ${winners} Positive • ${losers} Negative`
+    `Active Trades: ${total} • ${winners} Positive • ${losers} Negative`;
 }
 
+// =========================
+// GRADE STATS
+// =========================
 function updateGradeStats(data){
 
   const grades = ["A+", "A", "B+", "B"];
-
   let html = "";
 
   grades.forEach(g => {
@@ -612,10 +619,12 @@ function updateGradeStats(data){
     `;
   });
 
-  // 🔥 IMPORTANT: THIS MUST BE OUTSIDE THE LOOP
   document.getElementById("gradeStats").innerHTML = html;
 }
 
+// =========================
+// RENDER TABLES
+// =========================
 function renderRows(list, selector){
 
   const tbody = document.querySelector(selector);
@@ -682,10 +691,12 @@ function renderRows(list, selector){
     `;
 
     tbody.appendChild(row);
-
   });
 }
 
+// =========================
+// HELPERS
+// =========================
 function isLocked(grade){
   return grade === "A+" || grade === "A" || grade === "B+" || grade === "B";
 }
@@ -698,6 +709,37 @@ function getGradeClass(grade){
   return "grade-C";
 }
 
+});
+
+function setFilter(e, filter){
+
+  currentFilter = filter;
+
+  document.querySelectorAll(".filters button").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  document.querySelectorAll(".grade-box").forEach(box => {
+    box.classList.remove("active");
+  });
+
+  const target = e.currentTarget;
+
+  if (target.classList.contains("grade-box")) {
+    target.classList.add("active");
+  }
+
+  if (target.tagName === "BUTTON") {
+    target.classList.add("active");
+  }
+
+  applyFilters();
+}
+
+
+// =========================
+// CHART SYSTEM (GLOBAL)
+// =========================
 function openChart(symbol, breakout, current, change){
 
   const modal = document.getElementById("chartModal");
@@ -742,7 +784,3 @@ function openChart(symbol, breakout, current, change){
 function closeChart(){
   document.getElementById("chartModal").style.display = "none";
 }
-});
-</script>
-</body>
-</html>
