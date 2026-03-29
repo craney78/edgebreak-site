@@ -600,7 +600,7 @@ if (marketStatus === "RED") {
     const isStrong = change >= 10;
 const isFast = change >= 8 && item.age <= 2;
 
-let rowClass = locked;
+let rowClass = locked || "";
 
 if (isStrong) rowClass += " strong-trade";
 
@@ -714,7 +714,7 @@ fetch("market_status.json?v=" + new Date().getTime())
           message = `
             🚫 Market conditions are unfavourable<br>
             Breakouts are failing at a higher rate<br>
-            Activity is paused while conditions stabilise
+            EdgeBreak — market conditions are unfavourable. Breakouts are currently failing at a higher rate. Trade with caution. No positions are currently held — monitoring market conditions.
           `;
         }
 
