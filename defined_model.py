@@ -1,6 +1,8 @@
 import requests
 import pandas as pd
 import time
+import json
+from datetime import datetime, timedelta
 
 # =========================
 # 🔑 CONFIG
@@ -91,8 +93,8 @@ def run_backtest():
             df["datetime"] = pd.to_datetime(df["datetime"])
             df = df.sort_values("datetime", ascending=True)
 
-            START_DATE = "2024-01-01"
-            END_DATE = "2024-12-01"
+            START_DATE = "2025-04-06"
+            END_DATE = "2026-04-06"
 
             df = df[(df["datetime"] >= START_DATE) & (df["datetime"] <= END_DATE)]
 
@@ -449,60 +451,156 @@ def run_backtest():
     return df
 
 # =========================
-# 💰 PORTFOLIO SIMULATION
+# 💰 FIXED TRADE ANALYSIS
 # =========================
-def run_portfolio_simulation(df):
+def run_fixed_trade_analysis(df):
 
-    capital = STARTING_CAPITAL
-    equity_curve = []
-
+    # 🔥 Ensure trades are in order
     df = df.sort_values("entry_date")
 
-    print("\n💰 PORTFOLIO SIMULATION START")
-    print(f"Starting Capital: ${capital:,.2f}\n")
+    TRADE_SIZE = 10000
+
+    total_pnl = 0
+    results = []
+
+    print("\n💰 FIXED TRADE ANALYSIS ($10,000 per trade)\n")
 
     for _, trade in df.iterrows():
 
-        risk_amount = capital * RISK_PER_TRADE
+        entry = trade["entry_date"].date()
+        exit = trade["exit_date"].date()
+        percent = trade["percent_move"]
 
-        # convert % return → multiplier
-        trade_return = trade["percent_move"] / 100
+        pnl = TRADE_SIZE * (percent / 100)
+        total_pnl += pnl
 
-        pnl = risk_amount * trade_return
-
-        capital += pnl
-        equity_curve.append(capital)
+        results.append(pnl)
 
         print(
-            f"{trade['symbol']} | "
-            f"{trade['entry_date'].date()} → {trade['exit_date'].date()} | "
-            f"{round(trade['percent_move'],2)}% | "
-            f"PnL: ${round(pnl,2)} | "
-            f"Capital: ${round(capital,2)}"
+            f"{trade['symbol']} | {entry} → {exit} | "
+            f"{percent}% | PnL: ${round(pnl,2)}"
         )
 
+    print("\n📊 SUMMARY")
+    print(f"Trades: {len(df)}")
+
+    if len(df) > 0:
+        print(f"Total PnL: ${round(total_pnl,2)}")
+        print(f"Final Capital: ${round(TRADE_SIZE * len(df) + total_pnl,2)}")
+        print(f"Avg Trade: ${round(total_pnl / len(df),2)}")
+
+        # 🔥 Win rate
+        win_rate = (df["percent_move"] > 0).mean() * 100
+        print(f"Win Rate: {round(win_rate,2)}%")
+
+    else:
+        print("No trades found")
+        return
+
     # =========================
-    # 📊 FINAL STATS
+    # 📊 WIN / LOSS ANALYSIS
     # =========================
-    peak = equity_curve[0]
-    max_dd = 0
+    wins = [x for x in results if x > 0]
+    losses = [x for x in results if x < 0]
 
-    for value in equity_curve:
-        if value > peak:
-            peak = value
-        dd = (peak - value) / peak
-        if dd > max_dd:
-            max_dd = dd
+    if wins:
+        print(f"Avg Win: ${round(sum(wins)/len(wins),2)}")
+        print(f"Best Win: ${round(max(wins),2)}")
 
-    print("\n📊 FINAL PORTFOLIO RESULTS")
-    print(f"Final Capital: ${round(capital,2)}")
-    print(f"Return: {round(((capital - STARTING_CAPITAL)/STARTING_CAPITAL)*100,2)}%")
-    print(f"Max Drawdown: {round(max_dd*100,2)}%")
+    if losses:
+        print(f"Avg Loss: ${round(sum(losses)/len(losses),2)}")
+        print(f"Worst Loss: ${round(min(losses),2)}")
 
+    
+# =========================
+# 📤 EXPORT FUNCTIONS (NOW OUTSIDE ✅)
+# =========================
+
+def export_watchlist(df):
+
+    active = df[df["exit_date"] == df["exit_date"].max()]
+
+    watchlist = []
+
+    for _, row in active.iterrows():
+        watchlist.append({
+            "symbol": row["symbol"],
+            "group": "SMALL" if row["entry_price"] < 20 else "MID" if row["entry_price"] < 80 else "LARGE",
+            "price": row["entry_price"],
+            "breakout": row["entry_price"],
+            "change_percent": row["percent_move"],
+            "signal_date": str(row["entry_date"]),
+            "status": "active"
+        })
+
+    with open("watchlist.json", "w") as f:
+        json.dump(watchlist, f, indent=2)
+
+    print("✅ watchlist.json created")
+
+
+def export_best_trades(df):
+
+    one_year_ago = datetime.now() - timedelta(days=365)
+
+    recent = df[df["entry_date"] >= one_year_ago]
+
+    best = recent[recent["percent_move"] > 20]
+    best = best.sort_values("percent_move", ascending=False).head(20)
+
+    output = []
+
+    for _, row in best.iterrows():
+        output.append({
+            "symbol": row["symbol"],
+            "group": row["price_group"],
+            "return": row["percent_move"],
+            "days": row["days_held"],
+            "date": str(row["entry_date"])
+        })
+
+    with open("best_trades.json", "w") as f:
+        json.dump(output, f, indent=2)
+
+    print("✅ best_trades.json created")
+
+
+def export_stats(df):
+
+    current_year = datetime.now().year
+
+    df_year = df[df["entry_date"].dt.year == current_year]
+
+    stats = {}
+
+    for group in ["SMALL", "MID", "LARGE"]:
+
+        group_df = df_year[df_year["price_group"] == group]
+
+        if group_df.empty:
+            continue
+
+        stats[group] = {
+            "trades": int(len(group_df)),
+            "avg_return": round(group_df["percent_move"].mean(), 2),
+            "best": round(group_df["percent_move"].max(), 2),
+            "worst": round(group_df["percent_move"].min(), 2)
+        }
+
+    with open("current_year_stats.json", "w") as f:
+        json.dump(stats, f, indent=2)
+
+    print("✅ stats.json created")    
+ 
 # =========================
 # RUN EVERYTHING
 # =========================
+
 df = run_backtest()
 
 if df is not None:
-    run_portfolio_simulation(df)
+    run_fixed_trade_analysis(df)
+
+    export_watchlist(df)
+    export_best_trades(df)
+    export_stats(df)
