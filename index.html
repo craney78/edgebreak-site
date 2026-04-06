@@ -785,12 +785,11 @@ a {
 <script>
 
 // 🔥 BEST TRADES DISPLAY
-fetch("watchlist.json?v=" + new Date().getTime())
+fetch("best_trades.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
 
     const container = document.getElementById("bestTradesContainer");
-
     if (!container) return;
 
     container.innerHTML = data.map(trade => {
@@ -821,4 +820,31 @@ fetch("watchlist.json?v=" + new Date().getTime())
   })
   .catch(err => console.error("BEST TRADES ERROR:", err));
 
-  </script>
+
+// 🔥 CURRENT YEAR STATS (ADD THIS BELOW 👇)
+fetch("current_year_stats.json?v=" + new Date().getTime())
+  .then(res => res.json())
+  .then(data => {
+
+    const boxes = document.querySelectorAll(".section .box");
+    const groups = ["SMALL", "MID", "LARGE"];
+
+    groups.forEach((group, i) => {
+
+      const box = boxes[i + 1]; // ⚠️ important offset
+
+      if (!data[group] || !box) return;
+
+      box.innerHTML = `
+        <h3>${group === "SMALL" ? "🟢 Small Caps" : group === "MID" ? "🟡 Mid Caps" : "🔵 Large Caps"}</h3>
+        <p>Trades: ${data[group].trades}</p>
+        <p>Avg Return: ${data[group].avg_return}%</p>
+        <p>Best: ${data[group].best}%</p>
+        <p>Worst: ${data[group].worst}%</p>
+      `;
+    });
+
+  })
+  .catch(err => console.error("STATS ERROR:", err));
+
+</script>
