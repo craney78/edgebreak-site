@@ -803,10 +803,21 @@ fetch("best_trades.json?v=" + new Date().getTime())
 
       return `
         <div class="box">
-          <strong>${trade.symbol} ${icon}</strong><br>
-          +${trade.return}% in ${trade.days} days
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="font-size:18px;">
+              ${trade.symbol} ${icon}
+            </strong>
+            <span style="color:#22c55e; font-weight:bold;">
+              +${trade.return}%
+            </span>
+          </div>
+
+          <div style="margin-top:8px; font-size:13px; color:#9ca3af;">
+            ${trade.days} days
+          </div>
         </div>
       `;
+
     }).join("");
 
   })
