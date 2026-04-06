@@ -32,7 +32,6 @@ def generate_insight(touches, rl, comp, volume_ratio, breakout_strength):
     
     insights = []
 
-    # Structure
     if touches >= 3:
         insights.append("Strong resistance base")
     else:
@@ -48,13 +47,11 @@ def generate_insight(touches, rl, comp, volume_ratio, breakout_strength):
     elif comp >= 2:
         insights.append("building pressure")
 
-    # Volume
     if volume_ratio > 2:
         insights.append("heavy volume expansion")
     elif volume_ratio > 1.2:
         insights.append("volume confirmation")
 
-    # Breakout strength
     if breakout_strength > 0.04:
         insights.append("strong momentum breakout")
     else:
@@ -64,7 +61,7 @@ def generate_insight(touches, rl, comp, volume_ratio, breakout_strength):
 
 
 # =========================
-# 🔥 SETUP TYPE (NEW 🔥)
+# 🔥 SETUP TYPE
 # =========================
 
 def classify_setup(breakout_strength):
@@ -83,12 +80,25 @@ def find_resistance(data, lookback=30):
     return max(highs)
 
 
-def count_resistance_touches(data, resistance, tolerance=0.015, lookback=30):
-    touches = 0
+# =========================
+# 🔥 CLUSTER DETECTION
+# =========================
+
+def count_touch_clusters(data, resistance, tolerance=0.015, lookback=30):
+    cluster_count = 0
+    in_cluster = False
+
     for d in data[:lookback]:
-        if abs(float(d["high"]) - resistance) / resistance < tolerance:
-            touches += 1
-    return touches
+        high = float(d["high"])
+
+        if abs(high - resistance) / resistance < tolerance:
+            if not in_cluster:
+                cluster_count += 1
+                in_cluster = True
+        else:
+            in_cluster = False
+
+    return cluster_count
 
 
 # =========================
@@ -111,6 +121,10 @@ def compression_score(data, lookback=10):
 
 def detect_breakout_today(symbol, window, debug=False):
 
+    for d in window:
+        if "volume" not in d or d["volume"] is None:
+            return None
+
     today = window[0]
     history = window[1:]
 
@@ -118,6 +132,10 @@ def detect_breakout_today(symbol, window, debug=False):
     open_price = float(today["open"])
     high_price = float(today["high"])
     low_price = float(today["low"])
+
+    if "volume" not in today or today["volume"] is None:
+        return None
+
     volume = float(today["volume"])
 
     if len(history) < 30:
@@ -146,13 +164,14 @@ def detect_breakout_today(symbol, window, debug=False):
         return None
 
     # =========================
-    # 🔥 RESISTANCE (PAST ONLY)
+    # 🔥 RESISTANCE
     # =========================
 
     resistance = find_resistance(history)
-    touches = count_resistance_touches(history, resistance)
 
-    if touches < 2:
+    clusters = count_touch_clusters(history, resistance)
+
+    if clusters < 2:
         return None
 
     # =========================
@@ -172,13 +191,6 @@ def detect_breakout_today(symbol, window, debug=False):
     volume_ratio = volume / avg_volume
 
     # =========================
-    # 🔍 DEBUG
-    # =========================
-
-    if debug and close_price > resistance:
-        print(f"NEAR: {symbol} | Close {close_price} vs Res {resistance}")
-
-    # =========================
     # 💎 BREAKOUT QUALITY
     # =========================
 
@@ -195,11 +207,15 @@ def detect_breakout_today(symbol, window, debug=False):
 
     strong_candle = candle_range > avg_range
 
+    # =========================
+    # 🔥 BREAKOUT
+    # =========================
+
     breakout = (
         close_price > resistance * 1.002 and
         breakout_strength > 0.015 and
         close_price > open_price and
-        volume_ratio > 1.2 and
+        volume_ratio > 1.5 and
         strong_candle
     )
 
@@ -207,11 +223,24 @@ def detect_breakout_today(symbol, window, debug=False):
         return None
 
     # =========================
+    # 🔥 NEW: PRIOR MOVE FILTER
+    # =========================
+
+    lookback_move = 12
+    recent_prices = [float(d["close"]) for d in history[:lookback_move]]
+
+    recent_low = min(recent_prices)
+    move_percent = (close_price - recent_low) / recent_low
+
+    if move_percent > 0.20:
+        return None
+
+    # =========================
     # 🏆 SCORE
     # =========================
 
     score = round(
-        touches * 3 +
+        clusters * 3 +
         rl * 2 +
         comp * 2 +
         min(volume_ratio * 5, 15) +
@@ -219,14 +248,10 @@ def detect_breakout_today(symbol, window, debug=False):
         2
     )
 
-    # =========================
-    # 🧠 INTELLIGENCE LAYER
-    # =========================
-
     grade = get_grade(score)
 
     insight = generate_insight(
-        touches,
+        clusters,
         rl,
         comp,
         volume_ratio,
@@ -234,10 +259,6 @@ def detect_breakout_today(symbol, window, debug=False):
     )
 
     setup_type = classify_setup(breakout_strength)
-
-    # =========================
-    # 🚀 FINAL OUTPUT
-    # =========================
 
     return {
         "symbol": symbol,
@@ -250,8 +271,6 @@ def detect_breakout_today(symbol, window, debug=False):
         "insight": insight,
         "volume_ratio": round(volume_ratio, 2),
         "breakout_strength": round(breakout_strength * 100, 2),
-
-        # 🔮 tracking ready
         "day1_return": None,
         "day2_return": None,
         "result": None

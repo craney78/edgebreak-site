@@ -30,7 +30,7 @@ def fetch_batch(symbols):
         f"https://api.twelvedata.com/time_series"
         f"?symbol={','.join(symbols)}"
         f"&interval=1day"
-        f"&outputsize=120"
+        f"&outputsize=500"
         f"&apikey={API_KEY}"
     )
 
@@ -64,11 +64,11 @@ def fetch_batch(symbols):
 
     return {}
 
-# =========================
-# PROCESS DATA
-# =========================
+    
+
 def process_data(data):
     signals = []
+    seen = set()
 
     for symbol, content in data.items():
 
@@ -76,22 +76,53 @@ def process_data(data):
             continue
 
         values = content.get("values")
-        if not values or len(values) < 60:
+
+        # =========================
+        # DATA CHECK
+        # =========================
+        if not values or len(values) < 150:
             continue
 
         try:
-            window = values[:50]
+            # ✅ Reverse data → oldest to newest
+            values = list(reversed(values))
 
-            result = detect_breakout_today(symbol, window)
+            # =========================
+            # ROLLING SCAN
+            # =========================
+            for i in range(100, len(values)):
 
-            if result:
-                print(
-                    f"{result['symbol']} | {result['grade']} | "
-                    f"Score {result['score']} | "
-                    f"Break {result['breakout_strength']}%"
-                )
+                window = values[i-100:i]
 
-                signals.append(result)
+                # =========================
+                # PRICE FILTER (your system)
+                # =========================
+                last_price = float(window[-1]["close"])
+
+                if last_price < 8 or last_price > 40:
+                    continue
+
+                # =========================
+                # AVOID DUPLICATES
+                # =========================
+                key = f"{symbol}_{window[-1]['datetime']}"
+                if key in seen:
+                    continue
+                seen.add(key)
+
+                # =========================
+                # RUN BREAKOUT LOGIC
+                # =========================
+                result = detect_breakout_today(symbol, window)
+
+                if result:
+                    print(
+                        f"{result['symbol']} | {result['grade']} | "
+                        f"Score {result['score']} | "
+                        f"Break {result['breakout_strength']}%"
+                    )
+
+                    signals.append(result)
 
         except Exception as e:
             print(f"{symbol} error: {e}")
