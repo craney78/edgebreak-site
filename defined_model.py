@@ -91,8 +91,8 @@ def run_backtest():
             df["datetime"] = pd.to_datetime(df["datetime"])
             df = df.sort_values("datetime", ascending=True)
 
-            START_DATE = "2025-01-01"
-            END_DATE = "2026-03-05"
+            START_DATE = "2024-01-01"
+            END_DATE = "2024-12-01"
 
             df = df[(df["datetime"] >= START_DATE) & (df["datetime"] <= END_DATE)]
 

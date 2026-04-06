@@ -551,6 +551,12 @@ a {
   </p>
 </div>
 
+<div class="section">
+  <h2>Top Breakout Trades (Last 12 Months)</h2>
+
+  <div id="bestTradesContainer"></div>
+</div>
+
 <!-- WHY -->
 
 <div class="section">
@@ -782,192 +788,30 @@ a {
 
 <script>
 
-// 🧠 MARKET STATUS
-fetch("./market_status.json?v=" + new Date().getTime())
-  .then(res => {
-    if (!res.ok) throw new Error("Failed to load market_status.json");
-    return res.json();
-  })
-  .then(data => {
-
-// 🔥 HANDLE CONDITIONAL MODE (MATCH MARKET PAGE)
-if (data.mode === "CONDITIONAL") {
-
-  const box = document.getElementById("marketBox");
-
-  if (box) {
-    box.innerHTML = `
-      <div class="market-label">
-        US Market — ${data.label}
-      </div>
-
-      <div style="margin-top:10px; color:#8b949e;">
-        ${data.message || "Limited data — market conditions are still forming."}
-      </div>
-    `;
-  }
-
-  return; // STOP HERE
-}
-    const box = document.getElementById("marketBox");
-    if (!box) return;
-
-    // 🔥 SAFE VALUES
-    let success = data.success_rate || 0;
-    let follow = data.follow_through_rate || 0;
-
-    // 🔥 SCORE
-    let score = Math.round(success * 0.7 + follow * 0.3);
-
-    // 🔥 LOW DATA
-    let lowData = false;
-    if (success === 0 && follow === 0) {
-      score = 35;
-      lowData = true;
-    }
-
-    // 🔥 CONFIDENCE
-    const confidence = Math.min((data.total_trades || 0) / 20, 1);
-    const confidencePct = Math.round(confidence * 100);
-
-    // 🔥 TREND
-    let trend = "STABLE";
-    if (success > 60) trend = "IMPROVING";
-    if (success < 40) trend = "WEAKENING";
-
-    let trendColor = "#8b949e";
-    if (trend === "IMPROVING") trendColor = "#22c55e";
-    if (trend === "WEAKENING") trendColor = "#ef4444";
-
-    let scoreColor = "#ef4444";
-    if (score >= 65) scoreColor = "#22c55e";
-    else if (score >= 45) scoreColor = "#f59e0b";
-
-    // 🔥 MESSAGE + STYLE
-    let message = "";
-    let actionText = "";
-
-    if (data.status === "GREEN") {
-      message = "Breakouts are performing well with strong follow-through.";
-      actionText = "HIGH EDGE ENVIRONMENT — Conditions are favourable.";
-      box.style.borderColor = "#22c55e";
-      box.style.boxShadow = "0 0 25px rgba(34,197,94,0.4)";
-    }
-
-    if (data.status === "YELLOW") {
-      message = "Breakout performance is mixed and less consistent.";
-      actionText = "SELECTIVE ENVIRONMENT — Focus on quality.";
-      box.style.borderColor = "#f59e0b";
-      box.style.boxShadow = "0 0 25px rgba(245,158,11,0.4)";
-    }
-
-    if (data.status === "RED") {
-      message = "Breakout success rates are currently low.";
-      actionText = "LOW EDGE ENVIRONMENT — Reduce exposure.";
-      box.style.borderColor = "#ef4444";
-      box.style.boxShadow = "0 0 25px rgba(239,68,68,0.4)";
-    }
-
-    // 🔥 RENDER MARKET BOX FIRST
-    box.innerHTML = `
-      <div class="market-label">
-        <img src="https://flagcdn.com/us.svg" style="height:14px; vertical-align:middle; margin-right:6px;">
-        US Market — ${data.label}
-      </div>
-
-      <div style="margin-top:10px; font-size:18px; font-weight:bold;">
-        <span style="color:${scoreColor};">Market Score: ${score} / 100</span>
-      </div>
-
-      <div style="font-size:12px; color:#8b949e; margin-top:4px;">
-        Confidence: ${confidencePct}% • 
-        <span style="color:${trendColor};">Trend: ${trend}</span>
-      </div>
-
-      <div style="font-size:12px; color:#8b949e; margin-top:4px;">
-        Based on ${data.total_trades || 0} trades
-      </div>
-
-      ${lowData ? `
-        <div style="margin-top:10px; color:#8b949e;">
-          Limited data — conditions forming
-        </div>
-      ` : ""}
-
-      <div class="market-message" style="margin-top:12px;">
-        ${message}
-      </div>
-
-      <div class="market-action" style="margin-top:10px;">
-        ${actionText}
-      </div>
-    `;
-
-    // 🔥 EDGE METER (RUN AFTER RENDER — THIS WAS THE BUG)
-    setTimeout(() => {
-      const fill = document.getElementById("edgeMeterFill");
-      const label = document.getElementById("edgeMeterLabel");
-
-      if (fill && label) {
-        fill.style.width = score + "%";
-
-        let text = "WEAK CONDITIONS";
-        if (score >= 65) text = "STRONG CONDITIONS";
-        else if (score >= 45) text = "MIXED CONDITIONS";
-
-        label.innerHTML = `${text} • ${score}%`;
-
-        if (score >= 65) fill.style.boxShadow = "0 0 25px rgba(34,197,94,0.8)";
-        else if (score >= 45) fill.style.boxShadow = "0 0 25px rgba(245,158,11,0.7)";
-        else fill.style.boxShadow = "0 0 25px rgba(239,68,68,0.7)";
-      }
-    }, 200);
-
-  })
-  .catch(err => {
-    console.error("MARKET LOAD ERROR:", err);
-    const box = document.getElementById("marketBox");
-    if (box) box.innerHTML = "Error loading market data";
-  });
-
-
-// 📊 TODAY BREAKOUT COUNT + TOP BREAKOUT
-fetch("watchlist.json?v=" + new Date().getTime())
+// 🔥 BEST TRADES DISPLAY
+fetch("best_trades.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
-console.log("MARKET DATA RECEIVED:", data);
-    const today = data.filter(x => x.age === 0 && x.status !== "failed");
-    const top = [...today].sort((a, b) => b.score - a.score)[0];
 
-    const el = document.getElementById("todayCount");
-    if (el) {
-      el.innerText = today.length > 0
-        ? `${today.length} new breakout setups detected today`
-        : "No new breakouts today — monitoring";
-    }
+    const container = document.getElementById("bestTradesContainer");
 
-    const topEl = document.getElementById("topBreakout");
+    if (!container) return;
 
-    if (topEl) {
-      if (!top) {
-        topEl.innerHTML = "Monitoring breakout conditions...";
-      } else {
-        const grade = top.grade || "A";
-        const change = Number(top.change_percent || 0);
-        const age = Number(top.age || 0);
+    container.innerHTML = data.map(trade => {
 
-        if ((change >= 15 && age <= 3) || change >= 20) {
-          topEl.innerHTML = `${grade} Breakout → +${change.toFixed(1)}% in ${age} days`;
-        } else {
-          topEl.innerHTML = `${grade} Setup Detected`;
-        }
-      }
-    }
+      let icon = "🟡";
+      if (trade.group === "SMALL") icon = "🟢";
+      if (trade.group === "LARGE") icon = "🔵";
+
+      return `
+        <div class="box">
+          <strong>${trade.symbol} ${icon}</strong><br>
+          +${trade.return}% in ${trade.days} days
+        </div>
+      `;
+    }).join("");
 
   })
-  .catch(() => {
-    const el = document.getElementById("todayCount");
-    if (el) el.innerText = "";
-  });
+  .catch(err => console.error("BEST TRADES ERROR:", err));
 
   </script>
