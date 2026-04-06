@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>EdgeBreak Watchlist</title>
 
 <style>
@@ -15,16 +14,9 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 900px;
   margin: auto;
   padding: 20px;
-}
-
-.back {
-  display: inline-block;
-  margin-bottom: 15px;
-  color: #8b949e;
-  text-decoration: none;
 }
 
 .logo-top {
@@ -34,324 +26,68 @@ body {
 
 .logo-top img {
   height: 60px;
-  filter: drop-shadow(0 0 10px rgba(0,255,150,0.6));
 }
 
-.top-cta {
-  text-align: center;
-  margin: 20px 0 20px;
-}
-
-.top-cta a {
-  background: linear-gradient(135deg, #00ff9c, #22c55e);
-  color: black;
-  padding: 14px 28px;
-  border-radius: 10px;
-  font-weight: bold;
+.back {
+  display: inline-block;
+  margin-bottom: 15px;
+  color: #8b949e;
   text-decoration: none;
-  box-shadow: 0 0 20px rgba(0,255,150,0.5);
-  transition: 0.25s;
 }
 
-.top-cta a:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 30px rgba(0,255,150,0.8);
+.section-title {
+  margin: 30px 0 10px;
+  font-size: 16px;
+  color: #8b949e;
+  text-transform: uppercase;
+}
+
+.box {
+  background: #11161c;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: 0.2s;
+}
+
+.box:hover {
+  border-color: #22c55e;
+}
+
+.strong {
+  border-left: 3px solid #00ff88;
+  box-shadow: 0 0 20px rgba(0,255,120,0.15);
+}
+
+.tag {
+  font-size: 11px;
+  padding: 3px 6px;
+  border-radius: 5px;
+  margin-left: 6px;
+}
+
+.tag-strong {
+  background: rgba(0,255,120,0.2);
+  color: #00ff88;
 }
 
 .lock-message {
   text-align: center;
-  margin-bottom: 20px;
-  color: #ffcc00;
-  font-size: 14px;
-}
-
-.market-bar {
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 15px;
-  font-weight: bold;
-}
-
-.market-weak { background: #2a1010; color: #ff6b6b; }
-.market-strong { background: #0f2a1f; color: #3ddc97; }
-.market-neutral { background: #2a260f; color: #f0c674; }
-
-.summary-bar {
-  display: flex;
-  justify-content: space-between;
-  background: linear-gradient(145deg, #11161c, #0d131a);
-  padding: 14px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #30363d;
-}
-
-.filters {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.filters button {
-  margin: 5px;
-  padding: 8px 14px;
-  border-radius: 6px;
-  background: #1c2229;
-  color: #e6edf3;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.filters button:hover {
-  background: #22c55e;
-  color: black;
-}
-
-.filters button.active {
-  background: #00ff9c;
-  color: black;
-  box-shadow: 0 0 15px rgba(0,255,150,0.5);
-}
-
-.section-title {
-  margin: 40px 0 12px;
-  font-size: 18px;
-  color: #ffffff;
-  letter-spacing: 0.3px;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 30px;
-}
-
-.table th, .table td {
-  padding: 14px;
-}
-
-.table th {
-  border-bottom: 1px solid #222;
-  color: #c9d1d9;
-}
-
-.table tr:hover {
-  background: #11161c;
-  box-shadow: inset 0 0 0 1px #22c55e;
-}
-
-.score-elite { color: #3ddc97; font-weight: bold; }
-.score-strong { color: #58a6ff; }
-.score-watch { color: #f0c674; }
-
-.grade {
-  margin-top: 4px;
-  display: inline-block;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: bold;
-}
-
-.grade-Aplus { background: #00ff9c; color: black; }
-.grade-A { background: #66ffcc; color: black; }
-.grade-Bplus { background: #ffaa00; color: black; }
-.grade-B { background: #ff8800; color: black; }
-.grade-C { background: #666; color: white; }
-
-.up { color: #3ddc97; font-weight: bold; }
-.down { color: #ff6b6b; font-weight: bold; }
-.neutral { color: #8b949e; }
-
-.locked {
-  opacity: 0.35;
-  filter: blur(2px);
-  pointer-events: none;
-}
-
-.subscribe-box {
-  text-align: center;
   margin-top: 20px;
-}
-
-.subscribe-btn {
-  background: #00ff9c;
-  color: black;
-  padding: 14px 28px;
-  border-radius: 8px;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.urgency {
-  text-align: center;
-  color: #8b949e;
-  font-size: 13px;
-  margin-top: 20px;
+  color: #22c55e;
 }
 
 .sticky-cta {
   position: fixed;
   bottom: 20px;
   right: 20px;
-
-  background: linear-gradient(135deg, #00ff9c, #22c55e);
+  background: #22c55e;
   color: black;
-
-  padding: 14px 18px;
-  border-radius: 10px;
-  font-weight: bold;
+  padding: 12px 16px;
+  border-radius: 8px;
   text-decoration: none;
-
-  box-shadow: 0 0 25px rgba(0,255,150,0.6);
-  transition: all 0.25s ease;
 }
-
-/* 🔥 HOVER EFFECT */
-.sticky-cta:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 0 35px rgba(0,255,150,0.9);
-}
-
-.footer {
-  margin-top: 40px;
-  font-size: 12px;
-  color: #6e7681;
-  text-align: center;
-}
-
-.grade-stats {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-
-.grade-box {
-  flex: 1;
-  min-width: 120px;
-  background: #11161c;
-  border: 1px solid #30363d;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 13px;
-}
-
-.grade-box.active {
-  border-color: #00ff9c;
-  box-shadow: 0 0 25px rgba(0,255,150,0.5);
-}
-
-.grade-box:hover {
-  border-color: #22c55e;
-  box-shadow: 
-    0 0 0 1px #22c55e,
-    0 0 25px rgba(34,197,94,0.25);
-  transform: translateY(-2px);
-}
-
-.grade-title {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.win { color: #3ddc97; }
-.loss { color: #ff6b6b; }
-
-.system-note {
-  font-size: 13px;
-  color: #8b949e;
-  margin: 10px auto 20px;
-  text-align: center;
-  max-width: 700px;
-  line-height: 1.5;
-
-  padding: 12px;
-  border: 1px solid #30363d;
-  border-radius: 8px;
-  background: #0d131a;
-}
-
-@media (max-width: 768px) {
-
-  .table thead {
-    display: none;
-  }
-
-  .table, 
-  .table tbody, 
-  .table tr, 
-  .table td {
-    display: block;
-    width: 100%;
-  }
-
-  .table tr {
-    margin-bottom: 15px;
-    padding: 12px;
-    background: #11161c;
-    border: 1px solid #30363d;
-    border-radius: 10px;
-  }
-
-  .table td {
-    padding: 6px 0;
-    font-size: 13px;
-    border: none;
-  }
-
-  .table td::before {
-    content: attr(data-label);
-    font-weight: bold;
-    display: block;
-    color: #8b949e;
-    font-size: 11px;
-    margin-bottom: 2px;
-  }
-
-}
-
-/* 🔴 DANGER MODE */
-.danger-mode {
-  box-shadow: 0 0 25px rgba(255, 0, 0, 0.25);
-  background: linear-gradient(90deg, #1a0000, #2a0000);
-  border: 1px solid rgba(255, 0, 0, 0.3);
-}
-
-/* 🔥 STRONG TRADE */
-.strong-trade {
-  background: rgba(0, 255, 120, 0.06);
-  border-left: 3px solid #00ff88;
-}
-
-/* ⚡ FAST MOVE */
-.fast-move {
-  color: #00ff88;
-  font-weight: bold;
-}
-
-/* 🧠 SIGNAL SYSTEM */
-.signal {
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: bold;
-}
-
-.signal-strong {
-  background: rgba(0,255,120,0.15);
-  color: #00ff88;
-}
-
-.signal-developing {
-  background: rgba(255,200,0,0.15);
-  color: #f0c674;
-}
-
-.signal-weak {
-  background: rgba(255,80,80,0.15);
-  color: #ff6b6b;
-}
-
 </style>
 </head>
 
@@ -365,594 +101,172 @@ body {
 
 <a href="index.html" class="back">← Back</a>
 
-<h1>Watchlist</h1>
+<h1>Live Breakout Tracking</h1>
 
-<p style="color:#22c55e; font-size:13px; margin-top:-8px; letter-spacing:0.5px;">
-  TRADING INTELLIGENCE DESK
-</p>
-
-<div class="top-cta">
-  <a href="pricing.html">Unlock Full Watchlist Access</a>
-</div>
-
-<div class="lock-message">
-  B-grade and above setups are premium — upgrade to unlock
-</div>
-
-<div id="marketBar" class="market-bar"></div>
-
-<div class="summary-bar" id="summaryBar">Loading stats...</div>
-
-<div class="grade-stats" id="gradeStats"></div>
-
-<p class="system-note">
-  All trades are generated and executed using a consistent, rule-based algorithm. 
-  Performance is influenced by overall market conditions — weaker environments may reduce follow-through. 
-  Incorporating active monitoring and disciplined trade management can enhance results.
-</p>
-
-<div class="filters">
-  <button onclick="setFilter(event,'ALL')" class="active">ALL</button>
-  <button onclick="setFilter(event,'A+')">A+</button>
-  <button onclick="setFilter(event,'A')">A</button>
-  <button onclick="setFilter(event,'B+')">B+</button>
-  <button onclick="setFilter(event,'B')">B</button>
-  <button onclick="setFilter(event,'C')">C</button>
-</div>
-
-<div class="section-title">Today's Breakouts</div>
-<table class="table" id="todayTable">
-<thead>
-<tr>
-<th>Symbol</th>
-<th>Score</th>
-<th>Break %</th>
-<th>Performance</th>
-<th>Signal</th>
-<th>Status</th>
-<th>Age</th>
-<th>Found</th>
-<th>Chart</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-
-<div class="section-title">Active Watchlist</div>
-<table class="table" id="activeTable">
-<thead>
-<tr>
-<th>Symbol</th>
-<th>Score</th>
-<th>Break %</th>
-<th>Performance</th>
-<th>Signal</th>
-<th>Status</th>
-<th>Age</th>
-<th>Found</th>
-<th>Chart</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-
-<details>
-  <summary style="cursor:pointer; color:#8b949e;">View Archived Signals</summary>
-  <table class="table" id="archiveTable">
-    <thead>
-      <tr>
-        <th>Symbol</th>
-        <th>Score</th>
-        <th>Break %</th>
-        <th>Performance</th>
-        <th>Signal</th>
-        <th>Status</th>
-        <th>Age</th>
-        <th>Found</th>
-        <th>Chart</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</details>
-
-<div class="urgency">
-  Most traders never see these setups in time
-</div>
-
-<div class="subscribe-box">
-  <a href="pricing.html" class="subscribe-btn">Unlock Full Access</a>
-</div>
-
-<div class="footer">
-EdgeBreak Intelligence
-</div>
+<div id="watchlistContainer"></div>
+<div id="lockMessage" class="lock-message"></div>
 
 </div>
 
-<a href="pricing.html" class="sticky-cta">Unlock</a>
+<button onclick="goToCheckout()">Unlock Full Access</button>
 
+<!-- CHART MODAL -->
 <div id="chartModal" onclick="closeChart()" style="
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.9);
-  z-index:999;
-  justify-content:center;
-  align-items:center;
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+z-index:999;
+justify-content:center;
+align-items:center;
 ">
-
-  <div onclick="event.stopPropagation();" style="
-  position:relative;
-  width:90%;
-  max-width:900px;
-  background:#0b0f14;
-  border:1px solid #30363d;
-  border-radius:10px;
-  padding:10px;
+<div onclick="event.stopPropagation();" style="
+width:90%;
+max-width:900px;
+background:#0b0f14;
+border-radius:10px;
+padding:10px;
 ">
+<span onclick="closeChart()" style="
+float:right;
+cursor:pointer;
+font-size:20px;
+">✕</span>
 
-    <span onclick="closeChart()" style="
-      position:absolute;
-      top:10px;
-      right:15px;
-      cursor:pointer;
-      font-size:20px;
-      color:#8b949e;
-    ">✕</span>
-
-    <div id="chartContainer" style="position:relative;"></div>
-
-  </div>
+<div id="chartContainer"></div>
+</div>
 </div>
 
 <script>
 
-console.log("SCRIPT START");  
+// 🔐 SIMULATED ACCESS (replace later with Stripe/login)
+const isPremium = localStorage.getItem("edgebreak_token") === "active";
 
-// 🔥 GLOBAL STATE
-let todayData = [];
-let activeData = [];
-let archiveData = [];
-let currentFilter = "ALL";
-
-// 🔥 ADD THESE
-let marketStatus = "UNKNOWN";
-let marketLabel = "";
-
-// =========================
-// FILTER SYSTEM
-// =========================
-function setFilter(e, filter){
-
-  currentFilter = filter;
-
-  document.querySelectorAll(".filters button").forEach(btn => {
-    btn.classList.remove("active");
-  });
-
-  document.querySelectorAll(".grade-box").forEach(box => {
-    box.classList.remove("active");
-  });
-
-  const target = e.currentTarget;
-
-  if (target.classList.contains("grade-box")) {
-    target.classList.add("active");
-  }
-
-  if (target.tagName === "BUTTON") {
-    target.classList.add("active");
-  }
-
-  applyFilters();
+// 🔥 GROUP HELPER
+function groupBy(list, key){
+  return list.reduce((acc, item) => {
+    (acc[item[key]] = acc[item[key]] || []).push(item);
+    return acc;
+  }, {});
 }
 
-function applyFilters(){
-  renderRows(todayData, "#todayTable tbody");
-  renderRows(activeData, "#activeTable tbody");
-  renderRows(archiveData, "#archiveTable tbody");
-}
-
-// =========================
-// TABLE RENDER
-// =========================
-function renderRows(list, selector){
-
-  const tbody = document.querySelector(selector);
-  if(!tbody) return;
-
-// =========================
-// 🔴 RED MARKET — WARNING ONLY (NO BLOCKING)
-// =========================
-tbody.innerHTML = "";
-
-if (marketStatus === "RED") {
-
-  const warningRow = document.createElement("tr");
-
-  warningRow.innerHTML = `
-    <td colspan="8" style="text-align:center;color:#ff6b6b;padding:20px;">
-      ⚠️ Unfavourable market conditions — trade cautiously<br>
-      <span style="color:#8b949e;">
-        Breakouts may fail at a higher rate
-      </span>
-    </td>
-  `;
-
-  tbody.appendChild(warningRow);
-}
-
-  // =========================
-  // NORMAL FLOW
-  // =========================
-
-  if(!list || list.length === 0){
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#8b949e;">
-    ⚠️ No new breakouts — monitoring conditions
-    </td></tr>`;
-    return;
-  }
-
-  list.forEach(item=>{
-
-    // 🔒 FILTER
-    if(currentFilter !== "ALL" && item.grade !== currentFilter) return;
-
-    // 🔒 SAFE VALUES
-    const symbol = item.symbol || "UNKNOWN";
-    const change = Number(item.change_percent) || 0;
-    const entry = Number(item.entry_price || item.start_price) || 0;
-
-    // =========================
-// 🧠 TRADE SIGNAL
-// =========================
-let signal = "WEAK";
-let signalClass = "signal-weak";
-
-if (change >= 10 && item.age <= 3) {
-  signal = "STRONG";
-  signalClass = "signal-strong";
-}
-else if (change >= 3) {
-  signal = "DEVELOPING";
-  signalClass = "signal-developing";
-}
-
-    // 🔒 PERFORMANCE DISPLAY
-    let perfClass = "neutral";
-    let perfText = "-";
-
-    if(change > 0){
-      perfClass = "up";
-      perfText = "+" + change.toFixed(2) + "%";
-    } 
-    else if(change < 0){
-      perfClass = "down";
-      perfText = change.toFixed(2) + "%";
-    }
-
-    // 🔒 LOCKED STATE
-    const locked = isLocked(item.grade) ? "locked" : "";
-
-    const isStrong = change >= 10;
-const isFast = change >= 8 && item.age <= 2;
-
-let rowClass = locked || "";
-
-if (isStrong) rowClass += " strong-trade";
-
-const row = document.createElement("tr");
-row.className = rowClass;
-
-    row.innerHTML = `
-      <td data-label="Symbol">${locked ? "████" : symbol}</td>
-
-      <td data-label="Score">
-        ${item.score || "-"}
-        <div class="grade ${getGradeClass(item.grade)}">${item.grade}</div>
-      </td>
-
-      <td data-label="Break %">
-        ${item.break ? Number(item.break).toFixed(2) + "%" : "-"}
-      </td>
-
-      <td data-label="Performance" class="${perfClass} ${isFast ? "fast-move" : ""}">
-        ${perfText}
-      </td>
-
-      <td data-label="Signal">
-  <span class="signal ${signalClass}">${signal}</span>
-</td>
-
-      <td data-label="Status">${item.status || "-"}</td>
-
-      <td data-label="Age">${item.age ?? "-"}</td>
-
-      <td data-label="Found">${item.signal_date || "-"}</td>
-
-      <td data-label="Chart">
-        <button onclick="openChart('${symbol}', ${entry}, ${change})">
-          View
-        </button>
-      </td>
-    `;
-
-    tbody.appendChild(row);
-  });
-}
-// =========================
-// HELPERS
-// =========================
-function isLocked(grade){
-  return grade === "A+" || grade === "A" || grade === "B+" || grade === "B";
-}
-
-function getGradeClass(grade){
-  if (grade === "A+") return "grade-Aplus";
-  if (grade === "A") return "grade-A";
-  if (grade === "B+") return "grade-Bplus";
-  if (grade === "B") return "grade-B";
-  return "grade-C";
-}
-
-// =========================
-// MAIN INIT
-// =========================
-document.addEventListener("DOMContentLoaded", function(){
-
-// =========================
-// MARKET + WATCHLIST (FINAL FIXED)
-// =========================
-fetch("market_status.json?v=" + new Date().getTime())
-  .then(res => {
-    if (!res.ok) throw new Error("Market load fail");
-    return res.json();
-  })
-  .then(data => {
-
-    // 🔒 STORE STATUS (CRITICAL)
-    marketStatus = data.status || "UNKNOWN";
-    marketLabel = data.label || "";
-
-    const bar = document.getElementById("marketBar");
-
-    // =========================
-    // MARKET UI (CLEAN)
-    // =========================
-    if (bar) {
-
-      if (data.mode === "CONDITIONAL") {
-        bar.className = "market-bar market-neutral";
-        bar.innerHTML = `
-          MARKET — ${data.label}
-          <div style="font-size:12px;color:#8b949e;">
-            ${data.message || "Conditions forming — limited data"}
-          </div>
-        `;
-      } else {
-
-        let message = "";
-        let className = "market-weak";
-
-        if (data.status === "GREEN") {
-          className = "market-strong";
-          message = `
-            ✅ Market conditions are favourable<br>
-            Breakouts are showing strong follow-through<br>
-            Conditions support active participation
-          `;
-        }
-        else if (data.status === "YELLOW") {
-          className = "market-neutral";
-          message = `
-            ⚠️ Market conditions are mixed<br>
-            Follow-through is inconsistent<br>
-            Selectivity and caution are required
-          `;
-        }
-        else if (data.status === "RED") {
-          className = "market-weak";
-          message = `
-            🚫 Market conditions are unfavourable<br>
-            Breakouts are failing at a higher rate<br>
-            EdgeBreak — market conditions are unfavourable. Breakouts are currently failing at a higher rate. Trade with caution. No positions are currently held — monitoring market conditions.
-          `;
-        }
-
-        // 🔥 CLEAN CLASS LOGIC (WITH DANGER MODE)
-        let fullClass = "market-bar " + className;
-
-        if (data.status === "RED") {
-          fullClass += " danger-mode";
-        }
-
-        bar.className = fullClass;
-
-        // 🔥 FINAL OUTPUT
-        bar.innerHTML = `
-          ${message}
-          <div style="font-size:12px;color:#8b949e;margin-top:6px;">
-            ${data.total_trades || 0} trades tracked
-          </div>
-        `;
-      }
-    }
-
-    // =========================
-// WATCHLIST LOAD (CHAINED CORRECTLY)
-// =========================
-return fetch("watchlist.json?v=" + new Date().getTime());
-})
-.then(res => {
-  if (!res.ok) throw new Error("Watchlist load fail");
-  return res.json();
-})
+// 🔥 LOAD DATA
+fetch("watchlist.json?v=" + new Date().getTime())
+.then(res => res.json())
 .then(data => {
 
-  const today = data.filter(x => x.age === 0 && x.status !== "failed");
-  const active = data.filter(x => x.age > 0 && x.status !== "failed");
-  const archived = data.filter(x => x.status === "failed" || x.age > 5);
+  const container = document.getElementById("watchlistContainer");
+  const lock = document.getElementById("lockMessage");
 
-  todayData = today;
-  activeData = active;
-  archiveData = archived;
+  const setups = data.filter(x => x.status !== "failed");
 
-    // =========================
-    // 🔴 RED MARKET UI CONTROL
-    // =========================
-    if (marketStatus === "RED") {
+  const grouped = groupBy(setups, "group");
 
-      const summaryBar = document.getElementById("summaryBar");
-      if (summaryBar) {
-        summaryBar.innerHTML = `
-          🚫 Trading paused — no active trades displayed
-        `;
-      }
-
-      const gradeStats = document.getElementById("gradeStats");
-      if (gradeStats) {
-        gradeStats.innerHTML = `
-          <div style="text-align:center;color:#8b949e;padding:15px;">
-            Market conditions are unfavourable — performance metrics hidden
-          </div>
-        `;
-      }
-
-    } else {
-      updateSummary(data);
-      updateGradeStats(data);
-    }
-
-    // =========================
-    // ALWAYS RENDER TABLES
-    // =========================
-    applyFilters();
-  })
-  .catch(err => {
-    console.error("System load error:", err);
-  });
-
-}); 
-
-// =========================
-// SUMMARY
-// =========================
-function updateSummary(data){
-
-  const bar = document.getElementById("summaryBar");
-  if (!bar) return;
-
-  const total = data.length;
-  const winners = data.filter(x => (x.change_percent || 0) > 0).length;
-  const losers = data.filter(x => (x.change_percent || 0) < 0).length;
-
-  bar.innerHTML =
-    `Active Trades: ${total} • ${winners} Positive • ${losers} Negative`;
-}
-
-// =========================
-// GRADE STATS
-// =========================
-function updateGradeStats(data){
-
-  const container = document.getElementById("gradeStats");
-  if (!container) return;
-
-  const grades = ["A+", "A", "B+", "B"];
   let html = "";
 
-  grades.forEach(g => {
+  const order = ["SMALL", "MID", "LARGE"];
 
-    const trades = data.filter(x => x.grade === g);
+  order.forEach(group => {
 
-    const wins = trades.filter(x => (x.change_percent || 0) > 0).length;
-    const losses = trades.filter(x => (x.change_percent || 0) < 0).length;
+    if (!grouped[group]) return;
 
-    html += `
-      <div class="grade-box" onclick="setFilter(event,'${g}')">
-        <div class="grade-title">${g}</div>
-        <div class="win">+ ${wins}</div>
-        <div class="loss">- ${losses}</div>
-      </div>
-    `;
+    let label = "🟡 Mid Caps";
+    if (group === "SMALL") label = "🟢 Small Caps";
+    if (group === "LARGE") label = "🔵 Large Caps";
+
+    html += `<div class="section-title">${label}</div>`;
+
+    grouped[group].forEach(stock => {
+
+      const change = Number(stock.change_percent || 0);
+
+      let perfColor = "#8b949e";
+      let perfText = "-";
+
+      if (change > 0) {
+        perfColor = "#3ddc97";
+        perfText = "+" + change.toFixed(2) + "%";
+      } else if (change < 0) {
+        perfColor = "#ff6b6b";
+        perfText = change.toFixed(2) + "%";
+      }
+
+      // 📅 ENTRY DATE
+      let dateText = "-";
+      if (stock.signal_date) {
+        const d = new Date(stock.signal_date);
+        dateText = d.toLocaleDateString(undefined, {
+          month: "short",
+          day: "numeric"
+        });
+      }
+
+      // 🔥 STRONG TRADE
+      const isStrong = change >= 10;
+
+      const symbol = isPremium ? stock.symbol : "████";
+
+      html += `
+        <div class="box ${isStrong ? "strong" : ""}">
+          <div style="display:flex; justify-content:space-between;">
+            <strong>
+              ${symbol}
+              ${isStrong ? `<span class="tag tag-strong">STRONG</span>` : ""}
+            </strong>
+            <span style="color:${perfColor}; font-weight:bold;">
+              ${perfText}
+            </span>
+          </div>
+
+          <div style="margin-top:6px; font-size:13px; color:#9ca3af;">
+            Started: ${dateText}
+          </div>
+
+          ${
+            isPremium
+              ? `
+                <button onclick="openChart('${stock.symbol}')">
+                  View Chart
+                </button>
+              `
+              : `
+                <div style="margin-top:10px; color:#22c55e;">
+                  🔒 Unlock to view setups
+                </div>
+              `
+          }
+        </div>
+      `;
+    });
+
   });
 
   container.innerHTML = html;
-}
 
-// =========================
-// CHART SYSTEM (CLEAN FINAL)
-// =========================
+  if (!isPremium) {
+    lock.innerHTML = `
+      🔒 Breakout setups are hidden<br>
+      <a href="pricing.html" style="color:#22c55e; font-weight:bold;">
+        Unlock full access →
+      </a>
+    `;
+  }
 
-function getCurrentPrice(symbol){
-  const allData = [...todayData, ...activeData, ...archiveData];
-  const match = allData.find(x => x.symbol === symbol);
-  if(!match) return null;
-  return Number(match.current_price) || null;
-}
+})
+.catch(err => console.error(err));
 
-function openChart(symbol, entryValue, changeValue){
 
+// 📊 CHART
+function openChart(symbol){
   const modal = document.getElementById("chartModal");
   const container = document.getElementById("chartContainer");
 
-  if(!modal || !container) return;
-
   modal.style.display = "flex";
 
-  let entry = Number(entryValue);
-  let move = Number(changeValue);
-
-  if (isNaN(entry) || entry <= 0) entry = 0;
-
-  if (!move || move === 0) {
-    const current = getCurrentPrice(symbol);
-    if (current && entry > 0) {
-      move = ((current - entry) / entry) * 100;
-    } else {
-      move = 0;
-    }
-  }
-
-  const stop = entry > 0 ? entry * 0.90 : 0;
-
-  const entryText = entry > 0 ? "$" + entry.toFixed(2) : "N/A";
-  const stopText = entry > 0 ? "$" + stop.toFixed(2) : "N/A";
-  const moveText = (move >= 0 ? "+" : "") + move.toFixed(2) + "%";
-
-  let moveColor = "#3ddc97";
-  if(move < 0) moveColor = "#ff6b6b";
-  else if(move < 5) moveColor = "#f0c674";
-
-  let status = "ACTIVE";
-  let statusColor = "#f0c674";
-
-  if(move >= 15){
-    status = "STRONG";
-    statusColor = "#3ddc97";
-  }
-  else if(move < -5){
-    status = "FAILED";
-    statusColor = "#ff6b6b";
-  }
-
   container.innerHTML = `
-    <div style="position:absolute;bottom:15px;left:15px;background:rgba(0,0,0,0.9);padding:16px;border-radius:10px;border:1px solid #30363d;z-index:10;min-width:200px;">
-      <div style="font-weight:bold;margin-bottom:8px;">${symbol}</div>
-      <div style="font-size:12px;color:#8b949e;">Entry</div>
-      <div>${entryText}</div>
-      <div style="margin-top:6px;font-size:12px;color:#8b949e;">Stop</div>
-      <div style="color:#ff6b6b;">${stopText}</div>
-      <div style="margin-top:6px;font-size:12px;color:#8b949e;">Move</div>
-      <div style="color:${moveColor};">${moveText}</div>
-      <div style="margin-top:6px;font-size:12px;color:#8b949e;">Status</div>
-      <div style="color:${statusColor};font-weight:bold;">${status}</div>
-    </div>
-
     <iframe 
       src="https://s.tradingview.com/widgetembed/?symbol=${symbol}&interval=D&theme=dark"
       style="width:100%; height:500px; border:none;">
@@ -961,10 +275,10 @@ function openChart(symbol, entryValue, changeValue){
 }
 
 function closeChart(){
-  const modal = document.getElementById("chartModal");
-  if(modal) modal.style.display = "none";
+  document.getElementById("chartModal").style.display = "none";
 }
 
 </script>
+
 </body>
 </html>
