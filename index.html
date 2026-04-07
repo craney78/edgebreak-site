@@ -1,129 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>EDGEBREAK</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>EDGEBREAK</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #e2e8f0;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #020617;
+  color: #e2e8f0;
+}
 
-    h1, h2, h3 {
-      margin: 0;
-    }
+/* HERO */
+.hero {
+  position: relative;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: url('hero.jpg') center/cover no-repeat;
+}
 
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 20px;
-    }
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(2,6,23,0.75);
+}
 
-    /* HERO */
-    .hero {
-      text-align: center;
-      padding: 80px 20px;
-      background: linear-gradient(to right, #020617, #0f172a);
-    }
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
 
-    .hero h1 {
-      font-size: 48px;
-      font-weight: bold;
-    }
+.hero h1 {
+  font-size: 60px;
+  letter-spacing: 2px;
+}
 
-    .hero p {
-      margin-top: 10px;
-      color: #94a3b8;
-      font-size: 18px;
-    }
+.hero p {
+  margin-top: 10px;
+  color: #94a3b8;
+}
 
-    .hero button {
-      margin-top: 20px;
-      padding: 12px 28px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background: #22c55e;
-      color: white;
-      cursor: pointer;
-    }
+.hero button {
+  margin-top: 20px;
+  padding: 14px 32px;
+  background: #22c55e;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-    .hero button:hover {
-      background: #16a34a;
-    }
+.hero button:hover {
+  background: #16a34a;
+}
 
-    /* SECTION */
-    .section {
-      margin-top: 40px;
-    }
+/* CONTAINER */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
 
-    .section h2 {
-      margin-bottom: 20px;
-    }
+/* SECTION */
+.section {
+  margin-top: 60px;
+}
 
-    /* GRID */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 15px;
-    }
+.section h2 {
+  margin-bottom: 20px;
+}
 
-    .card {
-      background: #1e293b;
-      padding: 15px;
-      border-radius: 10px;
-    }
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
 
-    .big {
-      font-size: 22px;
-      font-weight: bold;
-    }
+.card {
+  background: #0f172a;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #1e293b;
+}
 
-    .green { color: #22c55e; }
-    .red { color: #ef4444; }
+.big {
+  font-size: 22px;
+  font-weight: bold;
+}
 
-    /* GROUP STATS */
-    .groups {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 15px;
-      margin-top: 20px;
-    }
+.green { color: #22c55e; }
+.red { color: #ef4444; }
 
-    /* BEST TRADES */
-    .trade {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #1e293b;
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
+/* GROUP STATS */
+.groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
 
-    /* WATCHLIST */
-    .watch {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-      border-bottom: 1px solid #334155;
-    }
+/* BEST TRADES */
+.trade {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px;
+  background: #0f172a;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #1e293b;
+}
 
-  </style>
+/* WATCHLIST */
+.watch {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px;
+  border-bottom: 1px solid #1e293b;
+}
+
+/* FOOTER */
+.footer {
+  margin-top: 80px;
+  padding: 30px;
+  text-align: center;
+  border-top: 1px solid #1e293b;
+  color: #64748b;
+}
+</style>
 </head>
 
 <body>
 
 <!-- HERO -->
 <div class="hero">
-  <h1>EDGEBREAK</h1>
-  <p>Breakout Trading System Built on Real Data</p>
-  <p>Live trades • Backtested edge • Updated daily</p>
-  <button>Get Access</button>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <h1>EDGEBREAK</h1>
+    <p>Breakout Trading System Built on Real Data</p>
+    <p>Live trades • Backtested edge • Updated daily</p>
+    <button>Get Access</button>
+  </div>
 </div>
 
 <div class="container">
@@ -133,7 +157,6 @@
     <h2>📊 2026 Performance</h2>
 
     <div id="statsGrid" class="grid"></div>
-
     <div id="groupStats" class="groups"></div>
   </div>
 
@@ -151,7 +174,16 @@
 
 </div>
 
+<!-- FOOTER -->
+<div class="footer">
+  <div>EDGEBREAK © 2026</div>
+  <div>Data-driven breakout trading system</div>
+</div>
+
 <script>
+// =========================
+// LOAD STATS
+// =========================
 fetch("stats.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
@@ -159,12 +191,8 @@ fetch("stats.json?v=" + new Date().getTime())
     const year = "2026";
     const stats = data.years[year];
 
-    // =========================
     // MAIN STATS
-    // =========================
-    const statsGrid = document.getElementById("statsGrid");
-
-    statsGrid.innerHTML = `
+    document.getElementById("statsGrid").innerHTML = `
       <div class="card"><div>Total Trades</div><div class="big">${stats.total_trades}</div></div>
       <div class="card"><div>Win Rate</div><div class="big">${stats.win_rate}%</div></div>
       <div class="card"><div>Avg Return</div><div class="big">${stats.avg_return}%</div></div>
@@ -172,35 +200,29 @@ fetch("stats.json?v=" + new Date().getTime())
       <div class="card"><div>Worst Trade</div><div class="big red">${stats.worst_trade}%</div></div>
     `;
 
-    // =========================
     // GROUP STATS
-    // =========================
-    const groupDiv = document.getElementById("groupStats");
+    document.getElementById("groupStats").innerHTML =
+      Object.entries(stats.groups).map(([group, g]) => `
+        <div class="card">
+          <h3>${group}</h3>
+          <div>Trades: ${g.trades}</div>
+          <div>Win Rate: ${g.win_rate}%</div>
+          <div>Avg: ${g.avg_return}%</div>
+          <div class="green">Best: ${g.best}%</div>
+          <div class="red">Worst: ${g.worst}%</div>
+        </div>
+      `).join("");
 
-    groupDiv.innerHTML = Object.entries(stats.groups).map(([group, g]) => `
-      <div class="card">
-        <h3>${group}</h3>
-        <div>Trades: ${g.trades}</div>
-        <div>Win Rate: ${g.win_rate}%</div>
-        <div>Avg: ${g.avg_return}%</div>
-        <div class="green">Best: ${g.best}%</div>
-        <div class="red">Worst: ${g.worst}%</div>
-      </div>
-    `).join("");
-
-    // =========================
     // BEST TRADES (TOP 5)
-    // =========================
-    const bestDiv = document.getElementById("bestTrades");
-
     const topTrades = stats.best_trades.slice(0, 5);
 
-    bestDiv.innerHTML = topTrades.map(t => `
-      <div class="trade">
-        <div><strong>${t.symbol}</strong></div>
-        <div class="green">+${t.return}%</div>
-      </div>
-    `).join("");
+    document.getElementById("bestTrades").innerHTML =
+      topTrades.map(t => `
+        <div class="trade">
+          <div><strong>${t.symbol}</strong></div>
+          <div class="green">+${t.return}%</div>
+        </div>
+      `).join("");
 
   });
 
@@ -212,21 +234,18 @@ fetch("watchlist.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
 
-    const watchDiv = document.getElementById("watchlist");
+    document.getElementById("watchlist").innerHTML =
+      data.map(t => {
+        const color = t.current_return >= 0 ? "green" : "red";
 
-    watchDiv.innerHTML = data.map(t => {
-
-      const color = t.current_return >= 0 ? "green" : "red";
-
-      return `
-        <div class="watch">
-          <div>${t.symbol}</div>
-          <div>$${t.entry}</div>
-          <div class="${color}">${t.current_return}%</div>
-        </div>
-      `;
-
-    }).join("");
+        return `
+          <div class="watch">
+            <div>${t.symbol}</div>
+            <div>$${t.entry}</div>
+            <div class="${color}">${t.current_return}%</div>
+          </div>
+        `;
+      }).join("");
 
   });
 </script>
