@@ -478,13 +478,13 @@ fetch("watchlist.json?v=" + new Date().getTime())
 });
 
 // =========================
-// 🔥 STATS (CLEAN + SAFE)
+// 🔥 STATS (FINAL CLEAN VERSION)
 // =========================
 fetch("stats.json?v=" + new Date().getTime())
 .then(res => res.json())
 .then(data => {
 
-  console.log("STATS:", data);
+  console.log("RAW STATS:", data);
 
   let stats = null;
 
@@ -501,6 +501,7 @@ fetch("stats.json?v=" + new Date().getTime())
       avg_return: data.by_year["2025"].avg_return,
       best_trade: data.by_year["2025"].best,
       worst_trade: data.by_year["2025"].worst,
+      best_trades: [], // fallback
       groups: data.by_group || {}
     };
   }
@@ -512,6 +513,13 @@ fetch("stats.json?v=" + new Date().getTime())
     return;
   }
 
+  // 🔥 FORCE BEST TRADES (CRITICAL FIX)
+  if (!stats.best_trades && data.years && data.years["2025"]) {
+    stats.best_trades = data.years["2025"].best_trades || [];
+  }
+
+  console.log("FINAL STATS USED:", stats);
+
   // 🔥 NORMALISE DATA
   const totalTrades = stats.total_trades || stats.trades || 0;
   const winRate = stats.win_rate || 0;
@@ -519,7 +527,9 @@ fetch("stats.json?v=" + new Date().getTime())
   const bestTrade = stats.best_trade || stats.best || 0;
   const worstTrade = stats.worst_trade || stats.worst || 0;
 
+  // =========================
   // 🔥 MAIN STATS GRID
+  // =========================
   document.getElementById("statsGrid").innerHTML = `
     <div class="card"><div>Total Trades</div><div class="big">${totalTrades}</div></div>
     <div class="card"><div>Win Rate</div><div class="big">${winRate}%</div></div>
@@ -528,25 +538,37 @@ fetch("stats.json?v=" + new Date().getTime())
     <div class="card red"><div>Worst</div><div class="big">${worstTrade}%</div></div>
   `;
 
-  // 🔥 BEST TRADES (FROM stats.json)
-document.getElementById("bestTrades").innerHTML =
-  (stats.best_trades || []).map(t => `
-    <div class="trade">
-      <div>${t.symbol}</div>
-      <div class="green">+${t.return}%</div>
-    </div>
-  `).join("");
+  // =========================
+  // 🔥 BEST TRADES
+  // =========================
+  const bestTrades = stats.best_trades || [];
 
-// 🔥 TRADE PROOF (CLEAN DISPLAY)
-document.getElementById("tradeProof").innerHTML =
-  (stats.best_trades || []).map(t => `
-    <div class="card">
-      <div class="green big">+${t.return}%</div>
-      <div style="color:#94a3b8;">Multi-day trade</div>
-    </div>
-  `).join("");
+  document.getElementById("bestTrades").innerHTML =
+    bestTrades.length
+      ? bestTrades.map(t => `
+          <div class="trade">
+            <div>${t.symbol}</div>
+            <div class="green">+${t.return}%</div>
+          </div>
+        `).join("")
+      : "<div class='card'>No best trades found</div>";
 
+  // =========================
+  // 🔥 TRADE PROOF (CONVERSION SECTION)
+  // =========================
+  document.getElementById("tradeProof").innerHTML =
+    bestTrades.length
+      ? bestTrades.map(t => `
+          <div class="card">
+            <div class="green big">+${t.return}%</div>
+            <div style="color:#94a3b8;">Multi-day trade</div>
+          </div>
+        `).join("")
+      : "<div class='card'>No trade data available</div>";
+
+  // =========================
   // 🔥 GROUP STATS
+  // =========================
   document.getElementById("groupStats").innerHTML =
     Object.entries(stats.groups || {}).map(([g, v]) => `
       <div class="card">
@@ -565,8 +587,6 @@ document.getElementById("tradeProof").innerHTML =
   document.getElementById("statsGrid").innerHTML =
     "<div class='card'>Stats failed to load</div>";
 });
-
-  
 
 </script>
 
