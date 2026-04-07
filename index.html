@@ -224,7 +224,12 @@ body {
 
 <!-- ACTIVITY -->
 <div class="section">
-  <h2>📢 Live Activity</h2>
+  <h2>Live Activity</h2>
+
+  <p style="color:#94a3b8; margin-bottom:15px;">
+    Real-time updates from the system showing when trades are opened and closed.
+  </p>
+
   <div id="activityFeed"></div>
 </div>
 
@@ -270,27 +275,38 @@ body {
 
 <script>
 // ACTIVITY
-fetch("activity.json")
+fetch("activity.json?v=" + new Date().getTime())
 .then(res => res.json())
 .then(data => {
-  document.getElementById("activityFeed").innerHTML =
-    data.slice(0,5).map(a => {
-      if (a.type === "OPEN") {
-        return `<div class="activity open">
-          <div>🟢 OPEN: ${a.symbol} @ $${a.price}</div>
+
+  const container = document.getElementById("activityFeed");
+
+  container.innerHTML = data.slice(0,5).map(a => {
+
+    if (a.type === "OPEN") {
+      return `
+        <div class="activity open">
+          <div>
+            OPEN: ${a.symbol} @ $${a.price}
+          </div>
           <small>${a.date}</small>
-        </div>`;
-      }
-      if (a.type === "CLOSED") {
-        return `<div class="activity closed">
-          <div>🔴 CLOSED: ${a.symbol} (${a.return}%)</div>
+        </div>
+      `;
+    }
+
+    if (a.type === "CLOSED") {
+      return `
+        <div class="activity closed">
+          <div>
+            CLOSED: ${a.symbol} (${a.return}%)
+          </div>
           <small>${a.date}</small>
-        </div>`;
-      }
-    }).join("");
-})
-.catch(() => {
-  document.getElementById("activityFeed").innerHTML = "<div class='card'>No activity yet</div>";
+        </div>
+      `;
+    }
+
+  }).join("");
+
 });
 
 // WATCHLIST
