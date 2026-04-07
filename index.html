@@ -315,59 +315,41 @@ fetch("watchlist.json?v=" + new Date().getTime())
 .then(res => res.json())
 .then(data => {
 
-  if (!data || data.length === 0) {
-    document.getElementById("liveStats").innerHTML =
-      "<div class='card'>No active trades</div>";
+  const container = document.getElementById("watchlist");
+
+  const active = data.filter(t => t.status === "active");
+
+  if (!active.length) {
+    container.innerHTML = "<div class='card'>No active trades</div>";
     return;
   }
 
-  const trades = data;
+  container.innerHTML = active.map(t => {
 
-  const total = trades.length;
+    const entry = t.breakout;
+    const current = t.change_percent;
 
-  const wins = trades.filter(t => t.current_return > 0);
-  const losses = trades.filter(t => t.current_return <= 0);
+    const color = current >= 0 ? "green" : "red";
 
-  const winRate = ((wins.length / total) * 100).toFixed(1);
+    // 🔒 BLACKED OUT SYMBOL
+    const hiddenSymbol = "████";
 
-  const avgReturn = (
-    trades.reduce((sum, t) => sum + t.current_return, 0) / total
-  ).toFixed(2);
+    return `
+      <div class="watch">
+        <div>${hiddenSymbol}</div>
+        <div>$${entry.toFixed(2)}</div>
+        <div class="${color}">
+          ${current.toFixed(2)}%
+        </div>
+      </div>
+    `;
 
-  const best = Math.max(...trades.map(t => t.current_return)).toFixed(2);
-  const worst = Math.min(...trades.map(t => t.current_return)).toFixed(2);
-
-  document.getElementById("liveStats").innerHTML = `
-    <div class="card">
-      <div>Active Trades</div>
-      <div class="big">${total}</div>
-    </div>
-
-    <div class="card">
-      <div>Win Rate</div>
-      <div class="big">${winRate}%</div>
-    </div>
-
-    <div class="card">
-      <div>Avg Return</div>
-      <div class="big">${avgReturn}%</div>
-    </div>
-
-    <div class="card">
-      <div>Best Current</div>
-      <div class="big green">${best}%</div>
-    </div>
-
-    <div class="card">
-      <div>Worst Current</div>
-      <div class="big red">${worst}%</div>
-    </div>
-  `;
+  }).join("");
 
 })
 .catch(() => {
-  document.getElementById("liveStats").innerHTML =
-    "<div class='card'>Live stats unavailable</div>";
+  document.getElementById("watchlist").innerHTML =
+    "<div class='card'>Watchlist unavailable</div>";
 });
 
 // STATS
