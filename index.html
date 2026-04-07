@@ -481,7 +481,7 @@ fetch("watchlist.json?v=" + new Date().getTime())
 });
 
 // =========================
-// STATS (WORKS WITH OLD + NEW)
+// 🔥 STATS (CLEAN + SAFE)
 // =========================
 fetch("stats.json?v=" + new Date().getTime())
 .then(res => res.json())
@@ -489,14 +489,14 @@ fetch("stats.json?v=" + new Date().getTime())
 
   console.log("STATS:", data);
 
-  let stats;
+  let stats = null;
 
-  // NEW FORMAT
+  // ✅ NEW FORMAT
   if (data.years && data.years["2025"]) {
     stats = data.years["2025"];
   }
 
-  // OLD FORMAT
+  // ✅ OLD FORMAT
   else if (data.by_year && data.by_year["2025"]) {
     stats = {
       total_trades: data.by_year["2025"].trades,
@@ -504,29 +504,36 @@ fetch("stats.json?v=" + new Date().getTime())
       avg_return: data.by_year["2025"].avg_return,
       best_trade: data.by_year["2025"].best,
       worst_trade: data.by_year["2025"].worst,
-      best_trades: [],
       groups: data.by_group || {}
     };
   }
 
+  // ❌ NO DATA
   if (!stats) {
     document.getElementById("statsGrid").innerHTML =
-      "<div class='card'>No stats available</div>";
+      "<div class='card'>No 2025 stats available</div>";
     return;
   }
 
-  // MAIN STATS
+  // 🔥 NORMALISE DATA
+  const totalTrades = stats.total_trades || stats.trades || 0;
+  const winRate = stats.win_rate || 0;
+  const avgReturn = stats.avg_return || 0;
+  const bestTrade = stats.best_trade || stats.best || 0;
+  const worstTrade = stats.worst_trade || stats.worst || 0;
+
+  // 🔥 MAIN STATS GRID
   document.getElementById("statsGrid").innerHTML = `
-    <div class="card"><div>Total Trades</div><div class="big">${stats.total_trades}</div></div>
-    <div class="card"><div>Win Rate</div><div class="big">${stats.win_rate}%</div></div>
-    <div class="card"><div>Avg Return</div><div class="big">${stats.avg_return}%</div></div>
-    <div class="card green"><div>Best</div><div class="big">${stats.best_trade}%</div></div>
-    <div class="card red"><div>Worst</div><div class="big">${stats.worst_trade}%</div></div>
+    <div class="card"><div>Total Trades</div><div class="big">${totalTrades}</div></div>
+    <div class="card"><div>Win Rate</div><div class="big">${winRate}%</div></div>
+    <div class="card"><div>Avg Return</div><div class="big">${avgReturn}%</div></div>
+    <div class="card green"><div>Best</div><div class="big">${bestTrade}%</div></div>
+    <div class="card red"><div>Worst</div><div class="big">${worstTrade}%</div></div>
   `;
 
-  // GROUPS
+  // 🔥 GROUP STATS
   document.getElementById("groupStats").innerHTML =
-    Object.entries(stats.groups || {}).map(([g,v]) => `
+    Object.entries(stats.groups || {}).map(([g, v]) => `
       <div class="card">
         <h3>${g}</h3>
         <div>Trades: ${v.trades}</div>
@@ -537,20 +544,71 @@ fetch("stats.json?v=" + new Date().getTime())
       </div>
     `).join("");
 
-  // BEST TRADES (SAFE + FALLBACK)
-const bestContainer = document.getElementById("bestTrades");
+})
+.catch(err => {
+  console.error("Stats error:", err);
+  document.getElementById("statsGrid").innerHTML =
+    "<div class='card'>Stats failed to load</div>";
+});
 
-if (stats.best_trades && stats.best_trades.length > 0) {
-  bestContainer.innerHTML =
-    stats.best_trades.slice(0,5).map(t => `
+  // 🔥 BEST TRADES FROM CSV (REAL DATA)
+fetch("trade_history_2025.csv")
+.then(res => res.text())
+.then(text => {
+
+  const rows = text.split("\n").slice(1);
+
+  const trades = rows
+    .map(r => r.split(","))
+    .filter(r => r.length > 5)
+    .map(r => ({
+      symbol: r[0],
+      percent: parseFloat(r[5])
+    }))
+    .filter(t => !isNaN(t.percent))
+    .sort((a,b) => b.percent - a.percent)
+    .slice(0,5);
+
+  document.getElementById("bestTrades").innerHTML =
+    trades.map(t => `
       <div class="trade">
         <div>${t.symbol}</div>
-        <div class="green">+${t.return}%</div>
+        <div class="green">+${t.percent}%</div>
       </div>
     `).join("");
-} else {
-  bestContainer.innerHTML = "<div class='card'>No trade data available</div>";
-}
+
+});
+
+// 🔥 TRADE PROOF (PERCENT + DAYS ONLY)
+fetch("trade_history_2025.csv")
+.then(res => res.text())
+.then(text => {
+
+  const rows = text.split("\n").slice(1);
+
+  const trades = rows
+    .map(r => r.split(","))
+    .filter(r => r.length > 6)
+    .map(r => ({
+      percent: parseFloat(r[5]),
+      days: parseInt(r[6])
+    }))
+    .filter(t => !isNaN(t.percent))
+    .slice(0,6);
+
+  document.getElementById("tradeProof").innerHTML =
+    trades.map(t => `
+      <div class="card">
+        <div class="${t.percent >= 0 ? 'green' : 'red'} big">
+          ${t.percent > 0 ? '+' : ''}${t.percent}%
+        </div>
+        <div style="color:#94a3b8;">
+          ${t.days} days
+        </div>
+      </div>
+    `).join("");
+
+});
 
 </script>
 
