@@ -352,13 +352,42 @@ fetch("watchlist.json?v=" + new Date().getTime())
     "<div class='card'>Watchlist unavailable</div>";
 });
 
-// STATS
-fetch("stats.json")
+// =========================
+// STATS (WORKS WITH OLD + NEW)
+// =========================
+fetch("stats.json?v=" + new Date().getTime())
 .then(res => res.json())
 .then(data => {
 
-  const stats = data.years ? data.years["2025"] : data["2025"];
+  console.log("STATS:", data);
 
+  let stats;
+
+  // NEW FORMAT
+  if (data.years && data.years["2025"]) {
+    stats = data.years["2025"];
+  }
+
+  // OLD FORMAT
+  else if (data.by_year && data.by_year["2025"]) {
+    stats = {
+      total_trades: data.by_year["2025"].trades,
+      win_rate: data.by_year["2025"].win_rate,
+      avg_return: data.by_year["2025"].avg_return,
+      best_trade: data.by_year["2025"].best,
+      worst_trade: data.by_year["2025"].worst,
+      best_trades: [],
+      groups: data.by_group || {}
+    };
+  }
+
+  if (!stats) {
+    document.getElementById("statsGrid").innerHTML =
+      "<div class='card'>No stats available</div>";
+    return;
+  }
+
+  // MAIN STATS
   document.getElementById("statsGrid").innerHTML = `
     <div class="card"><div>Total Trades</div><div class="big">${stats.total_trades}</div></div>
     <div class="card"><div>Win Rate</div><div class="big">${stats.win_rate}%</div></div>
@@ -367,8 +396,9 @@ fetch("stats.json")
     <div class="card red"><div>Worst</div><div class="big">${stats.worst_trade}%</div></div>
   `;
 
+  // GROUPS
   document.getElementById("groupStats").innerHTML =
-    Object.entries(stats.groups).map(([g,v]) => `
+    Object.entries(stats.groups || {}).map(([g,v]) => `
       <div class="card">
         <h3>${g}</h3>
         <div>Trades: ${v.trades}</div>
@@ -379,18 +409,23 @@ fetch("stats.json")
       </div>
     `).join("");
 
-  document.getElementById("bestTrades").innerHTML =
-    (stats.best_trades || []).slice(0,5).map(t => `
-      <div class="trade">
-        <div>${t.symbol}</div>
-        <div class="green">+${t.return}%</div>
-      </div>
-    `).join("");
+  // BEST TRADES
+  if (stats.best_trades && stats.best_trades.length > 0) {
+    document.getElementById("bestTrades").innerHTML =
+      stats.best_trades.slice(0,5).map(t => `
+        <div class="trade">
+          <div>${t.symbol}</div>
+          <div class="green">+${t.return}%</div>
+        </div>
+      `).join("");
+  }
 
 })
 .catch(() => {
-  document.getElementById("statsGrid").innerHTML = "<div class='card'>Stats unavailable</div>";
+  document.getElementById("statsGrid").innerHTML =
+    "<div class='card'>Stats unavailable</div>";
 });
+
 </script>
 
 </body>
