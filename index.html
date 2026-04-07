@@ -1,825 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>EdgeBreak Intelligence</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: radial-gradient(circle at top, #0f1720, #0b0f14);
-  color: #e6edf3;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-/* NAV */
-.nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 40px;
-  border-bottom: 1px solid #1f2933;
-  background: rgba(0,0,0,0.3);
-  backdrop-filter: blur(6px);
-}
-
-.logo img {
-  height: 46px;
-  filter: drop-shadow(0 0 8px rgba(34,197,94,0.7));
-}
-
-.nav-links a {
-  margin-left: 25px;
-  color: #9ca3af;
-  font-size: 14px;
-  transition: 0.2s;
-}
-
-.nav-links a:hover {
-  color: #ffffff;
-}
-.nav-links a.active {
-  color: #22c55e;
-  font-weight: bold;
-  border-bottom: 2px solid #22c55e;
-  padding-bottom: 4px;
-}
-
-/* HERO */
-.hero {
-  text-align: center;
-  padding: 120px 20px 80px;
-  max-width: 850px;
-  margin: auto;
-
-  background: 
-    linear-gradient(rgba(11,15,20,0.75), rgba(11,15,20,0.9)),
-    url("/images/hero-bg.png");
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-
-  border-radius: 12px;
-
-  /* 🔥 NEW GLOW EFFECT */
-  box-shadow: 
-    0 0 60px rgba(0,255,150,0.12),
-    inset 0 0 80px rgba(0,255,150,0.05);
-}
-
-.hero-logo {
-  height: 160px;
-  margin-bottom: 30px;
-  filter: drop-shadow(0 0 25px rgba(34,197,94,1));
-}
-
-.hero h1 {
-  font-size: 52px;
-  margin-bottom: 20px;
-  line-height: 1.2;
-  text-shadow: 0 0 15px rgba(34,197,94,0.25);
-
-  /* 🔥 ADD THIS */
-  letter-spacing: -0.5px;
-}
-
-.hero p {
-  color: #9ca3af;
-  font-size: 18px;
-  line-height: 1.6;
-}
-
-/* CTA */
-.cta-btn {
-  display: inline-block;
-  margin-top: 30px;
-  padding: 16px 28px;
-  background: #22c55e;
-  color: black;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 16px;
-  transition: all 0.25s ease;
-  box-shadow: 0 0 25px rgba(34,197,94,0.6);
-}
-
-.cta-btn:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 0 30px rgba(34,197,94,0.9);
-}
-
-
-/* ARROW (UPDATED NAME ONLY) */
-.section-divider {
-  display: flex;
-  justify-content: center;
-  margin: 90px 0;
-}
-
-.section-divider img {
-  max-width: 320px;
-  display: block;
-  margin: 0 auto;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 0.7; }
-  50% { transform: scale(1.1); opacity: 1; }
-  100% { transform: scale(1); opacity: 0.7; }
-}
-
-/* SECTIONS */
-.section {
-  max-width: 850px;
-  margin: 80px auto;
-  padding: 60px 20px 0;
-
-  /* 🔥 SUBTLE DIVIDER LINE */
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-
-.section h2 {
-  margin-bottom: 15px;
-  font-size: 28px;
-  font-weight: 600;
-
-  /* 🔥 NEW */
-  color: #ffffff;
-  letter-spacing: -0.3px;
-}
-
-.section p {
-  color: #9ca3af;
-  line-height: 1.7;
-}
-
-/* BOX */
-.box {
-  background: linear-gradient(145deg, #111827, #0d131a);
-  border: 1px solid #1f2933;
-  padding: 24px;
-  border-radius: 12px;
-  margin-top: 20px;
-  transition: all 0.25s ease;
-  position: relative;
-}
-
-.box:hover {
-  border-color: #22c55e;
-  box-shadow: 
-    0 0 0 1px #22c55e,
-    0 0 30px rgba(34,197,94,0.25);
-  transform: translateY(-3px);
-}
-
-/* MARKET */
-.market-box {
-  background: linear-gradient(145deg, #111827, #0d131a);
-  border: 1px solid #1f2933;
-  padding: 24px;
-  border-radius: 12px;
-  text-align: center;
-  margin-top: 20px;
-  transition: 0.3s;
-}
-.market-box:hover {
-  transform: scale(1.01);
-}
-
-.market-label {
-  font-weight: bold;
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-.market-message {
-  color: #9ca3af;
-}
-
-.market-action {
-  margin-top: 15px;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-/* NEW FOOTER */
-.footer {
-  background: linear-gradient(180deg, #0a0f1c, #06090f);
-  color: #ccc;
-  padding: 70px 20px 25px;
-  margin-top: 100px;
-  border-top: 1px solid rgba(0,255,150,0.15);
-}
-
-.footer-container {
-  max-width: 1100px;
-  margin: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 40px;
-}
-
-.footer-logo {
-  color: #22c55e;
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  letter-spacing: -0.5px;
-}
-
-.footer-tagline {
-  font-size: 14px;
-  color: #9ca3af;
-  margin-bottom: 10px;
-}
-
-.footer-type {
-  font-size: 13px;
-  color: #22c55e;
-  opacity: 0.8;
-}
-
-.footer-col h3 {
-  margin-bottom: 15px;
-  color: #ffffff;
-  font-size: 15px;
-  letter-spacing: 0.3px;
-}
-
-.footer-col ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-col ul li {
-  margin-bottom: 10px;
-}
-
-.footer-col ul li a {
-  color: #9ca3af;
-  font-size: 14px;
-  transition: 0.2s;
-}
-
-.footer-col ul li a:hover {
-  color: #22c55e;
-  transform: translateX(2px);
-}
-
-.footer-note {
-  font-size: 13px;
-  color: #8b949e;
-  line-height: 1.6;
-  margin-bottom: 12px;
-}
-
-.footer-bottom {
-  text-align: center;
-  margin-top: 50px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  font-size: 12px;
-  color: #6e7681;
-}
-
-/* 🔥 EDGE METER */
-.edge-meter {
-  margin-top: 25px;
-  text-align: center;
-}
-
-.edge-meter-bar {
-  height: 16px;
-  background: #1f2933;
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
-}
-
-.edge-meter-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #ef4444, #f59e0b, #22c55e);
-  transition: width 1s ease-out;
-  position: relative;
-}
-
-/* 🔥 SHIMMER EFFECT */
-.edge-meter-fill::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -50%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255,255,255,0.3),
-    transparent
-  );
-  animation: shimmer 2.5s infinite;
-}
-
-@keyframes shimmer {
-  0% { left: -50%; }
-  100% { left: 120%; }
-}
-
-.edge-meter-label {
-  margin-top: 12px;
-  font-size: 13px;
-  color: #9ca3af;
-  letter-spacing: 0.5px;
-}
-
-.hero-sub {
-  font-size: 1.1rem;
-  color: #8b949e;
-  margin-top: 10px;
-  line-height: 1.5;
-}
-
-.hero-sub strong {
-  color: #22c55e;
-}
-/* INFO BLOCKS (IMPROVED) */
-.info-block {
-  margin-top: 30px;
-  padding: 18px;
-  background: rgba(255,255,255,0.02);
-  border-left: 3px solid #1f2933;
-  border-radius: 8px;
-}
-
-.info-block.highlight {
-  border-left: 4px solid #22c55e;
-  background: rgba(34,197,94,0.08);
-  padding: 22px;
-  box-shadow: 0 0 30px rgba(34,197,94,0.12);
-}
-
-.strong-line {
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-/* STEP GRID */
-.steps-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-bottom: 30px;
-}
-
-/* STEP CARDS */
-.step-card {
-  background: linear-gradient(145deg, #111827, #0d131a);
-  border: 1px solid #1f2933;
-  border-radius: 12px;
-  padding: 18px;
-  transition: all 0.25s ease;
-  cursor: default;
-  position: relative;
-}
-
-/* 🔥 STRONG HOVER EFFECT */
-.step-card:hover {
-  border-color: #22c55e;
-  box-shadow: 
-    0 0 0 1px #22c55e,
-    0 0 30px rgba(34,197,94,0.35);
-  transform: translateY(-4px) scale(1.01);
-}
-
-.step-number {
-  font-size: 11px;
-  color: #22c55e;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 6px;
-  letter-spacing: 1px;
-}
-
-/* MOBILE FIX */
-@media (max-width: 600px) {
-
-  .section {
-    padding: 40px 15px 0;
-  }
-
-  .step-card {
-    padding: 16px;
-  }
-
-  .info-block {
-    padding: 16px;
-  }
-
-  .section-title {
-    font-size: 22px;
-  }
-
-}
-
-@media (max-width: 768px) {
-
-  .nav {
-    flex-direction: column;
-    align-items: center;
-    padding: 15px 10px;
-  }
-
-  .logo img {
-    height: 38px;
-    margin-bottom: 10px;
-  }
-
-  .nav-links {
-    display: flex;
-    flex-wrap: wrap;           /* 🔥 allows wrapping */
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .nav-links a {
-    margin: 0;
-    font-size: 13px;
-    padding: 6px 10px;
-  }
-
-}
-
-@media (max-width: 768px) {
-
-  .table thead {
-    display: none;
-  }
-
-  .table, 
-  .table tbody, 
-  .table tr, 
-  .table td {
-    display: block;
-    width: 100%;
-  }
-
-  .table tr {
-    margin-bottom: 15px;
-    padding: 12px;
-    background: #11161c;
-    border: 1px solid #30363d;
-    border-radius: 10px;
-  }
-
-  .table td {
-    padding: 6px 0;
-    font-size: 13px;
-    border: none;
-  }
-
-  .table td::before {
-    content: attr(data-label);
-    font-weight: bold;
-    display: block;
-    color: #8b949e;
-    font-size: 11px;
-    margin-bottom: 2px;
-  }
-
-}
-</style>
+  <meta charset="UTF-8">
+  <title>EDGEBREAK</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(to right, #020617, #0f172a);
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: bold;
+    }
+
+    .hero p {
+      margin-top: 10px;
+      color: #94a3b8;
+      font-size: 18px;
+    }
+
+    .hero button {
+      margin-top: 20px;
+      padding: 12px 28px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #22c55e;
+      color: white;
+      cursor: pointer;
+    }
+
+    .hero button:hover {
+      background: #16a34a;
+    }
+
+    /* SECTION */
+    .section {
+      margin-top: 40px;
+    }
+
+    .section h2 {
+      margin-bottom: 20px;
+    }
+
+    /* GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .big {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .green { color: #22c55e; }
+    .red { color: #ef4444; }
+
+    /* GROUP STATS */
+    .groups {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    /* BEST TRADES */
+    .trade {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1e293b;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    /* WATCHLIST */
+    .watch {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-bottom: 1px solid #334155;
+    }
+
+  </style>
 </head>
 
 <body>
 
-<!-- NAV -->
-<div class="nav">
-  <div class="logo">
-    <img src="images/logo.png">
-  </div>
-
-  <div class="nav-links">
-    <a href="index.html" class="active">Home</a>
-    <a href="watchlist.html">Watchlist</a>
-    <a href="results.html">Results</a>
-    <a href="how-it-works.html">How It Works</a>
-    <a href="pricing.html">Pricing</a>
-    <a href="faq.html">FAQ</a>
-  </div>
-</div>
-
 <!-- HERO -->
 <div class="hero">
-  <img src="images/logo.png" class="hero-logo">
-
-  <h1>High-Quality Breakouts. Without the Noise.</h1>
-
-  <p class="hero-sub">
-    EdgeBreak is a <strong>breakout tracking platform</strong><br>
-    showing real setups and real performance — across small, mid, and large cap stocks.
-  </p>
-
-  <p>
-    EdgeBreak scans thousands of stocks daily to identify structured breakout setups, 
-    ranking them by quality and grouping them by behaviour — so you can focus on what is actually moving.
-  </p>
-
-  <a href="watchlist.html" class="cta-btn">View Today’s Breakouts</a>
-
-  <br><br>
-
-  <p style="margin-top:20px; font-size:14px; color:#22c55e;">
-    No predictions. No signals. Just real breakout data.
-  </p>
-
-  <p style="margin-top:10px; font-size:13px; color:#8b949e;">
-    Track performance by market type — small caps, mid caps, and large caps — and see how each behaves in real time.
-  </p>
-
-  <p style="margin-top:10px; font-size:13px; color:#6e7681;">
-    Designed for traders who value structure, clarity, and data-driven decisions.
-  </p>
+  <h1>EDGEBREAK</h1>
+  <p>Breakout Trading System Built on Real Data</p>
+  <p>Live trades • Backtested edge • Updated daily</p>
+  <button>Get Access</button>
 </div>
 
-<div class="section" id="bestTradesSection">
-  <h2>Top Breakout Trades (Last 12 Months)</h2>
+<div class="container">
 
-  <div id="bestTradesContainer"></div>
-</div>
+  <!-- STATS -->
+  <div class="section">
+    <h2>📊 2026 Performance</h2>
 
-<!-- WHY -->
+    <div id="statsGrid" class="grid"></div>
 
-<div class="section">
-  <h2>Why EdgeBreak Works</h2>
-  <div class="box">
-
-    <p>
-      Most traders spend significant time scanning charts, chasing breakouts, and relying on subjective judgement.
-    </p>
-
-    <p>
-      EdgeBreak removes this inefficiency by systemising the entire process.
-    </p>
-
-    <p>
-      identifying structured breakout setups and grouping them by behaviour — so you can focus on what is actually moving.
-    </p>
-
-    <p style="margin-top:12px;">
-      Instead of relying on opinions or indicators, EdgeBreak tracks how breakouts actually perform — providing a clear, data-driven view of real outcomes.
-    </p>
-
-    <p>
-      Setups are grouped by behaviour — small caps, mid caps, and large caps — allowing you to see how different types of breakouts move, and where the biggest opportunities are emerging.
-    </p>
-
-    <p>
-      This creates consistency and clarity — replacing guesswork with structured data you can observe and act on.
-    </p>
-
-    <p style="margin-top:15px; font-weight:bold; color:#22c55e;">
-      No predictions. No interpretation. Just real breakout data and real performance.
-    </p>
-
-  </div>
-</div>
-
-
-<!-- HOW -->
-<div class="section-divider">
-  <img src="images/how.png">
-</div>
-
-<div class="section">
-
-  <h2 class="section-title">How EdgeBreak Works</h2>
-
-  <!-- 🔢 STEPS -->
-  <div class="steps-grid">
-
-    <div class="step-card">
-      <span class="step-number">01</span>
-      <p>Scan a broad universe of stocks daily</p>
-    </div>
-
-    <div class="step-card">
-      <span class="step-number">02</span>
-      <p>Identify structured breakout setups using defined rules</p>
-    </div>
-
-    <div class="step-card">
-      <span class="step-number">03</span>
-      <p>Select the highest-quality breakout opportunities</p>
-    </div>
-
-    <div class="step-card">
-      <span class="step-number">04</span>
-      <p>Group setups by behaviour — small, mid, and large cap stocks</p>
-    </div>
-
-    <div class="step-card">
-      <span class="step-number">05</span>
-      <p>Present clean breakout setups and track their real performance</p>
-    </div>
-
+    <div id="groupStats" class="groups"></div>
   </div>
 
-  <!-- 🎯 PHILOSOPHY -->
-<div class="info-block">
-  <p>EdgeBreak is not designed to increase trading activity.</p>
-
-  <p>
-    It is designed to simplify decision-making by presenting clean, high-quality breakout setups — without noise or unnecessary complexity.
-  </p>
-
-  <p class="strong-line">
-  The objective is not to trade more frequently — but to focus on better opportunities with clarity and intent.
-</p>
-</div>
-
-<!-- ========================= -->
-<!-- 📊 STATS SECTION -->
-<!-- ========================= -->
-<section id="statsSection">
-  <h2>📊 System Performance</h2>
-
-  <div id="overallStats"></div>
-  <div id="yearStats"></div>
-  <div id="groupStats"></div>
-</section>
-
-<!-- ========================= -->
-<!-- TECH -->
-<!-- ========================= -->
-<div class="section-divider">
-  <img src="images/engine.png">
-</div>
-
-<div class="section">
-  <h2>Built for Consistency. Driven by Data.</h2>
-
-  <div class="box">
-    <p>
-      EdgeBreak is built on a structured breakout system designed to scan thousands of stocks and consistently identify high-quality setups.
-    </p>
-
-    <p>
-      Every setup is selected using defined rules and price structure — not guesswork or subjective analysis.
-    </p>
-
-    <p style="margin-top:12px;">
-      The platform focuses on clarity and consistency, giving you a clean view of breakout opportunities and how they actually perform over time.
-    </p>
-  </div>
-</div>
-
-<!-- NOT SIGNALS -->
-<div class="section-divider">
-  <img src="images/structure.png">
-</div>
-
-<div class="section">
-  <h2>Not Signals. Not Advice.</h2>
-
-  <div class="box">
-    <p>EdgeBreak does not provide trade signals or execute trades.</p>
-
-    <p>
-      It presents structured breakout setups — allowing you to see what is happening in the market without noise or interpretation.
-    </p>
-
-    <p style="margin-top:10px;">
-      You stay in control of every decision, using your own strategy and preferred trading platform.
-    </p>
-  </div>
-</div>
-
-<!-- NEW FOOTER -->
-<footer class="footer">
-
-  <div class="footer-container">
-
-    <!-- BRAND -->
-    <div class="footer-col">
-      <h2 class="footer-logo">EdgeBreak</h2>
-
-      <p class="footer-tagline">
-        High-quality breakouts. Without the noise.
-      </p>
-
-      <p class="footer-type">
-        Breakout Tracking Platform
-      </p>
-
-      <p style="margin-top:12px; font-size:12px; color:#6e7681;">
-        Built on structured breakout logic and real performance data — not predictions.
-      </p>
-    </div>
-
-    <!-- PLATFORM -->
-    <div class="footer-col">
-      <h3>Platform</h3>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="watchlist.html">Watchlist</a></li>
-        <li><a href="results.html">Results</a></li>
-        <li><a href="how-it-works.html">How It Works</a></li>
-        <li><a href="pricing.html">Pricing</a></li>
-        <li><a href="faq.html">FAQ</a></li>
-      </ul>
-    </div>
-
-    <!-- IMPORTANT -->
-    <div class="footer-col">
-      <h3>Important</h3>
-
-      <p class="footer-note">
-        EdgeBreak provides structured breakout data and performance tracking.
-        We do not provide financial advice or execute trades.
-      </p>
-
-      <p class="footer-note">
-        Always conduct your own research before making trading decisions.
-      </p>
-
-      <p style="margin-top:15px; font-size:12px; color:#22c55e;">
-        No signals. No hype. Just clean breakout data.
-      </p>
-    </div>
-
+  <!-- BEST TRADES -->
+  <div class="section">
+    <h2>🏆 Best Trades (2026)</h2>
+    <div id="bestTrades"></div>
   </div>
 
-  <!-- TRUST LINE -->
-  <div style="text-align:center; margin-top:30px; font-size:13px; color:#8b949e;">
-    Designed for traders who value clarity, structure, and consistency.
+  <!-- WATCHLIST -->
+  <div class="section">
+    <h2>📡 Live Watchlist</h2>
+    <div id="watchlist"></div>
   </div>
 
-  <!-- BOTTOM -->
-  <div class="footer-bottom">
-    <p>© 2026 EdgeBreak. All rights reserved.</p>
-  </div>
-
-</footer>
-
+</div>
 
 <script>
-
 fetch("stats.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
 
-    // OVERALL
-    const overall = data.overall;
-    document.getElementById("overallStats").innerHTML = `
-      <h3>🔥 Overall</h3>
-      Trades: ${overall.trades} <br>
-      Win Rate: ${overall.win_rate}% <br>
-      Avg Return: ${overall.avg_return}% <br>
-      Best: ${overall.best}% <br>
-      Worst: ${overall.worst}%
+    const year = "2026";
+    const stats = data.years[year];
+
+    // =========================
+    // MAIN STATS
+    // =========================
+    const statsGrid = document.getElementById("statsGrid");
+
+    statsGrid.innerHTML = `
+      <div class="card"><div>Total Trades</div><div class="big">${stats.total_trades}</div></div>
+      <div class="card"><div>Win Rate</div><div class="big">${stats.win_rate}%</div></div>
+      <div class="card"><div>Avg Return</div><div class="big">${stats.avg_return}%</div></div>
+      <div class="card"><div>Best Trade</div><div class="big green">${stats.best_trade}%</div></div>
+      <div class="card"><div>Worst Trade</div><div class="big red">${stats.worst_trade}%</div></div>
     `;
 
-    // YEAR
-    let yearHTML = "<h3>📅 By Year</h3>";
-    for (const year in data.by_year) {
-      const y = data.by_year[year];
-      yearHTML += `
-        <div>
-          <strong>${year}</strong><br>
-          Trades: ${y.trades} |
-          Win Rate: ${y.win_rate}% |
-          Avg: ${y.avg_return}% |
-          Best: ${y.best}%
-        </div><br>
+    // =========================
+    // GROUP STATS
+    // =========================
+    const groupDiv = document.getElementById("groupStats");
+
+    groupDiv.innerHTML = Object.entries(stats.groups).map(([group, g]) => `
+      <div class="card">
+        <h3>${group}</h3>
+        <div>Trades: ${g.trades}</div>
+        <div>Win Rate: ${g.win_rate}%</div>
+        <div>Avg: ${g.avg_return}%</div>
+        <div class="green">Best: ${g.best}%</div>
+        <div class="red">Worst: ${g.worst}%</div>
+      </div>
+    `).join("");
+
+    // =========================
+    // BEST TRADES (TOP 5)
+    // =========================
+    const bestDiv = document.getElementById("bestTrades");
+
+    const topTrades = stats.best_trades.slice(0, 5);
+
+    bestDiv.innerHTML = topTrades.map(t => `
+      <div class="trade">
+        <div><strong>${t.symbol}</strong></div>
+        <div class="green">+${t.return}%</div>
+      </div>
+    `).join("");
+
+  });
+
+
+// =========================
+// WATCHLIST
+// =========================
+fetch("watchlist.json?v=" + new Date().getTime())
+  .then(res => res.json())
+  .then(data => {
+
+    const watchDiv = document.getElementById("watchlist");
+
+    watchDiv.innerHTML = data.map(t => {
+
+      const color = t.current_return >= 0 ? "green" : "red";
+
+      return `
+        <div class="watch">
+          <div>${t.symbol}</div>
+          <div>$${t.entry}</div>
+          <div class="${color}">${t.current_return}%</div>
+        </div>
       `;
-    }
-    document.getElementById("yearStats").innerHTML = yearHTML;
 
-    // GROUP
-    let groupHTML = "<h3>🟢🟡🔵 By Market Type</h3>";
-    for (const group in data.by_group) {
-      const g = data.by_group[group];
-      groupHTML += `
-        <div>
-          <strong>${group}</strong><br>
-          Trades: ${g.trades} |
-          Win Rate: ${g.win_rate}% |
-          Avg: ${g.avg_return}% |
-          Best: ${g.best}%
-        </div><br>
-      `;
-    }
-    document.getElementById("groupStats").innerHTML = groupHTML;
+    }).join("");
 
-  })
-  .catch(err => console.error("STATS ERROR:", err));
-
+  });
 </script>
+
+</body>
+</html>
