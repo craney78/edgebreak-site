@@ -154,13 +154,71 @@ body {
   border-top: 1px solid #1e293b;
   color: #64748b;
 }
+
+/* NAV BAR */
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(2,6,23,0.9);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid #1e293b;
+  z-index: 1000;
+}
+
+.nav-inner {
+  max-width: 1100px;
+  margin: auto;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-text {
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #94a3b8;
+  margin-left: 20px;
+  font-size: 14px;
+}
+
+.nav a:hover {
+  color: #22c55e;
+}
 </style>
 </head>
 
 <body>
 
+<!-- NAV BAR -->
+<div class="nav">
+  <div class="nav-inner">
+
+    <div class="nav-left">
+      <a href="index.html" class="logo-text">EDGEBREAK</a>
+    </div>
+
+    <div class="nav-right">
+      <a href="trading-guide.html">Trading Guide</a>
+    </div>
+
+  </div>
+</div>
+
 <!-- HERO -->
 <div class="hero">
+
+  <!-- TOP LINK -->
+  <div class="hero-top">
+    <a href="trading-guide.html">Trading Guide</a>
+  </div>
+
   <div class="hero-overlay"></div>
   <img src="images/logo.png" class="logo">
 
@@ -170,6 +228,7 @@ body {
     <p>Live trades • Backtested edge • Updated daily</p>
     <button>Get Access</button>
   </div>
+
 </div>
 
 <div class="container">
