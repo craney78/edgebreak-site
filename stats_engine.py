@@ -57,7 +57,7 @@ def build_stats(trades):
     }
 
     if not trades:
-        return stats
+        return {}
 
     # =========================
     # OVERALL
@@ -120,7 +120,41 @@ def build_stats(trades):
             "worst": round(min(t["percent_move"] for t in items), 2)
         }
 
-    return stats
+    # =========================
+    # NEW FORMAT FOR WEBSITE
+    # =========================
+    new_format = {}
+
+    if "2025" in stats["by_year"]:
+
+        year_data = stats["by_year"]["2025"]
+
+        # BEST TRADES (top 5)
+        sorted_trades = sorted(trades, key=lambda x: x["percent_move"], reverse=True)
+
+        best_trades = [
+            {
+                "symbol": t["symbol"],
+                "return": round(t["percent_move"], 2)
+            }
+            for t in sorted_trades[:5]
+        ]
+
+        new_format = {
+            "years": {
+                "2025": {
+                    "total_trades": year_data["trades"],
+                    "win_rate": year_data["win_rate"],
+                    "avg_return": year_data["avg_return"],
+                    "best_trade": year_data["best"],
+                    "worst_trade": year_data["worst"],
+                    "best_trades": best_trades,
+                    "groups": stats["by_group"]
+                }
+            }
+        }
+
+    return new_format
 
 
 # =========================
