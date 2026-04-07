@@ -469,18 +469,17 @@ if (!stats) {
   console.log("❌ No 2025 data found in stats.json");
 }
 
-  // ✅ OLD FORMAT
-  else if (data.by_year && data.by_year["2025"]) {
-    stats = {
-      total_trades: data.by_year["2025"].trades,
-      win_rate: data.by_year["2025"].win_rate,
-      avg_return: data.by_year["2025"].avg_return,
-      best_trade: data.by_year["2025"].best,
-      worst_trade: data.by_year["2025"].worst,
-      best_trades: [], // fallback
-      groups: data.by_group || {}
-    };
-  }
+else if (data.by_year && data.by_year["2025"]) {
+  stats = {
+    total_trades: data.by_year["2025"].trades,
+    win_rate: data.by_year["2025"].win_rate,
+    avg_return: data.by_year["2025"].avg_return,
+    best_trade: data.by_year["2025"].best,
+    worst_trade: data.by_year["2025"].worst,
+    best_trades: [],
+    groups: data.by_group || {}
+  };
+}
 
   // ❌ NO DATA
   if (!stats) {
