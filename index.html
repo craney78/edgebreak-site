@@ -88,13 +88,13 @@ body {
 /* GRID */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
 }
 
 .card {
   background: #0f172a;
-  padding: 16px;
+  padding: 20px;
   border-radius: 12px;
   border: 1px solid #1e293b;
 }
@@ -134,6 +134,11 @@ body {
   border-bottom: 1px solid #1e293b;
 }
 
+/* CTA */
+.cta {
+  text-align: center;
+}
+
 /* FOOTER */
 .footer {
   margin-top: 80px;
@@ -150,12 +155,11 @@ body {
 <!-- HERO -->
 <div class="hero">
   <div class="hero-overlay"></div>
-
   <img src="images/logo.png" class="logo">
 
   <div class="hero-content">
     <h1>EDGEBREAK</h1>
-    <p>Breakout Trading System Built on Real Data</p>
+    <p>Find High-Probability Breakout Trades Using Real Data</p>
     <p>Live trades • Backtested edge • Updated daily</p>
     <button>Get Access</button>
   </div>
@@ -163,10 +167,57 @@ body {
 
 <div class="container">
 
+  <!-- WHAT IS -->
+  <div class="section">
+    <h2>What is EdgeBreak?</h2>
+    <div class="card">
+      <p>EdgeBreak is a data-driven breakout trading system designed to identify high-probability opportunities in the market.</p>
+      <p>It scans stocks daily for strong technical setups — including volume expansion, price structure, and resistance breakouts.</p>
+      <p>Every trade is tracked, recorded, and analysed to give full transparency into real performance.</p>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="section">
+    <h2>How It Works</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>1. Scan</h3>
+        <p>We scan the market daily for breakout setups using volume, structure, and resistance levels.</p>
+      </div>
+      <div class="card">
+        <h3>2. Track</h3>
+        <p>Trades are tracked live with defined rules for entries and exits.</p>
+      </div>
+      <div class="card">
+        <h3>3. Analyse</h3>
+        <p>All trades are recorded and analysed to validate performance.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY IT WORKS -->
+  <div class="section">
+    <h2>Why It Works</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>📊 Data Driven</h3>
+        <p>Every trade is backed by real data — not opinions.</p>
+      </div>
+      <div class="card">
+        <h3>📈 Proven Setups</h3>
+        <p>Focus on breakout patterns that historically perform.</p>
+      </div>
+      <div class="card">
+        <h3>⚡ Real Results</h3>
+        <p>Live trades and historical results are fully transparent.</p>
+      </div>
+    </div>
+  </div>
+
   <!-- STATS -->
   <div class="section">
     <h2>📊 2026 Performance</h2>
-
     <div id="statsGrid" class="grid"></div>
     <div id="groupStats" class="groups"></div>
   </div>
@@ -183,6 +234,13 @@ body {
     <div id="watchlist"></div>
   </div>
 
+  <!-- CTA -->
+  <div class="section cta">
+    <h2>Unlock EdgeBreak</h2>
+    <p style="color:#94a3b8;">Access the live system, watchlist, and performance data.</p>
+    <button>Unlock the System</button>
+  </div>
+
 </div>
 
 <!-- FOOTER -->
@@ -192,73 +250,57 @@ body {
 </div>
 
 <script>
-// =========================
 // LOAD STATS
-// =========================
 fetch("stats.json?v=" + new Date().getTime())
-  .then(res => res.json())
-  .then(data => {
+.then(res => res.json())
+.then(data => {
+  const stats = data.years["2026"];
 
-    const year = "2026";
-    const stats = data.years[year];
+  document.getElementById("statsGrid").innerHTML = `
+    <div class="card"><div>Total Trades</div><div class="big">${stats.total_trades}</div></div>
+    <div class="card"><div>Win Rate</div><div class="big">${stats.win_rate}%</div></div>
+    <div class="card"><div>Avg Return</div><div class="big">${stats.avg_return}%</div></div>
+    <div class="card"><div>Best Trade</div><div class="big green">${stats.best_trade}%</div></div>
+    <div class="card"><div>Worst Trade</div><div class="big red">${stats.worst_trade}%</div></div>
+  `;
 
-    // MAIN STATS
-    document.getElementById("statsGrid").innerHTML = `
-      <div class="card"><div>Total Trades</div><div class="big">${stats.total_trades}</div></div>
-      <div class="card"><div>Win Rate</div><div class="big">${stats.win_rate}%</div></div>
-      <div class="card"><div>Avg Return</div><div class="big">${stats.avg_return}%</div></div>
-      <div class="card"><div>Best Trade</div><div class="big green">${stats.best_trade}%</div></div>
-      <div class="card"><div>Worst Trade</div><div class="big red">${stats.worst_trade}%</div></div>
-    `;
+  document.getElementById("groupStats").innerHTML =
+    Object.entries(stats.groups).map(([g, v]) => `
+      <div class="card">
+        <h3>${g}</h3>
+        <div>Trades: ${v.trades}</div>
+        <div>Win Rate: ${v.win_rate}%</div>
+        <div>Avg: ${v.avg_return}%</div>
+        <div class="green">Best: ${v.best}%</div>
+        <div class="red">Worst: ${v.worst}%</div>
+      </div>
+    `).join("");
 
-    // GROUP STATS
-    document.getElementById("groupStats").innerHTML =
-      Object.entries(stats.groups).map(([group, g]) => `
-        <div class="card">
-          <h3>${group}</h3>
-          <div>Trades: ${g.trades}</div>
-          <div>Win Rate: ${g.win_rate}%</div>
-          <div>Avg: ${g.avg_return}%</div>
-          <div class="green">Best: ${g.best}%</div>
-          <div class="red">Worst: ${g.worst}%</div>
-        </div>
-      `).join("");
+  const top = stats.best_trades.slice(0,5);
+  document.getElementById("bestTrades").innerHTML =
+    top.map(t => `
+      <div class="trade">
+        <div><strong>${t.symbol}</strong></div>
+        <div class="green">+${t.return}%</div>
+      </div>
+    `).join("");
+});
 
-    // BEST TRADES (TOP 5)
-    const topTrades = stats.best_trades.slice(0, 5);
-
-    document.getElementById("bestTrades").innerHTML =
-      topTrades.map(t => `
-        <div class="trade">
-          <div><strong>${t.symbol}</strong></div>
-          <div class="green">+${t.return}%</div>
-        </div>
-      `).join("");
-
-  });
-
-
-// =========================
 // WATCHLIST
-// =========================
 fetch("watchlist.json?v=" + new Date().getTime())
-  .then(res => res.json())
-  .then(data => {
-
-    document.getElementById("watchlist").innerHTML =
-      data.map(t => {
-        const color = t.current_return >= 0 ? "green" : "red";
-
-        return `
-          <div class="watch">
-            <div>${t.symbol}</div>
-            <div>$${t.entry}</div>
-            <div class="${color}">${t.current_return}%</div>
-          </div>
-        `;
-      }).join("");
-
-  });
+.then(res => res.json())
+.then(data => {
+  document.getElementById("watchlist").innerHTML =
+    data.map(t => `
+      <div class="watch">
+        <div>${t.symbol}</div>
+        <div>$${t.entry}</div>
+        <div class="${t.current_return >= 0 ? 'green' : 'red'}">
+          ${t.current_return}%
+        </div>
+      </div>
+    `).join("");
+});
 </script>
 
 </body>
