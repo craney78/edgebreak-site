@@ -772,65 +772,52 @@ a {
 
 <script>
 
-// 🔥 BEST TRADES DISPLAY
-fetch("best_trades.json?v=" + new Date().getTime())
+fetch("stats.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
 
-    const container = document.getElementById("bestTradesContainer");
-    if (!container) return;
+    // OVERALL
+    const overall = data.overall;
+    document.getElementById("overallStats").innerHTML = `
+      <h3>🔥 Overall</h3>
+      Trades: ${overall.trades} <br>
+      Win Rate: ${overall.win_rate}% <br>
+      Avg Return: ${overall.avg_return}% <br>
+      Best: ${overall.best}% <br>
+      Worst: ${overall.worst}%
+    `;
 
-    container.innerHTML = data.map(trade => {
-
-      let icon = "🟡";
-      if (trade.group === "SMALL") icon = "🟢";
-      if (trade.group === "LARGE") icon = "🔵";
-
-      return `
-        <div class="box">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <strong style="font-size:18px;">
-              ${trade.symbol} ${icon}
-            </strong>
-            <span style="color:#22c55e; font-weight:bold;">
-              +${trade.return}%
-            </span>
-          </div>
-
-          <div style="margin-top:8px; font-size:13px; color:#9ca3af;">
-            ${trade.days} days
-          </div>
-        </div>
+    // YEAR
+    let yearHTML = "<h3>📅 By Year</h3>";
+    for (const year in data.by_year) {
+      const y = data.by_year[year];
+      yearHTML += `
+        <div>
+          <strong>${year}</strong><br>
+          Trades: ${y.trades} |
+          Win Rate: ${y.win_rate}% |
+          Avg: ${y.avg_return}% |
+          Best: ${y.best}%
+        </div><br>
       `;
+    }
+    document.getElementById("yearStats").innerHTML = yearHTML;
 
-    }).join("");
-
-  })
-  .catch(err => console.error("BEST TRADES ERROR:", err));
-
-
-// 🔥 CURRENT YEAR STATS (ADD THIS BELOW 👇)
-fetch("current_year_stats.json?v=" + new Date().getTime())
-  .then(res => res.json())
-  .then(data => {
-
-    const boxes = document.querySelectorAll(".section .box");
-    const groups = ["SMALL", "MID", "LARGE"];
-
-    groups.forEach((group, i) => {
-
-      const box = boxes[i + 1]; // ⚠️ important offset
-
-      if (!data[group] || !box) return;
-
-      box.innerHTML = `
-        <h3>${group === "SMALL" ? "🟢 Small Caps" : group === "MID" ? "🟡 Mid Caps" : "🔵 Large Caps"}</h3>
-        <p>Trades: ${data[group].trades}</p>
-        <p>Avg Return: ${data[group].avg_return}%</p>
-        <p>Best: ${data[group].best}%</p>
-        <p>Worst: ${data[group].worst}%</p>
+    // GROUP
+    let groupHTML = "<h3>🟢🟡🔵 By Market Type</h3>";
+    for (const group in data.by_group) {
+      const g = data.by_group[group];
+      groupHTML += `
+        <div>
+          <strong>${group}</strong><br>
+          Trades: ${g.trades} |
+          Win Rate: ${g.win_rate}% |
+          Avg: ${g.avg_return}% |
+          Best: ${g.best}%
+        </div><br>
       `;
-    });
+    }
+    document.getElementById("groupStats").innerHTML = groupHTML;
 
   })
   .catch(err => console.error("STATS ERROR:", err));
