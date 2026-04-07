@@ -21,13 +21,22 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: url('hero.jpg') center/cover no-repeat;
+  background: url('images/hero-bg.png') center/cover no-repeat;
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(2,6,23,0.75);
+  background: rgba(2,6,23,0.7);
+}
+
+.logo {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160px;
+  z-index: 3;
 }
 
 .hero-content {
@@ -36,13 +45,13 @@ body {
 }
 
 .hero h1 {
-  font-size: 60px;
-  letter-spacing: 2px;
+  font-size: 56px;
+  margin-bottom: 10px;
 }
 
 .hero p {
-  margin-top: 10px;
   color: #94a3b8;
+  margin: 5px 0;
 }
 
 .hero button {
@@ -141,6 +150,8 @@ body {
 <!-- HERO -->
 <div class="hero">
   <div class="hero-overlay"></div>
+
+  <img src="images/logo.png" class="logo">
 
   <div class="hero-content">
     <h1>EDGEBREAK</h1>
