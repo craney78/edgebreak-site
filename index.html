@@ -36,7 +36,6 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: 160px;
-  z-index: 3;
 }
 
 .hero-content {
@@ -44,15 +43,9 @@ body {
   z-index: 2;
 }
 
-.hero h1 {
-  font-size: 56px;
-  margin-bottom: 10px;
-}
+.hero h1 { font-size: 56px; margin-bottom: 10px; }
 
-.hero p {
-  color: #94a3b8;
-  margin: 5px 0;
-}
+.hero p { color: #94a3b8; margin: 5px 0; }
 
 .hero button {
   margin-top: 20px;
@@ -61,12 +54,7 @@ body {
   border: none;
   border-radius: 10px;
   color: white;
-  font-size: 16px;
   cursor: pointer;
-}
-
-.hero button:hover {
-  background: #16a34a;
 }
 
 /* CONTAINER */
@@ -115,6 +103,32 @@ body {
   margin-top: 20px;
 }
 
+/* ACTIVITY */
+.activity {
+  padding: 14px;
+  margin-bottom: 10px;
+  background: #0f172a;
+  border-radius: 10px;
+  border: 1px solid #1e293b;
+  display: flex;
+  justify-content: space-between;
+}
+
+.activity.open { border-left: 4px solid #22c55e; }
+.activity.closed { border-left: 4px solid #ef4444; }
+
+/* WATCHLIST */
+.watch {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.blur {
+  filter: blur(6px);
+}
+
 /* BEST TRADES */
 .trade {
   display: flex;
@@ -126,17 +140,10 @@ body {
   border: 1px solid #1e293b;
 }
 
-/* WATCHLIST */
-.watch {
-  display: flex;
-  justify-content: space-between;
-  padding: 14px;
-  border-bottom: 1px solid #1e293b;
-}
-
 /* CTA */
 .cta {
   text-align: center;
+  margin-top: 60px;
 }
 
 /* FOOTER */
@@ -167,79 +174,86 @@ body {
 
 <div class="container">
 
-  <!-- WHAT IS -->
-  <div class="section">
-    <h2>What is EdgeBreak?</h2>
+<!-- WHAT -->
+<div class="section">
+  <h2>What is EdgeBreak?</h2>
+  <div class="card">
+    <p>EdgeBreak is a data-driven breakout trading system designed to identify high-probability opportunities in the market.</p>
+    <p>It scans stocks daily for strong technical setups — including volume expansion, price structure, and resistance breakouts.</p>
+    <p>Every trade is tracked, recorded, and analysed to give full transparency into real performance.</p>
+  </div>
+</div>
+
+<!-- HOW -->
+<div class="section">
+  <h2>How It Works</h2>
+  <div class="grid">
     <div class="card">
-      <p>EdgeBreak is a data-driven breakout trading system designed to identify high-probability opportunities in the market.</p>
-      <p>It scans stocks daily for strong technical setups — including volume expansion, price structure, and resistance breakouts.</p>
-      <p>Every trade is tracked, recorded, and analysed to give full transparency into real performance.</p>
+      <h3>1. Scan</h3>
+      <p>Identify breakout setups using volume and structure.</p>
+    </div>
+    <div class="card">
+      <h3>2. Track</h3>
+      <p>Trades are managed with defined entry and exit rules.</p>
+    </div>
+    <div class="card">
+      <h3>3. Analyse</h3>
+      <p>All trades are logged to validate system performance.</p>
     </div>
   </div>
+</div>
 
-  <!-- HOW IT WORKS -->
-  <div class="section">
-    <h2>How It Works</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>1. Scan</h3>
-        <p>We scan the market daily for breakout setups using volume, structure, and resistance levels.</p>
-      </div>
-      <div class="card">
-        <h3>2. Track</h3>
-        <p>Trades are tracked live with defined rules for entries and exits.</p>
-      </div>
-      <div class="card">
-        <h3>3. Analyse</h3>
-        <p>All trades are recorded and analysed to validate performance.</p>
-      </div>
+<!-- WHY -->
+<div class="section">
+  <h2>Why It Works</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>📊 Data Driven</h3>
+      <p>Every trade is backed by real performance data.</p>
+    </div>
+    <div class="card">
+      <h3>📈 Proven Setups</h3>
+      <p>Focus on breakout patterns that historically perform.</p>
+    </div>
+    <div class="card">
+      <h3>⚡ Live Results</h3>
+      <p>Trades are tracked and updated daily.</p>
     </div>
   </div>
+</div>
 
-  <!-- WHY IT WORKS -->
-  <div class="section">
-    <h2>Why It Works</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>📊 Data Driven</h3>
-        <p>Every trade is backed by real data — not opinions.</p>
-      </div>
-      <div class="card">
-        <h3>📈 Proven Setups</h3>
-        <p>Focus on breakout patterns that historically perform.</p>
-      </div>
-      <div class="card">
-        <h3>⚡ Real Results</h3>
-        <p>Live trades and historical results are fully transparent.</p>
-      </div>
-    </div>
-  </div>
+<!-- ACTIVITY -->
+<div class="section">
+  <h2>📢 Live Activity</h2>
+  <div id="activityFeed"></div>
+</div>
 
-  <!-- STATS -->
-  <div class="section">
-    <h2>📊 2026 Performance</h2>
-    <div id="statsGrid" class="grid"></div>
-    <div id="groupStats" class="groups"></div>
-  </div>
+<!-- WATCHLIST -->
+<div class="section">
+  <h2>📡 Live Watchlist</h2>
+  <div id="watchlist"></div>
+  <p style="color:#94a3b8;">Unlock full access inside the system</p>
+</div>
 
-  <!-- BEST TRADES -->
-  <div class="section">
-    <h2>🏆 Best Trades (2026)</h2>
-    <div id="bestTrades"></div>
-  </div>
+<!-- BEST TRADES -->
+<div class="section">
+  <h2>🏆 Best Trades (2025)</h2>
+  <div id="bestTrades"></div>
+</div>
 
-  <!-- WATCHLIST -->
-  <div class="section">
-    <h2>📡 Live Watchlist</h2>
-    <div id="watchlist"></div>
-  </div>
+<!-- STATS -->
+<div class="section">
+  <h2>📊 2025 Performance</h2>
+  <div id="statsGrid" class="grid"></div>
+  <div id="groupStats" class="groups"></div>
+</div>
 
-  <!-- CTA -->
-  <div class="section cta">
-    <h2>Unlock EdgeBreak</h2>
-    <p style="color:#94a3b8;">Access the live system, watchlist, and performance data.</p>
-    <button>Unlock the System</button>
-  </div>
+<!-- CTA -->
+<div class="cta">
+  <h2>Unlock EdgeBreak</h2>
+  <p style="color:#94a3b8;">Access the full system, live trades, and data.</p>
+  <button>Unlock the System</button>
+</div>
 
 </div>
 
@@ -250,22 +264,64 @@ body {
 </div>
 
 <script>
-// LOAD STATS
-fetch("stats.json?v=" + new Date().getTime())
+// ACTIVITY
+fetch("activity.json")
 .then(res => res.json())
 .then(data => {
-  const stats = data.years["2026"];
+  document.getElementById("activityFeed").innerHTML =
+    data.slice(0,5).map(a => {
+      if (a.type === "OPEN") {
+        return `<div class="activity open">
+          <div>🟢 OPEN: ${a.symbol} @ $${a.price}</div>
+          <small>${a.date}</small>
+        </div>`;
+      }
+      if (a.type === "CLOSED") {
+        return `<div class="activity closed">
+          <div>🔴 CLOSED: ${a.symbol} (${a.return}%)</div>
+          <small>${a.date}</small>
+        </div>`;
+      }
+    }).join("");
+})
+.catch(() => {
+  document.getElementById("activityFeed").innerHTML = "<div class='card'>No activity yet</div>";
+});
+
+// WATCHLIST
+fetch("watchlist.json")
+.then(res => res.json())
+.then(data => {
+  document.getElementById("watchlist").innerHTML =
+    data.map(t => `
+      <div class="watch">
+        <div class="blur">${t.symbol}</div>
+        <div>$${t.entry}</div>
+        <div class="${t.current_return >= 0 ? 'green' : 'red'}">${t.current_return}%</div>
+      </div>
+    `).join("");
+})
+.catch(() => {
+  document.getElementById("watchlist").innerHTML = "<div class='card'>Watchlist unavailable</div>";
+});
+
+// STATS
+fetch("stats.json")
+.then(res => res.json())
+.then(data => {
+
+  const stats = data.years ? data.years["2025"] : data["2025"];
 
   document.getElementById("statsGrid").innerHTML = `
     <div class="card"><div>Total Trades</div><div class="big">${stats.total_trades}</div></div>
     <div class="card"><div>Win Rate</div><div class="big">${stats.win_rate}%</div></div>
     <div class="card"><div>Avg Return</div><div class="big">${stats.avg_return}%</div></div>
-    <div class="card"><div>Best Trade</div><div class="big green">${stats.best_trade}%</div></div>
-    <div class="card"><div>Worst Trade</div><div class="big red">${stats.worst_trade}%</div></div>
+    <div class="card green"><div>Best</div><div class="big">${stats.best_trade}%</div></div>
+    <div class="card red"><div>Worst</div><div class="big">${stats.worst_trade}%</div></div>
   `;
 
   document.getElementById("groupStats").innerHTML =
-    Object.entries(stats.groups).map(([g, v]) => `
+    Object.entries(stats.groups).map(([g,v]) => `
       <div class="card">
         <h3>${g}</h3>
         <div>Trades: ${v.trades}</div>
@@ -276,30 +332,17 @@ fetch("stats.json?v=" + new Date().getTime())
       </div>
     `).join("");
 
-  const top = stats.best_trades.slice(0,5);
   document.getElementById("bestTrades").innerHTML =
-    top.map(t => `
+    (stats.best_trades || []).slice(0,5).map(t => `
       <div class="trade">
-        <div><strong>${t.symbol}</strong></div>
+        <div>${t.symbol}</div>
         <div class="green">+${t.return}%</div>
       </div>
     `).join("");
-});
 
-// WATCHLIST
-fetch("watchlist.json?v=" + new Date().getTime())
-.then(res => res.json())
-.then(data => {
-  document.getElementById("watchlist").innerHTML =
-    data.map(t => `
-      <div class="watch">
-        <div>${t.symbol}</div>
-        <div>$${t.entry}</div>
-        <div class="${t.current_return >= 0 ? 'green' : 'red'}">
-          ${t.current_return}%
-        </div>
-      </div>
-    `).join("");
+})
+.catch(() => {
+  document.getElementById("statsGrid").innerHTML = "<div class='card'>Stats unavailable</div>";
 });
 </script>
 
