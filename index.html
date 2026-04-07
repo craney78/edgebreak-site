@@ -228,6 +228,11 @@ body {
   <div id="activityFeed"></div>
 </div>
 
+<div class="section">
+  <h2>📊 Live Performance</h2>
+  <div id="liveStats" class="grid"></div>
+</div>
+
 <!-- WATCHLIST -->
 <div class="section">
   <h2>📡 Live Watchlist</h2>
@@ -303,6 +308,66 @@ fetch("watchlist.json")
 })
 .catch(() => {
   document.getElementById("watchlist").innerHTML = "<div class='card'>Watchlist unavailable</div>";
+});
+
+// LIVE STATS FROM WATCHLIST
+fetch("watchlist.json?v=" + new Date().getTime())
+.then(res => res.json())
+.then(data => {
+
+  if (!data || data.length === 0) {
+    document.getElementById("liveStats").innerHTML =
+      "<div class='card'>No active trades</div>";
+    return;
+  }
+
+  const trades = data;
+
+  const total = trades.length;
+
+  const wins = trades.filter(t => t.current_return > 0);
+  const losses = trades.filter(t => t.current_return <= 0);
+
+  const winRate = ((wins.length / total) * 100).toFixed(1);
+
+  const avgReturn = (
+    trades.reduce((sum, t) => sum + t.current_return, 0) / total
+  ).toFixed(2);
+
+  const best = Math.max(...trades.map(t => t.current_return)).toFixed(2);
+  const worst = Math.min(...trades.map(t => t.current_return)).toFixed(2);
+
+  document.getElementById("liveStats").innerHTML = `
+    <div class="card">
+      <div>Active Trades</div>
+      <div class="big">${total}</div>
+    </div>
+
+    <div class="card">
+      <div>Win Rate</div>
+      <div class="big">${winRate}%</div>
+    </div>
+
+    <div class="card">
+      <div>Avg Return</div>
+      <div class="big">${avgReturn}%</div>
+    </div>
+
+    <div class="card">
+      <div>Best Current</div>
+      <div class="big green">${best}%</div>
+    </div>
+
+    <div class="card">
+      <div>Worst Current</div>
+      <div class="big red">${worst}%</div>
+    </div>
+  `;
+
+})
+.catch(() => {
+  document.getElementById("liveStats").innerHTML =
+    "<div class='card'>Live stats unavailable</div>";
 });
 
 // STATS
