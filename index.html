@@ -321,7 +321,7 @@ body {
 </div>
 
 <div class="section">
-  <h2>📊 Live Performance</h2>
+  <h2>Live Performance</h2>
   <div id="liveStats" class="grid"></div>
 </div>
 
@@ -336,6 +336,11 @@ body {
 <div class="section">
   <h2>Best Trades (2025)</h2>
   <div id="bestTrades"></div>
+</div>
+
+<div class="section">
+  <h2>Recent Trade Outcomes</h2>
+  <div id="tradeProof" class="grid"></div>
 </div>
 
 <!-- STATS -->
@@ -532,22 +537,20 @@ fetch("stats.json?v=" + new Date().getTime())
       </div>
     `).join("");
 
-  // BEST TRADES
-  if (stats.best_trades && stats.best_trades.length > 0) {
-    document.getElementById("bestTrades").innerHTML =
-      stats.best_trades.slice(0,5).map(t => `
-        <div class="trade">
-          <div>${t.symbol}</div>
-          <div class="green">+${t.return}%</div>
-        </div>
-      `).join("");
-  }
+  // BEST TRADES (SAFE + FALLBACK)
+const bestContainer = document.getElementById("bestTrades");
 
-})
-.catch(() => {
-  document.getElementById("statsGrid").innerHTML =
-    "<div class='card'>Stats unavailable</div>";
-});
+if (stats.best_trades && stats.best_trades.length > 0) {
+  bestContainer.innerHTML =
+    stats.best_trades.slice(0,5).map(t => `
+      <div class="trade">
+        <div>${t.symbol}</div>
+        <div class="green">+${t.return}%</div>
+      </div>
+    `).join("");
+} else {
+  bestContainer.innerHTML = "<div class='card'>No trade data available</div>";
+}
 
 </script>
 
