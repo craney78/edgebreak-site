@@ -93,8 +93,8 @@ def run_backtest():
             df["datetime"] = pd.to_datetime(df["datetime"])
             df = df.sort_values("datetime", ascending=True)
 
-            START_DATE = "2025-04-06"
-            END_DATE = "2026-04-06"
+            START_DATE = "2025-01-01"
+            END_DATE = "2026-12-31"
 
             df = df[(df["datetime"] >= START_DATE) & (df["datetime"] <= END_DATE)]
 
@@ -362,6 +362,17 @@ def run_backtest():
                 })
 
         time.sleep(0.1)
+
+         
+    # =========================
+    # 📊 EXPORT RESULTS (ADD HERE)
+    # =========================
+    
+    df = pd.DataFrame(results)
+
+    df.to_csv("trade_history_2025.csv", index=False)
+
+    print(f"\n✅ Saved {len(df)} trades to trade_history_2025.csv")    
 
     # =========================
     # RESULTS SUMMARY + ANALYSIS

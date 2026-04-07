@@ -5,21 +5,29 @@ import os
 import json
 
 from breakout_logic import detect_breakout_today
-from market_index import calculate_live_market_strength, save_market_status_json
 
 API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
-SYMBOL_FILE = "nasdaq_symbols.txt"
 
 BATCH_SIZE = 10
 SLEEP_TIME = 2
 SCAN_LIMIT = 9999
 
 # =========================
-# LOAD SYMBOLS
+# BUILD NASDAQ UNIVERSE (MATCH BACKTEST)
 # =========================
-def load_symbols():
-    with open(SYMBOL_FILE, "r") as f:
-        return [line.strip() for line in f if line.strip()]
+def build_nasdaq_universe():
+    url = "https://www.nasdaqtrader.com/dynamic/symdir/nasdaqlisted.txt"
+    df = pd.read_csv(url, sep="|")
+
+    clean = df[
+        (df["ETF"] == "N") &
+        (df["Test Issue"] == "N")
+    ]
+
+    clean = clean[~clean["Symbol"].str.contains(r"\.|W$|R$|P$|Q$", regex=True)]
+    clean = clean[clean["Symbol"].str.len() <= 5]
+
+    return clean["Symbol"].tolist()
 
 # =========================
 # FETCH DATA (STABLE EOD VERSION ✅)
@@ -64,7 +72,7 @@ def fetch_batch(symbols):
 
     return {}
 
-    
+
 
 def process_data(data):
     signals = []
@@ -84,51 +92,138 @@ def process_data(data):
             continue
 
         try:
-            # ✅ Reverse data → oldest to newest
+            # oldest → newest
             values = list(reversed(values))
 
             # =========================
-            # ROLLING SCAN
+            # MAIN SCAN LOOP
             # =========================
             for i in range(100, len(values)):
 
-                window = values[i-100:i]
+                # 🔥 MATCH BACKTEST ORIENTATION
+                window = list(reversed(values[i-100:i]))
 
                 # =========================
-                # PRICE FILTER (your system)
+                # 🔥 LIQUIDITY FILTER (BACKTEST MATCH)
                 # =========================
-                last_price = float(window[-1]["close"])
-
-                if last_price < 8 or last_price > 40:
+                avg_volume = sum(float(d["volume"]) for d in window[1:21]) / 20
+                if avg_volume < 500000:
                     continue
 
                 # =========================
-                # AVOID DUPLICATES
+                # 🎯 BREAKOUT LOGIC
                 # =========================
-                key = f"{symbol}_{window[-1]['datetime']}"
+                result = detect_breakout_today(symbol, window)
+
+                if not result:
+                    continue
+
+                # =========================
+                # 🔥 VOLUME CONFIRMATION
+                # =========================
+                recent_volumes = [float(d["volume"]) for d in window[1:21]]
+                avg_vol = sum(recent_volumes) / len(recent_volumes)
+                current_vol = float(window[0]["volume"])
+
+                volume_ratio = current_vol / avg_vol
+
+                if volume_ratio < 1.3:
+                    continue
+
+                # =========================
+                # 💰 PRICE GROUP
+                # =========================
+                current_price = float(window[0]["close"])
+
+                if current_price < 20:
+                    price_group = "SMALL"
+                elif current_price < 80:
+                    price_group = "MID"
+                else:
+                    price_group = "LARGE"
+
+                # =========================
+                # 🔵 LARGE CAP TREND FILTER
+                # =========================
+                if price_group == "LARGE":
+                    sma_long = sum(float(x["close"]) for x in window[1:71]) / 70
+
+                    if current_price < sma_long:
+                        continue
+
+                # =========================
+                # 🎯 GRADE FILTER
+                # =========================
+                grade = result["grade"]
+
+                if price_group == "SMALL" and grade != "B+":
+                    continue
+                if price_group == "MID" and grade != "B":
+                    continue
+                if price_group == "LARGE" and grade not in ["B+", "A+"]:
+                    continue
+
+                # =========================
+                # 🧱 STRUCTURE FILTER (MATCH BACKTEST)
+                # =========================
+                history = window[1:]
+
+                recent_lows = [float(d["low"]) for d in history[:5]]
+
+                higher_lows = sum([
+                    recent_lows[0] > recent_lows[1],
+                    recent_lows[1] > recent_lows[2]
+                ])
+
+                if higher_lows < 2:
+                    continue
+
+                # =========================
+                # 🧱 RESISTANCE FILTER (MATCH BACKTEST)
+                # =========================
+                resistance = max(float(d["high"]) for d in history[:80])
+
+                touches = sum(
+                    1 for d in history[:80]
+                    if abs(float(d["high"]) - resistance) / resistance < 0.015
+                )
+
+                if touches < 2:
+                    continue
+
+                # =========================
+                # 🚫 DUPLICATE CHECK
+                # =========================
+                key = f"{symbol}_{window[0]['datetime']}"
                 if key in seen:
                     continue
                 seen.add(key)
 
                 # =========================
-                # RUN BREAKOUT LOGIC
+                # ✅ FINAL SIGNAL
                 # =========================
-                result = detect_breakout_today(symbol, window)
+                print(
+                    f"{result['symbol']} | {grade} | "
+                    f"Score {result['score']} | "
+                    f"Break {result['breakout_strength']}%"
+                )
 
-                if result:
-                    print(
-                        f"{result['symbol']} | {result['grade']} | "
-                        f"Score {result['score']} | "
-                        f"Break {result['breakout_strength']}%"
-                    )
-
-                    signals.append(result)
+                signals.append({
+                    "symbol": result["symbol"],
+                    "date": window[0]["datetime"],
+                    "price": current_price,
+                    "grade": grade,
+                    "score": result["score"],
+                    "breakout_strength": result["breakout_strength"],
+                    "price_group": price_group,
+                    "volume_ratio": round(volume_ratio, 2),
+                    "resistance": resistance
+                })
 
         except Exception as e:
             print(f"{symbol} error: {e}")
 
     return signals
-
 
 # =========================
 # SORT SIGNALS
@@ -477,7 +572,7 @@ def log_to_csv(signals, filename="breakout_history.csv"):
 def run():
     print("🚀 SCANNING...\n")
 
-    symbols = load_symbols()[:SCAN_LIMIT]
+    symbols = build_nasdaq_universe()[:SCAN_LIMIT]
     all_signals = []
 
     for i in range(0, len(symbols), BATCH_SIZE):
@@ -518,9 +613,6 @@ def run():
 
     save_watchlist_json(all_signals)
     convert_trade_history_to_json()
-
-    market = calculate_live_market_strength()
-    save_market_status_json(market)
 
     print(f"\nTOTAL NEW SIGNALS: {len(all_signals)}")
 
