@@ -365,11 +365,13 @@ body {
 <script>
 
 // 🔐 PROTECT DASHBOARD
+// 🔐 PROTECT DASHBOARD
 const isLoggedIn = localStorage.getItem("loggedIn");
 
-if (!isLoggedIn) {
-  window.location.href = "login.html";
-}
+// TEMP UNLOCK
+// if (!isLoggedIn) {
+//   window.location.href = "login.html";
+// }
 
 function logout() {
   localStorage.removeItem("loggedIn");
