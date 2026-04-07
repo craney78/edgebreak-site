@@ -371,13 +371,6 @@ if (!isLoggedIn) {
   window.location.href = "login.html";
 }
 
-// Only runs if logged in
-document.querySelector(".logout-btn")?.style.display = "block";
-
-if (!localStorage.getItem("loggedIn")) {
-  document.querySelector(".logout-btn")?.style.display = "none";
-}
-
 function logout() {
   localStorage.removeItem("loggedIn");
   window.location.href = "login.html";
@@ -416,23 +409,6 @@ fetch("activity.json?v=" + new Date().getTime())
 
   }).join("");
 
-});
-
-// WATCHLIST
-fetch("watchlist.json")
-.then(res => res.json())
-.then(data => {
-  document.getElementById("watchlist").innerHTML =
-    data.map(t => `
-      <div class="watch">
-        <div class="blur">${t.symbol}</div>
-        <div>$${t.entry}</div>
-        <div class="${t.current_return >= 0 ? 'green' : 'red'}">${t.current_return}%</div>
-      </div>
-    `).join("");
-})
-.catch(() => {
-  document.getElementById("watchlist").innerHTML = "<div class='card'>Watchlist unavailable</div>";
 });
 
 // LIVE STATS FROM WATCHLIST
@@ -486,12 +462,12 @@ fetch("stats.json?v=" + new Date().getTime())
 
   console.log("RAW STATS:", data);
 
-  let stats = null;
+  // 🔥 GET 2025 STATS (BULLETPROOF)
+let stats = data?.years?.["2025"] || null;
 
-  // ✅ NEW FORMAT
-  if (data.years && data.years["2025"]) {
-    stats = data.years["2025"];
-  }
+if (!stats) {
+  console.log("❌ No 2025 data found in stats.json");
+}
 
   // ✅ OLD FORMAT
   else if (data.by_year && data.by_year["2025"]) {
