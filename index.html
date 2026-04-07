@@ -221,29 +221,35 @@ body {
   color: #22c55e;
 }
 
+.hero {
+  position: relative;
+}
+
+#authLink {
+  font-weight: 500;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- NAV BAR -->
-<div class="nav">
-  <div class="nav-inner">
-
-    <div class="nav-left">
-      <a href="index.html" class="logo-text">EDGEBREAK</a>
-    </div>
-
-  <div class="hero-top">
-    <a href="trading-guide.html">Trading Guide</a>
-    <a href="pricing.html">Pricing</a>
-  </div>
+<div class="hero-top">
+  <a href="trading-guide.html">Trading Guide</a>
+  <a href="pricing.html">Pricing</a>
+  <a href="login.html" id="authLink">Login</a>
+</div>>
 
   </div>
 </div>
 
 <!-- HERO -->
 <div class="hero">
+
+<!-- LOGOUT BUTTON -->
+<button onclick="logout()" class="logout-btn">
+  Logout
+</button>  
 
   <!-- TOP LINK -->
   <div class="hero-top">
@@ -364,6 +370,26 @@ body {
 </div>
 
 <script>
+
+// 🔐 PROTECT DASHBOARD
+const isLoggedIn = localStorage.getItem("loggedIn");
+
+if (!isLoggedIn) {
+  window.location.href = "login.html";
+}
+
+// Only runs if logged in
+document.querySelector(".logout-btn")?.style.display = "block";
+
+if (!localStorage.getItem("loggedIn")) {
+  document.querySelector(".logout-btn")?.style.display = "none";
+}
+
+function logout() {
+  localStorage.removeItem("loggedIn");
+  window.location.href = "login.html";
+}
+
 // ACTIVITY
 fetch("activity.json?v=" + new Date().getTime())
 .then(res => res.json())
