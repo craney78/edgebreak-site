@@ -11,7 +11,7 @@ API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
 
 BATCH_SIZE = 10
 SLEEP_TIME = 2
-SCAN_LIMIT = 9999
+SCAN_LIMIT = 3200
 
 # =========================
 # BUILD NASDAQ UNIVERSE (MATCH BACKTEST)
@@ -431,7 +431,11 @@ def save_watchlist_json(new_signals):
         item["age"] = item.get("age", 0) + 1
 
         entry_price = safe_float(item.get("entry_price"))
-        current_price = safe_float(item.get("current_price"))
+        entry_price = safe_float(item.get("entry_price"))
+
+        # 🔥 ALWAYS ENSURE CURRENT PRICE EXISTS
+        current_price = safe_float(item.get("current_price", entry_price))
+        item["current_price"] = current_price
 
         if entry_price > 0 and current_price > 0:
             change = ((current_price - entry_price) / entry_price) * 100

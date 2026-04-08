@@ -229,6 +229,71 @@ body {
   font-weight: 500;
 }
 
+.locked-box {
+  background: rgba(15,23,42,0.9);
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* FOOTER */
+.footer {
+  margin-top: 80px;
+  background: #020617;
+  border-top: 1px solid #1e293b;
+  padding: 40px 20px;
+}
+
+.footer-inner {
+  max-width: 1100px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+}
+
+.footer-col h4 {
+  margin-bottom: 10px;
+  color: white;
+}
+
+.footer-col p {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.footer-col a {
+  display: block;
+  text-decoration: none;
+  color: #94a3b8;
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+.footer-col a:hover {
+  color: #22c55e;
+}
+
+.footer-col button {
+  padding: 10px 20px;
+  background: #22c55e;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 30px auto 0;
+  padding-top: 20px;
+  border-top: 1px solid #1e293b;
+  text-align: center;
+  color: #94a3b8;
+}
+
 </style>
 </head>
 
@@ -243,15 +308,56 @@ body {
 <!-- HERO -->
 <div class="hero">
 
-
   <div class="hero-overlay"></div>
   <img src="images/logo.png" class="logo">
 
   <div class="hero-content">
-    <h1>EDGEBREAK</h1>
-    <p>Find High-Probability Breakout Trades Using Real Data</p>
-    <p>Live trades • Backtested edge • Updated daily</p>
-    <button>Get Access</button>
+
+    <h1 style="font-size:60px; line-height:1.1;">
+      Catch Breakout Moves <span style="color:#22c55e;">Before They Run</span>
+    </h1>
+
+    <p style="font-size:18px; margin-top:15px;">
+      Data-backed trading system scanning the market daily for high-probability breakout setups
+    </p>
+
+    <p style="color:#22c55e; font-weight:bold; margin-top:10px;">
+      🚀 +400% winner • Live trades • Proven edge
+    </p>
+
+    <!-- CTA BUTTONS -->
+    <div style="margin-top:25px; display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+      
+      <button onclick="goToPricing()" style="
+        padding:14px 32px;
+        background:#22c55e;
+        border:none;
+        border-radius:10px;
+        color:white;
+        font-weight:bold;
+        cursor:pointer;
+      ">
+        🔓 Unlock EdgeBreak
+      </button>
+
+      <button onclick="scrollToStats()" style="
+        padding:14px 32px;
+        background:transparent;
+        border:1px solid #1e293b;
+        border-radius:10px;
+        color:#94a3b8;
+        cursor:pointer;
+      ">
+        View Performance
+      </button>
+
+    </div>
+
+    <!-- TRUST LINE -->
+    <p style="margin-top:20px; color:#64748b; font-size:13px;">
+      No indicators. No guesswork. Just real breakout data.
+    </p>
+
   </div>
 
 </div>
@@ -325,8 +431,33 @@ body {
 <!-- WATCHLIST -->
 <div class="section">
   <h2>Live Watchlist</h2>
-  <div id="watchlist"></div>
-  <p style="color:#94a3b8;">Unlock full access inside the system</p>
+
+  <!-- SUBTEXT -->
+  <p style="color:#94a3b8; margin-bottom:15px;">
+    Real breakout trades detected by the system — updated daily
+  </p>
+
+  <!-- WATCHLIST CONTENT -->
+  <div id="watchlist" class="watchlist-box"></div>
+
+  <!-- LOCK OVERLAY -->
+  <div class="locked-overlay">
+    <h3>🔒 Full Access Required</h3>
+    
+    <p style="color:#94a3b8; margin-top:10px;">
+      See all live breakout trades, entry points, and performance tracking
+    </p>
+
+    <ul style="text-align:left; max-width:300px; margin:15px auto; color:#cbd5f5;">
+      <li>✔ Full watchlist access</li>
+      <li>✔ Live trade updates</li>
+      <li>✔ Entry + breakout levels</li>
+      <li>✔ Performance tracking</li>
+    </ul>
+
+    <button onclick="goToPricing()">Unlock EdgeBreak</button>
+  </div>
+
 </div>
 
 <!-- BEST TRADES -->
@@ -356,10 +487,62 @@ body {
 
 </div>
 
-<!-- FOOTER -->
+
+
+ <!-- FOOTER -->
 <div class="footer">
-  <div>EDGEBREAK © 2026</div>
-  <div>Data-driven breakout trading system</div>
+
+  <div class="footer-inner">
+
+    <!-- LEFT (LOGO + BRAND) -->
+    <div class="footer-col">
+      
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <img src="images/logo.png" style="width:40px; height:auto;">
+        <h3 style="color:white; margin:0;">EDGEBREAK</h3>
+      </div>
+
+      <p>
+        Data-driven breakout trading system designed to identify high-probability opportunities before they run.
+      </p>
+
+    </div>
+
+    <!-- LINKS -->
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="#">How It Works</a>
+      <a href="#">Performance</a>
+      <a href="pricing.html">Pricing</a>
+    </div>
+
+    <!-- RESOURCES -->
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="trading-guide.html">Trading Guide</a>
+      <a href="#">FAQ</a>
+      <a href="#">Support</a>
+    </div>
+
+    <!-- CTA -->
+    <div class="footer-col">
+      <h4>Get Access</h4>
+      <p style="margin-bottom:10px;">
+        Unlock the full system and live trades
+      </p>
+      <button onclick="goToPricing()">Unlock</button>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="footer-bottom">
+    <p>© 2026 EdgeBreak • All rights reserved</p>
+    <p style="color:#64748b; font-size:12px;">
+      Not financial advice. Trading involves risk.
+    </p>
+  </div>
+
 </div>
 
 <script>
@@ -420,7 +603,11 @@ fetch("watchlist.json?v=" + new Date().getTime())
 
   const container = document.getElementById("watchlist");
 
-  const active = data.filter(t => t.status === "active");
+  const active = data.filter(t =>
+  t.status === "breaking" || t.status === "holding"
+);
+
+  const preview = active.slice(0, 2);
 
   if (!active.length) {
     container.innerHTML = "<div class='card'>No active trades</div>";
@@ -450,6 +637,9 @@ fetch("watchlist.json?v=" + new Date().getTime())
   }).join("");
 
 })
+
+container.classList.add("blur");
+
 .catch(() => {
   document.getElementById("watchlist").innerHTML =
     "<div class='card'>Watchlist unavailable</div>";
