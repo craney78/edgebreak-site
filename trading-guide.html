@@ -84,13 +84,63 @@ button {
   font-size: 16px;
 }
 
-/* FOOTER */
 .footer {
   margin-top: 80px;
-  padding: 30px;
-  text-align: center;
+  background: #020617;
   border-top: 1px solid #1e293b;
-  color: #64748b;
+  padding: 40px 20px;
+}
+
+.footer-inner {
+  max-width: 1100px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+}
+
+.footer-col h4 {
+  margin-bottom: 10px;
+  color: white;
+}
+
+.footer-col p {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.footer-col a {
+  display: block;
+  text-decoration: none;
+  color: #94a3b8;
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+.footer-col a:hover {
+  color: #22c55e;
+}
+
+.footer-col button {
+  padding: 10px 20px;
+  background: #22c55e;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.footer-col button:hover {
+  background: #16a34a;
+}
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 30px auto 0;
+  padding-top: 20px;
+  border-top: 1px solid #1e293b;
+  text-align: center;
+  color: #94a3b8;
 }
 </style>
 </head>
@@ -205,11 +255,60 @@ button {
   <button onclick="window.location.href='index.html'">Back to Dashboard</button>
 </div>
 
-</div>
-
 <!-- FOOTER -->
 <div class="footer">
-  EDGEBREAK © 2026
+
+  <div class="footer-inner">
+
+    <!-- LEFT (LOGO + BRAND) -->
+    <div class="footer-col">
+
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <img src="images/logo.png" style="width:45px; filter: drop-shadow(0 0 6px rgba(34,197,94,0.4));">
+        <h3 style="color:white; margin:0;">EDGEBREAK</h3>
+      </div>
+
+      <p>
+        Data-driven breakout trading system designed to identify high-probability opportunities before they run.
+      </p>
+
+    </div>
+
+    <!-- PRODUCT -->
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="index.html">Home</a>
+      <a href="#statsGrid">Performance</a>
+      <a href="pricing.html">Pricing</a>
+    </div>
+
+    <!-- RESOURCES -->
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="trading-guide.html">Trading Guide</a>
+      <a href="#">FAQ</a>
+      <a href="#">Support</a>
+    </div>
+
+    <!-- CTA -->
+    <div class="footer-col">
+      <h4>Get Access</h4>
+      <p style="margin-bottom:10px;">
+        Unlock the full system and live trades
+      </p>
+      <button onclick="goToPricing()">Unlock</button>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM -->
+  <div class="footer-bottom">
+    <p>© 2026 EdgeBreak • All rights reserved</p>
+    <p style="color:#64748b; font-size:12px;">
+      Not financial advice. Trading involves risk.
+    </p>
+  </div>
+
 </div>
 
 </body>

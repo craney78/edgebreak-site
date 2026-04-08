@@ -11,171 +11,260 @@ body {
   font-family: Arial, sans-serif;
   background: #020617;
   color: #e2e8f0;
-}
-
-/* LOGO */
-.logo-bar {
-  text-align: center;
-  padding: 20px 0;
-  border-bottom: 1px solid #1e293b;
-}
-
-.logo-bar img {
-  width: 120px;
-  cursor: pointer;
-}
-
-/* CONTAINER */
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 50px 20px;
   text-align: center;
 }
 
-h1 {
-  font-size: 36px;
+/* HERO */
+.pricing-hero {
+  padding: 80px 20px 40px;
 }
 
-p {
-  color: #94a3b8;
-  line-height: 1.6;
+.pricing-hero h1 {
+  font-size: 48px;
+  margin-bottom: 10px;
 }
 
-/* CARD */
-.card {
-  background: #0f172a;
-  padding: 30px;
-  border-radius: 12px;
-  border: 1px solid #1e293b;
-  margin-top: 30px;
-}
-
-.price {
-  font-size: 40px;
-  margin: 20px 0;
+.highlight {
   color: #22c55e;
 }
 
-/* CTA */
-button {
-  padding: 14px 30px;
+/* CARD */
+.pricing-card {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 30px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #0f172a, #020617);
+  border: 1px solid #1e293b;
+  box-shadow: 0 0 40px rgba(34,197,94,0.1);
+}
+
+.price {
+  font-size: 48px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.sub {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+/* FEATURES */
+.features {
+  text-align: left;
+  margin: 20px 0;
+}
+
+.features li {
+  margin: 10px 0;
+}
+
+/* BUTTON */
+.buy-btn {
+  width: 100%;
+  padding: 14px;
   background: #22c55e;
   border: none;
   border-radius: 10px;
   color: white;
+  font-weight: bold;
   cursor: pointer;
   font-size: 16px;
 }
 
-/* SECTIONS */
-.section {
-  margin-top: 50px;
+.buy-btn:hover {
+  background: #16a34a;
 }
+
+/* URGENCY */
+.urgency {
+  margin-top: 15px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* PROOF */
+.proof {
+  margin-top: 40px;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* GUARANTEE */
+.guarantee {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.footer {
+  margin-top: 80px;
+  background: #020617;
+  border-top: 1px solid #1e293b;
+  padding: 40px 20px;
+}
+
+.footer-inner {
+  max-width: 1100px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+}
+
+.footer-col h4 {
+  margin-bottom: 10px;
+  color: white;
+}
+
+.footer-col p {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.footer-col a {
+  display: block;
+  text-decoration: none;
+  color: #94a3b8;
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+.footer-col a:hover {
+  color: #22c55e;
+}
+
+.footer-col button {
+  padding: 10px 20px;
+  background: #22c55e;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.footer-col button:hover {
+  background: #16a34a;
+}
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 30px auto 0;
+  padding-top: 20px;
+  border-top: 1px solid #1e293b;
+  text-align: center;
+  color: #94a3b8;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- LOGO -->
-<div class="logo-bar">
-  <img src="images/logo.png" onclick="window.location.href='index.html'">
+<div class="pricing-hero">
+  <h1>Unlock <span class="highlight">EdgeBreak</span></h1>
+  <p>Get full access to live breakout trades and system data</p>
 </div>
 
-<div class="container">
+<div class="pricing-card">
 
-<h1>Access the EdgeBreak System</h1>
+  <div class="sub">LIMITED ACCESS</div>
 
-<p>
-EdgeBreak is designed to remove guesswork from breakout trading by applying a consistent, data-driven process.
-</p>
+  <div class="price">$19</div>
+  <div class="sub">One-time access</div>
 
-<!-- VALUE -->
-<div class="section">
-  <div class="card">
-    <p>
-    Instead of scanning hundreds of charts and second guessing decisions, the system highlights structured opportunities and tracks them from entry to exit.
-    </p>
+  <ul class="features">
+    <li>✔ Full live watchlist</li>
+    <li>✔ Real breakout signals</li>
+    <li>✔ Entry + resistance levels</li>
+    <li>✔ Trade tracking</li>
+    <li>✔ Proven system performance</li>
+  </ul>
 
-    <p>
-    Every trade is recorded, measured, and reflected in the performance you see on the dashboard.
+  <button class="buy-btn" onclick="buyNow()">
+    🔓 Unlock Now
+  </button>
+
+  <div class="urgency">
+    ⚡ New trades added daily
+  </div>
+
+</div>
+
+<div class="proof">
+  🚀 +400% trade captured<br>
+  📊 Real tracked performance<br>
+  🔥 Data-driven system
+</div>
+
+<div class="guarantee">
+  Not financial advice. Trading involves risk.
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+
+  <div class="footer-inner">
+
+    <!-- LEFT (LOGO + BRAND) -->
+    <div class="footer-col">
+
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <img src="images/logo.png" style="width:45px; filter: drop-shadow(0 0 6px rgba(34,197,94,0.4));">
+        <h3 style="color:white; margin:0;">EDGEBREAK</h3>
+      </div>
+
+      <p>
+        Data-driven breakout trading system designed to identify high-probability opportunities before they run.
+      </p>
+
+    </div>
+
+    <!-- PRODUCT -->
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="index.html">Home</a>
+      <a href="#statsGrid">Performance</a>
+      <a href="pricing.html">Pricing</a>
+    </div>
+
+    <!-- RESOURCES -->
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="trading-guide.html">Trading Guide</a>
+      <a href="#">FAQ</a>
+      <a href="#">Support</a>
+    </div>
+
+    <!-- CTA -->
+    <div class="footer-col">
+      <h4>Get Access</h4>
+      <p style="margin-bottom:10px;">
+        Unlock the full system and live trades
+      </p>
+      <button onclick="goToPricing()">Unlock</button>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM -->
+  <div class="footer-bottom">
+    <p>© 2026 EdgeBreak • All rights reserved</p>
+    <p style="color:#64748b; font-size:12px;">
+      Not financial advice. Trading involves risk.
     </p>
   </div>
-</div>
-
-<!-- WHAT YOU GET -->
-<div class="section">
-  <div class="card">
-
-    <h2>What You Get</h2>
-
-    <p>✔ Live breakout trade signals</p>
-    <p>✔ Active watchlist of current trades</p>
-    <p>✔ Real-time activity (entries & exits)</p>
-    <p>✔ Full performance tracking</p>
-    <p>✔ Historical results and transparency</p>
-
-  </div>
-</div>
-
-<!-- WHY IT WORKS -->
-<div class="section">
-  <div class="card">
-    <h2>Why It Works</h2>
-
-    <p>
-    The system focuses on repeatable patterns — not predictions.
-    </p>
-
-    <p>
-    By applying the same structured approach across many trades, it removes emotional decision making and builds consistency over time.
-    </p>
-
-  </div>
-</div>
-
-<!-- EXPECTATIONS -->
-<div class="section">
-  <div class="card">
-    <h2>Expectations</h2>
-
-    <p>
-    Not every trade will be profitable. Losses and drawdowns are part of trading.
-    </p>
-
-    <p>
-    The goal is not perfection — it is consistency over a series of trades.
-    </p>
-
-  </div>
-</div>
-
-<!-- PRICING -->
-<div class="card">
-
-  <h2>EdgeBreak Access</h2>
-
-  <div class="price">$29 / month</div>
-
-  <p>
-  Full access to the system, live trades, and performance tracking.
-  </p>
-
-  <br>
-
-  <button>Get Access</button>
 
 </div>
 
-<!-- FINAL -->
-<div class="section">
-  <p>
-  EdgeBreak provides structure, not certainty.  
-  How you apply that structure determines your outcome.
-  </p>
-</div>
-
-</div>
+<script>
+function buyNow() {
+  // TEMP (until Stripe added)
+  localStorage.setItem("paidUser", "true");
+  window.location.href = "index.html";
+}
+</script>
 
 </body>
 </html>
