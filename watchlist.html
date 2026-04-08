@@ -383,21 +383,96 @@ fetch("watchlist.json")
 
 });
 
-  // STATS
+fetch("watchlist.json")
+.then(res => res.json())
+.then(data => {
+
+  let total = 0;
+  let count = 0;
+  let best = -999;
+
+  let small = [], mid = [], large = [];
+
+  const rows = data.map(t => {
+
+    const entry = Number(t.entry_price) || 0;
+    const change = Number(t.change_percent) || 0;
+
+    const color = change >= 0 ? "green" : "red";
+
+    total += change;
+    count++;
+
+    if (change > best) best = change;
+
+    // GROUPS
+    if (t.price_group === "SMALL") small.push(change);
+    if (t.price_group === "MID") mid.push(change);
+    if (t.price_group === "LARGE") large.push(change);
+
+    return `
+<tr>
+  <td><strong>${t.symbol}</strong></td>
+  <td>$${entry.toFixed(2)}</td>
+  <td class="${color}">
+    ${change.toFixed(2)}%
+  </td>
+  <td>
+    <span class="status ${t.status}">
+      ${t.status}
+    </span>
+  </td>
+</tr>
+
+<tr>
+  <td colspan="4">
+    <div class="chart-box" onclick="handleChartClick('${t.symbol}')">
+      📈 View Chart
+    </div>
+  </td>
+</tr>
+`;
+  });
+
+  // RENDER TABLE (if still using it)
+  const table = document.getElementById("watchlistTable");
+  if (table) table.innerHTML = rows.join("");
+
+  // =========================
+  // 🔥 STATS (SAFE VERSION)
+  // =========================
+
   document.getElementById("activeCount").innerText = count;
-  document.getElementById("avgReturn").innerText = (total / count).toFixed(2) + "%";
-  document.getElementById("bestTrade").innerText = "+" + best.toFixed(2) + "%";
+
+  document.getElementById("avgReturn").innerText =
+    count ? (total / count).toFixed(2) + "%" : "0%";
+
+  document.getElementById("bestTrade").innerText =
+    best > -999 ? "+" + best.toFixed(2) + "%" : "0%";
+
+  // =========================
+  // 📊 GROUP AVERAGES (SAFE)
+  // =========================
 
   function avg(arr) {
     if (!arr.length) return "0%";
-    return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2) + "%";
+
+    const clean = arr.map(Number).filter(n => !isNaN(n));
+
+    if (!clean.length) return "0%";
+
+    return (clean.reduce((a,b)=>a+b,0)/clean.length).toFixed(2) + "%";
   }
 
-  document.getElementById("smallPerf").innerText = avg(small);
-  document.getElementById("midPerf").innerText = avg(mid);
-  document.getElementById("largePerf").innerText = avg(large);
+  const smallEl = document.getElementById("smallPerf");
+  const midEl = document.getElementById("midPerf");
+  const largeEl = document.getElementById("largePerf");
 
-});
+  if (smallEl) smallEl.innerText = avg(small);
+  if (midEl) midEl.innerText = avg(mid);
+  if (largeEl) largeEl.innerText = avg(large);
+
+});  
 
 
 // 🔒 CHART CLICK
