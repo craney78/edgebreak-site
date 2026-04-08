@@ -249,41 +249,72 @@ tr:hover {
 
 document.addEventListener("DOMContentLoaded", function () {
 
-  console.log("🚀 WATCHLIST START");
+  console.log("🚀 WATCHLIST LOADED");
 
   // =========================
-  // 📊 WATCHLIST LOAD
+  // 🔔 TODAY ACTIVITY
   // =========================
-  fetch("watchlist.json")
+  fetch("activity.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
 
-    console.log("DATA:", data);
+    const today = new Date().toISOString().slice(0,10);
 
-    // 🔴 FALLBACK (if empty or broken)
-    if (!data || !data.length) {
-      data = [
-        {
-          symbol: "TEST",
-          entry_price: 100,
-          change_percent: 5.25,
-          status: "holding",
-          price_group: "SMALL",
-          signal_date: "2026-04-08"
+    let open = 0;
+    let closed = 0;
+
+    const html = data.map(a => {
+
+      if (!a.date || !a.type) return "";
+
+      if (a.date.includes(today)) {
+
+        if (a.type === "OPEN") {
+          open++;
+          return `<div class="green">🟢 ${a.symbol} opened</div>`;
         }
-      ];
-    }
 
-    let smallHTML = "", midHTML = "", largeHTML = "";
-    let smallStats = [], midStats = [], largeStats = [];
+        if (a.type === "CLOSED") {
+          closed++;
+          return `<div class="red">🔴 ${a.symbol} closed (${a.return}%)</div>`;
+        }
+      }
+
+      return "";
+
+    }).join("");
+
+    document.getElementById("todayActivity").innerHTML =
+      html || "No activity today";
+
+    document.getElementById("todayOpen").innerText = open;
+    document.getElementById("todayClosed").innerText = closed;
+
+  })
+  .catch(err => console.error("Activity error:", err));
+
+
+  // =========================
+  // 📊 WATCHLIST (FIXED)
+  // =========================
+  fetch("watchlist.json?v=" + new Date().getTime())
+  .then(res => res.json())
+  .then(data => {
+
+    console.log("WATCHLIST DATA:", data);
+
+    if (!data || !data.length) {
+      document.getElementById("smallSection").innerHTML = "<div class='card'>No data</div>";
+      return;
+    }
 
     let total = 0;
     let count = 0;
     let best = -999;
 
-    // =========================
-    // 🔧 BUILD TRADE BOX
-    // =========================
+    let smallHTML = "", midHTML = "", largeHTML = "";
+    let smallStats = [], midStats = [], largeStats = [];
+
     function buildTradeBox(t) {
 
       const entry = Number(t.entry_price) || 0;
@@ -315,9 +346,6 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
     }
 
-    // =========================
-    // 🔄 PROCESS DATA
-    // =========================
     data.forEach(t => {
 
       const change = Number(t.change_percent) || 0;
@@ -332,21 +360,18 @@ document.addEventListener("DOMContentLoaded", function () {
         smallStats.push(change);
       }
 
-      else if (t.price_group === "MID") {
+      if (t.price_group === "MID") {
         midHTML += buildTradeBox(t);
         midStats.push(change);
       }
 
-      else if (t.price_group === "LARGE") {
+      if (t.price_group === "LARGE") {
         largeHTML += buildTradeBox(t);
         largeStats.push(change);
       }
 
     });
 
-    // =========================
-    // 📊 HELPERS
-    // =========================
     function avg(arr) {
       if (!arr.length) return "0%";
       return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2) + "%";
@@ -378,50 +403,39 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
 
-        ${html}
+        ${html || "<div class='card'>No trades</div>"}
       `;
     }
 
-    // =========================
-    // 🧱 RENDER SECTIONS (SAFE)
-    // =========================
-    const smallEl = document.getElementById("smallSection");
-    const midEl = document.getElementById("midSection");
-    const largeEl = document.getElementById("largeSection");
+    document.getElementById("smallSection").innerHTML =
+      buildSection("🟢 Small Cap Desk", smallHTML, smallStats);
 
-    if (!smallEl || !midEl || !largeEl) {
-      console.error("❌ Missing section divs");
-      return;
-    }
+    document.getElementById("midSection").innerHTML =
+      buildSection("🟡 Mid Cap Desk", midHTML, midStats);
 
-    smallEl.innerHTML = buildSection("🟢 Small Cap Desk", smallHTML, smallStats);
-    midEl.innerHTML = buildSection("🟡 Mid Cap Desk", midHTML, midStats);
-    largeEl.innerHTML = buildSection("🔵 Large Cap Desk", largeHTML, largeStats);
+    document.getElementById("largeSection").innerHTML =
+      buildSection("🔵 Large Cap Desk", largeHTML, largeStats);
 
     // =========================
     // 🔥 MAIN STATS
     // =========================
-    const activeEl = document.getElementById("activeCount");
-    const avgEl = document.getElementById("avgReturn");
-    const bestEl = document.getElementById("bestTrade");
+    document.getElementById("activeCount").innerText = count;
 
-    if (activeEl) activeEl.innerText = count;
-    if (avgEl) avgEl.innerText = count ? (total/count).toFixed(2) + "%" : "0%";
-    if (bestEl) bestEl.innerText = best > -999 ? "+" + best.toFixed(2) + "%" : "0%";
+    document.getElementById("avgReturn").innerText =
+      count ? (total / count).toFixed(2) + "%" : "0%";
+
+    document.getElementById("bestTrade").innerText =
+      best > -999 ? "+" + best.toFixed(2) + "%" : "0%";
 
     // =========================
     // 📊 MARKET BREAKDOWN
     // =========================
-    const smallPerf = document.getElementById("smallPerf");
-    const midPerf = document.getElementById("midPerf");
-    const largePerf = document.getElementById("largePerf");
-
-    if (smallPerf) smallPerf.innerText = avg(smallStats);
-    if (midPerf) midPerf.innerText = avg(midStats);
-    if (largePerf) largePerf.innerText = avg(largeStats);
+    document.getElementById("smallPerf").innerText = avg(smallStats);
+    document.getElementById("midPerf").innerText = avg(midStats);
+    document.getElementById("largePerf").innerText = avg(largeStats);
 
   })
-  .catch(err => console.error("❌ FETCH ERROR:", err));
+  .catch(err => console.error("Watchlist error:", err));
 
 
   // =========================
