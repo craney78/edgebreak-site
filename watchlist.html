@@ -299,10 +299,27 @@ fetch("watchlist.json?v=" + new Date().getTime())
   }
 
   function getReturn(t) {
-    let val = t.change_percent ?? t.return ?? 0;
-    if (typeof val === "string") val = val.replace("%", "");
+
+  let val = t.change_percent ?? t.return;
+
+  // ✅ if exists, clean it
+  if (val !== undefined && val !== null && val !== "") {
+    if (typeof val === "string") {
+      val = val.replace("%", "");
+    }
     return Number(val) || 0;
   }
+
+  // 🔥 FALLBACK: CALCULATE RETURN
+  const entry = Number(t.entry_price ?? t.entry ?? 0);
+  const current = Number(t.price ?? t.current_price ?? 0);
+
+  if (entry && current) {
+    return ((current - entry) / entry) * 100;
+  }
+
+  return 0;
+}
 
   function buildTradeBox(t) {
 
