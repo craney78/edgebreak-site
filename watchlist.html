@@ -1,154 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>EdgeBreak Trading Desk</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>EdgeBreak Watchlist</title>
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #020617;
-  color: #e2e8f0;
-  padding: 80px 20px;
-}
-
-/* CONTAINER */
-.container {
-  max-width: 1100px;
-  margin: auto;
-}
-
-/* HEADER */
-.header {
-  margin-bottom: 20px;
-}
-
-.header h1 {
-  margin: 0;
-  font-size: 36px;
-}
-
-.header p {
-  color: #94a3b8;
-}
-
-/* TOP GRID */
-.top-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-/* CARD */
-.card {
-  background: #0f172a;
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid #1e293b;
-}
-
-/* STATS STRIP */
-.stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 15px;
-  margin: 20px 0;
-}
-
-.stat {
-  background: #0f172a;
-  padding: 15px;
-  border-radius: 10px;
-  border: 1px solid #1e293b;
-}
-
-.label {
-  font-size: 12px;
-  color: #64748b;
-}
-
-.value {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-/* TABLE */
-.table-container {
-  background: #0f172a;
-  border-radius: 12px;
-  border: 1px solid #1e293b;
-  overflow: hidden;
-  margin-top: 20px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th {
-  padding: 14px;
-  font-size: 12px;
-  color: #64748b;
-  text-align: left;
-  border-bottom: 1px solid #1e293b;
-}
-
-td {
-  padding: 14px;
-  border-bottom: 1px solid #1e293b;
-}
-
-tr:hover {
-  background: rgba(34,197,94,0.05);
-}
-
-/* STATUS */
-.green { color: #22c55e; }
-.red { color: #ef4444; }
-
-.status {
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-.breaking {
-  background: rgba(34,197,94,0.15);
-  color: #22c55e;
-}
-
-.holding {
-  background: rgba(59,130,246,0.15);
-  color: #3b82f6;
-}
-
-/* CHART BOX */
-.chart-box {
-  background: #020617;
-  border: 1px solid #1e293b;
-  border-radius: 10px;
-  padding: 16px;
-  text-align: center;
-  cursor: pointer;
-  color: #94a3b8;
-  transition: 0.2s;
-}
-
-.chart-box:hover {
-  border-color: #22c55e;
-  color: #22c55e;
-  transform: translateY(-2px);
-}
-
-/* STAT LINES */
-.stat-line {
-  display: flex;
-  justify-content: space-between;
-  margin: 10px 0;
-}
+body { background:#020617; color:#e2e8f0; font-family:Arial; padding:20px; }
+.container { max-width:1100px; margin:auto; }
+.card { background:#0f172a; padding:20px; border-radius:12px; margin-bottom:20px; }
+.stat-line { display:flex; justify-content:space-between; margin:8px 0; }
+.green { color:#22c55e; }
+.red { color:#ef4444; }
+.section { margin-top:40px; }
+.trade { display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #1e293b; }
 </style>
 </head>
 
@@ -156,278 +18,86 @@ tr:hover {
 
 <div class="container">
 
-  <!-- HEADER -->
-  <div class="header" style="display:flex; align-items:center; gap:15px;">
-  <img src="logo.png" style="width:50px;">
-  <div>
-    <h1 style="margin:0;">EdgeBreak Trading Desk</h1>
-    <p>Daily breakout signals powered by real data</p>
-  </div>
+<h1>EdgeBreak Watchlist</h1>
+
+<!-- TODAY -->
+<div class="card">
+  <h3>Today's Trades</h3>
+  <div id="todayActivity">Loading...</div>
 </div>
 
-  <!-- TOP GRID -->
-  <div class="card">
-  <h3>Today’s Activity</h3>
-
-  <div class="stat-line">
-    <span>Opened</span>
-    <span id="todayOpen">0</span>
-  </div>
-
-  <div class="stat-line">
-    <span>Closed</span>
-    <span id="todayClosed">0</span>
-  </div>
-
-  <div id="todayActivity" style="margin-top:10px;"></div>
+<!-- MARKET -->
+<div class="card">
+  <h3>Market Breakdown</h3>
+  <div class="stat-line"><span>Small</span><span id="smallPerf">-</span></div>
+  <div class="stat-line"><span>Mid</span><span id="midPerf">-</span></div>
+  <div class="stat-line"><span>Large</span><span id="largePerf">-</span></div>
 </div>
 
-    <!-- MARKET BREAKDOWN -->
-    <div class="card">
-      <h3>Market Breakdown</h3>
-
-      <div class="stat-line">
-        <span>Small Caps</span>
-        <span id="smallPerf">-</span>
-      </div>
-
-      <div class="stat-line">
-        <span>Mid Caps</span>
-        <span id="midPerf">-</span>
-      </div>
-
-      <div class="stat-line">
-        <span>Large Caps</span>
-        <span id="largePerf">-</span>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- STATS -->
-  <div class="stats">
-    <div class="stat">
-      <div class="label">Active Trades</div>
-      <div class="value" id="activeCount">-</div>
-    </div>
-
-    <div class="stat">
-      <div class="label">Avg Return</div>
-      <div class="value" id="avgReturn">-</div>
-    </div>
-
-    <div class="stat">
-      <div class="label">Best Trade</div>
-      <div class="value green" id="bestTrade">-</div>
-    </div>
-  </div>
-
-  <!-- SECTIONS -->
-      <div id="smallSection"></div>
-      <div id="midSection"></div>
-      <div id="largeSection"></div>
+<!-- WATCHLIST -->
+<div class="section">
+  <h2>Watchlist</h2>
+  <div id="watchlist"></div>
+</div>
 
 </div>
 
 <script>
 
-document.addEventListener("DOMContentLoaded", function () {
-
-  console.log("🚀 FINAL FIX RUNNING");
-
-  // =========================
-  // 🔔 TODAY ACTIVITY (FIXED FOR YOUR DATA)
-  // =========================
-  fetch("activity.json?v=" + new Date().getTime())
-  .then(res => res.json())
-  .then(data => {
-
-    console.log("ACTIVITY RAW:", data);
-
-    let open = 0;
-    let closed = 0;
-
-    const html = data.map(a => {
-
-      if (!a.type) return "";
-
-      // 👉 NO DATE FILTER (your data not matching)
-      if (a.type === "OPEN") {
-        open++;
-        return `<div class="green">🟢 ${a.symbol} @ $${a.price}</div>`;
-      }
-
-      if (a.type === "CLOSED") {
-        closed++;
-        return `<div class="red">🔴 ${a.symbol} (${a.return}%)</div>`;
-      }
-
-      return "";
-
-    }).slice(0,5).join("");
-
-    document.getElementById("todayActivity").innerHTML =
-      html || "No activity";
-
-    document.getElementById("todayOpen").innerText = open;
-    document.getElementById("todayClosed").innerText = closed;
-
-  });
-
-fetch("watchlist.json?v=" + new Date().getTime())
+fetch("watchlist.json?v=" + Date.now())
 .then(res => res.json())
 .then(data => {
 
-  console.log("WATCHLIST RAW:", data);
+  console.log("DATA:", data);
 
-  let smallHTML = "", midHTML = "", largeHTML = "";
-  let smallStats = [], midStats = [], largeStats = [];
+  let small = [], mid = [], large = [];
+  let html = "";
 
-  let total = 0;
-  let count = 0;
-  let best = -999;
+  data.forEach(t => {
 
-  // HELPERS
-  function getGroup(price) {
-    if (price < 20) return "SMALL";
-    if (price < 80) return "MID";
-    return "LARGE";
-  }
+    const entry = Number(t.price || 0);
 
-  function getEntry(t) {
-    return Number(t.entry_price ?? t.price ?? t.entry ?? 0);
-  }
+    // ❌ current_price useless → ignore
+    const change = Number(t.change_percent || 0);
 
-  function getReturn(t) {
+    // group
+    let group = t.group || "MID";
 
-  let val = t.change_percent ?? t.return;
+    if (entry < 20) group = "SMALL";
+    else if (entry < 80) group = "MID";
+    else group = "LARGE";
 
-  // ✅ if exists, clean it
-  if (val !== undefined && val !== null && val !== "") {
-    if (typeof val === "string") {
-      val = val.replace("%", "");
-    }
-    return Number(val) || 0;
-  }
+    if (group === "SMALL") small.push(change);
+    if (group === "MID") mid.push(change);
+    if (group === "LARGE") large.push(change);
 
-  // 🔥 FALLBACK: CALCULATE RETURN
-  const entry = Number(t.entry_price ?? t.entry ?? 0);
-  const current = Number(t.price ?? t.current_price ?? 0);
-
-  if (entry && current) {
-    return ((current - entry) / entry) * 100;
-  }
-
-  return 0;
-}
-
-  function buildTradeBox(t) {
-
-    const entry = getEntry(t);
-    const change = getReturn(t);
-    const color = change >= 0 ? "green" : "red";
-
-    return `
-      <div class="card" style="margin-bottom:15px;">
-        <div style="display:flex; justify-content:space-between;">
-          <strong>${t.symbol || "N/A"}</strong>
-          <span class="${color}">
-            ${change.toFixed(2)}%
-          </span>
+    html += `
+      <div class="trade">
+        <div>
+          <strong>${t.symbol}</strong><br>
+          Entry: $${entry}
         </div>
-
-        <div style="font-size:13px; color:#94a3b8; margin-top:5px;">
-          Entry: $${entry.toFixed(2)}
-        </div>
-
-        <div class="chart-box" onclick="handleChartClick('${t.symbol}')">
-          📈 View Chart
+        <div class="${change>=0?'green':'red'}">
+          ${change.toFixed(2)}%
         </div>
       </div>
     `;
-  }
-
-  // PROCESS DATA
-  data.forEach(t => {
-
-    const entry = getEntry(t);
-    const change = getReturn(t);
-    const group = getGroup(entry);
-
-    console.log(
-    t.symbol,
-    "ENTRY:", getEntry(t),
-    "PRICE:", t.price,
-    "RETURN:", getReturn(t)
-  );
-
-    total += change;
-    count++;
-
-    if (change > best) best = change;
-
-    if (group === "SMALL") {
-      smallHTML += buildTradeBox(t);
-      smallStats.push(change);
-    }
-
-    if (group === "MID") {
-      midHTML += buildTradeBox(t);
-      midStats.push(change);
-    }
-
-    if (group === "LARGE") {
-      largeHTML += buildTradeBox(t);
-      largeStats.push(change);
-    }
-
   });
 
-  // BUILD SECTIONS
-  function buildSection(title, html) {
-    return `
-      <h2 style="margin-top:30px;">${title}</h2>
-      ${html || "<div class='card'>No trades</div>"}
-    `;
+  document.getElementById("watchlist").innerHTML = html;
+
+  function avg(arr){
+    if(!arr.length) return "0%";
+    return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2)+"%";
   }
 
-  document.getElementById("smallSection").innerHTML =
-    buildSection("🟢 Small Cap Desk", smallHTML);
-
-  document.getElementById("midSection").innerHTML =
-    buildSection("🟡 Mid Cap Desk", midHTML);
-
-  document.getElementById("largeSection").innerHTML =
-    buildSection("🔵 Large Cap Desk", largeHTML);
-
-  // =========================
-  // 🔥 MAIN STATS (NOW FIXED)
-  // =========================
-  const safeCount = count || 0;
-  const safeTotal = Number(total) || 0;
-  const safeBest = (best > -999 && !isNaN(best)) ? best : 0;
-
-  document.getElementById("activeCount").innerText = safeCount;
-
-  document.getElementById("avgReturn").innerText =
-    safeCount ? (safeTotal / safeCount).toFixed(2) + "%" : "0%";
-
-  document.getElementById("bestTrade").innerText =
-    "+" + safeBest.toFixed(2) + "%";
-
-  // =========================
-  // 📊 MARKET BREAKDOWN (NOW FIXED)
-  // =========================
-  function avg(arr) {
-    if (!arr.length) return "0%";
-    return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2) + "%";
-  }
-
-  document.getElementById("smallPerf").innerText = avg(smallStats);
-  document.getElementById("midPerf").innerText = avg(midStats);
-  document.getElementById("largePerf").innerText = avg(largeStats);
+  document.getElementById("smallPerf").innerText = avg(small);
+  document.getElementById("midPerf").innerText = avg(mid);
+  document.getElementById("largePerf").innerText = avg(large);
 
 });
 
-});
 </script>
+
+</body>
+</html>
