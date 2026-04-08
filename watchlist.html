@@ -354,6 +354,13 @@ fetch("watchlist.json?v=" + new Date().getTime())
     const change = getReturn(t);
     const group = getGroup(entry);
 
+    console.log(
+    t.symbol,
+    "ENTRY:", getEntry(t),
+    "PRICE:", t.price,
+    "RETURN:", getReturn(t)
+  );
+
     total += change;
     count++;
 
