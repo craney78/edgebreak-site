@@ -1,16 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>EdgeBreak Watchlist</title>
+<meta charset="UTF-8">
+<title>EdgeBreak Trading Desk</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body { background:#020617; color:#e2e8f0; font-family:Arial; padding:20px; }
-.container { max-width:1100px; margin:auto; }
-.card { background:#0f172a; padding:20px; border-radius:12px; margin-bottom:20px; }
-.stat-line { display:flex; justify-content:space-between; margin:8px 0; }
-.green { color:#22c55e; }
-.red { color:#ef4444; }
-.section { margin-top:40px; }
-.trade { display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #1e293b; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #020617;
+  color: #e2e8f0;
+  padding: 80px 20px;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: #0f172a;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #1e293b;
+  margin-bottom: 20px;
+}
+
+.top-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.stat-line {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.stat {
+  background: #0f172a;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #1e293b;
+}
+
+.label { font-size: 12px; color: #64748b; }
+.value { font-size: 20px; font-weight: bold; }
+
+.green { color: #22c55e; }
+.red { color: #ef4444; }
+
+.trade {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.section { margin-top: 30px; }
 </style>
 </head>
 
@@ -18,82 +81,158 @@ body { background:#020617; color:#e2e8f0; font-family:Arial; padding:20px; }
 
 <div class="container">
 
-<h1>EdgeBreak Watchlist</h1>
-
-<!-- TODAY -->
-<div class="card">
-  <h3>Today's Trades</h3>
-  <div id="todayActivity">Loading...</div>
+<!-- HEADER -->
+<div class="header">
+  <img src="logo.png" style="width:50px;">
+  <div>
+    <h1>EdgeBreak Trading Desk</h1>
+    <p>Daily breakout signals powered by real data</p>
+  </div>
 </div>
 
-<!-- MARKET -->
-<div class="card">
-  <h3>Market Breakdown</h3>
-  <div class="stat-line"><span>Small</span><span id="smallPerf">-</span></div>
-  <div class="stat-line"><span>Mid</span><span id="midPerf">-</span></div>
-  <div class="stat-line"><span>Large</span><span id="largePerf">-</span></div>
+<!-- TOP GRID -->
+<div class="top-grid">
+
+  <!-- TODAY -->
+  <div class="card">
+    <h3>Today's Trades</h3>
+    <div class="stat-line"><span>Opened</span><span id="todayOpen">0</span></div>
+    <div class="stat-line"><span>Closed</span><span id="todayClosed">0</span></div>
+    <div id="todayActivity"></div>
+  </div>
+
+  <!-- MARKET -->
+  <div class="card">
+    <h3>Market Breakdown</h3>
+    <div class="stat-line"><span>Small</span><span id="smallPerf">-</span></div>
+    <div class="stat-line"><span>Mid</span><span id="midPerf">-</span></div>
+    <div class="stat-line"><span>Large</span><span id="largePerf">-</span></div>
+  </div>
+
 </div>
 
-<!-- WATCHLIST -->
-<div class="section">
-  <h2>Watchlist</h2>
-  <div id="watchlist"></div>
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <div class="label">Active Trades</div>
+    <div class="value" id="activeCount">-</div>
+  </div>
+  <div class="stat">
+    <div class="label">Avg Return</div>
+    <div class="value" id="avgReturn">-</div>
+  </div>
+  <div class="stat">
+    <div class="label">Best Trade</div>
+    <div class="value green" id="bestTrade">-</div>
+  </div>
 </div>
+
+<!-- SECTIONS -->
+<div id="smallSection" class="section"></div>
+<div id="midSection" class="section"></div>
+<div id="largeSection" class="section"></div>
 
 </div>
 
 <script>
 
-fetch("watchlist.json?v=" + Date.now())
-.then(res => res.json())
-.then(data => {
+document.addEventListener("DOMContentLoaded", function () {
 
-  console.log("DATA:", data);
+  console.log("🚀 CLEAN BUILD RUNNING");
 
-  let small = [], mid = [], large = [];
-  let html = "";
+  // =========================
+  // 🔔 TODAY ACTIVITY
+  // =========================
+  fetch("activity.json?v=" + Date.now())
+  .then(res => res.json())
+  .then(data => {
 
-  data.forEach(t => {
+    let open = 0, closed = 0;
 
-    const entry = Number(t.price || 0);
+    const html = data.map(a => {
 
-    // ❌ current_price useless → ignore
-    const change = Number(t.change_percent || 0);
+      if (a.type === "OPEN") {
+        open++;
+        return `<div class="green">🟢 ${a.symbol} @ $${a.price}</div>`;
+      }
 
-    // group
-    let group = t.group || "MID";
+      if (a.type === "CLOSED") {
+        closed++;
+        return `<div class="red">🔴 ${a.symbol} (${a.return}%)</div>`;
+      }
 
-    if (entry < 20) group = "SMALL";
-    else if (entry < 80) group = "MID";
-    else group = "LARGE";
+      return "";
 
-    if (group === "SMALL") small.push(change);
-    if (group === "MID") mid.push(change);
-    if (group === "LARGE") large.push(change);
+    }).slice(0,5).join("");
 
-    html += `
-      <div class="trade">
-        <div>
-          <strong>${t.symbol}</strong><br>
-          Entry: $${entry}
-        </div>
-        <div class="${change>=0?'green':'red'}">
-          ${change.toFixed(2)}%
-        </div>
-      </div>
-    `;
+    document.getElementById("todayOpen").innerText = open;
+    document.getElementById("todayClosed").innerText = closed;
+    document.getElementById("todayActivity").innerHTML = html;
+
   });
 
-  document.getElementById("watchlist").innerHTML = html;
+  // =========================
+  // 📊 WATCHLIST
+  // =========================
+  fetch("watchlist.json?v=" + Date.now())
+  .then(res => res.json())
+  .then(data => {
 
-  function avg(arr){
-    if(!arr.length) return "0%";
-    return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2)+"%";
-  }
+    let total = 0, count = 0, best = -999;
 
-  document.getElementById("smallPerf").innerText = avg(small);
-  document.getElementById("midPerf").innerText = avg(mid);
-  document.getElementById("largePerf").innerText = avg(large);
+    let smallHTML="", midHTML="", largeHTML="";
+    let small=[], mid=[], large=[];
+
+    data.forEach(t => {
+
+      const entry = Number(t.price || 0);
+      const change = Number(t.change_percent || 0);
+      const group = t.group;
+
+      total += change;
+      count++;
+      if (change > best) best = change;
+
+      const row = `
+        <div class="trade">
+          <div>
+            <strong>${t.symbol}</strong><br>
+            $${entry.toFixed(2)}<br>
+            ${t.signal_date}
+          </div>
+          <div class="${change>=0?'green':'red'}">
+            ${change.toFixed(2)}%
+          </div>
+        </div>
+      `;
+
+      if (group==="SMALL"){ smallHTML+=row; small.push(change); }
+      if (group==="MID"){ midHTML+=row; mid.push(change); }
+      if (group==="LARGE"){ largeHTML+=row; large.push(change); }
+
+    });
+
+    function avg(arr){
+      if(!arr.length) return "0%";
+      return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2)+"%";
+    }
+
+    // sections
+    document.getElementById("smallSection").innerHTML = "<h2>🟢 Small Cap</h2>"+smallHTML;
+    document.getElementById("midSection").innerHTML = "<h2>🟡 Mid Cap</h2>"+midHTML;
+    document.getElementById("largeSection").innerHTML = "<h2>🔵 Large Cap</h2>"+largeHTML;
+
+    // stats
+    document.getElementById("activeCount").innerText = count;
+    document.getElementById("avgReturn").innerText = count ? (total/count).toFixed(2)+"%" : "0%";
+    document.getElementById("bestTrade").innerText = best>-999 ? best.toFixed(2)+"%" : "0%";
+
+    // breakdown
+    document.getElementById("smallPerf").innerText = avg(small);
+    document.getElementById("midPerf").innerText = avg(mid);
+    document.getElementById("largePerf").innerText = avg(large);
+
+  });
 
 });
 
