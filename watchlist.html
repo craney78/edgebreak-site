@@ -26,18 +26,17 @@ body {
   margin-bottom: 20px;
 }
 
+.top-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
 .card {
   background: #0f172a;
   padding: 20px;
   border-radius: 12px;
   border: 1px solid #1e293b;
-  margin-bottom: 20px;
-}
-
-.top-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
 }
 
 .stat-line {
@@ -66,14 +65,14 @@ body {
 .green { color: #22c55e; }
 .red { color: #ef4444; }
 
+.section { margin-top: 30px; }
+
 .trade {
   display: flex;
   justify-content: space-between;
   padding: 12px;
   border-bottom: 1px solid #1e293b;
 }
-
-.section { margin-top: 30px; }
 </style>
 </head>
 
@@ -127,7 +126,7 @@ body {
   </div>
 </div>
 
-<!-- SECTIONS -->
+<!-- WATCHLIST SECTIONS -->
 <div id="smallSection" class="section"></div>
 <div id="midSection" class="section"></div>
 <div id="largeSection" class="section"></div>
@@ -135,10 +134,9 @@ body {
 </div>
 
 <script>
-
 document.addEventListener("DOMContentLoaded", function () {
 
-  console.log("🚀 CLEAN BUILD RUNNING");
+  console.log("✅ PAGE RUNNING");
 
   // =========================
   // 🔔 TODAY ACTIVITY
@@ -147,7 +145,8 @@ document.addEventListener("DOMContentLoaded", function () {
   .then(res => res.json())
   .then(data => {
 
-    let open = 0, closed = 0;
+    let open = 0;
+    let closed = 0;
 
     const html = data.map(a => {
 
@@ -167,9 +166,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("todayOpen").innerText = open;
     document.getElementById("todayClosed").innerText = closed;
-    document.getElementById("todayActivity").innerHTML = html;
+    document.getElementById("todayActivity").innerHTML = html || "No activity";
 
+  })
+  .catch(() => {
+    document.getElementById("todayActivity").innerText = "No activity";
   });
+
 
   // =========================
   // 📊 WATCHLIST
@@ -178,16 +181,18 @@ document.addEventListener("DOMContentLoaded", function () {
   .then(res => res.json())
   .then(data => {
 
-    let total = 0, count = 0, best = -999;
-
     let smallHTML="", midHTML="", largeHTML="";
     let small=[], mid=[], large=[];
+
+    let total = 0;
+    let count = 0;
+    let best = -999;
 
     data.forEach(t => {
 
       const entry = Number(t.price || 0);
       const change = Number(t.change_percent || 0);
-      const group = t.group;
+      const group = t.group || "MID";
 
       total += change;
       count++;
@@ -198,17 +203,17 @@ document.addEventListener("DOMContentLoaded", function () {
           <div>
             <strong>${t.symbol}</strong><br>
             $${entry.toFixed(2)}<br>
-            ${t.signal_date}
+            ${t.signal_date || ""}
           </div>
-          <div class="${change>=0?'green':'red'}">
+          <div class="${change >= 0 ? 'green' : 'red'}">
             ${change.toFixed(2)}%
           </div>
         </div>
       `;
 
-      if (group==="SMALL"){ smallHTML+=row; small.push(change); }
-      if (group==="MID"){ midHTML+=row; mid.push(change); }
-      if (group==="LARGE"){ largeHTML+=row; large.push(change); }
+      if (group === "SMALL") { smallHTML += row; small.push(change); }
+      if (group === "MID") { midHTML += row; mid.push(change); }
+      if (group === "LARGE") { largeHTML += row; large.push(change); }
 
     });
 
@@ -217,21 +222,21 @@ document.addEventListener("DOMContentLoaded", function () {
       return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2)+"%";
     }
 
-    // sections
-    document.getElementById("smallSection").innerHTML = "<h2>🟢 Small Cap</h2>"+smallHTML;
-    document.getElementById("midSection").innerHTML = "<h2>🟡 Mid Cap</h2>"+midHTML;
-    document.getElementById("largeSection").innerHTML = "<h2>🔵 Large Cap</h2>"+largeHTML;
+    document.getElementById("smallSection").innerHTML = "<h2>🟢 Small Cap</h2>" + smallHTML;
+    document.getElementById("midSection").innerHTML = "<h2>🟡 Mid Cap</h2>" + midHTML;
+    document.getElementById("largeSection").innerHTML = "<h2>🔵 Large Cap</h2>" + largeHTML;
 
-    // stats
     document.getElementById("activeCount").innerText = count;
     document.getElementById("avgReturn").innerText = count ? (total/count).toFixed(2)+"%" : "0%";
-    document.getElementById("bestTrade").innerText = best>-999 ? best.toFixed(2)+"%" : "0%";
+    document.getElementById("bestTrade").innerText = best > -999 ? best.toFixed(2)+"%" : "0%";
 
-    // breakdown
     document.getElementById("smallPerf").innerText = avg(small);
     document.getElementById("midPerf").innerText = avg(mid);
     document.getElementById("largePerf").innerText = avg(large);
 
+  })
+  .catch(() => {
+    console.error("Watchlist failed to load");
   });
 
 });
