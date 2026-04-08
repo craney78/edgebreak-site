@@ -429,7 +429,7 @@ fetch("watchlist.json?v=" + new Date().getTime())
 
   container.innerHTML = active.map(t => {
 
-    const entry = t.breakout;
+    const entry = t.entry_price;
     const current = t.change_percent;
 
     const color = current >= 0 ? "green" : "red";

@@ -3,6 +3,7 @@ import time
 import csv
 import os
 import json
+import pandas as pd
 
 from breakout_logic import detect_breakout_today
 
@@ -217,7 +218,14 @@ def process_data(data):
                     "breakout_strength": result["breakout_strength"],
                     "price_group": price_group,
                     "volume_ratio": round(volume_ratio, 2),
-                    "resistance": resistance
+                    "resistance": resistance,
+
+                    # ✅ ADD THESE (PREVENT CRASHES)
+                    "setup_type": result.get("setup_type", "breakout"),
+                    "insight": result.get("insight", "Breakout with volume"),
+                    "day1_return": 0,
+                    "day2_return": 0,
+                    "result": "OPEN"
                 })
 
         except Exception as e:
