@@ -182,12 +182,6 @@ tr:hover {
   <div id="todayActivity" style="margin-top:10px;"></div>
 </div>
 
-    <!-- NOTIFICATIONS -->
-    <div class="card">
-      <h3>Today’s Activity</h3>
-      <div id="todayActivity">Loading...</div>
-    </div>
-
     <!-- MARKET BREAKDOWN -->
     <div class="card">
       <h3>Market Breakdown</h3>
@@ -228,20 +222,10 @@ tr:hover {
     </div>
   </div>
 
-  <!-- TABLE -->
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <!-- SECTIONS -->
-          <div id="smallSection"></div>
-          <div id="midSection"></div>
-          <div id="largeSection"></div>
-        </tr>
-      </thead>
-      <tbody id="watchlistTable"></tbody>
-    </table>
-  </div>
+  <!-- SECTIONS -->
+      <div id="smallSection"></div>
+      <div id="midSection"></div>
+      <div id="largeSection"></div>
 
 </div>
 
@@ -290,165 +274,136 @@ document.addEventListener("DOMContentLoaded", function () {
 
   });
 
+fetch("watchlist.json?v=" + new Date().getTime())
+.then(res => res.json())
+.then(data => {
 
-  // =========================
-  // 📊 WATCHLIST (ADAPTED TO YOUR DATA)
-  // =========================
-  fetch("watchlist.json?v=" + new Date().getTime())
-  .then(res => res.json())
-  .then(data => {
+  console.log("WATCHLIST RAW:", data);
 
-    console.log("WATCHLIST RAW:", data);
+  let smallHTML = "", midHTML = "", largeHTML = "";
+  let smallStats = [], midStats = [], largeStats = [];
 
-    let total = 0;
-    let count = 0;
-    let best = -999;
+  let total = 0;
+  let count = 0;
+  let best = -999;
 
-    let smallHTML = "", midHTML = "", largeHTML = "";
-    let smallStats = [], midStats = [], largeStats = [];
+  // HELPERS
+  function getGroup(price) {
+    if (price < 20) return "SMALL";
+    if (price < 80) return "MID";
+    return "LARGE";
+  }
 
-    function getGroup(price) {
-      if (price < 20) return "SMALL";
-      if (price < 80) return "MID";
-      return "LARGE";
-    }
+  function getEntry(t) {
+    return Number(t.entry_price ?? t.price ?? t.entry ?? 0);
+  }
 
-    function getEntry(t) {
-      return Number(t.entry_price ?? t.price ?? t.entry ?? 0);
-    }
+  function getReturn(t) {
+    let val = t.change_percent ?? t.return ?? 0;
+    if (typeof val === "string") val = val.replace("%", "");
+    return Number(val) || 0;
+  }
 
-    function getReturn(t) {
-      return Number(t.change_percent ?? t.return ?? 0);
-    }
+  function buildTradeBox(t) {
 
-    function buildTradeBox(t) {
+    const entry = getEntry(t);
+    const change = getReturn(t);
+    const color = change >= 0 ? "green" : "red";
 
-      const entry = getEntry(t);
-      const change = getReturn(t);
-
-      const color = change >= 0 ? "green" : "red";
-
-      return `
-        <div class="card" style="margin-bottom:15px;">
-          <div style="display:flex; justify-content:space-between;">
-            <strong>${t.symbol}</strong>
-            <span class="${color}">${change.toFixed(2)}%</span>
-          </div>
-
-          <div style="font-size:13px; color:#94a3b8; margin-top:5px;">
-            Entry: $${entry.toFixed(2)}
-          </div>
-
-          <div class="chart-box" onclick="handleChartClick('${t.symbol}')">
-            📈 View Chart
-          </div>
-        </div>
-      `;
-    }
-
-    data.forEach(t => {
-
-      const entry = getEntry(t);
-      const change = getReturn(t);
-
-      const group = getGroup(entry);
-
-      total += change;
-      count++;
-
-      if (change > best) best = change;
-
-      if (group === "SMALL") {
-        smallHTML += buildTradeBox(t);
-        smallStats.push(change);
-      }
-
-      if (group === "MID") {
-        midHTML += buildTradeBox(t);
-        midStats.push(change);
-      }
-
-      if (group === "LARGE") {
-        largeHTML += buildTradeBox(t);
-        largeStats.push(change);
-      }
-
-    });
-
-    function avg(arr) {
-      if (!arr.length) return "0%";
-      return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2) + "%";
-    }
-
-    function bestVal(arr) {
-      if (!arr.length) return "0%";
-      return Math.max(...arr).toFixed(2) + "%";
-    }
-
-    function buildSection(title, html, stats) {
-      return `
-        <h2 style="margin-top:30px;">${title}</h2>
-
-        <div class="stats">
-          <div class="stat">
-            <div class="label">Trades</div>
-            <div class="value">${stats.length}</div>
-          </div>
-
-          <div class="stat">
-            <div class="label">Avg Return</div>
-            <div class="value">${avg(stats)}</div>
-          </div>
-
-          <div class="stat">
-            <div class="label">Best</div>
-            <div class="value">${bestVal(stats)}</div>
-          </div>
+    return `
+      <div class="card" style="margin-bottom:15px;">
+        <div style="display:flex; justify-content:space-between;">
+          <strong>${t.symbol || "N/A"}</strong>
+          <span class="${color}">
+            ${change.toFixed(2)}%
+          </span>
         </div>
 
-        ${html}
-      `;
+        <div style="font-size:13px; color:#94a3b8; margin-top:5px;">
+          Entry: $${entry.toFixed(2)}
+        </div>
+
+        <div class="chart-box" onclick="handleChartClick('${t.symbol}')">
+          📈 View Chart
+        </div>
+      </div>
+    `;
+  }
+
+  // PROCESS DATA
+  data.forEach(t => {
+
+    const entry = getEntry(t);
+    const change = getReturn(t);
+    const group = getGroup(entry);
+
+    total += change;
+    count++;
+
+    if (change > best) best = change;
+
+    if (group === "SMALL") {
+      smallHTML += buildTradeBox(t);
+      smallStats.push(change);
     }
 
-    document.getElementById("smallSection").innerHTML =
-      buildSection("🟢 Small Cap Desk", smallHTML, smallStats);
+    if (group === "MID") {
+      midHTML += buildTradeBox(t);
+      midStats.push(change);
+    }
 
-    document.getElementById("midSection").innerHTML =
-      buildSection("🟡 Mid Cap Desk", midHTML, midStats);
-
-    document.getElementById("largeSection").innerHTML =
-      buildSection("🔵 Large Cap Desk", largeHTML, largeStats);
-
-    // MAIN STATS
-    document.getElementById("activeCount").innerText = count;
-    document.getElementById("avgReturn").innerText =
-      count ? (total/count).toFixed(2) + "%" : "0%";
-    document.getElementById("bestTrade").innerText =
-      best > -999 ? "+" + best.toFixed(2) + "%" : "0%";
-
-    // MARKET BREAKDOWN
-    document.getElementById("smallPerf").innerText = avg(smallStats);
-    document.getElementById("midPerf").innerText = avg(midStats);
-    document.getElementById("largePerf").innerText = avg(largeStats);
+    if (group === "LARGE") {
+      largeHTML += buildTradeBox(t);
+      largeStats.push(change);
+    }
 
   });
 
+  // BUILD SECTIONS
+  function buildSection(title, html) {
+    return `
+      <h2 style="margin-top:30px;">${title}</h2>
+      ${html || "<div class='card'>No trades</div>"}
+    `;
+  }
+
+  document.getElementById("smallSection").innerHTML =
+    buildSection("🟢 Small Cap Desk", smallHTML);
+
+  document.getElementById("midSection").innerHTML =
+    buildSection("🟡 Mid Cap Desk", midHTML);
+
+  document.getElementById("largeSection").innerHTML =
+    buildSection("🔵 Large Cap Desk", largeHTML);
 
   // =========================
-  // 🔒 CHART CLICK
+  // 🔥 MAIN STATS (NOW FIXED)
   // =========================
-  window.handleChartClick = function(symbol) {
+  const safeCount = count || 0;
+  const safeTotal = Number(total) || 0;
+  const safeBest = (best > -999 && !isNaN(best)) ? best : 0;
 
-    const isPaid = localStorage.getItem("paidUser");
+  document.getElementById("activeCount").innerText = safeCount;
 
-    if (!isPaid) {
-      window.location.href = "pricing.html";
-      return;
-    }
+  document.getElementById("avgReturn").innerText =
+    safeCount ? (safeTotal / safeCount).toFixed(2) + "%" : "0%";
 
-    window.location.href = `chart.html?symbol=${symbol}`;
-  };
+  document.getElementById("bestTrade").innerText =
+    "+" + safeBest.toFixed(2) + "%";
+
+  // =========================
+  // 📊 MARKET BREAKDOWN (NOW FIXED)
+  // =========================
+  function avg(arr) {
+    if (!arr.length) return "0%";
+    return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2) + "%";
+  }
+
+  document.getElementById("smallPerf").innerText = avg(smallStats);
+  document.getElementById("midPerf").innerText = avg(midStats);
+  document.getElementById("largePerf").innerText = avg(largeStats);
 
 });
 
+});
 </script>
