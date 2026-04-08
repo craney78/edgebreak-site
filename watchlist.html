@@ -2,91 +2,152 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>EdgeBreak Trading Desk</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EdgeBreak Watchlist</title>
 
 <style>
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #0b0f14;
-  color: #e6edf3;
+  background: #020617;
+  color: #e2e8f0;
+  padding: 80px 20px;
 }
 
+/* CONTAINER */
 .container {
-  max-width: 900px;
+  max-width: 1100px;
   margin: auto;
+}
+
+/* HEADER */
+.header {
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 36px;
+}
+
+.header p {
+  color: #94a3b8;
+}
+
+/* TOP GRID */
+.top-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* CARD */
+.card {
+  background: #0f172a;
   padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #1e293b;
 }
 
-.logo-top {
-  text-align: center;
-  margin-bottom: 10px;
+/* STATS STRIP */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
 }
 
-.logo-top img {
-  height: 60px;
-}
-
-.back {
-  display: inline-block;
-  margin-bottom: 15px;
-  color: #8b949e;
-  text-decoration: none;
-}
-
-.section-title {
-  margin: 30px 0 10px;
-  font-size: 16px;
-  color: #8b949e;
-  text-transform: uppercase;
-}
-
-.box {
-  background: #11161c;
-  border: 1px solid #30363d;
+.stat {
+  background: #0f172a;
+  padding: 15px;
   border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 12px;
-  transition: 0.2s;
+  border: 1px solid #1e293b;
 }
 
-.box:hover {
-  border-color: #22c55e;
+.label {
+  font-size: 12px;
+  color: #64748b;
 }
 
-.strong {
-  border-left: 3px solid #00ff88;
-  box-shadow: 0 0 20px rgba(0,255,120,0.15);
+.value {
+  font-size: 20px;
+  font-weight: bold;
 }
 
-.tag {
-  font-size: 11px;
-  padding: 3px 6px;
-  border-radius: 5px;
-  margin-left: 6px;
-}
-
-.tag-strong {
-  background: rgba(0,255,120,0.2);
-  color: #00ff88;
-}
-
-.lock-message {
-  text-align: center;
+/* TABLE */
+.table-container {
+  background: #0f172a;
+  border-radius: 12px;
+  border: 1px solid #1e293b;
+  overflow: hidden;
   margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  padding: 14px;
+  font-size: 12px;
+  color: #64748b;
+  text-align: left;
+  border-bottom: 1px solid #1e293b;
+}
+
+td {
+  padding: 14px;
+  border-bottom: 1px solid #1e293b;
+}
+
+tr:hover {
+  background: rgba(34,197,94,0.05);
+}
+
+/* STATUS */
+.green { color: #22c55e; }
+.red { color: #ef4444; }
+
+.status {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.breaking {
+  background: rgba(34,197,94,0.15);
   color: #22c55e;
 }
 
-.sticky-cta {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #22c55e;
-  color: black;
-  padding: 12px 16px;
-  border-radius: 8px;
-  text-decoration: none;
+.holding {
+  background: rgba(59,130,246,0.15);
+  color: #3b82f6;
+}
+
+/* CHART BOX */
+.chart-box {
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  color: #94a3b8;
+  transition: 0.2s;
+}
+
+.chart-box:hover {
+  border-color: #22c55e;
+  color: #22c55e;
+  transform: translateY(-2px);
+}
+
+/* STAT LINES */
+.stat-line {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
 }
 </style>
 </head>
@@ -95,187 +156,189 @@ body {
 
 <div class="container">
 
-<div class="logo-top">
-  <img src="images/logo.png">
-</div>
+  <!-- HEADER -->
+  <div class="header">
+    <h1>EdgeBreak Trading Desk</h1>
+    <p>Daily breakout signals powered by real data</p>
+  </div>
 
-<a href="index.html" class="back">← Back</a>
+  <!-- TOP GRID -->
+  <div class="top-grid">
 
-<h1>Live Breakout Tracking</h1>
+    <!-- NOTIFICATIONS -->
+    <div class="card">
+      <h3>Today’s Activity</h3>
+      <div id="todayActivity">Loading...</div>
+    </div>
 
-<div id="watchlistContainer"></div>
-<div id="lockMessage" class="lock-message"></div>
+    <!-- MARKET BREAKDOWN -->
+    <div class="card">
+      <h3>Market Breakdown</h3>
 
-</div>
+      <div class="stat-line">
+        <span>Small Caps</span>
+        <span id="smallPerf">-</span>
+      </div>
 
-<button onclick="goToCheckout()">Unlock Full Access</button>
+      <div class="stat-line">
+        <span>Mid Caps</span>
+        <span id="midPerf">-</span>
+      </div>
 
-<!-- CHART MODAL -->
-<div id="chartModal" onclick="closeChart()" style="
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.9);
-z-index:999;
-justify-content:center;
-align-items:center;
-">
-<div onclick="event.stopPropagation();" style="
-width:90%;
-max-width:900px;
-background:#0b0f14;
-border-radius:10px;
-padding:10px;
-">
-<span onclick="closeChart()" style="
-float:right;
-cursor:pointer;
-font-size:20px;
-">✕</span>
+      <div class="stat-line">
+        <span>Large Caps</span>
+        <span id="largePerf">-</span>
+      </div>
+    </div>
 
-<div id="chartContainer"></div>
-</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="label">Active Trades</div>
+      <div class="value" id="activeCount">-</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Avg Return</div>
+      <div class="value" id="avgReturn">-</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Best Trade</div>
+      <div class="value green" id="bestTrade">-</div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>Entry</th>
+          <th>Return</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="watchlistTable"></tbody>
+    </table>
+  </div>
+
 </div>
 
 <script>
 
-// 🔐 SIMULATED ACCESS (replace later with Stripe/login)
-const isPremium = localStorage.getItem("edgebreak_token") === "active";
-
-// 🔥 GROUP HELPER
-function groupBy(list, key){
-  return list.reduce((acc, item) => {
-    (acc[item[key]] = acc[item[key]] || []).push(item);
-    return acc;
-  }, {});
-}
-
-// 🔥 LOAD DATA
-fetch("watchlist.json?v=" + new Date().getTime())
+// 🔔 ACTIVITY
+fetch("activity.json")
 .then(res => res.json())
 .then(data => {
 
-  const container = document.getElementById("watchlistContainer");
-  const lock = document.getElementById("lockMessage");
+  const today = new Date().toISOString().slice(0,10);
 
-  const setups = data.filter(x => x.status !== "failed");
+  const todays = data.filter(a => a.date.startsWith(today));
 
-  const grouped = groupBy(setups, "group");
+  const html = todays.map(a => {
 
-  let html = "";
+    if (a.type === "OPEN") {
+      return `<div class="green">🟢 ${a.symbol} opened</div>`;
+    }
 
-  const order = ["SMALL", "MID", "LARGE"];
+    if (a.type === "CLOSED") {
+      return `<div class="red">🔴 ${a.symbol} closed (${a.return}%)</div>`;
+    }
 
-  order.forEach(group => {
+  }).join("");
 
-    if (!grouped[group]) return;
+  document.getElementById("todayActivity").innerHTML =
+    html || "No activity today";
 
-    let label = "🟡 Mid Caps";
-    if (group === "SMALL") label = "🟢 Small Caps";
-    if (group === "LARGE") label = "🔵 Large Caps";
+});
 
-    html += `<div class="section-title">${label}</div>`;
 
-    grouped[group].forEach(stock => {
+// 📊 WATCHLIST
+fetch("watchlist.json")
+.then(res => res.json())
+.then(data => {
 
-      const change = Number(stock.change_percent || 0);
+  let total = 0;
+  let count = 0;
+  let best = -999;
 
-      let perfColor = "#8b949e";
-      let perfText = "-";
+  let small = [], mid = [], large = [];
 
-      if (change > 0) {
-        perfColor = "#3ddc97";
-        perfText = "+" + change.toFixed(2) + "%";
-      } else if (change < 0) {
-        perfColor = "#ff6b6b";
-        perfText = change.toFixed(2) + "%";
-      }
+  const rows = data.map(t => {
 
-      // 📅 ENTRY DATE
-      let dateText = "-";
-      if (stock.signal_date) {
-        const d = new Date(stock.signal_date);
-        dateText = d.toLocaleDateString(undefined, {
-          month: "short",
-          day: "numeric"
-        });
-      }
+    const entry = t.entry_price || 0;
+    const change = t.change_percent || 0;
 
-      // 🔥 STRONG TRADE
-      const isStrong = change >= 10;
+    const color = change >= 0 ? "green" : "red";
 
-      const symbol = isPremium ? stock.symbol : "████";
+    total += change;
+    count++;
 
-      html += `
-        <div class="box ${isStrong ? "strong" : ""}">
-          <div style="display:flex; justify-content:space-between;">
-            <strong>
-              ${symbol}
-              ${isStrong ? `<span class="tag tag-strong">STRONG</span>` : ""}
-            </strong>
-            <span style="color:${perfColor}; font-weight:bold;">
-              ${perfText}
-            </span>
-          </div>
+    if (change > best) best = change;
 
-          <div style="margin-top:6px; font-size:13px; color:#9ca3af;">
-            Started: ${dateText}
-          </div>
+    // GROUPS
+    if (t.price_group === "SMALL") small.push(change);
+    if (t.price_group === "MID") mid.push(change);
+    if (t.price_group === "LARGE") large.push(change);
 
-          ${
-            isPremium
-              ? `
-                <button onclick="openChart('${stock.symbol}')">
-                  View Chart
-                </button>
-              `
-              : `
-                <div style="margin-top:10px; color:#22c55e;">
-                  🔒 Unlock to view setups
-                </div>
-              `
-          }
-        </div>
-      `;
-    });
+    return `
+<tr>
+  <td><strong>${t.symbol}</strong></td>
+  <td>$${entry.toFixed(2)}</td>
+  <td class="${color}">
+    ${change.toFixed(2)}%
+  </td>
+  <td>
+    <span class="status ${t.status}">
+      ${t.status}
+    </span>
+  </td>
+</tr>
 
+<tr>
+  <td colspan="4">
+    <div class="chart-box" onclick="handleChartClick('${t.symbol}')">
+      📈 View Chart
+    </div>
+  </td>
+</tr>
+`;
   });
 
-  container.innerHTML = html;
+  document.getElementById("watchlistTable").innerHTML = rows.join("");
 
-  if (!isPremium) {
-    lock.innerHTML = `
-      🔒 Breakout setups are hidden<br>
-      <a href="pricing.html" style="color:#22c55e; font-weight:bold;">
-        Unlock full access →
-      </a>
-    `;
+  // STATS
+  document.getElementById("activeCount").innerText = count;
+  document.getElementById("avgReturn").innerText = (total / count).toFixed(2) + "%";
+  document.getElementById("bestTrade").innerText = "+" + best.toFixed(2) + "%";
+
+  function avg(arr) {
+    if (!arr.length) return "0%";
+    return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2) + "%";
   }
 
-})
-.catch(err => console.error(err));
+  document.getElementById("smallPerf").innerText = avg(small);
+  document.getElementById("midPerf").innerText = avg(mid);
+  document.getElementById("largePerf").innerText = avg(large);
+
+});
 
 
-// 📊 CHART
-function openChart(symbol){
-  const modal = document.getElementById("chartModal");
-  const container = document.getElementById("chartContainer");
+// 🔒 CHART CLICK
+function handleChartClick(symbol) {
 
-  modal.style.display = "flex";
+  const isPaid = localStorage.getItem("paidUser");
 
-  container.innerHTML = `
-    <iframe 
-      src="https://s.tradingview.com/widgetembed/?symbol=${symbol}&interval=D&theme=dark"
-      style="width:100%; height:500px; border:none;">
-    </iframe>
-  `;
-}
+  if (!isPaid) {
+    window.location.href = "pricing.html";
+    return;
+  }
 
-function closeChart(){
-  document.getElementById("chartModal").style.display = "none";
+  window.location.href = `chart.html?symbol=${symbol}`;
 }
 
 </script>
