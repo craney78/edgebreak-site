@@ -677,7 +677,6 @@ fetch("activity.json?v=" + new Date().getTime())
 
 });
 
-// LIVE STATS FROM WATCHLIST
 fetch("watchlist.json?v=" + new Date().getTime())
 .then(res => res.json())
 .then(data => {
@@ -685,9 +684,10 @@ fetch("watchlist.json?v=" + new Date().getTime())
   const container = document.getElementById("watchlist");
 
   const active = data.filter(t =>
-  t.status === "breaking" || t.status === "holding"
-);
+    t.status === "breaking" || t.status === "holding"
+  );
 
+  // 🔥 PREVIEW MODE (2 trades only)
   const preview = active.slice(0, 2);
 
   if (!active.length) {
@@ -695,14 +695,14 @@ fetch("watchlist.json?v=" + new Date().getTime())
     return;
   }
 
-  container.innerHTML = active.map(t => {
+  container.innerHTML = preview.map(t => {
 
-    const entry = t.entry_price;
-    const current = t.change_percent;
+    const entry = t.entry_price || 0;
+    const current = t.change_percent || 0;
 
     const color = current >= 0 ? "green" : "red";
 
-    // 🔒 BLACKED OUT SYMBOL
+    // 🔒 HIDE SYMBOL
     const hiddenSymbol = "████";
 
     return `
@@ -717,11 +717,10 @@ fetch("watchlist.json?v=" + new Date().getTime())
 
   }).join("");
 
-})
-
-  // 🔥 BLUR EFFECT
+  // 🔥 BLUR EFFECT (NOW IN CORRECT PLACE)
   container.classList.add("blur");
 
+})
 .catch(() => {
   document.getElementById("watchlist").innerHTML =
     "<div class='card'>Watchlist unavailable</div>";
