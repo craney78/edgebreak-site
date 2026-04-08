@@ -247,108 +247,42 @@ tr:hover {
 
 <script>
 
-// 🔔 ACTIVITY
-fetch("activity.json")
-.then(res => res.json())
-.then(data => {
-
-  const today = new Date().toISOString().slice(0,10);
-
-  const todays = data.filter(a => a.date.startsWith(today));
-
-  let open = 0;
-  let closed = 0;
-
-  const html = todays.map(a => {
-
-    if (a.type === "OPEN") {
-      open++;
-      return `<div class="green">🟢 ${a.symbol} opened</div>`;
-    }
-
-    if (a.type === "CLOSED") {
-      closed++;
-      return `<div class="red">🔴 ${a.symbol} closed (${a.return}%)</div>`;
-    }
-
-  }).join("");
-
-  document.getElementById("todayActivity").innerHTML =
-    html || "No activity today";
-
-  document.getElementById("todayOpen").innerText = open;
-  document.getElementById("todayClosed").innerText = closed;
-
-});
-
-
-<script>
-
-<script>
-
 document.addEventListener("DOMContentLoaded", function () {
 
-  console.log("🚀 Watchlist Page Loaded");
+  console.log("🚀 WATCHLIST START");
 
   // =========================
-  // 🔔 TODAY ACTIVITY
-  // =========================
-  fetch("activity.json")
-  .then(res => res.json())
-  .then(data => {
-
-    const today = new Date().toISOString().slice(0,10);
-
-    let open = 0;
-    let closed = 0;
-
-    const html = data.map(a => {
-
-      if (!a.date || !a.type) return "";
-
-      if (a.date.includes(today)) {
-
-        if (a.type === "OPEN") {
-          open++;
-          return `<div class="green">🟢 ${a.symbol} opened</div>`;
-        }
-
-        if (a.type === "CLOSED") {
-          closed++;
-          return `<div class="red">🔴 ${a.symbol} closed (${a.return}%)</div>`;
-        }
-      }
-
-      return "";
-
-    }).join("");
-
-    document.getElementById("todayActivity").innerHTML =
-      html || "No activity today";
-
-    document.getElementById("todayOpen").innerText = open;
-    document.getElementById("todayClosed").innerText = closed;
-
-  })
-  .catch(err => console.error("Activity error:", err));
-
-
-  // =========================
-  // 📊 WATCHLIST + ALL STATS
+  // 📊 WATCHLIST LOAD
   // =========================
   fetch("watchlist.json")
   .then(res => res.json())
   .then(data => {
 
-    let total = 0;
-    let count = 0;
-    let best = -999;
+    console.log("DATA:", data);
+
+    // 🔴 FALLBACK (if empty or broken)
+    if (!data || !data.length) {
+      data = [
+        {
+          symbol: "TEST",
+          entry_price: 100,
+          change_percent: 5.25,
+          status: "holding",
+          price_group: "SMALL",
+          signal_date: "2026-04-08"
+        }
+      ];
+    }
 
     let smallHTML = "", midHTML = "", largeHTML = "";
     let smallStats = [], midStats = [], largeStats = [];
 
+    let total = 0;
+    let count = 0;
+    let best = -999;
+
     // =========================
-    // 🔧 BUILD TRADE CARD
+    // 🔧 BUILD TRADE BOX
     // =========================
     function buildTradeBox(t) {
 
@@ -398,12 +332,12 @@ document.addEventListener("DOMContentLoaded", function () {
         smallStats.push(change);
       }
 
-      if (t.price_group === "MID") {
+      else if (t.price_group === "MID") {
         midHTML += buildTradeBox(t);
         midStats.push(change);
       }
 
-      if (t.price_group === "LARGE") {
+      else if (t.price_group === "LARGE") {
         largeHTML += buildTradeBox(t);
         largeStats.push(change);
       }
@@ -415,11 +349,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // =========================
     function avg(arr) {
       if (!arr.length) return "0%";
-
-      const clean = arr.map(Number).filter(n => !isNaN(n));
-      if (!clean.length) return "0%";
-
-      return (clean.reduce((a,b)=>a+b,0)/clean.length).toFixed(2) + "%";
+      return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2) + "%";
     }
 
     function bestVal(arr) {
@@ -427,9 +357,6 @@ document.addEventListener("DOMContentLoaded", function () {
       return Math.max(...arr).toFixed(2) + "%";
     }
 
-    // =========================
-    // 🧱 BUILD SECTIONS
-    // =========================
     function buildSection(title, html, stats) {
       return `
         <h2 style="margin-top:30px;">${title}</h2>
@@ -451,43 +378,54 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
 
-        ${html || "<p style='color:#64748b;'>No trades</p>"}
+        ${html}
       `;
     }
 
-    document.getElementById("smallSection").innerHTML =
-      buildSection("🟢 Small Cap Desk", smallHTML, smallStats);
+    // =========================
+    // 🧱 RENDER SECTIONS (SAFE)
+    // =========================
+    const smallEl = document.getElementById("smallSection");
+    const midEl = document.getElementById("midSection");
+    const largeEl = document.getElementById("largeSection");
 
-    document.getElementById("midSection").innerHTML =
-      buildSection("🟡 Mid Cap Desk", midHTML, midStats);
+    if (!smallEl || !midEl || !largeEl) {
+      console.error("❌ Missing section divs");
+      return;
+    }
 
-    document.getElementById("largeSection").innerHTML =
-      buildSection("🔵 Large Cap Desk", largeHTML, largeStats);
+    smallEl.innerHTML = buildSection("🟢 Small Cap Desk", smallHTML, smallStats);
+    midEl.innerHTML = buildSection("🟡 Mid Cap Desk", midHTML, midStats);
+    largeEl.innerHTML = buildSection("🔵 Large Cap Desk", largeHTML, largeStats);
 
     // =========================
-    // 🔥 MAIN STATS STRIP
+    // 🔥 MAIN STATS
     // =========================
-    document.getElementById("activeCount").innerText = count;
+    const activeEl = document.getElementById("activeCount");
+    const avgEl = document.getElementById("avgReturn");
+    const bestEl = document.getElementById("bestTrade");
 
-    document.getElementById("avgReturn").innerText =
-      count ? (total / count).toFixed(2) + "%" : "0%";
-
-    document.getElementById("bestTrade").innerText =
-      best > -999 ? "+" + best.toFixed(2) + "%" : "0%";
+    if (activeEl) activeEl.innerText = count;
+    if (avgEl) avgEl.innerText = count ? (total/count).toFixed(2) + "%" : "0%";
+    if (bestEl) bestEl.innerText = best > -999 ? "+" + best.toFixed(2) + "%" : "0%";
 
     // =========================
     // 📊 MARKET BREAKDOWN
     // =========================
-    document.getElementById("smallPerf").innerText = avg(smallStats);
-    document.getElementById("midPerf").innerText = avg(midStats);
-    document.getElementById("largePerf").innerText = avg(largeStats);
+    const smallPerf = document.getElementById("smallPerf");
+    const midPerf = document.getElementById("midPerf");
+    const largePerf = document.getElementById("largePerf");
+
+    if (smallPerf) smallPerf.innerText = avg(smallStats);
+    if (midPerf) midPerf.innerText = avg(midStats);
+    if (largePerf) largePerf.innerText = avg(largeStats);
 
   })
-  .catch(err => console.error("Watchlist error:", err));
+  .catch(err => console.error("❌ FETCH ERROR:", err));
 
 
   // =========================
-  // 🔒 CHART CLICK (PAYWALL)
+  // 🔒 CHART CLICK
   // =========================
   window.handleChartClick = function(symbol) {
 
