@@ -284,18 +284,18 @@ fetch("activity.json")
 
 <script>
 
+<script>
+
 document.addEventListener("DOMContentLoaded", function () {
 
-  console.log("🚀 SYSTEM LOADED");
+  console.log("🚀 Watchlist Page Loaded");
 
   // =========================
-  // 🔔 TODAY ACTIVITY (FIXED)
+  // 🔔 TODAY ACTIVITY
   // =========================
   fetch("activity.json")
   .then(res => res.json())
   .then(data => {
-
-    console.log("ACTIVITY:", data);
 
     const today = new Date().toISOString().slice(0,10);
 
@@ -323,16 +323,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }).join("");
 
-    const activityEl = document.getElementById("todayActivity");
-    const openEl = document.getElementById("todayOpen");
-    const closedEl = document.getElementById("todayClosed");
+    document.getElementById("todayActivity").innerHTML =
+      html || "No activity today";
 
-    if (activityEl) activityEl.innerHTML = html || "No activity today";
-    if (openEl) openEl.innerText = open;
-    if (closedEl) closedEl.innerText = closed;
+    document.getElementById("todayOpen").innerText = open;
+    document.getElementById("todayClosed").innerText = closed;
 
   })
-  .catch(err => console.error("ACTIVITY ERROR:", err));
+  .catch(err => console.error("Activity error:", err));
 
 
   // =========================
@@ -342,8 +340,6 @@ document.addEventListener("DOMContentLoaded", function () {
   .then(res => res.json())
   .then(data => {
 
-    console.log("WATCHLIST:", data);
-
     let total = 0;
     let count = 0;
     let best = -999;
@@ -352,13 +348,12 @@ document.addEventListener("DOMContentLoaded", function () {
     let smallStats = [], midStats = [], largeStats = [];
 
     // =========================
-    // 🔧 BUILD TRADE BOX
+    // 🔧 BUILD TRADE CARD
     // =========================
     function buildTradeBox(t) {
 
       const entry = Number(t.entry_price) || 0;
       const change = Number(t.change_percent) || 0;
-
       const color = change >= 0 ? "green" : "red";
 
       return `
@@ -416,7 +411,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // =========================
-    // 📊 SAFE AVG FUNCTION
+    // 📊 HELPERS
     // =========================
     function avg(arr) {
       if (!arr.length) return "0%";
@@ -460,56 +455,39 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
     }
 
-    const smallSection = document.getElementById("smallSection");
-    const midSection = document.getElementById("midSection");
-    const largeSection = document.getElementById("largeSection");
-
-    if (smallSection) smallSection.innerHTML =
+    document.getElementById("smallSection").innerHTML =
       buildSection("🟢 Small Cap Desk", smallHTML, smallStats);
 
-    if (midSection) midSection.innerHTML =
+    document.getElementById("midSection").innerHTML =
       buildSection("🟡 Mid Cap Desk", midHTML, midStats);
 
-    if (largeSection) largeSection.innerHTML =
+    document.getElementById("largeSection").innerHTML =
       buildSection("🔵 Large Cap Desk", largeHTML, largeStats);
 
     // =========================
-    // 🔥 MAIN STATS
+    // 🔥 MAIN STATS STRIP
     // =========================
-    const activeEl = document.getElementById("activeCount");
-    const avgEl = document.getElementById("avgReturn");
-    const bestEl = document.getElementById("bestTrade");
+    document.getElementById("activeCount").innerText = count;
 
-    if (activeEl) activeEl.innerText = count || 0;
+    document.getElementById("avgReturn").innerText =
+      count ? (total / count).toFixed(2) + "%" : "0%";
 
-    if (avgEl) {
-      avgEl.innerText = count
-        ? (total / count).toFixed(2) + "%"
-        : "0%";
-    }
-
-    if (bestEl) {
-      bestEl.innerText =
-        best > -999 ? "+" + best.toFixed(2) + "%" : "0%";
-    }
+    document.getElementById("bestTrade").innerText =
+      best > -999 ? "+" + best.toFixed(2) + "%" : "0%";
 
     // =========================
     // 📊 MARKET BREAKDOWN
     // =========================
-    const smallPerf = document.getElementById("smallPerf");
-    const midPerf = document.getElementById("midPerf");
-    const largePerf = document.getElementById("largePerf");
-
-    if (smallPerf) smallPerf.innerText = avg(smallStats);
-    if (midPerf) midPerf.innerText = avg(midStats);
-    if (largePerf) largePerf.innerText = avg(largeStats);
+    document.getElementById("smallPerf").innerText = avg(smallStats);
+    document.getElementById("midPerf").innerText = avg(midStats);
+    document.getElementById("largePerf").innerText = avg(largeStats);
 
   })
-  .catch(err => console.error("WATCHLIST ERROR:", err));
+  .catch(err => console.error("Watchlist error:", err));
 
 
   // =========================
-  // 🔒 CHART CLICK
+  // 🔒 CHART CLICK (PAYWALL)
   // =========================
   window.handleChartClick = function(symbol) {
 
