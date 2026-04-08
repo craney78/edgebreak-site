@@ -249,30 +249,87 @@ tr:hover {
 
 document.addEventListener("DOMContentLoaded", function () {
 
+  console.log("🚀 WATCHLIST LOADED");
+
+  // =========================
+  // 🔔 TODAY ACTIVITY (FIXED)
+  // =========================
+  fetch("activity.json?v=" + new Date().getTime())
+  .then(res => res.json())
+  .then(data => {
+
+    const today = new Date();
+    const todayStr =
+      today.getFullYear() + "-" +
+      String(today.getMonth()+1).padStart(2,"0") + "-" +
+      String(today.getDate()).padStart(2,"0");
+
+    let open = 0;
+    let closed = 0;
+
+    const html = data.map(a => {
+
+      if (!a.date || !a.type) return "";
+
+      if (a.date.includes(todayStr)) {
+
+        if (a.type === "OPEN") {
+          open++;
+          return `<div class="green">🟢 ${a.symbol} opened</div>`;
+        }
+
+        if (a.type === "CLOSED") {
+          closed++;
+          return `<div class="red">🔴 ${a.symbol} closed (${a.return}%)</div>`;
+        }
+      }
+
+      return "";
+
+    }).join("");
+
+    document.getElementById("todayActivity").innerHTML =
+      html || "No activity today";
+
+    document.getElementById("todayOpen").innerText = open;
+    document.getElementById("todayClosed").innerText = closed;
+
+  })
+  .catch(err => console.error("Activity error:", err));
+
+
+  // =========================
+  // 📊 WATCHLIST + STATS
+  // =========================
   fetch("watchlist.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
 
-    console.log("REAL DATA:", data);
-
-    let smallHTML = "", midHTML = "", largeHTML = "";
-    let smallStats = [], midStats = [], largeStats = [];
+    console.log("WATCHLIST DATA:", data);
 
     let total = 0;
     let count = 0;
     let best = -999;
 
+    let smallHTML = "", midHTML = "", largeHTML = "";
+    let smallStats = [], midStats = [], largeStats = [];
+
+    // =========================
+    // 🔧 GROUP LOGIC (FIXED)
+    // =========================
     function getGroup(price) {
       if (price < 20) return "SMALL";
       if (price < 80) return "MID";
       return "LARGE";
     }
 
+    // =========================
+    // 🔧 BUILD TRADE BOX
+    // =========================
     function buildTradeBox(t) {
 
       const entry = Number(t.entry_price || t.entry || 0);
       const change = Number(t.change_percent || t.return || 0);
-
       const color = change >= 0 ? "green" : "red";
 
       return `
@@ -283,7 +340,14 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
 
           <div style="font-size:13px; color:#94a3b8; margin-top:5px;">
-            Entry: $${entry.toFixed(2)}
+            Entry: $${entry.toFixed(2)}<br>
+            Date: ${t.signal_date || "-"}
+          </div>
+
+          <div style="margin-top:10px;">
+            <span class="status ${t.status}">
+              ${t.status}
+            </span>
           </div>
 
           <div class="chart-box" onclick="handleChartClick('${t.symbol}')">
@@ -293,6 +357,9 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
     }
 
+    // =========================
+    // 🔄 PROCESS DATA
+    // =========================
     data.forEach(t => {
 
       const entry = Number(t.entry_price || t.entry || 0);
@@ -322,6 +389,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
+    // =========================
+    // 📊 HELPERS
+    // =========================
     function avg(arr) {
       if (!arr.length) return "0%";
       return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2) + "%";
@@ -357,6 +427,9 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
     }
 
+    // =========================
+    // 🧱 RENDER SECTIONS
+    // =========================
     document.getElementById("smallSection").innerHTML =
       buildSection("🟢 Small Cap Desk", smallHTML, smallStats);
 
@@ -366,7 +439,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("largeSection").innerHTML =
       buildSection("🔵 Large Cap Desk", largeHTML, largeStats);
 
-    // MAIN STATS
+    // =========================
+    // 🔥 MAIN STATS
+    // =========================
     document.getElementById("activeCount").innerText = count;
 
     document.getElementById("avgReturn").innerText =
@@ -375,13 +450,20 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("bestTrade").innerText =
       best > -999 ? "+" + best.toFixed(2) + "%" : "0%";
 
-    // MARKET BREAKDOWN
+    // =========================
+    // 📊 MARKET BREAKDOWN (FIXED)
+    // =========================
     document.getElementById("smallPerf").innerText = avg(smallStats);
     document.getElementById("midPerf").innerText = avg(midStats);
     document.getElementById("largePerf").innerText = avg(largeStats);
 
-  });
+  })
+  .catch(err => console.error("Watchlist error:", err));
 
+
+  // =========================
+  // 🔒 CHART CLICK
+  // =========================
   window.handleChartClick = function(symbol) {
 
     const isPaid = localStorage.getItem("paidUser");
