@@ -16,7 +16,20 @@ body {
 
 /* HERO */
 .pricing-hero {
-  padding: 80px 20px 40px;
+  padding: 100px 20px 60px;
+  position: relative;
+}
+
+.pricing-hero::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(34,197,94,0.15), transparent 70%);
+  z-index: -1;
 }
 
 .pricing-hero h1 {
