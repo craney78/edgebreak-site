@@ -455,6 +455,19 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("largeSection").innerHTML =
       "<h2>🔵 Large Cap</h2>" + (largeHTML || emptyBox("large cap"));
 
+    // =========================
+    // 📊 STATS (FIXED)
+    // =========================
+    document.getElementById("activeCount").innerText = count;
+    document.getElementById("avgReturn").innerText =
+      count ? (total / count).toFixed(2) + "%" : "0%";
+    document.getElementById("bestTrade").innerText =
+      best > -999 ? best.toFixed(2) + "%" : "0%";
+
+    document.getElementById("smallPerf").innerText = avg(small);
+    document.getElementById("midPerf").innerText = avg(mid);
+    document.getElementById("largePerf").innerText = avg(large);
+
   })
   .catch(() => {
     console.error("Watchlist failed to load");
