@@ -191,7 +191,17 @@ document.addEventListener("DOMContentLoaded", function () {
     data.forEach(t => {
 
       const entry = Number(t.price || 0);
-      const change = Number(t.change_percent || 0);
+      let change = Number(t.change_percent || 0);
+
+      // 🔥 fallback calculation
+      if (change === 0) {
+        const entry = Number(t.price || 0);
+        const current = Number(t.current_price || 0);
+
+        if (entry && current && current !== 0) {
+          change = ((current - entry) / entry) * 100;
+        }
+      }
       const group = t.group || "MID";
 
       total += change;

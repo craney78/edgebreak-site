@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 import time
 import json
-from datetime import datetime, timedelta
+from datetime import datetime
 
 # =========================
 # 🔑 CONFIG
@@ -16,6 +16,10 @@ STOP_DAYS = 4
 STARTING_CAPITAL = 100000
 RISK_PER_TRADE = 0.02
 
+START_DATE = "2025-01-01"
+END_DATE = datetime.now().strftime("%Y-%m-%d")
+
+RUN_LABEL = "2025_to_now"
 
 # =========================
 # BUILD NASDAQ UNIVERSE
@@ -90,15 +94,10 @@ def run_backtest():
                 continue
 
             df = pd.DataFrame(content["values"])
-            df["datetime"] = pd.to_datetime(df["datetime"])
+            df["datetime"] = pd.to_datetime(df["datetime"])  # ✅ ADD THIS
             df = df.sort_values("datetime", ascending=True)
 
-            START_DATE = "2025-01-01"
-            END_DATE = "2026-12-31"
-
-            df = df[(df["datetime"] >= START_DATE) & (df["datetime"] <= END_DATE)]
-
-            # ✅ CREATE data FIRST
+             # ✅ CREATE data FIRST
             data = df.to_dict("records")
 
             # =========================
@@ -216,6 +215,9 @@ def run_backtest():
                 # =========================
                 entry = float(data[idx]["close"])
                 entry_date = data[idx]["datetime"]
+
+                if entry_date < pd.to_datetime(START_DATE):
+                    continue
 
                 exit_price = entry
                 exit_date = entry_date
@@ -356,6 +358,7 @@ def run_backtest():
                     "entry_date": entry_date,
                     "exit_date": exit_date,
                     "entry_price": entry,
+                    "exit_price": exit_price,  # ✅ ADD THIS LINE
                     "percent_move": round(percent_move, 2),
                     "days_held": days_held,
                     "exit_type": status
@@ -370,9 +373,16 @@ def run_backtest():
     
     df = pd.DataFrame(results)
 
-    df.to_csv("trade_history_2025.csv", index=False)
+    df.to_csv(f"trade_history_{RUN_LABEL}.csv", index=False)
 
-    print(f"\n✅ Saved {len(df)} trades to trade_history_2025.csv")    
+    print(f"\n✅ Saved {len(df)} trades to trade_history_{RUN_LABEL}.csv")
+
+    # =========================
+    # 📤 SAVE CLEAN JSON (ADD HERE)
+    # =========================
+    df.to_json(f"trade_history_{RUN_LABEL}.json", orient="records", indent=2)
+
+    print("✅ trade_history JSON saved")    
 
     # =========================
     # RESULTS SUMMARY + ANALYSIS
@@ -459,6 +469,43 @@ def run_backtest():
     print(f"Best: {round(df['percent_move'].max(),2)}%")
     print(f"Worst: {round(df['percent_move'].min(),2)}%")
 
+    
+
+    # =========================
+    # 💾 SAVE MASTER STATS (ADD HERE)
+    # =========================
+    stats = {
+        "total_trades": int(len(df)),
+        "win_rate": round((df['percent_move'] > 0).mean() * 100, 2),
+        "avg_return": round(df['percent_move'].mean(), 2),
+        "best_trade": round(df['percent_move'].max(), 2),
+        "worst_trade": round(df['percent_move'].min(), 2),
+        "avg_winner": round(df[df['percent_move'] > 0]['percent_move'].mean(), 2),
+        "avg_loser": round(df[df['percent_move'] < 0]['percent_move'].mean(), 2)
+}
+
+    with open(f"master_stats_{RUN_LABEL}.json", "w") as f:
+        json.dump(stats, f, indent=2)
+
+    print("✅ master_stats.json created")
+
+    capital = 0
+    equity = []
+
+    TRADE_SIZE = 10000
+
+    for _, trade in df.sort_values("entry_date").iterrows():
+
+        pnl = TRADE_SIZE * (trade["percent_move"] / 100)
+        capital += pnl
+
+        equity.append(capital)
+
+    with open(f"equity_curve_{RUN_LABEL}.json", "w") as f:
+        json.dump(equity, f)
+
+    print("✅ equity curve saved")
+
     return df
 
 # =========================
@@ -521,87 +568,7 @@ def run_fixed_trade_analysis(df):
     if losses:
         print(f"Avg Loss: ${round(sum(losses)/len(losses),2)}")
         print(f"Worst Loss: ${round(min(losses),2)}")
-
-    
-# =========================
-# 📤 EXPORT FUNCTIONS (NOW OUTSIDE ✅)
-# =========================
-
-def export_watchlist(df):
-
-    active = df[df["exit_date"] == df["exit_date"].max()]
-
-    watchlist = []
-
-    for _, row in active.iterrows():
-        watchlist.append({
-            "symbol": row["symbol"],
-            "group": "SMALL" if row["entry_price"] < 20 else "MID" if row["entry_price"] < 80 else "LARGE",
-            "price": row["entry_price"],
-            "breakout": row["entry_price"],
-            "change_percent": row["percent_move"],
-            "signal_date": str(row["entry_date"]),
-            "status": "active"
-        })
-
-    with open("watchlist.json", "w") as f:
-        json.dump(watchlist, f, indent=2)
-
-    print("✅ watchlist.json created")
-
-
-def export_best_trades(df):
-
-    one_year_ago = datetime.now() - timedelta(days=365)
-
-    recent = df[df["entry_date"] >= one_year_ago]
-
-    best = recent[recent["percent_move"] > 20]
-    best = best.sort_values("percent_move", ascending=False).head(20)
-
-    output = []
-
-    for _, row in best.iterrows():
-        output.append({
-            "symbol": row["symbol"],
-            "group": row["price_group"],
-            "return": row["percent_move"],
-            "days": row["days_held"],
-            "date": str(row["entry_date"])
-        })
-
-    with open("best_trades.json", "w") as f:
-        json.dump(output, f, indent=2)
-
-    print("✅ best_trades.json created")
-
-
-def export_stats(df):
-
-    current_year = datetime.now().year
-
-    df_year = df[df["entry_date"].dt.year == current_year]
-
-    stats = {}
-
-    for group in ["SMALL", "MID", "LARGE"]:
-
-        group_df = df_year[df_year["price_group"] == group]
-
-        if group_df.empty:
-            continue
-
-        stats[group] = {
-            "trades": int(len(group_df)),
-            "avg_return": round(group_df["percent_move"].mean(), 2),
-            "best": round(group_df["percent_move"].max(), 2),
-            "worst": round(group_df["percent_move"].min(), 2)
-        }
-
-    with open("current_year_stats.json", "w") as f:
-        json.dump(stats, f, indent=2)
-
-    print("✅ stats.json created")    
+ 
  
 # =========================
 # RUN EVERYTHING
@@ -611,7 +578,4 @@ df = run_backtest()
 
 if df is not None:
     run_fixed_trade_analysis(df)
-
-    export_watchlist(df)
-    export_best_trades(df)
-    export_stats(df)
+    export_best_trades(df)  # keep this one

@@ -929,30 +929,26 @@ document.getElementById("tradeProof").innerHTML =
 // =========================
 // 🔥 STATS (FINAL CLEAN VERSION)
 // =========================
-fetch("stats.json?v=" + new Date().getTime())
+// =========================
+// 📊 MASTER STATS (BACKTEST)
+// =========================
+fetch("master_stats_2025_to_now.json?v=" + new Date().getTime())
 .then(res => res.json())
-.then(data => {
+.then(stats => {
 
-  console.log("RAW STATS:", data);
+  document.getElementById("statsGrid").innerHTML = `
+    <div class="card"><div>Total Trades</div><div class="big">${stats.total_trades}</div></div>
+    <div class="card"><div>Win Rate</div><div class="big">${stats.win_rate}%</div></div>
+    <div class="card"><div>Avg Return</div><div class="big">${stats.avg_return}%</div></div>
+    <div class="card green"><div>Best Trade</div><div class="big">${stats.best_trade}%</div></div>
+    <div class="card red"><div>Worst Trade</div><div class="big">${stats.worst_trade}%</div></div>
+  `;
 
-  // 🔥 GET 2025 STATS (BULLETPROOF)
-let stats = data?.years?.["2025"] || null;
-
-if (!stats) {
-  console.log("❌ No 2025 data found in stats.json");
-}
-
-else if (data.by_year && data.by_year["2025"]) {
-  stats = {
-    total_trades: data.by_year["2025"].trades,
-    win_rate: data.by_year["2025"].win_rate,
-    avg_return: data.by_year["2025"].avg_return,
-    best_trade: data.by_year["2025"].best,
-    worst_trade: data.by_year["2025"].worst,
-    best_trades: [],
-    groups: data.by_group || {}
-  };
-}
+})
+.catch(() => {
+  document.getElementById("statsGrid").innerHTML =
+    "<div class='card'>Stats unavailable</div>";
+});
 
   // ❌ NO DATA
   if (!stats) {

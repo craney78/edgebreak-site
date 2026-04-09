@@ -17,18 +17,47 @@ SCAN_LIMIT = 3200
 # BUILD NASDAQ UNIVERSE (MATCH BACKTEST)
 # =========================
 def build_nasdaq_universe():
+
     url = "https://www.nasdaqtrader.com/dynamic/symdir/nasdaqlisted.txt"
-    df = pd.read_csv(url, sep="|")
 
-    clean = df[
-        (df["ETF"] == "N") &
-        (df["Test Issue"] == "N")
-    ]
+    try:
+        df = pd.read_csv(url, sep="|")
 
-    clean = clean[~clean["Symbol"].str.contains(r"\.|W$|R$|P$|Q$", regex=True)]
-    clean = clean[clean["Symbol"].str.len() <= 5]
+        # 🔥 VALIDATE DATA
+        if "Symbol" not in df.columns:
+            print("❌ Nasdaq file missing Symbol column")
+            return []
 
-    return clean["Symbol"].tolist()
+        clean = df[
+            (df["ETF"] == "N") &
+            (df["Test Issue"] == "N")
+        ]
+
+        clean = clean[~clean["Symbol"].str.contains(r"\.|W$|R$|P$|Q$", regex=True)]
+        clean = clean[clean["Symbol"].str.len() <= 5]
+
+        symbols = clean["Symbol"].dropna().tolist()
+
+        print(f"✅ Loaded {len(symbols)} NASDAQ symbols")
+
+        return symbols
+
+    except Exception as e:
+        print(f"❌ Failed to load NASDAQ universe: {e}")
+        return []
+
+# =========================
+# FETCH LATEST PRICE
+# =========================
+def fetch_latest_price(symbol):
+
+    url = f"https://api.twelvedata.com/price?symbol={symbol}&apikey={API_KEY}"
+
+    try:
+        r = requests.get(url, timeout=10).json()
+        return float(r["price"])
+    except:
+        return None        
 
 # =========================
 # FETCH DATA (STABLE EOD VERSION ✅)
@@ -99,17 +128,17 @@ def process_data(data):
             # =========================
             # MAIN SCAN LOOP
             # =========================
-            for i in range(100, len(values)):
+            i = len(values) - 1
 
                 # 🔥 MATCH BACKTEST ORIENTATION
-                window = list(reversed(values[i-100:i]))
+            window = list(reversed(values[i-100:i]))
 
-                # =========================
-                # 🔥 LIQUIDITY FILTER (BACKTEST MATCH)
-                # =========================
-                avg_volume = sum(float(d["volume"]) for d in window[1:21]) / 20
-                if avg_volume < 500000:
-                    continue
+            # =========================
+            # 🔥 LIQUIDITY FILTER (BACKTEST MATCH)
+            # =========================
+            avg_volume = sum(float(d["volume"]) for d in window[1:21]) / 20
+            if avg_volume < 500000:
+                continue
 
                 # =========================
                 # 🎯 BREAKOUT LOGIC
@@ -195,7 +224,7 @@ def process_data(data):
                 # =========================
                 # 🚫 DUPLICATE CHECK
                 # =========================
-                key = f"{symbol}_{window[0]['datetime']}"
+                key = symbol
                 if key in seen:
                     continue
                 seen.add(key)
@@ -231,7 +260,18 @@ def process_data(data):
         except Exception as e:
             print(f"{symbol} error: {e}")
 
-    return signals
+    # =========================
+    # 🔁 REMOVE DUPLICATES (KEEP BEST PER SYMBOL)
+    # =========================
+    unique = {}
+
+    for s in signals:
+        symbol = s["symbol"]
+
+        if symbol not in unique or s["score"] > unique[symbol]["score"]:
+            unique[symbol] = s
+
+    return list(unique.values())
 
 # =========================
 # SORT SIGNALS
@@ -430,13 +470,16 @@ def save_watchlist_json(new_signals):
 
         item["age"] = item.get("age", 0) + 1
 
-        entry_price = safe_float(item.get("entry_price"))
-        entry_price = safe_float(item.get("entry_price"))
+        entry_price = float(item.get("price", 0))
 
         # 🔥 ALWAYS ENSURE CURRENT PRICE EXISTS
-        current_price = safe_float(item.get("current_price", entry_price))
-        item["current_price"] = current_price
+        current_price = fetch_latest_price(item["symbol"])
 
+        if current_price is None:
+            current_price = entry_price
+
+        item["current_price"] = round(current_price, 2)
+        
         if entry_price > 0 and current_price > 0:
             change = ((current_price - entry_price) / entry_price) * 100
             item["change_percent"] = round(change, 2)
@@ -593,6 +636,13 @@ def run():
         print(f"Batch {i // BATCH_SIZE + 1}")
 
         data = fetch_batch(batch)
+
+        # 🔥 CHECK FOR MISSING SYMBOLS
+        missing = [s for s in batch if s not in data]
+
+        if missing:
+            print(f"⚠️ Missing data for: {missing}")
+
         signals = process_data(data)
 
         all_signals.extend(signals)
