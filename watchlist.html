@@ -73,10 +73,182 @@ body {
   padding: 12px;
   border-bottom: 1px solid #1e293b;
 }
+
+.nav-logo {
+  width: 30px;
+  filter: drop-shadow(0 0 6px rgba(34,197,94,0.5));
+}
+
+.logo-text {
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  letter-spacing: 1px;
+  font-size: 16px;
+}
+
+.live-badge {
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(34,197,94,0.15);
+  color: #22c55e;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* NAVBAR */
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(2,6,23,0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(30,41,59,0.6);
+  z-index: 1000;
+}
+
+.nav-inner {
+  max-width: 1100px;
+  margin: auto;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LEFT */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* LINKS */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #94a3b8;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.nav-link:hover {
+  color: #22c55e;
+}
+
+/* CTA */
+.nav-cta {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.nav-cta:hover {
+  transform: translateY(-1px);
+}
+
+/* MOBILE */
+.menu-toggle {
+  display: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  background: #020617;
+  border-top: 1px solid #1e293b;
+}
+
+.mobile-menu a {
+  padding: 15px;
+  text-decoration: none;
+  color: #94a3b8;
+  border-bottom: 1px solid #1e293b;
+}
+
+.mobile-menu a:hover {
+  color: #22c55e;
+}
+
+.mobile-cta {
+  background: #22c55e;
+  color: white !important;
+  text-align: center;
+}
+
+/* MOBILE BREAKPOINT */
+@media (max-width: 768px) {
+
+  .nav-links {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .mobile-menu.active {
+    display: flex;
+  }
+}
+
 </style>
 </head>
 
 <body>
+
+<div class="nav">
+  <div class="nav-inner">
+
+    <!-- LEFT -->
+    <div class="nav-left">
+      <img src="images/logo.png" class="nav-logo">
+      <a href="index.html" class="logo-text">EDGEBREAK</a>
+      <span class="live-badge">● LIVE</span>
+    </div>
+
+    <!-- DESKTOP LINKS -->
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="index.html#statsGrid" class="nav-link">Performance</a>
+      <a href="watchlist.html" class="nav-link">Trading Desk</a>
+      <a href="trading-guide.html" class="nav-link">Guide</a>
+      <a href="pricing.html" class="nav-cta">Unlock</a>
+    </div>
+
+    <!-- MOBILE BUTTON -->
+    <div class="menu-toggle" onclick="toggleMenu()">
+      ☰
+    </div>
+
+  </div>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu"></div>
+    <a href="index.html">Home</a>
+    <a href="index.html#statsGrid">Performance</a>
+    <a href="watchlist.html">Trading Desk</a>
+    <a href="trading-guide.html">Guide</a>
+    <a href="pricing.html" class="mobile-cta">Unlock</a>
+  </div>
+</div>
 
 <div class="container">
 
@@ -251,6 +423,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+</script>
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById("mobileMenu");
+  menu.classList.toggle("active");
+}
 </script>
 
 </body>
