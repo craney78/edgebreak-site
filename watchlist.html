@@ -209,7 +209,12 @@ body {
   }
 }
 
-filter: drop-shadow(0 0 14px rgba(34,197,94,0.5));
+.header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px; /* increase from 20px */
+}
 
 </style>
 </head>
@@ -280,7 +285,10 @@ filter: drop-shadow(0 0 14px rgba(34,197,94,0.5));
 
   <!-- TODAY -->
   <div class="card">
-    <h3>Today's Trades</h3>
+    <h3>Today’s Trades</h3>
+    <p style="font-size:13px; color:#64748b; margin-top:-5px;">
+      Find your next breakout opportunity as it happens
+    </p>
     <div class="stat-line"><span>Opened</span><span id="todayOpen">0</span></div>
     <div class="stat-line"><span>Closed</span><span id="todayClosed">0</span></div>
     <div id="todayActivity"></div>
@@ -352,7 +360,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("todayOpen").innerText = open;
     document.getElementById("todayClosed").innerText = closed;
-    document.getElementById("todayActivity").innerHTML = html || "No activity";
+    document.getElementById("todayActivity").innerHTML = html || `
+      <div style="color:#94a3b8; font-size:13px; margin-top:10px;">
+        No trades triggered yet today.<br>
+        <span style="color:#64748b;">
+          The system is scanning for high-probability breakouts.
+        </span>
+      </div>
+    `;
 
   })
   .catch(() => {
@@ -418,17 +433,27 @@ document.addEventListener("DOMContentLoaded", function () {
       return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2)+"%";
     }
 
-    document.getElementById("smallSection").innerHTML = "<h2>🟢 Small Cap</h2>" + smallHTML;
-    document.getElementById("midSection").innerHTML = "<h2>🟡 Mid Cap</h2>" + midHTML;
-    document.getElementById("largeSection").innerHTML = "<h2>🔵 Large Cap</h2>" + largeHTML;
+    function emptyBox(label) {
+      return `
+        <div class="card" style="margin-top:10px;">
+          <p style="color:#94a3b8; font-size:13px;">
+            No active ${label} trades right now.<br>
+            <span style="color:#64748b;">
+              Waiting for breakout confirmation.
+            </span>
+          </p>
+        </div>
+      `;
+    }
 
-    document.getElementById("activeCount").innerText = count;
-    document.getElementById("avgReturn").innerText = count ? (total/count).toFixed(2)+"%" : "0%";
-    document.getElementById("bestTrade").innerText = best > -999 ? best.toFixed(2)+"%" : "0%";
+    document.getElementById("smallSection").innerHTML =
+      "<h2>🟢 Small Cap</h2>" + (smallHTML || emptyBox("small cap"));
 
-    document.getElementById("smallPerf").innerText = avg(small);
-    document.getElementById("midPerf").innerText = avg(mid);
-    document.getElementById("largePerf").innerText = avg(large);
+    document.getElementById("midSection").innerHTML =
+      "<h2>🟡 Mid Cap</h2>" + (midHTML || emptyBox("mid cap"));
+
+    document.getElementById("largeSection").innerHTML =
+      "<h2>🔵 Large Cap</h2>" + (largeHTML || emptyBox("large cap"));
 
   })
   .catch(() => {
