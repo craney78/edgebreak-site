@@ -596,6 +596,10 @@ body {
   opacity: 1;
 }
 
+.grid {
+  gap: 25px;
+}
+
 </style>
 </head>
 
@@ -727,51 +731,42 @@ body {
 
 </div>
   
-
-<!-- ACTIVITY -->
+<!-- LIVE WATCHLIST PREVIEW -->
 <div class="section">
-  <h2>Live Activity</h2>
 
-  <p style="color:#94a3b8; margin-bottom:15px;">
-    Real-time updates from the system showing when trades are opened and closed.
+  <h2>Live Breakout Signals</h2>
+
+  <p style="color:#94a3b8; margin-bottom:25px; max-width:700px;">
+    A live preview of breakout trades detected by the system. Full access includes entry points, symbols, and real-time performance tracking.
   </p>
 
-  <div id="activityFeed"></div>
-</div>
+  <!-- WATCHLIST BOX -->
+  <div class="watchlist-container">
 
-<div class="section">
-  <h2>Live Performance</h2>
-  <div id="liveStats" class="grid"></div>
-</div>
+    <div id="watchlist" class="watchlist-box"></div>
 
-<!-- WATCHLIST -->
-<div class="section">
-  <h2>Live Watchlist</h2>
+    <!-- LOCK OVERLAY -->
+    <div class="locked-overlay">
+      <div class="lock-content">
 
-  <!-- SUBTEXT -->
-  <p style="color:#94a3b8; margin-bottom:15px;">
-    Real breakout trades detected by the system — updated daily
-  </p>
+        <h3>🔒 Unlock Full Access</h3>
 
-  <!-- WATCHLIST CONTENT -->
-  <div id="watchlist" class="watchlist-box"></div>
+        <p style="color:#94a3b8; margin-top:10px;">
+          See all live trades, entry points, and performance data in real time.
+        </p>
 
-  <!-- LOCK OVERLAY -->
-  <div class="locked-overlay">
-    <h3>🔒 Full Access Required</h3>
-    
-    <p style="color:#94a3b8; margin-top:10px;">
-      See all live breakout trades, entry points, and performance tracking
-    </p>
+        <ul>
+          <li>✔ Full watchlist access</li>
+          <li>✔ Live trade updates</li>
+          <li>✔ Entry + breakout levels</li>
+          <li>✔ Real-time performance tracking</li>
+        </ul>
 
-    <ul style="text-align:left; max-width:300px; margin:15px auto; color:#cbd5f5;">
-      <li>✔ Full watchlist access</li>
-      <li>✔ Live trade updates</li>
-      <li>✔ Entry + breakout levels</li>
-      <li>✔ Performance tracking</li>
-    </ul>
+        <button onclick="goToPricing()">Unlock EdgeBreak</button>
 
-    <button onclick="goToPricing()">Unlock EdgeBreak</button>
+      </div>
+    </div>
+
   </div>
 
 </div>
