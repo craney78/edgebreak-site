@@ -282,6 +282,16 @@ body {
   color: #ef4444;
 }
 
+.live-badge {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
 </style>
 </head>
 
@@ -378,17 +388,19 @@ body {
     <div class="value" id="activeCount">-</div>
   </div>
 
-  <!-- PERFORMANCE -->
+  <!-- AVG RETURN -->
   <div class="stat">
     <div class="label">Avg Return (All Trades)</div>
     <div class="value" id="avgReturn">-</div>
   </div>
 
+  <!-- BEST TRADE -->
   <div class="stat">
     <div class="label">Best Trade</div>
     <div class="value green" id="bestTrade">-</div>
   </div>
 
+  <!-- WIN RATE -->
   <div class="stat">
     <div class="label">Win Rate</div>
     <div class="value" id="winRate">-</div>
@@ -396,12 +408,31 @@ body {
 
 </div>
 
+<!-- ✅ WIN BAR (OUTSIDE GRID) -->
+<div style="margin-top:20px;">
+  <div style="font-size:12px; color:#94a3b8; margin-bottom:6px;">
+    Win Rate Performance
+  </div>
+
+  <div style="
+    background:#1e293b;
+    height:10px;
+    border-radius:6px;
+    overflow:hidden;
+  ">
+    <div id="winBar" style="
+      height:100%;
+      width:0%;
+      background:#22c55e;
+      transition: width 0.5s ease;
+    "></div>
+  </div>
+</div>
+
 <!-- WATCHLIST SECTIONS -->
 <div id="smallSection" class="section"></div>
 <div id="midSection" class="section"></div>
 <div id="largeSection" class="section"></div>
-
-</div>
 
 <script>
 
@@ -581,15 +612,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("activeCount").innerText = active.length;
 
+    document.getElementById("winBar").style.width = win + "%";
+
+    const bar = document.getElementById("winBar");
+    bar.style.background = win >= 50 ? "#22c55e" : "#ef4444";
+
     animateValue("avgReturn", avg);
     animateValue("winRate", win);
 
     const bestMove = parseFloat(best.percent_move || 0);
-
-    document.getElementById("bestTrade").innerHTML =
-      `<span style="color:#22c55e;">${best.symbol}</span> (${bestMove.toFixed(2)}%)`;
+    
+  document.getElementById("bestTrade").innerHTML = `
+    <div style="font-size:22px; font-weight:bold; color:#22c55e;">
+      ${best.symbol}
+    </div>
+    <div style="font-size:14px; color:#94a3b8;">
+      +${bestMove.toFixed(2)}%
+    </div>
+  `;
 
   });
 
 });
 </script>
+
+</body>
+</html>
