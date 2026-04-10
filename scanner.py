@@ -46,19 +46,7 @@ def build_nasdaq_universe():
         print(f"❌ Failed to load NASDAQ universe: {e}")
         return []
 
-# =========================
-# FETCH LATEST PRICE
-# =========================
-def fetch_latest_price(symbol):
-
-    url = f"https://api.twelvedata.com/price?symbol={symbol}&apikey={API_KEY}"
-
-    try:
-        r = requests.get(url, timeout=10).json()
-        return float(r["price"])
-    except:
-        return None        
-
+ 
 # =========================
 # FETCH DATA (STABLE EOD VERSION ✅)
 # =========================
@@ -303,65 +291,6 @@ def safe_float(value):
 
 
 # =========================
-# REBUILD FROM HISTORY
-# =========================
-def rebuild_from_history():
-
-    if not os.path.exists("breakout_history.csv"):
-        print("❌ No CSV found")
-        return []
-
-    latest = {}
-
-    with open("breakout_history.csv", newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-
-        for row in reader:
-            try:
-                symbol = row.get("symbol")
-
-                if not symbol:
-                    continue
-
-                latest[symbol] = {
-                    "symbol": symbol,
-                    "score": safe_float(row.get("score")),
-                    "grade": row.get("grade", "C"),
-                    "break": safe_float(row.get("breakout_strength")),
-
-                    "age": 1,
-                    "status": "holding",
-                    "signal_date": row.get("date"),
-                    "entry_price": safe_float(row.get("price")),
-                    "current_price": safe_float(row.get("price")),
-                    "change_percent": 0
-                }
-
-            except Exception as e:
-                print("Row error:", e)
-
-    print(f"✅ Rebuilt {len(latest)} stocks from history")
-
-    return list(latest.values())
-
-# =========================
-# SAVE WATCHLIST TXT
-# =========================
-def save_watchlist(signals):
-    with open("watchlist.txt", "w", encoding="utf-8") as f:
-        f.write("💎 RANKED BREAKOUTS\n\n")
-
-        for s in signals:
-            f.write(
-                f"{s['symbol']} | {s['grade']} | "
-                f"Score {s['score']} | "
-                f"Break {s['breakout_strength']}%\n"
-                f"→ {s['insight']}\n\n"
-            )
-
-    print("📄 Watchlist TXT saved")
-
-# =========================
 # 🧠 GET MARKET CONDITION
 # =========================
 def get_current_market_label():
@@ -375,204 +304,7 @@ def get_current_market_label():
             return data.get("label", "UNKNOWN")
     except:
         return "UNKNOWN"
-
-# =========================
-# ARCHIVE COMPLETED TRADES (NEW 🔥)
-# =========================
-def archive_trade(item):
-
-    file_exists = os.path.isfile("trade_history.csv")
-
-    percent_move = item.get("change_percent", 0)
-
-    market_label = get_current_market_label()
-
-    row = {
-        "date": item.get("signal_date"),
-        "ticker": item.get("symbol"),
-        "grade": item.get("grade"),
-        "result": item.get("status"),
-        "market": market_label,
-        "breakout_price": item.get("entry_price"),
-        "exit_price": item.get("current_price"),
-        "percent_move": percent_move,
-        "duration_days": item.get("age")
-    }
-
-    with open("trade_history.csv", "a", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=row.keys())
-
-        if not file_exists:
-            writer.writeheader()
-
-        writer.writerow(row)
-
-# =========================
-# 🔄 CONVERT CSV → JSON
-# =========================
-def convert_trade_history_to_json():
-
-    if not os.path.exists("trade_history.csv"):
-        print("⚠️ No trade_history.csv found")
-        return
-
-    trades = []
-
-    with open("trade_history.csv", newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-
-        for row in reader:
-            try:
-                trades.append({
-                    "date": row.get("date"),
-                    "ticker": row.get("ticker"),
-                    "grade": row.get("grade"),
-                    "result": row.get("result"),
-                    "market": row.get("market"),  # 🔥 important
-                    "percent_move": float(row.get("percent_move", 0)),
-                    "duration_days": int(float(row.get("duration_days", 0)))
-                })
-            except:
-                continue
-
-    # newest first
-    trades.reverse()
-
-    with open("trade_history.json", "w") as f:
-        json.dump(trades, f, indent=2)
-
-    print(f"✅ trade_history.json updated — {len(trades)} trades")
-
-# =========================
-# SAVE WATCHLIST JSON
-# =========================
-def save_watchlist_json(new_signals):
-
-    existing = []
-
-    if os.path.exists("watchlist.json"):
-        with open("watchlist.json", "r") as f:
-            try:
-                existing = json.load(f)
-            except:
-                existing = []
-
-    if not existing:
-        print("⚠️ watchlist empty — rebuilding from history...")
-        existing = rebuild_from_history()
-
-    existing_map = {item["symbol"]: item for item in existing}
-
-    # =========================
-    # 🔄 UPDATE EXISTING TRADES (EOD)
-    # =========================
-    for item in existing:
-
-        item["age"] = item.get("age", 0) + 1
-
-        entry_price = float(item.get("price", 0))
-
-        # 🔥 ALWAYS ENSURE CURRENT PRICE EXISTS
-        current_price = fetch_latest_price(item["symbol"])
-
-        if current_price is None:
-            current_price = entry_price
-
-        item["current_price"] = round(current_price, 2)
-        
-        if entry_price > 0 and current_price > 0:
-            change = ((current_price - entry_price) / entry_price) * 100
-            item["change_percent"] = round(change, 2)
-        else:
-            item["change_percent"] = 0
-
-        if "status" not in item:
-            item["status"] = "holding"
-
-        # =========================
-        # 🧠 WIN / LOSS LOGIC
-        # =========================
-        if item["age"] >= 2:
-
-            resistance = item.get("resistance", item.get("entry_price"))
-            entry = safe_float(item.get("entry_price"))
-            price = safe_float(item.get("current_price"))
-
-            if resistance and price:
-
-                # 🔴 LOSS
-                if price < resistance:
-                    item["below_resistance"] = item.get("below_resistance", 0) + 1
-                else:
-                    item["below_resistance"] = 0
-
-                if item["below_resistance"] >= 2:
-                    item["status"] = "LOSS"
-
-                # 🟢 WIN
-                peak = item.get("peak_price", entry)
-
-                if price > peak:
-                    item["peak_price"] = price
-
-                peak = item.get("peak_price", entry)
-
-                pullback = ((price - peak) / peak) * 100 if peak > 0 else 0
-
-                if peak >= entry * 1.12 and pullback <= -5:
-                    item["status"] = "WIN"
-
-    # =========================
-    # 📦 ARCHIVE COMPLETED TRADES (NO C GRADE)
-    # =========================
-    completed = []
-
-    for item in existing:
-
-        if item.get("status") in ["WIN", "LOSS"]:
-
-            grade = item.get("grade", "C")
-
-            # ❌ REMOVE C COMPLETELY
-            if grade == "C":
-                completed.append(item)
-                continue
-
-            archive_trade(item)
-            completed.append(item)
-
-    # REMOVE completed trades
-    existing = [x for x in existing if x not in completed]
-
-    # =========================
-    # ➕ ADD NEW SIGNALS
-    # =========================
-    for s in new_signals:
-
-        if s["symbol"] not in existing_map:
-
-            existing.append({
-                "symbol": s["symbol"],
-                "score": s["score"],
-                "grade": s["grade"],
-                "break": s["breakout_strength"],
-
-                "age": 0,
-                "status": "breaking",
-                "signal_date": s.get("date"),
-                "entry_price": s.get("price"),
-                "resistance": s.get("resistance"),
-                "current_price": s.get("price"),
-                "change_percent": 0
-            })
-
-    # =========================
-    # 💾 SAVE JSON
-    # =========================
-    with open("watchlist.json", "w") as f:
-        json.dump(existing, f, indent=2)
-
-    print(f"✅ watchlist.json updated — total {len(existing)} stocks")
+   
 
 # =========================
 # CSV LOGGING
@@ -593,33 +325,49 @@ FIELDNAMES = [
     "result"
 ]
 
-def log_to_csv(signals, filename="breakout_history.csv"):
-    file_exists = os.path.isfile(filename)
+# =========================
+# APPEND TO ACTIVE POSITIONS (LIVE SYSTEM)
+# =========================
+def append_to_active_positions(new_signals):
 
-    with open(filename, "a", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
+    file = "active_positions.json"
 
-        if not file_exists:
-            writer.writerow(FIELDNAMES)
+    if os.path.exists(file):
+        with open(file, "r") as f:
+            try:
+                existing = json.load(f)
+            except:
+                existing = []
+    else:
+        existing = []
 
-        for s in signals:
-            writer.writerow([
-                s["date"],
-                s["symbol"],
-                s["price"],
-                s["resistance"],
-                s["score"],
-                s["grade"],
-                s["setup_type"],
-                s["breakout_strength"],
-                s["volume_ratio"],
-                s["insight"],
-                s["day1_return"],
-                s["day2_return"],
-                s["result"]
-            ])
+    existing_symbols = {t["symbol"] for t in existing}
 
-    print("📊 Logged to breakout_history.csv")
+    added = 0
+
+    for s in new_signals:
+
+        if s["symbol"] in existing_symbols:
+            continue
+
+        trade = {
+            "symbol": s["symbol"],
+            "entry_price": s["price"],
+            "entry_date": s["date"],
+            "grade": s["grade"],
+            "price_group": s["price_group"],
+            "current_price": s["price"],
+            "change_percent": 0,
+            "days_held": 0
+        }
+
+        existing.append(trade)
+        added += 1
+
+    with open(file, "w") as f:
+        json.dump(existing, f, indent=2)
+
+    print(f"✅ Added {added} new trades")
 
 # =========================
 # MAIN RUN
@@ -637,47 +385,27 @@ def run():
 
         data = fetch_batch(batch)
 
-        # 🔥 CHECK FOR MISSING SYMBOLS
         missing = [s for s in batch if s not in data]
-
         if missing:
             print(f"⚠️ Missing data for: {missing}")
 
         signals = process_data(data)
-
         all_signals.extend(signals)
 
         time.sleep(SLEEP_TIME)
 
     all_signals = sort_signals(all_signals)
 
+    # ✅ ONLY RESPONSIBILITY
     if len(all_signals) > 0:
-        display_list = all_signals
+        append_to_active_positions(all_signals)
     else:
-        display_list = rebuild_from_history()
+        print("⚠️ No new signals")
 
-    display_list = sort_signals(display_list)
+    print(f"\n📊 TOTAL NEW SIGNALS: {len(all_signals)}")
 
-    print("\n💎 BREAKOUTS (RANKED):\n")
-
-    for s in display_list:
-        print(
-            f"{s['symbol']} | {s['grade']} | "
-            f"Score {s['score']} | "
-            f"Break {s.get('break', s.get('breakout_strength', 0))}%"
-        )
-
-    if len(all_signals) > 0:
-        save_watchlist(all_signals)
-        log_to_csv(all_signals)
-    else:
-        print("⚠️ No new signals — rebuilding watchlist")
-
-    save_watchlist_json(all_signals)
-    convert_trade_history_to_json()
-
-    print(f"\nTOTAL NEW SIGNALS: {len(all_signals)}")
-
-
+# =========================
+# RUN
+# =========================
 if __name__ == "__main__":
     run()

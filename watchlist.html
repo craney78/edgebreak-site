@@ -342,24 +342,34 @@ document.addEventListener("DOMContentLoaded", function () {
     let open = 0;
     let closed = 0;
 
-    const html = data.map(a => {
+    const html = data.slice(-5).reverse().map(a => {
 
       if (a.type === "OPEN") {
         open++;
-        return `<div class="green">🟢 ${a.symbol} @ $${a.price}</div>`;
+        return `<div class="green">🟢 ${a.symbol}</div>`;
       }
 
       if (a.type === "CLOSED") {
         closed++;
-        return `<div class="red">🔴 ${a.symbol} (${a.return}%)</div>`;
+        const color = a.result >= 0 ? "#22c55e" : "#ef4444";
+
+        return `
+          <div>
+            🔴 ${a.symbol} 
+            <span style="color:${color}; font-weight:bold;">
+              ${a.result}%
+            </span>
+          </div>
+        `;
       }
 
       return "";
 
-    }).slice(0,5).join("");
+    }).join("");
 
     document.getElementById("todayOpen").innerText = open;
     document.getElementById("todayClosed").innerText = closed;
+
     document.getElementById("todayActivity").innerHTML = html || `
       <div style="color:#94a3b8; font-size:13px; margin-top:10px;">
         No trades triggered yet today.<br>
@@ -376,112 +386,67 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   // =========================
-  // 📊 WATCHLIST
+  // 📊 LIVE TRADES (ACTIVE POSITIONS)
   // =========================
-  fetch("watchlist.json?v=" + Date.now())
+  fetch("active_positions.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
 
-    let smallHTML="", midHTML="", largeHTML="";
-    let small=[], mid=[], large=[];
+    const small = [];
+    const mid = [];
+    const large = [];
 
-    let total = 0;
-    let count = 0;
-    let best = -999;
-
-    data.forEach(t => {
-
-      const entry = Number(t.price || 0);
-      let change = Number(t.change_percent || 0);
-
-      // 🔥 fallback calculation
-      if (change === 0) {
-        const entry = Number(t.price || 0);
-        const current = Number(t.current_price || 0);
-
-        if (entry && current && current !== 0) {
-          change = ((current - entry) / entry) * 100;
-        }
-      }
-      const group = t.group || "MID";
-
-      total += change;
-      count++;
-      if (change > best) best = change;
-
-      const row = `
-        <div class="trade">
-          <div>
-            <strong>${t.symbol}</strong><br>
-            $${entry.toFixed(2)}<br>
-            ${t.signal_date || ""}
-          </div>
-          <div class="${change >= 0 ? 'green' : 'red'}">
-            ${change.toFixed(2)}%
-          </div>
-        </div>
-      `;
-
-      if (group === "SMALL") { smallHTML += row; small.push(change); }
-      if (group === "MID") { midHTML += row; mid.push(change); }
-      if (group === "LARGE") { largeHTML += row; large.push(change); }
-
+    data.forEach(trade => {
+      if (trade.price_group === "SMALL") small.push(trade);
+      if (trade.price_group === "MID") mid.push(trade);
+      if (trade.price_group === "LARGE") large.push(trade);
     });
 
-    function avg(arr){
-      if(!arr.length) return "0%";
-      return (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2)+"%";
+    function renderTrades(trades, title, targetId) {
+
+      const container = document.getElementById(targetId);
+      if (!container) return;
+
+      if (trades.length === 0) {
+        container.innerHTML = `<h3>${title}</h3><p style="color:#64748b;">No active trades</p>`;
+        return;
+      }
+
+      container.innerHTML = `<h3>${title}</h3>` + trades.map(t => {
+
+        const color = t.change_percent >= 0 ? "#22c55e" : "#ef4444";
+
+        return `
+          <div class="box">
+            <div style="display:flex; justify-content:space-between;">
+              <strong>${t.symbol}</strong>
+              <span style="color:${color}; font-weight:bold;">
+                ${t.change_percent}%
+              </span>
+            </div>
+
+            <div style="font-size:13px; color:#94a3b8; margin-top:5px;">
+              Entry: $${t.entry_price} | Now: $${t.current_price}
+            </div>
+
+            <div style="font-size:12px; color:#64748b;">
+              ${t.days_held} days
+            </div>
+          </div>
+        `;
+      }).join("");
     }
 
-    function emptyBox(label) {
-      return `
-        <div class="card" style="margin-top:10px;">
-          <p style="color:#94a3b8; font-size:13px;">
-            No active ${label} trades right now.<br>
-            <span style="color:#64748b;">
-              Waiting for breakout confirmation.
-            </span>
-          </p>
-        </div>
-      `;
-    }
-
-    document.getElementById("smallSection").innerHTML =
-      "<h2>🟢 Small Cap</h2>" + (smallHTML || emptyBox("small cap"));
-
-    document.getElementById("midSection").innerHTML =
-      "<h2>🟡 Mid Cap</h2>" + (midHTML || emptyBox("mid cap"));
-
-    document.getElementById("largeSection").innerHTML =
-      "<h2>🔵 Large Cap</h2>" + (largeHTML || emptyBox("large cap"));
-
-    // =========================
-    // 📊 STATS (FIXED)
-    // =========================
-    document.getElementById("activeCount").innerText = count;
-    document.getElementById("avgReturn").innerText =
-      count ? (total / count).toFixed(2) + "%" : "0%";
-    document.getElementById("bestTrade").innerText =
-      best > -999 ? best.toFixed(2) + "%" : "0%";
-
-    document.getElementById("smallPerf").innerText = avg(small);
-    document.getElementById("midPerf").innerText = avg(mid);
-    document.getElementById("largePerf").innerText = avg(large);
+    renderTrades(small, "🟢 Small Caps", "smallSection");
+    renderTrades(mid, "🟡 Mid Caps", "midSection");
+    renderTrades(large, "🔵 Large Caps", "largeSection");
 
   })
-  .catch(() => {
-    console.error("Watchlist failed to load");
+  .catch(err => {
+    console.error("Error loading trades:", err);
   });
 
 });
-
-</script>
-
-<script>
-function toggleMenu() {
-  const menu = document.getElementById("mobileMenu");
-  menu.classList.toggle("active");
-}
 </script>
 
 </body>
