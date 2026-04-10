@@ -577,37 +577,62 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch("active_positions.json?v=" + Date.now()).then(r => r.json()),
     fetch("live_trade_history.json?v=" + Date.now()).then(r => r.json())
   ])
-  .then(([active, history]) => {
+    .then(([active, history]) => {
 
+    // ✅ safety
     if (!Array.isArray(active)) active = [];
     if (!Array.isArray(history)) history = [];
 
+    // combine (used only for fallback best trade)
     const all = [
-      ...history.map(t => ({ percent_move: t.percent_move ?? t.result ?? 0, symbol: t.symbol })),
-      ...active.map(t => ({ percent_move: t.change_percent ?? 0, symbol: t.symbol }))
+      ...history.map(t => ({
+        percent_move: t.percent_move ?? t.result ?? 0,
+        symbol: t.symbol
+      })),
+      ...active.map(t => ({
+        percent_move: t.change_percent ?? 0,
+        symbol: t.symbol
+      }))
     ];
 
     if (all.length === 0) return;
 
-    let wins = 0, total = 0, best = all[0];
+    // =========================
+    // ✅ CALCULATIONS (CLOSED TRADES ONLY)
+    // =========================
+    let wins = 0;
+    let total = 0;
+    let best = history[0] || all[0];
 
-    all.forEach(t => {
-      const r = parseFloat(t.percent_move) || 0;
+    history.forEach(t => {
+      const bestValue = parseFloat(best.percent_move ?? best.result ?? 0);
+
+      if (r > bestValue) {
+        best = t;
+      }      
+
       total += r;
+
       if (r > 0) wins++;
-      if (r > best.percent_move) best = t;
+
+      if (r > (parseFloat(best.percent_move) || 0)) {
+        best = t;
+      }
     });
 
-    const avg = total / all.length;
-    const win = (wins / all.length) * 100;
+    const win = history.length > 0 ? (wins / history.length) * 100 : 0;
+    const avg = history.length > 0 ? total / history.length : 0;
+
+    // =========================
+    // 📊 UPDATE UI
+    // =========================
 
     // LIVE COUNT
     document.getElementById("activeCount").innerText = active.length;
 
-    // WIN BAR
+    // PERFORMANCE BAR
     const bar = document.getElementById("winBar");
 
-    // 🔥 WIDTH BASED ON PERFORMANCE (AVG RETURN)
     let performanceWidth = 0;
 
     if (avg <= 0) {
@@ -618,7 +643,16 @@ document.addEventListener("DOMContentLoaded", function () {
       performanceWidth = (avg / 10) * 100;
     }
 
-bar.style.width = performanceWidth + "%";
+    bar.style.width = performanceWidth + "%";
+
+    // COLOR (based on performance)
+    if (avg < 0) {
+      bar.style.background = "#ef4444";
+    } else if (avg < 5) {
+      bar.style.background = "#f59e0b";
+    } else {
+      bar.style.background = "#22c55e";
+    }
 
     // ANIMATION
     animateValue("avgReturn", avg);
@@ -636,10 +670,12 @@ bar.style.width = performanceWidth + "%";
       </div>
     `;
 
+  })
+  .catch(err => {
+    console.error("STATS ERROR:", err);
   });
 
-});
-</script>
+  </script>
 
-</body>
-</html>
+  </body>
+  </html>
