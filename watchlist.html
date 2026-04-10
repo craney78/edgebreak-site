@@ -404,6 +404,7 @@ body {
 </div>
 
 <script>
+
 document.addEventListener("DOMContentLoaded", function () {
 
   console.log("✅ PAGE RUNNING");
@@ -412,19 +413,18 @@ document.addEventListener("DOMContentLoaded", function () {
   // 🎬 NUMBER ANIMATION
   // =========================
   function animateValue(id, end) {
-
     const el = document.getElementById(id);
-    if (!el) return;
+    if (!el || isNaN(end)) return;
 
     let start = 0;
-    let duration = 800;
+    const duration = 800;
     let startTime = null;
 
     function animate(time) {
       if (!startTime) startTime = time;
 
       const progress = Math.min((time - startTime) / duration, 1);
-      const value = (progress * end);
+      const value = start + (end - start) * progress;
 
       el.innerText = value.toFixed(2) + "%";
 
@@ -442,297 +442,154 @@ document.addEventListener("DOMContentLoaded", function () {
   // 🔔 TODAY ACTIVITY
   // =========================
   fetch("activity.json?v=" + Date.now())
-  .then(res => res.json())
-  .then(data => {
+    .then(res => res.json())
+    .then(data => {
 
-    let open = 0;
-    let closed = 0;
+      if (!Array.isArray(data)) data = [];
 
-    const html = data.slice(-5).reverse().map(a => {
+      let open = 0;
+      let closed = 0;
 
-      if (a.type === "OPEN") {
-        open++;
-        return `<div class="green">🟢 ${a.symbol}</div>`;
-      }
+      const html = data.slice(-5).reverse().map(a => {
 
-      if (a.type === "CLOSED") {
-        closed++;
-        const color = a.result >= 0 ? "#22c55e" : "#ef4444";
+        if (a.type === "OPEN") {
+          open++;
+          return `<div class="green">🟢 ${a.symbol}</div>`;
+        }
 
-        return `
-          <div>
-            🔴 ${a.symbol} 
-            <span style="color:${color}; font-weight:bold;">
-              ${a.result}%
-            </span>
-          </div>
-        `;
-      }
+        if (a.type === "CLOSED") {
+          closed++;
+          const result = a.result ?? a.percent_move ?? 0;
+          const color = result >= 0 ? "#22c55e" : "#ef4444";
 
-      return "";
+          return `
+            <div>
+              🔴 ${a.symbol}
+              <span style="color:${color}; font-weight:bold;">
+                ${result.toFixed(2)}%
+              </span>
+            </div>
+          `;
+        }
 
-    }).join("");
+        return "";
 
-    document.getElementById("todayOpen").innerText = open;
-    document.getElementById("todayClosed").innerText = closed;
+      }).join("");
 
-    document.getElementById("todayActivity").innerHTML = html || `
-      <div style="color:#94a3b8; font-size:13px; margin-top:10px;">
-        No trades triggered yet today.<br>
-        <span style="color:#64748b;">
-          The system is scanning for high-probability breakouts.
-        </span>
-      </div>
-    `;
+      document.getElementById("todayOpen").innerText = open;
+      document.getElementById("todayClosed").innerText = closed;
 
-  })
-  .catch(() => {
-    document.getElementById("todayActivity").innerText = "No activity";
-  });
-
+      document.getElementById("todayActivity").innerHTML = html || `
+        <div style="color:#94a3b8; font-size:13px;">
+          No trades triggered yet today
+        </div>
+      `;
+    });
 
   // =========================
   // 📊 LIVE TRADES + BREAKDOWN
   // =========================
-  fetch("active_positions.json?v=" + new Date().getTime())
-  .then(res => res.json())
-  .then(data => {
+  fetch("active_positions.json?v=" + Date.now())
+    .then(res => res.json())
+    .then(data => {
 
-    const smallTrades = [];
-    const midTrades = [];
-    const largeTrades = [];
+      if (!Array.isArray(data)) data = [];
 
-    let smallCount = 0;
-    let midCount = 0;
-    let largeCount = 0;
+      const small = [];
+      const mid = [];
+      const large = [];
 
-    data.forEach(trade => {
+      data.forEach(t => {
+        const g = (t.price_group || t.group || "").toUpperCase();
+        if (g === "SMALL") small.push(t);
+        else if (g === "MID") mid.push(t);
+        else if (g === "LARGE") large.push(t);
+      });
 
-      const group = trade.price_group || trade.group;
+      document.getElementById("smallCount").innerText = small.length;
+      document.getElementById("midCount").innerText = mid.length;
+      document.getElementById("largeCount").innerText = large.length;
 
-      if (group === "SMALL") {
-        smallTrades.push(trade);
-        smallCount++;
+      function renderTrades(trades, title, id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        if (trades.length === 0) {
+          el.innerHTML = `<h3>${title}</h3><p style="color:#64748b;">No active trades</p>`;
+          return;
+        }
+
+        el.innerHTML = `<h3>${title}</h3>` + trades.map(t => {
+          const change = t.change_percent ?? 0;
+          const color = change >= 0 ? "#22c55e" : "#ef4444";
+
+          return `
+            <div class="box">
+              <div style="display:flex; justify-content:space-between;">
+                <strong>${t.symbol}</strong>
+                <span style="color:${color}; font-weight:bold;">
+                  ${change.toFixed(2)}%
+                </span>
+              </div>
+              <div style="font-size:13px; color:#94a3b8;">
+                Entry: $${t.entry_price ?? "-"} | Now: $${t.current_price ?? "-"}
+              </div>
+              <div style="font-size:12px; color:#64748b;">
+                ${t.days_held ?? 0} days
+              </div>
+            </div>
+          `;
+        }).join("");
       }
 
-      if (group === "MID") {
-        midTrades.push(trade);
-        midCount++;
-      }
-
-      if (group === "LARGE") {
-        largeTrades.push(trade);
-        largeCount++;
-      }
+      renderTrades(small, "🟢 Small Caps", "smallSection");
+      renderTrades(mid, "🟡 Mid Caps", "midSection");
+      renderTrades(large, "🔵 Large Caps", "largeSection");
 
     });
 
   // =========================
-  // 📊 COMBINED LIVE STATS
+  // 📊 COMBINED STATS
   // =========================
   Promise.all([
-    fetch("active_positions.json?v=" + Date.now()).then(res => res.json()),
-    fetch("live_trade_history.json?v=" + Date.now()).then(res => res.json())
+    fetch("active_positions.json?v=" + Date.now()).then(r => r.json()),
+    fetch("live_trade_history.json?v=" + Date.now()).then(r => r.json())
   ])
   .then(([active, history]) => {
 
-    console.log("ACTIVE:", active);
-    console.log("HISTORY:", history);
+    if (!Array.isArray(active)) active = [];
+    if (!Array.isArray(history)) history = [];
 
-    // combine trades
-    const allTrades = [
-      ...history,
-      ...active.map(t => ({
-        percent_move: t.change_percent,
-        symbol: t.symbol
-      }))
+    const all = [
+      ...history.map(t => ({ percent_move: t.percent_move ?? t.result ?? 0, symbol: t.symbol })),
+      ...active.map(t => ({ percent_move: t.change_percent ?? 0, symbol: t.symbol }))
     ];
 
-    const totalTrades = allTrades.length;
+    if (all.length === 0) return;
 
-    if (totalTrades === 0) return;
+    let wins = 0, total = 0, best = all[0];
 
-    let wins = 0;
-    let totalReturn = 0;
-    let best = allTrades[0];
-
-    allTrades.forEach(trade => {
-
-      const r = trade.percent_move || 0;
-
-      totalReturn += r;
-
+    all.forEach(t => {
+      const r = parseFloat(t.percent_move) || 0;
+      total += r;
       if (r > 0) wins++;
-
-      if (r > best.percent_move) {
-      best = trade;
-      }
-
+      if (r > best.percent_move) best = t;
     });
 
-    const avgReturn = (totalReturn / totalTrades).toFixed(2);
-    const winRate = ((wins / totalTrades) * 100).toFixed(1);
+    const avg = total / all.length;
+    const win = (wins / all.length) * 100;
 
-  // =========================
-  // 📊 UPDATE UI
-  // =========================
-  // =========================
-  // 🎨 COLOR LOGIC
-  // =========================
+    document.getElementById("activeCount").innerText = active.length;
 
-  // AVG RETURN
-  const avgEl = document.getElementById("avgReturn");
-  animateValue("avgReturn", parseFloat(avgReturn));
+    animateValue("avgReturn", avg);
+    animateValue("winRate", win);
 
-  avgEl.classList.remove("green", "red");
-  if (avgReturn >= 0) {
-    avgEl.classList.add("green");
-  } else {
-    avgEl.classList.add("red");
-  }
+    const bestMove = parseFloat(best.percent_move || 0);
 
-  // BEST TRADE (already green)
-  document.getElementById("bestTrade").innerHTML =
-    `<span style="color:#22c55e;">${best.symbol}</span> (${best.percent_move}%)`;
-
-  // WIN RATE
-  const winEl = document.getElementById("winRate");
-  animateValue("winRate", parseFloat(winRate));
-
-  winEl.classList.remove("green", "red");
-  if (winRate >= 50) {
-    winEl.classList.add("green");
-  } else {
-    winEl.classList.add("red");
-  }
-
-})
-.catch(err => console.error("STATS ERROR:", err));
-
-    // =========================
-    // 📊 MARKET BREAKDOWN
-    // =========================
-    document.getElementById("smallCount").innerText = smallCount;
-    document.getElementById("midCount").innerText = midCount;
-    document.getElementById("largeCount").innerText = largeCount;
-
-
-    // =========================
-    // 📦 RENDER TRADES
-    // =========================
-    function renderTrades(trades, title, targetId) {
-
-      const container = document.getElementById(targetId);
-      if (!container) return;
-
-      if (trades.length === 0) {
-        container.innerHTML = `<h3>${title}</h3><p style="color:#64748b;">No active trades</p>`;
-        return;
-      }
-
-      container.innerHTML = `<h3>${title}</h3>` + trades.map(t => {
-
-        const color = t.change_percent >= 0 ? "#22c55e" : "#ef4444";
-
-        return `
-          <div class="box">
-            <div style="display:flex; justify-content:space-between;">
-              <strong>${t.symbol}</strong>
-              <span style="color:${color}; font-weight:bold;">
-                ${t.change_percent}%
-              </span>
-            </div>
-
-            <div style="font-size:13px; color:#94a3b8; margin-top:5px;">
-              Entry: $${t.entry_price} | Now: $${t.current_price}
-            </div>
-
-            <div style="font-size:12px; color:#64748b;">
-              ${t.days_held} days
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    renderTrades(smallTrades, "🟢 Small Caps", "smallSection");
-    renderTrades(midTrades, "🟡 Mid Caps", "midSection");
-    renderTrades(largeTrades, "🔵 Large Caps", "largeSection");
-
-  })
-  .catch(err => {
-    console.error("Error loading trades:", err);
-  });
-
-});
-
-  // =========================
-  // 📊 UPDATE UI
-  // =========================
-  document.getElementById("activeCount").innerText = totalTrades;
-  document.getElementById("avgReturn").innerText = avgReturn + "%";
-  document.getElementById("bestTrade").innerHTML =
-    `<span style="color:#22c55e;">${best.symbol}</span> (${best.percent_move}%)`;
-
-// =========================
-// 📊 COMBINED LIVE + HISTORY STATS
-// =========================
-Promise.all([
-  fetch("active_positions.json?v=" + Date.now()).then(res => res.json()),
-  fetch("live_trade_history.json?v=" + Date.now()).then(res => res.json())
-])
-.then(([active, history]) => {
-
-  const allTrades = [
-    ...history,
-    ...active.map(t => ({
-      percent_move: t.change_percent,
-      symbol: t.symbol
-    }))
-  ];
-
-  const totalTrades = allTrades.length;
-
-  if (totalTrades === 0) return;
-
-  let wins = 0;
-  let totalReturn = 0;
-  let best = allTrades[0];
-
-  allTrades.forEach(trade => {
-
-    const r = trade.percent_move || 0;
-
-    totalReturn += r;
-
-    if (r > 0) wins++;
-
-    if (r > best.percent_move) {
-      best = trade;
-    }
+    document.getElementById("bestTrade").innerHTML =
+      `<span style="color:#22c55e;">${best.symbol}</span> (${bestMove.toFixed(2)}%)`;
 
   });
 
-  const avgReturn = (totalReturn / totalTrades).toFixed(2);
-  const winRate = ((wins / totalTrades) * 100).toFixed(1);
-
-  // =========================
-  // 📊 UPDATE UI
-  // =========================
-  document.getElementById("avgReturn").innerText = avgReturn + "%";
-
-  document.getElementById("bestTrade").innerHTML =
-    `<span style="color:#22c55e;">${best.symbol}</span> (${best.percent_move}%)`;
-
-  document.getElementById("winRate").innerText = winRate + "%";
-
-})
-.catch(err => console.error("STATS ERROR:", err));
-
 });
 </script>
-
-</script>
-
-</body>
-</html>
