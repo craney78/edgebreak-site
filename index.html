@@ -809,63 +809,72 @@ body {
 }
 
 /* =========================
-   🎯 PERFECT 3x2 GRID
+   🎯 PERFECT 3 COLUMN LAYOUT
    ========================= */
 
-/* Keep sections aligned */
+/* Keep sections centered and clean */
 .section {
-  max-width: 1100px !important;
-  margin: 60px auto !important;
-  padding: 40px 20px !important;
+  max-width: 1100px;
+  margin: 60px auto;
+  padding: 40px 20px;
 }
 
-/* FORCE 3 COLUMNS ALWAYS */
+/* FORCE EXACTLY 3 COLUMNS */
 .section .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 25px !important;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
   margin-top: 30px;
 }
 
-/* MATCH CARD HEIGHTS */
+/* MATCH CARD SIZE */
 .section .card {
-  padding: 28px !important;
+  padding: 28px;
   border-radius: 14px;
-  height: 100%;              /* equal height */
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 100%;
 }
 
-/* TEXT BALANCE */
+/* KEEP TEXT BALANCED */
 .section .card p {
   flex-grow: 1;
 }
 
-/* FEATURE LIST ALIGNMENT */
+/* FEATURE LIST CLEAN */
 .feature-list {
   margin-top: 12px;
   text-align: left;
 }
 
-/* WINNER ALIGNMENT */
+/* WINNER BLOCK */
 .winner {
   margin-top: 10px;
 }
 
 .winner-main {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: bold;
   color: #22c55e;
 }
 
 /* =========================
-   📱 MOBILE FIX
+   📱 MOBILE RESPONSIVE
    ========================= */
 
+/* Tablet (2 per row) */
 @media (max-width: 900px) {
   .section .grid {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile (1 per row) */
+@media (max-width: 600px) {
+  .section .grid {
+    grid-template-columns: 1fr;
   }
 }
 
