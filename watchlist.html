@@ -607,16 +607,18 @@ document.addEventListener("DOMContentLoaded", function () {
     // WIN BAR
     const bar = document.getElementById("winBar");
 
-    bar.style.width = win + "%";
+    // 🔥 WIDTH BASED ON PERFORMANCE (AVG RETURN)
+    let performanceWidth = 0;
 
-    // ✅ COLOR BASED ON PERFORMANCE (AVG RETURN)
-    if (avg < 0) {
-      bar.style.background = "#ef4444"; // red
-    } else if (avg < 5) {
-      bar.style.background = "#f59e0b"; // yellow
+    if (avg <= 0) {
+      performanceWidth = 0;
+    } else if (avg >= 10) {
+      performanceWidth = 100;
     } else {
-      bar.style.background = "#22c55e"; // green
+      performanceWidth = (avg / 10) * 100;
     }
+
+bar.style.width = performanceWidth + "%";
 
     // ANIMATION
     animateValue("avgReturn", avg);
