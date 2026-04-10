@@ -432,35 +432,63 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
   // =========================
-  // 📊 LIVE STATS (FROM ACTIVE TRADES)
+  // 📊 COMBINED LIVE STATS
   // =========================
-  const activeCount = data.length;
+  Promise.all([
+    fetch("active_positions.json?v=" + Date.now()).then(res => res.json()),
+    fetch("live_trade_history.json?v=" + Date.now()).then(res => res.json())
+  ])
+  .then(([active, history]) => {
 
-  let totalReturn = 0;
-  let best = null;
+    console.log("ACTIVE:", active);
+    console.log("HISTORY:", history);
 
-  data.forEach(trade => {
-    const change = trade.change_percent || 0;
+    // combine trades
+    const allTrades = [
+      ...history,
+      ...active.map(t => ({
+        percent_move: t.change_percent,
+        symbol: t.symbol
+      }))
+    ];
 
-    totalReturn += change;
+    const totalTrades = allTrades.length;
 
-    if (!best || change > best.change_percent) {
+    if (totalTrades === 0) return;
+
+    let wins = 0;
+    let totalReturn = 0;
+    let best = allTrades[0];
+
+    allTrades.forEach(trade => {
+
+      const r = trade.percent_move || 0;
+
+      totalReturn += r;
+
+      if (r > 0) wins++;
+
+      if (r > best.percent_move) {
       best = trade;
-    }
-  });
+      }
 
-  const avgReturn = activeCount > 0 ? (totalReturn / activeCount).toFixed(2) : 0;
+    });
+
+    const avgReturn = (totalReturn / totalTrades).toFixed(2);
+    const winRate = ((wins / totalTrades) * 100).toFixed(1);
 
   // =========================
   // 📊 UPDATE UI
   // =========================
-  document.getElementById("activeCount").innerText = activeCount;
-
   document.getElementById("avgReturn").innerText = avgReturn + "%";
 
-  document.getElementById("bestTrade").innerHTML = best
-    ? `<span style="color:#22c55e;">${best.symbol}</span> (${best.change_percent}%)`
-    : "-";  
+  document.getElementById("bestTrade").innerHTML =
+    `<span style="color:#22c55e;">${best.symbol}</span> (${best.percent_move}%)`;
+
+  document.getElementById("winRate").innerText = winRate + "%";
+
+})
+.catch(err => console.error("STATS ERROR:", err));
 
     // =========================
     // 📊 MARKET BREAKDOWN
@@ -561,6 +589,61 @@ fetch("live_trade_history.json?v=" + Date.now())
   document.getElementById("avgReturn").innerText = avgReturn + "%";
   document.getElementById("bestTrade").innerHTML =
     `<span style="color:#22c55e;">${best.symbol}</span> (${best.percent_move}%)`;
+
+// =========================
+// 📊 COMBINED LIVE + HISTORY STATS
+// =========================
+Promise.all([
+  fetch("active_positions.json?v=" + Date.now()).then(res => res.json()),
+  fetch("live_trade_history.json?v=" + Date.now()).then(res => res.json())
+])
+.then(([active, history]) => {
+
+  const allTrades = [
+    ...history,
+    ...active.map(t => ({
+      percent_move: t.change_percent,
+      symbol: t.symbol
+    }))
+  ];
+
+  const totalTrades = allTrades.length;
+
+  if (totalTrades === 0) return;
+
+  let wins = 0;
+  let totalReturn = 0;
+  let best = allTrades[0];
+
+  allTrades.forEach(trade => {
+
+    const r = trade.percent_move || 0;
+
+    totalReturn += r;
+
+    if (r > 0) wins++;
+
+    if (r > best.percent_move) {
+      best = trade;
+    }
+
+  });
+
+  const avgReturn = (totalReturn / totalTrades).toFixed(2);
+  const winRate = ((wins / totalTrades) * 100).toFixed(1);
+
+  // =========================
+  // 📊 UPDATE UI
+  // =========================
+  document.getElementById("avgReturn").innerText = avgReturn + "%";
+
+  document.getElementById("bestTrade").innerHTML =
+    `<span style="color:#22c55e;">${best.symbol}</span> (${best.percent_move}%)`;
+
+  document.getElementById("winRate").innerText = winRate + "%";
+
+})
+.catch(err => console.error("STATS ERROR:", err));
 
 });
 </script>
