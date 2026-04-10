@@ -848,6 +848,48 @@ body {
   margin-top: auto;
 }
 
+/* =========================
+   🔒 FORCE PERFECT ALIGNMENT
+   ========================= */
+
+/* MATCH GRID STRUCTURE */
+.section:nth-of-type(1) .grid,
+.section:nth-of-type(2) .grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+/* FORCE IDENTICAL CARD HEIGHTS */
+.section:nth-of-type(1) .card,
+.section:nth-of-type(2) .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  height: 100%;
+  min-height: 320px;   /* 🔥 increase until perfect */
+  padding: 28px;
+}
+
+/* FORCE INNER CONTENT ALIGNMENT */
+.section:nth-of-type(1) .card h3,
+.section:nth-of-type(2) .card h3 {
+  min-height: 48px;
+}
+
+.section:nth-of-type(1) .card p,
+.section:nth-of-type(2) .card p {
+  min-height: 70px;
+}
+
+/* LOCK BOTTOM ELEMENTS */
+.section:nth-of-type(1) .feature-list,
+.section:nth-of-type(2) .feature-list,
+.section:nth-of-type(2) .winner {
+  margin-top: auto;
+}
+
 </style>
 </head>
 
