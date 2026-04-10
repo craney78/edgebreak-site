@@ -809,58 +809,64 @@ body {
 }
 
 /* =========================
-   🚀 BIG MODE (FINAL)
+   🎯 PERFECT 3x2 GRID
    ========================= */
 
-/* Widen main sections */
+/* Keep sections aligned */
 .section {
-  max-width: 1300px !important;
-  margin: 80px auto !important;
-  padding: 50px 20px !important;
+  max-width: 1100px !important;
+  margin: 60px auto !important;
+  padding: 40px 20px !important;
 }
 
-/* FORCE BIG CARDS (KEY LINE) */
+/* FORCE 3 COLUMNS ALWAYS */
 .section .grid {
-  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)) !important;
-  gap: 40px !important;
-  max-width: 1200px;
-  margin: 40px auto 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 25px !important;
+  margin-top: 30px;
 }
 
-/* LARGE CARD DESIGN */
+/* MATCH CARD HEIGHTS */
 .section .card {
-  padding: 40px !important;
-  border-radius: 18px;
+  padding: 28px !important;
+  border-radius: 14px;
+  height: 100%;              /* equal height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-/* STRONGER HEADINGS */
-.section .card h3 {
-  font-size: 22px;
-  margin-bottom: 12px;
-}
-
-/* BODY TEXT SCALE */
+/* TEXT BALANCE */
 .section .card p {
-  font-size: 15px;
+  flex-grow: 1;
 }
 
-/* FEATURE LIST SCALE */
+/* FEATURE LIST ALIGNMENT */
 .feature-list {
-  font-size: 14px;
-  margin-top: 15px;
+  margin-top: 12px;
+  text-align: left;
 }
 
-/* WINNER SCALE */
+/* WINNER ALIGNMENT */
+.winner {
+  margin-top: 10px;
+}
+
 .winner-main {
-  font-size: 36px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #22c55e;
 }
 
-.winner-sub {
-  font-size: 13px;
-}
+/* =========================
+   📱 MOBILE FIX
+   ========================= */
 
-.winner-list {
-  font-size: 13px;
+@media (max-width: 900px) {
+  .section .grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 </style>
