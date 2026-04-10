@@ -508,6 +508,53 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
+
+// =========================
+// 📊 REAL PERFORMANCE (CLOSED TRADES ONLY)
+// =========================
+fetch("live_trade_history.json?v=" + Date.now())
+.then(res => res.json())
+.then(data => {
+
+  // ✅ only CLOSED trades
+  const closed = data.filter(t => t.exit_type !== "OPEN");
+
+  const totalTrades = closed.length;
+
+  if (totalTrades === 0) return;
+
+  let wins = 0;
+  let totalReturn = 0;
+  let best = closed[0];
+  let worst = closed[0];
+
+  closed.forEach(trade => {
+
+    const r = trade.percent_move;
+
+    totalReturn += r;
+
+    if (r > 0) wins++;
+
+    if (r > best.percent_move) best = trade;
+    if (r < worst.percent_move) worst = trade;
+
+  });
+
+  const winRate = ((wins / totalTrades) * 100).toFixed(1);
+  const avgReturn = (totalReturn / totalTrades).toFixed(2);
+
+  // =========================
+  // 📊 UPDATE UI
+  // =========================
+  document.getElementById("activeCount").innerText = totalTrades;
+  document.getElementById("avgReturn").innerText = avgReturn + "%";
+  document.getElementById("bestTrade").innerHTML =
+    `<span style="color:#22c55e;">${best.symbol}</span> (${best.percent_move}%)`;
+
+});
+</script>
+
 </script>
 
 </body>
