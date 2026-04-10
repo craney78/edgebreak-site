@@ -216,6 +216,72 @@ body {
   margin-bottom: 30px; /* increase from 20px */
 }
 
+/* =========================
+   📊 PREMIUM STATS GRID
+   ========================= */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin: 40px 0;
+}
+
+.stat {
+  background: linear-gradient(145deg, #020617, #020617);
+  border: 1px solid #1e293b;
+  border-radius: 18px;
+  padding: 25px;
+  text-align: center;
+  transition: 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(34,197,94,0.15);
+  border-color: #22c55e;
+}
+
+/* glow line */
+.stat::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: #22c55e;
+  transition: 0.5s;
+}
+
+.stat:hover::before {
+  left: 0;
+}
+
+.label {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.value {
+  font-size: 32px;
+  font-weight: bold;
+  color: #e2e8f0;
+}
+
+.value.green {
+  color: #22c55e;
+}
+
+.value.red {
+  color: #ef4444;
+}
+
 </style>
 </head>
 
@@ -341,6 +407,36 @@ body {
 document.addEventListener("DOMContentLoaded", function () {
 
   console.log("✅ PAGE RUNNING");
+
+  // =========================
+  // 🎬 NUMBER ANIMATION
+  // =========================
+  function animateValue(id, end) {
+
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    let start = 0;
+    let duration = 800;
+    let startTime = null;
+
+    function animate(time) {
+      if (!startTime) startTime = time;
+
+      const progress = Math.min((time - startTime) / duration, 1);
+      const value = (progress * end);
+
+      el.innerText = value.toFixed(2) + "%";
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        el.innerText = end.toFixed(2) + "%";
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
 
   // =========================
   // 🔔 TODAY ACTIVITY
@@ -480,12 +576,35 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================
   // 📊 UPDATE UI
   // =========================
-  document.getElementById("avgReturn").innerText = avgReturn + "%";
+  // =========================
+  // 🎨 COLOR LOGIC
+  // =========================
 
+  // AVG RETURN
+  const avgEl = document.getElementById("avgReturn");
+  animateValue("avgReturn", parseFloat(avgReturn));
+
+  avgEl.classList.remove("green", "red");
+  if (avgReturn >= 0) {
+    avgEl.classList.add("green");
+  } else {
+    avgEl.classList.add("red");
+  }
+
+  // BEST TRADE (already green)
   document.getElementById("bestTrade").innerHTML =
     `<span style="color:#22c55e;">${best.symbol}</span> (${best.percent_move}%)`;
 
-  document.getElementById("winRate").innerText = winRate + "%";
+  // WIN RATE
+  const winEl = document.getElementById("winRate");
+  animateValue("winRate", parseFloat(winRate));
+
+  winEl.classList.remove("green", "red");
+  if (winRate >= 50) {
+    winEl.classList.add("green");
+  } else {
+    winEl.classList.add("red");
+  }
 
 })
 .catch(err => console.error("STATS ERROR:", err));
@@ -546,41 +665,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
-
-// =========================
-// 📊 REAL PERFORMANCE (CLOSED TRADES ONLY)
-// =========================
-fetch("live_trade_history.json?v=" + Date.now())
-.then(res => res.json())
-.then(data => {
-
-  // ✅ only CLOSED trades
-  const closed = data.filter(t => t.exit_type !== "OPEN");
-
-  const totalTrades = closed.length;
-
-  if (totalTrades === 0) return;
-
-  let wins = 0;
-  let totalReturn = 0;
-  let best = closed[0];
-  let worst = closed[0];
-
-  closed.forEach(trade => {
-
-    const r = trade.percent_move;
-
-    totalReturn += r;
-
-    if (r > 0) wins++;
-
-    if (r > best.percent_move) best = trade;
-    if (r < worst.percent_move) worst = trade;
-
-  });
-
-  const winRate = ((wins / totalTrades) * 100).toFixed(1);
-  const avgReturn = (totalReturn / totalTrades).toFixed(2);
 
   // =========================
   // 📊 UPDATE UI
