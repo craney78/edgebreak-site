@@ -335,51 +335,103 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================
   // 🔔 TODAY ACTIVITY
   // =========================
-  fetch("active_positions.json?v=" + Date.now())
+  fetch("activity.json?v=" + Date.now())
   .then(res => res.json())
   .then(data => {
 
-    let small = 0;
-    let mid = 0;
-    let large = 0;
+    let open = 0;
+    let closed = 0;
 
-    data.forEach(trade => {
+    const html = data.slice(-5).reverse().map(a => {
 
-      const group = trade.price_group || trade.group;
+      if (a.type === "OPEN") {
+        open++;
+        return `<div class="green">🟢 ${a.symbol}</div>`;
+      }
 
-      if (group === "SMALL") small++;
-      if (group === "MID") mid++;
-      if (group === "LARGE") large++;
+      if (a.type === "CLOSED") {
+        closed++;
+        const color = a.result >= 0 ? "#22c55e" : "#ef4444";
 
-    });
+        return `
+          <div>
+            🔴 ${a.symbol} 
+            <span style="color:${color}; font-weight:bold;">
+              ${a.result}%
+            </span>
+          </div>
+        `;
+      }
 
-    document.getElementById("smallCount").innerText = small;
-    document.getElementById("midCount").innerText = mid;
-    document.getElementById("largeCount").innerText = large;
+      return "";
+
+    }).join("");
+
+    document.getElementById("todayOpen").innerText = open;
+    document.getElementById("todayClosed").innerText = closed;
+
+    document.getElementById("todayActivity").innerHTML = html || `
+      <div style="color:#94a3b8; font-size:13px; margin-top:10px;">
+        No trades triggered yet today.<br>
+        <span style="color:#64748b;">
+          The system is scanning for high-probability breakouts.
+        </span>
+      </div>
+    `;
 
   })
-  .catch(err => console.error("Breakdown error:", err));
+  .catch(() => {
+    document.getElementById("todayActivity").innerText = "No activity";
+  });
 
 
   // =========================
-  // 📊 LIVE TRADES (ACTIVE POSITIONS)
+  // 📊 LIVE TRADES + BREAKDOWN
   // =========================
   fetch("active_positions.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
 
-    const small = [];
-    const mid = [];
-    const large = [];
+    const smallTrades = [];
+    const midTrades = [];
+    const largeTrades = [];
+
+    let smallCount = 0;
+    let midCount = 0;
+    let largeCount = 0;
 
     data.forEach(trade => {
+
       const group = trade.price_group || trade.group;
 
-    if (group === "SMALL") small.push(trade);
-    if (group === "MID") mid.push(trade);
-    if (group === "LARGE") large.push(trade);
+      if (group === "SMALL") {
+        smallTrades.push(trade);
+        smallCount++;
+      }
+
+      if (group === "MID") {
+        midTrades.push(trade);
+        midCount++;
+      }
+
+      if (group === "LARGE") {
+        largeTrades.push(trade);
+        largeCount++;
+      }
+
     });
 
+    // =========================
+    // 📊 MARKET BREAKDOWN
+    // =========================
+    document.getElementById("smallCount").innerText = smallCount;
+    document.getElementById("midCount").innerText = midCount;
+    document.getElementById("largeCount").innerText = largeCount;
+
+
+    // =========================
+    // 📦 RENDER TRADES
+    // =========================
     function renderTrades(trades, title, targetId) {
 
       const container = document.getElementById(targetId);
@@ -415,9 +467,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }).join("");
     }
 
-    renderTrades(small, "🟢 Small Caps", "smallSection");
-    renderTrades(mid, "🟡 Mid Caps", "midSection");
-    renderTrades(large, "🔵 Large Caps", "largeSection");
+    renderTrades(smallTrades, "🟢 Small Caps", "smallSection");
+    renderTrades(midTrades, "🟡 Mid Caps", "midSection");
+    renderTrades(largeTrades, "🔵 Large Caps", "largeSection");
 
   })
   .catch(err => {
