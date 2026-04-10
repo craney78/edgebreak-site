@@ -888,204 +888,57 @@ function logout() {
   window.location.href = "login.html";
 }
 
-// ACTIVITY
-fetch("activity.json?v=" + new Date().getTime())
-.then(res => res.json())
-.then(data => {
-
-  const container = document.getElementById("activityFeed");
-
-  container.innerHTML = data.slice(0,5).map(a => {
-
-    if (a.type === "OPEN") {
-      return `
-        <div class="activity open">
-          <div>
-            OPEN: ${a.symbol} @ $${a.price}
-          </div>
-          <small>${a.date}</small>
-        </div>
-      `;
-    }
-
-    if (a.type === "CLOSED") {
-      return `
-        <div class="activity closed">
-          <div>
-            CLOSED: ${a.symbol} (${a.return}%)
-          </div>
-          <small>${a.date}</small>
-        </div>
-      `;
-    }
-
-  }).join("");
-
-});
-
-fetch("watchlist.json?v=" + new Date().getTime())
-.then(res => res.json())
-.then(data => {
-
-  const container = document.getElementById("watchlist");
-
-  const active = data.filter(t =>
-    t.status === "breaking" || t.status === "holding"
-  );
-
-  // 🔥 PREVIEW MODE (2 trades only)
-  const preview = active.slice(0, 2);
-
-  if (!active.length) {
-    container.innerHTML = "<div class='card'>No active trades</div>";
-    return;
-  }
-
-  container.innerHTML = preview.map(t => {
-
-    const entry = t.entry_price || 0;
-    const current = t.change_percent || 0;
-
-    const color = current >= 0 ? "green" : "red";
-
-    // 🔒 HIDE SYMBOL
-    const hiddenSymbol = "████";
-
-    return `
-      <div class="watch">
-        <div>${hiddenSymbol}</div>
-        <div>$${entry.toFixed(2)}</div>
-        <div class="${color}">
-          ${current.toFixed(2)}%
-        </div>
-      </div>
-    `;
-
-  }).join("");
-
-document.getElementById("tradeProof").innerHTML =
-  bestTrades.length
-    ? bestTrades.map(t => `
-        <div class="proof-card">
-          <div class="proof-return">+${t.return}%</div>
-          <div class="proof-label">Breakout Trade</div>
-        </div>
-      `).join("")
-    : "<div class='card'>No trade data available</div>";
-
-  // 🔥 BLUR EFFECT (NOW IN CORRECT PLACE)
-  container.classList.add("blur");
-
-})
-.catch(() => {
-  document.getElementById("watchlist").innerHTML =
-    "<div class='card'>Watchlist unavailable</div>";
-});
-
-// =========================
-// 🔥 STATS (FINAL CLEAN VERSION)
-// =========================
-// =========================
-// 📊 MASTER STATS (BACKTEST)
-// =========================
-// =========================
-// 📊 MASTER STATS (BACKTEST)
-// =========================
 fetch("master_stats_2025_to_now.json?v=" + new Date().getTime())
 .then(res => res.json())
 .then(stats => {
 
+  // =========================
+  // 📊 MAIN STATS
+  // =========================
   document.getElementById("statsGrid").innerHTML = `
     <div class="card">
-      <div style="font-size:12px; color:#64748b;">TOTAL TRADES</div>
+      <div>TOTAL TRADES</div>
       <div class="big">${stats.total_trades}</div>
     </div>
     <div class="card">
-      <div style="font-size:12px; color:#64748b;">WIN RATE</div>
+      <div>WIN RATE</div>
       <div class="big">${stats.win_rate}%</div>
     </div>
-      <div class="card">
-      <div style="font-size:12px; color:#64748b;">AVG RETURN</div>
+    <div class="card">
+      <div>AVG RETURN</div>
       <div class="big">${stats.avg_return}%</div>
     </div>
     <div class="card green">
-      <div style="font-size:12px; color:#64748b;">BEST TRADE</div>
+      <div>BEST TRADE</div>
       <div class="big">${stats.best_trade}%</div>
     </div>
     <div class="card red">
-      <div style="font-size:12px; color:#64748b;">WORST TRADE</div>
+      <div>WORST TRADE</div>
       <div class="big">${stats.worst_trade}%</div>
     </div>
   `;
 
-})
-.catch(() => {
-  document.getElementById("statsGrid").innerHTML =
-    "<div class='card'>Stats unavailable</div>";
-});
-
-  // ❌ NO DATA
-  if (!stats) {
-    document.getElementById("statsGrid").innerHTML =
-      "<div class='card'>No 2025 stats available</div>";
-    return;
-  }
-
-  // 🔥 FORCE BEST TRADES (CRITICAL FIX)
-  if (!stats.best_trades && data.years && data.years["2025"]) {
-    stats.best_trades = data.years["2025"].best_trades || [];
-  }
-
-  console.log("FINAL STATS USED:", stats);
-
-  // 🔥 NORMALISE DATA
-  const totalTrades = stats.total_trades || stats.trades || 0;
-  const winRate = stats.win_rate || 0;
-  const avgReturn = stats.avg_return || 0;
-  const bestTrade = stats.best_trade || stats.best || 0;
-  const worstTrade = stats.worst_trade || stats.worst || 0;
-
   // =========================
-  // 🔥 MAIN STATS GRID
-  // =========================
-  document.getElementById("statsGrid").innerHTML = `
-    <div class="card"><div>Total Trades</div><div class="big">${totalTrades}</div></div>
-    <div class="card"><div>Win Rate</div><div class="big">${winRate}%</div></div>
-    <div class="card"><div>Avg Return</div><div class="big">${avgReturn}%</div></div>
-    <div class="card green"><div>Best</div><div class="big">${bestTrade}%</div></div>
-    <div class="card red"><div>Worst</div><div class="big">${worstTrade}%</div></div>
-  `;
-
-  // =========================
-  // 🔥 BEST TRADES
+  // 🏆 BEST TRADES
   // =========================
   const bestTrades = stats.best_trades || [];
 
-  document.getElementById("bestTrades").innerHTML =
-    bestTrades.length
-      ? bestTrades.map(t => `
-          <div class="trade">
-            <div>${t.symbol}</div>
-            <div class="green">+${t.return}%</div>
-          </div>
-        `).join("")
-      : "<div class='card'>No best trades found</div>";
+  const bestContainer = document.getElementById("bestTrades");
+
+  if (bestContainer) {
+    bestContainer.innerHTML =
+      bestTrades.length
+        ? bestTrades.map(t => `
+            <div class="trade">
+              <div>${t.symbol}</div>
+              <div class="green">+${t.return}%</div>
+            </div>
+          `).join("")
+        : "<div class='card'>No best trades found</div>";
+  }
 
   // =========================
-  // 🔥 TRADE PROOF (CONVERSION SECTION)
-  // =========================
-  document.getElementById("tradeProof").innerHTML =
-    bestTrades.length
-      ? bestTrades.map(t => `
-          <div class="card">
-            <div class="green big">+${t.return}%</div>
-            <div style="color:#94a3b8;">Multi-day trade</div>
-          </div>
-        `).join("")
-      : "<div class='card'>No trade data available</div>";
-
-  // =========================
-  // 🔥 GROUP STATS
+  // 📊 GROUP STATS
   // =========================
   document.getElementById("groupStats").innerHTML =
     Object.entries(stats.groups || {}).map(([g, v]) => `
@@ -1102,8 +955,6 @@ fetch("master_stats_2025_to_now.json?v=" + new Date().getTime())
 })
 .catch(err => {
   console.error("Stats error:", err);
-  document.getElementById("statsGrid").innerHTML =
-    "<div class='card'>Stats failed to load</div>";
 });
 
 </script>
