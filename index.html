@@ -808,6 +808,35 @@ body {
   color: #94a3b8;
 }
 
+/* =========================
+   MATCH CARD SIZES
+   ========================= */
+
+/* Force same grid behaviour as How It Works */
+.section.trading-desk-section .grid,
+.section.trading-desk .grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+}
+
+/* Make all cards equal height */
+.section.trading-desk-section .card,
+.section.trading-desk .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Keep content balanced */
+.section.trading-desk-section .card p,
+.section.trading-desk .card p {
+  flex-grow: 1;
+}
+
+/* Align lists neatly */
+.feature-list {
+  margin-top: auto;
+}
+
 </style>
 </head>
 
