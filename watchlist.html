@@ -397,9 +397,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const large = [];
 
     data.forEach(trade => {
-      if (trade.price_group === "SMALL") small.push(trade);
-      if (trade.price_group === "MID") mid.push(trade);
-      if (trade.price_group === "LARGE") large.push(trade);
+      const group = trade.price_group || trade.group;
+
+    if (group === "SMALL") small.push(trade);
+    if (group === "MID") mid.push(trade);
+    if (group === "LARGE") large.push(trade);
     });
 
     function renderTrades(trades, title, targetId) {
