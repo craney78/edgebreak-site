@@ -335,54 +335,30 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================
   // 🔔 TODAY ACTIVITY
   // =========================
-  fetch("activity.json?v=" + Date.now())
+  fetch("active_positions.json?v=" + Date.now())
   .then(res => res.json())
   .then(data => {
 
-    let open = 0;
-    let closed = 0;
+    let small = 0;
+    let mid = 0;
+    let large = 0;
 
-    const html = data.slice(-5).reverse().map(a => {
+    data.forEach(trade => {
 
-      if (a.type === "OPEN") {
-        open++;
-        return `<div class="green">🟢 ${a.symbol}</div>`;
-      }
+      const group = trade.price_group || trade.group;
 
-      if (a.type === "CLOSED") {
-        closed++;
-        const color = a.result >= 0 ? "#22c55e" : "#ef4444";
+      if (group === "SMALL") small++;
+      if (group === "MID") mid++;
+      if (group === "LARGE") large++;
 
-        return `
-          <div>
-            🔴 ${a.symbol} 
-            <span style="color:${color}; font-weight:bold;">
-              ${a.result}%
-            </span>
-          </div>
-        `;
-      }
+    });
 
-      return "";
-
-    }).join("");
-
-    document.getElementById("todayOpen").innerText = open;
-    document.getElementById("todayClosed").innerText = closed;
-
-    document.getElementById("todayActivity").innerHTML = html || `
-      <div style="color:#94a3b8; font-size:13px; margin-top:10px;">
-        No trades triggered yet today.<br>
-        <span style="color:#64748b;">
-          The system is scanning for high-probability breakouts.
-        </span>
-      </div>
-    `;
+    document.getElementById("smallCount").innerText = small;
+    document.getElementById("midCount").innerText = mid;
+    document.getElementById("largeCount").innerText = large;
 
   })
-  .catch(() => {
-    document.getElementById("todayActivity").innerText = "No activity";
-  });
+  .catch(err => console.error("Breakdown error:", err));
 
 
   // =========================
