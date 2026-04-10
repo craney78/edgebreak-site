@@ -890,6 +890,47 @@ body {
   margin-top: auto;
 }
 
+/* =========================
+   ✅ FINAL ALIGNMENT (CLEAN)
+   ========================= */
+
+/* Target ONLY the two sections */
+.section:nth-of-type(1) .grid,
+.section:nth-of-type(2) .grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+/* Make cards identical */
+.section:nth-of-type(1) .card,
+.section:nth-of-type(2) .card {
+  height: 300px;              /* 🔥 fixed height = perfect alignment */
+  padding: 28px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top content */
+.section:nth-of-type(1) .card h3,
+.section:nth-of-type(2) .card h3 {
+  margin-bottom: 10px;
+}
+
+/* Middle content grows */
+.section:nth-of-type(1) .card p,
+.section:nth-of-type(2) .card p {
+  flex-grow: 1;
+}
+
+/* Bottom content stays aligned */
+.section:nth-of-type(1) .feature-list,
+.section:nth-of-type(2) .feature-list,
+.section:nth-of-type(2) .winner {
+  margin-top: auto;
+}
+
 </style>
 </head>
 
