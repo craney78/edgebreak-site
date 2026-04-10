@@ -421,6 +421,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
+  // =========================
+  // 📊 LIVE STATS (FROM ACTIVE TRADES)
+  // =========================
+  const activeCount = data.length;
+
+  let totalReturn = 0;
+  let best = null;
+
+  data.forEach(trade => {
+    const change = trade.change_percent || 0;
+
+    totalReturn += change;
+
+    if (!best || change > best.change_percent) {
+      best = trade;
+    }
+  });
+
+  const avgReturn = activeCount > 0 ? (totalReturn / activeCount).toFixed(2) : 0;
+
+  // =========================
+  // 📊 UPDATE UI
+  // =========================
+  document.getElementById("activeCount").innerText = activeCount;
+
+  document.getElementById("avgReturn").innerText = avgReturn + "%";
+
+  document.getElementById("bestTrade").innerHTML = best
+    ? `<span style="color:#22c55e;">${best.symbol}</span> (${best.change_percent}%)`
+    : "-";  
+
     // =========================
     // 📊 MARKET BREAKDOWN
     // =========================
