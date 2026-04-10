@@ -645,6 +645,44 @@ body {
   color: white;
 }
 
+.trading-desk-section {
+  position: relative;
+  border-radius: 20px;
+  padding: 70px 25px;
+
+  background:
+    radial-gradient(circle at top, rgba(34,197,94,0.08), transparent 70%),
+    #020617;
+
+  border: 1px solid rgba(34,197,94,0.1);
+
+  box-shadow:
+    0 0 40px rgba(34,197,94,0.05),
+    0 20px 60px rgba(0,0,0,0.8);
+}
+
+.trading-desk-section .card {
+  padding: 26px;
+}
+
+.trading-desk-section h2 {
+  font-size: 34px;
+  margin-bottom: 10px;
+}
+
+.trading-desk-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 120px;
+  height: 3px;
+
+  background: linear-gradient(90deg, transparent, #22c55e, transparent);
+}
+
 </style>
 </head>
 
@@ -777,7 +815,7 @@ body {
 </div>
 
 <!-- INSIDE THE TRADING DESK -->
-<div class="section">
+<div class="section trading-desk-section"></div>
 
   <h2>Inside the Trading Desk</h2>
 
