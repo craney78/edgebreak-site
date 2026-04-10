@@ -629,216 +629,183 @@ body {
   padding: 60px 20px;
 }
 
-.mini-trades {
-  margin-top: 10px;
-  font-size: 13px;
-  color: #e2e8f0;
-}
-
-.mini-trades strong {
-  color: white;
-}
-
 /* =========================
-   🔥 TRADING DESK SECTION
+   CLEAN SECTION BASE
    ========================= */
 
-.trading-desk-section {
-  max-width: 1000px;
-  margin: 60px auto; /* centers section */
-
-  padding: 60px 30px;
-  border-radius: 20px;
-
-  background:
-    radial-gradient(circle at top, rgba(34,197,94,0.08), transparent 70%),
-    #020617;
-
-  border: 1px solid rgba(34,197,94,0.1);
-
-  box-shadow:
-    0 0 40px rgba(34,197,94,0.05),
-    0 20px 60px rgba(0,0,0,0.8);
-
+.section {
+  margin-top: 60px;
   text-align: center;
 }
 
-/* TITLE */
-.trading-desk-section h2 {
-  font-size: 34px;
-  margin-bottom: 10px;
-}
+/* =========================
+   🔥 TRADING DESK
+   ========================= */
 
-/* SUBTEXT */
-.trading-desk-section p {
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
+.trading-desk {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 50px 25px;
+
+  border-radius: 16px;
+  border: 1px solid #1e293b;
+  background: #020617;
 }
 
 /* GRID */
-.trading-desk-section .grid {
-  max-width: 900px;
-  margin: 0 auto;
+.trading-desk .grid {
+  margin-top: 30px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 25px;
+  gap: 20px;
 }
 
 /* CARDS */
-.trading-desk-section .card {
-  padding: 26px;
-}
-
-/* =========================
-   💎 FEATURE LIST
-   ========================= */
-
-.feature-list {
-  margin-top: 12px;
-  text-align: left;
-  font-size: 13px;
-  color: #cbd5f5;
-  padding-left: 18px;
-}
-
-.feature-list li {
-  list-style: none;
-  position: relative;
-  padding-left: 18px;
-  margin-bottom: 6px;
-}
-
-.feature-list li::before {
-  content: "✔";
-  position: absolute;
-  left: 0;
-  color: #22c55e;
-}
-
-/* =========================
-   🏆 WINNER DISPLAY
-   ========================= */
-
-.mini-trades {
-  margin-top: 15px;
+.trading-desk .card {
+  padding: 22px;
   text-align: center;
 }
 
-/* HERO WINNER */
-.winner-hero {
-  padding: 16px;
-  border-radius: 12px;
-
-  background: radial-gradient(circle, rgba(34,197,94,0.2), transparent);
-  border: 1px solid rgba(34,197,94,0.3);
-
-  margin-bottom: 10px;
-}
-
-.winner-symbol {
-  font-size: 14px;
-  color: #94a3b8;
-}
-
-.winner-return {
-  font-size: 32px;
-  font-weight: bold;
-  color: #22c55e;
-}
-
-.winner-meta {
-  font-size: 12px;
-  color: #64748b;
-}
-
-/* SUPPORTING TRADES */
-.winner-sub {
-  font-size: 12px;
-  color: #94a3b8;
-}
-
-.winner-sub span {
-  margin: 0 6px;
-  opacity: 0.5;
-}
-
-/* =========================
-   ✨ TOP ACCENT LINE
-   ========================= */
-
-.trading-desk-section::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-
-  width: 120px;
-  height: 3px;
-
-  background: linear-gradient(90deg, transparent, #22c55e, transparent);
-}
-}
-
-/* HERO WINNER */
-.winner-hero {
-  padding: 16px;
-  border-radius: 12px;
-  background: radial-gradient(circle, rgba(34,197,94,0.2), transparent);
-  border: 1px solid rgba(34,197,94,0.3);
-  margin-bottom: 10px;
-}
-
-.winner-symbol {
-  font-size: 14px;
-  color: #94a3b8;
-}
-
-.winner-return {
-  font-size: 32px;
-  font-weight: bold;
-  color: #22c55e;
-}
-
-.winner-meta {
-  font-size: 12px;
-  color: #64748b;
-}
-
-/* SUPPORTING */
-.winner-sub {
-  font-size: 12px;
-  color: #94a3b8;
-}
-
-.winner-sub span {
-  margin: 0 6px;
-  opacity: 0.5;
-}
-
-.trading-desk-section .grid {
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
+/* LIST */
 .feature-list {
   margin-top: 12px;
   text-align: left;
   font-size: 13px;
-  color: #cbd5f5;
-  padding-left: 18px;
+  color: #94a3b8;
 }
 
-.feature-list li {
-  margin-bottom: 6px;
+/* =========================
+   🏆 WINNER (SIMPLE + CLEAN)
+   ========================= */
+
+.winner {
+  margin-top: 15px;
 }
 
-.trading-desk-section {
-  max-width: 1000px;
+.winner-main {
+  font-size: 28px;
+  font-weight: bold;
+  color: #22c55e;
+}
+
+.winner-sub {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 5px;
+}
+
+.winner-list {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* =========================
+   📊 PERFORMANCE
+   ========================= */
+
+.performance {
+  max-width: 900px;
+  margin: 60px auto;
+}
+
+/* STATS GRID */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 20px;
+}
+
+/* STAT CARD */
+.stat-card {
+  background: #0f172a;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #1e293b;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.stat-value {
+  font-size: 26px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+/* =========================
+   🔧 FORCE CLEAN LAYOUT FIX
+   ========================= */
+
+/* CLEAN SECTION */
+.section {
+  max-width: 1100px;
+  margin: 60px auto !important;
+  padding: 40px 20px !important;
+  text-align: center;
+}
+
+/* FIX TRADING DESK */
+.section.trading-desk-section,
+.section.trading-desk {
+  max-width: 900px !important;
+  margin: 60px auto !important;
+  padding: 50px 25px !important;
+  border-radius: 16px;
+
+  background: #020617;
+  border: 1px solid #1e293b;
+}
+
+/* FIX GRID INSIDE */
+.section.trading-desk-section .grid,
+.section.trading-desk .grid {
+  max-width: 850px;
+  margin: 30px auto 0 auto;
+  gap: 20px;
+}
+
+/* FIX CARDS */
+.section.trading-desk-section .card,
+.section.trading-desk .card {
+  padding: 22px;
+}
+
+/* FIX TEXT WIDTH */
+.section.trading-desk-section p,
+.section.trading-desk p {
+  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* WINNER CLEAN */
+.winner-main {
+  font-size: 28px;
+  font-weight: bold;
+  color: #22c55e;
+}
+
+.winner-sub {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.winner-list {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 6px;
+}
+
+/* LIST CLEAN */
+.feature-list {
+  text-align: left;
+  max-width: 220px;
+  margin: 12px auto 0 auto;
+  font-size: 13px;
+  color: #94a3b8;
 }
 
 </style>
