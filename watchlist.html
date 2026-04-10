@@ -419,22 +419,7 @@ body {
     <div id="winBar" style="height:100%; width:0%; background:#22c55e;"></div>
   </div>
 </div>
-
-  <div style="
-    background:#1e293b;
-    height:10px;
-    border-radius:6px;
-    overflow:hidden;
-  ">
-    <div id="winBar" style="
-      height:100%;
-      width:0%;
-      background:#22c55e;
-      transition: width 0.5s ease;
-    "></div>
-  </div>
-</div>
-
+ 
 <!-- WATCHLIST SECTIONS -->
 <div id="smallSection" class="section"></div>
 <div id="midSection" class="section"></div>
@@ -616,12 +601,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const avg = total / all.length;
     const win = (wins / all.length) * 100;
 
+    // LIVE COUNT
+    document.getElementById("activeCount").innerText = active.length;
+
+    // WIN BAR
     const bar = document.getElementById("winBar");
 
-    // width still based on win rate (visual fill)
     bar.style.width = win + "%";
 
-    // 🔥 COLOR BASED ON PERFORMANCE (AVG RETURN)
+    // ✅ COLOR BASED ON PERFORMANCE (AVG RETURN)
     if (avg < 0) {
       bar.style.background = "#ef4444"; // red
     } else if (avg < 5) {
@@ -630,26 +618,21 @@ document.addEventListener("DOMContentLoaded", function () {
       bar.style.background = "#22c55e"; // green
     }
 
-    document.getElementById("activeCount").innerText = active.length;
-
-    document.getElementById("winBar").style.width = win + "%";
-
-    const bar = document.getElementById("winBar");
-    bar.style.background = win >= 50 ? "#22c55e" : "#ef4444";
-
+    // ANIMATION
     animateValue("avgReturn", avg);
     animateValue("winRate", win);
 
+    // BEST TRADE
     const bestMove = parseFloat(best.percent_move || 0);
-    
-  document.getElementById("bestTrade").innerHTML = `
-    <div style="font-size:22px; font-weight:bold; color:#22c55e;">
-      ${best.symbol}
-    </div>
-    <div style="font-size:14px; color:#94a3b8;">
-      +${bestMove.toFixed(2)}%
-    </div>
-  `;
+
+    document.getElementById("bestTrade").innerHTML = `
+      <div style="font-size:22px; font-weight:bold; color:#22c55e;">
+        ${best.symbol}
+      </div>
+      <div style="font-size:14px; color:#94a3b8;">
+        +${bestMove.toFixed(2)}%
+      </div>
+    `;
 
   });
 
