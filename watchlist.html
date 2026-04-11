@@ -571,52 +571,45 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
   // =========================
-  // 📊 COMBINED STATS
+  // 📊 COMBINED STATS (FINAL WORKING VERSION)
   // =========================
   Promise.all([
     fetch("/active_positions.json?v=" + Date.now()).then(r => r.json()),
     fetch("/live_trade_history.json?v=" + Date.now()).then(r => r.json())
   ])
-    .then(([active, history]) => {
+  .then(([active, history]) => {
 
-    // ✅ safety
+    console.log("ACTIVE:", active);
+    console.log("HISTORY:", history);
+
+    // safety
     if (!Array.isArray(active)) active = [];
     if (!Array.isArray(history)) history = [];
 
-    // combine (used only for fallback best trade)
-    const all = [
-      ...history.map(t => ({
-        percent_move: t.percent_move ?? t.result ?? 0,
-        symbol: t.symbol
-      })),
-      ...active.map(t => ({
-        percent_move: t.change_percent ?? 0,
-        symbol: t.symbol
-      }))
-    ];
-
-    if (all.length === 0) return;
-
     // =========================
-    // ✅ SAFE CALCULATIONS
+    // ✅ CALCULATIONS (HISTORY ONLY)
     // =========================
-
     let wins = 0;
     let total = 0;
 
-    // ✅ only use history for stats
-    if (history.length === 0) {
-      console.warn("⚠️ No trade history found");
+    // LIVE COUNT (always show)
+    document.getElementById("activeCount").innerText = active.length;
 
-      document.getElementById("activeCount").innerText = active.length;
+    // ❌ if no history → show defaults
+    if (history.length === 0) {
+
       document.getElementById("avgReturn").innerText = "0%";
       document.getElementById("winRate").innerText = "0%";
       document.getElementById("bestTrade").innerText = "-";
 
+      document.getElementById("winBar").style.width = "0%";
+
+      console.warn("No history data found");
+
       return;
     }
 
-    // safe best
+    // ✅ find best trade
     let best = history[0];
 
     history.forEach(t => {
@@ -632,6 +625,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (r > bestValue) {
         best = t;
       }
+      });
 
     });
 
@@ -642,34 +636,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // 📊 UPDATE UI
     // =========================
 
-    // LIVE COUNT
-    document.getElementById("activeCount").innerText = active.length;
-
-    // PERFORMANCE BAR
-    const bar = document.getElementById("winBar");
-
-    let performanceWidth = 0;
-
-    if (avg <= 0) {
-      performanceWidth = 0;
-    } else if (avg >= 10) {
-      performanceWidth = 100;
-    } else {
-      performanceWidth = (avg / 10) * 100;
-    }
-
-    bar.style.width = performanceWidth + "%";
-
-    // COLOR (based on performance)
-    if (avg < 0) {
-      bar.style.background = "#ef4444";
-    } else if (avg < 5) {
-      bar.style.background = "#f59e0b";
-    } else {
-      bar.style.background = "#22c55e";
-    }
-
-    // ANIMATION
+    // animate numbers
     animateValue("avgReturn", avg);
     animateValue("winRate", win);
 
@@ -685,12 +652,29 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     `;
 
+    // =========================
+    // 📈 PERFORMANCE BAR
+    // =========================
+    const bar = document.getElementById("winBar");
+
+    let width = 0;
+
+    if (avg <= 0) width = 0;
+    else if (avg >= 10) width = 100;
+    else width = (avg / 10) * 100;
+
+    bar.style.width = width + "%";
+
+    if (avg < 0) bar.style.background = "#ef4444";
+    else if (avg < 5) bar.style.background = "#f59e0b";
+    else bar.style.background = "#22c55e";
+
   })
   .catch(err => {
     console.error("STATS ERROR:", err);
   });
 
-  </script>
+</script>
 
-  </body>
-  </html>
+</body>
+</html>
