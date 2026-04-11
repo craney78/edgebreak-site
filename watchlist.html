@@ -425,6 +425,31 @@ body {
 <div id="midSection" class="section"></div>
 <div id="largeSection" class="section"></div>
 
+<div class="section">
+
+  <h3 style="margin-bottom:15px;">Performance by Category</h3>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="label">🟢 Small Caps</div>
+      <div class="value" id="smallStats">-</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">🟡 Mid Caps</div>
+      <div class="value" id="midStats">-</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">🔵 Large Caps</div>
+      <div class="value" id="largeStats">-</div>
+    </div>
+
+  </div>
+
+</div>
+
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -630,6 +655,72 @@ document.addEventListener("DOMContentLoaded", function () {
     const win = (wins / history.length) * 100;
     const avg = total / history.length;
 
+    // =========================
+    // 📊 CATEGORY STATS (AUTO GROUP)
+    // =========================
+
+    const groups = {
+      SMALL: [],
+      MID: [],
+      LARGE: []
+    };
+
+    // assign group based on entry price
+    history.forEach(t => {
+
+      const price = parseFloat(t.entry_price ?? 0);
+
+      let g = "SMALL";
+
+      if (price < 20) g = "SMALL";
+      else if (price < 80) g = "MID";
+      else g = "LARGE";
+
+      groups[g].push(t);
+
+    });
+
+    function calcStats(trades) {
+
+      if (trades.length === 0) {
+        return "No trades";
+      }
+
+      let wins = 0;
+      let total = 0;
+      let best = trades[0];
+
+      trades.forEach(t => {
+        const r = parseFloat(t.percent_move ?? t.result ?? 0);
+
+        total += r;
+
+        if (r > 0) wins++;
+
+        const bestVal = parseFloat(best.percent_move ?? best.result ?? 0);
+
+        if (r > bestVal) best = t;
+      });
+
+      const avg = total / trades.length;
+      const win = (wins / trades.length) * 100;
+      const bestMove = parseFloat(best.percent_move ?? best.result ?? 0);
+
+      return `
+        <div style="font-size:14px;">
+          Trades: ${trades.length}<br>
+          Avg: ${avg.toFixed(2)}%<br>
+          Win: ${win.toFixed(0)}%<br>
+          Best: ${bestMove.toFixed(2)}%
+        </div>
+      `;
+    }
+
+    // update UI
+    document.getElementById("smallStats").innerHTML = calcStats(groups.SMALL);
+    document.getElementById("midStats").innerHTML = calcStats(groups.MID);
+    document.getElementById("largeStats").innerHTML = calcStats(groups.LARGE);
+    
     // =========================
     // 📊 UPDATE UI
     // =========================
