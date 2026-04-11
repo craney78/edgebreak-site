@@ -770,7 +770,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (!startInput || !sizeInput) return;
 
-      let capital = parseFloat(startInput.value || 10000);
+      const startValue = parseFloat(startInput.value || 10000);
       const positionSize = parseFloat(sizeInput.value || 1);
 
       // sort trades by date (important)
@@ -799,92 +799,33 @@ document.addEventListener("DOMContentLoaded", function () {
         return (a.entry_date ?? 0) - (b.entry_date ?? 0);
       });
 
-      sortedHistory.forEach(t => {
-      const r = parseFloat(t.percent_move ?? t.result ?? 0);
-
-      capital = capital * (1 + (r / 100) * positionSize);
-      });
-
+      
       // =========================
-      // 📈 EQUITY CURVE (FULL CLEAN VERSION)
+      // 📈 EQUITY CURVE (FIXED)
       // =========================
 
-      let capital = parseFloat(startInput.value || 10000);
-      const startValue = capital;
+      const startValue = parseFloat(startInput.value || 10000);
       const positionSize = parseFloat(sizeInput.value || 1);
 
-      // build curve
-      const values = [1]; // start at 1 = 100%
+      let chartCapital = startValue;
+
+      const values = [1];
       const labels = ["Start"];
 
-      
-        // normalised growth (this makes chart look clean)
-        values.push(capital / startValue);
+      sortedHistory.forEach((t, i) => {
 
+        const r = parseFloat(t.percent_move ?? t.result ?? 0);
+
+        chartCapital = chartCapital * (1 + (r / 100) * positionSize);
+
+        values.push(chartCapital / startValue);
         labels.push(i + 1);
 
       });
 
       // =========================
-      // 📊 RENDER CHART
+      // 💰 FINAL VALUES
       // =========================
-
-      const ctx = document.getElementById("equityChart");
-
-      if (!ctx) return;
-
-      // destroy previous chart (prevents stacking bug)
-      if (window.equityChartInstance) {
-        window.equityChartInstance.destroy();
-      }
-
-      window.equityChartInstance = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: labels,
-          datasets: [{
-            data: values,
-            borderColor: "#22c55e",
-            backgroundColor: "rgba(34,197,94,0.1)",
-            tension: 0.45,
-            fill: true,
-            borderWidth: 3,
-            pointRadius: 0
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-
-          plugins: {
-            legend: { display: false }
-          },
-
-          scales: {
-            x: {
-              ticks: { display: false },
-              grid: { display: false }
-            },
-
-            y: {
-              min: 0.9,
-
-              ticks: {
-                color: "#94a3b8",
-
-                // convert back to dollars
-                callback: function(value) {
-                  return "$" + Math.round(value * startValue).toLocaleString();
-                }
-              },
-
-              grid: {
-                color: "#1e293b"
-              }
-            }
-          }
-        }
-      });
 
       const final = chartCapital;
       const totalReturn = ((final - startValue) / startValue) * 100;
@@ -895,7 +836,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
       document.getElementById("totalReturn").innerText =
         totalReturn.toFixed(2) + "%";
-    }
+
+
+      // =========================
+      // 📊 RENDER CHART
+      // =========================
+
+      const ctx = document.getElementById("equityChart");
+
+      if (ctx) {
+
+        if (window.equityChartInstance) {
+          window.equityChartInstance.destroy();
+        }
+
+        window.equityChartInstance = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [{
+              data: values,
+              borderColor: "#22c55e",
+              backgroundColor: "rgba(34,197,94,0.1)",
+              tension: 0.45,
+              fill: true,
+              borderWidth: 3,
+              pointRadius: 0
+            }]
+          },
+          options: {
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              x: {
+                ticks: { display: false },
+                grid: { display: false }
+              },
+              y: {
+                min: 0.9,
+                ticks: {
+                  color: "#94a3b8",
+                  callback: v => "$" + Math.round(v * startValue).toLocaleString()
+                },
+                grid: { color: "#1e293b" }
+              }
+            }
+          }
+        });
+
+      }
+    
 
     // run once
     runSimulation();
