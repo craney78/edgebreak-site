@@ -811,9 +811,29 @@ document.addEventListener("DOMContentLoaded", function () {
       let chartCapital = startValue;
 
       const values = [1];
+      const drawdowns = [0];
       const labels = ["Start"];
 
-      sortedHistory.forEach((t, i) => {
+      let peak = 1;
+
+        sortedHistory.forEach((t, i) => {
+
+        const r = parseFloat(t.percent_move ?? t.result ?? 0);
+
+        chartCapital = chartCapital * (1 + (r / 100) * positionSize);
+
+        const normalized = chartCapital / startValue;
+
+        values.push(normalized);
+        labels.push(i + 1);
+
+        // 🔴 drawdown calculation
+        if (normalized > peak) peak = normalized;
+
+        const dd = (normalized - peak) / peak;
+        drawdowns.push(dd);
+
+      });    
 
         const r = parseFloat(t.percent_move ?? t.result ?? 0);
 
@@ -855,15 +875,26 @@ document.addEventListener("DOMContentLoaded", function () {
           type: "line",
           data: {
             labels: labels,
-            datasets: [{
-              data: values,
-              borderColor: "#22c55e",
-              backgroundColor: "rgba(34,197,94,0.1)",
-              tension: 0.45,
-              fill: true,
-              borderWidth: 3,
-              pointRadius: 0
-            }]
+            datasets: [
+              {
+                data: values,
+                borderColor: "#22c55e",
+                backgroundColor: "rgba(34,197,94,0.1)",
+                tension: 0.45,
+                fill: true,
+                borderWidth: 3,
+                pointRadius: 0
+              },
+              {
+                data: drawdowns.map(d => 1 + d),
+                borderColor: "#ef4444",
+                backgroundColor: "rgba(239,68,68,0.1)",
+                tension: 0.45,
+                fill: true,
+                borderWidth: 2,
+                pointRadius: 0
+              }
+            ]
           },
           options: {
             plugins: {
