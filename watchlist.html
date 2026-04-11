@@ -450,6 +450,26 @@ body {
 
 </div>
 
+<div class="section">
+
+  <h3 style="margin-bottom:15px;">Top Breakout Trades</h3>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="label">🏆 Best Trades</div>
+      <div class="value" id="topTrades">-</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">📉 Worst Trades</div>
+      <div class="value" id="worstTrades">-</div>
+    </div>
+
+  </div>
+
+</div>
+
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -741,6 +761,45 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("smallStats").innerHTML = calcStats(groups.SMALL);
     document.getElementById("midStats").innerHTML = calcStats(groups.MID);
     document.getElementById("largeStats").innerHTML = calcStats(groups.LARGE);
+
+    // =========================
+    // 🏆 TOP & WORST TRADES
+    // =========================
+
+        // use history only (closed trades)
+        const sorted = [...history].sort((a, b) => {
+          return (b.percent_move ?? 0) - (a.percent_move ?? 0);
+        });
+    });
+
+    // top 3 winners
+    const top = sorted.slice(0, 3);
+
+    // worst 3 losers
+    const worst = sorted.slice(-3).reverse();
+
+    function renderTradeList(trades, isPositive = true) {
+
+      if (trades.length === 0) return "No trades";
+
+      return trades.map(t => {
+        const move = parseFloat(t.percent_move ?? 0);
+        const color = move >= 0 ? "#22c55e" : "#ef4444";
+
+        return `
+          <div style="font-size:14px; margin-bottom:6px;">
+            <strong>${t.symbol}</strong>
+            <span style="color:${color}; float:right;">
+              ${move.toFixed(2)}%
+            </span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // update UI
+    document.getElementById("topTrades").innerHTML = renderTradeList(top, true);
+    document.getElementById("worstTrades").innerHTML = renderTradeList(worst, false);
 
     // =========================
     // 📊 UPDATE UI
