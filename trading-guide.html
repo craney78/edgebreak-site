@@ -342,6 +342,12 @@ body {
   border-bottom: none;
 }
 
+.hero-logo-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+/* 🔥 GLOW BEHIND */
 .hero-logo-wrap::before {
   content: "";
   position: absolute;
@@ -362,7 +368,15 @@ body {
 
   border-radius: 50%;
   filter: blur(25px);
-  z-index: 0;
+
+  z-index: 0;   /* 🔥 BEHIND */
+}
+
+/* 🔥 LOGO ABOVE GLOW */
+.hero-logo {
+  width: 140px;
+  position: relative;
+  z-index: 2;   /* 🔥 ABOVE */
 }
 
 /* LOGO ON TOP */
