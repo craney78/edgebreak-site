@@ -176,6 +176,42 @@ button {
   z-index: 2;
 }
 
+/* NAV LOGO GLOW (FINAL CLEAN VERSION) */
+.logo-wrap {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+}
+
+.logo-wrap::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: 24px;   /* 🔥 smaller than logo = no bleed */
+  height: 24px;
+
+  transform: translate(-50%, -50%);
+
+  background: radial-gradient(
+    circle,
+    rgba(34,197,94,0.6) 0%,
+    rgba(34,197,94,0.2) 50%,
+    transparent 70%
+  );
+
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.nav-logo {
+  position: relative;
+  z-index: 1;
+  width: 30px;
+}
+
 /* HALO */
 
 .logo-text {
@@ -192,28 +228,6 @@ button {
   border-radius: 6px;
   background: rgba(34,197,94,0.15);
   color: #22c55e;
-}
-
-.logo-wrap::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 38px;
-  height: 38px;
-
-  transform: translate(-50%, -50%);
-
-  background: radial-gradient(
-    circle,
-    rgba(34,197,94,0.6) 0%,
-    rgba(34,197,94,0.25) 40%,
-    transparent 70%
-  );
-
-  border-radius: 50%;
-  z-index: 0;
-  filter: blur(4px);
 }
 
 .nav-logo {
@@ -344,9 +358,9 @@ body {
 
     <!-- LEFT -->
     <div class="nav-left">
-      <div class="logo-wrap">
-        <img src="images/logo.png" class="nav-logo">
-      </div>
+        <div class="logo-wrap">
+    <img src="images/logo.png" class="nav-logo">
+    </div>
       <a href="index.html" class="logo-text">EDGEBREAK</a>
       <span class="live-badge">LIVE</span>
     </div>
