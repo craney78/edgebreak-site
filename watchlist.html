@@ -615,9 +615,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (r > 0) wins++;
 
-      if (r > (parseFloat(best.percent_move) || 0)) {
+    const bestValue = parseFloat(best.percent_move ?? best.result ?? 0);
+
+      if (r > bestValue) {
         best = t;
-      }
+    }
     });
 
     const win = history.length > 0 ? (wins / history.length) * 100 : 0;
