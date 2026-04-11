@@ -863,24 +863,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
       let peak = 1;
 
+        let bestIndex = 0;
+        let bestValue = -Infinity;
+
         sortedHistory.forEach((t, i) => {
 
-        const r = parseFloat(t.percent_move ?? t.result ?? 0);
+          const r = parseFloat(t.percent_move ?? t.result ?? 0);
 
-        chartCapital = chartCapital * (1 + (r / 100) * positionSize);
+          // track best trade
+          if (r > bestValue) {
+            bestValue = r;
+            bestIndex = i + 1; // +1 because of "Start"
+          }
 
-        const normalized = chartCapital / startValue;
+          capital = capital * (1 + (r / 100) * positionSize);
 
-        values.push(normalized);
-        labels.push(i + 1);
+          const normalized = capital / startValue;
 
-        // 🔴 drawdown calculation
-        if (normalized > peak) peak = normalized;
+          values.push(normalized);
+          labels.push(i + 1);
 
-        const dd = (normalized - peak) / peak;
-        drawdowns.push(dd);
+          if (normalized > peak) peak = normalized;
 
-      });    
+          const dd = (normalized - peak) / peak;
+          drawdowns.push(dd);
+
+        });    
         
       // =========================
       // 💰 FINAL VALUES
@@ -930,12 +938,32 @@ document.addEventListener("DOMContentLoaded", function () {
                 fill: true,
                 borderWidth: 2,
                 pointRadius: 0
+              },
+              {
+                data: values.map((v, i) => i === bestIndex ? v : null),
+                borderColor: "#facc15",
+                backgroundColor: "#facc15",
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                showLine: false
               }
             ]
           },
           options: {
             plugins: {
-              legend: { display: false }
+              legend: { display: false },
+
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    if (context.datasetIndex === 2 && context.raw !== null) {
+                      return "Best Trade: +" + bestValue.toFixed(2) + "%";
+                    }
+                    return "";
+                  }
+                }
+              }
+
             },
             scales: {
               x: {
