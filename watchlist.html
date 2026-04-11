@@ -630,30 +630,54 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // =========================
-    // ✅ CALCULATE STATS
+    // 🔥 COMBINED STATS (BEST VERSION)
+    // =========================
+
+    // combine ALL trades for performance
+    const all = [
+      ...history.map(t => ({
+        percent_move: t.percent_move ?? t.result ?? 0,
+        symbol: t.symbol
+      })),
+      ...active.map(t => ({
+        percent_move: t.change_percent ?? 0,
+        symbol: t.symbol
+      }))
+    ];
+
+    // =========================
+    // 📊 CALCULATIONS
     // =========================
     let wins = 0;
     let total = 0;
-    let best = history[0];
 
+    // use history for win rate
     history.forEach(t => {
-
       const r = parseFloat(t.percent_move ?? t.result ?? 0);
+      if (r > 0) wins++;
+    });
+
+    // use ALL for avg + best
+    let best = all[0];
+
+    all.forEach(t => {
+      const r = parseFloat(t.percent_move ?? 0);
 
       total += r;
 
-      if (r > 0) wins++;
-
-      const bestValue = parseFloat(best.percent_move ?? best.result ?? 0);
+      const bestValue = parseFloat(best.percent_move ?? 0);
 
       if (r > bestValue) {
         best = t;
       }
-  
     });
 
-    const win = (wins / history.length) * 100;
-    const avg = total / history.length;
+    // final stats
+    const win = history.length > 0 ? (wins / history.length) * 100 : 0;
+    const avg = all.length > 0 ? total / all.length : 0;
+
+        const win = (wins / history.length) * 100;
+        const avg = total / history.length;
 
     // =========================
     // 📊 CATEGORY STATS (AUTO GROUP)
@@ -720,7 +744,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("smallStats").innerHTML = calcStats(groups.SMALL);
     document.getElementById("midStats").innerHTML = calcStats(groups.MID);
     document.getElementById("largeStats").innerHTML = calcStats(groups.LARGE);
-    
+
     // =========================
     // 📊 UPDATE UI
     // =========================
