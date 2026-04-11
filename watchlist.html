@@ -472,7 +472,15 @@ body {
   </div>
 
 </div>
- 
+
+<div class="section">
+
+  <h3 style="margin-bottom:15px;">📈 Portfolio Growth</h3>
+
+  <canvas id="equityChart" height="100"></canvas>
+
+</div>
+
 <!-- WATCHLIST SECTIONS -->
 <div id="smallSection" class="section"></div>
 <div id="midSection" class="section"></div>
@@ -522,6 +530,8 @@ body {
   </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 
@@ -795,6 +805,94 @@ document.addEventListener("DOMContentLoaded", function () {
       capital = capital * (1 + (r / 100) * positionSize);
       });
 
+      // =========================
+      // 📈 EQUITY CURVE (FULL CLEAN VERSION)
+      // =========================
+
+      // starting values
+      let capital = parseFloat(startInput.value || 10000);
+      const startValue = capital;
+      const positionSize = parseFloat(sizeInput.value || 1);
+
+      // build curve
+      const values = [1]; // start at 1 = 100%
+      const labels = ["Start"];
+
+      // IMPORTANT: use filtered + sorted history (your existing code)
+      sortedHistory.forEach((t, i) => {
+
+        const r = parseFloat(t.percent_move ?? t.result ?? 0);
+
+        capital = capital * (1 + (r / 100) * positionSize);
+
+        // normalised growth (this makes chart look clean)
+        values.push(capital / startValue);
+
+        labels.push(i + 1);
+
+      });
+
+      // =========================
+      // 📊 RENDER CHART
+      // =========================
+
+      const ctx = document.getElementById("equityChart");
+
+      if (!ctx) return;
+
+      // destroy previous chart (prevents stacking bug)
+      if (window.equityChartInstance) {
+        window.equityChartInstance.destroy();
+      }
+
+      window.equityChartInstance = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [{
+            data: values,
+            borderColor: "#22c55e",
+            backgroundColor: "rgba(34,197,94,0.1)",
+            tension: 0.45,
+            fill: true,
+            borderWidth: 3,
+            pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+
+          plugins: {
+            legend: { display: false }
+          },
+
+          scales: {
+            x: {
+              ticks: { display: false },
+              grid: { display: false }
+            },
+
+            y: {
+              min: 0.9,
+
+              ticks: {
+                color: "#94a3b8",
+
+                // convert back to dollars
+                callback: function(value) {
+                  return "$" + Math.round(value * startValue).toLocaleString();
+                }
+              },
+
+              grid: {
+                color: "#1e293b"
+              }
+            }
+          }
+        }
+      });
+
       const final = capital;
       const totalReturn = ((final - startInput.value) / startInput.value) * 100;
 
@@ -813,7 +911,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("startCapital").addEventListener("input", runSimulation);
     document.getElementById("positionSize").addEventListener("change", runSimulation);
     document.getElementById("timeRange")?.addEventListener("change", runSimulation);
-    
+
     // =========================
     // 📊 CATEGORY STATS (AUTO GROUP)
     // =========================
