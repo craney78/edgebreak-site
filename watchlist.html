@@ -511,7 +511,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================
   // 📊 LIVE TRADES + BREAKDOWN
   // =========================
-  fetch("active_positions.json?v=" + Date.now())
+  fetch("/active_positions.json?v=" + Date.now())
     .then(res => res.json())
     .then(data => {
 
@@ -574,8 +574,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // 📊 COMBINED STATS
   // =========================
   Promise.all([
-    fetch("active_positions.json?v=" + Date.now()).then(r => r.json()),
-    fetch("live_trade_history.json?v=" + Date.now()).then(r => r.json())
+    fetch("/active_positions.json?v=" + Date.now()).then(r => r.json()),
+    fetch("/live_trade_history.json?v=" + Date.now()).then(r => r.json())
   ])
     .then(([active, history]) => {
 
