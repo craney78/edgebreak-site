@@ -332,6 +332,23 @@ def append_to_active_positions(new_signals):
 
     file = "active_positions.json"
 
+    # =========================
+    # 🔔 LOAD ACTIVITY
+    # =========================
+    activity_file = "activity.json"
+
+    if os.path.exists(activity_file):
+        with open(activity_file, "r") as f:
+            try:
+                activity = json.load(f)
+            except:
+                activity = []
+    else:
+        activity = []
+
+    # =========================
+    # 📂 LOAD EXISTING TRADES
+    # =========================
     if os.path.exists(file):
         with open(file, "r") as f:
             try:
@@ -345,6 +362,9 @@ def append_to_active_positions(new_signals):
 
     added = 0
 
+    # =========================
+    # 🟢 ADD NEW TRADES
+    # =========================
     for s in new_signals:
 
         if s["symbol"] in existing_symbols:
@@ -364,10 +384,41 @@ def append_to_active_positions(new_signals):
         existing.append(trade)
         added += 1
 
-    with open(file, "w") as f:
-        json.dump(existing, f, indent=2)
+        # =========================
+        # 🔔 LOG OPEN TRADE
+        # =========================
+        activity.append({
+            "type": "OPEN",
+            "symbol": s["symbol"],
+            "entry_price": s["price"],
+            "date": int(time.time() * 1000)
+        })
 
-    print(f"✅ Added {added} new trades")
+        # =========================
+        # 💾 SAVE FILES
+        # =========================
+        with open(file, "w") as f:
+            json.dump(existing, f, indent=2)
+
+        with open(activity_file, "w") as f:
+            json.dump(activity[-50:], f, indent=2)
+
+        print(f"✅ Added {added} new trades")
+
+        # =========================
+        # 🔔 ADD ACTIVITY LOG HERE
+        # =========================
+        activity.append({
+            "type": "OPEN",
+            "symbol": s["symbol"],
+            "entry_price": s["price"],
+            "date": int(time.time() * 1000)
+        })
+
+        with open(file, "w") as f:
+            json.dump(existing, f, indent=2)
+
+        print(f"✅ Added {added} new trades")
 
 # =========================
 # MAIN RUN

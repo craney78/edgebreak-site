@@ -292,6 +292,10 @@ body {
   100% { opacity: 1; }
 }
 
+#maxDrawdown {
+  color: #ef4444;
+}
+
 </style>
 </head>
 
@@ -529,6 +533,11 @@ body {
     <div class="stat">
       <div class="label">📉 Worst Trades</div>
       <div class="value" id="worstTrades">-</div>
+    </div>
+
+    <div class="box">
+      <div class="label">Max Drawdown</div>
+      <div id="maxDrawdown">-</div>
     </div>
 
   </div>
@@ -889,7 +898,15 @@ document.addEventListener("DOMContentLoaded", function () {
         drawdowns.push(dd);
 
       });    
-        
+      
+      // =========================
+      // 📉 MAX DRAWDOWN
+      // =========================
+      const maxDD = Math.min(...drawdowns) * 100;
+
+      document.getElementById("maxDrawdown").innerText =
+        maxDD.toFixed(2) + "%";
+
       // =========================
       // 💰 FINAL VALUES
       // =========================
