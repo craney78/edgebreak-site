@@ -849,7 +849,6 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("totalReturn").innerText =
         totalReturn.toFixed(2) + "%";
 
-
       // =========================
       // 📊 RENDER CHART
       // =========================
@@ -900,89 +899,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 min: 0.9,
                 ticks: {
                   color: "#94a3b8",
-                  callback: v => "$" + Math.round(v * startValue).toLocaleString()
+                  callback: function(v) {
+                    return "$" + Math.round(v * startValue).toLocaleString();
+                  }
                 },
                 grid: { color: "#1e293b" }
               }
             }
           }
         });
-        {    
-        }
 
-    // run once
-    runSimulation();
+      } // ✅ END if (ctx)
 
-    // update on change
-    document.getElementById("startCapital").addEventListener("input", runSimulation);
-    document.getElementById("positionSize").addEventListener("change", runSimulation);
-    document.getElementById("timeRange")?.addEventListener("change", runSimulation);
+      } // ✅ CLOSE runSimulation()
+      
+        
 
-    // =========================
-    // 📊 CATEGORY STATS (AUTO GROUP)
-    // =========================
+      // run once
+      runSimulation();
 
-    const groups = {
-      SMALL: [],
-      MID: [],
-      LARGE: []
-    };
+      // listeners
+      document.getElementById("startCapital")?.addEventListener("input", runSimulation);
+      document.getElementById("positionSize")?.addEventListener("change", runSimulation);
+      document.getElementById("timeRange")?.addEventListener("change", runSimulation);
 
-    // assign group based on entry price
-    history.forEach(t => {
-
-      const price = parseFloat(t.entry_price ?? 0);
-
-      let g = "SMALL";
-
-      if (price < 20) g = "SMALL";
-      else if (price < 80) g = "MID";
-      else g = "LARGE";
-
-      groups[g].push(t);
-
-    });
-
-    function calcStats(trades) {
-
-      if (trades.length === 0) {
-        return "No trades";
-      }
-
-      let wins = 0;
-      let total = 0;
-      let best = trades[0];
-
-      trades.forEach(t => {
-        const r = parseFloat(t.percent_move ?? t.result ?? 0);
-
-        total += r;
-
-        if (r > 0) wins++;
-
-        const bestVal = parseFloat(best.percent_move ?? best.result ?? 0);
-
-        if (r > bestVal) best = t;
-      });
-
-      const avg = total / trades.length;
-      const win = (wins / trades.length) * 100;
-      const bestMove = parseFloat(best.percent_move ?? best.result ?? 0);
-
-      return `
-        <div style="font-size:14px;">
-          Trades: ${trades.length}<br>
-          Avg: ${avg.toFixed(2)}%<br>
-          Win: ${win.toFixed(0)}%<br>
-          Best: ${bestMove.toFixed(2)}%
-        </div>
-      `;
-    }
-
-    // update UI
-    document.getElementById("smallStats").innerHTML = calcStats(groups.SMALL);
-    document.getElementById("midStats").innerHTML = calcStats(groups.MID);
-    document.getElementById("largeStats").innerHTML = calcStats(groups.LARGE);
+    
 
     // =========================
     // 🏆 TOP & WORST TRADES
@@ -1058,8 +999,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (avg < 0) bar.style.background = "#ef4444";
     else if (avg < 5) bar.style.background = "#f59e0b";
     else bar.style.background = "#22c55e";
-
+  
   })
+
   .catch(err => {
     console.error("STATS ERROR:", err);
   });
