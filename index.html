@@ -984,25 +984,73 @@ body {
   padding: 140px 20px 80px;  /* 🔥 pushes content down */
 }
 
-/* LOGO CENTER TOP */
+.hero {
+  position: relative;
+  text-align: center;
+  padding: 160px 20px 100px;
+  overflow: hidden;
+}
+
+/* DARK BLEND OVER BG IMAGE */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(2,6,23,0.4) 0%,
+    rgba(2,6,23,0.9) 70%
+  );
+  z-index: 1;
+}
+
+/* 🔥 LOGO POSITION */
 .hero-logo-wrap {
   position: absolute;
-  top: 90px;   /* 🔥 controls vertical position */
+  top: 80px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
 }
 
-/* LOGO SIZE */
-.hero-logo {
-  width: 140px;
+/* 🔥 GLOW (LIKE YOUR EXAMPLE) */
+.hero-logo-wrap::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: 320px;
+  height: 320px;
+
+  transform: translate(-50%, -50%);
+
+  background: radial-gradient(
+    circle,
+    rgba(34,197,94,0.9) 0%,
+    rgba(34,197,94,0.4) 30%,
+    transparent 70%
+  );
+
+  border-radius: 50%;
+  filter: blur(25px);
+  z-index: 2;
 }
 
-/* CONTENT BELOW LOGO */
+/* LOGO */
+.hero-logo {
+  width: 160px;
+  position: relative;
+  z-index: 3;
+
+  /* 🔥 SHAPE GLOW */
+  filter: drop-shadow(0 0 30px rgba(34,197,94,0.7));
+}
+
+/* CONTENT BELOW */
 .hero-content {
   position: relative;
-  z-index: 2;
-  margin-top: 120px;  /* 🔥 pushes text below logo */
+  z-index: 3;
+  margin-top: 160px;
 }
 
 </style>
