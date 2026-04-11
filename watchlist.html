@@ -605,21 +605,20 @@ document.addEventListener("DOMContentLoaded", function () {
     let best = history[0] || all[0];
 
     history.forEach(t => {
-      const bestValue = parseFloat(best.percent_move ?? best.result ?? 0);
 
-      if (r > bestValue) {
-        best = t;
-      }      
+      // ✅ FIX: define r properly
+      const r = parseFloat(t.percent_move ?? t.result ?? 0);
 
       total += r;
 
       if (r > 0) wins++;
 
-    const bestValue = parseFloat(best.percent_move ?? best.result ?? 0);
+      const bestValue = parseFloat(best.percent_move ?? best.result ?? 0);
 
       if (r > bestValue) {
         best = t;
-    }
+      }
+
     });
 
     const win = history.length > 0 ? (wins / history.length) * 100 : 0;
