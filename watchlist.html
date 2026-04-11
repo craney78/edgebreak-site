@@ -865,30 +865,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let bestIndex = 0;
         let bestValue = -Infinity;
-
+        
         sortedHistory.forEach((t, i) => {
 
-          const r = parseFloat(t.percent_move ?? t.result ?? 0);
+        const r = parseFloat(t.percent_move ?? t.result ?? 0);
 
-          // track best trade
-          if (r > bestValue) {
-            bestValue = r;
-            bestIndex = i + 1; // +1 because of "Start"
-          }
+        // 🔥 track best trade
+        if (r > bestValue) {
+          bestValue = r;
+          bestIndex = i + 1; // +1 because of "Start"
+        }
 
-          capital = capital * (1 + (r / 100) * positionSize);
+        chartCapital = chartCapital * (1 + (r / 100) * positionSize);
 
-          const normalized = capital / startValue;
+        const normalized = chartCapital / startValue;
 
-          values.push(normalized);
-          labels.push(i + 1);
+        values.push(normalized);
+        labels.push(i + 1);
 
-          if (normalized > peak) peak = normalized;
+        if (normalized > peak) peak = normalized;
 
-          const dd = (normalized - peak) / peak;
-          drawdowns.push(dd);
+        const dd = (normalized - peak) / peak;
+        drawdowns.push(dd);
 
-        });    
+      });    
         
       // =========================
       // 💰 FINAL VALUES
