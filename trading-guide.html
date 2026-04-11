@@ -342,34 +342,27 @@ body {
   border-bottom: none;
 }
 
-/* HERO LOGO GLOW */
-.hero-logo-wrap {
-  position: relative;
-  display: inline-block;
-}
-
-/* 🔥 BIG GLOW */
 .hero-logo-wrap::before {
   content: "";
   position: absolute;
   top: 50%;
   left: 50%;
 
-  width: 200px;
-  height: 200px;
+  width: 320px;
+  height: 320px;
 
   transform: translate(-50%, -50%);
 
   background: radial-gradient(
     circle,
-    rgba(34,197,94,0.8) 0%,
-    rgba(34,197,94,0.35) 40%,
+    rgba(34,197,94,0.9) 0%,
+    rgba(34,197,94,0.4) 30%,
     transparent 70%
   );
 
   border-radius: 50%;
+  filter: blur(25px);
   z-index: 0;
-  filter: blur(12px);
 }
 
 /* LOGO ON TOP */
