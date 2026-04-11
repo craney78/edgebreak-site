@@ -834,16 +834,7 @@ document.addEventListener("DOMContentLoaded", function () {
         drawdowns.push(dd);
 
       });    
-
-        const r = parseFloat(t.percent_move ?? t.result ?? 0);
-
-        chartCapital = chartCapital * (1 + (r / 100) * positionSize);
-
-        values.push(chartCapital / startValue);
-        labels.push(i + 1);
-
-      });
-
+        
       // =========================
       // 💰 FINAL VALUES
       // =========================
@@ -916,8 +907,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
           }
         });
-
-        }    
+            
         }
 
     // run once
