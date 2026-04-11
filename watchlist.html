@@ -443,6 +443,17 @@ body {
       </select>
     </div>
 
+    <div class="stat">
+      <div class="label">Time Range</div>
+      <select id="timeRange" 
+        style="width:100%; padding:8px; border-radius:6px; border:none;">
+        <option value="ALL">All Time</option>
+        <option value="12">Last 12 Months</option>
+        <option value="6">Last 6 Months</option>
+        <option value="3">Last 3 Months</option>
+      </select>
+    </div>
+
     <!-- OUTPUT -->
     <div class="stat">
       <div class="label">Final Value</div>
@@ -753,14 +764,35 @@ document.addEventListener("DOMContentLoaded", function () {
       const positionSize = parseFloat(sizeInput.value || 1);
 
       // sort trades by date (important)
-      const sortedHistory = [...history].sort((a, b) => {
+      // get selected time range
+      const range = document.getElementById("timeRange")?.value || "ALL";
+
+      // current time
+      const now = Date.now();
+
+      // filter trades
+      let filtered = history;
+
+      if (range !== "ALL") {
+
+        const months = parseInt(range);
+        const cutoff = now - (months * 30 * 24 * 60 * 60 * 1000);
+
+        filtered = history.filter(t => {
+          return (t.entry_date ?? 0) >= cutoff;
+        });
+
+      }
+
+      // sort filtered trades
+      const sortedHistory = [...filtered].sort((a, b) => {
         return (a.entry_date ?? 0) - (b.entry_date ?? 0);
       });
 
       sortedHistory.forEach(t => {
-        const r = parseFloat(t.percent_move ?? t.result ?? 0);
+      const r = parseFloat(t.percent_move ?? t.result ?? 0);
 
-        capital = capital * (1 + (r / 100) * positionSize);
+      capital = capital * (1 + (r / 100) * positionSize);
       });
 
       const final = capital;
@@ -780,7 +812,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // update on change
     document.getElementById("startCapital").addEventListener("input", runSimulation);
     document.getElementById("positionSize").addEventListener("change", runSimulation);
-
+    document.getElementById("timeRange")?.addEventListener("change", runSimulation);
+    
     // =========================
     // 📊 CATEGORY STATS (AUTO GROUP)
     // =========================
