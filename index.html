@@ -957,7 +957,7 @@ body {
     </div>
 
     <!-- MOBILE BUTTON -->
-    <div class="menu-toggle" onclick="toggleMenu()">
+    <div class="menu-toggle" id="menuToggle">☰</div>
       ☰
     </div>
 
@@ -1343,6 +1343,20 @@ function toggleMenu() {
   const menu = document.getElementById("mobileMenu");
   menu.classList.toggle("active");
 }
+
+// MOBILE NAV FIX
+document.addEventListener("DOMContentLoaded", function () {
+
+  const toggle = document.getElementById("menuToggle");
+  const menu = document.getElementById("mobileMenu");
+
+  if (toggle && menu) {
+    toggle.addEventListener("click", function () {
+      menu.classList.toggle("active");
+    });
+  }
+
+});
 
 <script>
 
