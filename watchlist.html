@@ -419,6 +419,48 @@ body {
     <div id="winBar" style="height:100%; width:0%; background:#22c55e;"></div>
   </div>
 </div>
+
+<div class="section">
+
+  <h3 style="margin-bottom:15px;">💰 Portfolio Simulator</h3>
+
+  <div class="stats">
+
+    <!-- INPUTS -->
+    <div class="stat">
+      <div class="label">Starting Capital</div>
+      <input id="startCapital" type="number" value="10000" 
+        style="width:100%; padding:8px; border-radius:6px; border:none;">
+    </div>
+
+    <div class="stat">
+      <div class="label">Position Size</div>
+      <select id="positionSize" 
+        style="width:100%; padding:8px; border-radius:6px; border:none;">
+        <option value="1">100% (Aggressive)</option>
+        <option value="0.5">50% (Balanced)</option>
+        <option value="0.25">25% (Conservative)</option>
+      </select>
+    </div>
+
+    <!-- OUTPUT -->
+    <div class="stat">
+      <div class="label">Final Value</div>
+      <div class="value green" id="finalValue">$0</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Total Return</div>
+      <div class="value" id="totalReturn">0%</div>
+    </div>
+
+  </div>
+
+  <div style="font-size:12px; color:#64748b; margin-top:10px;">
+    * Based on historical closed trades. Not financial advice.
+  </div>
+
+</div>
  
 <!-- WATCHLIST SECTIONS -->
 <div id="smallSection" class="section"></div>
@@ -695,6 +737,49 @@ document.addEventListener("DOMContentLoaded", function () {
     // final stats
     const win = history.length > 0 ? (wins / history.length) * 100 : 0;
     const avg = all.length > 0 ? total / all.length : 0;
+
+    // =========================
+    // 💰 PORTFOLIO SIMULATOR
+    // =========================
+
+    function runSimulation() {
+
+      const startInput = document.getElementById("startCapital");
+      const sizeInput = document.getElementById("positionSize");
+
+      if (!startInput || !sizeInput) return;
+
+      let capital = parseFloat(startInput.value || 10000);
+      const positionSize = parseFloat(sizeInput.value || 1);
+
+      // sort trades by date (important)
+      const sortedHistory = [...history].sort((a, b) => {
+        return (a.entry_date ?? 0) - (b.entry_date ?? 0);
+      });
+
+      sortedHistory.forEach(t => {
+        const r = parseFloat(t.percent_move ?? t.result ?? 0);
+
+        capital = capital * (1 + (r / 100) * positionSize);
+      });
+
+      const final = capital;
+      const totalReturn = ((final - startInput.value) / startInput.value) * 100;
+
+      // update UI
+      document.getElementById("finalValue").innerText =
+        "$" + final.toLocaleString(undefined, { maximumFractionDigits: 0 });
+
+      document.getElementById("totalReturn").innerText =
+        totalReturn.toFixed(2) + "%";
+    }
+
+    // run once
+    runSimulation();
+
+    // update on change
+    document.getElementById("startCapital").addEventListener("input", runSimulation);
+    document.getElementById("positionSize").addEventListener("change", runSimulation);
 
     // =========================
     // 📊 CATEGORY STATS (AUTO GROUP)
