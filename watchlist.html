@@ -809,7 +809,6 @@ document.addEventListener("DOMContentLoaded", function () {
       // 📈 EQUITY CURVE (FULL CLEAN VERSION)
       // =========================
 
-      // starting values
       let capital = parseFloat(startInput.value || 10000);
       const startValue = capital;
       const positionSize = parseFloat(sizeInput.value || 1);
@@ -818,13 +817,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const values = [1]; // start at 1 = 100%
       const labels = ["Start"];
 
-      // IMPORTANT: use filtered + sorted history (your existing code)
-      sortedHistory.forEach((t, i) => {
-
-        const r = parseFloat(t.percent_move ?? t.result ?? 0);
-
-        capital = capital * (1 + (r / 100) * positionSize);
-
+      
         // normalised growth (this makes chart look clean)
         values.push(capital / startValue);
 
@@ -893,8 +886,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       });
 
-      const final = capital;
-      const totalReturn = ((final - startInput.value) / startInput.value) * 100;
+      const final = chartCapital;
+      const totalReturn = ((final - startValue) / startValue) * 100;
 
       // update UI
       document.getElementById("finalValue").innerText =
