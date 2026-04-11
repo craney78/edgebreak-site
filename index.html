@@ -978,17 +978,31 @@ body {
   z-index: 1;
 }
 
-/* LOGO */
-.hero-logo {
-  width: 160px;
+.hero {
   position: relative;
-  z-index: 2;
+  text-align: center;
+  padding: 140px 20px 80px;  /* 🔥 pushes content down */
 }
 
-/* CONTENT ABOVE EVERYTHING */
+/* LOGO CENTER TOP */
+.hero-logo-wrap {
+  position: absolute;
+  top: 90px;   /* 🔥 controls vertical position */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+/* LOGO SIZE */
+.hero-logo {
+  width: 140px;
+}
+
+/* CONTENT BELOW LOGO */
 .hero-content {
   position: relative;
-  z-index: 3;
+  z-index: 2;
+  margin-top: 120px;  /* 🔥 pushes text below logo */
 }
 
 </style>
