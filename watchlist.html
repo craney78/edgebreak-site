@@ -598,15 +598,29 @@ document.addEventListener("DOMContentLoaded", function () {
     if (all.length === 0) return;
 
     // =========================
-    // ✅ CALCULATIONS (CLOSED TRADES ONLY)
+    // ✅ SAFE CALCULATIONS
     // =========================
+
     let wins = 0;
     let total = 0;
-    let best = history[0] || all[0];
+
+    // ✅ only use history for stats
+    if (history.length === 0) {
+      console.warn("⚠️ No trade history found");
+
+      document.getElementById("activeCount").innerText = active.length;
+      document.getElementById("avgReturn").innerText = "0%";
+      document.getElementById("winRate").innerText = "0%";
+      document.getElementById("bestTrade").innerText = "-";
+
+      return;
+    }
+
+    // safe best
+    let best = history[0];
 
     history.forEach(t => {
 
-      // ✅ FIX: define r properly
       const r = parseFloat(t.percent_move ?? t.result ?? 0);
 
       total += r;
@@ -621,8 +635,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
-    const win = history.length > 0 ? (wins / history.length) * 100 : 0;
-    const avg = history.length > 0 ? total / history.length : 0;
+    const win = (wins / history.length) * 100;
+    const avg = total / history.length;
 
     // =========================
     // 📊 UPDATE UI
@@ -660,7 +674,7 @@ document.addEventListener("DOMContentLoaded", function () {
     animateValue("winRate", win);
 
     // BEST TRADE
-    const bestMove = parseFloat(best.percent_move || 0);
+    const bestMove = parseFloat(best.percent_move ?? best.result ?? 0);
 
     document.getElementById("bestTrade").innerHTML = `
       <div style="font-size:22px; font-weight:bold; color:#22c55e;">
