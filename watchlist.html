@@ -764,6 +764,53 @@ document.addEventListener("DOMContentLoaded", function () {
     const avg = all.length > 0 ? total / all.length : 0;
 
     // =========================
+    // 📊 CATEGORY STATS (FIXED POSITION)
+    // =========================
+
+    const smallTrades = [];
+    const midTrades = [];
+    const largeTrades = [];
+
+    history.forEach(t => {
+
+      const price = parseFloat(t.entry_price ?? 0);
+
+      if (price < 20) smallTrades.push(t);
+      else if (price < 80) midTrades.push(t);
+      else largeTrades.push(t);
+
+    });
+
+    function getStats(trades) {
+
+      if (trades.length === 0) return "-";
+
+      let total = 0;
+      let wins = 0;
+
+      trades.forEach(t => {
+        const r = parseFloat(t.percent_move ?? 0);
+        total += r;
+        if (r > 0) wins++;
+      });
+
+      const avg = total / trades.length;
+      const win = (wins / trades.length) * 100;
+
+      return `
+        <div style="font-size:14px;">
+          ${trades.length} trades<br>
+          ${avg.toFixed(2)}% avg<br>
+          ${win.toFixed(0)}% win
+        </div>
+      `;
+    }
+
+    document.getElementById("smallStats").innerHTML = getStats(smallTrades);
+    document.getElementById("midStats").innerHTML = getStats(midTrades);
+    document.getElementById("largeStats").innerHTML = getStats(largeTrades);
+
+    // =========================
     // 💰 PORTFOLIO SIMULATOR
     // =========================
 
