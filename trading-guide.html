@@ -50,7 +50,10 @@ p {
   background: #0f172a;
   padding: 22px;
   border-radius: 12px;
-  border: 1px solid #1e293b;
+
+  border: 1px solid #1e293b;   /* ✅ always has border */
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.02);  /* subtle depth */
+
   margin-top: 15px;
 }
 
@@ -384,6 +387,16 @@ body {
   width: 140px;
   position: relative;
   z-index: 1;
+}
+
+/* GREEN = SYSTEM / POSITIVE */
+.highlight {
+  border-left: 4px solid #22c55e;
+}
+
+/* RED = RISK / WARNING */
+.warning {
+  border-left: 4px solid #ef4444;
 }
 
 </style>
