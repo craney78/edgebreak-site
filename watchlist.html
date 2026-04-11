@@ -463,7 +463,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================
   // 🔔 TODAY ACTIVITY
   // =========================
-  fetch("activity.json?v=" + Date.now())
+  fetch("/activity.json?v=" + Date.now())
     .then(res => res.json())
     .then(data => {
 
@@ -573,6 +573,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================
   // 📊 COMBINED STATS (CLEAN FINAL)
   // =========================
+  console.log("🔥 STATS BLOCK RUNNING");
+  
   Promise.all([
     fetch("/active_positions.json?v=" + Date.now()).then(r => r.json()),
     fetch("/live_trade_history.json?v=" + Date.now()).then(r => r.json())
