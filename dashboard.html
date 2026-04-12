@@ -670,6 +670,10 @@ h3 {
       <div class="value" id="userTradesCount">-</div>
     </div>
 
+    <div class="stat">
+      <div class="label">Best / Worst Trade</div>
+      <div class="value" id="userBestWorst">-</div>
+    </div>
     
   </div>
 
@@ -862,7 +866,6 @@ function addUserTrade() {
   document.getElementById("userExit").value = "";
   document.getElementById("userDate").value = "";
   document.getElementById("userNotes").value = "";
-  document.getElementById("userNotes").value = trade.notes || "";
 }
 
 // RENDER
@@ -1100,9 +1103,21 @@ function calculateUserStats() {
   let total = 0;
   let totalWins = 0;
   let totalLosses = 0;
+  let bestTrade = null;
+  let worstTrade = null;
 
   trades.forEach(t => {
     const r = parseFloat(t.percent ?? 0);
+
+    // BEST TRADE
+    if (!bestTrade || r > bestTrade.percent) {
+      bestTrade = t;
+    }
+
+    // WORST TRADE
+    if (!worstTrade || r < worstTrade.percent) {
+      worstTrade = t;
+    }
 
     total += r;
 
@@ -1139,7 +1154,25 @@ function calculateUserStats() {
 
   document.getElementById("userTradesCount").innerText =
     trades.length;
-}
+
+  const bestWorstEl = document.getElementById("userBestWorst");
+
+  if (bestTrade && worstTrade) {
+
+    bestWorstEl.innerHTML = `
+      <span style="color:#22c55e;">
+        +${bestTrade.percent.toFixed(2)}% (${bestTrade.symbol})
+      </span>
+      <br>
+      <span style="color:#ef4444;">
+        ${worstTrade.percent.toFixed(2)}% (${worstTrade.symbol})
+      </span>
+    `;
+
+  } else {
+    bestWorstEl.innerText = "-";
+  }
+
 
 // =========================
 // EXPORT CSV (ADD HERE)
