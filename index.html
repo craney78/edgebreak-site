@@ -1132,7 +1132,7 @@ body {
     </div>
 
     <p class="hero-trust">
-      Built on years of sharing breakout trades with 5,000+ followers • Real trade tracking • No guesswork
+     Refined through years of trading experience • Proven structure • Built to perform over time
     </p>
 
   </div>
@@ -1552,7 +1552,7 @@ fetch("active_positions.json?v=" + new Date().getTime())
 
     container.innerHTML = preview.map(trade => {
 
-      const percent = parseFloat(trade.percent_move || 0);
+      const percent = parseFloat(trade.change_percent || 0);
       const days = trade.days_held || 0;
 
       let color = "green";
