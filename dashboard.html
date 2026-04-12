@@ -613,6 +613,13 @@ h3 {
         <input id="userExit" type="number" placeholder="110"
           style="width:100%; padding:8px; border-radius:6px; border:none;">
       </div>
+
+      <div class="stat" style="grid-column: span 2;">
+        <div class="label">Trade Notes</div>
+        <textarea id="userNotes" placeholder="Why did you take this trade?"
+            style="width:100%; padding:10px; border-radius:8px; border:1px solid #1e293b; background:#020617; color:white; resize:none;">
+        </textarea>
+      </div>
       
       <div class="stat">
         <div class="label">Add Trade</div>
@@ -824,6 +831,7 @@ function addUserTrade() {
   const date = document.getElementById("userDate").value;
   const entry = parseFloat(document.getElementById("userEntry").value);
   const exit = parseFloat(document.getElementById("userExit").value);
+  const notes = document.getElementById("userNotes").value;
 
   if (!symbol || !date || entry <= 0 || exit <= 0 || isNaN(entry) || isNaN(exit)) {
     console.log({ symbol, date, entry, exit });
@@ -839,7 +847,8 @@ function addUserTrade() {
     date,
     entry,
     exit,
-    percent
+    percent,
+    notes
   });
 
   saveUserTrades(trades);
@@ -852,6 +861,8 @@ function addUserTrade() {
   document.getElementById("userEntry").value = "";
   document.getElementById("userExit").value = "";
   document.getElementById("userDate").value = "";
+  document.getElementById("userNotes").value = "";
+  document.getElementById("userNotes").value = trade.notes || "";
 }
 
 // RENDER
@@ -882,6 +893,12 @@ function renderUserTrades() {
             ${t.date}<br>
             Entry: ${t.entry} → Exit: ${t.exit}
           </span>
+
+          ${t.notes ? `
+            <div style="margin-top:6px; font-size:12px; color:#94a3b8;">
+              📝 ${t.notes}
+            </div>
+          ` : ""}
         </div>
 
         <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
