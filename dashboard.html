@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Dashboard - EdgeBreak</title>
+
+<link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-inner">
+
+    <div class="nav-left">
+      <img src="images/logo.png" class="nav-logo">
+      <a href="index.html" class="logo-text">EdgeBreak</a>
+    </div>
+
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Trading Desk</a>
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <button onclick="window.location.href='pricing.html'" class="nav-cta">
+        Upgrade
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header" style="margin-top:20px;">
+    <h1>My Dashboard</h1>
+    <p style="color:#94a3b8;">
+      Track your trades and monitor your performance
+    </p>
+  </div>
+
+  <!-- =========================
+       YOUR TRADES
+  ========================= -->
+  <div class="section">
+
+    <h3 style="margin-bottom:15px;">Your Trades</h3>
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="label">Symbol</div>
+        <input id="userSymbol" type="text" placeholder="AAPL"
+          style="width:100%; padding:8px; border-radius:6px; border:none;">
+      </div>
+
+      <div class="stat">
+        <div class="label">Entry Price</div>
+        <input id="userEntry" type="number" placeholder="100"
+          style="width:100%; padding:8px; border-radius:6px; border:none;">
+      </div>
+
+      <div class="stat">
+        <div class="label">Exit Price</div>
+        <input id="userExit" type="number" placeholder="110"
+          style="width:100%; padding:8px; border-radius:6px; border:none;">
+      </div>
+
+      <div class="stat">
+        <div class="label">Add Trade</div>
+        <button onclick="addUserTrade()" class="nav-cta">
+          Add
+        </button>
+      </div>
+
+    </div>
+
+    <!-- TRADE LIST -->
+    <div id="userTradesList" style="margin-top:20px;"></div>
+
+  </div>
+
+</div>
+
+<!-- =========================
+     JS
+========================= -->
+<script>
+
+// LOAD
+function getUserTrades() {
+  return JSON.parse(localStorage.getItem("userTrades") || "[]");
+}
+
+function saveUserTrades(trades) {
+  localStorage.setItem("userTrades", JSON.stringify(trades));
+}
+
+// ADD TRADE
+function addUserTrade() {
+
+  const symbol = document.getElementById("userSymbol").value;
+  const entry = parseFloat(document.getElementById("userEntry").value);
+  const exit = parseFloat(document.getElementById("userExit").value);
+
+  if (!symbol || !entry || !exit) return alert("Fill all fields");
+
+  const percent = ((exit - entry) / entry) * 100;
+
+  const trades = getUserTrades();
+
+  trades.push({
+    symbol,
+    entry,
+    exit,
+    percent
+  });
+
+  saveUserTrades(trades);
+
+  renderUserTrades();
+}
+
+// RENDER
+function renderUserTrades() {
+
+  const trades = getUserTrades();
+  const container = document.getElementById("userTradesList");
+
+  if (!container) return;
+
+  container.innerHTML = trades.map(t => {
+
+    const color = t.percent >= 0 ? "#22c55e" : "#ef4444";
+
+    return `
+      <div class="trade">
+        <strong>${t.symbol}</strong>
+        <span style="color:${color}">
+          ${t.percent >= 0 ? "+" : ""}${t.percent.toFixed(2)}%
+        </span>
+      </div>
+    `;
+  }).join("");
+}
+
+// INIT
+renderUserTrades();
+
+</script>
+
+</body>
+</html>
