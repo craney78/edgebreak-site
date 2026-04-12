@@ -752,6 +752,11 @@ body::before {
       <div class="value" id="avgHold">-</div>
       <div style="font-size:12px; color:#94a3b8;" id="avgPerTrade">-</div>
     </div>
+
+    <div class="stat">
+      <div class="label">Profit Factor</div>
+      <div class="value" id="profitFactor">-</div>
+    </div>
     
   </div>
 
@@ -1042,6 +1047,27 @@ document.addEventListener("DOMContentLoaded", function () {
     // final stats
     const win = history.length > 0 ? (wins / history.length) * 100 : 0;
     const avg = all.length > 0 ? total / all.length : 0;
+
+    // =========================
+    // 💰 PROFIT FACTOR
+    // =========================
+
+    let totalWins = 0;
+    let totalLosses = 0;
+
+    history.forEach(t => {
+      const r = parseFloat(t.percent_move ?? t.result ?? 0);
+
+      if (r > 0) totalWins += r;
+      if (r < 0) totalLosses += Math.abs(r);
+    });
+
+    const profitFactor =
+      totalLosses > 0 ? totalWins / totalLosses : 0;
+
+    // update UI
+    document.getElementById("profitFactor").innerText =
+      profitFactor.toFixed(2) + "x";
 
     // =========================
     // 📊 AVG HOLD TIME + RETURN
