@@ -263,6 +263,39 @@ button {
 </div>
 
 <!-- =========================
+     YOUR STATS
+========================= -->
+<div class="section">
+
+  <h3 style="margin-bottom:15px;">Your Stats</h3>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="label">Win Rate</div>
+      <div class="value" id="userWinRate">-</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Avg Return</div>
+      <div class="value" id="userAvgReturn">-</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Profit Factor</div>
+      <div class="value" id="userProfitFactor">-</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Trades Taken</div>
+      <div class="value" id="userTradesCount">-</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================
      JS
 ========================= -->
 <script>
@@ -299,6 +332,7 @@ function addUserTrade() {
   saveUserTrades(trades);
 
   renderUserTrades();
+  calculateUserStats();
 }
 
 // RENDER
@@ -326,6 +360,61 @@ function renderUserTrades() {
 
 // INIT
 renderUserTrades();
+calculateUserStats();
+
+// =========================
+// 📊 CALCULATE USER STATS
+// =========================
+function calculateUserStats() {
+
+  const trades = getUserTrades();
+
+  if (trades.length === 0) return;
+
+  let wins = 0;
+  let total = 0;
+  let totalWins = 0;
+  let totalLosses = 0;
+
+  trades.forEach(t => {
+    const r = parseFloat(t.percent ?? 0);
+
+    total += r;
+
+    if (r > 0) {
+      wins++;
+      totalWins += r;
+    }
+
+    if (r < 0) {
+      totalLosses += Math.abs(r);
+    }
+  });
+
+  const winRate = (wins / trades.length) * 100;
+  const avgReturn = total / trades.length;
+  const profitFactor =
+    totalLosses > 0 ? totalWins / totalLosses : 0;
+
+  // =========================
+  // UPDATE UI
+  // =========================
+
+  document.getElementById("userWinRate").innerText =
+    winRate.toFixed(1) + "%";
+
+  document.getElementById("userAvgReturn").innerText =
+    (avgReturn >= 0 ? "+" : "") + avgReturn.toFixed(2) + "%";
+
+  const avgEl = document.getElementById("userAvgReturn");
+  avgEl.style.color = avgReturn >= 0 ? "#22c55e" : "#ef4444";  
+
+  document.getElementById("userProfitFactor").innerText =
+    profitFactor.toFixed(2) + "x";
+
+  document.getElementById("userTradesCount").innerText =
+    trades.length;
+}
 
 </script>
 
