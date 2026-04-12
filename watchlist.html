@@ -747,6 +747,11 @@ body::before {
       <div class="value" id="worstTrades">-</div>
     </div>
 
+    <div class="stat">
+      <div class="label">Avg Hold Time</div>
+      <div class="value" id="avgHold">-</div>
+      <div style="font-size:12px; color:#94a3b8;" id="avgPerTrade">-</div>
+    </div>
     
   </div>
 
@@ -1039,6 +1044,31 @@ document.addEventListener("DOMContentLoaded", function () {
     const avg = all.length > 0 ? total / all.length : 0;
 
     // =========================
+    // 📊 AVG HOLD TIME + RETURN
+    // =========================
+
+    let totalDays = 0;
+    let totalReturn = 0;
+
+    history.forEach(t => {
+      const days = parseFloat(t.days_held ?? 0);
+      const r = parseFloat(t.percent_move ?? t.result ?? 0);
+
+      totalDays += days;
+      totalReturn += r;
+    });
+
+    const avgDays = history.length > 0 ? totalDays / history.length : 0;
+    const avgTrade = history.length > 0 ? totalReturn / history.length : 0;
+
+    // update UI
+    document.getElementById("avgHold").innerText =
+      avgDays.toFixed(0) + " days";
+
+    document.getElementById("avgPerTrade").innerText =
+      (avgTrade >= 0 ? "+" : "") + avgTrade.toFixed(2) + "% per trade";
+
+    // =========================
     // 📊 CATEGORY STATS (FIXED POSITION)
     // =========================
 
@@ -1170,8 +1200,10 @@ document.addEventListener("DOMContentLoaded", function () {
       // =========================
       const maxDD = Math.min(...drawdowns) * 100;
 
-      document.getElementById("maxDrawdown").innerText =
-        maxDD.toFixed(2) + "%";
+      const ddEl = document.getElementById("maxDrawdown");
+      if (ddEl) {
+        ddEl.innerText = maxDD.toFixed(2) + "%";
+      }
 
       // =========================
       // 💰 FINAL VALUES
