@@ -403,6 +403,26 @@ body::before {
 
 }
 
+@media (max-width: 768px) {
+
+  /* FORCE 2 PER ROW ON MOBILE */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+  }
+
+  /* CLEAN CARD SIZE */
+  .stat-card {
+    padding: 16px;
+  }
+
+  /* TEXT SIZE ADJUST */
+  .stat-value {
+    font-size: 20px;
+  }
+
+}
+
 </style>
 </head>
 
