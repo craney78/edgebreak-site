@@ -298,6 +298,37 @@ button {
 </div>
 
 <!-- =========================
+     sim settings
+========================= -->
+
+<div class="section">
+
+  <h3 style="margin-bottom:15px;">Simulation Settings</h3>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="label">Starting Capital ($)</div>
+      <input id="startingCapital" type="number" value="10000">
+    </div>
+
+    <div class="stat">
+      <div class="label">Position Size (%)</div>
+      <input id="positionSize" type="number" value="25">
+    </div>
+
+    <div class="stat">
+      <div class="label">Update</div>
+      <button onclick="updateSimulation()" class="nav-cta">
+        Apply
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================
      portfolio growth chart
 ========================= -->
 
@@ -308,6 +339,10 @@ button {
   <canvas id="userChart" height="100"></canvas>
 
 </div>
+
+<p style="color:#94a3b8; font-size:13px; margin-top:10px;">
+Simulation based on your trades, capital, and position size per trade
+</p>
 
 <!-- =========================
      JS
@@ -419,8 +454,10 @@ function renderUserChart() {
     return;
 }
 
-  let capital = 10000; // starting capital
-  const positionSize = 0.25; // 25% per trade
+  let capital = parseFloat(document.getElementById("startingCapital").value) || 10000;
+
+  let positionSizeInput = parseFloat(document.getElementById("positionSize").value) || 25;
+  let positionSize = positionSizeInput / 100;
 
   let equity = [];
 
@@ -465,6 +502,10 @@ function renderUserChart() {
       }
     }
   });
+}
+
+function updateSimulation() {
+  renderUserChart();
 }
 
 // delete trades
@@ -550,6 +591,8 @@ function calculateUserStats() {
 renderUserTrades();
 calculateUserStats();
 renderUserChart();
+document.getElementById("startingCapital").addEventListener("change", renderUserChart);
+document.getElementById("positionSize").addEventListener("change", renderUserChart);
 
 </script>
 
