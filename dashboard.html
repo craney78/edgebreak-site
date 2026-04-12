@@ -330,7 +330,9 @@ function addUserTrade() {
   const entry = parseFloat(document.getElementById("userEntry").value);
   const exit = parseFloat(document.getElementById("userExit").value);
 
-  if (!symbol || !entry || !exit) return alert("Fill all fields");
+  if (!symbol || entry <= 0 || exit <= 0 || isNaN(entry) || isNaN(exit)) {
+    return alert("Enter valid values");
+}
 
   const percent = ((exit - entry) / entry) * 100;
 
@@ -348,6 +350,10 @@ function addUserTrade() {
   renderUserTrades();
   calculateUserStats();
   renderUserChart();
+
+  document.getElementById("userSymbol").value = "";
+  document.getElementById("userEntry").value = "";
+  document.getElementById("userExit").value = "";
 }
 
 // RENDER
@@ -404,7 +410,14 @@ function renderUserChart() {
 
   const trades = getUserTrades();
 
-  if (trades.length === 0) return;
+  if (trades.length === 0) {
+
+    if (userChart) {
+        userChart.destroy();
+    }
+
+    return;
+}
 
   let capital = 10000; // starting capital
   const positionSize = 0.25; // 25% per trade
@@ -476,7 +489,15 @@ function calculateUserStats() {
 
   const trades = getUserTrades();
 
-  if (trades.length === 0) return;
+  if (trades.length === 0) {
+
+    document.getElementById("userWinRate").innerText = "-";
+    document.getElementById("userAvgReturn").innerText = "-";
+    document.getElementById("userProfitFactor").innerText = "-";
+    document.getElementById("userTradesCount").innerText = "0";
+
+    return;
+  }
 
   let wins = 0;
   let total = 0;
