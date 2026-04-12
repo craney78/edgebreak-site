@@ -162,10 +162,16 @@ input, select {
   border: 1px solid #1e293b;
   background: #020617;
   color: white;
+  appearance: auto; /* 🔥 IMPORTANT */
 }
 
 input:focus, select:focus {
   border-color: #22c55e;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
 }
 
 /* =========================
