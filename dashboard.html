@@ -237,6 +237,11 @@ button {
       </div>
 
       <div class="stat">
+        <div class="label">Date</div>
+        <input id="userDate" type="date">
+      </div>
+
+      <div class="stat">
         <div class="label">Entry Price</div>
         <input id="userEntry" type="number" placeholder="100"
           style="width:100%; padding:8px; border-radius:6px; border:none;">
@@ -247,7 +252,7 @@ button {
         <input id="userExit" type="number" placeholder="110"
           style="width:100%; padding:8px; border-radius:6px; border:none;">
       </div>
-
+      
       <div class="stat">
         <div class="label">Add Trade</div>
         <button onclick="addUserTrade()" class="nav-cta">
@@ -293,11 +298,7 @@ button {
       <div class="value" id="userTradesCount">-</div>
     </div>
 
-    <div class="stat">
-      <div class="label">Date</div>
-      <input id="userDate" type="date">
-    </div>
-
+    
   </div>
 
 </div>
@@ -380,6 +381,7 @@ function addUserTrade() {
   const exit = parseFloat(document.getElementById("userExit").value);
 
   if (!symbol || !date || entry <= 0 || exit <= 0 || isNaN(entry) || isNaN(exit)) {
+    console.log({ symbol, date, entry, exit });
     return alert("Enter all fields correctly");
   }
 
@@ -404,6 +406,7 @@ function addUserTrade() {
   document.getElementById("userSymbol").value = "";
   document.getElementById("userEntry").value = "";
   document.getElementById("userExit").value = "";
+  document.getElementById("userDate").value = "";
 }
 
 // RENDER
