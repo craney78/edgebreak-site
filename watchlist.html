@@ -456,6 +456,25 @@ body::before {
 
 }
 
+@media (max-width: 768px) {
+
+  /* KILL GRID COMPLETELY */
+  #statsGrid,
+  #groupStats {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  /* FORCE 2 PER ROW */
+  #statsGrid .stat-card,
+  #groupStats .stat-card {
+    width: calc(50% - 5px) !important;
+    box-sizing: border-box;
+  }
+
+}
+
 </style>
 </head>
 
