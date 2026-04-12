@@ -7,6 +7,8 @@
 
 <link rel="stylesheet" href="dashboard.css">
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <style>
@@ -296,6 +298,18 @@ button {
 </div>
 
 <!-- =========================
+     portfolio growth chart
+========================= -->
+
+<div class="section">
+
+  <h3 style="margin-bottom:15px;">Your Portfolio Growth</h3>
+
+  <canvas id="userChart" height="100"></canvas>
+
+</div>
+
+<!-- =========================
      JS
 ========================= -->
 <script>
@@ -333,6 +347,7 @@ function addUserTrade() {
 
   renderUserTrades();
   calculateUserStats();
+  renderUserChart();
 }
 
 // RENDER
@@ -343,24 +358,116 @@ function renderUserTrades() {
 
   if (!container) return;
 
-  container.innerHTML = trades.map(t => {
+  if (trades.length === 0) {
+    container.innerHTML = `
+      <p style="color:#64748b;">No trades added yet</p>
+    `;
+    return;
+  }
+
+  container.innerHTML = trades.map((t, i) => {
 
     const color = t.percent >= 0 ? "#22c55e" : "#ef4444";
 
     return `
       <div class="trade">
-        <strong>${t.symbol}</strong>
-        <span style="color:${color}">
-          ${t.percent >= 0 ? "+" : ""}${t.percent.toFixed(2)}%
-        </span>
+
+        <div>
+          <strong>${t.symbol}</strong><br>
+          <span style="font-size:12px; color:#64748b;">
+            Entry: ${t.entry} → Exit: ${t.exit}
+          </span>
+        </div>
+
+        <div style="text-align:right;">
+          <div style="color:${color}; font-weight:bold;">
+            ${t.percent >= 0 ? "+" : ""}${t.percent.toFixed(2)}%
+          </div>
+
+          <button onclick="deleteTrade(${i})"
+            style="margin-top:5px; font-size:12px; background:none; border:none; color:#ef4444; cursor:pointer;">
+            Remove
+          </button>
+        </div>
+
       </div>
     `;
-  }).join("");
+    
+  }).join(""); // 🔥 THIS WAS MISSING
+}
+    
+
+// chart
+let userChart;
+
+function renderUserChart() {
+
+  const trades = getUserTrades();
+
+  if (trades.length === 0) return;
+
+  let capital = 10000; // starting capital
+  const positionSize = 0.25; // 25% per trade
+
+  let equity = [];
+
+  trades.forEach(t => {
+
+    const position = capital * positionSize;
+    const pnl = position * (t.percent / 100);
+
+    capital += pnl;
+
+    equity.push(capital);
+  });
+
+  const ctx = document.getElementById("userChart");
+
+  if (!ctx) return;
+
+  if (userChart) {
+    userChart.destroy();
+  }
+
+  userChart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: equity.map((_, i) => "Trade " + (i + 1)),
+      datasets: [{
+        label: "Your Growth",
+        data: equity,
+        borderColor: "#22c55e",
+        backgroundColor: "rgba(34,197,94,0.2)",
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        x: { ticks: { color: "#94a3b8" }},
+        y: { ticks: { color: "#94a3b8" }}
+      }
+    }
+  });
 }
 
-// INIT
-renderUserTrades();
-calculateUserStats();
+// delete trades
+function deleteTrade(index) {
+
+  const trades = getUserTrades();
+
+  trades.splice(index, 1);
+
+  saveUserTrades(trades);
+
+  renderUserTrades();
+  calculateUserStats();
+  renderUserChart();
+}
+
 
 // =========================
 // 📊 CALCULATE USER STATS
@@ -415,6 +522,13 @@ function calculateUserStats() {
   document.getElementById("userTradesCount").innerText =
     trades.length;
 }
+
+// =========================
+// INIT (RUN ON LOAD)
+// =========================
+renderUserTrades();
+calculateUserStats();
+renderUserChart();
 
 </script>
 
