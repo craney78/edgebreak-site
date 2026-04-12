@@ -423,6 +423,30 @@ body::before {
 
 }
 
+@media (max-width: 768px) {
+
+  /* FORCE EXACTLY 2 BOXES PER ROW */
+  #statsGrid,
+  #groupStats {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* FIX CARD SIZE */
+  #statsGrid .stat-card,
+  #groupStats .stat-card {
+    padding: 16px !important;
+  }
+
+  /* TEXT SCALE */
+  #statsGrid .stat-value,
+  #groupStats .stat-value {
+    font-size: 20px !important;
+  }
+
+}
+
 </style>
 </head>
 
