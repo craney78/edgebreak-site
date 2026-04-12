@@ -663,7 +663,7 @@ h3 {
     <div class="stat">
       <div class="label">Win Rate</div>
       <div class="value" id="userWinRate">-</div>
-      <div class="stat-note">% of trades that were profitable</div>
+      <div class="stat-note" id="noteWinRate"></div>
     </div>
 
     <div class="stat">
@@ -673,7 +673,7 @@ h3 {
     <div class="stat">
       <div class="label">Avg Return</div>
       <div class="value" id="userAvgReturn">-</div>
-      <div class="stat-note">Average % gain/loss per trade</div>
+      <div class="stat-note" id="noteAvgReturn"></div>
     </div>
 
     <div class="stat">
@@ -683,7 +683,7 @@ h3 {
     <div class="stat">
       <div class="label">Profit Factor</div>
       <div class="value" id="userProfitFactor">-</div>
-      <div class="stat-note">Above 1 = profitable. 1.2+ is strong</div>
+      <div class="stat-note" id="noteProfitFactor"></div>
     </div>
 
     <div class="stat">
@@ -693,7 +693,7 @@ h3 {
     <div class="stat">
       <div class="label">Trades Taken</div>
       <div class="value" id="userTradesCount">-</div>
-      <div class="stat-note">Total trades recorded</div>
+      <div class="stat-note" id="noteTrades"></div>
     </div>
 
     <div class="stat">
@@ -1204,6 +1204,63 @@ function calculateUserStats() {
     bestWorstEl.innerText = "-";
   }
 
+// =========================
+// 🧠 SMART STAT MESSAGES
+// =========================
+
+// WIN RATE MESSAGE
+const noteWin = document.getElementById("noteWinRate");
+
+if (noteWin) {
+  if (winRate >= 60) {
+    noteWin.innerText = "Strong consistency ✅";
+  } else if (winRate >= 40) {
+    noteWin.innerText = "Decent, room to improve";
+  } else {
+    noteWin.innerText = "Low win rate ⚠️ focus on setups";
+  }
+}
+
+// AVG RETURN MESSAGE
+const noteAvg = document.getElementById("noteAvgReturn");
+
+if (noteAvg) {
+  if (avgReturn >= 2) {
+    noteAvg.innerText = "Excellent returns per trade 🚀";
+  } else if (avgReturn >= 0) {
+    noteAvg.innerText = "Profitable, keep refining";
+  } else {
+    noteAvg.innerText = "Negative expectancy ⚠️";
+  }
+}
+
+// PROFIT FACTOR MESSAGE
+const notePF = document.getElementById("noteProfitFactor");
+
+if (notePF) {
+  if (profitFactor >= 1.5) {
+    notePF.innerText = "Very strong system 💰";
+  } else if (profitFactor >= 1.2) {
+    notePF.innerText = "Profitable system ✅";
+  } else if (profitFactor >= 1) {
+    notePF.innerText = "Break-even zone";
+  } else {
+    notePF.innerText = "Losing system ⚠️";
+  }
+}
+
+// TRADES COUNT MESSAGE
+const noteTrades = document.getElementById("noteTrades");
+
+if (noteTrades) {
+  if (trades.length >= 30) {
+    noteTrades.innerText = "Solid data set 📊";
+  } else if (trades.length >= 10) {
+    noteTrades.innerText = "Getting meaningful data";
+  } else {
+    noteTrades.innerText = "Add more trades for accuracy";
+  }
+}
 
 // =========================
 // EXPORT CSV (ADD HERE)
