@@ -169,6 +169,10 @@ button {
 .green { color: #22c55e; }
 .red { color: #ef4444; }
 
+.section canvas {
+  margin-top: 10px;
+}
+
 /* =========================
    MOBILE
 ========================= */
@@ -441,23 +445,28 @@ function renderUserTrades() {
           </span>
         </div>
 
-        <div style="text-align:right;">
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+
           <div style="color:${color}; font-weight:bold;">
             ${t.percent >= 0 ? "+" : ""}${t.percent.toFixed(2)}%
           </div>
 
-          <button onclick="deleteTrade(${i})"
-            style="margin-top:5px; font-size:12px; background:none; border:none; color:#ef4444; cursor:pointer;">
-            Remove
+          <button onclick="editTrade(${i})"
+            style="font-size:12px; background:none; border:none; color:#22c55e; cursor:pointer;">
+            ✏️ Edit
           </button>
+
+          <button onclick="deleteTrade(${i})"
+            style="font-size:12px; background:none; border:none; color:#ef4444; cursor:pointer;">
+            ❌ Remove
+          </button>
+
         </div>
 
       </div>
     `;
-    
-  }).join(""); // 🔥 THIS WAS MISSING
-}
-    
+}).join("");
+}    
 
 // chart
 let userChart;
@@ -580,6 +589,7 @@ function updateSimulation() {
 }
 
 // delete trades
+// DELETE TRADE
 function deleteTrade(index) {
 
   const trades = getUserTrades();
@@ -593,6 +603,25 @@ function deleteTrade(index) {
   renderUserChart();
 }
 
+
+// EDIT TRADE
+function editTrade(index) {
+
+  const trades = getUserTrades();
+  const trade = trades[index];
+
+  document.getElementById("userSymbol").value = trade.symbol;
+  document.getElementById("userDate").value = trade.date;
+  document.getElementById("userEntry").value = trade.entry;
+  document.getElementById("userExit").value = trade.exit;
+
+  trades.splice(index, 1);
+  saveUserTrades(trades);
+
+  renderUserTrades();
+  calculateUserStats();
+  renderUserChart();
+}
 
 // =========================
 // 📊 CALCULATE USER STATS
