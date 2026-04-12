@@ -1,0 +1,244 @@
+/* =========================
+   🌐 GLOBAL RESET
+   ========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* =========================
+   🌙 BODY
+   ========================= */
+body {
+  background: #020617;
+  color: #e2e8f0;
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+}
+
+/* =========================
+   📦 MAIN CONTAINER
+   ========================= */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* =========================
+   📄 SECTIONS
+   ========================= */
+.section {
+  margin: 60px 0;
+  text-align: center;
+}
+
+.section h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.section p {
+  color: #94a3b8;
+  font-size: 15px;
+}
+
+/* =========================
+   🔝 NAVBAR
+   ========================= */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #020617;
+  border-bottom: 1px solid #1e293b;
+}
+
+.navbar div:first-child {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.navbar a {
+  color: #e2e8f0;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 14px;
+}
+
+.navbar a:hover {
+  color: #38bdf8;
+}
+
+/* =========================
+   🧱 CARDS
+   ========================= */
+.card {
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: left;
+  transition: 0.2s;
+}
+
+.card:hover {
+  border-color: #38bdf8;
+}
+
+/* =========================
+   📊 GRID SYSTEM
+   ========================= */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* =========================
+   📈 STATS
+   ========================= */
+.stat {
+  font-size: 26px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.stat.green { color: #22c55e; }
+.stat.red { color: #ef4444; }
+.stat.blue { color: #38bdf8; }
+
+/* =========================
+   🧠 STAT NOTES (SMART TEXT)
+   ========================= */
+.stat-note {
+  font-size: 13px;
+  margin-top: 8px;
+  color: #94a3b8;
+}
+
+/* =========================
+   🧾 TABLES
+   ========================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th {
+  text-align: left;
+  font-size: 13px;
+  color: #64748b;
+  padding-bottom: 10px;
+}
+
+td {
+  padding: 10px 0;
+  border-bottom: 1px solid #1e293b;
+  font-size: 14px;
+}
+
+/* =========================
+   🔘 BUTTONS
+   ========================= */
+button {
+  background: #38bdf8;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  color: #020617;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* =========================
+   🔴 / 🟢 TAGS
+   ========================= */
+.tag {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  display: inline-block;
+}
+
+.tag.green {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.tag.red {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+/* =========================
+   📝 INPUTS (DASHBOARD)
+   ========================= */
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #1e293b;
+  background: #020617;
+  color: #e2e8f0;
+}
+
+/* =========================
+   🔒 PREMIUM LOCK
+   ========================= */
+.locked {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* =========================
+   📊 PROGRESS BAR
+   ========================= */
+.bar-container {
+  background: #1e293b;
+  border-radius: 10px;
+  height: 10px;
+  margin-top: 10px;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  background: #38bdf8;
+  width: 0%;
+}
+
+/* =========================
+   📌 FOOTER
+   ========================= */
+.footer {
+  margin-top: 60px;
+  padding: 20px;
+  border-top: 1px solid #1e293b;
+  text-align: center;
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* =========================
+   📱 MOBILE FIX
+   ========================= */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar a {
+    margin: 10px 0 0 0;
+  }
+}
