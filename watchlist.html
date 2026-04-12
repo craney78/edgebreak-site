@@ -109,6 +109,14 @@
 
 }
 
+@media (max-width: 768px) {
+
+  .top-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
 /* =========================
    FOOTER (FULL FIX)
 ========================= */
@@ -309,14 +317,45 @@ body::before {
 }
 
 /* =========================
-   TOP GRID (FIX)
+   TOP GRID (PRO FIX)
 ========================= */
 
 .top-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+/* MAKE CARDS MATCH HEIGHT */
+.top-grid .card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* CLEAN HEADER SPACING */
+.top-grid .card h3 {
+  margin-bottom: 6px;
+}
+
+.top-grid .card p {
+  margin-bottom: 12px;
+}
+
+/* STAT ROWS */
+.stat-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* ACTIVITY ITEMS */
+#todayActivity div {
+  font-size: 13px;
+  margin: 4px 0;
 }
 
 /* =========================
