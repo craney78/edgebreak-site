@@ -266,6 +266,10 @@ button {
 
     </div>
 
+    <button onclick="exportTradesCSV()" class="nav-cta" style="margin-bottom:10px;">
+      Export CSV
+    </button>
+
     <!-- TRADE LIST -->
     <div id="userTradesList" style="margin-top:20px;"></div>
 
@@ -683,6 +687,34 @@ function calculateUserStats() {
 
   document.getElementById("userTradesCount").innerText =
     trades.length;
+}
+
+// =========================
+// EXPORT CSV (ADD HERE)
+// =========================
+function exportTradesCSV() {
+
+  const trades = getUserTrades();
+
+  if (trades.length === 0) {
+    return alert("No trades to export");
+  }
+
+  let csv = "Symbol,Date,Entry,Exit,Return\n";
+
+  trades.forEach(t => {
+    csv += `${t.symbol},${t.date},${t.entry},${t.exit},${t.percent.toFixed(2)}%\n`;
+  });
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "my_trades.csv";
+  a.click();
+
+  URL.revokeObjectURL(url);
 }
 
 // =========================
