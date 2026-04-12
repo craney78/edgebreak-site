@@ -329,6 +329,14 @@ button {
       </button>
     </div>
 
+    <div class="stat">
+      <div class="label">Compounding</div>
+      <select id="compounding">
+        <option value="on">On</option>
+        <option value="off">Off</option>
+      </select>
+    </div>
+    
   </div>
 
 </div>
@@ -453,37 +461,44 @@ function renderUserChart() {
 
   const trades = getUserTrades();
 
+  // sort by date
   trades.sort((a, b) => new Date(a.date) - new Date(b.date));
 
   if (trades.length === 0) {
-
     if (userChart) {
-        userChart.destroy();
+      userChart.destroy();
     }
-
     return;
-}
+  }
 
   let capital = parseFloat(document.getElementById("startingCapital").value) || 10000;
 
   let positionSizeInput = parseFloat(document.getElementById("positionSize").value) || 25;
   let positionSize = positionSizeInput / 100;
 
+  const compounding = document.getElementById("compounding").value;
+
   let equity = [];
 
   trades.forEach(t => {
 
-    const position = capital * positionSize;
-    const pnl = position * (t.percent / 100);
+    let position;
 
+    if (compounding === "on") {
+      position = capital * positionSize;
+    } else {
+      position = 10000 * positionSize;
+    }
+
+    const pnl = position * (t.percent / 100);
     capital += pnl;
 
     equity.push(capital);
   });
 
-  const color = equity[equity.length - 1] >= equity[0] 
-  ? "#22c55e" 
-  : "#ef4444";
+  const color = equity[equity.length - 1] >= equity[0]
+    ? "#22c55e"
+    : "#ef4444";
 
   const ctx = document.getElementById("userChart");
 
@@ -500,25 +515,25 @@ function renderUserChart() {
       datasets: [{
         label: "Portfolio Growth",
         data: equity,
-        borderColor: "#22c55e",
+        borderColor: color,
         borderWidth: 2,
         pointRadius: 0,
         tension: 0.4,
         fill: true,
         backgroundColor: (ctx) => {
           const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 300);
-          gradient.addColorStop(0, "rgba(34,197,94,0.4)");
-          gradient.addColorStop(1, "rgba(34,197,94,0)");
+          gradient.addColorStop(0, color + "66");
+          gradient.addColorStop(1, color + "00");
           return gradient;
-      }
-    }]
+        }
+      }]
+    },
     options: {
       responsive: true,
       maintainAspectRatio: false,
 
       plugins: {
         legend: { display: false },
-
         tooltip: {
           backgroundColor: "#020617",
           borderColor: "#22c55e",
@@ -541,7 +556,6 @@ function renderUserChart() {
             display: false
           }
         },
-
         y: {
           ticks: {
             color: "#64748b",
@@ -553,6 +567,8 @@ function renderUserChart() {
         }
       }
     }
+  });
+}
 
 function updateSimulation() {
   renderUserChart();
@@ -643,6 +659,7 @@ calculateUserStats();
 renderUserChart();
 document.getElementById("startingCapital").addEventListener("change", renderUserChart);
 document.getElementById("positionSize").addEventListener("change", renderUserChart);
+document.getElementById("compounding").addEventListener("change", renderUserChart);
 
 </script>
 
