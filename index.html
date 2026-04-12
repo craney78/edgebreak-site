@@ -1546,7 +1546,9 @@ fetch("active_positions.json?v=" + new Date().getTime())
     const container = document.getElementById("previewTrades");
     if (!container) return;
 
-    const preview = data.slice(0, 4);
+    const preview = data
+    .sort((a, b) => b.percent_move - a.percent_move)
+    .slice(0, 4);
 
     container.innerHTML = preview.map(trade => {
 
