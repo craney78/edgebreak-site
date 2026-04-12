@@ -1121,6 +1121,10 @@ body {
       Data-driven breakout system focused exclusively on the NASDAQ.
     </p>
 
+    <p style="color:#22c55e; margin-top:8px; font-size:14px;">
+      Now refined into a structured system after years of real market tracking
+    </p>
+
     <div class="hero-buttons">
       <button onclick="goToPricing()" class="btn-primary">
         🔓 Unlock EdgeBreak
@@ -1128,7 +1132,7 @@ body {
     </div>
 
     <p class="hero-trust">
-      High-conviction setups • Real trade tracking • No guesswork
+      Built on years of sharing breakout trades with 5,000+ followers • Real trade tracking • No guesswork
     </p>
 
   </div>
@@ -1179,6 +1183,32 @@ body {
       <p>
         Trades are executed using structured entry and exit frameworks refined through years of trading experience, enhanced by AI-assisted analysis to optimise outcomes and manage risk.
       </p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section">
+
+  <h2>What Early Users Are Saying</h2>
+
+  <p style="color:#94a3b8; margin-bottom:30px;">
+    Built from real trading experience and refined into a structured system.
+  </p>
+
+  <div class="grid">
+
+    <div class="card">
+      <p>"The structure is what makes it different. It’s not just signals — it’s a system."</p>
+    </div>
+
+    <div class="card">
+      <p>"Less trades, but better ones. That’s what actually works."</p>
+    </div>
+
+    <div class="card">
+      <p>"Finally something that filters out the noise and focuses on real setups."</p>
     </div>
 
   </div>
@@ -1264,6 +1294,27 @@ body {
   </div>
 
 </div>
+
+<!-- 🔒 TRADING DESK PREVIEW -->
+<div class="section">
+
+  <h2>Live Trading Desk Preview</h2>
+
+  <p style="color:#94a3b8; margin-bottom:25px;">
+    Live trades updating daily — full details locked for members
+  </p>
+
+  <!-- LIVE DATA GOES HERE -->
+  <div id="previewTrades" class="grid"></div>
+
+  <!-- CTA -->
+  <div style="margin-top:30px;">
+    <button onclick="goToPricing()" class="btn-primary">
+      🔓 Unlock Full Trading Desk
+    </button>
+  </div>
+
+</div>
   
 <!-- PROVEN PERFORMANCE -->
 <div class="section">
@@ -1290,6 +1341,15 @@ body {
     The system is designed to capture the minority of trades that drive the majority of returns.
   </p>
 
+  <p style="
+    text-align:center;
+    color:#22c55e;
+    font-weight:bold;
+    margin-top:40px;
+  ">
+    Every trade is tracked. Winners and losers are shown. No cherry-picked results.
+  </p>
+
   <!-- CTA -->
   <div style="text-align:center; margin-top:35px;">
 
@@ -1313,12 +1373,8 @@ body {
 <div class="cta">
   <h2>Unlock EdgeBreak</h2>
   <p style="color:#94a3b8;">Access the full system, live trades, and data.</p>
-  <button>Unlock the System</button>
+  <button>Unlock Live Trades</button>
 </div>
-
-</div>
-
-
 
  <!-- FOOTER -->
 <div class="footer">
@@ -1462,12 +1518,73 @@ fetch("master_stats_2025_to_now.json?v=" + new Date().getTime())
   console.error("Stats error:", err);
 });
 
+function goToPricing() {
+  window.location.href = "pricing.html";
+}
+
 </script>
 
 <script>
 document.getElementById("menuToggle").addEventListener("click", function () {
   document.getElementById("mobileMenu").classList.toggle("active");
 });
+
+</script>
+
+<script>
+
+// 🔓 PRICING BUTTON
+function goToPricing() {
+  window.location.href = "pricing.html";
+}
+
+// 🔒 HOMEPAGE TRADING DESK PREVIEW
+fetch("active_positions.json?v=" + new Date().getTime())
+  .then(res => res.json())
+  .then(data => {
+
+    const container = document.getElementById("previewTrades");
+    if (!container) return;
+
+    const preview = data.slice(0, 4);
+
+    container.innerHTML = preview.map(trade => {
+
+      const percent = parseFloat(trade.percent_move || 0);
+      const days = trade.days_held || 0;
+
+      let color = "green";
+      if (percent < 0) color = "red";
+
+      let status = "Holding";
+      if (days <= 2) status = "Breaking out";
+      if (percent < 0) status = "Pullback";
+
+      return `
+        <div class="card">
+          <div style="font-size:12px; color:#22c55e; margin-bottom:6px;">
+            🔒 LOCKED
+          </div>
+          <div class="big ${color}">
+            ${percent > 0 ? "+" : ""}${percent.toFixed(2)}%
+          </div>
+          <div style="color:#94a3b8;">
+            ${days} days
+          </div>
+          <div style="font-size:12px; color:#64748b; margin-top:6px;">
+            ${status}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+  })
+  .catch(() => {
+    document.getElementById("previewTrades").innerHTML = `
+      <p style="color:#64748b;">Preview unavailable</p>
+    `;
+  });
+
 </script>
 
 </body>
