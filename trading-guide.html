@@ -8,7 +8,51 @@
 
 
 </head>
+<style
+/* =========================
+   🔥 ISOLATE NAV ON GUIDE PAGE
+   ========================= */
 
+.guide-page .navbar {
+  height: 60px;
+  padding: 0;
+}
+
+.guide-page .nav-inner {
+  height: 60px;
+  padding: 0 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.guide-page .nav-left,
+.guide-page .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* 🔥 CRITICAL: reset ALL inherited junk */
+.guide-page .navbar * {
+  line-height: normal;
+  padding: 0;
+  margin: 0;
+}
+
+/* logo lock */
+.guide-page .nav-logo {
+  width: 30px;
+  height: auto;
+}
+
+/* live badge */
+.guide-page .live-badge {
+  font-size: 12px;
+  padding: 2px 6px;
+}
+</style>
 <body>
 
 <!-- NAVBAR -->
