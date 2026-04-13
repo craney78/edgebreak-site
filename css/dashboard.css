@@ -816,7 +816,8 @@ h1, h2 {
 
   transition: 0.2s;
 
-  width: 100%;   /* makes it look like a proper CTA */
+  width: auto;
+  display: inline-block;   /* makes it look like a proper CTA */
 }
 
 /* hover effect */
@@ -827,4 +828,17 @@ h1, h2 {
 
 .footer-col button {
   max-width: 180px;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-col p {
+  margin-bottom: 10px;
+}
+
+.footer-col button {
+  align-self: flex-start; /* keeps it neat under text */
 }
