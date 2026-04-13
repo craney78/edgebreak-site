@@ -168,16 +168,6 @@ body {
 }
 
 /* =========================
-   📦 SECTION
-   ========================= */
-.section {
-  max-width: 1100px;
-  margin: 60px auto;
-  padding: 20px;
-  text-align: center;
-}
-
-/* =========================
    🔥 GRID FIX (CRITICAL)
    ========================= */
 
@@ -188,15 +178,6 @@ body {
 
   max-width: 1000px;
   margin: 0 auto;
-}
-
-/* FORCE ALL SECTIONS TO CENTER */
-
-.section {
-  max-width: 1100px;
-  margin: 60px auto;
-  padding: 20px;
-  text-align: center;
 }
 
 /* =========================
@@ -408,14 +389,6 @@ body {
   color: #22c55e;
 }
 
-/* =========================
-   🎯 CONTENT WIDTH LOCK
-   ========================= */
-
-.section,
-.cta {
-  max-width: 900px;
-}
 
 /* =========================
    ✨ HEADING GLOW
@@ -783,15 +756,6 @@ h1, h2 {
    🎯 HEADER CENTER FIX
    ========================= */
 
-.header {
-  display: flex;
-  flex-direction: column;   /* stack logo + text */
-  align-items: center;      /* center horizontally */
-  justify-content: center;
-
-  text-align: center;       /* center text */
-  margin: 40px auto;
-}
 
 .header img,
 .hero-logo {
@@ -920,11 +884,6 @@ html {
   scroll-behavior: smooth;
 }
 
-.section {
-  max-width: 900px;
-  margin: 40px auto;
-  text-align: center;
-}
 
 .section p {
   max-width: 700px;
@@ -1074,13 +1033,6 @@ html {
   align-items: center;
 }
 
-/* =========================
-   🔥 FIX TRADING GUIDE HEADER GAP
-   ========================= */
-
-.header {
-  margin: 20px auto 30px auto !important;
-}
 
 /* =========================
    🔥 FIX LIVE BADGE (CAUSE OF BIG NAV)
@@ -1187,14 +1139,6 @@ img {
   text-align: center;
 }
 
-.header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-
-  margin: 40px auto;
-}
 
 .header-sub {
   color: #94a3b8;
@@ -1413,12 +1357,6 @@ p {
   box-shadow: 0 6px 16px rgba(34,197,94,0.3);
 }
 
-.header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
 
 .header-sub {
   max-width: 500px;
@@ -1473,13 +1411,6 @@ body {
   display: block !important;
 }
 
-.section {
-  display: block !important;
-  width: 100%;
-  max-width: 900px;
-  margin: 60px auto;
-  padding: 0 20px;
-}
 
 .header {
   display: flex;
@@ -1488,15 +1419,8 @@ body {
   text-align: center;
 }
 
-/* FAQ FIX */
-.section > div {
-  max-width: 700px;
-  margin: 0 auto;
-}
 
-.cta-inner {
-  text-align: center;
-}
+
 
 /* 🔥 STOP SIDE SCROLL */
 html, body {
@@ -1507,12 +1431,6 @@ html, body {
    🔥 GLOBAL SPACING RESET
    ========================= */
 
-.section {
-  max-width: 900px;
-  margin: 60px auto;
-  padding: 0 20px;
-}
-
 .header {
   margin: 40px auto 20px auto;
 }
@@ -1521,9 +1439,7 @@ html, body {
   padding: 80px 20px 60px;
 }
 
-.cta-inner {
-  text-align: center;
-}
+
 
 .section h2 {
   margin-bottom: 10px;
@@ -1533,13 +1449,6 @@ html, body {
   margin-bottom: 15px;
 }
 
-.cta-inner {
-  margin: 40px auto;
-}
-
-.grid {
-  margin-top: 30px;
-}
 
 .footer {
   margin-top: 60px;
@@ -1547,18 +1456,43 @@ html, body {
 
 /* 🔥 FIX OVERLAPPING SECTIONS */
 
-.grid {
-  margin-bottom: 40px;
+
+.card {
+  margin-bottom: 20px;
 }
 
+/* =========================
+   🔥 FINAL CLEAN LAYOUT
+   ========================= */
+
 .section {
+  max-width: 900px;
   margin: 60px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 40px auto 20px auto;
+}
+
+.grid {
+  display: grid;
+  gap: 25px;
+  max-width: 900px;
+  margin: 30px auto;
 }
 
 .card {
   margin-bottom: 20px;
 }
 
-.section {
-  overflow: hidden;
+.cta {
+  max-width: 900px;
+  margin: 60px auto;
+  text-align: center;
 }
