@@ -453,23 +453,27 @@ fetch("master_stats_2025_to_now.json?v=" + new Date().getTime())
   // =========================
   // 📊 MAIN STATS
   // =========================
-  document.getElementById("statsGrid").innerHTML = `
+  document.getElementById("statsGridBoxes").innerHTML = `
     <div class="card">
       <div>TOTAL TRADES</div>
       <div class="big">${stats.total_trades}</div>
     </div>
+
     <div class="card">
       <div>WIN RATE</div>
       <div class="big">${stats.win_rate}%</div>
     </div>
+
     <div class="card">
       <div>AVG RETURN</div>
       <div class="big">${stats.avg_return}%</div>
     </div>
+
     <div class="card green">
       <div>BEST TRADE</div>
       <div class="big">${stats.best_trade}%</div>
     </div>
+
     <div class="card red">
       <div>WORST TRADE</div>
       <div class="big">${stats.worst_trade}%</div>
