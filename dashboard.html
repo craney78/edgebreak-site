@@ -227,29 +227,29 @@
   <h3 style="margin-bottom:15px;">Your Portfolio Growth</h3>
 
   <div style="height:300px; position:relative;">
-    <canvas id="userChart"></canvas>
-    <!-- =========================
-     locked premium
-    ========================= -->
 
+    <canvas id="userChart"></canvas>
+
+    <!-- 🔒 PREMIUM OVERLAY -->
     <div id="premiumOverlay" class="premium-overlay">
 
       <div class="premium-box">
         <h2>🔒 Premium Feature</h2>
-      <p>Unlock full dashboard, portfolio tracking, and simulation tools</p>
+        <p>Unlock full dashboard, portfolio tracking, and simulation tools</p>
 
-      <button onclick="unlockPremium()" class="nav-cta">
-        Unlock Now
-      </button>
+        <a href="pricing.html" class="nav-cta">
+          Unlock Now
+        </a>
+      </div>
+
     </div>
 
   </div>
 
-<p style="color:#94a3b8; font-size:13px; margin-top:10px;">
-Simulation based on your trades, capital, and position size per trade
-</p>
+  <p style="color:#94a3b8; font-size:13px; margin-top:10px;">
+    Simulation based on your trades, capital, and position size per trade
+  </p>
 
-</div>
 </div>
 
 <!-- FOOTER -->
@@ -729,7 +729,7 @@ if (noteTrades) {
     noteTrades.innerText = "Add more trades for accuracy";
   }
 }
-
+}
 // =========================
 // EXPORT CSV (ADD HERE)
 // =========================
@@ -777,16 +777,6 @@ if (!isPremium) {
   document.getElementById("premiumOverlay").style.display = "flex";
 }
 
-// =========================
-// MOBILE MENU TOGGLE
-// =========================
-
-const menuToggle = document.getElementById("menuToggle");
-const mobileMenu = document.getElementById("mobileMenu");
-
-menuToggle.addEventListener("click", () => {
-  mobileMenu.classList.toggle("active");
-});
 
 </script>
 
