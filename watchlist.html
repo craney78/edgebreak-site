@@ -11,6 +11,17 @@
 
 <body>
 
+<div id="paywall" class="paywall">
+  <div class="paywall-content">
+    <h2>🔒 Premium Access</h2>
+    <p>Unlock live breakout trades and full system data</p>
+
+    <a href="pricing.html">
+      <button class="unlock-btn">Unlock EdgeBreak</button>
+    </a>
+  </div>
+</div>
+
 <!-- NAVBAR -->
 <div class="nav">
   <div class="nav-inner">
@@ -962,6 +973,18 @@ document.addEventListener("DOMContentLoaded", function () {
 function toggleMenu() {
   const menu = document.getElementById("mobileMenu");
   menu.classList.toggle("active");
+}
+</script>
+
+<script>
+const isPremium = false; // 🔥 CHANGE LATER
+
+if (isPremium) {
+  document.getElementById("paywall").style.display = "none";
+}
+
+if (!isPremium) {
+  document.body.classList.add("locked");
 }
 </script>
 
