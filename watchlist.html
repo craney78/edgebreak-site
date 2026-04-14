@@ -390,22 +390,25 @@
 <script>
 function loadChart(symbol) {
 
+  const cleanSymbol = symbol.toUpperCase().trim();
+  const finalSymbol = "NASDAQ:" + cleanSymbol;
+
   document.getElementById("tv_chart").innerHTML = "";
+
+  // 👇 SHOW SYMBOL TO USER
+  document.getElementById("chartTitle").innerText = finalSymbol;
 
   new TradingView.widget({
     width: "100%",
     height: 420,
-    symbol: symbol,
+    symbol: finalSymbol,
     interval: "D",
-    timezone: "America/New_York",  // ✅ FIXED
+    timezone: "America/New_York",
     theme: "dark",
     style: "1",
     locale: "en",
-    toolbar_bg: "#020617",
-    enable_publishing: false,
     hide_top_toolbar: true,
-    hide_legend: true,
-    save_image: false,
+    hide_legend: false,   // 👈 IMPORTANT (shows ticker inside chart too)
     container_id: "tv_chart"
   });
 
