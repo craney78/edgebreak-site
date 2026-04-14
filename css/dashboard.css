@@ -1643,3 +1643,65 @@ body {
     height: 85px;
   }
 }
+
+/* =========================
+   📊 CHART SECTION
+========================= */
+
+.chart-container {
+  margin-top: 20px;
+  padding: 20px;
+
+  background: #020617;              /* matches your theme */
+  border: 1px solid #1e293b;
+  border-radius: 14px;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* Chart area */
+#tv_chart {
+  width: 100%;
+  height: 420px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Section title (Price Chart) */
+.section h3 {
+  color: white;
+  font-weight: 600;
+}
+
+/* =========================
+   🖱️ CLICKABLE TRADE BOXES
+========================= */
+
+.box {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.box:hover {
+  transform: scale(1.02);
+  border-color: #22c55e;
+  background: rgba(34,197,94,0.05);
+}
+
+/* =========================
+   📱 MOBILE OPTIMISATION
+========================= */
+
+@media (max-width: 768px) {
+
+  .chart-container {
+    padding: 15px;
+    margin-top: 15px;
+  }
+
+  #tv_chart {
+    height: 300px;
+  }
+
+}

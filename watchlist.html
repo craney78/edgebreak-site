@@ -178,6 +178,15 @@
 <div id="midSection" class="section"></div>
 <div id="largeSection" class="section"></div>
 
+<!-- CHART -->
+<div class="section">
+  <h3 style="margin-bottom:15px;">Price Chart</h3>
+
+  <div class="chart-container">
+    <div id="tv_chart"></div>
+  </div>
+</div>
+
 <div class="section">
 
   <h3 style="margin-bottom:15px;">Portfolio Simulator</h3>
@@ -376,9 +385,31 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<script src="https://s3.tradingview.com/tv.js"></script>
 
 <script>
+function loadChart(symbol) {
+
+  document.getElementById("tv_chart").innerHTML = "";
+
+  new TradingView.widget({
+    width: "100%",
+    height: 420,
+    symbol: "ASX:" + symbol,
+    interval: "D",
+    timezone: "Australia/Sydney",
+    theme: "dark",
+    style: "1",
+    locale: "en",
+    toolbar_bg: "#020617",
+    enable_publishing: false,
+    hide_top_toolbar: true,
+    hide_legend: true,
+    save_image: false,
+    container_id: "tv_chart"
+  });
+
+}
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -495,26 +526,26 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         el.innerHTML = `<h3>${title}</h3>` + trades.map(t => {
-          const change = t.change_percent ?? 0;
-          const color = change >= 0 ? "#22c55e" : "#ef4444";
+        const change = t.change_percent ?? 0;
+        const color = change >= 0 ? "#22c55e" : "#ef4444";
 
-          return `
-            <div class="box">
-              <div style="display:flex; justify-content:space-between;">
-                <strong>${t.symbol}</strong>
-                <span style="color:${color}; font-weight:bold;">
-                  ${change.toFixed(2)}%
-                </span>
-              </div>
-              <div style="font-size:13px; color:#94a3b8;">
-                Entry: $${t.entry_price ?? "-"} | Now: $${t.current_price ?? "-"}
-              </div>
-              <div style="font-size:12px; color:#64748b;">
-                ${t.days_held ?? 0} days
-              </div>
+        return `
+          <div class="box" onclick="loadChart('${t.symbol}')">
+            <div style="display:flex; justify-content:space-between;">
+              <strong>${t.symbol}</strong>
+              <span style="color:${color}; font-weight:bold;">
+                ${change.toFixed(2)}%
+              </span>
             </div>
-          `;
-        }).join("");
+            <div style="font-size:13px; color:#94a3b8;">
+              Entry: $${t.entry_price ?? "-"} | Now: $${t.current_price ?? "-"}
+            </div>
+            <div style="font-size:12px; color:#64748b;">
+              ${t.days_held ?? 0} days
+            </div>
+          </div>
+        `;
+      }).join("");
       }
 
       renderTrades(small, "🟢 Small Caps", "smallSection");
