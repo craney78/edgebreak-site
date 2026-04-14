@@ -395,9 +395,9 @@ function loadChart(symbol) {
   new TradingView.widget({
     width: "100%",
     height: 420,
-    symbol: "ASX:" + symbol,
+    symbol: symbol,
     interval: "D",
-    timezone: "Australia/Sydney",
+    timezone: "America/New_York",  // ✅ FIXED
     theme: "dark",
     style: "1",
     locale: "en",
