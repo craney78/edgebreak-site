@@ -13,11 +13,15 @@
 <p>Unlocking your access...</p>
 
 <script>
-  localStorage.setItem("edgebreak_token", "active");
+  // 🔓 Grant access
+  localStorage.setItem("edgebreak_access", "true");
 
+  // Optional: store email later (we’ll add this next phase)
+
+  // Redirect into product
   setTimeout(() => {
-    window.location = "watchlist.html";
-  }, 1500);
+    window.location.href = "watchlist.html";
+  }, 1200);
 </script>
 
 </body>

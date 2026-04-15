@@ -50,13 +50,18 @@
   <!-- HEADER -->
   <div class="header">
 
-  <img src="images/logo.png" class="hero-logo">
+    <img src="images/logo.png" class="hero-logo">
 
-  <h1>My Dashboard</h1>
+    <h1>My Dashboard</h1>
 
-  <p class="header-sub">
-    Track your trades and performance
-  </p>
+    <p class="header-sub">
+      Track your trades and performance
+    </p>
+
+  <!-- 🔧 MANAGE SUB BUTTON -->
+  <a href="https://billing.stripe.com/p/login/YOUR_LINK" class="nav-cta" style="margin-top:15px; display:inline-block;">
+    Manage Subscription
+  </a>
 
 </div>
   <!-- =========================
@@ -326,11 +331,6 @@
 </div>
   
 <script>
-
-function unlockPremium() {
-  localStorage.setItem("premiumUser", "true");
-  window.location.href = "dashboard.html";
-}    
 
 // LOAD
 function getUserTrades() {
@@ -781,15 +781,6 @@ renderUserChart();
 document.getElementById("startingCapital").addEventListener("change", renderUserChart);
 document.getElementById("positionSize").addEventListener("change", renderUserChart);
 document.getElementById("compounding").addEventListener("change", renderUserChart);
-
-// =========================
-// 🔒 PREMIUM CHECK
-// =========================
-const isPremium = localStorage.getItem("premiumUser");
-
-if (!isPremium) {
-  document.getElementById("premiumOverlay").style.display = "flex";
-}
 
 
 </script>
