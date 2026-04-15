@@ -6,8 +6,6 @@
 <title>Pricing - EdgeBreak</title>
 <link rel="stylesheet" href="css/dashboard.css">
 
-<link rel="stylesheet" href="dashboard.css">
-
 
 </head>
 
@@ -60,32 +58,35 @@
 
   
 
-  <div class="pricing-card">
+  <div class="price">
+    $19<span>/month</span>
+  </div>
 
-    <div class="price">
-      $19<span>/month</span>
-    </div>
-
-    <div class="sub">
-      First 3 months • Then $29/month
-    </div>
+  <div class="sub">
+    Intro Offer — First 3 Months<br>
+    <span style="color:#64748b;">Then $29/month</span>
+  </div>
 
     <ul class="features">
-      <ul class="features">
       <li>✔ Explore breakout setups identified through structured data</li>
       <li>✔ Reduce emotional decision-making through a rules-based approach</li>
       <li>✔ Track and review performance over time</li>
       <li>✔ Understand a structured, repeatable analysis process</li>
       <li>✔ Gain insight into what works — and what doesn’t</li>
     </ul>
-    </ul>
+    
 
     <a href="https://buy.stripe.com/3cIaEW5d7cO19e08odds400" class="btn-primary">
       Unlock Access
     </a>
 
+    <p style="margin-top:15px; font-size:13px; color:#64748b;">
+      Used by traders focused on building consistency through structured analysis
+    </p>
+
     <div class="small">
-      Cancel anytime • No lock-in contracts
+      Cancel anytime • No lock-in contracts<br>
+      Built to help you develop a structured, repeatable trading approach over time
     </div>
 
   </div>
@@ -198,8 +199,6 @@
   <!-- FINAL CTA -->
   <div class="section" style="text-align:center;">
 
-    <h2>Start Building Your Edge</h2>
-
     <h2>Start Exploring a Data-Driven Approach</h2>
 
     <p style="color:#94a3b8;">
@@ -228,7 +227,7 @@
       </div>
 
       <p>
-        Data-driven breakout trading system designed to analyse and track breakout setups using structured market data.
+        Data-driven breakout trading system designed to analyse and track breakout setups using structured market data
       </p>
 
     </div>
@@ -242,6 +241,7 @@
       <a href="dashboard.html" class="nav-link">My Dashboard</a>
       <a href="pricing.html">Pricing</a>
       <a href="disclaimer.html">Disclaimer</a>
+      <a href="about.html">About</a>
     </div>
 
     <!-- RESOURCES -->
@@ -255,10 +255,7 @@
     <!-- CTA -->
     <div class="footer-col">
       <h4>Get Access</h4>
-      <p style="margin-bottom:10px;">
-        Unlock the full system and live trades
-      </p>
-      <button onclick="window.location.href='pricing.html'">Unlock</button>
+      <a href="pricing.html" class="nav-cta">🔓 Unlock EdgeBreak</a>
     </div>
 
   </div>
@@ -283,6 +280,20 @@
   </div>
 
 </div>
+
+<script>
+  const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
+
+  document.querySelectorAll(".nav-cta").forEach(btn => {
+    if (isLoggedIn) {
+      btn.innerText = "Dashboard";
+      btn.href = "dashboard.html";
+    } else {
+      btn.innerText = "Unlock";
+      btn.href = "pricing.html";
+    }
+  });
+</script>
 
 </body>
 </html>

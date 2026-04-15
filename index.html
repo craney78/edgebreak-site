@@ -28,7 +28,8 @@
       <a href="watchlist.html" class="nav-link">Trading Desk</a>
       <a href="trading-guide.html" class="nav-link">Guide</a>
       <a href="dashboard.html" class="nav-link">My Dashboard</a>
-      <a href="pricing.html" class="nav-cta">Unlock</a>
+      <a href="pricing.html" class="nav-cta">🔓 Unlock EdgeBreak</a>
+    
     </div>
 
   </div>
@@ -72,9 +73,9 @@
     </p>
 
     <div class="hero-buttons">
-      <button onclick="goToPricing()" class="btn-primary">
+      <a href="pricing.html" class="btn-primary">
         🔓 Unlock EdgeBreak
-      </button>
+      </a>
     </div>
 
     <p class="hero-trust">
@@ -110,7 +111,9 @@
 
 <!-- IMAGE BLOCK -->
 
-::contentReference[oaicite:0]{index=0}
+<div style="text-align:center; margin:40px 0;">
+  <img src="images/human-trading-section.png" style="max-width:100%; border-radius:12px;">
+</div>
 
 
 <!-- MARKET REALITY SECTION -->
@@ -133,8 +136,6 @@
   </p>
 
 </div>
-</div>
-
 
 <!-- HOW IT WORKS -->
 <div class="section">
@@ -328,9 +329,9 @@
 
   <!-- CTA -->
     <div style="margin-top:30px;">
-      <button onclick="goToPricing()" class="btn-primary">
-        🔓 Unlock Full Trading Desk
-      </button>
+      <a href="pricing.html" class="nav-cta">
+        🔓 Unlock EdgeBreak
+      </a>
   </div>
 
 </div>
@@ -373,9 +374,9 @@
     Access the trading desk to explore daily breakout setups, tracked positions, and performance data.
   </p>
 
-  <button onclick="window.location.href='watchlist.html'" class="btn-primary">
+  <a href="pricing.html" class="btn-primary">
     Enter Trading Desk
-  </button>
+  </a>
 
 </div>
 
@@ -388,9 +389,9 @@
     <h2>Unlock EdgeBreak</h2>
     <p style="color:#94a3b8;">Access the full system, live trades, and data.</p>
 
-    <button onclick="window.location.href='pricing.html'" class="btn-primary">
+    <a href="pricing.html" class="btn-primary">
       Unlock EdgeBreak
-    </button>
+    </a>
 
   </div>
 
@@ -443,7 +444,7 @@
       <p style="margin-bottom:10px;">
         Unlock full access to the system and tracked breakout setups
       </p>
-      <button onclick="window.location.href='pricing.html'">Unlock</button>
+      <a href="pricing.html" class="nav-cta">Unlock</a>
     </div>
 
   </div>
@@ -475,19 +476,6 @@
 
 <script>
 
-// 🔐 PROTECT DASHBOARD
-// 🔐 PROTECT DASHBOARD
-const isLoggedIn = localStorage.getItem("loggedIn");
-
-// TEMP UNLOCK
-// if (!isLoggedIn) {
-//   window.location.href = "login.html";
-// }
-
-function logout() {
-  localStorage.removeItem("loggedIn");
-  window.location.href = "login.html";
-}
 
 fetch("master_stats_2025_to_now.json?v=" + new Date().getTime())
 .then(res => res.json())
@@ -562,25 +550,14 @@ fetch("master_stats_2025_to_now.json?v=" + new Date().getTime())
   console.error("Stats error:", err);
 });
 
-function goToPricing() {
-  window.location.href = "pricing.html";
-}
+
 
 </script>
 
-<script>
-document.getElementById("menuToggle").addEventListener("click", function () {
-  document.getElementById("mobileMenu").classList.toggle("active");
-});
-
-</script>
 
 <script>
 
-// 🔓 PRICING BUTTON
-function goToPricing() {
-  window.location.href = "pricing.html";
-}
+
 
 // 🔒 HOMEPAGE TRADING DESK PREVIEW
 fetch("active_positions.json?v=" + new Date().getTime())
@@ -631,6 +608,20 @@ fetch("active_positions.json?v=" + new Date().getTime())
     `;
   });
 
+</script>
+
+<script>
+  const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
+
+  document.querySelectorAll(".nav-cta").forEach(btn => {
+    if (isLoggedIn) {
+      btn.innerText = "Dashboard";
+      btn.href = "dashboard.html";
+    } else {
+      btn.innerText = "Unlock";
+      btn.href = "pricing.html";
+    }
+  });
 </script>
 
 </body>
