@@ -37,7 +37,7 @@
       <a href="watchlist.html" class="nav-link">Trading Desk</a>
       <a href="trading-guide.html" class="nav-link">Guide</a>
       <a href="dashboard.html" class="nav-link">My Dashboard</a>
-      <a href="pricing.html" class="nav-cta">Unlock</a>
+      <a href="#" id="logoutBtn" class="nav-cta">Logout</a>
     </div>
 
   </div>
@@ -782,7 +782,31 @@ document.getElementById("startingCapital").addEventListener("change", renderUser
 document.getElementById("positionSize").addEventListener("change", renderUserChart);
 document.getElementById("compounding").addEventListener("change", renderUserChart);
 
+<script>
+  const logoutBtn = document.getElementById("logoutBtn");
 
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", function () {
+      localStorage.removeItem("edgebreak_access");
+      window.location.href = "index.html";
+    });
+  }
+</script>
+
+</script>
+
+<script>
+  const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
+
+  document.querySelectorAll(".nav-cta").forEach(btn => {
+    if (isLoggedIn) {
+      btn.innerText = "Dashboard";
+      btn.href = "dashboard.html";
+    } else {
+      btn.innerText = "Unlock";
+      btn.href = "pricing.html";
+    }
+  });
 </script>
 
 </body>
