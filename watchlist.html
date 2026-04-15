@@ -11,16 +11,11 @@
 
 <body>
 
-<div id="paywall" class="paywall">
-  <div class="paywall-content">
-    <h2>🔒 Premium Access</h2>
-    <p>Unlock live breakout trades and full system data</p>
-
-    <a href="pricing.html">
-      <button class="unlock-btn">Unlock EdgeBreak</button>
-    </a>
-  </div>
-</div>
+<script>
+  if (localStorage.getItem("edgebreak_access") !== "true") {
+    window.location.href = "pricing.html";
+  }
+</script>
 
 <!-- NAVBAR -->
 <div class="nav">
