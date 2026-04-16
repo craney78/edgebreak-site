@@ -282,6 +282,7 @@
       <a href="dashboard.html">My Dashboard</a>
       <a href="pricing.html">Pricing</a>
       <a href="disclaimer.html">Disclaimer</a>
+      <a href="about.html">About</a>
     </div>
 
     <!-- RESOURCES -->
@@ -290,6 +291,7 @@
       <a href="trading-guide.html">Trading Guide</a>
       <a href="faq.html">FAQ</a>
       <a href="support.html">Support</a>
+      <a href="privacy.html">Privacy Policy</a>
     </div>
 
     <!-- CTA -->
@@ -330,6 +332,20 @@ function toggleMenu() {
   const menu = document.getElementById("mobileMenu");
   menu.classList.toggle("active");
 }
+</script>
+
+<script>
+  const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
+
+  document.querySelectorAll(".nav-cta").forEach(btn => {
+    if (isLoggedIn) {
+      btn.innerText = "Dashboard";
+      btn.href = "dashboard.html";
+    } else {
+      btn.innerText = "Unlock";
+      btn.href = "pricing.html";
+    }
+  });
 </script>
 
 </body>

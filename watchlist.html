@@ -35,7 +35,7 @@
       <a href="watchlist.html" class="nav-link">Trading Desk</a>
       <a href="trading-guide.html" class="nav-link">Guide</a>
       <a href="dashboard.html" class="nav-link">My Dashboard</a>
-      <a href="pricing.html" class="nav-cta">Unlock</a>
+      <a href="#" id="logoutBtn" class="nav-cta">Logout</a>
     </div>
 
 </div>
@@ -354,6 +354,7 @@ Data is updated daily for analysis purposes. This platform provides information 
       <a href="trading-guide.html">Trading Guide</a>
       <a href="faq.html">FAQ</a>
       <a href="support.html">Support</a>
+      <a href="privacy.html">Privacy Policy</a>
     </div>
 
     <!-- CTA -->
@@ -1044,6 +1045,33 @@ if (isPremium) {
 if (!isPremium) {
   document.body.classList.add("locked");
 }
+
+<script>
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", function () {
+      localStorage.removeItem("edgebreak_access");
+      window.location.href = "index.html";
+    });
+  }
+ 
+</script>
+
+</script>
+
+<script>
+  const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
+
+  document.querySelectorAll(".nav-cta").forEach(btn => {
+    if (isLoggedIn) {
+      btn.innerText = "Dashboard";
+      btn.href = "dashboard.html";
+    } else {
+      btn.innerText = "Unlock";
+      btn.href = "pricing.html";
+    }
+  });
 </script>
 
 </body>
