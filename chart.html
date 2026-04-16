@@ -5,8 +5,8 @@
   <title>EdgeBreak Chart</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- USE YOUR MAIN SITE CSS -->
-  <link rel="stylesheet" href="/styles.css">
+ 
+<link rel="stylesheet" href="css/dashboard.css">
 </head>
 
 <body>
@@ -35,23 +35,33 @@
 </div>
 
 <div class="container">
-  <div class="header">
+  <div class="section" style="margin-top:100px; text-align:center;">
+  <h1>
+    Chart — <span class="highlight" id="symbolText">Loading...</span>
+  </h1>
+</div>
     EdgeBreak Chart — <span class="symbol" id="symbolText">Loading...</span>
   </div>
 
-    <div class="chart-container">
+    <div class="section trading-desk-section">
+
+  <div class="chart-container">
     <div id="tradingview_chart"></div>
 
-    <div id="entryLine" style="display:none;"></div>
-    <div id="entryLabel" style="display:none;"></div>
+    <div id="entryLine"></div>
+    <div id="entryLabel"></div>
 
-    <div id="stopLine" style="display:none;"></div>
-    <div id="stopLabel" style="display:none;"></div>
-    <div id="breakoutZone" style="display:none;"></div>
-    <div id="riskBox" style="display:none;"></div>
-    <div id="rewardBox" style="display:none;"></div>
-    <div id="rrLabel" style="display:none;"></div>
+    <div id="stopLine"></div>
+    <div id="stopLabel"></div>
+
+    <div id="breakoutZone"></div>
+
+    <div id="riskBox"></div>
+    <div id="rewardBox"></div>
+    <div id="rrLabel"></div>
   </div>
+
+</div>
 
     
   <div class="footer">
