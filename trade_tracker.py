@@ -2,6 +2,7 @@ import json
 import requests
 import os
 from datetime import datetime
+import time
 
 API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
 
@@ -224,9 +225,12 @@ def run_tracker():
             activity.append({
                 "type": "CLOSED",
                 "symbol": symbol,
-                "result": round(percent_move, 2),
+                "entry_price": round(entry, 2),
+                "exit_price": round(exit_price, 2),
+                "percent_move": round(percent_move, 2),
+                "days_held": days,
                 "exit_type": status,
-                "date": datetime.now().isoformat()
+                "date": int(time.time() * 1000)  # 🔥 MATCH FRONTEND
             })
 
             # HISTORY LOG

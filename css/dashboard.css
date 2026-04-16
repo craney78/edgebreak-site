@@ -1754,3 +1754,108 @@ footer {
   max-width: 100%;
   box-sizing: border-box;
 }
+
+/* =========================
+   CHART PAGE
+   ========================= */
+
+.chart-container {
+  position: relative;
+  margin: 20px auto;
+  width: 95%;
+  max-width: 1200px;
+  height: 600px;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ENTRY LINE */
+#entryLine {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #22c55e;
+  top: 50%;
+  left: 0;
+  z-index: 10;
+  opacity: 0.9;
+}
+
+/* ENTRY LABEL */
+#entryLabel {
+  position: absolute;
+  right: 10px;
+  top: 48%;
+  background: #22c55e;
+  color: black;
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 6px;
+  z-index: 11;
+  font-weight: bold;
+}
+
+/* STOP LINE */
+#stopLine {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #ef4444;
+  left: 0;
+  z-index: 10;
+  opacity: 0.9;
+}
+
+/* STOP LABEL */
+#stopLabel {
+  position: absolute;
+  right: 10px;
+  background: #ef4444;
+  color: white;
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 6px;
+  z-index: 11;
+  font-weight: bold;
+}
+
+/* BREAKOUT ZONE */
+#breakoutZone {
+  position: absolute;
+  width: 100%;
+  height: 40px;
+  background: rgba(56, 189, 248, 0.2);
+  border-top: 2px solid #38bdf8;
+  border-bottom: 2px solid #38bdf8;
+  z-index: 5;
+}
+
+/* RISK (RED) */
+#riskBox {
+  position: absolute;
+  width: 100%;
+  background: rgba(239, 68, 68, 0.25);
+  z-index: 4;
+}
+
+/* REWARD (GREEN) */
+#rewardBox {
+  position: absolute;
+  width: 100%;
+  background: rgba(34, 197, 94, 0.25);
+  z-index: 4;
+}
+
+/* RR LABEL */
+#rrLabel {
+  position: absolute;
+  right: 10px;
+  background: #020617;
+  color: white;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  z-index: 12;
+  border: 1px solid #1e293b;
+}

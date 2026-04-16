@@ -100,7 +100,7 @@
       </div>
 
       <p>
-        Data-driven breakout trading system designed to identify high-probability opportunities before they run.
+        Data-driven breakout trading system designed to analyse and track breakout setups using structured market data
       </p>
     </div>
 
@@ -112,6 +112,7 @@
       <a href="dashboard.html">My Dashboard</a>
       <a href="pricing.html">Pricing</a>
       <a href="disclaimer.html">Disclaimer</a>
+      <a href="about.html">About</a>
     </div>
 
     <div class="footer-col">
@@ -119,6 +120,7 @@
       <a href="trading-guide.html">Trading Guide</a>
       <a href="faq.html">FAQ</a>
       <a href="support.html">Support</a>
+      <a href="privacy.html">Privacy Policy</a>
     </div>
 
     <div class="footer-col">
@@ -151,6 +153,20 @@
   </div>
 
 </div>
+
+<script>
+  const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
+
+  document.querySelectorAll(".nav-cta").forEach(btn => {
+    if (isLoggedIn) {
+      btn.innerText = "Dashboard";
+      btn.href = "dashboard.html";
+    } else {
+      btn.innerText = "Unlock";
+      btn.href = "pricing.html";
+    }
+  });
+</script>
 
 </body>
 </html>
