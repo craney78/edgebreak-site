@@ -29,15 +29,7 @@
     <div id="rrLabel" style="display:none;"></div>
   </div>
 
-<div class="footer">
-  Data-driven breakout system • Not financial advice
-</div>
-
-    <!-- ENTRY OVERLAY -->
-    <div id="entryLine" style="display:none;"></div>
-    <div id="entryLabel" style="display:none;"></div>
-  </div>
-
+    
   <div class="footer">
     Data-driven breakout system • Not financial advice
   </div>
@@ -46,54 +38,6 @@
   <script src="https://s3.tradingview.com/tv.js"></script>
 
   <script>
-    // =========================
-    // GET URL PARAMETERS
-    // =========================
-    const params = new URLSearchParams(window.location.search);
-    let symbol = params.get("symbol");
-    let entry = params.get("entry");
-
-    if (!symbol) symbol = "AAPL";
-
-    // Update header
-    document.getElementById("symbolText").innerText = symbol;
-
-    // =========================
-    // LOAD CHART
-    // =========================
-    new TradingView.widget({
-      "width": "100%",
-      "height": 600,
-      "symbol": "NASDAQ:" + symbol,
-      "interval": "D",
-      "timezone": "Australia/Sydney",
-      "theme": "dark",
-      "style": "1",
-      "locale": "en",
-      "toolbar_bg": "#020617",
-      "enable_publishing": false,
-      "hide_side_toolbar": false,
-      "allow_symbol_change": false,
-      "container_id": "tradingview_chart"
-    });
-
-    const params = new URLSearchParams(window.location.search);
-let symbol = params.get("symbol");
-
-if (!symbol) symbol = "AAPL";
-
-// Load chart
-new TradingView.widget({
-  "width": "100%",
-  "height": 600,
-  "symbol": "NASDAQ:" + symbol,
-  "interval": "D",
-  "timezone": "Australia/Sydney",
-  "theme": "dark",
-  "style": "1",
-  "container_id": "tradingview_chart"
-});
-
 
 // =========================
 // ENTRY + STOP LOGIC HERE 👇
@@ -204,30 +148,6 @@ if (entry) {
         rrLabel.innerText = "R:R " + rr + "x";
         }
 
-    // =========================
-    // ENTRY DISPLAY
-    // =========================
-    if (entry) {
-      const line = document.getElementById("entryLine");
-      const label = document.getElementById("entryLabel");
-
-      const entryPrice = parseFloat(entry);
-
-      // Simulated price range
-      const minPrice = entryPrice * 0.8;
-      const maxPrice = entryPrice * 1.2;
-
-      // Calculate vertical position
-      const position = ((maxPrice - entryPrice) / (maxPrice - minPrice)) * 100;
-
-      line.style.display = "block";
-      label.style.display = "block";
-
-      line.style.top = position + "%";
-      label.style.top = (position - 2) + "%";
-
-      label.innerText = "Entry: $" + entry;
-      }
   </script>
 
 </body>
