@@ -44,63 +44,82 @@
   </div>
 
   <!-- TERMS CONTENT -->
-  <div class="section" style="max-width:800px; margin:auto; line-height:1.8; color:#94a3b8;">
+<div class="section" style="max-width:800px; margin:auto; line-height:1.8; color:#94a3b8;">
 
-    <h3>1. Overview</h3>
-    <p>
-      EdgeBreak is a subscription-based software platform operated by Crane Platform Labs (ABN 41 946 218 773).
-      By accessing or using this website and its services, you agree to be bound by these Terms of Service.
-    </p>
+  <h3>1. Overview</h3>
+  <p>
+    EdgeBreak is a subscription-based software platform operated by Crane Platform Labs (ABN 41 946 218 773).
+    By accessing or using this website and its services, you agree to be bound by these Terms of Service.
+  </p>
 
-    <h3>2. Nature of Service</h3>
-    <p>
-      EdgeBreak provides data-driven trading insights, analytics, and performance tracking tools.
-      The platform is designed to assist users in making informed decisions but does not provide financial advice.
-    </p>
+  <h3>2. Nature of Service</h3>
+  <p>
+    EdgeBreak provides data-driven market analysis tools, including breakout identification, performance tracking, 
+    and structured trading insights. The platform is designed to support users in developing their own approach 
+    to trading and does not execute trades or manage funds.
+  </p>
 
-    <h3>3. Not Financial Advice</h3>
-    <p>
-      All content provided by EdgeBreak is for informational and educational purposes only.
-      We do not provide personal financial advice, investment recommendations, or guarantees of performance.
-      Users are solely responsible for their own trading decisions.
-    </p>
+  <h3>3. Not Financial Advice</h3>
+  <p>
+    All content provided by EdgeBreak is for informational and educational purposes only.
+    Nothing on this platform constitutes financial, investment, or trading advice.
+    Users should seek independent financial advice where appropriate.
+    All decisions made based on the platform are the sole responsibility of the user.
+  </p>
 
-    <h3>4. Subscription & Billing</h3>
-    <p>
-      Access to EdgeBreak is provided through a recurring subscription.
-      By subscribing, you agree to pay all applicable fees.
-      Subscriptions renew automatically unless cancelled prior to the next billing cycle.
-    </p>
+  <h3>4. No Guarantees</h3>
+  <p>
+    EdgeBreak does not guarantee any specific outcomes or performance results.
+    Trading involves risk, and past performance is not indicative of future results.
+  </p>
 
-    <h3>5. Cancellations & Refunds</h3>
-    <p>
-      You may cancel your subscription at any time through Stripe or by contacting us.
-      No refunds are provided for partial billing periods unless required by law.
-    </p>
+  <h3>5. Subscription & Billing</h3>
+  <p>
+    Access to EdgeBreak is provided through a recurring subscription.
+    By subscribing, you agree to pay all applicable fees.
+    Subscriptions renew automatically unless cancelled prior to the next billing cycle.
+  </p>
 
-    <h3>6. User Responsibilities</h3>
-    <p>
-      Users agree to use the platform responsibly and not misuse, copy, distribute, or attempt to reverse engineer any part of the system.
-    </p>
+  <h3>6. Cancellations & Refunds</h3>
+  <p>
+    You may cancel your subscription at any time through Stripe or by contacting us.
+    No refunds are provided for partial billing periods unless required by applicable law.
+  </p>
 
-    <h3>7. Limitation of Liability</h3>
-    <p>
-      Crane Platform Labs is not liable for any financial losses, damages, or outcomes resulting from the use of EdgeBreak.
-      Trading involves risk, and past performance is not indicative of future results.
-    </p>
+  <h3>7. User Responsibilities</h3>
+  <p>
+    Users agree to use the platform responsibly and not misuse, copy, distribute, or attempt to reverse engineer 
+    any part of the system. You are responsible for ensuring your use of the platform complies with applicable laws.
+  </p>
 
-    <h3>8. Changes to Terms</h3>
-    <p>
-      We reserve the right to update these Terms at any time.
-      Continued use of the service constitutes acceptance of any changes.
-    </p>
+  <h3>8. Limitation of Liability</h3>
+  <p>
+    To the maximum extent permitted by law, Crane Platform Labs is not liable for any direct, indirect, incidental, 
+    or consequential loss or damage arising from the use of EdgeBreak, including financial losses resulting from trading decisions.
+  </p>
 
-    <h3>9. Contact</h3>
-    <p>
-      For any questions, contact: support@edgebreak.ai
-    </p>
+  <h3>9. Service Availability</h3>
+  <p>
+    We do not guarantee uninterrupted access to the platform. The service may be modified, suspended, or discontinued 
+    at any time without prior notice.
+  </p>
 
-  </div>
+  <h3>10. Changes to Terms</h3>
+  <p>
+    We reserve the right to update these Terms at any time. Continued use of the service constitutes acceptance of any changes.
+  </p>
+
+  <h3>11. Governing Law</h3>
+  <p>
+    These Terms are governed by the laws of New South Wales, Australia. 
+    Users accessing the platform from other jurisdictions do so at their own initiative and are responsible for compliance 
+    with local laws where applicable.
+  </p>
+
+  <h3>12. Contact</h3>
+  <p>
+    For any questions, contact: <strong>support@edgebreak.ai</strong>
+  </p>
 
 </div>
 
@@ -129,6 +148,7 @@
       <a href="pricing.html">Pricing</a>
       <a href="disclaimer.html">Disclaimer</a>
       <a href="terms.html">Terms of Service</a>
+      <a href="about.html">About</a>
     </div>
 
     <div class="footer-col">
@@ -136,6 +156,7 @@
       <a href="trading-guide.html">Trading Guide</a>
       <a href="faq.html">FAQ</a>
       <a href="support.html">Support</a>
+      <a href="privacy.html">Privacy Policy</a>
     </div>
 
     <div class="footer-col">
@@ -166,6 +187,20 @@
   </div>
 
 </div>
+
+<script>
+  const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
+
+  document.querySelectorAll(".nav-cta").forEach(btn => {
+    if (isLoggedIn) {
+      btn.innerText = "Dashboard";
+      btn.href = "dashboard.html";
+    } else {
+      btn.innerText = "Unlock";
+      btn.href = "pricing.html";
+    }
+  });
+</script>
 
 </body>
 </html>
