@@ -37,20 +37,46 @@
   <!-- TradingView -->
   <script src="https://s3.tradingview.com/tv.js"></script>
 
-  <script>
+<script>
+// =========================
+// URL PARAMS (MISSING BEFORE)
+// =========================
+const params = new URLSearchParams(window.location.search);
 
-// =========================
-// ENTRY + STOP LOGIC HERE 👇
-// =========================
+let symbol = params.get("symbol");
 const entry = params.get("entry");
 const stop = params.get("stop");
+const breakout = params.get("breakout");
+const target = params.get("target");
 
+if (!symbol) symbol = "AAPL";
+
+// Update header
+document.getElementById("symbolText").innerText = symbol;
+
+// =========================
+// LOAD CHART (YOU WERE MISSING THIS)
+// =========================
+new TradingView.widget({
+  "width": "100%",
+  "height": 600,
+  "symbol": "NASDAQ:" + symbol,
+  "interval": "D",
+  "timezone": "Australia/Sydney",
+  "theme": "dark",
+  "style": "1",
+  "container_id": "tradingview_chart"
+});
+
+
+// =========================
+// ENTRY + STOP
+// =========================
 if (entry) {
   const entryLine = document.getElementById("entryLine");
   const entryLabel = document.getElementById("entryLabel");
 
   const entryPrice = parseFloat(entry);
-
   const minPrice = entryPrice * 0.8;
   const maxPrice = entryPrice * 1.2;
 
@@ -64,13 +90,11 @@ if (entry) {
 
   entryLabel.innerText = "Entry: $" + entry;
 
-  // STOP LINE
   if (stop) {
     const stopLine = document.getElementById("stopLine");
     const stopLabel = document.getElementById("stopLabel");
 
     const stopPrice = parseFloat(stop);
-
     const stopPos = ((maxPrice - stopPrice) / (maxPrice - minPrice)) * 100;
 
     stopLine.style.display = "block";
@@ -81,74 +105,53 @@ if (entry) {
 
     stopLabel.innerText = "Stop: $" + stop;
   }
+
+  // =========================
+  // BREAKOUT ZONE
+  // =========================
+  if (breakout) {
+    const zone = document.getElementById("breakoutZone");
+    const breakoutPrice = parseFloat(breakout);
+
+    const breakoutPos = ((maxPrice - breakoutPrice) / (maxPrice - minPrice)) * 100;
+
+    zone.style.display = "block";
+    zone.style.top = (breakoutPos - 2) + "%";
+  }
+
+  // =========================
+  // RISK / REWARD
+  // =========================
+  if (stop && target) {
+    const riskBox = document.getElementById("riskBox");
+    const rewardBox = document.getElementById("rewardBox");
+    const rrLabel = document.getElementById("rrLabel");
+
+    const stopPrice = parseFloat(stop);
+    const targetPrice = parseFloat(target);
+
+    const stopPos = ((maxPrice - stopPrice) / (maxPrice - minPrice)) * 100;
+    const targetPos = ((maxPrice - targetPrice) / (maxPrice - minPrice)) * 100;
+
+    riskBox.style.display = "block";
+    rewardBox.style.display = "block";
+    rrLabel.style.display = "block";
+
+    riskBox.style.top = entryPos + "%";
+    riskBox.style.height = (stopPos - entryPos) + "%";
+
+    rewardBox.style.top = targetPos + "%";
+    rewardBox.style.height = (entryPos - targetPos) + "%";
+
+    const risk = Math.abs(entryPrice - stopPrice);
+    const reward = Math.abs(targetPrice - entryPrice);
+    const rr = (reward / risk).toFixed(2);
+
+    rrLabel.style.top = (entryPos - 3) + "%";
+    rrLabel.innerText = "R:R " + rr + "x";
+  }
 }
-    // =========================
-    // BREAKOUT ZONE
-    // =========================
-    const breakout = params.get("breakout");
-
-    if (entry && breakout) {
-      const zone = document.getElementById("breakoutZone");
-
-      const entryPrice = parseFloat(entry);
-      const breakoutPrice = parseFloat(breakout);
-
-      const minPrice = entryPrice * 0.8;
-      const maxPrice = entryPrice * 1.2;
-
-      const breakoutPos = ((maxPrice - breakoutPrice) / (maxPrice - minPrice)) * 100;
-
-      zone.style.display = "block";
-
-      zone.style.top = (breakoutPos - 2) + "%";
-      }
-
-
-      // =========================
-      // RISK / REWARD BOX
-      // =========================
-      const target = params.get("target");
-
-      if (entry && stop && target) {
-        const riskBox = document.getElementById("riskBox");
-        const rewardBox = document.getElementById("rewardBox");
-        const rrLabel = document.getElementById("rrLabel");
-
-        const entryPrice = parseFloat(entry);
-        const stopPrice = parseFloat(stop);
-        const targetPrice = parseFloat(target);
-
-        const minPrice = entryPrice * 0.8;
-        const maxPrice = entryPrice * 1.2;
-
-        // Calculate positions
-        const entryPos = ((maxPrice - entryPrice) / (maxPrice - minPrice)) * 100;
-        const stopPos = ((maxPrice - stopPrice) / (maxPrice - minPrice)) * 100;
-        const targetPos = ((maxPrice - targetPrice) / (maxPrice - minPrice)) * 100;
-
-        // Show boxes
-        riskBox.style.display = "block";
-        rewardBox.style.display = "block";
-        rrLabel.style.display = "block";
-
-        // 🔴 RISK (entry → stop)
-        riskBox.style.top = entryPos + "%";
-        riskBox.style.height = (stopPos - entryPos) + "%";
-
-        // 🟢 REWARD (target → entry)
-        rewardBox.style.top = targetPos + "%";
-        rewardBox.style.height = (entryPos - targetPos) + "%";
-
-        // 📊 R:R calculation
-        const risk = Math.abs(entryPrice - stopPrice);
-        const reward = Math.abs(targetPrice - entryPrice);
-        const rr = (reward / risk).toFixed(2);
-
-        rrLabel.style.top = (entryPos - 3) + "%";
-        rrLabel.innerText = "R:R " + rr + "x";
-        }
-
-  </script>
+</script>
 
 </body>
 </html>
