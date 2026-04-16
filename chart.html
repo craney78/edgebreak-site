@@ -41,6 +41,15 @@
   </h1>
 </div>
 
+<div class="chart-search">
+  <input 
+    type="text" 
+    id="tickerInput" 
+    placeholder="Enter ticker (e.g. TSLA)"
+  >
+  <button onclick="loadTicker()">Load</button>
+</div>
+
     <div class="section trading-desk-section">
 
   <div class="chart-container">
@@ -154,6 +163,7 @@ if (!symbol) symbol = "AAPL";
 
 // Update header
 document.getElementById("symbolText").innerText = symbol;
+document.getElementById("tickerInput").value = symbol;
 
 // =========================
 // LOAD CHART (YOU WERE MISSING THIS)
@@ -252,6 +262,21 @@ if (entry) {
     rrLabel.innerText = "R:R " + rr + "x";
   }
 }
+
+function loadTicker() {
+  const input = document.getElementById("tickerInput").value.trim().toUpperCase();
+
+  if (!input) return;
+
+  window.location.href = `chart.html?symbol=${input}`;
+}
+
+document.getElementById("tickerInput").addEventListener("keypress", function(e) {
+  if (e.key === "Enter") {
+    loadTicker();
+  }
+});
+
 </script>
 
 </body>
