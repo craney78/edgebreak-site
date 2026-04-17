@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <!-- HEADER -->
 <div class="header">
 
-  <img src="/images/logo.png" class="hero-logo">
+  <img src="images/logo.png" class="hero-logo">
 
   <h1>Trading Desk</h1>
 
@@ -459,57 +459,54 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================
   // 🔔 TODAY ACTIVITY
   // =========================
-  fetch("/active_positions.json?v=" + Date.now())
-    .then(res => res.json())
-    .then(data => {
+  fetch("/activity.json?v=" + Date.now())
+  .then(res => res.json())
+  .then(data => {
 
-    // your existing code stays here
+    if (!Array.isArray(data)) data = [];
 
-    })
-    .catch(() => {
-      console.log("Failed to load active positions");
-    });
+    let open = 0;
+    let closed = 0;
 
-      if (!Array.isArray(data)) data = [];
+    const html = data.slice(-5).reverse().map(a => {
 
-      let open = 0;
-      let closed = 0;
+      if (a.type === "OPEN") {
+        open++;
+        return `<div class="green">🟢 ${a.symbol}</div>`;
+      }
 
-      const html = data.slice(-5).reverse().map(a => {
+      if (a.type === "CLOSED") {
+        closed++;
+        const result = a.result ?? a.percent_move ?? 0;
+        const color = result >= 0 ? "#22c55e" : "#ef4444";
 
-        if (a.type === "OPEN") {
-          open++;
-          return `<div class="green">🟢 ${a.symbol}</div>`;
-        }
+        return `
+          <div>
+            🔴 ${a.symbol}
+            <span style="color:${color}; font-weight:bold;">
+              ${result.toFixed(2)}%
+            </span>
+          </div>
+        `;
+      }
 
-        if (a.type === "CLOSED") {
-          closed++;
-          const result = a.result ?? a.percent_move ?? 0;
-          const color = result >= 0 ? "#22c55e" : "#ef4444";
+      return "";
 
-          return `
-            <div>
-              🔴 ${a.symbol}
-              <span style="color:${color}; font-weight:bold;">
-                ${result.toFixed(2)}%
-              </span>
-            </div>
-          `;
-        }
+    }).join("");
 
-        return "";
+    document.getElementById("todayOpen").innerText = open;
+    document.getElementById("todayClosed").innerText = closed;
 
-      }).join("");
+    document.getElementById("todayActivity").innerHTML = html || `
+      <div style="color:#94a3b8; font-size:13px;">
+        No trades triggered yet today
+      </div>
+    `;
 
-      document.getElementById("todayOpen").innerText = open;
-      document.getElementById("todayClosed").innerText = closed;
-
-      document.getElementById("todayActivity").innerHTML = html || `
-        <div style="color:#94a3b8; font-size:13px;">
-          No trades triggered yet today
-        </div>
-      `;
-    });
+  })
+  .catch(() => {
+    console.log("Failed to load activity");
+  });
 
   // =========================
   // 📊 LIVE TRADES + BREAKDOWN
@@ -559,14 +556,23 @@ document.addEventListener("DOMContentLoaded", function () {
         return `
           <div class="box" onclick="loadChart('${t.symbol}')">
             <div style="display:flex; justify-content:space-between;">
-              <strong>${t.symbol}</strong>
+      
+              <strong 
+                style="cursor:pointer;"
+                onclick="window.location.href='chart.html?symbol=${t.symbol}'"
+              >
+                ${t.symbol}
+              </strong>
+
               <span style="color:${color}; font-weight:bold;">
                 ${change.toFixed(2)}%
               </span>
             </div>
+
             <div style="font-size:13px; color:#94a3b8;">
               Entry: $${t.entry_price ?? "-"} | Now: $${t.current_price ?? "-"}
             </div>
+
             <div style="font-size:12px; color:#64748b;">
               ${t.days_held ?? 0} days
             </div>
@@ -1036,27 +1042,15 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 
-</script>
 
-<script>
+
+
 function toggleMenu() {
   const menu = document.getElementById("mobileMenu");
   menu.classList.toggle("active");
 }
-</script>
 
-<script>
-const isPremium = true;
 
-const paywall = document.getElementById("paywall");
-
-if (paywall) {
-  if (isPremium) {
-    paywall.style.display = "none";
-  } else {
-    document.body.classList.add("locked");
-  }
-}
 
 
   const logoutBtn = document.getElementById("logoutBtn");
@@ -1067,7 +1061,8 @@ if (paywall) {
       window.location.href = "index.html";
     });
   }
- 
+
+
 
   const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
 
