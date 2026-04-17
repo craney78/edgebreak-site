@@ -250,7 +250,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   <h3 style="margin-bottom:15px;">Portfolio Growth</h3>
 
-  <canvas id="equityChart" height="100"></canvas>
+  <div style="height:300px;">
+    <canvas id="equityChart"></canvas>
+  </div>
 
   <div style="font-size:12px; color:#64748b; margin-top:8px;">
   * Based on completed trades only. Open trades not included. Not financial advice.
@@ -1009,13 +1011,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const bestMove = parseFloat(best.percent_move ?? best.result ?? 0);
 
     document.getElementById("bestTrade").innerHTML = `
-      <div style="font-size:22px; font-weight:bold; color:#22c55e;">
-        ${best.symbol}
-      </div>
-      <div style="font-size:14px; color:#94a3b8;">
-        +${bestMove.toFixed(2)}%
-      </div>
-    `;
+  <div style="font-size:22px; font-weight:bold; color:#22c55e;">
+    ${best.symbol}
+  </div>
+  <div style="font-size:14px; color:#94a3b8;">
+    +${bestMove.toFixed(2)}%
+  </div>
+`;
 
     // =========================
     // 📈 PERFORMANCE BAR
@@ -1033,14 +1035,16 @@ document.addEventListener("DOMContentLoaded", function () {
     if (avg < 0) bar.style.background = "#ef4444";
     else if (avg < 5) bar.style.background = "#f59e0b";
     else bar.style.background = "#22c55e";
-  
-  })
 
-  .catch(err => {
-    console.error("STATS ERROR:", err);
-  });
+    }) // ← KEEP THIS
 
+    .catch(err => {   // ← THIS WAS MISSING/BROKEN
+      console.error("STATS ERROR:", err);
+    });
 
+    });   <!-- ✅ THIS IS THE FIX -->
+
+</script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -1053,8 +1057,6 @@ document.addEventListener("DOMContentLoaded", function () {
       window.location.href = "index.html";
     });
   }
-
-<script>
 
   const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
 
@@ -1071,9 +1073,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 });
-
-<script>
-
 </script>
 
 </body>
