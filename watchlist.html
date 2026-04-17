@@ -11,7 +11,7 @@
 
 </head>
 
-<body>
+<body style="background:#020617;">
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -45,8 +45,8 @@ document.addEventListener("DOMContentLoaded", function () {
 </div>
 </div>
 
-<div class="container">
 
+<div class="container">
 <!-- HEADER -->
 <div class="header">
 
@@ -252,13 +252,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   <canvas id="equityChart" height="100"></canvas>
 
+  <div style="font-size:12px; color:#64748b; margin-top:8px;">
+  * Based on completed trades only. Open trades not included. Not financial advice.
 </div>
 
-  <div style="font-size:12px; color:#64748b; margin-top:8px;">
-    * Based on completed trades only. Open trades not included. Not financial advice.
-  </div>
+</div>
 
-
+  
 
 <div class="section">
 
@@ -318,8 +318,7 @@ document.addEventListener("DOMContentLoaded", function () {
   </div>
 
 </div>
-
-</div>  <!-- CLOSE container -->
+</div>
 <!-- FOOTER -->
 <div class="footer">
 
@@ -1043,15 +1042,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
-
-function toggleMenu() {
-  const menu = document.getElementById("mobileMenu");
-  menu.classList.toggle("active");
-}
-
-
-
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
   const logoutBtn = document.getElementById("logoutBtn");
 
@@ -1062,7 +1054,7 @@ function toggleMenu() {
     });
   }
 
-
+<script>
 
   const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
 
@@ -1077,6 +1069,11 @@ function toggleMenu() {
       navCta.href = "pricing.html";
     }
   }
+
+});
+
+<script>
+
 </script>
 
 </body>
