@@ -14,9 +14,11 @@
 <body>
 
 <script>
+document.addEventListener("DOMContentLoaded", function () {
   if (localStorage.getItem("edgebreak_access") !== "true") {
     window.location.href = "pricing.html";
   }
+});
 </script>
 
 <!-- NAVBAR -->
@@ -57,8 +59,8 @@
   </p>
 
   <p style="font-size:12px; color:#64748b; margin-top:10px; max-width:600px;">
-Data is updated daily for analysis purposes. This platform provides information only and does not offer financial advice or trade execution.
-</p>
+    Data is updated daily for analysis purposes. This platform provides information only and does not offer financial advice or trade execution.
+  </p>
 
 </div>
 
@@ -144,7 +146,7 @@ Data is updated daily for analysis purposes. This platform provides information 
 <div class="performance-wrapper">
 
   <div class="performance-label">
-    System Performance
+    Framework Performance
   </div>
 
   <div class="performance-sub">
@@ -332,7 +334,7 @@ Data is updated daily for analysis purposes. This platform provides information 
       </div>
 
       <p>
-        Data-driven breakout trading system designed to analyse and track breakout setups using structured market data
+        Data-driven breakout trading framework designed to analyse and track breakout setups using structured market data
       </p>
 
     </div>
@@ -457,9 +459,16 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================
   // 🔔 TODAY ACTIVITY
   // =========================
-  fetch("/activity.json?v=" + Date.now())
+  fetch("/active_positions.json?v=" + Date.now())
     .then(res => res.json())
     .then(data => {
+
+    // your existing code stays here
+
+    })
+    .catch(() => {
+      console.log("Failed to load active positions");
+    });
 
       if (!Array.isArray(data)) data = [];
 
@@ -611,16 +620,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // =========================
 
     // combine ALL trades for performance
-    const all = [
-      ...history.map(t => ({
-        percent_move: t.percent_move ?? t.result ?? 0,
-        symbol: t.symbol
-      })),
-      ...active.map(t => ({
-        percent_move: t.change_percent ?? 0,
-        symbol: t.symbol
-      }))
-    ];
+    const all = history.map(t => ({
+      percent_move: t.percent_move ?? t.result ?? 0,
+      symbol: t.symbol
+    }));
 
     // =========================
     // 📊 CALCULATIONS
@@ -971,7 +974,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         return `
           <div style="font-size:14px; margin-bottom:6px;">
-            <strong>${t.symbol}</strong>
+            <strong 
+              style="cursor:pointer;"
+              onclick="window.location.href='chart.html?symbol=${t.symbol}'"
+            >
+              ${t.symbol}
+            </strong>
             <span style="color:${color}; float:right;">
               ${move.toFixed(2)}%
             </span>
@@ -1040,15 +1048,17 @@ function toggleMenu() {
 <script>
 const isPremium = true;
 
-if (isPremium) {
-  document.getElementById("paywall").style.display = "none";
+const paywall = document.getElementById("paywall");
+
+if (paywall) {
+  if (isPremium) {
+    paywall.style.display = "none";
+  } else {
+    document.body.classList.add("locked");
+  }
 }
 
-if (!isPremium) {
-  document.body.classList.add("locked");
-}
 
-<script>
   const logoutBtn = document.getElementById("logoutBtn");
 
   if (logoutBtn) {
@@ -1058,22 +1068,20 @@ if (!isPremium) {
     });
   }
  
-</script>
 
-</script>
-
-<script>
   const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
 
-  document.querySelectorAll(".nav-cta").forEach(btn => {
+  const navCta = document.querySelector(".nav .nav-cta");
+
+  if (navCta) {
     if (isLoggedIn) {
-      btn.innerText = "Dashboard";
-      btn.href = "dashboard.html";
+      navCta.innerText = "Dashboard";
+      navCta.href = "dashboard.html";
     } else {
-      btn.innerText = "Unlock";
-      btn.href = "pricing.html";
+      navCta.innerText = "Unlock";
+      navCta.href = "pricing.html";
     }
-  });
+  }
 </script>
 
 </body>
