@@ -1948,3 +1948,32 @@ footer {
   margin-bottom: 15px;
   border: 1px solid #1e293b;
 }
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.feature-card {
+  text-align: center;
+}
+
+.feature-img {
+  width: 100%;
+  border-radius: 10px;
+  border: 2px solid #1e293b;
+  margin-bottom: 15px;
+}
+
+.feature-sub {
+  color: #64748b;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+@media (max-width: 768px) {
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
