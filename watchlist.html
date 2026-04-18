@@ -1019,21 +1019,26 @@ document.addEventListener("DOMContentLoaded", function () {
   </div>
 `;
 
+   
     // =========================
-    // 📈 PERFORMANCE BAR (STRICT RULES)
+    // 📈 PERFORMANCE BAR (ORIGINAL)
     // =========================
     const bar = document.getElementById("winBar");
 
-    // use true 0–100 value
-    let score = win;
+    let width = 0;
+
+    // original scaling
+    if (avg <= 0) width = 0;
+    else if (avg >= 10) width = 100;
+    else width = (avg / 10) * 100;
 
     // apply width
-    bar.style.width = score + "%";
+    bar.style.width = width + "%";
 
-    // 🎨 EXACT COLOR RULES
-    if (score <= 10) {
+    // original color logic
+    if (avg < 0) {
       bar.style.background = "#ef4444"; // red
-    } else if (score <= 70) {
+    } else if (avg < 5) {
       bar.style.background = "#f59e0b"; // yellow
     } else {
       bar.style.background = "#22c55e"; // green
