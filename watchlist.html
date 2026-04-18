@@ -1020,34 +1020,40 @@ document.addEventListener("DOMContentLoaded", function () {
 `;
 
     // =========================
-    // 📈 PERFORMANCE BAR
+    // 📈 PERFORMANCE BAR (FINAL)
     // =========================
     const bar = document.getElementById("winBar");
 
-    let width = 0;
+    // convert avg return → performance score
+    let score = avg * 2; // adjust if needed
 
-    if (avg <= 0) width = 0;
-    else if (avg >= 10) width = 100;
-    else width = (avg / 10) * 100;
+    // clamp between 0–100
+    score = Math.max(0, Math.min(score, 100));
 
-    bar.style.width = width + "%";
+    // apply width
+    bar.style.width = score + "%";
 
-    if (avg < 0) bar.style.background = "#ef4444";
-    else if (avg < 5) bar.style.background = "#f59e0b";
-    else bar.style.background = "#22c55e";
+    // 🎨 COLOR LOGIC
+    if (score <= 10) {
+      bar.style.background = "#ef4444"; // red
+    } else if (score <= 70) {
+      bar.style.background = "#f59e0b"; // yellow
+    } else {
+      bar.style.background = "#22c55e"; // green
+    }
 
-    }) // ← KEEP THIS
+    }) // closes .then()
 
-    .catch(err => {   // ← THIS WAS MISSING/BROKEN
+    .catch(err => {
       console.error("STATS ERROR:", err);
     });
 
-    });   <!-- ✅ THIS IS THE FIX -->
+    }); // ✅ closes MAIN DOMContentLoaded
 
 </script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+
 
   const logoutBtn = document.getElementById("logoutBtn");
 
