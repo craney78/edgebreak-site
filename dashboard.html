@@ -16,12 +16,11 @@
 
 <body>
 
+<!-- 🔐 LOGIN CHECK (DASHBOARD LOCK) -->
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  if (localStorage.getItem("edgebreak_access") !== "true") {
-    window.location.href = "login.html";
-  }
-});
+if (!localStorage.getItem("edgebreak_user")) {
+  window.location.href = "pricing.html";
+}
 </script>
 
 <!-- NAVBAR -->
@@ -775,6 +774,27 @@ document.getElementById("compounding").addEventListener("change", renderUserChar
       btn.href = "pricing.html";
     }
   });
+
+// =========================
+// 🔐 NAV LOGIN STATE (DASHBOARD)
+// =========================
+const user = localStorage.getItem("edgebreak_user");
+const navBtn = document.querySelector(".nav-cta");
+
+if (navBtn) {
+  if (user) {
+    navBtn.innerText = "Logout";
+    navBtn.href = "#";
+    navBtn.onclick = function () {
+      localStorage.removeItem("edgebreak_user");
+      window.location.href = "index.html";
+    };
+  } else {
+    navBtn.innerText = "Login";
+    navBtn.href = "login.html";
+  }
+}
+
 </script>
 
 </body>
