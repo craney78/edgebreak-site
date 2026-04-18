@@ -1097,21 +1097,7 @@ if (!isLoggedIn && lockedContent) {
       window.location.href = "index.html";
     });
   }
-
-  const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
-
-  const navCta = document.querySelector(".nav .nav-cta");
-
-  if (navCta) {
-    if (isLoggedIn) {
-      navCta.innerText = "Dashboard";
-      navCta.href = "dashboard.html";
-    } else {
-      navCta.innerText = "Unlock";
-      navCta.href = "pricing.html";
-    }
-  }
-
+  
 // =========================
 // 🔐 NAV LOGIN STATE
 // =========================
