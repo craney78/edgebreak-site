@@ -1020,20 +1020,17 @@ document.addEventListener("DOMContentLoaded", function () {
 `;
 
     // =========================
-    // 📈 PERFORMANCE BAR (FINAL)
+    // 📈 PERFORMANCE BAR (STRICT RULES)
     // =========================
     const bar = document.getElementById("winBar");
 
-    // convert avg return → performance score
-    let score = avg * 2; // adjust if needed
-
-    // clamp between 0–100
-    score = Math.max(0, Math.min(score, 100));
+    // use true 0–100 value
+    let score = win;
 
     // apply width
     bar.style.width = score + "%";
 
-    // 🎨 COLOR LOGIC
+    // 🎨 EXACT COLOR RULES
     if (score <= 10) {
       bar.style.background = "#ef4444"; // red
     } else if (score <= 70) {
