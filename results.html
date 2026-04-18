@@ -179,6 +179,18 @@ function showBestTrades(data){
   document.getElementById("bestTrades").innerHTML = html;
 }
 
+const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
+
+document.querySelectorAll(".nav-cta").forEach(btn => {
+  if (isLoggedIn) {
+    btn.innerText = "Dashboard";
+    btn.href = "dashboard.html";
+  } else {
+    btn.innerText = "Unlock";
+    btn.href = "pricing.html";
+  }
+});
+
 </script>
 
 </body>
