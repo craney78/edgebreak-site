@@ -1021,21 +1021,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
    
     // =========================
-    // 📈 PERFORMANCE BAR (ORIGINAL)
+    // 📈 PERFORMANCE BAR (YOUR RULES)
     // =========================
     const bar = document.getElementById("winBar");
 
     let width = 0;
 
-    // original scaling
-    if (avg <= 0) width = 0;
-    else if (avg >= 10) width = 100;
-    else width = (avg / 10) * 100;
+    // WIDTH LOGIC
+    if (avg <= 0) {
+      width = 0;
+    } else if (avg >= 5) {
+      width = 100;
+    } else {
+      width = (avg / 5) * 100;
+    }
 
-    // apply width
+    // APPLY WIDTH
     bar.style.width = width + "%";
 
-    // original color logic
+    // COLOR LOGIC
     if (avg < 0) {
       bar.style.background = "#ef4444"; // red
     } else if (avg < 5) {
