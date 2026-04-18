@@ -1,37 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Login - EdgeBreak</title>
-<link rel="stylesheet" href="css/dashboard.css">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
+  <title>Login | EdgeBreak</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body>
+<body style="background:#020617; color:white; display:flex; align-items:center; justify-content:center; height:100vh;">
 
-<!-- LOGO BAR -->
-<div class="logo-bar">
-  <img src="images/logo.png" onclick="window.location.href='index.html'">
-</div>
+  <div style="text-align:center; max-width:300px; width:100%;">
+    
+    <h2 style="margin-bottom:20px;">Login</h2>
 
-<!-- LOGIN -->
-<div class="wrapper">
-  <div class="login-card">
+    <input id="email" type="text" placeholder="Email"
+      style="width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:none;">
 
-    <h2>Login</h2>
-    <p>Access your EdgeBreak dashboard</p>
+    <input id="password" type="password" placeholder="Password"
+      style="width:100%; padding:10px; margin-bottom:20px; border-radius:6px; border:none;">
 
-    <input type="text" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()"
+      style="width:100%; padding:10px; background:#22c55e; border:none; border-radius:6px; color:white;">
+      Login
+    </button>
 
-    <button onclick="login()">Login</button>
-
-    <div id="error" class="error"></div>
+    <p id="error" style="color:#ef4444; margin-top:10px;"></p>
 
   </div>
-</div>
 
 <script>
 function login() {
@@ -39,16 +32,16 @@ function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  // TEMP LOGIN
-  if (email === "test@test.com" && password === "1234") {
-    
-    localStorage.setItem("loggedIn", "true");
-    window.location.href = "index.html";
+  // SIMPLE TEST LOGIN (CHANGE LATER)
+  if (email === "admin" && password === "admin") {
+
+    localStorage.setItem("edgebreak_access", "true");
+
+    window.location.href = "watchlist.html";
 
   } else {
-    document.getElementById("error").innerText = "Invalid login details";
+    document.getElementById("error").innerText = "Invalid login";
   }
-
 }
 </script>
 
