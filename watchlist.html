@@ -434,13 +434,12 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("✅ PAGE RUNNING");
 
 // =========================
-// 🔐 PARTIAL LOCK (TRADING DESK)
+// 🔐 WATCHLIST LOCK (FINAL)
 // =========================
-const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
-
+const user = localStorage.getItem("edgebreak_user");
 const lockedContent = document.getElementById("lockedContent");
 
-if (!isLoggedIn && lockedContent) {
+if (!user && lockedContent) {
   lockedContent.innerHTML = `
     <div style="text-align:center; padding:60px;">
       <h3 style="color:white;">🔒 Locked</h3>
@@ -452,9 +451,9 @@ if (!isLoggedIn && lockedContent) {
       </button>
     </div>
   `;
-
-  return; // 🔥 THIS STOPS EVERYTHING ELSE
+  return;
 }
+
 
   // =========================
   // 🎬 NUMBER ANIMATION
@@ -1087,58 +1086,8 @@ if (!isLoggedIn && lockedContent) {
 </script>
 
 <script>
+   
 
-
-  const logoutBtn = document.getElementById("logoutBtn");
-
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", function () {
-      localStorage.removeItem("edgebreak_access");
-      window.location.href = "index.html";
-    });
-  }
-  
-// =========================
-// 🔐 NAV LOGIN STATE
-// =========================
-const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
-
-// find nav button (adjust selector if needed)
-const navButton = document.querySelector(".nav-cta");
-
-if (navButton) {
-  if (isLoggedIn) {
-    navButton.innerText = "Dashboard";
-    navButton.href = "dashboard.html";
-  } else {
-    navButton.innerText = "Login";
-    navButton.href = "login.html";
-  }
-}
-
-// =========================
-// 🔐 WATCHLIST LOCK (FINAL)
-// =========================
-const user = localStorage.getItem("edgebreak_user");
-const lockedContent = document.getElementById("lockedContent");
-
-if (!user && lockedContent) {
-
-  lockedContent.innerHTML = `
-    <div style="text-align:center; padding:60px;">
-      <h3 style="color:white;">🔒 Locked</h3>
-      <p style="color:#94a3b8;">
-        Unlock full Trading Desk access to view live positions and performance
-      </p>
-      <button onclick="window.location.href='login.html'" 
-        style="margin-top:15px; padding:10px 20px; background:#22c55e; border:none; border-radius:6px; color:white;">
-        Login to Unlock
-      </button>
-    </div>
-  `;
-
-  return; // 🔥 CRITICAL — stops rest of page rendering
-}
 
 </script>
 
