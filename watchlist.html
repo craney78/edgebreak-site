@@ -1089,7 +1089,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+// =========================
+// 🔐 NAV LOGIN STATE
+// =========================
+const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
 
+// find nav button (adjust selector if needed)
+const navButton = document.querySelector(".nav-cta");
+
+if (navButton) {
+  if (isLoggedIn) {
+    navButton.innerText = "Dashboard";
+    navButton.href = "dashboard.html";
+  } else {
+    navButton.innerText = "Login";
+    navButton.href = "login.html";
+  }
+}
 </script>
 
 </body>
