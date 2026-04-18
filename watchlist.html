@@ -37,7 +37,7 @@ if (!localStorage.getItem("edgebreak_user")) {
       <a href="watchlist.html" class="nav-link">Trading Desk</a>
       <a href="trading-guide.html" class="nav-link">Guide</a>
       <a href="dashboard.html" class="nav-link">My Dashboard</a>
-      <a href="#" id="logoutBtn" class="nav-cta">Logout</a>
+      <a href="login.html" class="nav-cta">Login</a>
     </div>
 
 </div>
@@ -1133,6 +1133,30 @@ if (navButton) {
   }
 }
 
+// =========================
+// 🔐 NAV LOGIN / LOGOUT BUTTON
+// =========================
+const user = localStorage.getItem("edgebreak_user");
+const navBtn = document.querySelector(".nav-cta");
+
+if (navBtn) {
+
+  if (user) {
+    navBtn.innerText = "Logout";
+    navBtn.href = "#";
+
+    navBtn.onclick = function (e) {
+      e.preventDefault();
+      localStorage.removeItem("edgebreak_user");
+      window.location.href = "index.html";
+    };
+
+  } else {
+    navBtn.innerText = "Login";
+    navBtn.href = "login.html";
+  }
+
+}
 
 </script>
 
