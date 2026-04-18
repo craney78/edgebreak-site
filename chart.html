@@ -296,33 +296,12 @@ document.getElementById("tickerInput").addEventListener("keypress", function(e) 
 });
 
 // =========================
-// 🔐 NAV LOGIN STATE (CHART)
+// 🔐 NAV LOGIN / LOGOUT
 // =========================
 const user = localStorage.getItem("edgebreak_user");
 const navBtn = document.querySelector(".nav-cta");
 
 if (navBtn) {
-  if (user) {
-    navBtn.innerText = "Logout";
-    navBtn.href = "#";
-    navBtn.onclick = function () {
-      localStorage.removeItem("edgebreak_user");
-      window.location.href = "index.html";
-    };
-  } else {
-    navBtn.innerText = "Login";
-    navBtn.href = "login.html";
-  }
-}
-
-// =========================
-// 🔐 NAV LOGIN / LOGOUT BUTTON
-// =========================
-const user = localStorage.getItem("edgebreak_user");
-const navBtn = document.querySelector(".nav-cta");
-
-if (navBtn) {
-
   if (user) {
     navBtn.innerText = "Logout";
     navBtn.href = "#";
@@ -337,20 +316,8 @@ if (navBtn) {
     navBtn.innerText = "Login";
     navBtn.href = "login.html";
   }
-
 }
-
-const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
-
-document.querySelectorAll(".nav-cta").forEach(btn => {
-  if (isLoggedIn) {
-    btn.innerText = "Dashboard";
-    btn.href = "dashboard.html";
-  } else {
-    btn.innerText = "Unlock";
-    btn.href = "pricing.html";
-  }
-});
+</script>
 
 </script>
 
