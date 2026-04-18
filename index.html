@@ -594,17 +594,28 @@ fetch("active_positions.json?v=" + new Date().getTime())
 </script>
 
 <script>
-  const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
+// =========================
+// 🔐 NAV LOGIN / LOGOUT
+// =========================
+const user = localStorage.getItem("edgebreak_user");
+const navBtn = document.querySelector(".nav-cta");
 
-  document.querySelectorAll(".nav-cta").forEach(btn => {
-    if (isLoggedIn) {
-      btn.innerText = "Dashboard";
-      btn.href = "dashboard.html";
-    } else {
-      btn.innerText = "Unlock";
-      btn.href = "pricing.html";
-    }
-  });
+if (navBtn) {
+  if (user) {
+    navBtn.innerText = "Logout";
+    navBtn.href = "#";
+
+    navBtn.onclick = function (e) {
+      e.preventDefault();
+      localStorage.removeItem("edgebreak_user");
+      window.location.href = "index.html";
+    };
+
+  } else {
+    navBtn.innerText = "Login";
+    navBtn.href = "login.html";
+  }
+}  
 </script>
 
 </body>
