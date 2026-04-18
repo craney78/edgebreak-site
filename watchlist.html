@@ -321,33 +321,7 @@
 
 </div>
 
-// =========================
-// 🔐 PARTIAL LOCK (TRADING DESK)
-// =========================
-const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
-
-const lockedContent = document.getElementById("lockedContent");
-
-if (!isLoggedIn && lockedContent) {
-  lockedContent.innerHTML = `
-    <div style="text-align:center; padding:60px;">
-      <h3 style="color:white;">🔒 Locked</h3>
-      <p style="color:#94a3b8;">
-        Unlock full Trading Desk access to view live positions and performance
-      </p>
-      <button onclick="window.location.href='login.html'" 
-        style="margin-top:15px; padding:10px 20px; background:#22c55e; border:none; border-radius:6px; color:white;">
-        Login to Unlock
-      </button>
-    </div>
-  `;
-}
-
-</script>
-
 </div>
-
-
 
 <!-- FOOTER -->
 <div class="footer">
@@ -455,6 +429,28 @@ function loadChart(symbol) {
 document.addEventListener("DOMContentLoaded", function () {
 
   console.log("✅ PAGE RUNNING");
+
+// =========================
+// 🔐 PARTIAL LOCK (TRADING DESK)
+// =========================
+const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
+
+const lockedContent = document.getElementById("lockedContent");
+
+if (!isLoggedIn && lockedContent) {
+  lockedContent.innerHTML = `
+    <div style="text-align:center; padding:60px;">
+      <h3 style="color:white;">🔒 Locked</h3>
+      <p style="color:#94a3b8;">
+        Unlock full Trading Desk access to view live positions and performance
+      </p>
+      <button onclick="window.location.href='login.html'" 
+        style="margin-top:15px; padding:10px 20px; background:#22c55e; border:none; border-radius:6px; color:white;">
+        Login to Unlock
+      </button>
+    </div>
+  `;
+}
 
   // =========================
   // 🎬 NUMBER ANIMATION
