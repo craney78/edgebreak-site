@@ -1137,41 +1137,28 @@ if (navButton) {
 }
 
 // =========================
-// 🔐 NAV LOGIN / LOGOUT BUTTON
+// 🔐 WATCHLIST LOCK (FINAL)
 // =========================
 const user = localStorage.getItem("edgebreak_user");
-const navBtn = document.querySelector(".nav-cta");
+const lockedContent = document.getElementById("lockedContent");
 
-if (navBtn) {
+if (!user && lockedContent) {
 
-  if (user) {
-    navBtn.innerText = "Logout";
-    navBtn.href = "#";
+  lockedContent.innerHTML = `
+    <div style="text-align:center; padding:60px;">
+      <h3 style="color:white;">🔒 Locked</h3>
+      <p style="color:#94a3b8;">
+        Unlock full Trading Desk access to view live positions and performance
+      </p>
+      <button onclick="window.location.href='login.html'" 
+        style="margin-top:15px; padding:10px 20px; background:#22c55e; border:none; border-radius:6px; color:white;">
+        Login to Unlock
+      </button>
+    </div>
+  `;
 
-    navBtn.onclick = function (e) {
-      e.preventDefault();
-      localStorage.removeItem("edgebreak_user");
-      window.location.href = "index.html";
-    };
-
-  } else {
-    navBtn.innerText = "Login";
-    navBtn.href = "login.html";
-  }
-
+  return; // 🔥 CRITICAL — stops rest of page rendering
 }
-
-const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
-
-document.querySelectorAll(".nav-cta").forEach(btn => {
-  if (isLoggedIn) {
-    btn.innerText = "Dashboard";
-    btn.href = "dashboard.html";
-  } else {
-    btn.innerText = "Unlock";
-    btn.href = "pricing.html";
-  }
-});
 
 </script>
 
