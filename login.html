@@ -7,6 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="css/dashboard.css">
+
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -36,8 +39,8 @@
     </div>
 
   </div>
-
 </div>  
+
 <div class="container">
 
   <div class="section" style="max-width:400px; margin:100px auto;">
@@ -61,14 +64,12 @@
   </div>
 
 </div>
+
 <!-- FOOTER -->
 <div class="footer" style="width:100%;">
-
   <div class="footer-inner">
 
-    <!-- LEFT (LOGO + BRAND) -->
     <div class="footer-col">
-      
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
         <img src="images/logo.png" style="width:40px; height:auto;">
         <h3 style="color:white; margin:0;">EdgeBreak</h3>
@@ -77,10 +78,8 @@
       <p>
         Data-driven breakout trading framework designed to analyse and track breakout setups using structured market data
       </p>
-
     </div>
 
-    <!-- LINKS -->
     <div class="footer-col">
       <h4>Product</h4>
       <a href="index.html#performance">Performance</a>
@@ -92,7 +91,6 @@
       <a href="about.html">About</a>
     </div>
 
-    <!-- RESOURCES -->
     <div class="footer-col">
       <h4>Resources</h4>
       <a href="trading-guide.html">Trading Guide</a>
@@ -102,7 +100,6 @@
       <a href="privacy.html">Privacy Policy</a>
     </div>
 
-    <!-- CTA -->
     <div class="footer-col">
       <h4>Get Access</h4>
       <p style="margin-bottom:10px;">
@@ -113,48 +110,71 @@
 
   </div>
 
-  <!-- BOTTOM BAR -->
   <div class="footer-bottom">
+    <p>© 2026 EdgeBreak • All rights reserved</p>
 
-  <!-- EDGEBREAK INFO -->
-  <p>© 2026 EdgeBreak • All rights reserved</p>
-
-  <p class="footer-disclaimer">
-    Not financial advice. Trading involves risk.
-  </p>
-
-  <!-- PARENT COMPANY -->
-  <div class="footer-parent-block">
-    <img src="images/crane-logo.png" alt="Crane Platform Labs" class="footer-logo">
-
-    <p class="footer-parent">
-      EdgeBreak is a product of <strong>Crane Platform Labs</strong><br>
-      ABN 41 946 218 773
+    <p class="footer-disclaimer">
+      Not financial advice. Trading involves risk.
     </p>
+
+    <div class="footer-parent-block">
+      <img src="images/crane-logo.png" alt="Crane Platform Labs" class="footer-logo">
+
+      <p class="footer-parent">
+        EdgeBreak is a product of <strong>Crane Platform Labs</strong><br>
+        ABN 41 946 218 773
+      </p>
+    </div>
   </div>
-
 </div>
 
-
-</div>
 <script>
-// =========================
-// 🔐 LOGIN FUNCTION
-// =========================
-function login() {
+
+// 🔑 ADD YOUR DETAILS HERE
+// 🔑 ADD YOUR DETAILS HERE
+// 🔑 ADD YOUR DETAILS HERE
+const supabase = window.supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+);
+
+// LOGIN
+async function login() {
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  if (email === "admin" && password === "admin") {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
 
-    localStorage.setItem("edgebreak_user", email);
-
-    window.location.href = "watchlist.html";
-
-  } else {
-    document.getElementById("error").innerText = "Invalid login";
+  if (error) {
+    document.getElementById("error").innerText = error.message;
+    return;
   }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("is_active")
+    .eq("id", data.user.id)
+    .single();
+
+  if (!profile || !profile.is_active) {
+    document.getElementById("error").innerText = "No active subscription";
+    return;
+  }
+
+  localStorage.setItem("edgebreak_user", email);
+  window.location.href = "watchlist.html";
+}
+
+// SIGNUP (optional use later)
+async function signup() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  await supabase.auth.signUp({ email, password });
 }
 
 // ENTER KEY SUPPORT
