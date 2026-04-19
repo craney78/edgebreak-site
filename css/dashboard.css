@@ -1823,12 +1823,14 @@ body {
 }
 
 /* =========================
-   📱 MOBILE OPTIMISATION (CLEAN)
+   📱 MOBILE OPTIMISATION (FINAL CLEAN)
 ========================= */
 
 @media (max-width: 768px) {
 
-  /* GLOBAL */
+  /* =========================
+     GLOBAL
+  ========================= */
   html, body {
     overflow-x: hidden;
     background: #020617;
@@ -1840,23 +1842,32 @@ body {
     box-sizing: border-box;
   }
 
-  /* NAV */
+  /* =========================
+     NAV (FIXED ISSUE)
+  ========================= */
   .nav-inner {
-    flex-direction: column;
+    flex-direction: row;                /* 🔥 FIX */
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    padding: 10px 15px;
   }
 
-  .nav-links .nav-cta,
-  .nav-links > button.nav-cta {
-    display: none !important;
+  .nav-links {
+    display: none;                     /* 🔥 remove clutter */
   }
 
   .nav-logo {
-    width: 30px;
+    width: 28px;
+    height: auto;
   }
 
-  /* HERO */
+  .nav-cta {
+    display: inline-block !important;  /* keep login/logout */
+  }
+
+  /* =========================
+     HERO
+  ========================= */
   .hero-logo {
     width: 90px !important;
   }
@@ -1879,16 +1890,20 @@ body {
     font-size: 18px;
   }
 
-  /* SECTIONS */
+  /* =========================
+     SECTIONS
+  ========================= */
   .section {
     max-width: 100%;
     padding: 20px 15px;
   }
 
-  /* GRIDS */
+  /* =========================
+     GRIDS (STACKED CLEAN)
+  ========================= */
   .feature-grid {
     grid-template-columns: 1fr !important;
-    gap: 40px;
+    gap: 50px;
   }
 
   .grid {
@@ -1905,7 +1920,9 @@ body {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* CHART */
+  /* =========================
+     CHART
+  ========================= */
   .chart-container {
     padding: 15px;
     margin-top: 15px;
@@ -1915,7 +1932,9 @@ body {
     height: 300px;
   }
 
-  /* FOOTER */
+  /* =========================
+     FOOTER
+  ========================= */
   .footer-inner {
     display: flex;
     flex-direction: column;
@@ -1941,7 +1960,9 @@ body {
     margin: 0 auto;
   }
 
-  /* BUTTONS */
+  /* =========================
+     BUTTONS
+  ========================= */
   .btn-primary,
   .nav-cta {
     padding: 14px 20px;
