@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { buffer } from "micro";
 import { createClient } from "@supabase/supabase-js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -16,44 +17,39 @@ export const config = {
 
 export default async function handler(req, res) {
 
-  const sig = req.headers["stripe-signature"];
-
   let event;
 
   try {
+    const sig = req.headers["stripe-signature"];
+    const buf = await buffer(req);
+
     event = stripe.webhooks.constructEvent(
-      req.body,
+      buf,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
+
   } catch (err) {
-    console.error("❌ Webhook signature error:", err.message);
+    console.error("❌ Signature error:", err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  console.log("✅ EVENT RECEIVED:", event.type);
+  console.log("✅ EVENT:", event.type);
 
   try {
 
-    // =========================
-    // ✅ PAYMENT SUCCESS
-    // =========================
     if (event.type === "checkout.session.completed") {
 
       const session = event.data.object;
 
-      console.log("SESSION:", session);
+      console.log("SESSION RECEIVED");
 
-      // safer email handling
-      const email =
-        session.customer_details?.email ||
-        session.customer_email ||
-        null;
+      const email = session.customer_details?.email;
 
       console.log("EMAIL:", email);
 
       if (!email) {
-        console.log("⚠️ No email found — skipping");
+        console.log("⚠️ No email found");
         return res.json({ received: true });
       }
 
@@ -64,7 +60,7 @@ export default async function handler(req, res) {
         .maybeSingle();
 
       if (error) {
-        console.error("❌ Supabase fetch error:", error);
+        console.error("❌ Supabase error:", error);
       }
 
       if (user) {
@@ -73,22 +69,17 @@ export default async function handler(req, res) {
           .update({ is_active: true })
           .eq("id", user.id);
 
-        console.log("✅ User activated:", email);
+        console.log("✅ USER ACTIVATED:", email);
       } else {
-        console.log("⚠️ User not found in DB:", email);
+        console.log("⚠️ USER NOT FOUND:", email);
       }
     }
 
-    // =========================
-    // ❌ SUBSCRIPTION CANCELLED
-    // =========================
     if (event.type === "customer.subscription.deleted") {
 
       const subscription = event.data.object;
 
-      const customer = await stripe.customers.retrieve(
-        subscription.customer
-      );
+      const customer = await stripe.customers.retrieve(subscription.customer);
 
       const email = customer.email;
 
@@ -106,14 +97,14 @@ export default async function handler(req, res) {
           .update({ is_active: false })
           .eq("id", user.id);
 
-        console.log("❌ User deactivated:", email);
+        console.log("❌ USER DEACTIVATED:", email);
       }
     }
 
   } catch (err) {
-    console.error("🔥 Webhook processing error:", err);
-    return res.status(500).send("Server error");
+    console.error("🔥 PROCESSING ERROR:", err);
+    return res.status(500).json({ error: "processing_failed" });
   }
 
-  return res.json({ received: true });
+  res.status(200).json({ received: true });
 }
