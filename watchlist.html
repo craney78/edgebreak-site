@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>
-if (!localStorage.getItem("edgebreak_user")) {
-  window.location.href = "pricing.html";
-}
-</script>  
+ 
 <meta charset="UTF-8">
 <title>EdgeBreak | Breakout Trading Framework, Trade Tracking & Performance Dashboard</title>
 <meta name="description" content="Track your trades, analyse performance, and improve consistency with the EdgeBreak trading dashboard built for structured execution.">
@@ -16,6 +12,39 @@ if (!localStorage.getItem("edgebreak_user")) {
 </head>
 
 <body style="background:#020617;">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+// =========================
+// 🔐 NAV LOGIN / LOGOUT
+// =========================
+const supabase = window.supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+);
+
+async function checkAccess() {
+
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (!session) {
+    window.location.href = "pricing.html";
+    return;
+  }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("is_active")
+    .eq("id", session.user.id)
+    .single();
+
+  if (!profile || !profile.is_active) {
+    window.location.href = "pricing.html";
+  }
+}
+
+checkAccess();
+</script>
 
 <!-- NAVBAR -->
 <div class="nav">
@@ -39,7 +68,7 @@ if (!localStorage.getItem("edgebreak_user")) {
       <a href="dashboard.html" class="nav-link">My Dashboard</a>
       <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
       <a href="blog.html" class="nav-link">Trade Insights</a>
-      <a href="login.html" class="nav-cta">Login</a>   
+      <a href="#" class="nav-cta" id="authBtn">Login</a>
     </div>
 
   </div>
@@ -1072,30 +1101,42 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }); // ✅ closes MAIN DOMContentLoaded
 
-// =========================
-// 🔐 NAV LOGIN / LOGOUT
-// =========================
-const user = localStorage.getItem("edgebreak_user");
-const navBtn = document.querySelector(".nav-cta");
 
-if (navBtn) {
-  if (user) {
-    navBtn.innerText = "Logout";
-    navBtn.href = "#";
 
-    navBtn.onclick = function (e) {
+</script>
+
+<script>
+
+async function setupAuthButton() {
+
+  const { data: { session } } = await supabase.auth.getSession();
+  const btn = document.getElementById("authBtn");
+
+  if (!btn) return;
+
+  if (session) {
+    // ✅ Logged in → show logout
+    btn.innerText = "Logout";
+
+    btn.onclick = async function (e) {
       e.preventDefault();
-      localStorage.removeItem("edgebreak_user");
+
+      await supabase.auth.signOut();
+
       window.location.href = "index.html";
     };
 
   } else {
-    navBtn.innerText = "Login";
-    navBtn.href = "login.html";
+    // ❌ Not logged in → show login
+    btn.innerText = "Login";
+    btn.href = "login.html";
   }
+
 }
 
-</script>
+setupAuthButton();
 
+</script>
+</script>
 </body>
 </html>

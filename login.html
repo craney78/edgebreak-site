@@ -13,11 +13,11 @@
 </head>
 
 <body>
+
 <!-- NAVBAR -->
 <div class="nav">
   <div class="nav-inner">
 
-    <!-- LEFT -->
     <div class="nav-left">
       <a href="index.html">
         <img src="images/logo.png" class="nav-logo">
@@ -26,7 +26,6 @@
       <span class="live-badge">LIVE</span>
     </div>
 
-    <!-- DESKTOP LINKS -->
     <div class="nav-links">
       <a href="index.html" class="nav-link">Home</a>
       <a href="index.html#statsGrid" class="nav-link">Performance</a>
@@ -35,7 +34,7 @@
       <a href="dashboard.html" class="nav-link">My Dashboard</a>
       <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
       <a href="blog.html" class="nav-link">Trade Insights</a>
-      <a href="login.html" class="nav-cta">Login</a>   
+      <a href="#" class="nav-cta" id="authBtn">Login</a>
     </div>
 
   </div>
@@ -83,12 +82,10 @@
     <div class="footer-col">
       <h4>Product</h4>
       <a href="index.html#performance">Performance</a>
-      <a href="watchlist.html" class="nav-link">Trading Desk</a>
-      <a href="dashboard.html" class="nav-link">My Dashboard</a>
-      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
+      <a href="watchlist.html">Trading Desk</a>
+      <a href="dashboard.html">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL">Charts</a>
       <a href="pricing.html">Pricing</a>
-      <a href="disclaimer.html">Disclaimer</a>
-      <a href="about.html">About</a>
     </div>
 
     <div class="footer-col">
@@ -96,49 +93,22 @@
       <a href="trading-guide.html">Trading Guide</a>
       <a href="faq.html">FAQ</a>
       <a href="support.html">Support</a>
-      <a href="terms.html">Terms of Service</a>
-      <a href="privacy.html">Privacy Policy</a>
     </div>
 
-    <div class="footer-col">
-      <h4>Get Access</h4>
-      <p style="margin-bottom:10px;">
-        Unlock full access to the system and tracked breakout setups
-      </p>
-      <a href="pricing.html" class="nav-cta">Unlock</a>
-    </div>
-
-  </div>
-
-  <div class="footer-bottom">
-    <p>© 2026 EdgeBreak • All rights reserved</p>
-
-    <p class="footer-disclaimer">
-      Not financial advice. Trading involves risk.
-    </p>
-
-    <div class="footer-parent-block">
-      <img src="images/crane-logo.png" alt="Crane Platform Labs" class="footer-logo">
-
-      <p class="footer-parent">
-        EdgeBreak is a product of <strong>Crane Platform Labs</strong><br>
-        ABN 41 946 218 773
-      </p>
-    </div>
   </div>
 </div>
 
 <script>
 
-// 🔑 ADD YOUR DETAILS HERE
-// 🔑 ADD YOUR DETAILS HERE
-// 🔑 ADD YOUR DETAILS HERE
+// 🔑 YOUR SUPABASE CONNECTION (already filled correctly)
 const supabase = window.supabase.createClient(
   "https://qmonyhukamuuunxxxdlk.supabase.co",
   "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 
+// =========================
 // LOGIN
+// =========================
 async function login() {
 
   const email = document.getElementById("email").value;
@@ -154,6 +124,7 @@ async function login() {
     return;
   }
 
+  // CHECK SUBSCRIPTION STATUS
   const { data: profile } = await supabase
     .from("profiles")
     .select("is_active")
@@ -165,16 +136,8 @@ async function login() {
     return;
   }
 
-  localStorage.setItem("edgebreak_user", email);
+  // ✅ NO LOCAL STORAGE NEEDED
   window.location.href = "watchlist.html";
-}
-
-// SIGNUP (optional use later)
-async function signup() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  await supabase.auth.signUp({ email, password });
 }
 
 // ENTER KEY SUPPORT
@@ -183,6 +146,7 @@ document.addEventListener("keypress", function(e) {
     login();
   }
 });
+
 </script>
 
 </body>
