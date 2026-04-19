@@ -27,50 +27,93 @@ export default async function handler(req, res) {
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
+    console.error("❌ Webhook signature error:", err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  // ✅ PAYMENT SUCCESS
-  if (event.type === "checkout.session.completed") {
+  console.log("✅ EVENT RECEIVED:", event.type);
 
-    const session = event.data.object;
-    const email = session.customer_details.email;
+  try {
 
-    const { data: user } = await supabase
-      .from("profiles")
-      .select("id")
-      .eq("email", email)
-      .single();
+    // =========================
+    // ✅ PAYMENT SUCCESS
+    // =========================
+    if (event.type === "checkout.session.completed") {
 
-    if (user) {
-      await supabase
+      const session = event.data.object;
+
+      console.log("SESSION:", session);
+
+      // safer email handling
+      const email =
+        session.customer_details?.email ||
+        session.customer_email ||
+        null;
+
+      console.log("EMAIL:", email);
+
+      if (!email) {
+        console.log("⚠️ No email found — skipping");
+        return res.json({ received: true });
+      }
+
+      const { data: user, error } = await supabase
         .from("profiles")
-        .update({ is_active: true })
-        .eq("id", user.id);
+        .select("id")
+        .eq("email", email)
+        .maybeSingle();
+
+      if (error) {
+        console.error("❌ Supabase fetch error:", error);
+      }
+
+      if (user) {
+        await supabase
+          .from("profiles")
+          .update({ is_active: true })
+          .eq("id", user.id);
+
+        console.log("✅ User activated:", email);
+      } else {
+        console.log("⚠️ User not found in DB:", email);
+      }
     }
+
+    // =========================
+    // ❌ SUBSCRIPTION CANCELLED
+    // =========================
+    if (event.type === "customer.subscription.deleted") {
+
+      const subscription = event.data.object;
+
+      const customer = await stripe.customers.retrieve(
+        subscription.customer
+      );
+
+      const email = customer.email;
+
+      console.log("CANCEL EMAIL:", email);
+
+      const { data: user } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("email", email)
+        .maybeSingle();
+
+      if (user) {
+        await supabase
+          .from("profiles")
+          .update({ is_active: false })
+          .eq("id", user.id);
+
+        console.log("❌ User deactivated:", email);
+      }
+    }
+
+  } catch (err) {
+    console.error("🔥 Webhook processing error:", err);
+    return res.status(500).send("Server error");
   }
 
-  // ❌ SUBSCRIPTION CANCELLED
-  if (event.type === "customer.subscription.deleted") {
-
-    const subscription = event.data.object;
-    const customer = await stripe.customers.retrieve(subscription.customer);
-
-    const email = customer.email;
-
-    const { data: user } = await supabase
-      .from("profiles")
-      .select("id")
-      .eq("email", email)
-      .single();
-
-    if (user) {
-      await supabase
-        .from("profiles")
-        .update({ is_active: false })
-        .eq("id", user.id);
-    }
-  }
-
-  res.json({ received: true });
+  return res.json({ received: true });
 }
