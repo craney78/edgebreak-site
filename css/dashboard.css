@@ -271,42 +271,6 @@ body {
   color: #64748b;
 }
 
-/* =========================
-   📱 MOBILE
-   ========================= */
-@media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .stats {
-    grid-template-columns: 1fr 1fr;
-  }
-}
- 
-/* FORCE FIX LOGO SIZE */
-.hero-logo {
-  width: 100px !important;
-  height: auto !important;
-}
-
-.hero-logo-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* NAV LOGO FIX */
-.nav-logo {
-  width: 30px;
-  height: auto;
-}
-
-@media (max-width: 768px) {
-  .watchlist-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
 
 /* =========================
    🔥 FIX NAV TEXT COLOUR
@@ -1536,13 +1500,6 @@ body {
   padding-top: 60px;
 }
 
-@media (max-width: 768px) {
-
-  .nav-inner {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
 
   .nav-links {
     display: flex;
@@ -1569,24 +1526,6 @@ body {
     align-self: center;
   }
 
-}
-
-@media (max-width: 768px) {
-  .nav-links .nav-cta {
-    display: none !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .nav-links > button.nav-cta {
-    display: none !important;
-  }
-}
-
-@media (max-width: 768px) {
-  html, body {
-    background: #020617 !important;
-  }
 }
 
 .footer-bottom {
@@ -1619,11 +1558,6 @@ body {
   line-height: 1.4;
 }
 
-@media (max-width: 768px) {
-  .footer-logo {
-    height: 85px;
-  }
-}
 
 /* =========================
    📊 CHART SECTION
@@ -1670,90 +1604,6 @@ body {
   background: rgba(34,197,94,0.05);
 }
 
-/* =========================
-   📱 MOBILE OPTIMISATION
-========================= */
-
-@media (max-width: 768px) {
-
-  .chart-container {
-    padding: 15px;
-    margin-top: 15px;
-  }
-
-  #tv_chart {
-    height: 300px;
-  }
-
-}
-
-  .footer-col {
-    width: 100%;
-    max-width: 300px;
-    align-items: center;
-  }
-
-  .footer-col a,
-  .footer-col p,
-  .footer-col h4 {
-    text-align: center;
-  }
-
-  .footer-logo {
-    margin: 0 auto 10px auto;
-  }
-
-  .footer-parent-block {
-    text-align: center;
-  }
-
-@media (max-width: 768px) {
-
-  .footer-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    width: 100%;
-  }
-
-  .footer-col {
-    width: 100%;
-    max-width: 300px;
-    align-items: center;
-    text-align: center;
-  }
-
-  .footer-col a,
-  .footer-col p,
-  .footer-col h4 {
-    text-align: center;
-  }
-
-  .footer-logo {
-    margin: 0 auto 10px auto;
-  }
-
-  .footer-parent-block {
-    text-align: center;
-  }
-
-}
-
-html, body {
-  overflow-x: hidden;
-}
-
-footer {
-  width: 100%;
-  margin: 0 auto;
-}
-
-* {
-  max-width: 100%;
-  box-sizing: border-box;
-}
 
 /* =========================
    CHART PAGE
@@ -1972,8 +1822,130 @@ footer {
   margin-top: 6px;
 }
 
+/* =========================
+   📱 MOBILE OPTIMISATION (CLEAN)
+========================= */
+
 @media (max-width: 768px) {
+
+  /* GLOBAL */
+  html, body {
+    overflow-x: hidden;
+    background: #020617;
+    font-size: 16px;
+  }
+
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* NAV */
+  .nav-inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-links .nav-cta,
+  .nav-links > button.nav-cta {
+    display: none !important;
+  }
+
+  .nav-logo {
+    width: 30px;
+  }
+
+  /* HERO */
+  .hero-logo {
+    width: 90px !important;
+  }
+
+  .hero-logo-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  /* SECTIONS */
+  .section {
+    max-width: 100%;
+    padding: 20px 15px;
+  }
+
+  /* GRIDS */
   .feature-grid {
+    grid-template-columns: 1fr !important;
+    gap: 40px;
+  }
+
+  .grid {
     grid-template-columns: 1fr;
   }
+
+  .stats,
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+
+  .watchlist-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* CHART */
+  .chart-container {
+    padding: 15px;
+    margin-top: 15px;
+  }
+
+  #tv_chart {
+    height: 300px;
+  }
+
+  /* FOOTER */
+  .footer-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-col {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .footer-logo {
+    margin: 0 auto 10px auto;
+  }
+
+  .footer-parent-block {
+    text-align: center;
+  }
+
+  footer {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* BUTTONS */
+  .btn-primary,
+  .nav-cta {
+    padding: 14px 20px;
+    font-size: 16px;
+  }
+
 }
