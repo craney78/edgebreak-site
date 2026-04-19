@@ -333,7 +333,7 @@ if (!localStorage.getItem("edgebreak_user")) {
 </div>
 
 <!-- FOOTER -->
-<div class="footer">
+<div class="footer" style="width:100%;">
 
   <div class="footer-inner">
 
@@ -357,11 +357,11 @@ if (!localStorage.getItem("edgebreak_user")) {
       <a href="index.html#performance">Performance</a>
       <a href="watchlist.html" class="nav-link">Trading Desk</a>
       <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
       <a href="pricing.html">Pricing</a>
       <a href="disclaimer.html">Disclaimer</a>
       <a href="about.html">About</a>
     </div>
-    
 
     <!-- RESOURCES -->
     <div class="footer-col">
@@ -369,6 +369,7 @@ if (!localStorage.getItem("edgebreak_user")) {
       <a href="trading-guide.html">Trading Guide</a>
       <a href="faq.html">FAQ</a>
       <a href="support.html">Support</a>
+      <a href="terms.html">Terms of Service</a>
       <a href="privacy.html">Privacy Policy</a>
     </div>
 
@@ -376,30 +377,34 @@ if (!localStorage.getItem("edgebreak_user")) {
     <div class="footer-col">
       <h4>Get Access</h4>
       <p style="margin-bottom:10px;">
-        Unlock the full system and live trades
+        Unlock full access to the system and tracked breakout setups
       </p>
-      <button onclick="window.location.href='pricing.html'">Unlock</button>
+      <a href="pricing.html" class="nav-cta">Unlock</a>
     </div>
 
   </div>
 
   <!-- BOTTOM BAR -->
   <div class="footer-bottom">
-    <p>© 2026 EdgeBreak • All rights reserved</p>
-    <p style="color:#64748b; font-size:12px;">
-      Not financial advice. Trading involves risk.
+
+  <!-- EDGEBREAK INFO -->
+  <p>© 2026 EdgeBreak • All rights reserved</p>
+
+  <p class="footer-disclaimer">
+    Not financial advice. Trading involves risk.
+  </p>
+
+  <!-- PARENT COMPANY -->
+  <div class="footer-parent-block">
+    <img src="images/crane-logo.png" alt="Crane Platform Labs" class="footer-logo">
+
+    <p class="footer-parent">
+      EdgeBreak is a product of <strong>Crane Platform Labs</strong><br>
+      ABN 41 946 218 773
     </p>
-
-    <!-- PARENT COMPANY -->
-    <div class="footer-parent-block">
-      <img src="images/crane-logo.png" alt="Crane Platform Labs" class="footer-logo">
-
-       <p class="footer-parent">
-        EdgeBreak is a product of <strong>Crane Platform Labs</strong><br>
-        ABN 41 946 218 773
-      </p>
-    </div>
   </div>
+
+</div>
 
 
 </div>

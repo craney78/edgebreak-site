@@ -130,51 +130,62 @@
 
 </div>
 
-<!-- FOOTER (IDENTICAL STRUCTURE) -->
-<div class="footer">
+<!-- FOOTER -->
+<div class="footer" style="width:100%;">
 
   <div class="footer-inner">
 
+    <!-- LEFT (LOGO + BRAND) -->
     <div class="footer-col">
+      
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-        <img src="images/logo.png" style="width:40px;">
-        <h3 style="margin:0;">EdgeBreak</h3>
+        <img src="images/logo.png" style="width:40px; height:auto;">
+        <h3 style="color:white; margin:0;">EdgeBreak</h3>
       </div>
 
       <p>
-        Data-driven breakout trading system designed to analyse and track breakout setups using structured market data
+        Data-driven breakout trading framework designed to analyse and track breakout setups using structured market data
       </p>
+
     </div>
 
+    <!-- LINKS -->
     <div class="footer-col">
       <h4>Product</h4>
       <a href="index.html#performance">Performance</a>
-      <a href="watchlist.html">Trading Desk</a>
-      <a href="dashboard.html">My Dashboard</a>
+      <a href="watchlist.html" class="nav-link">Trading Desk</a>
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
       <a href="pricing.html">Pricing</a>
       <a href="disclaimer.html">Disclaimer</a>
       <a href="about.html">About</a>
     </div>
 
+    <!-- RESOURCES -->
     <div class="footer-col">
       <h4>Resources</h4>
       <a href="trading-guide.html">Trading Guide</a>
       <a href="faq.html">FAQ</a>
       <a href="support.html">Support</a>
+      <a href="terms.html">Terms of Service</a>
       <a href="privacy.html">Privacy Policy</a>
     </div>
 
+    <!-- CTA -->
     <div class="footer-col">
       <h4>Get Access</h4>
-      <p>Unlock the full system and live trades</p>
-      <button onclick="window.location.href='pricing.html'">Unlock</button>
+      <p style="margin-bottom:10px;">
+        Unlock full access to the system and tracked breakout setups
+      </p>
+      <a href="pricing.html" class="nav-cta">Unlock</a>
     </div>
 
   </div>
 
   <!-- BOTTOM BAR -->
-<div class="footer-bottom">
+  <div class="footer-bottom">
 
+  <!-- EDGEBREAK INFO -->
   <p>© 2026 EdgeBreak • All rights reserved</p>
 
   <p class="footer-disclaimer">
@@ -193,30 +204,28 @@
 
 </div>
 
+
+</div>
+
 <script>
-  const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
+const user = localStorage.getItem("edgebreak_user");
+const navBtn = document.querySelector(".nav-cta");
 
-  document.querySelectorAll(".nav-cta").forEach(btn => {
-    if (isLoggedIn) {
-      btn.innerText = "Dashboard";
-      btn.href = "dashboard.html";
-    } else {
-      btn.innerText = "Unlock";
-      btn.href = "pricing.html";
-    }
-  });
+if (navBtn) {
+  if (user) {
+    navBtn.innerText = "Logout";
+    navBtn.href = "#";
 
-const isLoggedIn = localStorage.getItem("edgebreak_access") === "true";
-
-document.querySelectorAll(".nav-cta").forEach(btn => {
-  if (isLoggedIn) {
-    btn.innerText = "Dashboard";
-    btn.href = "dashboard.html";
+    navBtn.onclick = function (e) {
+      e.preventDefault();
+      localStorage.removeItem("edgebreak_user");
+      window.location.href = "index.html";
+    };
   } else {
-    btn.innerText = "Unlock";
-    btn.href = "pricing.html";
+    navBtn.innerText = "Login";
+    navBtn.href = "login.html";
   }
-});
+}
 
 </script>
 
