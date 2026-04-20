@@ -10,7 +10,40 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
+<script>
+const supabaseClient = window.supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+);
+
+async function checkAccess() {
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  // ❌ not logged in
+  if (!session) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  // 🔍 check profile
+  const { data: profile } = await supabaseClient
+    .from("profiles")
+    .select("is_active")
+    .eq("id", session.user.id)
+    .single();
+
+  // ❌ not active
+  if (!profile || !profile.is_active) {
+    window.location.href = "pricing.html";
+  }
+
+}
+
+checkAccess();
+</script>
 
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
