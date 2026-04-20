@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ 
+<meta charset="UTF-8">
+<title>EdgeBreak | Breakout Trading Framework, Trade Tracking & Performance Dashboard</title>
+<meta name="description" content="Track your trades, analyse performance, and improve consistency with the EdgeBreak trading dashboard built for structured execution.">
+<link rel="stylesheet" href="css/dashboard.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+</head>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+// =========================
+// 🔑 SUPABASE CLIENT (CLEAN)
+// =========================
+const supabaseClient = supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  }
+);
+
+// =========================
+// 🔒 ACCESS CONTROL
+// =========================
+async function checkAccess() {
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  // ❌ Not logged in → send to login
+  if (!session) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  // 🔍 Check subscription
+  const { data: profile, error } = await supabaseClient
+    .from("profiles")
+    .select("is_active")
+    .eq("id", session.user.id)
+    .single();
+
+  if (error) {
+    console.error("Profile error:", error);
+    window.location.href = "login.html";
+    return;
+  }
+
+  // ❌ Not active → send to pricing
+  if (!profile || !profile.is_active) {
+    window.location.href = "pricing.html";
+    return;
+  }
+
+  // ✅ Access granted
+  console.log("Access granted");
+}
+
+// =========================
+// ⏱ RUN AFTER PAGE LOAD
+// =========================
+window.addEventListener("load", checkAccess);
+
+</script>
+
+<body style="background:#020617;">
+
+<!-- NAVBAR -->
+<div class="nav">
+  <div class="nav-inner">
+
+    <!-- LEFT -->
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="images/logo.png" class="nav-logo">
+      </a>
+      <a href="index.html" class="logo-text">EDGEBREAK</a>
+      <span class="live-badge">LIVE</span>
+    </div>
+
+    <!-- DESKTOP LINKS -->
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="index.html#statsGrid" class="nav-link">Performance</a>
+      <a href="watchlist.html" class="nav-link">Trading Desk</a>
+      <a href="trading-guide.html" class="nav-link">Guide</a>
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
+      <a href="blog.html" class="nav-link">Trade Insights</a>
+      <a href="#" class="nav-cta" id="authBtn">Login</a>
+    </div>
+
+  </div>
+
+</div>  
+
+
+<div class="container">
+
+  
+
+<!-- HEADER -->
+<div class="header">
+
+  <img src="images/logo.png" class="hero-logo">
+
+  <h1>Trading Desk</h1>
+
+  <p class="header-sub">
+    Daily breakout set up's identified using structured data and consistent rules
+  </p>
+
+  <p style="font-size:12px; color:#64748b; margin-top:10px; max-width:600px;">
+    Data is updated daily for analysis purposes. This platform provides information only and does not offer financial advice or trade execution.
+  </p>
+
+</div>
+
+<!-- TOP GRID -->
+<div class="watchlist-grid">
+
+  <!-- TODAY -->
+  <div class="watch-card">
+
+    <h3>Today’s Trades</h3>
+
+    <p style="font-size:13px; color:#64748b;">
+      Track recent breakout setups based on daily system updates
+    </p>
+
+    <div class="stat-line">
+      <span>Opened</span>
+      <span id="todayOpen">0</span>
+    </div>
+
+    <div class="stat-line">
+      <span>Closed</span>
+      <span id="todayClosed">0</span>
+    </div>
+
+    <div id="todayActivity"></div>
+
+  </div>
+
+  <!-- MARKET -->
+  <div class="watch-card">
+
+    <h3>Market Breakdown</h3>
+
+    <div class="stat-line">
+      <span>Small</span>
+      <span id="smallCount">-</span>
+    </div>
+
+    <div class="stat-line">
+      <span>Mid</span>
+      <span id="midCount">-</span>
+    </div>
+
+    <div class="stat-line">
+      <span>Large</span>
+      <span id="largeCount">-</span>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="stats">
+
+  <!-- LIVE -->
+  <div class="stat">
+    <div class="label">Tracked Positions</div>
+    <div class="value" id="activeCount">-</div>
+  </div>
+
+  <!-- AVG RETURN -->
+  <div class="stat">
+    <div class="label">Avg Return (All Trades)</div>
+    <div class="value" id="avgReturn">-</div>
+  </div>
+
+  <!-- BEST TRADE -->
+  <div class="stat">
+    <div class="label">Best Trade</div>
+    <div class="value green" id="bestTrade">-</div>
+  </div>
+
+  <!-- WIN RATE -->
+  <div class="stat">
+    <div class="label">Win Rate</div>
+    <div class="value" id="winRate">-</div>
+  </div>
+
+</div>
+
+<!-- ✅ WIN BAR -->
+<div class="performance-wrapper">
+
+  <div class="performance-label">
+    Framework Performance
+  </div>
+
+  <div class="performance-sub">
+    Based on average movement across tracked trades
+  </div>
+
+  <div class="performance-bar">
+    <div id="winBar" class="performance-fill"></div>
+  </div>
+
+</div>
+
+<!-- WATCHLIST SECTIONS -->
+
+<div class="current-trades">
+
+  <h2>Current Trades</h2>
+  <p>Positions currently being tracked based on recent system activity</p>
+
+  <div id="currentTrades"></div>
+
+  <!-- 🔥 ADD THIS RIGHT HERE -->
+  <div id="noTradesMessage" class="no-trades">
+    <p>
+      The system is waiting for valid breakout conditions
+    </p>
+  </div>
+
+</div>
+
+<div id="smallSection" class="section"></div>
+<div id="midSection" class="section"></div>
+<div id="largeSection" class="section"></div>
+
+<!-- CHART -->
+<!-- CHART -->
+<div class="section" style="padding:20px 0; min-height:unset;">
+
+  <h3 style="margin-bottom:10px;">Price Chart</h3>
+
+  <div id="chartTitle" style="color:#94a3b8; font-size:14px; margin-bottom:10px; text-align:center;">
+    Select a position to view chart
+  </div>
+
+  <div style="max-width:900px; margin:0 auto;">
+    <div id="tv_chart" style="height:420px;"></div>
+  </div>
+
+</div>
+
+  <div class="section">
+
+  <h3 style="margin-bottom:15px; text-align:center;">
+    Portfolio Simulator
+  </h3>
+
+  <div class="stats">
+
+    <!-- INPUTS -->
+    <div class="stat">
+      <div class="label">Starting Capital</div>
+      <input id="startCapital" type="number" value="10000" 
+        style="width:100%; padding:8px; border-radius:6px; border:none;">
+    </div>
+
+    <div class="stat">
+      <div class="label">Position Size</div>
+      <select id="positionSize" 
+        style="width:100%; padding:8px; border-radius:6px; border:none;">
+        <option value="1">100% (Aggressive)</option>
+        <option value="0.5">50% (Balanced)</option>
+        <option value="0.25">25% (Conservative)</option>
+      </select>
+    </div>
+
+    <div class="stat">
+      <div class="label">Time Range</div>
+      <select id="timeRange" 
+        style="width:100%; padding:8px; border-radius:6px; border:none;">
+        <option value="ALL">All Time</option>
+        <option value="12">Last 12 Months</option>
+        <option value="6">Last 6 Months</option>
+        <option value="3">Last 3 Months</option>
+      </select>
+    </div>
+
+    <!-- OUTPUT -->
+    <div class="stat">
+      <div class="label">Final Value</div>
+      <div class="value green" id="finalValue">$0</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Total Return</div>
+      <div class="value" id="totalReturn">0%</div>
+    </div>
+
+  </div>
+
+  <div style="font-size:12px; color:#64748b; margin-top:10px;">
+    * Based on completed trades only. Open trades not included. Not financial advice.
+  </div>
+  
+</div>
+</div>
+
+<div class="section">
+
+  <h3 style="margin-bottom:15px;">Portfolio Growth</h3>
+
+  <canvas id="equityChart" height="100"></canvas>
+
+  <div style="font-size:12px; color:#64748b; margin-top:8px;">
+  * Based on completed trades only. Open trades not included. Not financial advice.
+</div>
+
+</div>
+
+  
+
+<div class="section">
+
+  <h3 style="margin-bottom:15px;">Performance by Category</h3>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="label">🟢 Small Caps</div>
+      <div class="value" id="smallStats">-</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">🟡 Mid Caps</div>
+      <div class="value" id="midStats">-</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">🔵 Large Caps</div>
+      <div class="value" id="largeStats">-</div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="section">
+
+  <h3 style="margin-bottom:15px;">Top Breakout Trades</h3>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="label">Best Trades</div>
+      <div class="value" id="topTrades">-</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Worst Trades</div>
+      <div class="value" id="worstTrades">-</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Avg Hold Time</div>
+      <div class="value" id="avgHold">-</div>
+      <div style="font-size:12px; color:#94a3b8;" id="avgPerTrade">-</div>
+    </div>
+
+    <div class="stat">
+      <div class="label">Profit Factor</div>
+      <div class="value" id="profitFactor">-</div>
+      <div style="font-size:12px; color:#94a3b8;">
+       Measures how much profit is made for every $1 lost
+      </div>
+    </div>
+    
+  </div>
+
+</div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer" style="width:100%;">
+
+  <div class="footer-inner">
+
+    <!-- LEFT (LOGO + BRAND) -->
+    <div class="footer-col">
+      
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <img src="images/logo.png" style="width:40px; height:auto;">
+        <h3 style="color:white; margin:0;">EdgeBreak</h3>
+      </div>
+
+      <p>
+        Data-driven breakout trading framework designed to analyse and track breakout setups using structured market data
+      </p>
+
+    </div>
+
+    <!-- LINKS -->
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="index.html#performance">Performance</a>
+      <a href="watchlist.html" class="nav-link">Trading Desk</a>
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="disclaimer.html">Disclaimer</a>
+      <a href="about.html">About</a>
+    </div>
+
+    <!-- RESOURCES -->
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="trading-guide.html">Trading Guide</a>
+      <a href="faq.html">FAQ</a>
+      <a href="support.html">Support</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+
+    <!-- CTA -->
+    <div class="footer-col">
+      <h4>Get Access</h4>
+      <p style="margin-bottom:10px;">
+        Unlock full access to the system and tracked breakout setups
+      </p>
+      <a href="pricing.html" class="nav-cta">Unlock</a>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="footer-bottom">
+
+  <!-- EDGEBREAK INFO -->
+  <p>© 2026 EdgeBreak • All rights reserved</p>
+
+  <p class="footer-disclaimer">
+    Not financial advice. Trading involves risk.
+  </p>
+
+  <!-- PARENT COMPANY -->
+  <div class="footer-parent-block">
+    <img src="images/crane-logo.png" alt="Crane Platform Labs" class="footer-logo">
+
+    <p class="footer-parent">
+      EdgeBreak is a product of <strong>Crane Platform Labs</strong><br>
+      ABN 41 946 218 773
+    </p>
+  </div>
+
+</div>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://s3.tradingview.com/tv.js"></script>
+
+<script>
+function loadChart(symbol) {
+
+  const cleanSymbol = symbol.toUpperCase().trim();
+  const finalSymbol = "NASDAQ:" + cleanSymbol;
+
+  document.getElementById("tv_chart").innerHTML = "";
+
+  // 👇 SHOW SYMBOL TO USER
+  document.getElementById("chartTitle").innerText = finalSymbol;
+
+  new TradingView.widget({
+    width: "100%",
+    height: 420,
+    symbol: finalSymbol,
+    interval: "D",
+    timezone: "America/New_York",
+    theme: "dark",
+    style: "1",
+    locale: "en",
+    hide_top_toolbar: true,
+    hide_legend: false,   // 👈 IMPORTANT (shows ticker inside chart too)
+    container_id: "tv_chart"
+  });
+
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  console.log("✅ PAGE RUNNING");
+
+
+  // =========================
+  // 🎬 NUMBER ANIMATION
+  // =========================
+  function animateValue(id, end) {
+    const el = document.getElementById(id);
+    if (!el || isNaN(end)) return;
+
+    let start = 0;
+    const duration = 800;
+    let startTime = null;
+
+    function animate(time) {
+      if (!startTime) startTime = time;
+
+      const progress = Math.min((time - startTime) / duration, 1);
+      const value = start + (end - start) * progress;
+
+      el.innerText = value.toFixed(2) + "%";
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        el.innerText = end.toFixed(2) + "%";
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  // =========================
+  // 🔔 TODAY ACTIVITY
+  // =========================
+  fetch("/activity.json?v=" + Date.now())
+  .then(res => res.json())
+  .then(data => {
+
+    if (!Array.isArray(data)) data = [];
+
+    let open = 0;
+    let closed = 0;
+
+    const html = data.slice(-5).reverse().map(a => {
+
+      if (a.type === "OPEN") {
+        open++;
+        return `<div class="green">🟢 ${a.symbol}</div>`;
+      }
+
+      if (a.type === "CLOSED") {
+        closed++;
+        const result = a.result ?? a.percent_move ?? 0;
+        const color = result >= 0 ? "#22c55e" : "#ef4444";
+
+        return `
+          <div>
+            🔴 ${a.symbol}
+            <span style="color:${color}; font-weight:bold;">
+              ${result.toFixed(2)}%
+            </span>
+          </div>
+        `;
+      }
+
+      return "";
+
+    }).join("");
+
+    document.getElementById("todayOpen").innerText = open;
+    document.getElementById("todayClosed").innerText = closed;
+
+    document.getElementById("todayActivity").innerHTML = html || `
+      <div style="color:#94a3b8; font-size:13px;">
+        No trades triggered yet today
+      </div>
+    `;
+
+  })
+  .catch(() => {
+    console.log("Failed to load activity");
+  });
+
+  // =========================
+  // 📊 LIVE TRADES + BREAKDOWN
+  // =========================
+  fetch("/active_positions.json?v=" + Date.now())
+    .then(res => res.json())
+    .then(data => {
+
+      if (!Array.isArray(data)) data = [];
+
+      const noTrades = document.getElementById("noTradesMessage");
+
+      // hide if trades exist
+      if (data.length > 0) {
+        noTrades.style.display = "none";
+      } else {
+        noTrades.style.display = "block";
+      }
+      const small = [];
+      const mid = [];
+      const large = [];
+
+      data.forEach(t => {
+        const g = (t.price_group || t.group || "").toUpperCase();
+        if (g === "SMALL") small.push(t);
+        else if (g === "MID") mid.push(t);
+        else if (g === "LARGE") large.push(t);
+      });
+
+      document.getElementById("smallCount").innerText = small.length;
+      document.getElementById("midCount").innerText = mid.length;
+      document.getElementById("largeCount").innerText = large.length;
+
+      function renderTrades(trades, title, id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        if (trades.length === 0) {
+          el.innerHTML = `<h3>${title}</h3><p style="color:#64748b;">No active trades</p>`;
+          return;
+        }
+
+        el.innerHTML = `<h3>${title}</h3>` + trades.map(t => {
+        const change = t.change_percent ?? 0;
+        const color = change >= 0 ? "#22c55e" : "#ef4444";
+
+        return `
+          <div class="box" onclick="loadChart('${t.symbol}')">
+            <div style="display:flex; justify-content:space-between;">
+      
+              <strong 
+                style="cursor:pointer;"
+                onclick="window.location.href='chart.html?symbol=${t.symbol}'"
+              >
+                ${t.symbol}
+              </strong>
+
+              <span style="color:${color}; font-weight:bold;">
+                ${change.toFixed(2)}%
+              </span>
+            </div>
+
+            <div style="font-size:13px; color:#94a3b8;">
+              Entry: $${t.entry_price ?? "-"} | Now: $${t.current_price ?? "-"}
+            </div>
+
+            <div style="font-size:12px; color:#64748b;">
+              ${t.days_held ?? 0} days
+            </div>
+          </div>
+        `;
+      }).join("");
+      }
+
+      renderTrades(small, "🟢 Small Caps", "smallSection");
+      renderTrades(mid, "🟡 Mid Caps", "midSection");
+      renderTrades(large, "🔵 Large Caps", "largeSection");
+
+    });
+
+  // =========================
+  // 📊 COMBINED STATS (CLEAN FINAL)
+  // =========================
+  console.log("🔥 STATS BLOCK RUNNING");
+  
+  Promise.all([
+    fetch("/active_positions.json?v=" + Date.now()).then(r => r.json()),
+    fetch("/live_trade_history.json?v=" + Date.now()).then(r => r.json())
+  ])
+  .then(([active, history]) => {
+
+    console.log("ACTIVE:", active);
+    console.log("HISTORY:", history);
+
+    // safety
+    if (!Array.isArray(active)) active = [];
+    if (!Array.isArray(history)) history = [];
+
+    // =========================
+    // ✅ ALWAYS SHOW LIVE COUNT
+    // =========================
+    document.getElementById("activeCount").innerText = active.length;
+
+    // =========================
+    // ❌ NO HISTORY → DEFAULT UI
+    // =========================
+    if (history.length === 0) {
+      document.getElementById("avgReturn").innerText = "0%";
+      document.getElementById("winRate").innerText = "0%";
+      document.getElementById("bestTrade").innerText = "-";
+      document.getElementById("winBar").style.width = "0%";
+      return;
+    }
+
+    // =========================
+    // 🔥 COMBINED STATS (BEST VERSION)
+    // =========================
+
+    // combine ALL trades for performance
+    const all = history.map(t => ({
+      percent_move: t.percent_move ?? t.result ?? 0,
+      symbol: t.symbol
+    }));
+
+    // =========================
+    // 📊 CALCULATIONS
+    // =========================
+    let wins = 0;
+    let total = 0;
+
+    // use history for win rate
+    history.forEach(t => {
+      const r = parseFloat(t.percent_move ?? t.result ?? 0);
+      if (r > 0) wins++;
+    });
+
+    // use ALL for avg + best
+    let best = all[0];
+
+    all.forEach(t => {
+      const r = parseFloat(t.percent_move ?? 0);
+
+      total += r;
+
+      const bestValue = parseFloat(best.percent_move ?? 0);
+
+      if (r > bestValue) {
+        best = t;
+      }
+    });
+
+    // final stats
+    const win = history.length > 0 ? (wins / history.length) * 100 : 0;
+    const avg = all.length > 0 ? total / all.length : 0;
+
+    // =========================
+    // 💰 PROFIT FACTOR
+    // =========================
+
+    let totalWins = 0;
+    let totalLosses = 0;
+
+    history.forEach(t => {
+      const r = parseFloat(t.percent_move ?? t.result ?? 0);
+
+      if (r > 0) totalWins += r;
+      if (r < 0) totalLosses += Math.abs(r);
+    });
+
+    const profitFactor =
+      totalLosses > 0 ? totalWins / totalLosses : 0;
+
+    // update UI
+    document.getElementById("profitFactor").innerText =
+      profitFactor.toFixed(2) + "x";
+
+    // =========================
+    // 📊 AVG HOLD TIME + RETURN
+    // =========================
+
+    let totalDays = 0;
+    let totalReturn = 0;
+
+    history.forEach(t => {
+      const days = parseFloat(t.days_held ?? 0);
+      const r = parseFloat(t.percent_move ?? t.result ?? 0);
+
+      totalDays += days;
+      totalReturn += r;
+    });
+
+    const avgDays = history.length > 0 ? totalDays / history.length : 0;
+    const avgTrade = history.length > 0 ? totalReturn / history.length : 0;
+
+    // update UI
+    document.getElementById("avgHold").innerText =
+      avgDays.toFixed(0) + " days";
+
+    document.getElementById("avgPerTrade").innerText =
+      (avgTrade >= 0 ? "+" : "") + avgTrade.toFixed(2) + "% per trade";
+
+    // =========================
+    // 📊 CATEGORY STATS (FIXED POSITION)
+    // =========================
+
+    const smallTrades = [];
+    const midTrades = [];
+    const largeTrades = [];
+
+    history.forEach(t => {
+
+      const price = parseFloat(t.entry_price ?? 0);
+
+      if (price < 20) smallTrades.push(t);
+      else if (price < 80) midTrades.push(t);
+      else largeTrades.push(t);
+
+    });
+
+    function getStats(trades) {
+
+      if (trades.length === 0) return "-";
+
+      let total = 0;
+      let wins = 0;
+
+      trades.forEach(t => {
+        const r = parseFloat(t.percent_move ?? 0);
+        total += r;
+        if (r > 0) wins++;
+      });
+
+      const avg = total / trades.length;
+      const win = (wins / trades.length) * 100;
+
+      return `
+        <div style="font-size:14px;">
+          ${trades.length} trades<br>
+          ${avg.toFixed(2)}% avg<br>
+          ${win.toFixed(0)}% win
+        </div>
+      `;
+    }
+
+    document.getElementById("smallStats").innerHTML = getStats(smallTrades);
+    document.getElementById("midStats").innerHTML = getStats(midTrades);
+    document.getElementById("largeStats").innerHTML = getStats(largeTrades);
+
+    // =========================
+    // 💰 PORTFOLIO SIMULATOR
+    // =========================
+
+    function runSimulation() {
+
+      const startInput = document.getElementById("startCapital");
+      const sizeInput = document.getElementById("positionSize");
+
+      if (!startInput || !sizeInput) return;
+
+      const startValue = parseFloat(startInput.value || 10000);
+      const positionSize = parseFloat(sizeInput.value || 1);
+
+      // sort trades by date (important)
+      // get selected time range
+      const range = document.getElementById("timeRange")?.value || "ALL";
+
+      // current time
+      const now = Date.now();
+
+      // filter trades
+      let filtered = history;
+
+      if (range !== "ALL") {
+
+        const months = parseInt(range);
+        const cutoff = now - (months * 30 * 24 * 60 * 60 * 1000);
+
+        filtered = history.filter(t => {
+          return (t.entry_date ?? 0) >= cutoff;
+        });
+
+      }
+
+      // sort filtered trades
+      const sortedHistory = [...filtered].sort((a, b) => {
+        return (a.entry_date ?? 0) - (b.entry_date ?? 0);
+      });
+
+      
+      // =========================
+      // 📈 EQUITY CURVE (FIXED)
+      // =========================
+            
+      let chartCapital = startValue;
+
+      const values = [1];
+      const drawdowns = [0];
+      const labels = ["Start"];
+
+      let peak = 1;
+
+        let bestIndex = 0;
+        let bestValue = -Infinity;
+        
+        sortedHistory.forEach((t, i) => {
+
+        const r = parseFloat(t.percent_move ?? t.result ?? 0);
+
+        // 🔥 track best trade
+        if (r > bestValue) {
+          bestValue = r;
+          bestIndex = i + 1; // +1 because of "Start"
+        }
+
+        chartCapital = chartCapital * (1 + (r / 100) * positionSize);
+
+        const normalized = chartCapital / startValue;
+
+        values.push(normalized);
+        labels.push(i + 1);
+
+        if (normalized > peak) peak = normalized;
+
+        const dd = (normalized - peak) / peak;
+        drawdowns.push(dd);
+
+      });    
+      
+      // =========================
+      // 📉 MAX DRAWDOWN
+      // =========================
+      const maxDD = Math.min(...drawdowns) * 100;
+
+      const ddEl = document.getElementById("maxDrawdown");
+      if (ddEl) {
+        ddEl.innerText = maxDD.toFixed(2) + "%";
+      }
+
+      // =========================
+      // 💰 FINAL VALUES
+      // =========================
+
+      const final = chartCapital;
+      const totalReturn = ((final - startValue) / startValue) * 100;
+
+      // update UI
+      document.getElementById("finalValue").innerText =
+        "$" + final.toLocaleString(undefined, { maximumFractionDigits: 0 });
+
+      document.getElementById("totalReturn").innerText =
+        totalReturn.toFixed(2) + "%";
+
+      // =========================
+      // 📊 RENDER CHART
+      // =========================
+
+      const ctx = document.getElementById("equityChart");
+
+      if (ctx) {
+
+        if (window.equityChartInstance) {
+          window.equityChartInstance.destroy();
+        }
+
+        window.equityChartInstance = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                data: values,
+                borderColor: "#22c55e",
+                backgroundColor: "rgba(34,197,94,0.1)",
+                tension: 0.45,
+                fill: true,
+                borderWidth: 3,
+                pointRadius: 0
+              },
+              {
+                data: drawdowns.map(d => 1 + d),
+                borderColor: "#ef4444",
+                backgroundColor: "rgba(239,68,68,0.1)",
+                tension: 0.45,
+                fill: true,
+                borderWidth: 2,
+                pointRadius: 0
+              },
+              {
+                data: values.map((v, i) => i === bestIndex ? v : null),
+                borderColor: "#facc15",
+                backgroundColor: "#facc15",
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                showLine: false
+              }
+            ]
+          },
+          options: {
+            plugins: {
+              legend: { display: false },
+
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    if (context.datasetIndex === 2 && context.raw !== null) {
+                      return "Best Trade: +" + bestValue.toFixed(2) + "%";
+                    }
+                    return "";
+                  }
+                }
+              }
+
+            },
+            scales: {
+              x: {
+                ticks: { display: false },
+                grid: { display: false }
+              },
+              y: {
+                min: 0.9,
+                ticks: {
+                  color: "#94a3b8",
+                  callback: function(v) {
+                    return "$" + Math.round(v * startValue).toLocaleString();
+                  }
+                },
+                grid: { color: "#1e293b" }
+              }
+            }
+          }
+        });
+
+      } // ✅ END if (ctx)
+
+      } // ✅ CLOSE runSimulation()
+      
+        
+
+      // run once
+      runSimulation();
+
+      // listeners
+      document.getElementById("startCapital")?.addEventListener("input", runSimulation);
+      document.getElementById("positionSize")?.addEventListener("change", runSimulation);
+      document.getElementById("timeRange")?.addEventListener("change", runSimulation);
+
+    
+
+    // =========================
+    // 🏆 TOP & WORST TRADES
+    // =========================
+
+        // use history only (closed trades)
+        const sorted = [...history].sort((a, b) => {
+          return (b.percent_move ?? 0) - (a.percent_move ?? 0);
+        });
+    
+    // top 3 winners
+    const top = sorted.slice(0, 3);
+
+    // worst 3 losers
+    const worst = sorted.slice(-3).reverse();
+
+    function renderTradeList(trades, isPositive = true) {
+
+      if (trades.length === 0) return "No trades";
+
+      return trades.map(t => {
+        const move = parseFloat(t.percent_move ?? 0);
+        const color = move >= 0 ? "#22c55e" : "#ef4444";
+
+        return `
+          <div style="font-size:14px; margin-bottom:6px;">
+            <strong 
+              style="cursor:pointer;"
+              onclick="window.location.href='chart.html?symbol=${t.symbol}'"
+            >
+              ${t.symbol}
+            </strong>
+            <span style="color:${color}; float:right;">
+              ${move.toFixed(2)}%
+            </span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // update UI
+    document.getElementById("topTrades").innerHTML = renderTradeList(top, true);
+    document.getElementById("worstTrades").innerHTML = renderTradeList(worst, false);
+
+    // =========================
+    // 📊 UPDATE UI
+    // =========================
+
+    // animate
+    animateValue("avgReturn", avg);
+    animateValue("winRate", win);
+
+    // BEST TRADE
+    const bestMove = parseFloat(best.percent_move ?? best.result ?? 0);
+
+    document.getElementById("bestTrade").innerHTML = `
+  <div style="font-size:22px; font-weight:bold; color:#22c55e;">
+    ${best.symbol}
+  </div>
+  <div style="font-size:14px; color:#94a3b8;">
+    +${bestMove.toFixed(2)}%
+  </div>
+`;
+
+   
+    // =========================
+    // 📈 PERFORMANCE BAR (YOUR RULES)
+    // =========================
+    const bar = document.getElementById("winBar");
+
+    let width = 0;
+
+    // WIDTH LOGIC
+    if (avg <= 0) {
+      width = 0;
+    } else if (avg >= 5) {
+      width = 100;
+    } else {
+      width = (avg / 5) * 100;
+    }
+
+    // APPLY WIDTH
+    bar.style.width = width + "%";
+
+    // COLOR LOGIC
+    if (avg < 0) {
+      bar.style.background = "#ef4444"; // red
+    } else if (avg < 5) {
+      bar.style.background = "#f59e0b"; // yellow
+    } else {
+      bar.style.background = "#22c55e"; // green
+    }
+
+    }) // closes .then()
+
+    .catch(err => {
+      console.error("STATS ERROR:", err);
+    });
+
+    }); // ✅ closes MAIN DOMContentLoaded
+
+
+
+</script>
+
+<script>
+
+// =========================
+// 🔄 NAV LOGIN / LOGOUT
+// =========================
+async function setupAuthButton() {
+
+  const btn = document.getElementById("authBtn");
+  if (!btn) return;
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (session) {
+    btn.innerText = "Logout";
+
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    };
+
+  } else {
+    btn.innerText = "Login";
+    btn.href = "login.html";
+  }
+}
+
+// =========================
+// ⏱ RUN AFTER PAGE LOAD
+// =========================
+window.addEventListener("load", async () => {
+  await setupAuthButton();
+});
+
+// =========================
+// 🔁 UPDATE ON AUTH CHANGE
+// =========================
+supabaseClient.auth.onAuthStateChange(() => {
+  setupAuthButton();
+});
+
+</script>
+
+
+</body>
+</html>

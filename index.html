@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>EdgeBreak | Structured Breakout Trading Framework & Trade Tracking Platform</title>
+<meta name="description" content="EdgeBreak is a data-driven breakout trading system focused on NASDAQ stocks. Track real trades, analyse performance, and trade with structured execution.">
+<link rel="stylesheet" href="css/dashboard.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabaseClient = supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  }
+);
+</script>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="nav">
+  <div class="nav-inner">
+
+    <!-- LEFT -->
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="images/logo.png" class="nav-logo">
+      </a>
+      <a href="index.html" class="logo-text">EDGEBREAK</a>
+      <span class="live-badge">LIVE</span>
+    </div>
+
+    <!-- DESKTOP LINKS -->
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="index.html#statsGrid" class="nav-link">Performance</a>
+      <a href="watchlist.html" class="nav-link">Trading Desk</a>
+      <a href="trading-guide.html" class="nav-link">Guide</a>
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
+      <a href="blog.html" class="nav-link">Trade Insights</a>
+      <a href="#" class="nav-cta" id="authBtn">Login</a>
+    </div>
+
+  </div>
+
+</div>  
+
+<!-- HERO -->
+<div class="hero">
+
+  <!-- OVERLAY (if your CSS uses it, keep it — otherwise safe to leave) -->
+  <div class="hero-overlay"></div>
+
+  <!-- LOGO -->
+  <div class="hero-logo-wrap">
+    <img src="images/logo.png" class="hero-logo" width="90">
+  </div>
+
+  <!-- CONTENT -->
+  <div class="hero-content">
+
+    <h1 class="hero-title">
+      EdgeBreak
+    </h1>
+
+    <h2 class="hero-sub">
+      Trade With Structure. Not Guesswork.
+    </h2>
+
+    <p class="hero-desc">
+      A structured trading framework designed to help you analyse breakout setups, track performance, and improve consistency using real market data.
+    </p>
+
+    <p style="color:#22c55e; font-weight:600; margin-top:10px;">
+      Access real tracked trades • See how positions are managed • Get notified when trades open and close
+    </p>
+
+    <div class="hero-buttons">
+      <a href="pricing.html" class="btn-primary">
+        View Trades
+      </a>
+    </div>
+
+    <p class="hero-trust">
+      For analysis purposes only • Not financial advice
+    </p>
+
+  </div>
+
+</div>
+
+<!-- 🔥 INSIDE EDGEBREAK (PRODUCT SECTION) -->
+<div class="section" style="text-align:center; max-width:900px; margin:60px auto;">
+
+  <h2>Inside EdgeBreak</h2>
+
+  <p style="color:#94a3b8; margin:15px auto 40px auto; max-width:650px;">
+    Access real trades, track how they are managed, and see every position from entry through to exit using structured market data.
+  </p>
+
+  <!-- 🔥 CONVERSION HOOK -->
+  <p style="color:#22c55e; font-weight:600; margin-bottom:50px;">
+    Most traders fail because they can’t see what they’re doing wrong. This fixes that.
+  </p>
+
+  <div class="feature-grid" style="grid-template-columns:1fr; gap:50px;">
+
+    <!-- BLOCK 1 -->
+    <div class="feature-card">
+      <img src="images/watchlist1.png" style="width:100%; height:auto; margin-bottom:25px;">
+
+      <h3>Access Live Trades</h3>
+
+      <p>
+        View all active breakout setups in one place and see exactly what trades are currently being tracked.
+      </p>
+
+      <p class="feature-sub">
+        Real positions. Real market conditions. No hidden activity.
+      </p>
+    </div>
+
+    <!-- BLOCK 2 -->
+    <div class="feature-card">
+      <img src="images/watchlist2.png" style="width:100%; height:auto; margin-bottom:25px;">
+
+      <h3>See Trade Management</h3>
+
+      <p>
+        Follow each position as it develops with entry price, movement, and time in trade clearly displayed.
+      </p>
+
+      <p class="feature-sub">
+        Understand how trades are handled — not just where they start.
+      </p>
+    </div>
+
+    <!-- BLOCK 3 -->
+    <div class="feature-card">
+      <img src="images/watchlist3.png" style="width:100%; height:auto; margin-bottom:25px;">
+
+      <h3>Full Performance Visibility</h3>
+
+      <p>
+        Every trade is tracked and summarised, including wins, losses, and overall system performance.
+      </p>
+
+      <p class="feature-sub">
+        Nothing hidden. No cherry-picked results.
+      </p>
+    </div>
+
+  </div>
+
+</div>
+
+<div style="margin:90px auto; max-width:900px; text-align:center;">
+  <div style="height:1px; background:#1e293b; margin-bottom:20px;"></div>
+</div>
+
+<!-- PROVEN PERFORMANCE -->
+<div class="section" id="statsGrid">
+
+  <h2>EdgeBreak System Performance</h2>
+
+  <p style="color:#94a3b8; margin-bottom:30px; max-width:700px; margin-left:auto; margin-right:auto;">
+    All tracked trades are recorded to provide a consistent view of system performance over time, with both positive and negative outcomes included.
+  </p>
+
+  <!-- MAIN STATS -->
+  <div id="statsGridBoxes" class="stats-grid"></div>
+
+  <!-- GROUP PERFORMANCE -->
+  <div id="groupStats" class="stats-grid" style="margin-top:20px;"></div>
+
+  <!-- TRUST LINE -->
+  <p style="margin-top:25px; text-align:center; color:#22c55e; font-weight:bold;">
+    The system is designed to focus on identifying breakout conditions that can influence overall performance over time.
+  </p>
+
+  <p style="text-align:center; color:#22c55e; font-weight:bold; margin-top:40px;">
+    Both positive and negative outcomes are included to support a balanced view of performance.
+  </p>
+
+  <p style="text-align:center; color:#22c55e; font-weight:bold; margin-top:20px;">
+    Every trade is tracked — including losses. No deleted trades. No filtered results.
+  </p>
+
+</div>
+
+<div style="margin:90px auto; max-width:900px; text-align:center;">
+  <div style="height:1px; background:#1e293b; margin-bottom:20px;"></div>
+</div>
+
+<!-- 🔥 DASHBOARD (PRODUCT SECTION) -->
+<div class="section" style="text-align:center; max-width:900px; margin:60px auto;">
+
+  <h2>Your Dashboard</h2>
+
+  <p style="color:#94a3b8; margin:15px auto 40px auto; max-width:650px;">
+    Track your trades, measure performance, and understand your results with complete clarity.
+  </p>
+
+  <div class="feature-grid" style="grid-template-columns:1fr; gap:50px;">
+
+    <!-- BLOCK 1 -->
+    <div class="feature-card">
+      <img src="images/dash1.png" style="width:100%; height:auto; margin-bottom:25px;">
+
+      <h3>Log Your Trades</h3>
+
+      <p>
+        Record every trade with entry, exit, and notes to build a clear history of your decisions.
+      </p>
+
+      <p class="feature-sub">
+        Build discipline through structured tracking.
+      </p>
+    </div>
+
+    <!-- BLOCK 2 -->
+    <div class="feature-card">
+      <img src="images/dash2.png" style="width:100%; height:auto; margin-bottom:25px;">
+
+      <h3>Know Your Numbers</h3>
+
+      <p>
+        See your win rate, average return, and performance metrics update instantly.
+      </p>
+
+      <p class="feature-sub">
+        Understand what’s working — and what isn’t.
+      </p>
+    </div>
+
+    <!-- BLOCK 3 -->
+    <div class="feature-card">
+      <img src="images/dash3.png" style="width:100%; height:auto; margin-bottom:25px;">
+
+      <h3>Measure Performance</h3>
+
+      <p>
+        Break down results across trades to see consistency, risk, and overall system behaviour.
+      </p>
+
+      <p class="feature-sub">
+        No hidden results. Full transparency.
+      </p>
+    </div>
+
+    <!-- BLOCK 4 -->
+    <div class="feature-card">
+      <img src="images/dash4.png" style="width:100%; height:auto; margin-bottom:25px;">
+
+      <h3>Simulate Growth</h3>
+
+      <p>
+        Test how your trades perform over time using position sizing and compounding.
+      </p>
+
+      <p class="feature-sub">
+        See the long-term impact of your decisions.
+      </p>
+    </div>
+
+  </div>
+
+</div>
+
+<div style="margin:90px auto; max-width:900px; text-align:center;">
+  <div style="height:1px; background:#1e293b; margin-bottom:20px;"></div>
+</div>
+
+<!-- HUMAN + MARKET REALITY SECTION -->
+<div class="section" style="text-align:center; max-width:750px; margin:40px auto;">
+
+  <h2>Built for Real Trading</h2>
+
+  <p style="font-size:20px; line-height:1.6; font-weight:600;">
+    EdgeBreak is built on real trading experience — not AI trading signals or automated systems.
+  </p>
+
+  <p style="color:#94a3b8; margin-top:12px;">
+    Designed for traders who want structured trading, clear rules, and consistent execution using real market data.
+  </p>
+
+  <p style="margin-top:12px; font-weight:500;">
+    The system provides structure. You stay in control.
+  </p>
+
+</div>
+
+<!-- IMAGE BLOCK -->
+<div style="text-align:center; margin:30px 0;">
+  <img src="images/human-trading-section.png" style="max-width:700px; width:100%; border-radius:12px;">
+</div>
+
+<!-- MARKET REALITY SECTION -->
+<div class="section" style="text-align:center; max-width:750px; margin:40px auto;">
+
+  <p style="font-size:18px; line-height:1.6;">
+    The stock market moves in cycles. Some periods perform well — others don’t.
+  </p>
+
+  <p style="color:#94a3b8; margin-top:12px;">
+    Losses, drawdowns, and slow performance are part of trading. This system is built to manage both strong and difficult conditions.
+  </p>
+
+  <p style="margin-top:12px; font-weight:500;">
+    Focus on consistency, risk management, and long-term performance.
+  </p>
+
+</div>
+
+<div style="margin:90px auto; max-width:900px; text-align:center;">
+  <div style="height:1px; background:#1e293b; margin-bottom:20px;"></div>
+</div>
+
+<!-- 🔥 TESTIMONIALS / SOCIAL PROOF -->
+<div class="section" style="text-align:center; max-width:900px; margin:60px auto;">
+
+  <h2>What Traders Are Saying About EdgeBreak</h2>
+
+  <p style="color:#94a3b8; margin-bottom:30px; max-width:650px; margin-left:auto; margin-right:auto;">
+    A structured Data-driven breakout trading framework built to help traders analyse breakout setups, manage trades, and stay consistent in real market conditions.
+  </p>
+
+  <div class="feature-grid">
+
+    <div class="card">
+      <p>
+        "The structure is what makes it different. It’s not just data — it’s a complete trading framework."
+      </p>
+      <p style="color:#64748b; font-size:12px;">— Amanda C</p>
+    </div>
+
+    <div class="card">
+      <p>
+        "Fewer trades, but a stronger focus on high-quality breakout setups. That’s where the edge comes from."
+      </p>
+      <p style="color:#64748b; font-size:12px;">— Ryan H</p>
+    </div>
+
+    <div class="card">
+      <p>
+        "It filters out the noise and helps me focus on real market structure instead of guessing."
+      </p>
+      <p style="color:#64748b; font-size:12px;">— Chris C</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div style="margin:90px auto; max-width:900px; text-align:center;">
+  <div style="height:1px; background:#1e293b; margin-bottom:20px;"></div>
+</div>
+
+<!-- 🔒 TRADING DESK PREVIEW -->
+<div class="section">
+
+    <h2>EdgeBreak Trading Desk Preview</h2>
+
+    <p style="color:#94a3b8; margin-bottom:25px;">
+      Daily breakout setups and tracked positions — full details available to members
+    </p>
+
+  <!-- LIVE DATA GOES HERE -->
+    <div id="previewTrades" class="grid"></div>
+
+  <!-- CTA -->
+    <div style="margin-top:30px;">
+      <a href="pricing.html" class="nav-cta">
+        🔓 Unlock EdgeBreak
+      </a>
+  </div>
+
+</div>
+  
+<div style="margin:90px auto; max-width:900px; text-align:center;">
+  <div style="height:1px; background:#1e293b; margin-bottom:20px;"></div>
+</div>
+
+<!-- 🔥 FINAL CTA -->
+<div class="section" style="text-align:center; max-width:700px; margin:80px auto;">
+
+  <h2>Get Access to EdgeBreak</h2>
+
+  <p style="color:#94a3b8; margin-bottom:20px;">
+    Access real trades, see how positions are managed, and track your performance using a structured trading framework.
+  </p>
+
+  <p style="font-weight:500; margin-bottom:10px;">
+    Get notified when new positions are tracked and when trades are closed.
+  </p>
+
+  <p style="color:#94a3b8; margin-bottom:25px;">
+    Stay updated without needing to monitor the market all day.
+  </p>
+
+  <a href="pricing.html" class="btn-primary" style="font-size:18px; padding:14px 28px;">
+    View Pricing & Get Access
+  </a>
+
+</div>
+
+</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer" style="width:100%;">
+
+  <div class="footer-inner">
+
+    <!-- LEFT (LOGO + BRAND) -->
+    <div class="footer-col">
+      
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <img src="images/logo.png" style="width:40px; height:auto;">
+        <h3 style="color:white; margin:0;">EdgeBreak</h3>
+      </div>
+
+      <p>
+        Data-driven breakout trading framework designed to analyse and track breakout setups using structured market data
+      </p>
+
+    </div>
+
+    <!-- LINKS -->
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="index.html#performance">Performance</a>
+      <a href="watchlist.html" class="nav-link">Trading Desk</a>
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="disclaimer.html">Disclaimer</a>
+      <a href="about.html">About</a>
+    </div>
+
+    <!-- RESOURCES -->
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="trading-guide.html">Trading Guide</a>
+      <a href="faq.html">FAQ</a>
+      <a href="support.html">Support</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+
+    <!-- CTA -->
+    <div class="footer-col">
+      <h4>Get Access</h4>
+      <p style="margin-bottom:10px;">
+        Unlock full access to the system and tracked breakout setups
+      </p>
+      <a href="pricing.html" class="nav-cta">Unlock</a>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="footer-bottom">
+
+  <!-- EDGEBREAK INFO -->
+  <p>© 2026 EdgeBreak • All rights reserved</p>
+
+  <p class="footer-disclaimer">
+    Not financial advice. Trading involves risk.
+  </p>
+
+  <!-- PARENT COMPANY -->
+  <div class="footer-parent-block">
+    <img src="images/crane-logo.png" alt="Crane Platform Labs" class="footer-logo">
+
+    <p class="footer-parent">
+      EdgeBreak is a product of <strong>Crane Platform Labs</strong><br>
+      ABN 41 946 218 773
+    </p>
+  </div>
+
+</div>
+
+
+</div>
+
+<script>
+
+
+fetch("master_stats_2025_to_now.json?v=" + new Date().getTime())
+.then(res => res.json())
+.then(stats => {
+
+  // =========================
+  // 📊 MAIN STATS
+  // =========================
+  document.getElementById("statsGridBoxes").innerHTML = `
+    <div class="card">
+      <div>TOTAL TRADES</div>
+      <div class="big">${stats.total_trades}</div>
+    </div>
+
+    <div class="card">
+      <div>WIN RATE</div>
+      <div class="big">${stats.win_rate}%</div>
+    </div>
+
+    <div class="card">
+      <div>AVG RETURN</div>
+      <div class="big">${stats.avg_return}%</div>
+    </div>
+
+    <div class="card green">
+      <div>BEST TRADE</div>
+      <div class="big">${stats.best_trade}%</div>
+    </div>
+
+    <div class="card red">
+      <div>WORST TRADE</div>
+      <div class="big">${stats.worst_trade}%</div>
+    </div>
+  `;
+
+  // =========================
+  // 🏆 BEST TRADES
+  // =========================
+  const bestTrades = stats.best_trades || [];
+
+  const bestContainer = document.getElementById("bestTrades");
+
+  if (bestContainer) {
+    bestContainer.innerHTML =
+      bestTrades.length
+        ? bestTrades.map(t => `
+            <div class="trade">
+              <div>${t.symbol}</div>
+              <div class="green">+${t.return}%</div>
+            </div>
+          `).join("")
+        : "<div class='card'>No best trades found</div>";
+  }
+
+  // =========================
+  // 📊 GROUP STATS
+  // =========================
+  document.getElementById("groupStats").innerHTML =
+    Object.entries(stats.groups || {}).map(([g, v]) => `
+      <div class="card">
+        <h3>${g}</h3>
+        <div>Trades: ${v.trades}</div>
+        <div>Win Rate: ${v.win_rate}%</div>
+        <div>Avg: ${v.avg_return}%</div>
+        <div class="green">Best: ${v.best}%</div>
+        <div class="red">Worst: ${v.worst}%</div>
+      </div>
+    `).join("");
+
+})
+.catch(err => {
+  console.error("Stats error:", err);
+});
+
+
+
+</script>
+
+
+<script>
+
+
+
+// 🔒 HOMEPAGE TRADING DESK PREVIEW
+fetch("active_positions.json?v=" + new Date().getTime())
+  .then(res => res.json())
+  .then(data => {
+
+    const container = document.getElementById("previewTrades");
+    if (!container) return;
+
+    const preview = data
+    .sort((a, b) => b.percent_move - a.percent_move)
+    .slice(0, 4);
+
+    container.innerHTML = preview.map(trade => {
+
+      const percent = parseFloat(trade.change_percent || 0);
+      const days = trade.days_held || 0;
+
+      let color = "green";
+      if (percent < 0) color = "red";
+
+      let status = "Holding";
+      if (days <= 2) status = "Breaking out";
+      if (percent < 0) status = "Pullback";
+
+      return `
+        <div class="card">
+          <div style="font-size:12px; color:#22c55e; margin-bottom:6px;">
+            🔒 LOCKED
+          </div>
+          <div class="big ${color}">
+            ${percent > 0 ? "+" : ""}${percent.toFixed(2)}%
+          </div>
+          <div style="color:#94a3b8;">
+            ${days} days
+          </div>
+          <div style="font-size:12px; color:#64748b; margin-top:6px;">
+            ${status}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+  })
+  .catch(() => {
+    document.getElementById("previewTrades").innerHTML = `
+      <p style="color:#64748b;">Preview unavailable</p>
+    `;
+  });
+
+</script>
+
+<script>
+// =========================
+// 🔐 NAV LOGIN / LOGOUT
+// =========================
+const user = localStorage.getItem("edgebreak_user");
+const navBtn = document.querySelector(".nav-cta");
+
+if (navBtn) {
+  if (user) {
+    navBtn.innerText = "Logout";
+    navBtn.href = "#";
+
+    navBtn.onclick = function (e) {
+      e.preventDefault();
+      localStorage.removeItem("edgebreak_user");
+      window.location.href = "index.html";
+    };
+
+  } else {
+    navBtn.innerText = "Login";
+    navBtn.href = "login.html";
+  }
+}  
+</script>
+<script>
+
+// =========================
+// 🔄 NAV LOGIN / LOGOUT
+// =========================
+async function setupAuthButton() {
+
+  const btn = document.getElementById("authBtn");
+  if (!btn) return;
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (session) {
+    btn.innerText = "Logout";
+
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    };
+
+  } else {
+    btn.innerText = "Login";
+    btn.href = "login.html";
+  }
+}
+
+// =========================
+// 🔁 AUTH STATE LISTENER
+// =========================
+supabaseClient.auth.onAuthStateChange(() => {
+  setupAuthButton();
+});
+
+</script>
+
+<script>
+window.addEventListener("load", async () => {
+  await setupAuthButton();
+});
+</script>
+</body>
+</html>

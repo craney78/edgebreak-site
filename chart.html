@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stock Chart | Breakout Analysis - EdgeBreak</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+<link rel="stylesheet" href="css/dashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+
+<script>
+
+// =========================
+// 🔑 SUPABASE CLIENT
+// =========================
+const supabaseClient = supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  }
+);
+
+// =========================
+// 🔒 ACCESS CONTROL
+// =========================
+async function checkAccess() {
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (!session) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const { data: profile } = await supabaseClient
+    .from("profiles")
+    .select("is_active")
+    .eq("id", session.user.id)
+    .single();
+
+  if (!profile || !profile.is_active) {
+    window.location.href = "pricing.html";
+  }
+
+}
+
+</script>
+
+</head>
+<body>
+
+
+
+<!-- NAVBAR -->
+<div class="nav">
+  <div class="nav-inner">
+
+    <!-- LEFT -->
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="images/logo.png" class="nav-logo">
+      </a>
+      <a href="index.html" class="logo-text">EDGEBREAK</a>
+      <span class="live-badge">LIVE</span>
+    </div>
+
+    <!-- DESKTOP LINKS -->
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="index.html#statsGrid" class="nav-link">Performance</a>
+      <a href="watchlist.html" class="nav-link">Trading Desk</a>
+      <a href="trading-guide.html" class="nav-link">Guide</a>
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
+      <a href="blog.html" class="nav-link">Trade Insights</a>
+      <a href="#" class="nav-cta" id="authBtn">Login</a>
+    </div>
+
+  </div>
+
+</div>  
+
+<div class="container">
+  <div class="section chart-title">
+  <h1>
+    Chart — <span class="highlight" id="symbolText">Loading...</span>
+  </h1>
+</div>
+
+<div class="chart-search">
+  <input 
+    type="text" 
+    id="tickerInput" 
+    placeholder="Enter ticker (e.g. TSLA)"
+  >
+  <button onclick="loadTicker()">Load</button>
+</div>
+
+    <div class="section trading-desk-section">
+
+  <div class="chart-container">
+    <div id="tradingview_chart"></div>
+
+    <div id="entryLine"></div>
+    <div id="entryLabel"></div>
+
+    <div id="stopLine"></div>
+    <div id="stopLabel"></div>
+
+    <div id="breakoutZone"></div>
+
+    <div id="riskBox"></div>
+    <div id="rewardBox"></div>
+    <div id="rrLabel"></div>
+  </div>
+
+</div>
+
+<div class="chart-note">
+  Lines: Entry (green), Stop (red), Target (reward projection), Breakout zone (highlighted resistance)
+  <br>
+  Entry: Triggered on confirmed breakout structure with volume • 
+  Stop: Defines where the setup is invalid • 
+  Target: Based on a fixed risk-to-reward model
+  <br>
+ 
+</div>
+
+    
+  <div class="footer-note">
+    <p>Data-driven breakout system</p>
+    <p>Not financial advice</p>
+  </div>
+
+  <!-- TradingView -->
+  <script src="https://s3.tradingview.com/tv.js"></script>
+<!-- FOOTER -->
+<div class="footer" style="width:100%;">
+
+  <div class="footer-inner">
+
+    <!-- LEFT (LOGO + BRAND) -->
+    <div class="footer-col">
+      
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <img src="images/logo.png" style="width:40px; height:auto;">
+        <h3 style="color:white; margin:0;">EdgeBreak</h3>
+      </div>
+
+      <p>
+        Data-driven breakout trading framework designed to analyse and track breakout setups using structured market data
+      </p>
+
+    </div>
+
+    <!-- LINKS -->
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="index.html#performance">Performance</a>
+      <a href="watchlist.html" class="nav-link">Trading Desk</a>
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="disclaimer.html">Disclaimer</a>
+      <a href="about.html">About</a>
+    </div>
+
+    <!-- RESOURCES -->
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="trading-guide.html">Trading Guide</a>
+      <a href="faq.html">FAQ</a>
+      <a href="support.html">Support</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+
+    <!-- CTA -->
+    <div class="footer-col">
+      <h4>Get Access</h4>
+      <p style="margin-bottom:10px;">
+        Unlock full access to the system and tracked breakout setups
+      </p>
+      <a href="pricing.html" class="nav-cta">Unlock</a>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="footer-bottom">
+
+  <!-- EDGEBREAK INFO -->
+  <p>© 2026 EdgeBreak • All rights reserved</p>
+
+  <p class="footer-disclaimer">
+    Not financial advice. Trading involves risk.
+  </p>
+
+  <!-- PARENT COMPANY -->
+  <div class="footer-parent-block">
+    <img src="images/crane-logo.png" alt="Crane Platform Labs" class="footer-logo">
+
+    <p class="footer-parent">
+      EdgeBreak is a product of <strong>Crane Platform Labs</strong><br>
+      ABN 41 946 218 773
+    </p>
+  </div>
+
+</div>
+
+
+</div>
+
+<script>
+window.addEventListener("load", async () => {
+
+  // 🔒 AUTH
+  await checkAccess();
+  await setupAuthButton();
+
+  // 📊 URL PARAMS
+  const params = new URLSearchParams(window.location.search);
+
+  let symbol = params.get("symbol");
+  const entry = params.get("entry");
+  const stop = params.get("stop");
+  const breakout = params.get("breakout");
+  const target = params.get("target");
+
+  if (!symbol) symbol = "AAPL";
+
+  document.getElementById("symbolText").innerText = symbol;
+  document.getElementById("tickerInput").value = symbol;
+
+  // 📈 CHART
+  new TradingView.widget({
+    "width": "100%",
+    "height": 600,
+    "symbol": "NASDAQ:" + symbol,
+    "interval": "D",
+    "timezone": "Australia/Sydney",
+    "theme": "dark",
+    "style": "1",
+    "container_id": "tradingview_chart"
+  });
+
+  // =========================
+  // ENTRY / STOP / RR LOGIC
+  // =========================
+
+  if (entry) {
+    const entryLine = document.getElementById("entryLine");
+    const entryLabel = document.getElementById("entryLabel");
+
+    const entryPrice = parseFloat(entry);
+    const minPrice = entryPrice * 0.8;
+    const maxPrice = entryPrice * 1.2;
+
+    const entryPos = ((maxPrice - entryPrice) / (maxPrice - minPrice)) * 100;
+
+    entryLine.style.display = "block";
+    entryLabel.style.display = "block";
+
+    entryLine.style.top = entryPos + "%";
+    entryLabel.style.top = (entryPos - 2) + "%";
+
+    entryLabel.innerText = "Entry: $" + entry;
+
+    if (stop) {
+      const stopLine = document.getElementById("stopLine");
+      const stopLabel = document.getElementById("stopLabel");
+
+      const stopPrice = parseFloat(stop);
+      const stopPos = ((maxPrice - stopPrice) / (maxPrice - minPrice)) * 100;
+
+      stopLine.style.display = "block";
+      stopLabel.style.display = "block";
+
+      stopLine.style.top = stopPos + "%";
+      stopLabel.style.top = (stopPos - 2) + "%";
+
+      stopLabel.innerText = "Stop: $" + stop;
+    }
+  }
+
+});
+
+</script>
+<script>
+
+// =========================
+// 🔄 NAV LOGIN / LOGOUT
+// =========================
+async function setupAuthButton() {
+
+  const btn = document.getElementById("authBtn");
+  if (!btn) return;
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (session) {
+    btn.innerText = "Logout";
+
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    };
+
+  } else {
+    btn.innerText = "Login";
+    btn.href = "login.html";
+  }
+}
+
+// =========================
+// 🔒 + 📊 PAGE INIT
+// =========================
+window.addEventListener("load", async () => {
+
+  await checkAccess();        // 🔒 protect page
+  await setupAuthButton();    // 🔄 update nav
+
+});
+
+// =========================
+// 🔁 AUTH STATE LISTENER
+// =========================
+supabaseClient.auth.onAuthStateChange(() => {
+  setupAuthButton();
+});
+
+</script>
+</body>
+</html>

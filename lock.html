@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EdgeBreak — Locked</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, sans-serif;
+      background: #020617;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 400px;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #38bdf8;
+    }
+
+    input {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 12px;
+      width: 100%;
+      border-radius: 6px;
+      border: none;
+      background: #38bdf8;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .error {
+      color: #ef4444;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>EdgeBreak Locked</h1>
+    <p>Platform upgrade in progress</p>
+
+    <input type="password" id="password" placeholder="Enter access code" />
+    <button onclick="unlock()">Enter</button>
+
+    <div class="error" id="error"></div>
+  </div>
+
+  <script>
+    const ACCESS_CODE = "edgebreakdev"; // 🔑 change this
+
+    function unlock() {
+      const input = document.getElementById("password").value;
+
+      if (input === ACCESS_CODE) {
+        localStorage.setItem("edgebreak_access", "granted");
+        window.location.href = "/";
+      } else {
+        document.getElementById("error").innerText = "Incorrect code";
+      }
+    }
+  </script>
+
+</body>
+</html>

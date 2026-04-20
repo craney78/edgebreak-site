@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | EdgeBreak</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/dashboard.css">
+
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  window.SUPABASE_URL = "https://qmonyhukamuuunxxxdlk.supabase.co";
+  window.SUPABASE_KEY = "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-";
+</script>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="nav">
+  <div class="nav-inner">
+
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="images/logo.png" class="nav-logo">
+      </a>
+      <a href="index.html" class="logo-text">EDGEBREAK</a>
+      <span class="live-badge">LIVE</span>
+    </div>
+
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="index.html#statsGrid" class="nav-link">Performance</a>
+      <a href="watchlist.html" class="nav-link">Trading Desk</a>
+      <a href="trading-guide.html" class="nav-link">Guide</a>
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
+      <a href="blog.html" class="nav-link">Trade Insights</a>
+      <a href="#" class="nav-cta" id="authBtn">Login</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- LOGIN / SIGNUP BOX -->
+<div class="container">
+  <div class="section" style="max-width:400px; margin:100px auto;">
+
+    <h2 id="formTitle" style="text-align:center; margin-bottom:20px;">
+      EdgeBreak Login
+    </h2>
+
+    <input id="email" type="email" placeholder="Email"
+      style="width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:none;" />
+
+    <input id="password" type="password" placeholder="Password"
+      style="width:100%; padding:10px; margin-bottom:20px; border-radius:6px; border:none;" />
+
+    <button id="loginBtn" class="nav-cta" style="width:100%;">
+      Login
+    </button>
+
+    <p style="text-align:center; margin-top:15px; font-size:14px;">
+      <span id="toggleMode" style="color:#22c55e; cursor:pointer;">
+        Don’t have an account? Create one
+      </span>
+    </p>
+
+    <div id="error" style="color:#ef4444; margin-top:10px; text-align:center;"></div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <h3>EdgeBreak</h3>
+      <p>Data-driven breakout trading system</p>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// =========================
+// 🔐 CONFIG (SAFE FOR GITHUB)
+// =========================
+
+// 👉 SET THESE IN BROWSER CONSOLE OR HOSTING ENV
+const SUPABASE_URL = window.SUPABASE_URL;
+const SUPABASE_KEY = window.SUPABASE_KEY;
+
+// 👉 YOUR STRIPE LINK
+const STRIPE_LINK = "https://buy.stripe.com/YOUR_LINK_HERE";
+
+// =========================
+// 🔑 INIT SUPABASE
+// =========================
+if (!SUPABASE_URL || !SUPABASE_KEY) {
+  document.body.innerHTML = "<h2 style='text-align:center;margin-top:100px;'>Missing Supabase config</h2>";
+  throw new Error("Supabase config not set");
+}
+
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// =========================
+// 🔁 MODE TOGGLE
+// =========================
+let isSignup = false;
+
+const toggle = document.getElementById("toggleMode");
+const btn = document.getElementById("loginBtn");
+const title = document.getElementById("formTitle");
+
+toggle.addEventListener("click", () => {
+  isSignup = !isSignup;
+
+  if (isSignup) {
+    title.innerText = "Create Account";
+    btn.innerText = "Create Account";
+    toggle.innerText = "Already have an account? Login";
+  } else {
+    title.innerText = "EdgeBreak Login";
+    btn.innerText = "Login";
+    toggle.innerText = "Don’t have an account? Create one";
+  }
+});
+
+// =========================
+// 🚀 MAIN AUTH
+// =========================
+async function handleAuth() {
+
+  btn.disabled = true;
+  btn.innerText = isSignup ? "Creating account..." : "Logging in...";
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  // 🟦 SIGNUP
+  if (isSignup) {
+
+    const { data, error } = await supabaseClient.auth.signUp({
+      email,
+      password
+    });
+
+    if (error) {
+      document.getElementById("error").innerText = error.message;
+      btn.disabled = false;
+      btn.innerText = "Create Account";
+      return;
+    }
+
+    const user = data.user;
+
+    await supabaseClient.from("profiles").insert({
+      id: user.id,
+      is_active: false
+    });
+
+    window.location.href = STRIPE_LINK;
+    return;
+  }
+
+  // 🟦 LOGIN
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    document.getElementById("error").innerText = error.message;
+    btn.disabled = false;
+    btn.innerText = "Login";
+    return;
+  }
+
+  const user = data.user;
+
+  const { data: profile } = await supabaseClient
+    .from("profiles")
+    .select("is_active")
+    .eq("id", user.id)
+    .single();
+
+  if (!profile || !profile.is_active) {
+    window.location.href = "pricing.html";
+    return;
+  }
+
+  window.location.href = "dashboard.html";
+}
+
+// =========================
+// EVENTS
+// =========================
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter") handleAuth();
+});
+
+btn.addEventListener("click", handleAuth);
+
+// =========================
+// NAV AUTH BUTTON
+// =========================
+async function setupAuthButton() {
+
+  const btn = document.getElementById("authBtn");
+  if (!btn) return;
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (session && session.user) {
+    btn.innerText = "Logout";
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    };
+  } else {
+    btn.innerText = "Login";
+    btn.href = "login.html";
+  }
+}
+
+setupAuthButton();
+
+supabaseClient.auth.onAuthStateChange(setupAuthButton);
+
+</script>
+
+</body>
+</html>

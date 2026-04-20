@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Disclaimer | EdgeBreak</title>
+<meta name="description" content="EdgeBreak provides data-driven trading insights for educational purposes only. Read our full disclaimer and understand the risks of trading.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="css/dashboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabaseClient = supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  }
+);
+</script>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="nav">
+  <div class="nav-inner">
+
+    <!-- LEFT -->
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="images/logo.png" class="nav-logo">
+      </a>
+      <a href="index.html" class="logo-text">EDGEBREAK</a>
+      <span class="live-badge">LIVE</span>
+    </div>
+
+    <!-- DESKTOP LINKS -->
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="index.html#statsGrid" class="nav-link">Performance</a>
+      <a href="watchlist.html" class="nav-link">Trading Desk</a>
+      <a href="trading-guide.html" class="nav-link">Guide</a>
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
+      <a href="blog.html" class="nav-link">Trade Insights</a>
+      <a href="#" class="nav-cta" id="authBtn">Login</a>
+    </div>
+
+  </div>
+</div> 
+
+<!-- HEADER -->
+<div class="header">
+
+  <!-- ✅ FIX: consistent path -->
+  <img src="/images/logo.png" class="hero-logo">
+
+  <h1>Disclaimer</h1>
+
+  <p class="header-sub">
+    Important information about using the EdgeBreak system
+  </p>
+
+</div>
+
+<!-- CONTENT -->
+<div class="section">
+
+  <p>
+    EdgeBreak is a trading tool designed for educational and informational purposes only and does not provide financial advice.
+  </p>
+
+  <p>
+    All trading involves risk. Past performance does not guarantee future results. The data, signals, and insights provided by this platform should not be relied upon as a recommendation to buy or sell any financial instrument.
+  </p>
+
+  <p>
+    You are solely responsible for your own investment decisions and should conduct your own research or consult with a licensed financial professional before making any trades.
+  </p>
+
+  <p>
+    By using this platform, you acknowledge that EdgeBreak and its creators are not liable for any financial losses or damages incurred as a result of using this system.
+  </p>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+
+  <div class="footer-inner">
+
+    <div class="footer-col">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <!-- ✅ FIX: consistent path -->
+        <img src="/images/logo.png" class="nav-logo">
+        <h3 style="margin:0;">EdgeBreak</h3>
+      </div>
+
+      <p>
+        Data-driven breakout trading system designed to analyse and track breakout setups using structured market data
+      </p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="index.html#performance">Performance</a>
+      <a href="watchlist.html">Trading Desk</a>
+      <a href="dashboard.html">My Dashboard</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="disclaimer.html">Disclaimer</a>
+      <a href="about.html">About</a>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="trading-guide.html">Trading Guide</a>
+        <a href="faq.html">FAQ</a>
+        <a href="support.html">Support</a>
+        <a href="privacy.html">Privacy Policy</a>
+      </div>
+
+    <div class="footer-col">
+      <h4>Get Access</h4>
+      <p>Unlock the full system and live trades</p>
+      <button class="btn-primary" onclick="window.location.href='pricing.html'">
+        Unlock
+      </button>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 EdgeBreak • All rights reserved</p>
+    <p style="color:#64748b; font-size:12px;">
+      Not financial advice. Trading involves risk.
+    </p>
+
+    <!-- PARENT COMPANY -->
+  <div class="footer-parent-block">
+    <img src="images/crane-logo.png" alt="Crane Platform Labs" class="footer-logo">
+
+    <p class="footer-parent">
+      EdgeBreak is a product of <strong>Crane Platform Labs</strong><br>
+      ABN 41 946 218 773
+    </p>
+  </div>
+  </div>
+
+</div>
+
+<script>
+async function setupAuthButton() {
+  const btn = document.getElementById("authBtn");
+  if (!btn) return;
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (session) {
+    btn.innerText = "Logout";
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    };
+  } else {
+    btn.innerText = "Login";
+    btn.href = "login.html";
+  }
+}
+
+supabaseClient.auth.onAuthStateChange(() => {
+  setupAuthButton();
+});
+</script>
+<script>
+window.addEventListener("load", async () => {
+  await setupAuthButton();
+});
+</script>
+</body>
+</html>

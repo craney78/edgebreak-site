@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Unlock EdgeBreak to access live breakout trades, performance tracking, and a structured breakout trading system. Simple monthly pricing.">
+<title>EdgeBreak Pricing | Breakout Trading Framework & Trade Tracking Platform</title>
+<link rel="stylesheet" href="css/dashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabaseClient = supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  }
+);
+</script>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="nav">
+  <div class="nav-inner">
+
+    <!-- LEFT -->
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="images/logo.png" class="nav-logo">
+      </a>
+      <a href="index.html" class="logo-text">EDGEBREAK</a>
+      <span class="live-badge">LIVE</span>
+    </div>
+
+    <!-- DESKTOP LINKS -->
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="index.html#statsGrid" class="nav-link">Performance</a>
+      <a href="watchlist.html" class="nav-link">Trading Desk</a>
+      <a href="trading-guide.html" class="nav-link">Guide</a>
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
+      <a href="blog.html" class="nav-link">Trade Insights</a>
+      <a href="#" class="nav-cta" id="authBtn">Login</a>
+    </div>
+
+  </div>
+
+</div>  
+
+<div class="container">
+
+  <!-- HERO -->
+  
+
+<!-- PRICING CARD -->
+<div class="section pricing-card">
+
+  <div class="header">
+
+    <img src="images/logo.png" class="hero-logo" style="width:80px; height:auto;">
+
+    <h1>Start Free. Trade With Structure.</h1>
+
+    <p class="header-sub">
+      Access real breakout trades and track performance using a structured, data-driven framework.
+    </p>
+
+    <p style="text-align:center; color:#22c55e; font-weight:bold; margin-top:20px;">
+      Every trade is tracked — including losses. No deleted trades. No filtered results.
+    </p>
+
+  </div>
+
+  <p style="text-align:center; color:#94a3b8; margin-top:20px;">
+    28 day free trial - cancel anytime
+  </p>
+
+  <ul class="features">
+    <li>✔ Access real tracked breakout trades</li>
+    <li>✔ See how positions are managed from entry to exit</li>
+    <li>✔ Get notified when trades open and close</li>
+    <li>✔ Track your own performance and trading decisions</li>
+    <li>✔ Use structured data to improve consistency over time</li>
+  </ul>
+
+  <!-- CLEAN STRIPE BUTTON -->
+  <div style="margin-top:30px; text-align:center;">
+
+    <p style="color:#22c55e; font-weight:bold; margin-bottom:15px;">
+      No charge today • 30-day free trial
+    </p>
+
+    <script async
+      src="https://js.stripe.com/v3/buy-button.js">
+    </script>
+
+    <stripe-buy-button
+      buy-button-id="buy_btn_1TNqLGCys1zSKDi2BpMrg5H5"
+      publishable-key="pk_test_51TM42jCys1zSKDi2giWOLC5ZC8CIE8OqS8CQjpbhfHYNbKZST9gJHksSdaf7RHAjmtoyW2LsTKuCKkWsxPCs6Fex00SsrPzpjH"
+    >
+    </stripe-buy-button>
+
+  </div>
+
+  <p style="margin-top:15px; font-size:13px; color:#64748b; text-align:center;">
+    Used by traders focused on building consistency through structured analysis
+  </p>
+
+  <div class="small" style="text-align:center;">
+    Cancel anytime • No lock-in contracts<br>
+    Built to help you develop a structured, repeatable trading approach over time
+  </div>
+
+</div>
+
+  <!-- WHAT YOU GET -->
+  <div class="section">
+
+    <h2 style="text-align:center;">
+      <h2>A Structured Trading Framework — Not a Broker, You Stay in Control</h2>
+    </h2>
+
+    <p style="color:#94a3b8; max-width:650px; margin:20px auto; text-align:center;">
+      EdgeBreak provides a structured, data-driven environment to explore, track, and analyse breakout setups, helping you develop a clearer understanding of performance over time.
+    </p>
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="label">Track Performance</div>
+        <div class="value">📊</div>
+        <div class="stat-note">Monitor win rate, returns, and consistency</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">Portfolio Growth</div>
+        <div class="value">📈</div>
+        <div class="stat-note">Visualise your account over time</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">Trade Journal</div>
+        <div class="value">📝</div>
+        <div class="stat-note">Review decisions and improve discipline</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">Simulation Tools</div>
+        <div class="value">⚙️</div>
+        <div class="stat-note">Test position sizing and compounding</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- WHY IT MATTERS -->
+  <div class="section">
+
+    <h2 style="text-align:center;">Why Traders Use EdgeBreak</h2>
+
+    <div style="max-width:600px; margin:auto; color:#94a3b8; line-height:1.8; text-align:center;">
+
+      <p>✔ Build consistency by tracking and reviewing trade outcomes</p>
+      <p>✔ Reduce emotional decision-making through structured analysis</p>
+      <p>✔ Identify patterns in what works — and what doesn’t</p>
+      <p>✔ Develop a more data-driven approach to trading</p>
+
+    </div>
+
+  </div>
+
+  <!-- DASHBOARD PREVIEW -->
+  <div class="section">
+
+    <h2 style="text-align:center;">See Your Edge Over Time</h2>
+
+    <p style="color:#94a3b8; text-align:center;">
+      Your performance, tracked and visualised — so you can improve with every trade.
+    </p>
+
+    <div class="stats" style="margin-top:30px;">
+
+      <div class="stat">
+        <div class="label">Win Rate</div>
+        <div class="value">62%</div>
+        <div class="stat-note">Based on tracked historical performance</div>
+        </div>
+
+      <div class="stat">
+        <div class="label">Profit Factor</div>
+        <div class="value">1.34x</div>
+        <div class="stat-note">Measured across recorded trade outcomes</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">Avg Return</div>
+        <div class="value">+2.8%</div>
+        <div class="stat-note">Average movement per tracked setup</div>
+      </div>
+
+      <div class="stat">
+        <div class="label">Best Trade</div>
+        <div class="value">+12.5%</div>
+        <div class="stat-note">Example breakout outcome</div>
+      </div>
+
+    </div>
+
+    <p style="font-size:12px; color:#64748b; margin-top:15px; text-align:center;">
+    These results are based on tracked historical data and simulated trade outcomes. 
+    Past performance is not indicative of future results.
+    </p>
+
+    </div>
+
+  </div>
+
+<!-- FINAL CTA -->
+<div class="section" style="text-align:center; padding:60px 20px;">
+
+  <h2 style="margin-bottom:10px;">
+    Start Free With EdgeBreak
+  </h2>
+
+  <p style="color:#94a3b8; max-width:600px; margin:0 auto 10px;">
+    Access real trades, track performance, and follow a structured breakout system built on data — not guesswork.
+  </p>
+
+  <p style="color:#22c55e; font-weight:bold; margin-bottom:25px;">
+    1-month free trial • No charge today • Cancel anytime
+  </p>
+
+  <!-- STRIPE CHECKOUT BUTTON -->
+  <a href="https://buy.stripe.com/3cIaEW5d7cO19e08odds400" 
+     class="btn-primary"
+     style="display:inline-block; padding:15px 30px; font-size:16px; font-weight:bold;">
+    Start Free Trial
+  </a>
+
+  <p style="margin-top:15px; font-size:13px; color:#64748b;">
+    No lock-in contracts • Full access instantly after signup
+  </p>
+
+</div>
+      
+</div>
+
+<!-- FOOTER -->
+<div class="footer" style="width:100%;">
+
+  <div class="footer-inner">
+
+    <!-- LEFT (LOGO + BRAND) -->
+    <div class="footer-col">
+      
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <img src="images/logo.png" style="width:40px; height:auto;">
+        <h3 style="color:white; margin:0;">EdgeBreak</h3>
+      </div>
+
+      <p>
+        Data-driven breakout trading framework designed to analyse and track breakout setups using structured market data
+      </p>
+
+    </div>
+
+    <!-- LINKS -->
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="index.html#performance">Performance</a>
+      <a href="watchlist.html" class="nav-link">Trading Desk</a>
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="disclaimer.html">Disclaimer</a>
+      <a href="about.html">About</a>
+    </div>
+
+    <!-- RESOURCES -->
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="trading-guide.html">Trading Guide</a>
+      <a href="faq.html">FAQ</a>
+      <a href="support.html">Support</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+
+    <!-- CTA -->
+    <div class="footer-col">
+      <h4>Get Access</h4>
+      <p style="margin-bottom:10px;">
+        Unlock full access to the system and tracked breakout setups
+      </p>
+      <a href="pricing.html" class="nav-cta">Unlock</a>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="footer-bottom">
+
+  <!-- EDGEBREAK INFO -->
+  <p>© 2026 EdgeBreak • All rights reserved</p>
+
+  <p class="footer-disclaimer">
+    Not financial advice. Trading involves risk.
+  </p>
+
+  <!-- PARENT COMPANY -->
+  <div class="footer-parent-block">
+    <img src="images/crane-logo.png" alt="Crane Platform Labs" class="footer-logo">
+
+    <p class="footer-parent">
+      EdgeBreak is a product of <strong>Crane Platform Labs</strong><br>
+      ABN 41 946 218 773
+    </p>
+  </div>
+
+</div>
+
+
+</div>
+
+<script>
+const user = localStorage.getItem("edgebreak_user");
+const navBtn = document.querySelector(".nav-cta");
+
+if (navBtn) {
+  if (user) {
+    navBtn.innerText = "Logout";
+    navBtn.href = "#";
+
+    navBtn.onclick = function (e) {
+      e.preventDefault();
+      localStorage.removeItem("edgebreak_user");
+      window.location.href = "index.html";
+    };
+  } else {
+    navBtn.innerText = "Login";
+    navBtn.href = "login.html";
+  }
+}
+</script>
+<script>
+
+// =========================
+// 🔄 NAV LOGIN / LOGOUT
+// =========================
+async function setupAuthButton() {
+
+  const btn = document.getElementById("authBtn");
+  if (!btn) return;
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (session) {
+    btn.innerText = "Logout";
+
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    };
+
+  } else {
+    btn.innerText = "Login";
+    btn.href = "login.html";
+  }
+}
+
+// =========================
+// 🔁 AUTH STATE LISTENER
+// =========================
+supabaseClient.auth.onAuthStateChange(() => {
+  setupAuthButton();
+});
+
+</script>
+
+<script>
+window.addEventListener("load", async () => {
+  await setupAuthButton();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,424 @@
+<head>
+<meta charset="UTF-8">
+<title>EdgeBreak Trading Guide</title>
+<meta name="description" content="Learn how to use the EdgeBreak breakout trading system, including trade setups, risk management, and consistent execution strategies.">
+<link rel="stylesheet" href="css/dashboard.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabaseClient = supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  }
+);
+</script>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="nav">
+  <div class="nav-inner">
+
+    <!-- LEFT -->
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="images/logo.png" class="nav-logo">
+      </a>
+      <a href="index.html" class="logo-text">EDGEBREAK</a>
+      <span class="live-badge">LIVE</span>
+    </div>
+
+    <!-- DESKTOP LINKS -->
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="index.html#statsGrid" class="nav-link">Performance</a>
+      <a href="watchlist.html" class="nav-link">Trading Desk</a>
+      <a href="trading-guide.html" class="nav-link">Guide</a>
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
+      <a href="blog.html" class="nav-link">Trade Insights</a>
+      <a href="#" class="nav-cta" id="authBtn">Login</a>
+    </div>
+
+  </div>
+
+</div>  
+
+<!-- HEADER -->
+<div class="header">
+
+  <img src="/images/logo.png" class="hero-logo">
+
+  <h1>Trading Guide</h1>
+
+  <p class="header-sub">
+    A structured guide to using EdgeBreak and analysing breakout setups
+  </p>
+
+</div>
+
+<!-- DISCLAIMER -->
+<div class="section">
+  <h2>Important Disclaimer</h2>
+  <div class="card warning">
+
+    <p>
+      EdgeBreak is a data-driven trading tool designed to analyse and track breakout setups using historical data and structured rules.
+    </p>
+
+    <p>
+      It does not provide financial advice. All trading involves risk, and losses are a normal part of the process.
+    </p>
+
+    <p>
+      You are fully responsible for your own decisions and how you use the information provided.
+    </p>
+
+  </div>
+</div>
+
+<!-- WHAT THIS IS -->
+<div class="section">
+  <h2>What EdgeBreak Provides</h2>
+  <div class="card highlight">
+
+    <p>
+      EdgeBreak reduces the need to manually scan large numbers of charts each day by providing a structured view of market activity.
+    </p>
+
+    <p>
+      Using a structured end-of-day process, it highlights breakout setups based on consistent filtering across price, volume, and structure.
+    </p>
+
+    <p>
+      The system is updated after market close, allowing you to review activity and prepare for the next trading session.
+    </p>
+
+    <p>
+      Trades are tracked throughout their lifecycle and reflected in overall performance data.
+    </p>
+
+  </div>
+</div>
+
+<!-- treade selectivity -->
+<div class="section">
+  <h2>Trade Frequency & Selectivity</h2>
+  <div class="card highlight">
+
+    <p>
+      EdgeBreak is not designed to generate constant trading activity.
+    </p>
+
+    <p>
+      The system focuses on highlighting breakout setups that meet consistent, structured criteria.
+    </p>
+
+
+    <p>
+      Rather than forcing activity, the system prioritises selectivity — focusing on structured conditions rather than reacting to every market move.
+    </p>
+
+  </div>
+</div>
+
+<!-- PROCESS -->
+<div class="section">
+  <h2>The Process</h2>
+    
+  <div class="card">
+
+    <div class="step"><strong>1. Scan</strong><br>System analyses market data to highlight structured breakout setups</div>
+
+    <div class="step"><strong>2. Review</strong><br>Setups appear in the trading desk for review</div>
+
+    <div class="step"><strong>3. Monitor</strong><br>Tracked positions are updated over time</div>
+
+    <div class="step"><strong>4. Exit</strong><br>Outcomes are recorded based on predefined system rules</div>
+
+  </div>
+</div>
+
+<!-- DAILY USE -->
+<div class="section">
+  <h2>How You Use It</h2>
+  <div class="card">
+
+    <p>The system is designed to be reviewed once per day, after the market closes.</p>
+
+    <p>At this time, EdgeBreak updates all activity, including newly highlighted setups and changes to tracked positions.</p>
+
+    <p>The typical workflow is:</p>
+
+    <p>• Check the platform after market close</p>
+    <p>• Review any new setups added to the system</p>
+    <p>• Review updates to tracked positions</p>
+    <p>• Prepare for the next trading session based on the data provided</p>
+
+    <p>EdgeBreak is built around a structured, rules-based approach. It is not designed for emotional or reactive decision making.</p>
+
+    <p>Consistency comes from following a repeatable process over time, rather than reacting to individual outcomes or short-term market moves.</p>
+
+    <p>The platform provides the structure — how that structure is applied remains the responsibility of the user.</p>
+
+  </div>
+
+    <p style="text-align:center; color:#22c55e; font-weight:bold; margin-top:20px;">
+      Remove emotion. Follow structure. Stay consistent.
+    </p>
+
+</div>
+
+<!-- DASHBOARD -->
+<div class="section">
+
+  <h2>Measure What Matters</h2>
+
+  <p style="color:#94a3b8; max-width:600px;">
+    Consistency isn’t about guessing — it’s about tracking and refining.
+    EdgeBreak provides the structure to measure performance and support a more disciplined approach over time.
+  </p>
+
+  <ul style="margin-top:15px; color:#94a3b8; line-height:1.8;">
+    <li>✔ Track trades and outcomes over time</li>
+    <li>✔ Understand win rate and consistency patterns</li>
+    <li>✔ Identify patterns in performance over time</li>
+    <li>✔ Build discipline through a data-driven approach</li>
+  </ul>
+
+  <div style="margin-top:20px;">
+    <button onclick="window.location.href='dashboard.html'" class="nav-cta">
+      Start Tracking Your Performance
+    </button>
+  </div>
+
+</div>
+
+<!-- RISK -->
+<div class="section">
+  <h2>Expectations & Market Reality</h2>
+  <div class="card warning">
+
+    <p>Markets move in cycles, and not every period will produce strong breakout conditions.</p>
+
+    <p>There will be losing trades, drawdowns, and periods where performance slows.</p>
+
+    <p>Trade frequency may vary depending on market conditions, as the system prioritises selectivity based on defined criteria.</p>
+
+    <p>EdgeBreak is designed to participate when predefined conditions are met, rather than forcing activity in all market environments.</p>
+
+    <p>Past performance does not guarantee future results.</p>
+
+  </div>
+</div>
+
+<!-- EDGE -->
+<div class="section">
+  <h2>The Edge</h2>
+  <div class="card highlight">
+
+    <p>The strength of EdgeBreak is not in predicting outcomes.</p>
+
+    <p>It lies in consistently analysing structured breakout setups and applying the same process over time.</p>
+
+    <p>Over a series of trades, this consistency is where a disciplined, data-driven approach is developed.</p>
+
+  </div>
+</div>
+
+<!-- RULES -->
+<div class="section">
+  <h2>Key Principles</h2>
+  <div class="card">
+
+    <p>• Follow a consistent, structured approach</p>
+    <p>• Apply risk awareness to each position</p>
+    <p>• Avoid emotional decision making</p>
+    <p>• Focus on long-term consistency rather than individual outcomes</p>
+
+  </div>
+</div>
+
+<!-- FINAL -->
+<div class="section">
+  <h2>Final Note</h2>
+  <div class="card">
+
+    <p>EdgeBreak is a tool designed to support disciplined trading.</p>
+
+    <p>It provides structure, not certainty.</p>
+
+    <p>How you use that structure determines your outcome.</p>
+
+  </div>
+</div>
+
+<!-- CTA -->
+<!-- CTA -->
+<div class="section">
+
+  <div class="guide-cta">
+
+    <button class="btn-primary" onclick="window.location.href='dashboard.html'">
+      ← Back to Dashboard
+    </button>
+
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer" style="width:100%;">
+
+  <div class="footer-inner">
+
+    <!-- LEFT (LOGO + BRAND) -->
+    <div class="footer-col">
+      
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <img src="images/logo.png" style="width:40px; height:auto;">
+        <h3 style="color:white; margin:0;">EdgeBreak</h3>
+      </div>
+
+      <p>
+        Data-driven breakout trading framework designed to analyse and track breakout setups using structured market data
+      </p>
+
+    </div>
+
+    <!-- LINKS -->
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="index.html#performance">Performance</a>
+      <a href="watchlist.html" class="nav-link">Trading Desk</a>
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="disclaimer.html">Disclaimer</a>
+      <a href="about.html">About</a>
+    </div>
+
+    <!-- RESOURCES -->
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="trading-guide.html">Trading Guide</a>
+      <a href="faq.html">FAQ</a>
+      <a href="support.html">Support</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+
+    <!-- CTA -->
+    <div class="footer-col">
+      <h4>Get Access</h4>
+      <p style="margin-bottom:10px;">
+        Unlock full access to the system and tracked breakout setups
+      </p>
+      <a href="pricing.html" class="nav-cta">Unlock</a>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="footer-bottom">
+
+  <!-- EDGEBREAK INFO -->
+  <p>© 2026 EdgeBreak • All rights reserved</p>
+
+  <p class="footer-disclaimer">
+    Not financial advice. Trading involves risk.
+  </p>
+
+  <!-- PARENT COMPANY -->
+  <div class="footer-parent-block">
+    <img src="images/crane-logo.png" alt="Crane Platform Labs" class="footer-logo">
+
+    <p class="footer-parent">
+      EdgeBreak is a product of <strong>Crane Platform Labs</strong><br>
+      ABN 41 946 218 773
+    </p>
+  </div>
+
+</div>
+
+
+</div>
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById("mobileMenu");
+  menu.classList.toggle("active");
+}
+</script>
+
+<script>
+const user = localStorage.getItem("edgebreak_user");
+const navBtn = document.querySelector(".nav-cta");
+
+if (navBtn) {
+  if (user) {
+    navBtn.innerText = "Logout";
+    navBtn.href = "#";
+
+    navBtn.onclick = function (e) {
+      e.preventDefault();
+      localStorage.removeItem("edgebreak_user");
+      window.location.href = "index.html";
+    };
+  } else {
+    navBtn.innerText = "Login";
+    navBtn.href = "login.html";
+  }
+}
+</script>
+<script>
+
+// =========================
+// 🔄 NAV LOGIN / LOGOUT
+// =========================
+async function setupAuthButton() {
+
+  const btn = document.getElementById("authBtn");
+  if (!btn) return;
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (session) {
+    btn.innerText = "Logout";
+
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    };
+
+  } else {
+    btn.innerText = "Login";
+    btn.href = "login.html";
+  }
+}
+
+// =========================
+// 🔁 AUTH STATE LISTENER
+// =========================
+supabaseClient.auth.onAuthStateChange(() => {
+  setupAuthButton();
+});
+
+</script>
+
+<script>
+window.addEventListener("load", async () => {
+  await setupAuthButton();
+});
+</script>
+</body>
+</html>
