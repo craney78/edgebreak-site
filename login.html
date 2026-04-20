@@ -11,7 +11,44 @@
   <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+<script>
+const supabase = window.supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  }
+);
 
+async function checkAccess() {
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  // ❌ not logged in
+  if (!session) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  // 🔍 check profile
+  const { data: profile } = await supabaseClient
+    .from("profiles")
+    .select("is_active")
+    .eq("id", session.user.id)
+    .single();
+
+  // ❌ not active
+  if (!profile || !profile.is_active) {
+    window.location.href = "pricing.html";
+  }
+
+}
+
+checkAccess();
+</script>
 <body>
 
 <!-- NAVBAR -->
@@ -156,6 +193,41 @@ async function login() {
   window.location.href = "watchlist.html";
 }
 
+</script>
+
+<script>
+async function setupAuthButton() {
+
+  const btn = document.getElementById("authBtn");
+  if (!btn) return;
+
+  const { data: { session } } = await supabase.auth.getSession();
+
+  console.log("SESSION:", session); // 🔥 DEBUG
+
+  if (session) {
+    btn.innerText = "Logout";
+
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      await supabase.auth.signOut();
+      window.location.href = "login.html";
+    };
+
+  } else {
+    btn.innerText = "Login";
+    btn.href = "login.html";
+  }
+}
+
+window.addEventListener("load", async () => {
+  await setupAuthButton();
+});
+
+// 🔥 update on login/logout
+supabase.auth.onAuthStateChange(() => {
+  setupAuthButton();
+});
 </script>
 </body>
 </html>
