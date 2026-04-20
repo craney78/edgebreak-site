@@ -47,37 +47,7 @@ checkAccess();
 
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-// =========================
-// 🔐 NAV LOGIN / LOGOUT
-// =========================
-const supabase = window.supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
-);
 
-async function checkAccess() {
-
-  const { data: { session } } = await supabase.auth.getSession();
-
-  if (!session) {
-    window.location.href = "pricing.html";
-    return;
-  }
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("is_active")
-    .eq("id", session.user.id)
-    .single();
-
-  if (!profile || !profile.is_active) {
-    window.location.href = "pricing.html";
-  }
-}
-
-checkAccess();
-</script>
 
 <!-- NAVBAR -->
 <div class="nav">
