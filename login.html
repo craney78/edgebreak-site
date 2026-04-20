@@ -10,10 +10,10 @@
   <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- 🔑 CONFIG -->
+  <!-- CONFIG -->
   <script>
     window.SUPABASE_URL = "https://qmonyhukamuuunxxxdlk.supabase.co";
-    window.SUPABASE_KEY = "PASTE_YOUR_ANON_PUBLIC_KEY_HERE";
+    window.SUPABASE_KEY = "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-";
   </script>
 </head>
 
@@ -74,6 +74,11 @@ const supabaseClient = supabase.createClient(
 );
 
 // =========================
+// 💳 STRIPE LINK (PUT YOUR REAL LINK HERE)
+// =========================
+const STRIPE_LINK = "https://buy.stripe.com/test_cNicN45d74hvai46g5ds401";
+
+// =========================
 // 🔁 MODE
 // =========================
 let isSignup = false;
@@ -131,20 +136,15 @@ async function handleAuth() {
 
     const user = data.user;
 
-    // create profile
+    // CREATE PROFILE
     await supabaseClient.from("profiles").insert({
       id: user.id,
       is_active: false
     });
 
-    alert("Account created. You can now log in.");
+    // 👉 SEND TO STRIPE
+    window.location.href = STRIPE_LINK;
 
-    isSignup = false;
-    title.innerText = "EdgeBreak Login";
-    btn.innerText = "Login";
-    toggle.innerText = "Don’t have an account? Create one";
-
-    btn.disabled = false;
     return;
   }
 
@@ -163,7 +163,7 @@ async function handleAuth() {
     return;
   }
 
-  // ✅ LOGIN SUCCESS → ALWAYS GO TO DASHBOARD
+  // 👉 SUCCESS → DASHBOARD
   window.location.href = "dashboard.html";
 
 }
@@ -178,7 +178,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 // =========================
-// NAV BUTTON
+// NAV LOGIN / LOGOUT
 // =========================
 async function setupAuthButton() {
 
@@ -199,6 +199,8 @@ async function setupAuthButton() {
 }
 
 setupAuthButton();
+
+supabaseClient.auth.onAuthStateChange(setupAuthButton);
 
 </script>
 
