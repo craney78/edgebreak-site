@@ -13,9 +13,15 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
 <script>
-const supabaseClient = window.supabase.createClient(
+const supabase = window.supabase.createClient(
   "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  }
 );
 
 async function checkAccess() {
@@ -1146,12 +1152,12 @@ async function setupAuthButton() {
   const btn = document.getElementById("authBtn");
   if (!btn) return;
 
-  // 🔥 wait for session to be ready
   const { data: { session } } = await supabase.auth.getSession();
+
+  console.log("SESSION:", session); // 🔥 DEBUG
 
   if (session) {
     btn.innerText = "Logout";
-    btn.href = "#";
 
     btn.onclick = async (e) => {
       e.preventDefault();
@@ -1165,13 +1171,14 @@ async function setupAuthButton() {
   }
 }
 
-// 🔥 THIS IS THE KEY FIX
-supabase.auth.onAuthStateChange((event, session) => {
-  setupAuthButton();
+window.addEventListener("load", async () => {
+  await setupAuthButton();
 });
 
-// also run once on load
-window.addEventListener("load", setupAuthButton);
+// 🔥 update on login/logout
+supabase.auth.onAuthStateChange(() => {
+  setupAuthButton();
+});
 </script>
 </body>
 </html>
