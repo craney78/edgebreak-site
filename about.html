@@ -5,6 +5,20 @@
   <title>About EdgeBreak</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabaseClient = supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  }
+);
+</script>
 </head>
 
 <body>
@@ -311,6 +325,41 @@
 
 
 </div>
+<script>
 
+// NAV BUTTON
+async function setupAuthButton() {
+
+  const btn = document.getElementById("authBtn");
+  if (!btn) return;
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (session) {
+    btn.innerText = "Logout";
+
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    };
+
+  } else {
+    btn.innerText = "Login";
+    btn.href = "login.html";
+  }
+}
+
+// RUN ON LOAD
+window.addEventListener("load", async () => {
+  await setupAuthButton();
+});
+
+// LISTENER
+supabaseClient.auth.onAuthStateChange(() => {
+  setupAuthButton();
+});
+
+</script>
 </body>
 </html>
