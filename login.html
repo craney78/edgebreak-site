@@ -107,13 +107,14 @@ const supabase = window.supabase.createClient(
 );
 
 // =========================
-// LOGIN
+// LOGIN FUNCTION
 // =========================
 async function login() {
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
+  // 🔐 LOGIN
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password
@@ -124,28 +125,40 @@ async function login() {
     return;
   }
 
-  // CHECK SUBSCRIPTION STATUS
-  const { data: profile } = await supabase
+  const user = data.user;
+
+  // 🔍 GET PROFILE
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("is_active")
-    .eq("id", data.user.id)
+    .eq("id", user.id)
     .single();
 
-  if (!profile || !profile.is_active) {
-  window.location.href = "pricing.html";
-  return;
+  if (profileError) {
+    document.getElementById("error").innerText = "Error loading profile";
+    return;
   }
 
-  // ✅ NO LOCAL STORAGE NEEDED
+  // 🚫 NOT ACTIVE → PRICING
+  if (!profile || !profile.is_active) {
+    window.location.href = "pricing.html";
+    return;
+  }
+
+  // ✅ ACTIVE → ACCESS
   window.location.href = "watchlist.html";
 }
 
+// =========================
 // ENTER KEY SUPPORT
+// =========================
 document.addEventListener("keypress", function(e) {
   if (e.key === "Enter") {
     login();
   }
 });
+
+</script>
 
 </script>
 
