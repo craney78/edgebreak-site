@@ -132,8 +132,8 @@ async function login() {
     .single();
 
   if (!profile || !profile.is_active) {
-    document.getElementById("error").innerText = "No active subscription";
-    return;
+  window.location.href = "pricing.html";
+  return;
   }
 
   // ✅ NO LOCAL STORAGE NEEDED
