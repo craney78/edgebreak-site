@@ -812,6 +812,36 @@ setupAuthButton();
 
 </script>
 </script>
+<script>
+async function setupAuthButton() {
 
+  const { data: { session } } = await supabase.auth.getSession();
+  const btn = document.getElementById("authBtn");
+
+  if (!btn) return;
+
+  if (session) {
+    // 🔒 LOGGED IN
+    btn.innerText = "Logout";
+    btn.href = "#";
+
+    btn.onclick = async (e) => {
+      e.preventDefault();
+
+      await supabase.auth.signOut();
+
+      window.location.href = "login.html";
+    };
+
+  } else {
+    // 🔓 LOGGED OUT
+    btn.innerText = "Login";
+    btn.href = "login.html";
+  }
+}
+
+// run after page loads
+document.addEventListener("DOMContentLoaded", setupAuthButton);
+</script>
 </body>
 </html>
