@@ -9,112 +9,84 @@
 
   <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- 🔑 CONFIG -->
   <script>
-  window.SUPABASE_URL = "https://qmonyhukamuuunxxxdlk.supabase.co";
-  window.SUPABASE_KEY = "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-";
-</script>
+    window.SUPABASE_URL = "https://qmonyhukamuuunxxxdlk.supabase.co";
+    window.SUPABASE_KEY = "PASTE_YOUR_ANON_PUBLIC_KEY_HERE";
+  </script>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
+<!-- NAV -->
 <div class="nav">
   <div class="nav-inner">
-
     <div class="nav-left">
       <a href="index.html">
         <img src="images/logo.png" class="nav-logo">
       </a>
       <a href="index.html" class="logo-text">EDGEBREAK</a>
-      <span class="live-badge">LIVE</span>
     </div>
-
     <div class="nav-links">
       <a href="index.html" class="nav-link">Home</a>
-      <a href="index.html#statsGrid" class="nav-link">Performance</a>
-      <a href="watchlist.html" class="nav-link">Trading Desk</a>
-      <a href="trading-guide.html" class="nav-link">Guide</a>
-      <a href="dashboard.html" class="nav-link">My Dashboard</a>
-      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
-      <a href="blog.html" class="nav-link">Trade Insights</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
       <a href="#" class="nav-cta" id="authBtn">Login</a>
     </div>
-
   </div>
 </div>
 
-<!-- LOGIN / SIGNUP BOX -->
+<!-- FORM -->
 <div class="container">
   <div class="section" style="max-width:400px; margin:100px auto;">
 
-    <h2 id="formTitle" style="text-align:center; margin-bottom:20px;">
-      EdgeBreak Login
-    </h2>
+    <h2 id="formTitle" style="text-align:center;">EdgeBreak Login</h2>
 
     <input id="email" type="email" placeholder="Email"
-      style="width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:none;" />
+      style="width:100%; padding:10px; margin:10px 0;">
 
     <input id="password" type="password" placeholder="Password"
-      style="width:100%; padding:10px; margin-bottom:20px; border-radius:6px; border:none;" />
+      style="width:100%; padding:10px; margin-bottom:20px;">
 
-    <button id="loginBtn" class="nav-cta" style="width:100%;">
+    <button id="actionBtn" class="nav-cta" style="width:100%;">
       Login
     </button>
 
-    <p style="text-align:center; margin-top:15px; font-size:14px;">
-      <span id="toggleMode" style="color:#22c55e; cursor:pointer;">
+    <p style="text-align:center; margin-top:15px;">
+      <span id="toggleMode" style="cursor:pointer; color:#22c55e;">
         Don’t have an account? Create one
       </span>
     </p>
 
-    <div id="error" style="color:#ef4444; margin-top:10px; text-align:center;"></div>
+    <div id="error" style="color:red; text-align:center;"></div>
 
-  </div>
-</div>
-
-<!-- FOOTER -->
-<div class="footer">
-  <div class="footer-inner">
-    <div class="footer-col">
-      <h3>EdgeBreak</h3>
-      <p>Data-driven breakout trading system</p>
-    </div>
   </div>
 </div>
 
 <script>
 
 // =========================
-// 🔐 CONFIG (SAFE FOR GITHUB)
-// =========================
-
-// 👉 SET THESE IN BROWSER CONSOLE OR HOSTING ENV
-const SUPABASE_URL = window.SUPABASE_URL;
-const SUPABASE_KEY = window.SUPABASE_KEY;
-
-// 👉 YOUR STRIPE LINK
-const STRIPE_LINK = "https://buy.stripe.com/YOUR_LINK_HERE";
-
-// =========================
 // 🔑 INIT SUPABASE
 // =========================
-if (!SUPABASE_URL || !SUPABASE_KEY) {
-  document.body.innerHTML = "<h2 style='text-align:center;margin-top:100px;'>Missing Supabase config</h2>";
-  throw new Error("Supabase config not set");
-}
-
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseClient = supabase.createClient(
+  window.SUPABASE_URL,
+  window.SUPABASE_KEY
+);
 
 // =========================
-// 🔁 MODE TOGGLE
+// 🔁 MODE
 // =========================
 let isSignup = false;
 
+const btn = document.getElementById("actionBtn");
 const toggle = document.getElementById("toggleMode");
-const btn = document.getElementById("loginBtn");
 const title = document.getElementById("formTitle");
 
+// =========================
+// 🔁 TOGGLE LOGIN/SIGNUP
+// =========================
 toggle.addEventListener("click", () => {
+
   isSignup = !isSignup;
 
   if (isSignup) {
@@ -126,6 +98,7 @@ toggle.addEventListener("click", () => {
     btn.innerText = "Login";
     toggle.innerText = "Don’t have an account? Create one";
   }
+
 });
 
 // =========================
@@ -133,13 +106,15 @@ toggle.addEventListener("click", () => {
 // =========================
 async function handleAuth() {
 
-  btn.disabled = true;
-  btn.innerText = isSignup ? "Creating account..." : "Logging in...";
-
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
 
-  // 🟦 SIGNUP
+  btn.disabled = true;
+  btn.innerText = isSignup ? "Creating..." : "Logging in...";
+
+  // =========================
+  // SIGNUP
+  // =========================
   if (isSignup) {
 
     const { data, error } = await supabaseClient.auth.signUp({
@@ -156,16 +131,26 @@ async function handleAuth() {
 
     const user = data.user;
 
+    // create profile
     await supabaseClient.from("profiles").insert({
       id: user.id,
       is_active: false
     });
 
-    window.location.href = STRIPE_LINK;
+    alert("Account created. You can now log in.");
+
+    isSignup = false;
+    title.innerText = "EdgeBreak Login";
+    btn.innerText = "Login";
+    toggle.innerText = "Don’t have an account? Create one";
+
+    btn.disabled = false;
     return;
   }
 
-  // 🟦 LOGIN
+  // =========================
+  // LOGIN
+  // =========================
   const { data, error } = await supabaseClient.auth.signInWithPassword({
     email,
     password
@@ -178,45 +163,32 @@ async function handleAuth() {
     return;
   }
 
-  const user = data.user;
-
-  const { data: profile } = await supabaseClient
-    .from("profiles")
-    .select("is_active")
-    .eq("id", user.id)
-    .single();
-
-  if (!profile || !profile.is_active) {
-    window.location.href = "pricing.html";
-    return;
-  }
-
+  // ✅ LOGIN SUCCESS → ALWAYS GO TO DASHBOARD
   window.location.href = "dashboard.html";
+
 }
 
 // =========================
 // EVENTS
 // =========================
-document.addEventListener("keydown", e => {
+btn.addEventListener("click", handleAuth);
+
+document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") handleAuth();
 });
 
-btn.addEventListener("click", handleAuth);
-
 // =========================
-// NAV AUTH BUTTON
+// NAV BUTTON
 // =========================
 async function setupAuthButton() {
 
   const btn = document.getElementById("authBtn");
-  if (!btn) return;
 
   const { data: { session } } = await supabaseClient.auth.getSession();
 
   if (session && session.user) {
     btn.innerText = "Logout";
-    btn.onclick = async (e) => {
-      e.preventDefault();
+    btn.onclick = async () => {
       await supabaseClient.auth.signOut();
       window.location.href = "login.html";
     };
@@ -227,8 +199,6 @@ async function setupAuthButton() {
 }
 
 setupAuthButton();
-
-supabaseClient.auth.onAuthStateChange(setupAuthButton);
 
 </script>
 
