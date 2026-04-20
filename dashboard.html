@@ -14,9 +14,9 @@
 // 🔑 SUPABASE CLIENT
 // =========================
 const supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
-  {
+  window.SUPABASE_URL,
+  window.SUPABASE_KEY
+);
     auth: {
       persistSession: true,
       autoRefreshToken: true
