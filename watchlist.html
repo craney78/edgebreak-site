@@ -1143,33 +1143,35 @@ setupAuthButton();
 <script>
 async function setupAuthButton() {
 
-  const { data: { session } } = await supabase.auth.getSession();
   const btn = document.getElementById("authBtn");
-
   if (!btn) return;
 
+  // 🔥 wait for session to be ready
+  const { data: { session } } = await supabase.auth.getSession();
+
   if (session) {
-    // 🔒 LOGGED IN
     btn.innerText = "Logout";
     btn.href = "#";
 
     btn.onclick = async (e) => {
       e.preventDefault();
-
       await supabase.auth.signOut();
-
       window.location.href = "login.html";
     };
 
   } else {
-    // 🔓 LOGGED OUT
     btn.innerText = "Login";
     btn.href = "login.html";
   }
 }
 
-// run after page loads
-document.addEventListener("DOMContentLoaded", setupAuthButton);
+// 🔥 THIS IS THE KEY FIX
+supabase.auth.onAuthStateChange((event, session) => {
+  setupAuthButton();
+});
+
+// also run once on load
+window.addEventListener("load", setupAuthButton);
 </script>
 </body>
 </html>
