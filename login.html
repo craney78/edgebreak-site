@@ -7,8 +7,8 @@
 
   <link rel="stylesheet" href="css/dashboard.css">
 
-  <!-- ✅ CORRECT SUPABASE CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <!-- ✅ SUPABASE CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -39,6 +39,7 @@
   </div>
 </div>
 
+<!-- LOGIN BOX -->
 <div class="container">
   <div class="section" style="max-width:400px; margin:100px auto;">
 
@@ -52,7 +53,7 @@
     <input id="password" type="password" placeholder="Password"
       style="width:100%; padding:10px; margin-bottom:20px; border-radius:6px; border:none;" />
 
-    <button onclick="login()" class="nav-cta" style="width:100%;">
+    <button id="loginBtn" class="nav-cta" style="width:100%;">
       Login
     </button>
 
@@ -74,17 +75,11 @@
 <script>
 
 // =========================
-// 🔑 SUPABASE CLIENT (FIXED)
+// 🔑 SUPABASE CLIENT (CLEAN)
 // =========================
-const supabase = window.supabase.createClient(
+const supabaseClient = supabase.createClient(
   "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true
-    }
-  }
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 
 // =========================
@@ -92,22 +87,29 @@ const supabase = window.supabase.createClient(
 // =========================
 async function login() {
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const btn = document.getElementById("loginBtn");
+  btn.disabled = true;
+  btn.innerText = "Logging in...";
 
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
     email,
     password
   });
 
   if (error) {
     document.getElementById("error").innerText = error.message;
+    btn.disabled = false;
+    btn.innerText = "Login";
     return;
   }
 
   const user = data.user;
 
-  const { data: profile, error: profileError } = await supabase
+  // 🔍 Get profile
+  const { data: profile, error: profileError } = await supabaseClient
     .from("profiles")
     .select("is_active")
     .eq("id", user.id)
@@ -115,6 +117,8 @@ async function login() {
 
   if (profileError) {
     document.getElementById("error").innerText = "Error loading profile";
+    btn.disabled = false;
+    btn.innerText = "Login";
     return;
   }
 
@@ -124,20 +128,23 @@ async function login() {
     return;
   }
 
-  // ✅ Delay ensures session saves
-  setTimeout(() => {
-    window.location.href = "watchlist.html";
-  }, 500);
+  // ✅ SUCCESS
+  window.location.href = "watchlist.html";
 }
 
 // =========================
 // ⌨️ ENTER KEY SUPPORT
 // =========================
-document.addEventListener("keypress", function(e) {
+document.addEventListener("keydown", function(e) {
   if (e.key === "Enter") {
     login();
   }
 });
+
+// =========================
+// 🔘 BUTTON CLICK
+// =========================
+document.getElementById("loginBtn").addEventListener("click", login);
 
 // =========================
 // 🔄 NAV LOGIN / LOGOUT
@@ -147,14 +154,14 @@ async function setupAuthButton() {
   const btn = document.getElementById("authBtn");
   if (!btn) return;
 
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await supabaseClient.auth.getSession();
 
   if (session) {
     btn.innerText = "Logout";
 
     btn.onclick = async (e) => {
       e.preventDefault();
-      await supabase.auth.signOut();
+      await supabaseClient.auth.signOut();
       window.location.href = "login.html";
     };
 
@@ -164,11 +171,9 @@ async function setupAuthButton() {
   }
 }
 
-// run on load
-window.addEventListener("load", setupAuthButton);
+setupAuthButton();
 
-// update on login/logout
-supabase.auth.onAuthStateChange(() => {
+supabaseClient.auth.onAuthStateChange(() => {
   setupAuthButton();
 });
 

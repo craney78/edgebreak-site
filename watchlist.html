@@ -10,10 +10,14 @@
 
 
 </head>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const supabase = window.supabase.createClient(
+
+// =========================
+// 🔑 SUPABASE CLIENT (CLEAN)
+// =========================
+const supabaseClient = supabase.createClient(
   "https://qmonyhukamuuunxxxdlk.supabase.co",
   "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
   {
@@ -24,35 +28,50 @@ const supabase = window.supabase.createClient(
   }
 );
 
+// =========================
+// 🔒 ACCESS CONTROL
+// =========================
 async function checkAccess() {
 
   const { data: { session } } = await supabaseClient.auth.getSession();
 
-  // ❌ not logged in
+  // ❌ Not logged in → send to login
   if (!session) {
     window.location.href = "login.html";
     return;
   }
 
-  // 🔍 check profile
-  const { data: profile } = await supabaseClient
+  // 🔍 Check subscription
+  const { data: profile, error } = await supabaseClient
     .from("profiles")
     .select("is_active")
     .eq("id", session.user.id)
     .single();
 
-  // ❌ not active
-  if (!profile || !profile.is_active) {
-    window.location.href = "pricing.html";
+  if (error) {
+    console.error("Profile error:", error);
+    window.location.href = "login.html";
+    return;
   }
 
+  // ❌ Not active → send to pricing
+  if (!profile || !profile.is_active) {
+    window.location.href = "pricing.html";
+    return;
+  }
+
+  // ✅ Access granted
+  console.log("Access granted");
 }
 
-checkAccess();
-</script>
-<body style="background:#020617;">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+// =========================
+// ⏱ RUN AFTER PAGE LOAD
+// =========================
+window.addEventListener("load", checkAccess);
 
+</script>
+
+<body style="background:#020617;">
 
 <!-- NAVBAR -->
 <div class="nav">
@@ -1115,53 +1134,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <script>
 
-async function setupAuthButton() {
-
-  const { data: { session } } = await supabase.auth.getSession();
-  const btn = document.getElementById("authBtn");
-
-  if (!btn) return;
-
-  if (session) {
-    // ✅ Logged in → show logout
-    btn.innerText = "Logout";
-
-    btn.onclick = async function (e) {
-      e.preventDefault();
-
-      await supabase.auth.signOut();
-
-      window.location.href = "index.html";
-    };
-
-  } else {
-    // ❌ Not logged in → show login
-    btn.innerText = "Login";
-    btn.href = "login.html";
-  }
-
-}
-
-setupAuthButton();
-
-</script>
-</script>
-<script>
+// =========================
+// 🔄 NAV LOGIN / LOGOUT
+// =========================
 async function setupAuthButton() {
 
   const btn = document.getElementById("authBtn");
   if (!btn) return;
 
-  const { data: { session } } = await supabase.auth.getSession();
-
-  console.log("SESSION:", session); // 🔥 DEBUG
+  const { data: { session } } = await supabaseClient.auth.getSession();
 
   if (session) {
     btn.innerText = "Logout";
 
     btn.onclick = async (e) => {
       e.preventDefault();
-      await supabase.auth.signOut();
+      await supabaseClient.auth.signOut();
       window.location.href = "login.html";
     };
 
@@ -1171,14 +1159,22 @@ async function setupAuthButton() {
   }
 }
 
+// =========================
+// ⏱ RUN AFTER PAGE LOAD
+// =========================
 window.addEventListener("load", async () => {
   await setupAuthButton();
 });
 
-// 🔥 update on login/logout
-supabase.auth.onAuthStateChange(() => {
+// =========================
+// 🔁 UPDATE ON AUTH CHANGE
+// =========================
+supabaseClient.auth.onAuthStateChange(() => {
   setupAuthButton();
 });
+
 </script>
+
+
 </body>
 </html>

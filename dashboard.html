@@ -6,14 +6,14 @@
 <title>My Dashboard | Track Your Trades - EdgeBreak</title>
 <link rel="stylesheet" href="css/dashboard.css">
 
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-</head>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const supabase = window.supabase.createClient(
+
+// =========================
+// 🔑 SUPABASE CLIENT
+// =========================
+const supabaseClient = supabase.createClient(
   "https://qmonyhukamuuunxxxdlk.supabase.co",
   "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
   {
@@ -24,36 +24,38 @@ const supabase = window.supabase.createClient(
   }
 );
 
+// =========================
+// 🔒 ACCESS CONTROL
+// =========================
 async function checkAccess() {
 
   const { data: { session } } = await supabaseClient.auth.getSession();
 
-  // ❌ not logged in
   if (!session) {
     window.location.href = "login.html";
     return;
   }
 
-  // 🔍 check profile
   const { data: profile } = await supabaseClient
     .from("profiles")
     .select("is_active")
     .eq("id", session.user.id)
     .single();
 
-  // ❌ not active
   if (!profile || !profile.is_active) {
     window.location.href = "pricing.html";
   }
 
 }
 
-checkAccess();
+// ✅ correct timing
+window.addEventListener("load", checkAccess);
+
 </script>
 
-<body>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head> 
 
+<body>
 
 <!-- NAVBAR -->
 <div class="nav">
@@ -136,7 +138,6 @@ checkAccess();
         <div class="label">Trade Notes</div>
         <textarea id="userNotes" placeholder="Why did you take this trade?"
           style="width:100%; padding:10px; border-radius:8px; border:1px solid #1e293b; background:#020617; color:white; resize:none;"></textarea>
-        </textarea>
         </div>
       
       <div class="stat">
@@ -773,84 +774,36 @@ function exportTradesCSV() {
 
   URL.revokeObjectURL(url);
 }
-
-// =========================
-// INIT (RUN ON LOAD)
-// =========================
-renderUserTrades();
-calculateUserStats();
-renderUserChart();
-document.getElementById("startingCapital").addEventListener("change", renderUserChart);
-document.getElementById("positionSize").addEventListener("change", renderUserChart);
-document.getElementById("compounding").addEventListener("change", renderUserChart);
-
 </script>
 <script>
 
-async function setupAuthButton() {
-
-  const { data: { session } } = await supabase.auth.getSession();
-  const btn = document.getElementById("authBtn");
-
-  if (!btn) return;
-
-  if (session) {
-    // ✅ Logged in → show logout
-    btn.innerText = "Logout";
-
-    btn.onclick = async function (e) {
-      e.preventDefault();
-
-      await supabase.auth.signOut();
-
-      window.location.href = "index.html";
-    };
-
-  } else {
-    // ❌ Not logged in → show login
-    btn.innerText = "Login";
-    btn.href = "login.html";
-  }
-
-}
-
-setupAuthButton();
-
-</script>
-</script>
-<script>
-async function setupAuthButton() {
-
-  const btn = document.getElementById("authBtn");
-  if (!btn) return;
-
-  const { data: { session } } = await supabase.auth.getSession();
-
-  console.log("SESSION:", session); // 🔥 DEBUG
-
-  if (session) {
-    btn.innerText = "Logout";
-
-    btn.onclick = async (e) => {
-      e.preventDefault();
-      await supabase.auth.signOut();
-      window.location.href = "login.html";
-    };
-
-  } else {
-    btn.innerText = "Login";
-    btn.href = "login.html";
-  }
-}
-
+// =========================
+// 🔒 + 🎯 FULL PAGE INIT
+// =========================
 window.addEventListener("load", async () => {
+
+  // 🔒 AUTH FIRST
+  await checkAccess();
   await setupAuthButton();
+
+  // 🎯 DASHBOARD INIT
+  renderUserTrades();
+  calculateUserStats();
+  renderUserChart();
+
+  document.getElementById("startingCapital")?.addEventListener("change", renderUserChart);
+  document.getElementById("positionSize")?.addEventListener("change", renderUserChart);
+  document.getElementById("compounding")?.addEventListener("change", renderUserChart);
+
 });
 
-// 🔥 update on login/logout
-supabase.auth.onAuthStateChange(() => {
+// =========================
+// 🔁 AUTH STATE LISTENER
+// =========================
+supabaseClient.auth.onAuthStateChange(() => {
   setupAuthButton();
 });
+
 </script>
 
 </body>
