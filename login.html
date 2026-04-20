@@ -3,52 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>Login | EdgeBreak</title>
-  <meta name="description" content="Log in to EdgeBreak to access your trading dashboard, live breakout trades, and performance tracking tools.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="css/dashboard.css">
 
-  <!-- SUPABASE -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- ✅ CORRECT SUPABASE CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
-<script>
-const supabase = window.supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true
-    }
-  }
-);
 
-async function checkAccess() {
-
-  const { data: { session } } = await supabaseClient.auth.getSession();
-
-  // ❌ not logged in
-  if (!session) {
-    window.location.href = "login.html";
-    return;
-  }
-
-  // 🔍 check profile
-  const { data: profile } = await supabaseClient
-    .from("profiles")
-    .select("is_active")
-    .eq("id", session.user.id)
-    .single();
-
-  // ❌ not active
-  if (!profile || !profile.is_active) {
-    window.location.href = "pricing.html";
-  }
-
-}
-
-checkAccess();
-</script>
 <body>
 
 <!-- NAVBAR -->
@@ -75,10 +37,9 @@ checkAccess();
     </div>
 
   </div>
-</div>  
+</div>
 
 <div class="container">
-
   <div class="section" style="max-width:400px; margin:100px auto;">
 
     <h2 style="text-align:center; margin-bottom:20px;">
@@ -98,72 +59,46 @@ checkAccess();
     <div id="error" style="color:#ef4444; margin-top:10px; text-align:center;"></div>
 
   </div>
-
 </div>
 
 <!-- FOOTER -->
-<div class="footer" style="width:100%;">
+<div class="footer">
   <div class="footer-inner">
-
     <div class="footer-col">
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-        <img src="images/logo.png" style="width:40px; height:auto;">
-        <h3 style="color:white; margin:0;">EdgeBreak</h3>
-      </div>
-
-      <p>
-        Data-driven breakout trading framework designed to analyse and track breakout setups using structured market data
-      </p>
+      <h3>EdgeBreak</h3>
+      <p>Data-driven breakout trading system</p>
     </div>
-
-    <div class="footer-col">
-      <h4>Product</h4>
-      <a href="index.html#performance">Performance</a>
-      <a href="watchlist.html">Trading Desk</a>
-      <a href="dashboard.html">My Dashboard</a>
-      <a href="/chart.html?symbol=AAPL">Charts</a>
-      <a href="pricing.html">Pricing</a>
-      <a href="#" class="nav-cta" id="authBtn">Login</a>
-    </div>
-
-    <div class="footer-col">
-      <h4>Resources</h4>
-      <a href="trading-guide.html">Trading Guide</a>
-      <a href="faq.html">FAQ</a>
-      <a href="support.html">Support</a>
-    </div>
-
   </div>
 </div>
 
 <script>
 
-console.log("JS LOADED");
-
 // =========================
-// SUPABASE CLIENT
+// 🔑 SUPABASE CLIENT (FIXED)
 // =========================
-const supabaseClient = window.supabase.createClient(
+const supabase = window.supabase.createClient(
   "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  }
 );
 
 // =========================
-// LOGIN FUNCTION
+// 🔐 LOGIN FUNCTION
 // =========================
 async function login() {
-
-  console.log("LOGIN CLICKED");
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password
   });
-
-  console.log("LOGIN RESPONSE:", data, error);
 
   if (error) {
     document.getElementById("error").innerText = error.message;
@@ -172,38 +107,47 @@ async function login() {
 
   const user = data.user;
 
-  const { data: profile, error: profileError } = await supabaseClient
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("is_active")
     .eq("id", user.id)
     .single();
-
-  console.log("PROFILE:", profile, profileError);
 
   if (profileError) {
     document.getElementById("error").innerText = "Error loading profile";
     return;
   }
 
+  // 🚫 Not active → pricing
   if (!profile || !profile.is_active) {
     window.location.href = "pricing.html";
     return;
   }
 
-  window.location.href = "watchlist.html";
+  // ✅ Delay ensures session saves
+  setTimeout(() => {
+    window.location.href = "watchlist.html";
+  }, 500);
 }
 
-</script>
+// =========================
+// ⌨️ ENTER KEY SUPPORT
+// =========================
+document.addEventListener("keypress", function(e) {
+  if (e.key === "Enter") {
+    login();
+  }
+});
 
-<script>
+// =========================
+// 🔄 NAV LOGIN / LOGOUT
+// =========================
 async function setupAuthButton() {
 
   const btn = document.getElementById("authBtn");
   if (!btn) return;
 
   const { data: { session } } = await supabase.auth.getSession();
-
-  console.log("SESSION:", session); // 🔥 DEBUG
 
   if (session) {
     btn.innerText = "Logout";
@@ -220,14 +164,15 @@ async function setupAuthButton() {
   }
 }
 
-window.addEventListener("load", async () => {
-  await setupAuthButton();
-});
+// run on load
+window.addEventListener("load", setupAuthButton);
 
-// 🔥 update on login/logout
+// update on login/logout
 supabase.auth.onAuthStateChange(() => {
   setupAuthButton();
 });
+
 </script>
+
 </body>
 </html>
