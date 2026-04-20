@@ -15,15 +15,14 @@
 // =========================
 const supabaseClient = supabase.createClient(
   window.SUPABASE_URL,
-  window.SUPABASE_KEY
-);
+  window.SUPABASE_KEY,
+  {
     auth: {
       persistSession: true,
       autoRefreshToken: true
     }
   }
 );
-
 // =========================
 // 🔒 ACCESS CONTROL
 // =========================
@@ -31,25 +30,37 @@ async function checkAccess() {
 
   const { data: { session } } = await supabaseClient.auth.getSession();
 
-  if (!session) {
+  // ❌ NOT LOGGED IN
+  if (!session || !session.user) {
     window.location.href = "login.html";
     return;
   }
 
-  const { data: profile } = await supabaseClient
+  const { data: profile, error } = await supabaseClient
     .from("profiles")
     .select("is_active")
     .eq("id", session.user.id)
     .single();
 
-  if (!profile || !profile.is_active) {
-    window.location.href = "pricing.html";
+  // ❌ ERROR OR NO PROFILE
+  if (error || !profile) {
+    window.location.href = "login.html";
+    return;
   }
+
+  // ❌ NOT ACTIVE (NOT PAID)
+  if (!profile.is_active) {
+    window.location.href = "pricing.html";
+    return;
+  }
+
+  // ✅ ACCESS GRANTED
+  console.log("Access granted");
 
 }
 
-// ✅ correct timing
-window.addEventListener("load", checkAccess);
+// 🔥 RUN IMMEDIATELY (NOT ON LOAD)
+checkAccess();
 
 </script>
 
@@ -778,19 +789,19 @@ function exportTradesCSV() {
 <script>
 
 // =========================
-// 🔒 + 🎯 FULL PAGE INIT
+// 🎯 FULL PAGE INIT (CLEAN)
 // =========================
 window.addEventListener("load", async () => {
 
-  // 🔒 AUTH FIRST
-  await checkAccess();
+  // 🔄 NAV BUTTON ONLY
   await setupAuthButton();
 
-  // 🎯 DASHBOARD INIT
+  // 📊 DASHBOARD DATA
   renderUserTrades();
   calculateUserStats();
   renderUserChart();
 
+  // 🔁 SIMULATION EVENTS
   document.getElementById("startingCapital")?.addEventListener("change", renderUserChart);
   document.getElementById("positionSize")?.addEventListener("change", renderUserChart);
   document.getElementById("compounding")?.addEventListener("change", renderUserChart);
