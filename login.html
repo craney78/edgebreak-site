@@ -100,8 +100,14 @@
 
 <script>
 
-// 🔑 YOUR SUPABASE CONNECTION (already filled correctly)
-const supabase = window.supabase.createClient(
+<script>
+
+console.log("JS LOADED");
+
+// =========================
+// SUPABASE CLIENT
+// =========================
+const supabaseClient = window.supabase.createClient(
   "https://qmonyhukamuuunxxxdlk.supabase.co",
   "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
@@ -111,14 +117,17 @@ const supabase = window.supabase.createClient(
 // =========================
 async function login() {
 
+  console.log("LOGIN CLICKED");
+
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  // 🔐 LOGIN
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
     email,
     password
   });
+
+  console.log("LOGIN RESPONSE:", data, error);
 
   if (error) {
     document.getElementById("error").innerText = error.message;
@@ -127,36 +136,28 @@ async function login() {
 
   const user = data.user;
 
-  // 🔍 GET PROFILE
-  const { data: profile, error: profileError } = await supabase
+  const { data: profile, error: profileError } = await supabaseClient
     .from("profiles")
     .select("is_active")
     .eq("id", user.id)
     .single();
+
+  console.log("PROFILE:", profile, profileError);
 
   if (profileError) {
     document.getElementById("error").innerText = "Error loading profile";
     return;
   }
 
-  // 🚫 NOT ACTIVE → PRICING
   if (!profile || !profile.is_active) {
     window.location.href = "pricing.html";
     return;
   }
 
-  // ✅ ACTIVE → ACCESS
   window.location.href = "watchlist.html";
 }
 
-// =========================
-// ENTER KEY SUPPORT
-// =========================
-document.addEventListener("keypress", function(e) {
-  if (e.key === "Enter") {
-    login();
-  }
-});
+</script>
 
 </script>
 
