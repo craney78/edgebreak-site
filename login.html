@@ -264,19 +264,18 @@ async function handleAuth() {
 
     const user = data.user;
 
-    // CREATE PROFILE
+    // CREATE PROFILE (safe, but NOT blocking redirect)
     if (user) {
-      await supabaseClient.from("profiles").insert({
+      supabaseClient.from("profiles").insert({
         id: user.id,
         is_active: false
-      });
+      }).catch(err => console.log("Profile insert failed:", err));
     }
 
-    // 🔥 IMPORTANT: LOG OUT AFTER SIGNUP
-    await supabaseClient.auth.signOut();
-
-    // 👉 SEND TO STRIPE
-    window.location.href = STRIPE_LINK + "?prefilled_email=" + encodeURIComponent(email);
+    // 🔥 HARD REDIRECT (THIS STOPS DASHBOARD REDIRECT)
+    window.location.replace(
+      STRIPE_LINK + "?prefilled_email=" + encodeURIComponent(email)
+    );
 
     return;
   }
