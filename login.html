@@ -276,7 +276,7 @@ async function handleAuth() {
     await supabaseClient.auth.signOut();
 
     // 👉 SEND TO STRIPE
-    window.location.href = STRIPE_LINK;
+    window.location.href = STRIPE_LINK + "?prefilled_email=" + encodeURIComponent(email);
 
     return;
   }
