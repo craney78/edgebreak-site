@@ -255,17 +255,18 @@ async function handleAuth() {
 
     const user = data.user;
 
-    // CREATE PROFILE
-    await supabaseClient.from("profiles").insert({
-      id: user.id,
-      is_active: false
-    });
-
-    // 👉 SEND TO STRIPE
+    // 👉 SEND TO STRIPE FIRST (ALWAYS)
     window.location.href = STRIPE_LINK;
 
+    // CREATE PROFILE (runs but doesn't block flow)
+    if (user) {
+      supabaseClient.from("profiles").insert({
+        id: user.id,
+        is_active: false
+      }).catch(err => console.log("Profile insert failed:", err));
+    }
+
     return;
-  }
 
   // =========================
   // LOGIN
