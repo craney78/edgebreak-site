@@ -19,48 +19,80 @@
 
 <body>
 
-<!-- NAV -->
+<!-- NAVBAR -->
 <div class="nav">
   <div class="nav-inner">
+
+    <!-- LEFT -->
     <div class="nav-left">
       <a href="index.html">
         <img src="images/logo.png" class="nav-logo">
       </a>
       <a href="index.html" class="logo-text">EDGEBREAK</a>
+      <span class="live-badge">LIVE</span>
     </div>
+
+    <!-- DESKTOP LINKS -->
     <div class="nav-links">
       <a href="index.html" class="nav-link">Home</a>
-      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="index.html#statsGrid" class="nav-link">Performance</a>
+      <a href="watchlist.html" class="nav-link">Trading Desk</a>
+      <a href="trading-guide.html" class="nav-link">Guide</a>
+      <a href="dashboard.html" class="nav-link">My Dashboard</a>
+      <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
+      <a href="blog.html" class="nav-link">Trade Insights</a>
       <a href="#" class="nav-cta" id="authBtn">Login</a>
     </div>
+
   </div>
-</div>
+
+</div>  
 
 <!-- FORM -->
 <div class="container">
-  <div class="section" style="max-width:400px; margin:100px auto;">
 
-    <h2 id="formTitle" style="text-align:center;">EdgeBreak Login</h2>
+  <div class="section login-box">
 
+    <!-- LOGO -->
+    <div style="text-align:center; margin-bottom:20px;">
+      <img src="images/logo.png" style="width:60px; margin-bottom:10px;">
+      <div style="font-weight:600; letter-spacing:1px;">EDGEBREAK</div>
+    </div>
+
+    <!-- HEADLINE -->
+    <h2 id="formTitle" style="text-align:center;">
+      Access EdgeBreak
+    </h2>
+
+    <!-- SUBTEXT -->
+    <p style="text-align:center; font-size:14px; color:#94a3b8; margin-bottom:20px;">
+      Create an account to access live breakout trades, performance tracking, and your dashboard.
+    </p>
+
+    <!-- INPUTS -->
     <input id="email" type="email" placeholder="Email"
-      style="width:100%; padding:10px; margin:10px 0;">
+      class="input-field">
 
     <input id="password" type="password" placeholder="Password"
-      style="width:100%; padding:10px; margin-bottom:20px;">
+      class="input-field">
 
-    <button id="actionBtn" class="nav-cta" style="width:100%;">
+    <!-- BUTTON -->
+    <button id="actionBtn" class="cta-primary full-width">
       Login
     </button>
 
+    <!-- TOGGLE -->
     <p style="text-align:center; margin-top:15px;">
-      <span id="toggleMode" style="cursor:pointer; color:#22c55e;">
+      <span id="toggleMode" class="link-green">
         Don’t have an account? Create one
       </span>
     </p>
 
-    <div id="error" style="color:red; text-align:center;"></div>
+    <!-- ERROR -->
+    <div id="error" class="error-text"></div>
 
   </div>
+
 </div>
 
 <script>
@@ -206,3 +238,4 @@ supabaseClient.auth.onAuthStateChange(setupAuthButton);
 
 </body>
 </html>
+
