@@ -65,19 +65,44 @@ app.post("/create-checkout-session", async (req, res) => {
 // =========================
 // 🔥 WEBHOOK ROUTE
 // =========================
-if (event.type === "checkout.session.completed") {
+app.post("/webhook", async (req, res) => {
 
-  const session = event.data.object;
+  const sig = req.headers["stripe-signature"];
+  let event;
 
-  const userId = session.client_reference_id;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      endpointSecret
+    );
+  } catch (err) {
+    console.log("❌ Webhook signature failed:", err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
 
-  await supabaseAdmin
-    .from("profiles")
-    .update({ is_active: true })
-    .eq("id", userId);
+  console.log("📩 Event received:", event.type);
 
-  console.log("🔥 USER ACTIVATED:", userId);
-}
+  // =========================
+  // ✅ ACTIVATE USER
+  // =========================
+  if (event.type === "checkout.session.completed") {
+
+    const session = event.data.object;
+
+    const userId = session.client_reference_id;
+
+    await supabaseAdmin
+      .from("profiles")
+      .update({ is_active: true })
+      .eq("id", userId);
+
+    console.log("🔥 USER ACTIVATED:", userId);
+  }
+
+  res.json({ received: true });
+
+});
 
   // =========================
   // 💳 HANDLE PAYMENTS
