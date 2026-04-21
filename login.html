@@ -183,9 +183,12 @@ window.supabaseClient = supabase.createClient(
 </div>
 
 <script defer>
+
 // =========================
-// 🚀 MAIN AUTH
+// 🔑 LOGIN
 // =========================
+const supabaseClient = window.supabaseClient;
+
 async function handleAuth() {
 
   const email = document.getElementById("email").value.trim();
@@ -197,10 +200,12 @@ async function handleAuth() {
     return;
   }
 
-  btn.disabled = true;
-  btn.innerText = isCreateAccount ? "Creating..." : "Logging in...";
+  const btn = document.getElementById("actionBtn");
 
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
+  btn.disabled = true;
+  btn.innerText = "Logging in...";
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
     email,
     password
   });
@@ -212,51 +217,67 @@ async function handleAuth() {
     return;
   }
 
-  setTimeout(() => {
-    
-  }, 600);
+  // ✅ SUCCESS → DASHBOARD
+  window.location.href = "/dashboard.html";
 }
 
-// =========================
-// EVENTS
-// =========================
-btn.addEventListener("click", handleAuth);
 
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") handleAuth();
+// =========================
+// EVENTS (FIXED)
+// =========================
+document.addEventListener("DOMContentLoaded", () => {
+
+  const btn = document.getElementById("actionBtn");
+
+  if (!btn) {
+    console.error("Login button not found");
+    return;
+  }
+
+  btn.addEventListener("click", handleAuth);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") handleAuth();
+  });
+
 });
 
+
 // =========================
-// NAV LOGIN / LOGOUT
+// 🔄 NAV LOGIN / LOGOUT
 // =========================
 async function setupAuthButton() {
 
   const btn = document.getElementById("authBtn");
+  if (!btn) return;
 
-  const { data: { session } } = await supabaseClient.auth.getSession();
+  const { data: { user } } = await supabaseClient.auth.getUser();
 
-  if (session && session.user) {
+  if (user) {
     btn.innerText = "Logout";
     btn.href = "#";
 
     btn.onclick = async (e) => {
       e.preventDefault();
       await supabaseClient.auth.signOut();
-      window.location.href = "login.html";
+      window.location.href = "/login.html";
     };
 
   } else {
     btn.innerText = "Login";
-    btn.href = "login.html";
+    btn.href = "/login.html";
     btn.onclick = null;
   }
 }
 
+// ✅ RUN
 setupAuthButton();
 
+// 🔁 KEEP IN SYNC
 supabaseClient.auth.onAuthStateChange(() => {
   setupAuthButton();
 });
+
 
 </script>
 
