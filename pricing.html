@@ -91,23 +91,17 @@ const supabaseClient = supabase.createClient(
   </ul>
 
   <!-- CLEAN STRIPE BUTTON -->
-  <div style="margin-top:30px; text-align:center;">
+  <div class="cta-wrap">
 
-    <p style="color:#22c55e; font-weight:bold; margin-bottom:15px;">
-      No charge today • 30-day free trial
-    </p>
+  <button onclick="window.location.href='login.html?signup=true'" class="cta-primary">
+    Start Free Trial
+  </button>
 
-    <script async
-      src="https://js.stripe.com/v3/buy-button.js">
-    </script>
-
-    <stripe-buy-button
-      buy-button-id="buy_btn_1TNqLGCys1zSKDi2BpMrg5H5"
-      publishable-key="pk_test_51TM42jCys1zSKDi2giWOLC5ZC8CIE8OqS8CQjpbhfHYNbKZST9gJHksSdaf7RHAjmtoyW2LsTKuCKkWsxPCs6Fex00SsrPzpjH"
-    >
-    </stripe-buy-button>
-
+  <div class="cta-sub">
+    Cancel anytime
   </div>
+
+</div>
 
   <p style="margin-top:15px; font-size:13px; color:#64748b; text-align:center;">
     Used by traders focused on building consistency through structured analysis
