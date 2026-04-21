@@ -41,104 +41,64 @@
 
 const supabaseClient = window.supabaseClient;
 
-const signupBtn = document.getElementById("signupBtn");
+document.addEventListener("DOMContentLoaded", () => {
 
-signupBtn.addEventListener("click", async () => {
+  const signupBtn = document.getElementById("signupBtn");
 
-  // 🔒 prevent double click
-  signupBtn.disabled = true;
-
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const errorBox = document.getElementById("error");
-
-  if (!email || !password) {
-    errorBox.innerText = "Enter email and password";
-    signupBtn.disabled = false;
+  if (!signupBtn) {
+    console.error("Signup button not found");
     return;
   }
 
-  const { data, error } = await supabaseClient.auth.signUp({
-    email,
-    password
+  signupBtn.addEventListener("click", async () => {
+
+    signupBtn.disabled = true;
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const errorBox = document.getElementById("error");
+
+    if (!email || !password) {
+      errorBox.innerText = "Enter email and password";
+      signupBtn.disabled = false;
+      return;
+    }
+
+    const { data, error } = await supabaseClient.auth.signUp({
+      email,
+      password
+    });
+
+    if (error) {
+      errorBox.innerText = error.message;
+      signupBtn.disabled = false;
+      return;
+    }
+
+    const userId = data.user.id;
+
+    await supabaseClient.auth.signOut();
+
+    const res = await fetch("https://courier-evacuate-letdown.ngrok-free.dev/create-checkout-session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ userId })
+    });
+
+    const session = await res.json();
+
+    if (!session.url) {
+      errorBox.innerText = "Payment error. Try again.";
+      signupBtn.disabled = false;
+      return;
+    }
+
+    window.location.href = session.url;
   });
 
-  if (error) {
-    errorBox.innerText = error.message;
-    signupBtn.disabled = false;
-    return;
-  }
-
-  const userId = data.user.id;
-
-  await supabaseClient.auth.signOut();
-
-  const res = await fetch("https://courier-evacuate-letdown.ngrok-free.dev/create-checkout-session", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      userId
-    })
-  });
-
-  const session = await res.json();
-
-  if (!session.url) {
-    errorBox.innerText = "Payment error. Try again.";
-    signupBtn.disabled = false;
-    return;
-  }
-
-  window.location.href = session.url;
 });
-
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const errorBox = document.getElementById("error");
-
-  if (!email || !password) {
-    errorBox.innerText = "Enter email and password";
-    return;
-  }
-
-  const { data, error } = await supabaseClient.auth.signUp({
-    email,
-    password
-  });
-
-  if (error) {
-    errorBox.innerText = error.message;
-    return;
-  }
-
-  const userId = data.user.id;
-
-  // 🔥 IMPORTANT: LOG USER OUT (prevents redirect bugs)
-  await supabaseClient.auth.signOut();
-
-  // 🚀 SEND TO BACKEND (Stripe)
-  const res = await fetch("https://courier-evacuate-letdown.ngrok-free.dev/create-checkout-session", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      userId,
-      email
-    })
-  });
-
-  const session = await res.json();
-
-  if (!session.url) {
-    errorBox.innerText = "Payment error. Try again.";
-    return;
-  }
-
-  window.location.href = session.url;
-
 
 
 </script>
