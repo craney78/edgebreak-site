@@ -34,16 +34,14 @@ const supabaseAdmin = createClient(
 app.post("/create-checkout-session", async (req, res) => {
   try {
 
-    const { userId, email } = req.body;
+    const { userId } = req.body;
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
 
-      payment_method_types: ["card"],
-
       line_items: [
         {
-          price: "price_XXXXXXXX", // 🔥 REPLACE WITH YOUR REAL PRICE ID
+          price: "price_1TNqKKCys1zSKDi2HpYhlXmQ", // 🔥 REPLACE WITH YOUR REAL PRICE ID
           quantity: 1
         }
       ],
@@ -51,8 +49,7 @@ app.post("/create-checkout-session", async (req, res) => {
       success_url: "https://edgebreak.ai/login.html",
       cancel_url: "https://edgebreak.ai/pricing.html",
 
-      client_reference_id: userId,
-      customer_email: email
+      client_reference_id: userId
     });
 
     res.json({ url: session.url });
@@ -63,22 +60,24 @@ app.post("/create-checkout-session", async (req, res) => {
   }
 });
 
+    
+
 // =========================
 // 🔥 WEBHOOK ROUTE
 // =========================
-app.post("/webhook", async (req, res) => {
+if (event.type === "checkout.session.completed") {
 
-  const sig = req.headers["stripe-signature"];
-  let event;
+  const session = event.data.object;
 
-  try {
-    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-  } catch (err) {
-    console.log("❌ Webhook signature failed:", err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
+  const userId = session.client_reference_id;
 
-  console.log("📩 Event received:", event.type);
+  await supabaseAdmin
+    .from("profiles")
+    .update({ is_active: true })
+    .eq("id", userId);
+
+  console.log("🔥 USER ACTIVATED:", userId);
+}
 
   // =========================
   // 💳 HANDLE PAYMENTS
