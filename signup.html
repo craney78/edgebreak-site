@@ -68,7 +68,7 @@ document.getElementById("signupBtn").addEventListener("click", async () => {
   await supabaseClient.auth.signOut();
 
   // 🚀 SEND TO BACKEND (Stripe)
-  const res = await fetch("https://buy.stripe.com/test_cNicN45d74hvai46g5ds401", {
+  const res = await fetch("https://courier-evacuate-letdown.ngrok-free.dev/create-checkout-session", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
