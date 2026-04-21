@@ -220,9 +220,11 @@ async function checkAccess() {
 <script>
 window.addEventListener("load", async () => {
 
-  // 🔒 AUTH
-  await checkAccess();
-  await setupAuthButton();
+  // ⏱ DELAY ACCESS CHECK (prevents redirect conflict)
+  setTimeout(async () => {
+    await checkAccess();
+    await setupAuthButton();
+  }, 300);
 
   // 📊 URL PARAMS
   const params = new URLSearchParams(window.location.search);
