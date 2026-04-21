@@ -246,7 +246,7 @@ async function handleAuth() {
   // =========================
   // SIGNUP → STRIPE
   // =========================
-  if (isSignup) {
+  if (btn.innerText === "Create Account") {
 
     const { data, error } = await supabaseClient.auth.signUp({
       email,
