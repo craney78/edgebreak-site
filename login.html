@@ -232,6 +232,9 @@ async function handleAuth() {
   const password = document.getElementById("password").value.trim();
   const errorBox = document.getElementById("error");
 
+  // 🔥 CAPTURE MODE BEFORE BUTTON TEXT CHANGES
+  const isCreateAccount = btn.innerText === "Create Account";
+
   // =========================
   // VALIDATION
   // =========================
@@ -241,12 +244,12 @@ async function handleAuth() {
   }
 
   btn.disabled = true;
-  btn.innerText = isSignup ? "Creating..." : "Logging in...";
+  btn.innerText = isCreateAccount ? "Creating..." : "Logging in...";
 
   // =========================
   // SIGNUP → STRIPE
   // =========================
-  if (btn.innerText === "Create Account") {
+  if (isCreateAccount) {
 
     const { data, error } = await supabaseClient.auth.signUp({
       email,
@@ -264,7 +267,7 @@ async function handleAuth() {
 
     const user = data.user;
 
-    // CREATE PROFILE (safe, but NOT blocking redirect)
+    // CREATE PROFILE (non-blocking)
     if (user) {
       supabaseClient.from("profiles").insert({
         id: user.id,
@@ -272,7 +275,7 @@ async function handleAuth() {
       }).catch(err => console.log("Profile insert failed:", err));
     }
 
-    // 🔥 HARD REDIRECT (THIS STOPS DASHBOARD REDIRECT)
+    // 👉 SEND TO STRIPE
     window.location.replace(
       STRIPE_LINK + "?prefilled_email=" + encodeURIComponent(email)
     );
@@ -297,7 +300,7 @@ async function handleAuth() {
     return;
   }
 
-  // 👉 SUCCESS → TRADING DESK (NOT DASHBOARD)
+  // 👉 SUCCESS → TRADING DESK
   setTimeout(() => {
     window.location.href = "watchlist.html";
   }, 600);
