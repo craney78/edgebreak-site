@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Start Free Trial | EdgeBreak</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/dashboard.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+  <script>
+  window.supabaseClient = supabase.createClient(
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
+  );
+  </script>
+</head>
+
+<body class="login-page">
+
+<div class="container">
+  <div class="section" style="max-width:500px; margin:120px auto; padding:40px;">
+
+    <h2>Create Your Account</h2>
+    <p>Start your free trial and unlock EdgeBreak</p>
+
+    <input id="email" type="email" placeholder="Email" class="input-field">
+    <input id="password" type="password" placeholder="Password" class="input-field">
+
+    <button id="signupBtn" class="nav-cta full-width">
+      Start Free Trial
+    </button>
+
+    <div id="error" style="color:red; margin-top:10px;"></div>
+
+  </div>
+</div>
+
+<script>
+
+const supabaseClient = window.supabaseClient;
+
+document.getElementById("signupBtn").addEventListener("click", async () => {
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const errorBox = document.getElementById("error");
+
+  if (!email || !password) {
+    errorBox.innerText = "Enter email and password";
+    return;
+  }
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email,
+    password
+  });
+
+  if (error) {
+    errorBox.innerText = error.message;
+    return;
+  }
+
+  const userId = data.user.id;
+
+  // 🔥 IMPORTANT: LOG USER OUT (prevents redirect bugs)
+  await supabaseClient.auth.signOut();
+
+  // 🚀 SEND TO BACKEND (Stripe)
+  const res = await fetch("https://buy.stripe.com/test_cNicN45d74hvai46g5ds401", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      userId,
+      email
+    })
+  });
+
+  const session = await res.json();
+
+  if (!session.url) {
+    errorBox.innerText = "Payment error. Try again.";
+    return;
+  }
+
+  window.location.href = session.url;
+
+});
+
+</script>
+
+</body>
+</html>

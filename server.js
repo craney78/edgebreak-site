@@ -29,6 +29,41 @@ const supabaseAdmin = createClient(
 );
 
 // =========================
+// 💳 CREATE CHECKOUT SESSION
+// =========================
+app.post("/create-checkout-session", async (req, res) => {
+  try {
+
+    const { userId, email } = req.body;
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+
+      payment_method_types: ["card"],
+
+      line_items: [
+        {
+          price: "price_XXXXXXXX", // 🔥 REPLACE WITH YOUR REAL PRICE ID
+          quantity: 1
+        }
+      ],
+
+      success_url: "https://edgebreak.ai/login.html",
+      cancel_url: "https://edgebreak.ai/pricing.html",
+
+      client_reference_id: userId,
+      customer_email: email
+    });
+
+    res.json({ url: session.url });
+
+  } catch (err) {
+    console.log("❌ Stripe session error:", err);
+    res.status(500).json({ error: "Stripe failed" });
+  }
+});
+
+// =========================
 // 🔥 WEBHOOK ROUTE
 // =========================
 app.post("/webhook", async (req, res) => {
