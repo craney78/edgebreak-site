@@ -37,60 +37,80 @@
   </div>
 </div>
 
+
 <script>
-    
-signupBtn.addEventListener("click", async () => {
 
-  alert("CLICK WORKING");
+const supabaseClient = window.supabaseClient;
 
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const errorBox = document.getElementById("error");
+document.addEventListener("DOMContentLoaded", () => {
 
-  console.log("STEP 1: CLICK");
+  const signupBtn = document.getElementById("signupBtn");
 
-  const { data, error } = await supabaseClient.auth.signUp({
-    email,
-    password
-  });
-
-  console.log("STEP 2: SIGNUP DONE", data, error);
-
-  if (error) {
-    errorBox.innerText = error.message;
+  if (!signupBtn) {
+    console.error("Signup button not found");
     return;
   }
 
-  const userId = data?.user?.id;
+  signupBtn.addEventListener("click", async () => {
 
-  console.log("STEP 3: USER ID", userId);
+    alert("CLICK WORKING");
 
-  await supabaseClient.auth.signOut();
+    signupBtn.disabled = true;
 
-  console.log("STEP 4: SIGNED OUT");
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const errorBox = document.getElementById("error");
 
-  const res = await fetch("https://courier-evacuate-letdown.ngrok-free.dev/create-checkout-session", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ userId })
+    console.log("STEP 1: CLICK");
+
+    const { data, error } = await supabaseClient.auth.signUp({
+      email,
+      password
+    });
+
+    console.log("STEP 2: SIGNUP DONE", data, error);
+
+    if (error) {
+      errorBox.innerText = error.message;
+      signupBtn.disabled = false;
+      return;
+    }
+
+    const userId = data?.user?.id;
+
+    console.log("STEP 3: USER ID", userId);
+
+    await supabaseClient.auth.signOut();
+
+    console.log("STEP 4: SIGNED OUT");
+
+    const res = await fetch("https://courier-evacuate-letdown.ngrok-free.dev/create-checkout-session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ userId })
+    });
+
+    console.log("STEP 5: FETCH RESPONSE", res);
+
+    const session = await res.json();
+
+    console.log("STEP 6: SESSION", session);
+
+    if (!session.url) {
+      errorBox.innerText = "Payment error. Try again.";
+      signupBtn.disabled = false;
+      return;
+    }
+
+    window.location.href = session.url;
+
   });
-
-  console.log("STEP 5: FETCH RESPONSE", res);
-
-  const session = await res.json();
-
-  console.log("STEP 6: SESSION", session);
-
-  if (!session.url) {
-    errorBox.innerText = "Payment error. Try again.";
-    return;
-  }
-
-  window.location.href = session.url;
 
 });
+
+
 
 </script>
 
