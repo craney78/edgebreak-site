@@ -270,7 +270,7 @@ async function handleAuth() {
   // =========================
   // LOGIN
   // =========================
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
+  const { data, error } = await supabaseClient.auth.signUp({
     email,
     password
   });
@@ -327,4 +327,3 @@ supabaseClient.auth.onAuthStateChange(setupAuthButton);
 
 </body>
 </html>
-
