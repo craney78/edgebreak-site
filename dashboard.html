@@ -60,7 +60,7 @@ async function checkAccess() {
 }
 
 // 🔥 RUN IMMEDIATELY (NOT ON LOAD)
-checkAccess();
+window.addEventListener("load", checkAccess);
 
 </script>
 
