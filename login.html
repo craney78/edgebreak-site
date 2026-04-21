@@ -230,6 +230,15 @@ async function handleAuth() {
 
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
+  const errorBox = document.getElementById("error");
+
+  // =========================
+  // VALIDATION
+  // =========================
+  if (!email || !password) {
+    errorBox.innerText = "Enter email and password";
+    return;
+  }
 
   btn.disabled = true;
   btn.innerText = isSignup ? "Creating..." : "Logging in...";
@@ -240,14 +249,14 @@ async function handleAuth() {
   if (isSignup) {
 
     const { data, error } = await supabaseClient.auth.signUp({
-     email,
-     password
+      email,
+      password
     });
 
     console.log("SIGNUP RESULT:", data, error);
 
     if (error) {
-      document.getElementById("error").innerText = error.message;
+      errorBox.innerText = error.message;
       btn.disabled = false;
       btn.innerText = "Create Account";
       return;
@@ -255,7 +264,7 @@ async function handleAuth() {
 
     const user = data.user;
 
-    // 👉 SEND TO STRIPE FIRST (ALWAYS)
+    // 👉 SEND TO STRIPE (ALWAYS)
     window.location.href = STRIPE_LINK;
 
     // CREATE PROFILE (non-blocking)
@@ -272,13 +281,15 @@ async function handleAuth() {
   // =========================
   // LOGIN
   // =========================
-  const { data, error } = await supabaseClient.auth.signUp({
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
     email,
     password
   });
 
+  console.log("LOGIN RESULT:", data, error);
+
   if (error) {
-    document.getElementById("error").innerText = error.message;
+    errorBox.innerText = error.message;
     btn.disabled = false;
     btn.innerText = "Login";
     return;
@@ -286,10 +297,9 @@ async function handleAuth() {
 
   // 👉 SUCCESS → DASHBOARD
   setTimeout(() => {
-  window.location.href = "dashboard.html";
-}, 600);
+    window.location.href = "dashboard.html";
+  }, 600);
 }
-
 
 // =========================
 // EVENTS
@@ -311,19 +321,26 @@ async function setupAuthButton() {
 
   if (session && session.user) {
     btn.innerText = "Logout";
-    btn.onclick = async () => {
+    btn.href = "#";
+
+    btn.onclick = async (e) => {
+      e.preventDefault();
       await supabaseClient.auth.signOut();
       window.location.href = "login.html";
     };
+
   } else {
     btn.innerText = "Login";
     btn.href = "login.html";
+    btn.onclick = null;
   }
 }
 
 setupAuthButton();
 
-supabaseClient.auth.onAuthStateChange(setupAuthButton);
+supabaseClient.auth.onAuthStateChange(() => {
+  setupAuthButton();
+});
 
 </script>
 
