@@ -248,35 +248,44 @@ async function handleAuth() {
   // =========================
   if (isSignup) {
 
-    const { data, error } = await supabaseClient.auth.signUp({
-      email,
-      password
-    });
+  const { data, error } = await supabaseClient.auth.signUp({
+    email,
+    password
+  });
 
-    console.log("SIGNUP RESULT:", data, error);
+  console.log("SIGNUP RESULT:", data, error);
 
-    if (error) {
-      errorBox.innerText = error.message;
-      btn.disabled = false;
-      btn.innerText = "Create Account";
-      return;
-    }
-
-    const user = data.user;
-
-    // 👉 SEND TO STRIPE IMMEDIATELY
-    window.location.href = STRIPE_LINK;
-
-    // CREATE PROFILE (non-blocking)
-    if (user) {
-      supabaseClient.from("profiles").insert({
-        id: user.id,
-        is_active: false
-      }).catch(err => console.log("Profile insert failed:", err));
-    }
-
+  if (error) {
+    errorBox.innerText = error.message;
+    btn.disabled = false;
+    btn.innerText = "Create Account";
     return;
   }
+
+  const user = data.user;
+
+  // 🔥 ENSURE USER EXISTS
+  if (!user) {
+    errorBox.innerText = "Signup failed. Try again.";
+    btn.disabled = false;
+    btn.innerText = "Create Account";
+    return;
+  }
+
+  // 🔥 WAIT A MOMENT (CRITICAL)
+  await new Promise(resolve => setTimeout(resolve, 500));
+
+  // CREATE PROFILE
+  await supabaseClient.from("profiles").insert({
+    id: user.id,
+    is_active: false
+  });
+
+  // 👉 NOW redirect to Stripe
+  window.location.href = STRIPE_LINK;
+
+  return;
+}
 
   // =========================
   // LOGIN → TRADING DESK
