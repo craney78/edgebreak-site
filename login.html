@@ -248,44 +248,38 @@ async function handleAuth() {
   // =========================
   if (isSignup) {
 
-  const { data, error } = await supabaseClient.auth.signUp({
-    email,
-    password
-  });
+    const { data, error } = await supabaseClient.auth.signUp({
+      email,
+      password
+    });
 
-  console.log("SIGNUP RESULT:", data, error);
+    console.log("SIGNUP RESULT:", data, error);
 
-  if (error) {
-    errorBox.innerText = error.message;
-    btn.disabled = false;
-    btn.innerText = "Create Account";
+    if (error) {
+      errorBox.innerText = error.message;
+      btn.disabled = false;
+      btn.innerText = "Create Account";
+      return;
+    }
+
+    const user = data.user;
+
+    // CREATE PROFILE
+    if (user) {
+      await supabaseClient.from("profiles").insert({
+        id: user.id,
+        is_active: false
+      });
+    }
+
+    // 🔥 IMPORTANT: LOG OUT AFTER SIGNUP
+    await supabaseClient.auth.signOut();
+
+    // 👉 SEND TO STRIPE
+    window.location.href = STRIPE_LINK;
+
     return;
   }
-
-  const user = data.user;
-
-  // 🔥 ENSURE USER EXISTS
-  if (!user) {
-    errorBox.innerText = "Signup failed. Try again.";
-    btn.disabled = false;
-    btn.innerText = "Create Account";
-    return;
-  }
-
-  // 🔥 WAIT A MOMENT (CRITICAL)
-  await new Promise(resolve => setTimeout(resolve, 500));
-
-  // CREATE PROFILE
-  await supabaseClient.from("profiles").insert({
-    id: user.id,
-    is_active: false
-  });
-
-  // 👉 NOW redirect to Stripe
-  window.location.href = STRIPE_LINK;
-
-  return;
-}
 
   // =========================
   // LOGIN → TRADING DESK
