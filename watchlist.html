@@ -7,61 +7,58 @@
 <meta name="description" content="Track your trades, analyse performance, and improve consistency with the EdgeBreak trading dashboard built for structured execution.">
 <link rel="stylesheet" href="css/dashboard.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-</head>
-script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
 window.supabaseClient = supabase.createClient(
   "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
 <script>
 // =========================
-// 🔒 ACCESS CONTROL
+// 🔒 HARD PAGE LOCK
+// =========================
+document.documentElement.style.visibility = "hidden";
+
+const supabaseClient = window.supabaseClient;
+
+// =========================
+// 🔐 ACCESS CONTROL
 // =========================
 async function checkAccess() {
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
 
-  const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!user) {
+      window.location.replace("/login.html");
+      return;
+    }
 
-  // ❌ Not logged in → send to login
-  if (!session) {
-    window.location.href = "login.html";
-    return;
+    const { data: profile, error } = await supabaseClient
+      .from("profiles")
+      .select("is_active")
+      .eq("id", user.id)
+      .single();
+
+    if (error || !profile || !profile.is_active) {
+      window.location.replace("/pricing.html");
+      return;
+    }
+
+    document.documentElement.style.visibility = "visible";
+
+  } catch (err) {
+    console.error(err);
+    window.location.replace("/login.html");
   }
-
-  // 🔍 Check subscription
-  const { data: profile, error } = await supabaseClient
-    .from("profiles")
-    .select("is_active")
-    .eq("id", session.user.id)
-    .single();
-
-  if (error) {
-    console.error("Profile error:", error);
-    window.location.href = "login.html";
-    return;
-  }
-
-  // ❌ Not active → send to pricing
-  if (!profile || !profile.is_active) {
-    window.location.href = "pricing.html";
-    return;
-  }
-
-  // ✅ Access granted
-  console.log("Access granted");
 }
 
-// =========================
-// ⏱ RUN AFTER PAGE LOAD
-// =========================
-window.addEventListener("load", checkAccess);
+// 🚀 RUN
+checkAccess();
 
 </script>
-
+</head>
 <body style="background:#020617;">
 
 <!-- NAVBAR -->
@@ -1133,33 +1130,27 @@ async function setupAuthButton() {
   const btn = document.getElementById("authBtn");
   if (!btn) return;
 
-  const { data: { session } } = await supabaseClient.auth.getSession();
+  const { data: { user } } = await supabaseClient.auth.getUser();
 
-  if (session) {
+  if (user) {
     btn.innerText = "Logout";
 
     btn.onclick = async (e) => {
       e.preventDefault();
       await supabaseClient.auth.signOut();
-      window.location.href = "login.html";
+      window.location.href = "/login.html";
     };
 
   } else {
     btn.innerText = "Login";
-    btn.href = "login.html";
+    btn.href = "/login.html";
   }
 }
 
-// =========================
-// ⏱ RUN AFTER PAGE LOAD
-// =========================
-window.addEventListener("load", async () => {
-  await setupAuthButton();
-});
+// ✅ RUN ON LOAD
+setupAuthButton();
 
-// =========================
-// 🔁 UPDATE ON AUTH CHANGE
-// =========================
+// 🔁 KEEP IN SYNC
 supabaseClient.auth.onAuthStateChange(() => {
   setupAuthButton();
 });
