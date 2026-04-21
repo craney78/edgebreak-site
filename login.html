@@ -244,7 +244,7 @@ async function handleAuth() {
   btn.innerText = isSignup ? "Creating..." : "Logging in...";
 
   // =========================
-  // SIGNUP
+  // SIGNUP → STRIPE
   // =========================
   if (isSignup) {
 
@@ -264,7 +264,7 @@ async function handleAuth() {
 
     const user = data.user;
 
-    // 👉 SEND TO STRIPE (ALWAYS)
+    // 👉 SEND TO STRIPE IMMEDIATELY
     window.location.href = STRIPE_LINK;
 
     // CREATE PROFILE (non-blocking)
@@ -279,7 +279,7 @@ async function handleAuth() {
   }
 
   // =========================
-  // LOGIN
+  // LOGIN → TRADING DESK
   // =========================
   const { data, error } = await supabaseClient.auth.signInWithPassword({
     email,
@@ -295,9 +295,9 @@ async function handleAuth() {
     return;
   }
 
-  // 👉 SUCCESS → DASHBOARD
+  // 👉 SUCCESS → TRADING DESK (NOT DASHBOARD)
   setTimeout(() => {
-    window.location.href = "dashboard.html";
+    window.location.href = "watchlist.html";
   }, 600);
 }
 
