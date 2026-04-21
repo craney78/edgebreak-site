@@ -8,13 +8,15 @@
   <link rel="stylesheet" href="css/dashboard.css">
 
   <!-- SUPABASE -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
   <!-- CONFIG -->
   <script>
-    window.SUPABASE_URL = "https://qmonyhukamuuunxxxdlk.supabase.co";
-    window.SUPABASE_KEY = "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-";
-  </script>
+window.supabaseClient = supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
+);
+</script>
 </head>
 
 <body class="login-page">

@@ -6,53 +6,63 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
  
 <link rel="stylesheet" href="css/dashboard.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
-
-// =========================
-// 🔑 SUPABASE CLIENT
-// =========================
-const supabaseClient = supabase.createClient(
+window.supabaseClient = supabase.createClient(
   "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true
-    }
-  }
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
+</script>
+
+<script>
+// =========================
+// 🔒 HARD PAGE LOCK
+// =========================
+document.documentElement.style.visibility = "hidden";
+
+const supabaseClient = window.supabaseClient;
 
 // =========================
-// 🔒 ACCESS CONTROL
+// 🔐 ACCESS CONTROL
 // =========================
 async function checkAccess() {
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
 
-  const { data: { session } } = await supabaseClient.auth.getSession();
+    // ❌ Not logged in
+    if (!user) {
+      window.location.replace("/login.html");
+      return;
+    }
 
-  if (!session) {
-    window.location.href = "login.html";
-    return;
+    // 🔎 Check if paid
+    const { data: profile, error } = await supabaseClient
+      .from("profiles")
+      .select("is_active")
+      .eq("id", user.id)
+      .single();
+
+    // ❌ Not active
+    if (error || !profile || !profile.is_active) {
+      window.location.replace("/pricing.html");
+      return;
+    }
+
+    // ✅ Allow page
+    document.documentElement.style.visibility = "visible";
+
+  } catch (err) {
+    console.error(err);
+    window.location.replace("/login.html");
   }
-
-  const { data: profile } = await supabaseClient
-    .from("profiles")
-    .select("is_active")
-    .eq("id", session.user.id)
-    .single();
-
-  if (!profile || !profile.is_active) {
-    window.location.href = "pricing.html";
-  }
-
 }
 
-
+// 🚀 RUN
+checkAccess();
 
 </script>
+
 
 </head>
 <body>
@@ -287,7 +297,7 @@ async function checkAccess() {
     }
   }
 
-});
+
 
 </script>
 <script>
@@ -300,9 +310,9 @@ async function setupAuthButton() {
   const btn = document.getElementById("authBtn");
   if (!btn) return;
 
-  const { data: { session } } = await supabaseClient.auth.getSession();
+  const { data: { user } } = await supabaseClient.auth.getUser();
 
-  if (session) {
+  if (user) {
     btn.innerText = "Logout";
 
     btn.onclick = async (e) => {
@@ -317,19 +327,12 @@ async function setupAuthButton() {
   }
 }
 
-// =========================
-// 🔒 + 📊 PAGE INIT
-// =========================
-window.addEventListener("load", async () => {
-
-  await checkAccess();        // 🔒 protect page
-  await setupAuthButton();    // 🔄 update nav
-
-});
 
 // =========================
 // 🔁 AUTH STATE LISTENER
 // =========================
+setupAuthButton();
+
 supabaseClient.auth.onAuthStateChange(() => {
   setupAuthButton();
 });

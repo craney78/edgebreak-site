@@ -7,18 +7,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="css/dashboard.css">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
-const supabaseClient = supabase.createClient(
+window.supabaseClient = supabase.createClient(
   "https://qmonyhukamuuunxxxdlk.supabase.co",
   "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true
-    }
-  }
 );
 </script>
 </head>
