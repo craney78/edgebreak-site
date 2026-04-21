@@ -239,12 +239,12 @@ async function handleAuth() {
   // =========================
   if (isSignup) {
 
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password
-  });
+    const { data, error } = await supabaseClient.auth.signUp({
+     email,
+     password
+    });
 
-  console.log("LOGIN RESULT:", data, error);
+    console.log("SIGNUP RESULT:", data, error);
 
     if (error) {
       document.getElementById("error").innerText = error.message;
@@ -258,7 +258,7 @@ async function handleAuth() {
     // 👉 SEND TO STRIPE FIRST (ALWAYS)
     window.location.href = STRIPE_LINK;
 
-    // CREATE PROFILE (runs but doesn't block flow)
+    // CREATE PROFILE (non-blocking)
     if (user) {
       supabaseClient.from("profiles").insert({
         id: user.id,
@@ -267,6 +267,7 @@ async function handleAuth() {
     }
 
     return;
+  }
 
   // =========================
   // LOGIN
