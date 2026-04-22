@@ -12,7 +12,7 @@
 <script>
 window.supabaseClient = supabase.createClient(
   "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
 </head>
@@ -43,7 +43,10 @@ window.supabaseClient = supabase.createClient(
       <a href="blog.html" class="nav-link">Trade Insights</a>
       <a href="#" class="nav-cta" id="authBtn">Login</a>
     </div>
-
+    <!-- HAMBURGER -->
+    <div class="menu-toggle" id="menuToggle">
+      ☰
+    </div>
   </div>
 
 </div>  
@@ -273,6 +276,26 @@ supabaseClient.auth.onAuthStateChange(() => {
 <script>
 window.addEventListener("load", async () => {
   await setupAuthButton();
+});
+</script>
+
+<script>
+// =========================
+// 📱 MOBILE NAV TOGGLE
+// =========================
+
+const toggle = document.getElementById("menuToggle");
+const nav = document.getElementById("navLinks");
+
+toggle.addEventListener("click", () => {
+  nav.classList.toggle("active");
+});
+
+// Auto close after click (nice UX)
+document.querySelectorAll("#navLinks a").forEach(link => {
+  link.addEventListener("click", () => {
+    nav.classList.remove("active");
+  });
 });
 </script>
 </body>

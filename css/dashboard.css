@@ -2013,3 +2013,49 @@ a:hover {
   margin-bottom: 15px;
 }
 
+/* =========================
+📱 MOBILE NAV FIX
+========================= */
+
+.menu-toggle {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: white;
+}
+
+/* Desktop */
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    width: 100%;
+    background: #0f172a;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    display: none; /* 🔴 hidden by default */
+  }
+
+  .nav-links a {
+    padding: 12px 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-links.active {
+    display: flex; /* 🔥 show when active */
+  }
+}
