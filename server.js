@@ -3,28 +3,33 @@ import Stripe from "stripe";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
+
 dotenv.config();
+
 const app = express();
 
 // =========================
-// ⚠️ IMPORTANT FOR STRIPE
+// 🔥 CORS (MUST BE FIRST)
+// =========================
+app.use(cors({
+  origin: "*"
+}));
+
+// =========================
+// ⚠️ RAW BODY (STRIPE ONLY)
 // =========================
 app.use("/webhook", express.raw({ type: "application/json" }));
 
-// (optional for other routes later)
+// =========================
+// 📦 JSON (NORMAL ROUTES)
+// =========================
 app.use(express.json());
-app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST"],
-  allowedHeaders: ["Content-Type"]
-}));
-
-
 
 // =========================
 // 🔑 KEYS
 // =========================
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const supabaseAdmin = createClient(
@@ -40,12 +45,18 @@ app.post("/create-checkout-session", async (req, res) => {
 
     const { userId } = req.body;
 
+    if (!userId) {
+      return res.status(400).json({ error: "Missing userId" });
+    }
+
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
 
+      payment_method_types: ["card"],
+
       line_items: [
         {
-          price: "price_1TNqKKCys1zSKDi2HpYhlXmQ", // 🔥 REPLACE WITH YOUR REAL PRICE ID
+          price: "price_1TNqKKCys1zSKDi2HpYhlXmQ",
           quantity: 1
         }
       ],
@@ -64,12 +75,10 @@ app.post("/create-checkout-session", async (req, res) => {
   }
 });
 
-    
-
 // =========================
-// 🔥 WEBHOOK ROUTE
+// 🔥 STRIPE WEBHOOK
 // =========================
-app.post("/webhook", async (req, res) => {
+app.post("/webhook", (req, res) => {
 
   const sig = req.headers["stripe-signature"];
   let event;
@@ -96,107 +105,36 @@ app.post("/webhook", async (req, res) => {
 
     const userId = session.client_reference_id;
 
-    await supabaseAdmin
-      .from("profiles")
-      .update({ is_active: true })
-      .eq("id", userId);
-
-    console.log("🔥 USER ACTIVATED:", userId);
-  }
-
-  res.json({ received: true });
-
-});
-
-  // =========================
-  // 💳 HANDLE PAYMENTS
-  // =========================
-  if (
-    event.type === "checkout.session.completed" ||
-    event.type === "invoice.payment_succeeded"
-  ) {
-
-    const session = event.data.object;
-
-    const customerId = session.customer;
-    const email = session.customer_details?.email;
-
-    console.log("✅ Payment success:", {
-      customerId,
-      email
-    });
-
-    if (!customerId) {
-      console.log("❌ No Stripe customer ID");
+    if (!userId) {
+      console.log("❌ No userId found in session");
       return res.json({ received: true });
     }
 
-    try {
-      await activateUser(customerId, email);
-    } catch (err) {
-      console.log("❌ Activation error:", err);
-    }
+    supabaseAdmin
+      .from("profiles")
+      .update({ is_active: true })
+      .eq("id", userId)
+      .then(() => {
+        console.log("🔥 USER ACTIVATED:", userId);
+      })
+      .catch(err => {
+        console.log("❌ Activation error:", err);
+      });
   }
 
   res.json({ received: true });
-
+});
 
 // =========================
-// 🔗 ACTIVATE USER (FINAL)
+// 🚀 HEALTH CHECK (OPTIONAL BUT USEFUL)
 // =========================
-async function activateUser(customerId, email) {
-
-  // 1️⃣ Try find by Stripe ID
-  let { data: user } = await supabaseAdmin
-    .from("profiles")
-    .select("id")
-    .eq("stripe_customer_id", customerId)
-    .single();
-
-  // 2️⃣ If not found → fallback to email
-  if (!user && email) {
-
-    const { data: userByEmail } = await supabaseAdmin
-      .from("profiles")
-      .select("id")
-      .eq("email", email)
-      .single();
-
-    if (userByEmail) {
-      console.log("🔄 Linking Stripe customer to user");
-
-      // save Stripe ID
-      await supabaseAdmin
-        .from("profiles")
-        .update({ stripe_customer_id: customerId })
-        .eq("id", userByEmail.id);
-
-      user = userByEmail;
-    }
-  }
-
-  // 3️⃣ If still not found
-  if (!user) {
-    console.log("❌ No user found for:", { customerId, email });
-    return;
-  }
-
-  // 4️⃣ Activate user
-  const { error } = await supabaseAdmin
-    .from("profiles")
-    .update({ is_active: true })
-    .eq("id", user.id);
-
-  if (error) {
-    console.log("❌ Activation failed:", error);
-  } else {
-    console.log("🔥 User activated:", customerId);
-  }
-}
+app.get("/", (req, res) => {
+  res.send("EdgeBreak server running");
+});
 
 // =========================
 // 🚀 START SERVER
 // =========================
 app.listen(3000, () => {
-  console.log("🚀 Webhook server running on port 3000");
+  console.log("🚀 Server running on port 3000");
 });
