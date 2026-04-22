@@ -87,6 +87,12 @@ window.supabaseClient = supabase.createClient(
         Login
       </button>
 
+      <div style="text-align:center; margin-top:15px;">
+        <a href="#" id="forgotPassword" style="font-size:14px; opacity:0.7;">
+          Forgot your password?
+        </a>
+      </div>
+
       <!-- ERROR -->
       <div id="error" class="error-text"></div>
 
@@ -214,6 +220,29 @@ async function handleAuth() {
   window.location.href = "/dashboard.html";
 }
 
+// =========================
+// 🔐 FORGOT PASSWORD (SUPABASE RESET)
+// =========================
+document.getElementById("forgotPassword").addEventListener("click", async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+
+  if (!email) {
+    alert("Enter your email first");
+    return;
+  }
+
+  const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+    redirectTo: "https://edgebreak.ai/login.html"
+  });
+
+  if (error) {
+    alert(error.message);
+  } else {
+    alert("Password reset email sent");
+  }
+});
 
 // =========================
 // EVENTS (FIXED)
