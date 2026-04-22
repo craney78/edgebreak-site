@@ -2014,30 +2014,49 @@ a:hover {
 }
 
 /* =========================
-📱 MOBILE NAV FIX
+NAV BASE
 ========================= */
 
-.menu-toggle {
-  display: none;
-  font-size: 26px;
-  cursor: pointer;
-  color: white;
+.nav-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
 }
 
-/* Desktop */
+/* Desktop nav */
 .nav-links {
   display: flex;
   gap: 20px;
 }
 
-/* Mobile */
+/* Hamburger hidden on desktop */
+.menu-toggle {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: white;
+}
+
+/* =========================
+📱 MOBILE FIX
+========================= */
+
 @media (max-width: 768px) {
 
+  /* ❌ HIDE DESKTOP NAV */
+  .nav-links {
+    display: none;
+  }
+
+  /* ✅ SHOW HAMBURGER */
   .menu-toggle {
     display: block;
   }
 
-  .nav-links {
+  /* DROPDOWN STYLE */
+  .nav-links.active {
+    display: flex;
     position: absolute;
     top: 70px;
     right: 0;
@@ -2046,16 +2065,12 @@ a:hover {
     flex-direction: column;
     align-items: center;
     padding: 20px 0;
-    display: none; /* 🔴 hidden by default */
+    z-index: 999;
   }
 
-  .nav-links a {
+  .nav-links.active a {
     padding: 12px 0;
     width: 100%;
     text-align: center;
-  }
-
-  .nav-links.active {
-    display: flex; /* 🔥 show when active */
   }
 }
