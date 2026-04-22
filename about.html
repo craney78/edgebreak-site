@@ -33,15 +33,27 @@ window.supabaseClient = supabase.createClient(
     <!-- RIGHT SIDE WRAP -->
     <div class="nav-links-wrap">
 
-      <!-- LINKS (ALL MUST BE INSIDE HERE) -->
+      <!-- LINKS -->
       <div class="nav-links" id="navLinks">
         <a href="index.html" class="nav-link">Home</a>
         <a href="index.html#statsGrid" class="nav-link">Performance</a>
-        <a href="watchlist.html" class="nav-link">Trading Desk</a>
+
+        <a href="watchlist.html" class="nav-link locked-link">
+          Trading Desk <span class="lock-icon">🔒</span>
+        </a>
+
         <a href="trading-guide.html" class="nav-link">Guide</a>
-        <a href="dashboard.html" class="nav-link">My Dashboard</a>
-        <a href="/chart.html?symbol=AAPL" class="nav-link">Charts</a>
+
+        <a href="dashboard.html" class="nav-link locked-link">
+          My Dashboard <span class="lock-icon">🔒</span>
+        </a>
+
+        <a href="/chart.html?symbol=AAPL" class="nav-link locked-link">
+          Charts <span class="lock-icon">🔒</span>
+        </a>
+
         <a href="blog.html" class="nav-link">Trade Insights</a>
+
         <a href="#" class="nav-cta" id="authBtn">Login</a>
       </div>
 
@@ -54,7 +66,6 @@ window.supabaseClient = supabase.createClient(
 
   </div>
 </div>
-
 <!-- HERO -->
 <div class="hero">
 
@@ -394,6 +405,55 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll("#navLinks a").forEach(link => {
     link.addEventListener("click", () => {
       nav.classList.remove("active");
+    });
+  });
+
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  // If no session → keep locked state
+  if (!session || !session.user) return;
+
+  // Get profile
+  const { data: profile } = await supabaseClient
+    .from("profiles")
+    .select("is_active")
+    .eq("id", session.user.id)
+    .single();
+
+  // If NOT active → keep locked
+  if (!profile || profile.is_active !== true) return;
+
+  // ✅ USER IS ACTIVE → UNLOCK NAV
+
+  document.querySelectorAll(".locked-link").forEach(link => {
+
+    // remove lock icon
+    const icon = link.querySelector(".lock-icon");
+    if (icon) icon.remove();
+
+    // remove locked behaviour
+    link.classList.remove("locked-link");
+
+  });
+
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  document.querySelectorAll(".locked-link").forEach(link => {
+    link.addEventListener("click", function(e) {
+
+      if (this.classList.contains("locked-link")) {
+        e.preventDefault();
+        window.location.href = "pricing.html";
+      }
+
     });
   });
 
