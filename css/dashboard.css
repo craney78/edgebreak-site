@@ -26,45 +26,6 @@ p {
 }
 
 /* =========================
-   🔝 NAVBAR
-   ========================= */
-.nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: rgba(2,6,23,0.9);
-  border-bottom: 1px solid #1e293b;
-  z-index: 1000;
-}
-
-
-.nav-links {
-  display: flex;
-  gap: 20px;
-}
-
-.nav-link {
-  color: #94a3b8;
-  text-decoration: none;
-}
-
-.nav-link:hover {
-  color: #22c55e;
-}
-
-.nav-cta {
-  background: #22c55e;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 8px;
-  color: white;
-}
-
-body {
-  padding-top: 80px;
-}
-
-/* =========================
    🚀 HERO FIX (FINAL)
    ========================= */
 
@@ -829,33 +790,6 @@ html {
   margin: 0 auto 20px;
 }
 
-/* =========================
-   🔥 NAVBAR FIX
-   ========================= */
-
-.navbar {
-  width: 100%;
-  background: #020617;
-  border-bottom: 1px solid #1e293b;
-}
-
-
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-
-.nav-links a {
-  color: #94a3b8;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.nav-links a:hover {
-  color: #22c55e;
-}
 
 .nav-logo {
   width: 30px;
@@ -884,18 +818,7 @@ html {
    🔥 NAV HEIGHT FIX
    ========================= */
 
-.navbar {
-  padding: 0;              /* remove extra vertical padding */
-}
 
-.nav-inner {
-  padding: 10px 20px;      /* controlled spacing */
-  height: 60px;            /* locks nav height */
-}
-
-.nav-left img {
-  display: block;
-}
 
 .hero-logo {
   width: 30px;
@@ -907,86 +830,12 @@ html {
    ========================= */
 
 
-/* prevent anything stretching it */
-.nav-left,
-.nav-links {
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
 
-.nav-logo {
-  width: 30px !important;
-  height: auto;
-  display: block;
-}
-
-.navbar img {
-  width: auto;
-  max-width: 30px;
-}
-
-/* =========================
-   🔥 HARD FIX NAV LOGO
-   ========================= */
-
-.navbar img {
-  width: 30px !important;
-  height: auto !important;
-  max-width: 30px !important;
-}
-
-.navbar {
-  height: 60px !important;
-}
-
-.nav-inner {
-  height: 60px !important;
-  display: flex;
-  align-items: center;
-}
-
-
-/* =========================
-   🔥 FIX LIVE BADGE (CAUSE OF BIG NAV)
-   ========================= */
-
-.live-badge {
-  display: inline-block;
-  font-size: 12px;
-  padding: 2px 6px;
-  line-height: 1;
-  height: auto;
-}
-
-.navbar {
-  height: 60px;
-}
-
-.nav-inner {
-  height: 60px;
-  display: flex;
-  align-items: center;
-}
-
-.navbar * {
-  max-height: 60px;
-}
 
 /* =========================
    🔥 FORCE FIX NAV (GUIDE PAGE)
    ========================= */
-.nav-left,
-.nav-links {
-  display: flex;
-  align-items: center;
-}
-/* THIS IS THE KEY FIX */
 
-.nav-links a:not(.nav-cta) {
-  line-height: 1;
-  padding: 0;
-}
 
 .hero-logo {
   width: 30px;
@@ -1478,14 +1327,7 @@ body {
 }
 
 
-  .nav-link {
-    font-size: 13px;
-  }
-
-  .nav-cta {
-    margin-top: 5px;
-  }
-
+  
 
 
   .footer-col {
@@ -1812,29 +1654,7 @@ body {
     box-sizing: border-box;
   }
 
-  /* =========================
-     NAV (FIXED ISSUE)
-  ========================= */
-  .nav-inner {
-    flex-direction: row;                /* 🔥 FIX */
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-  }
-
-  .nav-links {
-    display: none;                     /* 🔥 remove clutter */
-  }
-
-  .nav-logo {
-    width: 28px;
-    height: auto;
-  }
-
-  .nav-cta {
-    display: inline-block !important;  /* keep login/logout */
-  }
-
+  
   /* =========================
      HERO
   ========================= */
@@ -1984,10 +1804,20 @@ a:hover {
 }
 
 /* =========================
-NAV FINAL (CLEAN)
+NAV CLEAN RESET (FINAL)
 ========================= */
 
-/* container */
+/* NAV BAR */
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #020617;
+  border-bottom: 1px solid #1e293b;
+  z-index: 1000;
+}
+
+/* INNER */
 .nav-inner {
   display: flex;
   justify-content: space-between;
@@ -1996,26 +1826,45 @@ NAV FINAL (CLEAN)
   position: relative;
 }
 
-/* logo side */
+/* LEFT */
 .nav-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
-/* desktop nav */
+/* LOGO */
+.nav-logo {
+  width: 28px;
+}
+
+/* DESKTOP LINKS */
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 14px; /* tighter spacing */
+  gap: 12px;
 }
 
 .nav-links a {
-  font-size: 14px;
-  white-space: nowrap;
+  font-size: 13px;
+  color: #94a3b8;
+  text-decoration: none;
 }
 
-/* burger */
+.nav-links a:hover {
+  color: #22c55e;
+}
+
+/* CTA */
+.nav-cta {
+  background: #22c55e;
+  color: #020617;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* BURGER */
 .menu-toggle {
   display: none;
   font-size: 24px;
@@ -2035,6 +1884,7 @@ MOBILE
 
   .menu-toggle {
     display: block;
+    margin-left: auto;
   }
 
   .nav-links.active {
