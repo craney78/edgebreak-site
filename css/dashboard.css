@@ -1984,69 +1984,63 @@ a:hover {
 }
 
 /* =========================
-🔥 NAV HARD RESET (FINAL FIX)
+NAV FINAL (CLEAN)
 ========================= */
 
-/* NAV CONTAINER */
+/* container */
 .nav-inner {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  padding: 10px 16px !important;
-  position: relative !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  position: relative;
 }
 
-/* LEFT SIDE (LOGO AREA) */
+/* logo side */
 .nav-left {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-/* DESKTOP LINKS */
+/* desktop nav */
 .nav-links {
-  display: flex !important;
-  align-items: center !important;
-  gap: 16px !important; /* 🔥 tighter spacing */
+  display: flex;
+  align-items: center;
+  gap: 14px; /* tighter spacing */
 }
 
-/* LINKS STYLE */
 .nav-links a {
-  font-size: 14px !important;
+  font-size: 14px;
   white-space: nowrap;
 }
 
-/* HAMBURGER (RIGHT SIDE ALWAYS) */
+/* burger */
 .menu-toggle {
   display: none;
-  font-size: 26px;
+  font-size: 24px;
   cursor: pointer;
   color: white;
-  margin-left: auto; /* 🔥 forces right */
 }
 
 /* =========================
-📱 MOBILE (CLEAN MODE)
+MOBILE
 ========================= */
 
 @media (max-width: 768px) {
 
-  /* HIDE DESKTOP NAV COMPLETELY */
   .nav-links {
-    display: none !important;
+    display: none;
   }
 
-  /* SHOW BURGER ON RIGHT */
   .menu-toggle {
-    display: block !important;
+    display: block;
   }
 
-  /* DROPDOWN MENU */
   .nav-links.active {
-    display: flex !important;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
 
     position: absolute;
     top: 60px;
@@ -2055,7 +2049,6 @@ a:hover {
 
     background: #020617;
     padding: 20px 0;
-
     border-top: 1px solid #1e293b;
     z-index: 999;
   }
