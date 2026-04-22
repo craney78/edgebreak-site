@@ -78,7 +78,7 @@ app.post("/create-checkout-session", async (req, res) => {
 // =========================
 // 🔥 STRIPE WEBHOOK
 // =========================
-app.post("/webhook", (req, res) => {
+app.post("/webhook", async (req, res) => {
 
   const sig = req.headers["stripe-signature"];
   let event;
@@ -97,30 +97,69 @@ app.post("/webhook", (req, res) => {
   console.log("📩 Event received:", event.type);
 
   // =========================
-  // ✅ ACTIVATE USER
+  // ✅ STRIPE: PAYMENT SUCCESS
   // =========================
   if (event.type === "checkout.session.completed") {
 
     const session = event.data.object;
     const userId = session.client_reference_id;
+    const customerId = session.customer;
 
     if (!userId) {
       console.log("❌ No userId found in session");
       return res.json({ received: true });
     }
 
-    supabaseAdmin
+    await supabaseAdmin
       .from("profiles")
-      .update({ is_active: true })
-      .eq("id", userId)
-      .then(() => {
-        console.log("🔥 USER ACTIVATED:", userId);
+      .update({
+        is_active: true,
+        stripe_customer_id: customerId // 🔥 IMPORTANT
       })
-      .catch(err => {
-        console.log("❌ Activation error:", err);
-      });
+      .eq("id", userId);
+
+    console.log("🔥 USER ACTIVATED:", userId);
   }
 
+  // =========================
+  // ❌ STRIPE: PAYMENT FAILED
+  // =========================
+  if (event.type === "invoice.payment_failed") {
+
+    const invoice = event.data.object;
+    const customerId = invoice.customer;
+
+    console.log("❌ Payment failed:", customerId);
+
+    await supabaseAdmin
+      .from("profiles")
+      .update({ is_active: false })
+      .eq("stripe_customer_id", customerId);
+
+    console.log("🚫 Access removed (payment failed)");
+  }
+
+  // =========================
+  // ❌ STRIPE: SUBSCRIPTION CANCELLED
+  // =========================
+  if (event.type === "customer.subscription.deleted") {
+
+    const subscription = event.data.object;
+    const customerId = subscription.customer;
+
+    console.log("❌ Subscription cancelled:", customerId);
+
+    await supabaseAdmin
+      .from("profiles")
+      .update({ is_active: false })
+      .eq("stripe_customer_id", customerId);
+
+    console.log("🚫 Access removed (subscription cancelled)");
+  }
+
+  // =========================
+  // ✅ RESPONSE
+  // =========================
   res.json({ received: true });
 });
 
