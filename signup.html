@@ -10,10 +10,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
   <script>
-  window.supabaseClient = supabase.createClient(
-    "https://qmonyhukamuuunxxxdlk.supabase.co",
-    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
-  );
+    window.supabaseClient = supabase.createClient(
+      "https://qmonyhukamuuunxxxdlk.supabase.co",
+      "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    );
   </script>
 </head>
 
@@ -37,7 +37,6 @@
   </div>
 </div>
 
-
 <script>
 
 const supabaseClient = window.supabaseClient;
@@ -51,7 +50,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  
+  signupBtn.addEventListener("click", async () => {
+
     signupBtn.disabled = true;
 
     const email = document.getElementById("email").value.trim();
@@ -106,8 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
-
-
 
 </script>
 
