@@ -1916,3 +1916,47 @@ a:hover {
     text-align: center;
   }
 }
+
+/* =========================
+FIX NAV SPACING (REAL FIX)
+========================= */
+
+/* wrapper controls alignment */
+.nav-links-wrap {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* actual links stay tight */
+.nav-links {
+  display: flex;
+  gap: 12px;
+  width: auto;
+}
+
+/* STOP stretching */
+.nav-inner {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* =========================
+MOBILE FIX
+========================= */
+
+@media (max-width: 768px) {
+
+  .nav-links-wrap {
+    width: 100%;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .nav-links.active {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+}
