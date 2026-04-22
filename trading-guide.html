@@ -422,21 +422,29 @@ window.addEventListener("load", async () => {
 
 <script>
 // =========================
-// 📱 MOBILE NAV TOGGLE
+// 📱 MOBILE NAV TOGGLE (FIXED)
 // =========================
 
-const toggle = document.getElementById("menuToggle");
-const nav = document.getElementById("navLinks");
+document.addEventListener("DOMContentLoaded", () => {
 
-toggle.addEventListener("click", () => {
-  nav.classList.toggle("active");
-});
+  const toggle = document.getElementById("menuToggle");
+  const nav = document.getElementById("navLinks");
 
-// Auto close after click (nice UX)
-document.querySelectorAll("#navLinks a").forEach(link => {
-  link.addEventListener("click", () => {
-    nav.classList.remove("active");
+  if (!toggle || !nav) {
+    console.log("❌ Nav elements missing");
+    return;
+  }
+
+  toggle.addEventListener("click", () => {
+    nav.classList.toggle("active");
   });
+
+  document.querySelectorAll("#navLinks a").forEach(link => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("active");
+    });
+  });
+
 });
 </script>
 
