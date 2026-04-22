@@ -1192,5 +1192,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if (!user) return;
+
+  const { data: profile } = await supabaseClient
+    .from("profiles")
+    .select("is_active")
+    .eq("id", user.id)
+    .single();
+
+  if (!profile || profile.is_active !== true) return;
+
+  // ✅ REMOVE LOCK ICONS ONLY (VISUAL FIX)
+  document.querySelectorAll(".lock-icon").forEach(icon => icon.remove());
+
+  document.querySelectorAll(".locked-link").forEach(link => {
+    link.classList.remove("locked-link");
+  });
+
+});
+</script>
 </body>
 </html>
