@@ -28,41 +28,38 @@ const supabaseClient = window.supabaseClient;
 // =========================
 async function checkAccess() {
   try {
-    const { data: { user } } = await supabaseClient.auth.getUser();
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
 
-    // ❌ Not logged in
-    if (!user) {
+    // ❌ Not logged in OR error
+    if (userError || !user) {
       window.location.replace("/login.html");
       return;
     }
 
-    // 🔎 Check if paid
-    const { data: profile, error } = await supabaseClient
+    const { data: profile, error: profileError } = await supabaseClient
       .from("profiles")
       .select("is_active")
       .eq("id", user.id)
       .single();
 
-    // ❌ Not active
-    if (error || !profile || !profile.is_active) {
+    // ❌ Not paid / no profile / error
+    if (profileError || !profile || profile.is_active !== true) {
       window.location.replace("/pricing.html");
       return;
     }
 
-    // ✅ Allow page
+    // ✅ Access granted
     document.documentElement.style.visibility = "visible";
 
   } catch (err) {
-    console.error(err);
+    console.error("Access check failed:", err);
     window.location.replace("/login.html");
   }
 }
 
 // 🚀 RUN
 checkAccess();
-
 </script>
-
 
 </head>
 <body>
@@ -361,18 +358,14 @@ supabaseClient.auth.onAuthStateChange(() => {
 
 <script>
 // =========================
-// 📱 MOBILE NAV TOGGLE (FIXED)
+// 📱 MOBILE NAV TOGGLE
 // =========================
-
 document.addEventListener("DOMContentLoaded", () => {
 
   const toggle = document.getElementById("menuToggle");
   const nav = document.getElementById("navLinks");
 
-  if (!toggle || !nav) {
-    console.log("❌ Nav elements missing");
-    return;
-  }
+  if (!toggle || !nav) return;
 
   toggle.addEventListener("click", () => {
     nav.classList.toggle("active");
@@ -381,55 +374,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll("#navLinks a").forEach(link => {
     link.addEventListener("click", () => {
       nav.classList.remove("active");
-    });
-  });
-
-});
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", async () => {
-
-  const { data: { session } } = await supabaseClient.auth.getSession();
-
-  // If no session → keep locked state
-  if (!session || !session.user) return;
-
-  // Get profile
-  const { data: profile } = await supabaseClient
-    .from("profiles")
-    .select("is_active")
-    .eq("id", session.user.id)
-    .single();
-
-  // If NOT active → keep locked
-  if (!profile || profile.is_active !== true) return;
-
-  // ✅ USER IS ACTIVE → UNLOCK NAV
-
-  document.querySelectorAll(".locked-link").forEach(link => {
-
-    // remove lock icon
-    const icon = link.querySelector(".lock-icon");
-    if (icon) icon.remove();
-
-    // remove locked behaviour
-    link.classList.remove("locked-link");
-
-  });
-
-});
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  document.querySelectorAll(".locked-link").forEach(link => {
-    link.addEventListener("click", function(e) {
-
-      if (this.classList.contains("locked-link")) {
-        e.preventDefault();
-        window.location.href = "pricing.html";
-      }
-
     });
   });
 
