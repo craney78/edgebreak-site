@@ -1909,3 +1909,117 @@ MOBILE
     text-align: center;
   }
 }
+
+/* =========================
+🚀 NAV FINAL FIX (DO NOT TOUCH ABOVE)
+========================= */
+
+/* NAV BAR */
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #020617;
+  border-bottom: 1px solid #1e293b;
+  z-index: 1000;
+}
+
+/* INNER */
+.nav-inner {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 10px 16px !important;
+  position: relative !important;
+}
+
+/* LEFT SIDE */
+.nav-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+/* LOGO */
+.nav-logo {
+  width: 28px !important;
+  height: auto !important;
+}
+
+/* DESKTOP LINKS */
+.nav-links {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important; /* 🔥 FIX SPACING */
+}
+
+/* LINK STYLE */
+.nav-links a {
+  font-size: 13px !important;
+  color: #94a3b8 !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+}
+
+.nav-links a:hover {
+  color: #22c55e !important;
+}
+
+/* CTA */
+.nav-cta {
+  background: #22c55e !important;
+  color: #020617 !important;
+  padding: 6px 12px !important;
+  border-radius: 6px !important;
+  font-weight: 600 !important;
+}
+
+/* BURGER */
+.menu-toggle {
+  display: none !important;
+  font-size: 24px !important;
+  cursor: pointer !important;
+  color: white !important;
+  margin-left: auto !important; /* 🔥 FORCE RIGHT */
+}
+
+/* =========================
+📱 MOBILE FIX
+========================= */
+
+@media (max-width: 768px) {
+
+  /* HIDE DESKTOP NAV */
+  .nav-links {
+    display: none !important;
+  }
+
+  /* SHOW BURGER */
+  .menu-toggle {
+    display: block !important;
+  }
+
+  /* DROPDOWN */
+  .nav-links.active {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+
+    position: absolute !important;
+    top: 60px !important;
+    right: 0 !important;
+    width: 100% !important;
+
+    background: #020617 !important;
+    padding: 20px 0 !important;
+
+    border-top: 1px solid #1e293b !important;
+    z-index: 999 !important;
+  }
+
+  .nav-links.active a {
+    padding: 14px 0 !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
