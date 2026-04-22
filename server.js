@@ -9,19 +9,19 @@ dotenv.config();
 const app = express();
 
 // =========================
-// 🔥 CORS (MUST BE FIRST)
+// 🔥 CORS (KEEP * FOR NOW - LOCK LATER)
 // =========================
 app.use(cors({
   origin: "*"
 }));
 
 // =========================
-// ⚠️ RAW BODY (STRIPE ONLY)
+// ⚠️ RAW BODY (STRIPE WEBHOOK ONLY)
 // =========================
 app.use("/webhook", express.raw({ type: "application/json" }));
 
 // =========================
-// 📦 JSON (NORMAL ROUTES)
+// 📦 JSON (ALL OTHER ROUTES)
 // =========================
 app.use(express.json());
 
@@ -102,7 +102,6 @@ app.post("/webhook", (req, res) => {
   if (event.type === "checkout.session.completed") {
 
     const session = event.data.object;
-
     const userId = session.client_reference_id;
 
     if (!userId) {
@@ -126,10 +125,10 @@ app.post("/webhook", (req, res) => {
 });
 
 // =========================
-// 🚀 HEALTH CHECK (OPTIONAL BUT USEFUL)
+// 🧪 HEALTH CHECK
 // =========================
 app.get("/", (req, res) => {
-  res.send("EdgeBreak server running");
+  res.send("🚀 EdgeBreak server running");
 });
 
 // =========================
