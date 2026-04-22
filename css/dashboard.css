@@ -1804,7 +1804,7 @@ a:hover {
 }
 
 /* =========================
-NAV CLEAN RESET (FINAL)
+✅ NAV FINAL (CLEAN + FIXED)
 ========================= */
 
 /* NAV BAR */
@@ -1823,14 +1823,13 @@ NAV CLEAN RESET (FINAL)
   justify-content: space-between;
   align-items: center;
   padding: 10px 16px;
-  position: relative;
 }
 
 /* LEFT */
 .nav-left {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 /* LOGO */
@@ -1838,17 +1837,22 @@ NAV CLEAN RESET (FINAL)
   width: 28px;
 }
 
-/* DESKTOP LINKS */
+/* DESKTOP LINKS (FIXED SPACING ISSUE) */
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 12px;
+
+  gap: 12px;          /* ✅ tight spacing */
+  width: auto;        /* ✅ stop full-width stretch */
+  flex: 0 0 auto;     /* ✅ CRITICAL: prevents spreading */
 }
 
+/* LINKS */
 .nav-links a {
   font-size: 13px;
   color: #94a3b8;
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .nav-links a:hover {
@@ -1870,23 +1874,26 @@ NAV CLEAN RESET (FINAL)
   font-size: 24px;
   cursor: pointer;
   color: white;
+  margin-left: auto;   /* ✅ forces right */
 }
 
 /* =========================
-MOBILE
+📱 MOBILE (FIXED PROPERLY)
 ========================= */
 
 @media (max-width: 768px) {
 
+  /* hide desktop nav completely */
   .nav-links {
     display: none;
   }
 
+  /* show burger */
   .menu-toggle {
     display: block;
-    margin-left: auto;
   }
 
+  /* dropdown */
   .nav-links.active {
     display: flex;
     flex-direction: column;
@@ -1908,135 +1915,4 @@ MOBILE
     width: 100%;
     text-align: center;
   }
-}
-
-/* =========================
-🚀 NAV FINAL FIX (DO NOT TOUCH ABOVE)
-========================= */
-
-/* NAV BAR */
-.nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: #020617;
-  border-bottom: 1px solid #1e293b;
-  z-index: 1000;
-}
-
-/* INNER */
-.nav-inner {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  padding: 10px 16px !important;
-  position: relative !important;
-}
-
-/* LEFT SIDE */
-.nav-left {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-}
-
-/* LOGO */
-.nav-logo {
-  width: 28px !important;
-  height: auto !important;
-}
-
-/* DESKTOP LINKS */
-.nav-links {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important; /* 🔥 FIX SPACING */
-}
-
-/* LINK STYLE */
-.nav-links a {
-  font-size: 13px !important;
-  color: #94a3b8 !important;
-  text-decoration: none !important;
-  white-space: nowrap !important;
-}
-
-.nav-links a:hover {
-  color: #22c55e !important;
-}
-
-/* CTA */
-.nav-cta {
-  background: #22c55e !important;
-  color: #020617 !important;
-  padding: 6px 12px !important;
-  border-radius: 6px !important;
-  font-weight: 600 !important;
-}
-
-/* BURGER */
-.menu-toggle {
-  display: none !important;
-  font-size: 24px !important;
-  cursor: pointer !important;
-  color: white !important;
-  margin-left: auto !important; /* 🔥 FORCE RIGHT */
-}
-
-/* =========================
-📱 MOBILE FIX
-========================= */
-
-@media (max-width: 768px) {
-
-  /* HIDE DESKTOP NAV */
-  .nav-links {
-    display: none !important;
-  }
-
-  /* SHOW BURGER */
-  .menu-toggle {
-    display: block !important;
-  }
-
-  /* DROPDOWN */
-  .nav-links.active {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-
-    position: absolute !important;
-    top: 60px !important;
-    right: 0 !important;
-    width: 100% !important;
-
-    background: #020617 !important;
-    padding: 20px 0 !important;
-
-    border-top: 1px solid #1e293b !important;
-    z-index: 999 !important;
-  }
-
-  .nav-links.active a {
-    padding: 14px 0 !important;
-    width: 100% !important;
-    text-align: center !important;
-  }
-}
-
-.nav-links {
-  display: flex !important;
-  gap: 12px !important;
-  justify-content: flex-end;   /* 🔥 THIS FIXES IT */
-  flex: 0;                     /* 🔥 STOPS STRETCHING */
-}
-
-.nav-links {
-  display: flex !important;
-  gap: 12px !important;
-
-  width: auto !important;      /* 🔥 KEY FIX */
-  flex: 0 0 auto !important;   /* 🔥 KEY FIX */
-
-  justify-content: flex-end !important;
 }
