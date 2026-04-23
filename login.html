@@ -468,27 +468,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <script>
 // =========================
-// 📱 PHONE INPUT INIT (FIXED PROPERLY)
+// 📱 PHONE INPUT INIT (FINAL FIX)
 // =========================
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
+
+  if (typeof window.intlTelInput !== "function") {
+    console.error("❌ intlTelInput not loaded");
+    return;
+  }
 
   const phoneInput = document.querySelector("#phone");
 
   if (!phoneInput) {
-    console.log("❌ Phone input not found");
+    console.error("❌ Phone input not found");
     return;
   }
 
-  const iti = window.intlTelInput(phoneInput, {
+  window.intlTelInput(phoneInput, {
     initialCountry: "au",
     preferredCountries: ["au", "us", "gb"],
     separateDialCode: true,
+    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.5.6/build/js/utils.js"
   });
 
-  // 🔧 LOAD UTILS AFTER INIT (IMPORTANT)
-  const script = document.createElement("script");
-  script.src = "https://cdn.jsdelivr.net/npm/intl-tel-input@18.5.6/build/js/utils.js";
-  document.body.appendChild(script);
+  console.log("✅ Phone input initialized");
 
 });
 </script>
