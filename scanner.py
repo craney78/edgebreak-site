@@ -447,30 +447,31 @@ def run():
 
     all_signals = sort_signals(all_signals)
 
-    # ✅ ONLY RESPONSIBILITY
+    # =========================
+    # ✅ HANDLE SIGNALS
+    # =========================
     if len(all_signals) > 0:
+
         append_to_active_positions(all_signals)
-    if len(all_signals) > 0:
-    append_to_active_positions(all_signals)
 
-    # =========================
-    # 🚀 SEND SMS ALERT
-    # =========================
-    try:
-        message = f"🚀 EdgeBreak Alert: {len(all_signals)} new breakout signals detected"
+        # =========================
+        # 🚀 SEND SMS ALERT
+        # =========================
+        try:
+            message = f"🚀 EdgeBreak Alert: {len(all_signals)} new trades opened"
 
-        requests.post(
-            "http://localhost:3000/send-alert",
-            json={"message": message}
-        )
+            requests.post(
+                "http://localhost:3000/send-alert",
+                json={"message": message}
+            )
 
-        print("📩 SMS ALERT SENT")
+            print("📩 SMS ALERT SENT")
 
-    except Exception as e:
-        print(f"❌ SMS ERROR: {e}")
+        except Exception as e:
+            print(f"❌ SMS ERROR: {e}")
 
-else:
-    print("⚠️ No new signals")
+    else:
+        print("⚠️ No new signals")
 
 # =========================
 # RUN
