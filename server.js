@@ -52,12 +52,15 @@ app.post("/create-checkout-session", async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
 
-      // 🔥 ADD TRIAL HERE
+      // 🔥 TRIAL
       subscription_data: {
         trial_period_days: 28
       },
 
       payment_method_types: ["card"],
+
+      // 🔥 IMPORTANT FIX (prevents weird subscription issues)
+      customer_creation: "always",
 
       line_items: [
         {
@@ -66,8 +69,9 @@ app.post("/create-checkout-session", async (req, res) => {
         }
       ],
 
-      success_url: "https://edgebreak.ai/login.html?success=true",
-      cancel_url: "https://edgebreak.ai/pricing.html",
+      // 🔥 FIXED (must match your live domain EXACTLY)
+      success_url: "https://www.edgebreak.ai/login.html?success=true",
+      cancel_url: "https://www.edgebreak.ai/pricing.html",
 
       client_reference_id: userId
     });
