@@ -121,7 +121,35 @@ window.supabaseClient = supabase.createClient(
         color: #555;
       }
     }
+/* =========================
+   📱 MOBILE NAV FIX
+========================= */
 
+@media (max-width: 768px) {
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background: #020617;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    padding: 20px;
+    z-index: 999;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: block;
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+  }
+}
   </style>
 </head>
 
@@ -383,10 +411,21 @@ window.supabaseClient = supabase.createClient(
     <div class="footer-col">
       <h4>Get Access</h4>
       <p style="margin-bottom:10px;">
-        Unlock the full system and live trades
+          Unlock the full system and live trades
       </p>
-     
-    </div>
+
+      <button onclick="startTrial()" style="
+          padding:10px 16px;
+          border-radius:6px;
+          border:none;
+          background:#22c55e;
+          color:white;
+          cursor:pointer;
+          width:100%;
+      ">
+          Start Free Trial
+      </button>
+      </div>
 
   </div>
 
@@ -416,6 +455,16 @@ function startTrial() {
 }
 </script>
 
+<script>
+// =========================
+// 📱 MOBILE NAV TOGGLE
+// =========================
+const menuToggle = document.getElementById("menuToggle");
+const navLinks = document.getElementById("navLinks");
 
+menuToggle.addEventListener("click", () => {
+  navLinks.classList.toggle("active");
+});
+</script>
 </body>
 </html>
