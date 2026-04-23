@@ -450,10 +450,27 @@ def run():
     # ✅ ONLY RESPONSIBILITY
     if len(all_signals) > 0:
         append_to_active_positions(all_signals)
-    else:
-        print("⚠️ No new signals")
+    if len(all_signals) > 0:
+    append_to_active_positions(all_signals)
 
-    print(f"\n📊 TOTAL NEW SIGNALS: {len(all_signals)}")
+    # =========================
+    # 🚀 SEND SMS ALERT
+    # =========================
+    try:
+        message = f"🚀 EdgeBreak Alert: {len(all_signals)} new breakout signals detected"
+
+        requests.post(
+            "http://localhost:3000/send-alert",
+            json={"message": message}
+        )
+
+        print("📩 SMS ALERT SENT")
+
+    except Exception as e:
+        print(f"❌ SMS ERROR: {e}")
+
+else:
+    print("⚠️ No new signals")
 
 # =========================
 # RUN

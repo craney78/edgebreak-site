@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
-
+import twilio from "twilio";
 dotenv.config();
 
 const app = express();
@@ -36,6 +36,30 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY
 );
+
+// 📱 TWILIO CLIENT
+const client = twilio(
+  process.env.TWILIO_SID,
+  process.env.TWILIO_AUTH
+);
+
+// =========================
+// 📱 SMS FUNCTION (TWILIO)
+// =========================
+async function sendSMS(to, message) {
+  try {
+    const res = await client.messages.create({
+      body: message,
+      from: process.env.TWILIO_NUMBER,
+      to: to
+    });
+
+    console.log("✅ SMS SENT:", res.sid);
+
+  } catch (err) {
+    console.error("❌ SMS ERROR:", err.message);
+  }
+}
 
 // =========================
 // 💳 CREATE CHECKOUT SESSION
@@ -171,6 +195,71 @@ app.post("/webhook", async (req, res) => {
 // =========================
 app.get("/", (req, res) => {
   res.send("🚀 EdgeBreak server running");
+});
+
+// =========================
+// 🧪 TEST SMS (ALL ACTIVE USERS)
+// =========================
+app.get("/test-sms", async (req, res) => {
+
+  // 🔥 Get all active users with phone numbers
+  const { data: users, error } = await supabaseAdmin
+    .from("profiles")
+    .select("phone")
+    .eq("is_active", true);
+
+  if (error) {
+    console.error("❌ DB ERROR:", error.message);
+    return res.send("DB error");
+  }
+
+  // 📩 Send SMS to each user
+  for (const user of users) {
+    if (user.phone) {
+      await sendSMS(
+        user.phone,
+        "🚀 EdgeBreak Alert: System test message"
+      );
+    }
+  }
+
+  res.send(`SMS sent to ${users.length} users`);
+
+});
+
+// =========================
+// 🚀 SEND ALERT (FROM SCANNER)
+// =========================
+app.post("/send-alert", async (req, res) => {
+
+  const { message } = req.body;
+
+  if (!message) {
+    return res.status(400).send("Missing message");
+  }
+
+  // Get active users
+  const { data: users, error } = await supabaseAdmin
+    .from("profiles")
+    .select("phone")
+    .eq("is_active", true);
+
+  if (error) {
+    console.error("❌ DB ERROR:", error.message);
+    return res.send("DB error");
+  }
+
+  // Send SMS
+  for (const user of users) {
+    if (user.phone) {
+      await sendSMS(user.phone, message);
+    }
+  }
+
+  console.log("🚀 ALERT SENT:", message);
+
+  res.send("Alert sent");
+
 });
 
 // =========================
