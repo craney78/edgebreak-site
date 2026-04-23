@@ -400,5 +400,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("success") === "true") {
+    const msg = document.createElement("p");
+    msg.innerText = "Payment successful. Log in to access your account.";
+    msg.style.color = "#22c55e";
+    msg.style.marginTop = "10px";
+    msg.style.textAlign = "center";
+    msg.style.fontWeight = "600";
+
+    const container = document.querySelector(".container") || document.body;
+    container.prepend(msg);
+  }
+});
+</script>
 </body>
 </html>
