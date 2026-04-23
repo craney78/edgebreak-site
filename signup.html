@@ -247,13 +247,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // 📱 GET PHONE NUMBER
     const code = document.getElementById("countryCode").value;
     const number = document.getElementById("phone").value.trim();
-
     const fullPhone = code + number.replace(/^0/, "");
 
     console.log("PHONE:", fullPhone);
-
     console.log("STEP 1: CLICK");
 
+    // 🔐 SIGN UP
     const { data, error } = await supabaseClient.auth.signUp({
       email,
       password
@@ -271,10 +270,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("STEP 3: USER ID", userId);
 
+    // 💾 SAVE PHONE TO PROFILES TABLE (THIS WAS MISSING)
+    await supabaseClient.from("profiles").upsert({
+      id: userId,
+      email: email,
+      phone: fullPhone,
+      is_active: false
+    });
+
+    console.log("STEP 4: PHONE SAVED");
+
+    // 🔒 SIGN OUT BEFORE STRIPE
     await supabaseClient.auth.signOut();
 
-    console.log("STEP 4: SIGNED OUT");
+    console.log("STEP 5: SIGNED OUT");
 
+    // 💳 CREATE CHECKOUT SESSION
     const res = await fetch("https://courier-evacuate-letdown.ngrok-free.dev/create-checkout-session", {
       method: "POST",
       headers: {
@@ -283,11 +294,11 @@ document.addEventListener("DOMContentLoaded", () => {
       body: JSON.stringify({ userId })
     });
 
-    console.log("STEP 5: FETCH RESPONSE", res);
+    console.log("STEP 6: FETCH RESPONSE", res);
 
     const session = await res.json();
 
-    console.log("STEP 6: SESSION", session);
+    console.log("STEP 7: SESSION", session);
 
     if (!session.url) {
       errorBox.innerText = "Payment error. Try again.";
@@ -295,6 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    // 🚀 REDIRECT TO STRIPE
     window.location.href = session.url;
 
   });
