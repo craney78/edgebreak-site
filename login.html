@@ -417,5 +417,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("success") === "true") {
+    const msg = document.createElement("div");
+
+    msg.innerText = "🎉 Payment successful. Your free trial has started. Log in to access your account.";
+
+    msg.style.background = "#022c22";
+    msg.style.color = "#4ade80";
+    msg.style.padding = "12px";
+    msg.style.borderRadius = "8px";
+    msg.style.marginBottom = "15px";
+    msg.style.textAlign = "center";
+    msg.style.fontWeight = "600";
+
+    const form = document.querySelector("form");
+
+    if (form && form.parentNode) {
+      form.parentNode.insertBefore(msg, form);
+    }
+  }
+});
+</script>
 </body>
 </html>
