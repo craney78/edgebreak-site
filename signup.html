@@ -5,16 +5,36 @@
   <title>Start Free Trial | EdgeBreak</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="css/dashboard.css">
+ <link rel="stylesheet" href="css/dashboard.css">
+ <style>
+/* Fix intl-tel-input display */
+.iti {
+  width: 100%;
+}
+
+.iti input {
+  width: 100% !important;
+  padding-left: 90px !important;
+}
+
+.iti__flag-container {
+  z-index: 1000;
+}
+</style>
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.5.6/build/css/intlTelInput.css">
+ <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.5.6/build/js/intlTelInput.min.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
+  
   <script>
     window.supabaseClient = supabase.createClient(
       "https://qmonyhukamuuunxxxdlk.supabase.co",
       "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
     );
   </script>
+
+ </head>
+ <body> 
 <!-- NAVBAR -->
 <div class="nav">
   <div class="nav-inner">
@@ -101,7 +121,8 @@
       <!-- INPUTS -->
       <input id="email" type="email" placeholder="Email" class="input-field">
       <input id="password" type="password" placeholder="Password" class="input-field">
-      <input id="phone" type="text" placeholder="Phone (for alerts)" class="input-field">
+      <!-- 📱 PHONE INPUT -->
+      <input id="phone" type="tel" placeholder="Mobile Number">
 
       <!-- BUTTON -->
       <button id="signupBtn" class="nav-cta full-width">
@@ -345,6 +366,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
   });
+
+});
+</script>
+<script>
+// =========================
+// 📱 PHONE INPUT INIT (WORKING VERSION)
+// =========================
+document.addEventListener("DOMContentLoaded", () => {
+
+  const input = document.querySelector("#phone");
+
+  if (!input) {
+    console.log("❌ Phone input not found");
+    return;
+  }
+
+  if (typeof window.intlTelInput !== "function") {
+    console.log("❌ intlTelInput NOT loaded");
+    return;
+  }
+
+  window.intlTelInput(input, {
+    initialCountry: "au",
+    preferredCountries: ["au", "us", "gb"],
+    separateDialCode: true
+  });
+
+  console.log("✅ Phone init working");
 
 });
 </script>

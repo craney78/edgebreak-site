@@ -6,21 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="css/dashboard.css">
-<style>
-/* 📱 FIX intl-tel-input DISPLAY */
-.iti {
-  width: 100%;
-}
 
-.iti input {
-  width: 100% !important;
-  padding-left: 90px !important; /* space for flag */
-}
-
-.iti__flag-container {
-  z-index: 10;
-}
-</style>
   <!-- SUPABASE -->
  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
@@ -31,11 +17,6 @@ window.supabaseClient = supabase.createClient(
   "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- PHONE INPUT LIBRARY -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.5.6/build/css/intlTelInput.css"/>
-<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.5.6/build/js/intlTelInput.min.js"></script>
-
-
 </head>
 
 <body class="login-page">
@@ -120,12 +101,10 @@ window.supabaseClient = supabase.createClient(
       </p>
 
       <!-- INPUTS -->
+      <!-- INPUTS -->
       <input id="email" type="email" placeholder="Email" class="input-field">
 
       <input id="password" type="password" placeholder="Password" class="input-field">
-
-      <!-- 📱 PHONE INPUT -->
-      <input id="phone" type="tel" placeholder="Mobile Number">
 
       <!-- BUTTON -->
       <button id="actionBtn" class="nav-cta full-width">
@@ -466,35 +445,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<script>
-// =========================
-// 📱 PHONE INPUT INIT (FINAL FIX)
-// =========================
-window.addEventListener("load", () => {
-
-  if (typeof window.intlTelInput !== "function") {
-    console.error("❌ intlTelInput not loaded");
-    return;
-  }
-
-  const phoneInput = document.querySelector("#phone");
-
-  if (!phoneInput) {
-    console.error("❌ Phone input not found");
-    return;
-  }
-
-  window.intlTelInput(phoneInput, {
-    initialCountry: "au",
-    preferredCountries: ["au", "us", "gb"],
-    separateDialCode: true,
-    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.5.6/build/js/utils.js"
-  });
-
-  console.log("✅ Phone input initialized");
-
-});
-</script>
 
 </body>
 </html>
