@@ -369,9 +369,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+
 <script>
 // =========================
-// 📱 PHONE INPUT INIT (WORKING VERSION)
+// 📱 PHONE INPUT INIT (FORCED LOAD FIX)
 // =========================
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -382,20 +383,36 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  if (typeof window.intlTelInput !== "function") {
-    console.log("❌ intlTelInput NOT loaded");
-    return;
-  }
+  // 🔥 LOAD CSS
+  const css = document.createElement("link");
+  css.rel = "stylesheet";
+  css.href = "https://unpkg.com/intl-tel-input@18.5.6/build/css/intlTelInput.css";
+  document.head.appendChild(css);
 
-  window.intlTelInput(input, {
-    initialCountry: "au",
-    preferredCountries: ["au", "us", "gb"],
-    separateDialCode: true
-  });
+  // 🔥 LOAD SCRIPT
+  const script = document.createElement("script");
+  script.src = "https://unpkg.com/intl-tel-input@18.5.6/build/js/intlTelInput.min.js";
 
-  console.log("✅ Phone init working");
+  script.onload = () => {
+    console.log("✅ intlTelInput loaded");
+
+    window.intlTelInput(input, {
+      initialCountry: "au",
+      preferredCountries: ["au", "us", "gb"],
+      separateDialCode: true
+    });
+
+    console.log("✅ Phone input working");
+  };
+
+  script.onerror = () => {
+    console.error("❌ Failed to load intlTelInput");
+  };
+
+  document.body.appendChild(script);
 
 });
 </script>
+
 </body>
 </html>
