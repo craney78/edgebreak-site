@@ -56,12 +56,12 @@ app.post("/create-checkout-session", async (req, res) => {
 
       line_items: [
         {
-          price: "price_1TNqKKCys1zSKDi2HpYhlXmQ",
+          price: "price_1TMVSdCys1zSKDi2HILFnFV1",
           quantity: 1
         }
       ],
 
-      success_url: "https://edgebreak.ai/login.html",
+      success_url: "https://edgebreak.ai/login.html?success=true",
       cancel_url: "https://edgebreak.ai/pricing.html",
 
       client_reference_id: userId
