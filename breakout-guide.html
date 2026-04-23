@@ -181,7 +181,19 @@
     Learn how to identify, execute, and manage breakout trades using structure, volume, and price action.
   </p>
 
-  <button onclick="handleCTA(this)">Get Alerts</button>
+  <!-- HERO CTA -->
+  <div class="cta-box">
+    <h2>Stop Guessing. Trade Breakouts With Data.</h2>
+    <p>
+      Join EdgeBreak to receive real-time breakout alerts backed by structure, volume, and disciplined execution.
+    </p>
+
+    <button onclick="startTrial()">Start Free Trial</button>
+
+    <p style="margin-top:10px; font-size:12px; opacity:0.6;">
+      No guesswork • Real trade tracking • Cancel anytime
+    </p>
+  </div>
 
   <!-- 🔥 OVERVIEW IMAGE -->
   <img src="images/structure_build_up.png" 
@@ -207,7 +219,6 @@
     <li>Tightening price range (compression)</li>
   </ul>
 
-  <!-- ✅ STRUCTURE IMAGE -->
   <img src="images/breakout-structure.png" 
        style="width:100%; border-radius:12px; margin:30px 0;">
 
@@ -223,15 +234,13 @@
     <li>High volume = breakout confirmation</li>
   </ul>
 
-  <!-- ✅ VOLUME IMAGE -->
   <img src="images/volume_confirmation.png" 
        style="width:100%; border-radius:12px; margin:30px 0;">
 
-  <!-- CTA MID -->
+  <!-- MID CTA -->
   <div class="cta-box">
     <p>Want real breakout setups delivered automatically?</p>
-    <input placeholder="Enter your email">
-    <button>Get Alerts</button>
+    <button onclick="startTrial()">Start Free Trial</button>
   </div>
 
   <!-- SECTION -->
@@ -247,7 +256,6 @@
     <li>Continuation after breakout</li>
   </ul>
 
-  <!-- ✅ CONFIRMATION IMAGE -->
   <img src="images/perfect-breakout-confirmation-setup.png" 
        style="width:100%; border-radius:12px; margin:30px 0;">
 
@@ -263,7 +271,6 @@
     <li>Or enter on next candle continuation</li>
   </ul>
 
-  <!-- ✅ ENTRY IMAGE -->
   <img src="images/entry_point.png" 
        style="width:100%; border-radius:12px; margin:30px 0;">
 
@@ -280,7 +287,6 @@
     <li>Price falling back below resistance</li>
   </ul>
 
-  <!-- ✅ FALSE BREAKOUT IMAGE -->
   <img src="images/false_breakout.png" 
        style="width:100%; border-radius:12px; margin:30px 0;">
 
@@ -309,7 +315,6 @@
     <li>Use trailing stops</li>
   </ul>
 
-  <!-- ✅ EXIT IMAGE -->
   <img src="images/trade_management.png" 
        style="width:100%; border-radius:12px; margin:30px 0;">
 
@@ -320,8 +325,7 @@
       Join EdgeBreak to receive real-time breakout alerts backed by structure, volume, and disciplined execution.
     </p>
 
-    <input placeholder="Enter your email">
-    <button onclick="handleCTA(this)">Start Free Trial</button>
+    <button onclick="startTrial()">Start Free Trial</button>
 
     <p style="margin-top:10px; font-size:12px; opacity:0.6;">
       No guesswork • Real trade tracking • Cancel anytime
@@ -329,6 +333,8 @@
   </div>
 
 </div>
+
+
 
 <!-- FOOTER -->
 <div class="footer" style="width:100%;">
@@ -396,32 +402,13 @@
   </div>
 
 </div>
+
 <script>
-
-const supabaseClient = window.supabaseClient;
-
-async function captureLead(email) {
-
-  if (!email) return;
-
-  // Save to Supabase (simple leads table)
-  const { error } = await supabaseClient
-    .from("leads")
-    .insert([{ email }]);
-
-  if (error) {
-    console.log("Lead error:", error.message);
-  } else {
-    alert("You're in. Check your email soon.");
-  }
+function startTrial() {
+  window.location.href = "pricing.html";
 }
-
-function handleCTA(button) {
-  const input = button.parentElement.querySelector("input");
-  const email = input.value.trim();
-  captureLead(email);
-}
-
 </script>
+
+
 </body>
 </html>
