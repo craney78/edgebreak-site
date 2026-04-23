@@ -73,7 +73,23 @@ app.post("/create-checkout-session", async (req, res) => {
       return res.status(400).json({ error: "Missing userId" });
     }
 
+    // 🔥 GET USER EMAIL FROM DATABASE
+    const { data: userData, error: userError } = await supabaseAdmin
+      .from("profiles")
+      .select("email")
+      .eq("id", userId)
+      .single();
+
+    if (userError || !userData?.email) {
+      console.log("❌ USER EMAIL ERROR:", userError);
+      return res.status(400).json({ error: "User email not found" });
+    }
+
+    // 💳 CREATE STRIPE SESSION
     const session = await stripe.checkout.sessions.create({
+
+      customer_email: userData.email,
+
       mode: "subscription",
 
       subscription_data: {
@@ -93,6 +109,7 @@ app.post("/create-checkout-session", async (req, res) => {
       cancel_url: "https://www.edgebreak.ai/pricing.html",
 
       client_reference_id: userId
+
     });
 
     res.json({ url: session.url });
@@ -102,6 +119,7 @@ app.post("/create-checkout-session", async (req, res) => {
     res.status(500).json({ error: "Stripe failed" });
   }
 });
+
 // =========================
 // 🔥 STRIPE WEBHOOK
 // =========================

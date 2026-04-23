@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Free Breakout Trading Guide | EdgeBreak</title>
+  <meta name="description" content="Learn how to trade breakouts using structure, volume, and price action. Free printable guide.">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- USE YOUR EXISTING CSS -->
+  <link rel="stylesheet" href="css/dashboard.css">
+
+  <style>
+
+    /* =========================
+       📘 GUIDE STYLING
+    ========================= */
+
+    .guide-container {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 20px;
+      line-height: 1.8;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      margin-top: 40px;
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
+
+    p {
+      color: #94a3b8;
+    }
+
+    ul {
+      margin-left: 20px;
+      color: #cbd5f5;
+    }
+
+    /* =========================
+       📊 CHART PLACEHOLDER
+    ========================= */
+
+    .chart-placeholder {
+      margin: 30px 0;
+      padding: 40px;
+      border: 1px dashed #444;
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+      border-radius: 10px;
+    }
+
+    /* =========================
+       🔘 CTA BLOCK
+    ========================= */
+
+    .cta-box {
+      margin: 50px 0;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .cta-box input {
+      padding: 10px;
+      margin-right: 10px;
+      border-radius: 6px;
+      border: none;
+      width: 200px;
+    }
+
+    .cta-box button {
+      padding: 10px 16px;
+      border-radius: 6px;
+      border: none;
+      background: #22c55e;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* =========================
+       🖨 PRINT MODE
+    ========================= */
+
+    @media print {
+
+      body {
+        background: white;
+        color: black;
+      }
+
+      .nav,
+      .footer,
+      .cta-box,
+      button,
+      input {
+        display: none;
+      }
+
+      p, li {
+        color: black;
+      }
+
+      .chart-placeholder {
+        border: 1px solid #ccc;
+        color: #555;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- NAVBAR (KEEP YOUR EXISTING ONE) -->
+<!-- NAVBAR -->
+<div class="nav">
+  <div class="nav-inner">
+
+    <!-- LEFT -->
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="images/logo.png" class="nav-logo">
+      </a>
+      <a href="index.html" class="logo-text">EDGEBREAK</a>
+      <span class="live-badge">LIVE</span>
+    </div>
+
+    <!-- RIGHT SIDE WRAP -->
+    <div class="nav-links-wrap">
+
+      <!-- LINKS -->
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="index.html#statsGrid" class="nav-link">Performance</a>
+
+        <a href="watchlist.html" class="nav-link locked-link">
+          Trading Desk <span class="lock-icon">🔒</span>
+        </a>
+
+        <a href="trading-guide.html" class="nav-link">Guide</a>
+
+        <a href="dashboard.html" class="nav-link locked-link">
+          My Dashboard <span class="lock-icon">🔒</span>
+        </a>
+
+        <a href="/chart.html?symbol=AAPL" class="nav-link locked-link">
+          Charts <span class="lock-icon">🔒</span>
+        </a>
+
+        <a href="blog.html" class="nav-link">Trade Insights</a>
+
+        <a href="#" class="nav-cta" id="authBtn">Login</a>
+      </div>
+
+      <!-- HAMBURGER -->
+      <div class="menu-toggle" id="menuToggle">
+        ☰
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<div class="guide-container">
+
+  <!-- HERO -->
+  <h1>Free Breakout Trading Guide</h1>
+
+  <p>
+    Learn how to identify, execute, and manage breakout trades using structure, volume, and price action.
+  </p>
+
+  <button onclick="handleCTA(this)">Get Alerts</button>
+
+  <!-- 🔥 OVERVIEW IMAGE -->
+  <img src="images/structure_build_up.png" 
+       style="width:100%; border-radius:12px; margin:40px 0;">
+
+  <!-- INTRO -->
+  <h2>Introduction</h2>
+  <p>
+    Breakout trading focuses on identifying when price moves from consolidation into expansion. 
+    These moments often produce the largest and fastest market moves, driven by shifts in supply and demand.
+  </p>
+
+  <!-- SECTION -->
+  <h2>Market Structure and Build-Up</h2>
+
+  <p>
+    Breakouts form through identifiable structural conditions that signal a shift in market balance.
+  </p>
+
+  <ul>
+    <li>Multiple resistance tests</li>
+    <li>Higher lows forming</li>
+    <li>Tightening price range (compression)</li>
+  </ul>
+
+  <!-- ✅ STRUCTURE IMAGE -->
+  <img src="images/breakout-structure.png" 
+       style="width:100%; border-radius:12px; margin:30px 0;">
+
+  <!-- SECTION -->
+  <h2>Volume Confirmation</h2>
+
+  <p>
+    Volume is critical in confirming breakout strength. A valid breakout typically shows low volume during consolidation followed by a sharp increase at the breakout point.
+  </p>
+
+  <ul>
+    <li>Low volume = consolidation</li>
+    <li>High volume = breakout confirmation</li>
+  </ul>
+
+  <!-- ✅ VOLUME IMAGE -->
+  <img src="images/volume_confirmation.png" 
+       style="width:100%; border-radius:12px; margin:30px 0;">
+
+  <!-- CTA MID -->
+  <div class="cta-box">
+    <p>Want real breakout setups delivered automatically?</p>
+    <input placeholder="Enter your email">
+    <button>Get Alerts</button>
+  </div>
+
+  <!-- SECTION -->
+  <h2>Price Action</h2>
+
+  <p>
+    A strong breakout is defined by a clean close above resistance, supported by momentum and minimal rejection.
+  </p>
+
+  <ul>
+    <li>Strong close above level</li>
+    <li>Wide range candle</li>
+    <li>Continuation after breakout</li>
+  </ul>
+
+  <!-- ✅ CONFIRMATION IMAGE -->
+  <img src="images/perfect-breakout-confirmation-setup.png" 
+       style="width:100%; border-radius:12px; margin:30px 0;">
+
+  <!-- SECTION -->
+  <h2>Execution</h2>
+
+  <p>
+    Traders should avoid anticipating breakouts and instead enter only after confirmation.
+  </p>
+
+  <ul>
+    <li>Enter on breakout close</li>
+    <li>Or enter on next candle continuation</li>
+  </ul>
+
+  <!-- ✅ ENTRY IMAGE -->
+  <img src="images/entry_point.png" 
+       style="width:100%; border-radius:12px; margin:30px 0;">
+
+  <!-- SECTION -->
+  <h2>False Breakouts (What to Avoid)</h2>
+
+  <p>
+    Not all breakouts succeed. Many fail quickly and trap traders who enter too early.
+  </p>
+
+  <ul>
+    <li>Weak breakout candles</li>
+    <li>Immediate rejection</li>
+    <li>Price falling back below resistance</li>
+  </ul>
+
+  <!-- ✅ FALSE BREAKOUT IMAGE -->
+  <img src="images/false_breakout.png" 
+       style="width:100%; border-radius:12px; margin:30px 0;">
+
+  <!-- SECTION -->
+  <h2>Risk Management</h2>
+
+  <p>
+    Risk management ensures long-term survival in trading. Stops should be placed below key structural levels.
+  </p>
+
+  <ul>
+    <li>Small losses are essential</li>
+    <li>Protect capital at all times</li>
+  </ul>
+
+  <!-- SECTION -->
+  <h2>Exit Strategy</h2>
+
+  <p>
+    Profits are realised through disciplined exits. Traders should follow structure and trend until weakness appears.
+  </p>
+
+  <ul>
+    <li>Exit on lower highs</li>
+    <li>Exit on moving average break</li>
+    <li>Use trailing stops</li>
+  </ul>
+
+  <!-- ✅ EXIT IMAGE -->
+  <img src="images/trade_management.png" 
+       style="width:100%; border-radius:12px; margin:30px 0;">
+
+  <!-- FINAL CTA -->
+  <div class="cta-box">
+    <h2>Stop Guessing. Trade Breakouts With Data.</h2>
+    <p>
+      Join EdgeBreak to receive real-time breakout alerts backed by structure, volume, and disciplined execution.
+    </p>
+
+    <input placeholder="Enter your email">
+    <button onclick="handleCTA(this)">Start Free Trial</button>
+
+    <p style="margin-top:10px; font-size:12px; opacity:0.6;">
+      No guesswork • Real trade tracking • Cancel anytime
+    </p>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer" style="width:100%;">
+
+  <div class="footer-inner">
+
+    <!-- LEFT (LOGO + BRAND) -->
+    <div class="footer-col">
+      
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <img src="images/logo.png" style="width:40px; height:auto;">
+        <h3 style="color:white; margin:0;">EdgeBreak</h3>
+      </div>
+
+      <p>
+        Data-driven breakout trading system designed to analyse and track breakout setups using structured market data
+      </p>
+
+    </div>
+
+    <!-- LINKS -->
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="index.html#performance">Performance</a>      
+      <a href="pricing.html">Pricing</a>
+      <a href="disclaimer.html">Disclaimer</a>
+      <a href="about.html">About</a>
+    </div>
+
+    <!-- RESOURCES -->
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="trading-guide.html">Trading Guide</a>
+      <a href="faq.html">FAQ</a>
+      <a href="support.html">Support</a>
+    </div>
+
+    <!-- CTA -->
+    <div class="footer-col">
+      <h4>Get Access</h4>
+      <p style="margin-bottom:10px;">
+        Unlock the full system and live trades
+      </p>
+     
+    </div>
+
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="footer-bottom">
+    <p>© 2026 EdgeBreak • All rights reserved</p>
+    <p style="color:#64748b; font-size:12px;">
+      Not financial advice. Trading involves risk.
+    </p>
+
+    <!-- PARENT COMPANY -->
+  <div class="footer-parent-block">
+    <img src="images/crane-logo.png" alt="Crane Platform Labs" class="footer-logo">
+
+    <p class="footer-parent">
+      EdgeBreak is a product of <strong>Crane Platform Labs</strong><br>
+      ABN 41 946 218 773
+    </p>
+  </div>
+  </div>
+
+</div>
+<script>
+
+const supabaseClient = window.supabaseClient;
+
+async function captureLead(email) {
+
+  if (!email) return;
+
+  // Save to Supabase (simple leads table)
+  const { error } = await supabaseClient
+    .from("leads")
+    .insert([{ email }]);
+
+  if (error) {
+    console.log("Lead error:", error.message);
+  } else {
+    alert("You're in. Check your email soon.");
+  }
+}
+
+function handleCTA(button) {
+  const input = button.parentElement.querySelector("input");
+  const email = input.value.trim();
+  captureLead(email);
+}
+
+</script>
+</body>
+</html>
