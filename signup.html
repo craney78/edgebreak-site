@@ -6,23 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
  <link rel="stylesheet" href="css/dashboard.css">
- <style>
-/* Fix intl-tel-input display */
-.iti {
-  width: 100%;
-}
+ 
 
-.iti input {
-  width: 100% !important;
-  padding-left: 90px !important;
-}
-
-.iti__flag-container {
-  z-index: 1000;
-}
-</style>
-<link rel="stylesheet" href="https://unpkg.com/intl-tel-input@18.5.6/build/css/intlTelInput.css">
-<script src="https://unpkg.com/intl-tel-input@18.5.6/build/js/intlTelInput.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.5.6/css/intlTelInput.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.5.6/js/intlTelInput.min.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   
@@ -374,6 +361,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // =========================
 // 📱 PHONE INPUT INIT (FORCED LOAD FIX)
 // =========================
+
 document.addEventListener("DOMContentLoaded", () => {
 
   const input = document.querySelector("#phone");
@@ -383,36 +371,21 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // 🔥 LOAD CSS
-  const css = document.createElement("link");
-  css.rel = "stylesheet";
-  css.href = "https://unpkg.com/intl-tel-input@18.5.6/build/css/intlTelInput.css";
-  document.head.appendChild(css);
+  if (!window.intlTelInput) {
+    console.log("❌ Library still not loaded");
+    return;
+  }
 
-  // 🔥 LOAD SCRIPT
-  const script = document.createElement("script");
-  script.src = "https://unpkg.com/intl-tel-input@18.5.6/build/js/intlTelInput.min.js";
+  window.intlTelInput(input, {
+    initialCountry: "au",
+    separateDialCode: true
+  });
 
-  script.onload = () => {
-    console.log("✅ intlTelInput loaded");
-
-    window.intlTelInput(input, {
-      initialCountry: "au",
-      preferredCountries: ["au", "us", "gb"],
-      separateDialCode: true
-    });
-
-    console.log("✅ Phone input working");
-  };
-
-  script.onerror = () => {
-    console.error("❌ Failed to load intlTelInput");
-  };
-
-  document.body.appendChild(script);
+  console.log("✅ Phone working");
 
 });
 </script>
+
 
 </body>
 </html>
