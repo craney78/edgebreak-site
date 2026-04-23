@@ -7,10 +7,6 @@
 
  <link rel="stylesheet" href="css/dashboard.css">
  
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.5.6/css/intlTelInput.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.5.6/js/intlTelInput.min.js"></script>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   
   <script>
@@ -109,7 +105,20 @@
       <input id="email" type="email" placeholder="Email" class="input-field">
       <input id="password" type="password" placeholder="Password" class="input-field">
       <!-- 📱 PHONE INPUT -->
-      <input id="phone" type="tel" placeholder="Mobile Number" class="input-field">
+      <div style="display:flex; gap:10px; margin-top:10px;">
+
+      <!-- COUNTRY CODE -->
+        <select id="countryCode" class="input-field" style="max-width:120px;">
+          <option value="+61">🇦🇺 +61</option>
+          <option value="+1">🇺🇸 +1</option>
+          <option value="+44">🇬🇧 +44</option>
+          <option value="+64">🇳🇿 +64</option>
+        </select>
+
+      <!-- PHONE -->
+      <input id="phone" type="tel" placeholder="Mobile Number" class="input-field" style="flex:1;">
+
+    </div>
 
       <!-- BUTTON -->
       <button id="signupBtn" class="nav-cta full-width">
@@ -229,6 +238,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
     const errorBox = document.getElementById("error");
+
+    // 📱 GET PHONE NUMBER
+    const code = document.getElementById("countryCode").value;
+    const number = document.getElementById("phone").value.trim();
+
+    const fullPhone = code + number.replace(/^0/, "");
+
+    console.log("PHONE:", fullPhone);
 
     console.log("STEP 1: CLICK");
 
@@ -353,35 +370,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
   });
-
-});
-</script>
-
-<script>
-// =========================
-// 📱 PHONE INPUT INIT (FORCED LOAD FIX)
-// =========================
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  const input = document.querySelector("#phone");
-
-  if (!input) {
-    console.log("❌ Phone input not found");
-    return;
-  }
-
-  if (!window.intlTelInput) {
-    console.log("❌ Library still not loaded");
-    return;
-  }
-
-  window.intlTelInput(input, {
-    initialCountry: "au",
-    separateDialCode: true
-  });
-
-  console.log("✅ Phone working");
 
 });
 </script>
