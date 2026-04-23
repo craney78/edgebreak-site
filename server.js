@@ -52,6 +52,11 @@ app.post("/create-checkout-session", async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
 
+      // 🔥 ADD TRIAL HERE
+      subscription_data: {
+        trial_period_days: 28
+      },
+
       payment_method_types: ["card"],
 
       line_items: [
@@ -74,7 +79,6 @@ app.post("/create-checkout-session", async (req, res) => {
     res.status(500).json({ error: "Stripe failed" });
   }
 });
-
 // =========================
 // 🔥 STRIPE WEBHOOK
 // =========================
