@@ -684,20 +684,34 @@ function startReplay() {
     highlight.style.background = "#22c55e";
   }, 1200);
 
-  // STEP 3 — OUTCOME
+  // STEP 3 — OUTCOME (REAL MOVEMENT)
   setTimeout(() => {
 
     const result = getTradeResult();
 
-    outcome.style.top = entryPos + "%";
+    const targetLine = document.getElementById("targetLine");
+    const stopLine = document.getElementById("stopLine");
+
+    if (!targetLine || !stopLine) return;
+
+    const targetPos = parseFloat(targetLine.style.top);
+    const stopPos = parseFloat(stopLine.style.top);
+
     outcome.style.opacity = 1;
 
     if (result >= 0) {
+      // ✅ WIN → expand UP toward target
       outcome.classList.add("replay-win");
-      outcome.style.height = "40%";
+
+      outcome.style.top = targetPos + "%";
+      outcome.style.height = (entryPos - targetPos) + "%";
+
     } else {
+      // ❌ LOSS → expand DOWN toward stop
       outcome.classList.add("replay-loss");
-      outcome.style.height = "40%";
+
+      outcome.style.top = entryPos + "%";
+      outcome.style.height = (stopPos - entryPos) + "%";
     }
 
   }, 2200);
