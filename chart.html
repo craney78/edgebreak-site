@@ -634,19 +634,18 @@ function startReplay() {
 
   if (!overlay || !text) return;
 
-  // stop previous replay
+  // stop any previous replay
   if (replayInterval) {
     clearInterval(replayInterval);
     replayInterval = null;
   }
 
-  // 🔥 FORCE SHOW OVERLAY (THIS IS THE FIX)
+  // 🔥 HARD FORCE SHOW (THIS FIXES YOUR ISSUE)
   overlay.classList.add("active");
-
-  // reset first message immediately
-  text.innerText = "Price is approaching resistance...";
+  overlay.style.display = "flex";   // 👈 THIS IS THE KEY LINE
 
   const steps = [
+    "Price is approaching resistance...",
     "Structure is tightening...",
     "Breakout confirmed",
     "Momentum follows through",
@@ -654,17 +653,16 @@ function startReplay() {
   ];
 
   let i = 0;
+  text.innerText = steps[i];
 
   replayInterval = setInterval(() => {
+    i++;
     if (i >= steps.length) {
       clearInterval(replayInterval);
       replayInterval = null;
       return;
     }
-
     text.innerText = steps[i];
-    i++;
-
   }, 1500);
 }
 
