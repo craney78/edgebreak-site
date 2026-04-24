@@ -128,6 +128,10 @@ window.supabaseClient = supabase.createClient(
     font-family: Georgia, 'Times New Roman', serif;
   ">
 
+<div style="text-align:center; margin-bottom:20px;">
+  <img src="../images/logo.png" class="nav-logo">
+</div>
+
     <!-- TITLE -->
     <h1 style="font-size:44px; margin-bottom:12px;">
       A Trade Still Developing
@@ -1779,33 +1783,9 @@ window.supabaseClient = supabase.createClient(
 
 </div>
     
-
-<!-- NAV LOGIN SCRIPT -->
-<script>
-const user = localStorage.getItem("edgebreak_user");
-const navBtn = document.querySelector(".nav-cta");
-
-if (navBtn) {
-  if (user) {
-    navBtn.innerText = "Logout";
-    navBtn.href = "#";
-
-    navBtn.onclick = function (e) {
-      e.preventDefault();
-      localStorage.removeItem("edgebreak_user");
-      window.location.href = "index.html";
-    };
-  } else {
-    navBtn.innerText = "Login";
-    navBtn.href = "login.html";
-  }
-}
-</script>
 <script>
 
-// =========================
-// 🔄 NAV LOGIN / LOGOUT
-// =========================
+// NAV BUTTON
 async function setupAuthButton() {
 
   const btn = document.getElementById("authBtn");
@@ -1828,19 +1808,16 @@ async function setupAuthButton() {
   }
 }
 
-// =========================
-// 🔁 AUTH STATE LISTENER
-// =========================
+// RUN ON LOAD
+window.addEventListener("load", async () => {
+  await setupAuthButton();
+});
+
+// LISTENER
 supabaseClient.auth.onAuthStateChange(() => {
   setupAuthButton();
 });
 
-</script>
-
-<script>
-window.addEventListener("load", async () => {
-  await setupAuthButton();
-});
 </script>
 <script>
 // =========================
@@ -1917,6 +1894,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+</script>
+
 </script>
 </body>
 </html>
