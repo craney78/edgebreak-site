@@ -446,7 +446,7 @@ else {
 </script>
 <script>
 // =========================
-// 🎬 SIMPLE REPLAY ENGINE (FINAL)
+// 🎬 SIMPLE REPLAY ENGINE (FINAL FIXED)
 // =========================
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -455,14 +455,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const text = document.getElementById("replayText");
   const closeBtn = document.getElementById("replayClose");
 
-  if (!replayBtn || !overlay || !text) return;
+  if (!overlay || !text) return;
+
+  // ✅ CRITICAL FIX: ensure overlay is hidden on load
+  overlay.style.display = "none";
+  overlay.classList.remove("active");
 
   let interval = null;
 
   // ▶ START REPLAY
   function startReplay() {
 
-    // show overlay (with fade)
     overlay.style.display = "flex";
     setTimeout(() => overlay.classList.add("active"), 10);
 
@@ -477,7 +480,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let i = 0;
     text.innerText = steps[i];
 
-    // clear previous run (important)
     if (interval) clearInterval(interval);
 
     interval = setInterval(() => {
@@ -493,19 +495,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 1500);
   }
 
-  // ❌ CLOSE BUTTON
-  if (closeBtn) {
-    closeBtn.addEventListener("click", closeReplay);
-  }
-
-  // ❌ CLICK OUTSIDE BOX TO CLOSE
-  overlay.addEventListener("click", (e) => {
-    if (e.target === overlay) {
-      closeReplay();
-    }
-  });
-
-  // ❌ CLOSE FUNCTION (SMOOTH FADE OUT)
+  // ❌ CLOSE FUNCTION
   function closeReplay() {
 
     overlay.classList.remove("active");
@@ -520,7 +510,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ▶ BUTTON CLICK
-  replayBtn.addEventListener("click", startReplay);
+  if (replayBtn) {
+    replayBtn.addEventListener("click", startReplay);
+  }
+
+  // ❌ CLOSE BUTTON
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeReplay);
+  }
+
+  // ❌ CLICK OUTSIDE BOX
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) {
+      closeReplay();
+    }
+  });
 
 });
 
