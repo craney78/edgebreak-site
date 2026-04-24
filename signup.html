@@ -270,48 +270,46 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("STEP 2: SIGNUP DONE", data, error);
 
     // 🔥 SIMPLE SAFE FIX (NO RISK)
-    // 🔥 SIMPLE SAFE FIX (NO RISK)
-if (error && error.message.includes("User already registered")) {
-  errorBox.innerText = "Looks like you started before — continuing...";
+    if (error && error.message.includes("User already registered")) {
+      errorBox.innerText = "Looks like you started before — continuing...";
 
-  setTimeout(async () => {
+      setTimeout(async () => {
 
-    // 💳 CREATE CHECKOUT SESSION (same endpoint you already use)
-    const res = await fetch("https://courier-evacuate-letdown.ngrok-free.dev/create-checkout-session", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email // reuse existing email
-      })
-    });
+        const res = await fetch("https://courier-evacuate-letdown.ngrok-free.dev/create-checkout-session", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email
+          })
+        });
 
-    const session = await res.json();
+        const session = await res.json();
 
-    if (session.url) {
-      window.location.href = session.url; // 🚀 STRIPE
-    } else {
-      window.location.href = "pricing.html"; // fallback (unchanged)
+        if (session.url) {
+          window.location.href = session.url;
+        } else {
+          window.location.href = "pricing.html";
+        }
+
+      }, 1200);
+
+      return;
     }
-
-  }, 1200);
-
-  return;
-}
 
     // ❌ OTHER ERRORS
     if (error) {
-    errorBox.innerText = error.message;
-    signupBtn.disabled = false;
-    return;
+      errorBox.innerText = error.message;
+      signupBtn.disabled = false;
+      return;
     }
 
     const userId = data?.user?.id;
 
     console.log("STEP 3: USER ID", userId);
 
-    // 💾 SAVE PHONE TO PROFILES TABLE (THIS WAS MISSING)
+    // 💾 SAVE PHONE
     await supabaseClient.from("profiles").upsert({
       id: userId,
       email: email,
@@ -321,7 +319,7 @@ if (error && error.message.includes("User already registered")) {
 
     console.log("STEP 4: PHONE SAVED");
 
-    // 🔒 SIGN OUT BEFORE STRIPE
+    // 🔒 SIGN OUT
     await supabaseClient.auth.signOut();
 
     console.log("STEP 5: SIGNED OUT");
@@ -330,13 +328,13 @@ if (error && error.message.includes("User already registered")) {
     const res = await fetch("https://courier-evacuate-letdown.ngrok-free.dev/create-checkout-session", {
       method: "POST",
       headers: {
-          "Content-Type": "application/json"
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-          email,
-          userId: null
+        email,
+        userId: null
       })
-      }); // ✅ THIS WAS MISSING
+    });
 
     console.log("STEP 6: FETCH RESPONSE", res);
 
@@ -345,13 +343,17 @@ if (error && error.message.includes("User already registered")) {
     console.log("STEP 7: SESSION", session);
 
     if (!session.url) {
-    errorBox.innerText = "Payment error. Try again.";
-    signupBtn.disabled = false;
-    return;
+      errorBox.innerText = "Payment error. Try again.";
+      signupBtn.disabled = false;
+      return;
     }
 
-// 🚀 REDIRECT TO STRIPE
-window.location.href = session.url;
+    // 🚀 REDIRECT TO STRIPE
+    window.location.href = session.url;
+
+  }); // ✅ closes click handler
+
+}); // ✅ closes DOMContentLoaded
 
 </script>
 <script>
