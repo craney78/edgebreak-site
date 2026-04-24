@@ -725,6 +725,8 @@ function closeReplay() {
 
   overlay.classList.remove("active");
   overlay.style.display = "none";
+  overlay.style.visibility = "hidden";
+  overlay.style.opacity = "0";
 
   if (replayInterval) {
     clearInterval(replayInterval);
@@ -733,7 +735,7 @@ function closeReplay() {
 }
 
 // =========================
-// 🎯 EVENT BINDING
+// 🎯 EVENT BINDING (FINAL FIX)
 // =========================
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -743,35 +745,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!overlay) return;
 
-  
-  // ✅ HARD RESET (STRONGER — REPLACE OLD ONE WITH THIS)
-  overlay.style.display = "none";
+  // 🔥 HARD FORCE HIDE (THIS IS THE FIX)
   overlay.classList.remove("active");
+  overlay.style.display = "none";
+  overlay.style.visibility = "hidden";
+  overlay.style.opacity = "0";
 
-
-
+  // reset replay
   if (replayInterval) {
     clearInterval(replayInterval);
     replayInterval = null;
   }
 
-
-  // ▶ replay button
+  // ▶ replay button ONLY trigger
   if (replayBtn) {
-    replayBtn.addEventListener("click", startReplay);
+    replayBtn.onclick = () => {
+      overlay.style.visibility = "visible";
+      overlay.style.opacity = "1";
+      overlay.style.display = "flex";
+      startReplay();
+    };
   }
 
   // ❌ close button
   if (closeBtn) {
-    closeBtn.addEventListener("click", closeReplay);
+    closeBtn.onclick = closeReplay;
   }
 
-  // ❌ click outside closes overlay
-  overlay.addEventListener("click", (e) => {
+  // ❌ click outside
+  overlay.onclick = (e) => {
     if (e.target === overlay) {
       closeReplay();
     }
-  });
+  };
 
 });
 </script>
