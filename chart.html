@@ -762,9 +762,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!overlay) return;
 
-  // ✅ HARD RESET (fixes your dark screen issue)
+  // 🚨 HARD STOP ANY AUTO REPLAY
+  window.startReplay = startReplay;
+  window.startReplayWithResult = startReplayWithResult;
+
+  // ✅ HARD RESET (STRONGER — REPLACE OLD ONE WITH THIS)
   overlay.style.display = "none";
   overlay.classList.remove("active");
+
+  // ✅ HARD RESET (CLEAN VERSION)
+  overlay.style.display = "none";
+  overlay.classList.remove("active");
+
+  if (replayInterval) {
+    clearInterval(replayInterval);
+    replayInterval = null;
+  }
 
   if (replayInterval) {
     clearInterval(replayInterval);
