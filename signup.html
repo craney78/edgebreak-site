@@ -356,33 +356,40 @@ document.addEventListener("DOMContentLoaded", () => {
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
 
-  const { data: { session } } = await supabaseClient.auth.getSession();
+  try {
 
-  // If no session → keep locked state
-  if (!session || !session.user) return;
+    const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
 
-  // Get profile
-  const { data: profile } = await supabaseClient
-    .from("profiles")
-    .select("is_active")
-    .eq("id", session.user.id)
-    .single();
+    // ❌ No session → stay locked
+    if (sessionError || !session || !session.user) return;
 
-  // If NOT active → keep locked
-  if (!profile || profile.is_active !== true) return;
+    // ✅ Get profile safely
+    const { data: profile, error: profileError } = await supabaseClient
+      .from("profiles")
+      .select("is_active")
+      .eq("id", session.user.id)
+      .maybeSingle(); // 🔥 FIXED (was .single)
 
-  // ✅ USER IS ACTIVE → UNLOCK NAV
+    // ❌ Error OR not active → stay locked
+    if (profileError || !profile || profile.is_active !== true) return;
 
-  document.querySelectorAll(".locked-link").forEach(link => {
+    // ✅ USER IS ACTIVE → UNLOCK NAV
+    document.querySelectorAll(".locked-link").forEach(link => {
 
-    // remove lock icon
-    const icon = link.querySelector(".lock-icon");
-    if (icon) icon.remove();
+      // remove lock icon
+      const icon = link.querySelector(".lock-icon");
+      if (icon) icon.remove();
 
-    // remove locked behaviour
-    link.classList.remove("locked-link");
+      // remove locked styling
+      link.classList.remove("locked-link");
 
-  });
+    });
+
+    console.log("✅ User active — nav unlocked");
+
+  } catch (err) {
+    console.error("Nav unlock error:", err);
+  }
 
 });
 </script>
