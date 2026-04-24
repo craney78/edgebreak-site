@@ -270,15 +270,35 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("STEP 2: SIGNUP DONE", data, error);
 
     // 🔥 SIMPLE SAFE FIX (NO RISK)
-    if (error && error.message.includes("User already registered")) {
-    errorBox.innerText = "Looks like you started before — continuing...";
+    // 🔥 SIMPLE SAFE FIX (NO RISK)
+if (error && error.message.includes("User already registered")) {
+  errorBox.innerText = "Looks like you started before — continuing...";
 
-    setTimeout(() => {
-        window.location.href = "pricing.html";
-    }, 1200);
+  setTimeout(async () => {
 
-    return;
+    // 💳 CREATE CHECKOUT SESSION (same endpoint you already use)
+    const res = await fetch("https://courier-evacuate-letdown.ngrok-free.dev/create-checkout-session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email // reuse existing email
+      })
+    });
+
+    const session = await res.json();
+
+    if (session.url) {
+      window.location.href = session.url; // 🚀 STRIPE
+    } else {
+      window.location.href = "pricing.html"; // fallback (unchanged)
     }
+
+  }, 1200);
+
+  return;
+}
 
     // ❌ OTHER ERRORS
     if (error) {
