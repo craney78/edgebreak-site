@@ -246,8 +246,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   signupBtn.addEventListener("click", async (event) => {
-    
-    event.preventDefault(); // 🔥 ADD THIS LINE FIRST
+
+    event.preventDefault();
 
     signupBtn.disabled = true;
 
@@ -255,55 +255,59 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = document.getElementById("password").value.trim();
     const errorBox = document.getElementById("error");
 
-    // 📱 GET PHONE NUMBER
+    // 📱 PHONE
     const code = document.getElementById("countryCode").value;
     const number = document.getElementById("phone").value.trim();
     const fullPhone = code + number.replace(/^0/, "");
 
-    console.log("PHONE:", fullPhone);
     console.log("STEP 1: CLICK");
 
-    // 🔐 SIGN UP
+    // ====================================
+    // 🔍 CHECK IF USER ALREADY EXISTS
+    // ====================================
+    const { data: existingUser } = await supabaseClient
+      .from("profiles")
+      .select("id")
+      .eq("email", email)
+      .maybeSingle();
+
+    if (existingUser) {
+      console.log("EXISTING USER → STRIPE");
+
+      const res = await fetch("https://courier-evacuate-letdown.ngrok-free.dev/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          userId: existingUser.id
+        })
+      });
+
+      const session = await res.json();
+
+      console.log("SESSION:", session);
+
+      if (session.url) {
+        window.location.href = session.url;
+      } else {
+        window.location.href = "pricing.html";
+      }
+
+      return;
+    }
+
+    // ====================================
+    // 🔐 NEW USER → SIGN UP
+    // ====================================
     const { data, error } = await supabaseClient.auth.signUp({
       email,
       password
     });
 
-    console.log("STEP 2: SIGNUP DONE", data, error);
+    console.log("STEP 2: SIGNUP", data, error);
 
-    // 🔥 SIMPLE SAFE FIX (NO RISK)
-    if (error && error.message.includes("User already registered")) {
-      errorBox.innerText = "Looks like you started before — continuing...";
-
-      setTimeout(async () => {
-
-        const res = await fetch("https://courier-evacuate-letdown.ngrok-free.dev/create-checkout-session", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            email,
-            userId: email // ✅ FIXED (was missing)
-          })
-        });
-
-        const session = await res.json();
-
-        console.log("RETRY SESSION:", session);
-
-        if (session.url) {
-          window.location.href = session.url;
-        } else {
-          window.location.href = "pricing.html";
-        }
-
-      }, 1200);
-
-      return;
-    }
-
-    // ❌ OTHER ERRORS
     if (error) {
       errorBox.innerText = error.message;
       signupBtn.disabled = false;
@@ -314,22 +318,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("STEP 3: USER ID", userId);
 
-    // 💾 SAVE PHONE
+    // 💾 SAVE PROFILE
     await supabaseClient.from("profiles").upsert({
       id: userId,
-      email: email,
+      email,
       phone: fullPhone,
       is_active: false
     });
 
-    console.log("STEP 4: PHONE SAVED");
+    console.log("STEP 4: PROFILE SAVED");
 
     // 🔒 SIGN OUT
     await supabaseClient.auth.signOut();
 
     console.log("STEP 5: SIGNED OUT");
 
-    // 💳 CREATE CHECKOUT SESSION
+    // ====================================
+    // 💳 STRIPE CHECKOUT
+    // ====================================
     const res = await fetch("https://courier-evacuate-letdown.ngrok-free.dev/create-checkout-session", {
       method: "POST",
       headers: {
@@ -337,15 +343,13 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       body: JSON.stringify({
         email,
-        userId: data?.user?.id || "retry-user"
+        userId
       })
     });
 
-    console.log("STEP 6: FETCH RESPONSE", res);
-
     const session = await res.json();
 
-    console.log("STEP 7: SESSION", session);
+    console.log("STEP 6: SESSION", session);
 
     if (!session.url) {
       errorBox.innerText = "Payment error. Try again.";
