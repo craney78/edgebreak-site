@@ -374,18 +374,32 @@ let entry = params.get("entry");
 let stop = params.get("stop");
 let target = params.get("target");
 
-// optional (for future use)
+// optional
 let result = params.get("result");
 
 // clean symbol
 symbol = symbol.toUpperCase();
 
-// update UI
-const symbolText = document.getElementById("symbolText");
-const tickerInput = document.getElementById("tickerInput");
+// =========================
+// 🚀 LOAD AFTER PAGE READY
+// =========================
+document.addEventListener("DOMContentLoaded", () => {
 
-if (symbolText) symbolText.innerText = symbol;
-if (tickerInput) tickerInput.value = symbol;
+  const symbolText = document.getElementById("symbolText");
+  const tickerInput = document.getElementById("tickerInput");
+
+  if (symbolText) symbolText.innerText = symbol;
+  if (tickerInput) tickerInput.value = symbol;
+
+  // 🔥 LOAD CHART (NOW SAFE)
+  loadChart(symbol);
+
+  // 🔥 DRAW LINES IF EXISTS
+  if (entry) {
+    drawTradeLines(entry, stop, target);
+  }
+
+});
 
 // =========================
 // 📈 LOAD CHART
