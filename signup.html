@@ -333,10 +333,10 @@ if (error && error.message.includes("User already registered")) {
           "Content-Type": "application/json"
       },
       body: JSON.stringify({
-          userId,
-          email
+          email,
+          userId: null
       })
-      });
+      }); // ✅ THIS WAS MISSING
 
     console.log("STEP 6: FETCH RESPONSE", res);
 
@@ -345,17 +345,13 @@ if (error && error.message.includes("User already registered")) {
     console.log("STEP 7: SESSION", session);
 
     if (!session.url) {
-      errorBox.innerText = "Payment error. Try again.";
-      signupBtn.disabled = false;
-      return;
+    errorBox.innerText = "Payment error. Try again.";
+    signupBtn.disabled = false;
+    return;
     }
 
-    // 🚀 REDIRECT TO STRIPE
-    window.location.href = session.url;
-
-  });
-
-});
+// 🚀 REDIRECT TO STRIPE
+window.location.href = session.url;
 
 </script>
 <script>
