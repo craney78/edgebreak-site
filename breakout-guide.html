@@ -541,5 +541,34 @@ menuToggle.addEventListener("click", () => {
   navLinks.classList.toggle("active");
 });
 </script>
+
+<script>
+async function setupAuthButton() {
+
+  const btn = document.getElementById("authBtn");
+  if (!btn) return;
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (session) {
+    btn.innerText = "Logout";
+
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    };
+
+  } else {
+    btn.innerText = "Login";
+    btn.href = "login.html";
+  }
+}
+
+window.addEventListener("load", async () => {
+  await setupAuthButton();
+});
+</script>
+
 </body>
 </html>
