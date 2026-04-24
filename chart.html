@@ -100,6 +100,34 @@
   color: #ef4444;
   font-weight: 600;
 }
+#replayHighlight {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: yellow;
+  opacity: 0;
+  transition: all 0.4s ease;
+  z-index: 10;
+}
+
+#replayOutcome {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  opacity: 0;
+  z-index: 9;
+}
+
+.replay-win {
+  background: linear-gradient(to top, rgba(34,197,94,0.4), transparent);
+}
+
+.replay-loss {
+  background: linear-gradient(to bottom, rgba(239,68,68,0.4), transparent);
+}
+
 </style>
 <script>
 window.supabaseClient = supabase.createClient(
@@ -237,7 +265,6 @@ checkAccess();
   <div id="stopLine"></div>
   <div id="stopLabel"></div>
 
-  <!-- ✅ ADD HERE -->
   <div id="targetLine"></div>
   <div id="targetLabel"></div>
 
@@ -246,6 +273,11 @@ checkAccess();
   <div id="riskBox"></div>
   <div id="rewardBox"></div>
   <div id="rrLabel"></div>
+
+  <!-- 🔥 ADD EXACTLY HERE -->
+  <div id="replayHighlight"></div>
+  <div id="replayOutcome"></div>
+
 </div>
 
 </div>
@@ -511,6 +543,24 @@ function selectTrade(symbol, entry, stop, target, result) {
   window.location.href = url.toString();
 }
 
+// =========================
+// 📊 GET TRADE RESULT (ADD HERE)
+// =========================
+function getTradeResult() {
+
+  const targetEl = document.getElementById("targetLabel");
+  const entryEl = document.getElementById("entryLabel");
+
+  if (!targetEl || !entryEl) return 1;
+
+  const target = parseFloat(targetEl.innerText.replace(/[^\d.-]/g, ""));
+  const entry = parseFloat(entryEl.innerText.replace(/[^\d.-]/g, ""));
+
+  if (!target || !entry) return 1;
+
+  return target > entry ? 1 : -1;
+}
+
 </script>
 <script>
 // =========================
@@ -619,70 +669,60 @@ let replayInterval = null;
 // =========================
 function startReplay() {
 
-  const overlay = document.getElementById("replayOverlay");
-  const text = document.getElementById("replayText");
+  const highlight = document.getElementById("replayHighlight");
+  const outcome = document.getElementById("replayOutcome");
 
-  if (!overlay || !text) return;
+  const entryLine = document.getElementById("entryLine");
+  const targetLine = document.getElementById("targetLine");
+  const stopLine = document.getElementById("stopLine");
 
-  if (replayInterval) {
-    clearInterval(replayInterval);
-    replayInterval = null;
-  }
+  if (!entryLine) return;
 
-  // 🔥 FORCE SHOW (CONSISTENT)
-  overlay.classList.add("active");
-  overlay.style.display = "flex";
+  // reset
+  highlight.style.opacity = 0;
+  outcome.style.opacity = 0;
+  outcome.style.height = "0%";
+  outcome.className = "";
 
-  const steps = [
-    "Price is approaching resistance...",
-    "Structure is tightening...",
-    "Breakout confirmed",
-    "Momentum follows through",
-    "This setup met system criteria"
-  ];
+  // get entry position
+  const entryPos = entryLine.style.top;
 
-  runReplaySteps(steps);
+  // STEP 1 — ENTRY FOCUS
+  setTimeout(() => {
+    highlight.style.top = entryPos;
+    highlight.style.opacity = 1;
+  }, 300);
+
+  // STEP 2 — BREAKOUT ZONE
+  setTimeout(() => {
+    highlight.style.background = "#22c55e"; // green flash
+  }, 1200);
+
+  // STEP 3 — OUTCOME
+  setTimeout(() => {
+
+    const result = getTradeResult(); // we'll define this
+
+    outcome.style.top = entryPos;
+    outcome.style.opacity = 1;
+
+    if (result >= 0) {
+      outcome.classList.add("replay-win");
+      outcome.style.height = "40%"; // grow up
+    } else {
+      outcome.classList.add("replay-loss");
+      outcome.style.height = "40%"; // grow down visually
+    }
+
+  }, 2200);
+
+  // STEP 4 — CLEANUP
+  setTimeout(() => {
+    highlight.style.opacity = 0;
+  }, 4000);
+
 }
 
-// =========================
-// ▶ TRADE-BASED REPLAY (OPTIONAL)
-// =========================
-function startReplayWithResult(result) {
-
-  const overlay = document.getElementById("replayOverlay");
-  const text = document.getElementById("replayText");
-
-  if (!overlay || !text) return;
-
-  if (replayInterval) {
-    clearInterval(replayInterval);
-    replayInterval = null;
-  }
-
-  // 🔥 SAME FIX HERE (THIS WAS MISSING)
-  overlay.classList.add("active");
-  overlay.style.display = "flex";
-
-  let steps;
-
-  if (result >= 0) {
-    steps = [
-      "Price approached resistance...",
-      "Breakout confirmed",
-      "Momentum followed through",
-      "Winning trade captured"
-    ];
-  } else {
-    steps = [
-      "Price approached resistance...",
-      "Breakout attempted",
-      "Move failed",
-      "Stop loss triggered"
-    ];
-  }
-
-  runReplaySteps(steps);
-}
 
 // =========================
 // 🔁 STEP ENGINE
