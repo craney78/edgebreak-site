@@ -370,7 +370,7 @@ EdgeBreak tracks breakout setups across the NASDAQ using defined rules based on 
 
 
   <!-- FORM -->
-  <div class="cta-box" style="max-width:700px; margin:80px auto; text-align:center;">
+<div class="cta-box" style="max-width:700px; margin:80px auto; text-align:center;">
 
   <h2>Monthly Breakout Review</h2>
 
@@ -384,15 +384,11 @@ EdgeBreak tracks breakout setups across the NASDAQ using defined rules based on 
   </p>
 
   <!-- FORM -->
-  <form action="https://formspree.io/f/mkokkkvz" method="POST" style="margin-top:20px;">
-
-    <!-- Redirect back to your site -->
-    <input type="hidden" name="_next" value="https://www.edgebreak.ai/thank-you.html">
-    <input type="hidden" name="_redirect" value="https://www.edgebreak.ai/thank-you.html">
+  <form id="emailForm" style="margin-top:20px;">
 
     <input 
       type="email" 
-      name="email"
+      id="emailInput"
       placeholder="Enter your email"
       required
       style="
@@ -419,6 +415,8 @@ EdgeBreak tracks breakout setups across the NASDAQ using defined rules based on 
 
   </form>
 
+  <p id="emailMsg" style="margin-top:10px; font-size:13px; opacity:0.6;"></p>
+
   <p style="margin-top:10px; font-size:13px; opacity:0.6;">
     Winners and losers included. No cherry-picking.
   </p>
@@ -428,6 +426,36 @@ EdgeBreak tracks breakout setups across the NASDAQ using defined rules based on 
   </p>
 
 </div>
+
+<script>
+document.getElementById("emailForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const email = document.getElementById("emailInput").value;
+  const msg = document.getElementById("emailMsg");
+
+  fetch("https://formspree.io/f/mkokkkvz", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email: email })
+  })
+  .then(response => {
+    if (response.ok) {
+      msg.innerText = "You're in. Redirecting...";
+      setTimeout(() => {
+        window.location.href = "https://www.edgebreak.ai/thank-you.html";
+      }, 1000);
+    } else {
+      msg.innerText = "Something went wrong. Try again.";
+    }
+  })
+  .catch(() => {
+    msg.innerText = "Something went wrong. Try again.";
+  });
+});
+</script>  
 
 
 <!-- HUMAN + MARKET REALITY SECTION -->
