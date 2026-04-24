@@ -20,6 +20,18 @@ window.supabaseClient = supabase.createClient(
   <style>
 
     /* =========================
+   NAV BASE FIX (ADD THIS)
+========================= */
+
+.menu-toggle {
+  display: none;
+}
+
+.nav-links {
+  display: flex;
+}
+
+    /* =========================
        📘 GUIDE STYLING
     ========================= */
 
@@ -127,6 +139,13 @@ window.supabaseClient = supabase.createClient(
 
 @media (max-width: 768px) {
 
+  .menu-toggle {
+    display: block;
+    font-size: 26px;
+    cursor: pointer;
+    color: white;
+  }
+
   .nav-links {
     display: none;
     flex-direction: column;
@@ -136,18 +155,11 @@ window.supabaseClient = supabase.createClient(
     top: 70px;
     left: 0;
     padding: 20px;
-    z-index: 999;
+    z-index: 9999;
   }
 
   .nav-links.active {
     display: flex;
-  }
-
-  .menu-toggle {
-    display: block;
-    font-size: 24px;
-    cursor: pointer;
-    color: white;
   }
 }
   </style>
