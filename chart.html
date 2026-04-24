@@ -658,9 +658,38 @@ function startReplay() {
   outcome.style.height = "0%";
   outcome.className = "";
 
-  const entryPrice = parseFloat(entry);
-  const targetPrice = parseFloat(target);
-  const stopPrice = parseFloat(stop);
+  // 🔥 SAFE FALLBACK FROM LABELS (THIS FIXES YOUR ISSUE)
+let entryPrice = parseFloat(entry);
+let targetPrice = parseFloat(target);
+let stopPrice = parseFloat(stop);
+
+// fallback if URL is empty
+if (!entryPrice) {
+  const entryEl = document.getElementById("entryLabel");
+  if (entryEl) {
+    entryPrice = parseFloat(entryEl.innerText.replace(/[^\d.-]/g, ""));
+  }
+}
+
+if (!targetPrice) {
+  const targetEl = document.getElementById("targetLabel");
+  if (targetEl) {
+    targetPrice = parseFloat(targetEl.innerText.replace(/[^\d.-]/g, ""));
+  }
+}
+
+if (!stopPrice) {
+  const stopEl = document.getElementById("stopLabel");
+  if (stopEl) {
+    stopPrice = parseFloat(stopEl.innerText.replace(/[^\d.-]/g, ""));
+  }
+}
+
+// 🚨 FINAL GUARD
+if (!entryPrice) {
+  console.log("Replay stopped: no entry price");
+  return;
+}
 
   if (!entryPrice) return;
 
