@@ -245,7 +245,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  signupBtn.addEventListener("click", async () => {
+  signupBtn.addEventListener("click", async (event) => {
+    
+    event.preventDefault(); // 🔥 ADD THIS LINE FIRST
 
     signupBtn.disabled = true;
 
