@@ -634,15 +634,14 @@ function startReplay() {
 
   if (!overlay || !text) return;
 
-  // stop any previous replay
   if (replayInterval) {
     clearInterval(replayInterval);
     replayInterval = null;
   }
 
-  // 🔥 HARD FORCE SHOW (THIS FIXES YOUR ISSUE)
+  // 🔥 FORCE SHOW (CONSISTENT)
   overlay.classList.add("active");
-  overlay.style.display = "flex";   // 👈 THIS IS THE KEY LINE
+  overlay.style.display = "flex";
 
   const steps = [
     "Price is approaching resistance...",
@@ -652,18 +651,7 @@ function startReplay() {
     "This setup met system criteria"
   ];
 
-  let i = 0;
-  text.innerText = steps[i];
-
-  replayInterval = setInterval(() => {
-    i++;
-    if (i >= steps.length) {
-      clearInterval(replayInterval);
-      replayInterval = null;
-      return;
-    }
-    text.innerText = steps[i];
-  }, 1500);
+  runReplaySteps(steps);
 }
 
 // =========================
@@ -676,14 +664,14 @@ function startReplayWithResult(result) {
 
   if (!overlay || !text) return;
 
-  // 🛑 stop previous replay
   if (replayInterval) {
     clearInterval(replayInterval);
     replayInterval = null;
   }
 
-  // ✅ CLEAN SHOW (NO display manipulation)
+  // 🔥 SAME FIX HERE (THIS WAS MISSING)
   overlay.classList.add("active");
+  overlay.style.display = "flex";
 
   let steps;
 
@@ -741,6 +729,7 @@ function closeReplay() {
   if (!overlay) return;
 
   overlay.classList.remove("active");
+  overlay.style.display = "none";
 
   if (replayInterval) {
     clearInterval(replayInterval);
