@@ -641,7 +641,10 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 <script>
-<script>
+// =========================
+// 🎬 REPLAY ENGINE (CLEAN WORKING)
+// =========================
+
 function startReplay() {
 
   const highlight = document.getElementById("replayHighlight");
@@ -655,14 +658,12 @@ function startReplay() {
   outcome.style.height = "0%";
   outcome.className = "";
 
-  // 🔥 USE REAL PRICES (NOT DOM)
   const entryPrice = parseFloat(entry);
   const targetPrice = parseFloat(target);
   const stopPrice = parseFloat(stop);
 
   if (!entryPrice) return;
 
-  // fake visible scale (center entry)
   const minPrice = entryPrice * 0.9;
   const maxPrice = entryPrice * 1.1;
 
@@ -674,19 +675,19 @@ function startReplay() {
   const targetPos = targetPrice ? getPos(targetPrice) : entryPos - 10;
   const stopPos = stopPrice ? getPos(stopPrice) : entryPos + 10;
 
-  // STEP 1 — ENTRY
+  // ENTRY
   setTimeout(() => {
     highlight.style.top = entryPos + "%";
     highlight.style.opacity = 1;
     highlight.style.background = "yellow";
   }, 300);
 
-  // STEP 2 — BREAKOUT
+  // BREAKOUT
   setTimeout(() => {
     highlight.style.background = "#22c55e";
   }, 1200);
 
-  // STEP 3 — OUTCOME
+  // OUTCOME
   setTimeout(() => {
 
     const result = targetPrice > entryPrice ? 1 : -1;
@@ -697,7 +698,6 @@ function startReplay() {
       outcome.classList.add("replay-win");
 
       const height = Math.abs(entryPos - targetPos);
-
       outcome.style.top = Math.min(entryPos, targetPos) + "%";
       outcome.style.height = Math.max(height, 8) + "%";
 
@@ -705,31 +705,21 @@ function startReplay() {
       outcome.classList.add("replay-loss");
 
       const height = Math.abs(stopPos - entryPos);
-
       outcome.style.top = Math.min(entryPos, stopPos) + "%";
       outcome.style.height = Math.max(height, 8) + "%";
     }
 
   }, 2000);
-
 }
-</script>
 
 
 // =========================
-// 🎯 EVENT BINDING (CLEAN)
+// 🎯 EVENT BINDING (FIXED)
 // =========================
 document.addEventListener("DOMContentLoaded", () => {
 
   const replayBtn = document.getElementById("replayBtn");
 
-  // reset any running replay
-  if (replayInterval) {
-    clearInterval(replayInterval);
-    replayInterval = null;
-  }
-
-  // ▶ replay button
   if (replayBtn) {
     replayBtn.onclick = startReplay;
   }
