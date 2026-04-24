@@ -24,23 +24,6 @@
   box-shadow: 0 6px 20px rgba(34,197,94,0.3);
 }
 
-.replay-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(2, 6, 23, 0.85);
-
-  display: none;              /* always hidden by default */
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s ease;
-}
 .replay-box {
   background: #020617;
   border: 1px solid #1e293b;
@@ -665,53 +648,50 @@ document.addEventListener("DOMContentLoaded", () => {
 let replayInterval = null;
 
 // =========================
-// ▶ GENERIC REPLAY (BUTTON)
+// ▶ VISUAL REPLAY (FINAL)
 // =========================
 function startReplay() {
 
   const highlight = document.getElementById("replayHighlight");
   const outcome = document.getElementById("replayOutcome");
-
   const entryLine = document.getElementById("entryLine");
-  const targetLine = document.getElementById("targetLine");
-  const stopLine = document.getElementById("stopLine");
 
-  if (!entryLine) return;
+  if (!highlight || !outcome || !entryLine) return;
 
-  // reset
+  // RESET
   highlight.style.opacity = 0;
   outcome.style.opacity = 0;
   outcome.style.height = "0%";
   outcome.className = "";
 
-  // get entry position
   const entryPos = entryLine.style.top;
 
-  // STEP 1 — ENTRY FOCUS
+  // STEP 1 — ENTRY
   setTimeout(() => {
     highlight.style.top = entryPos;
+    highlight.style.background = "yellow";
     highlight.style.opacity = 1;
   }, 300);
 
-  // STEP 2 — BREAKOUT ZONE
+  // STEP 2 — BREAKOUT
   setTimeout(() => {
-    highlight.style.background = "#22c55e"; // green flash
+    highlight.style.background = "#22c55e"; // green
   }, 1200);
 
   // STEP 3 — OUTCOME
   setTimeout(() => {
 
-    const result = getTradeResult(); // we'll define this
+    const result = getTradeResult();
 
     outcome.style.top = entryPos;
     outcome.style.opacity = 1;
 
     if (result >= 0) {
       outcome.classList.add("replay-win");
-      outcome.style.height = "40%"; // grow up
+      outcome.style.height = "40%";
     } else {
       outcome.classList.add("replay-loss");
-      outcome.style.height = "40%"; // grow down visually
+      outcome.style.height = "40%";
     }
 
   }, 2200);
@@ -722,7 +702,6 @@ function startReplay() {
   }, 4000);
 
 }
-
 
 // =========================
 // 🔁 STEP ENGINE
@@ -749,72 +728,26 @@ function runReplaySteps(steps) {
 
   }, 1500);
 }
-
 // =========================
-// ❌ CLOSE REPLAY
-// =========================
-function closeReplay() {
-
-  const overlay = document.getElementById("replayOverlay");
-  if (!overlay) return;
-
-  overlay.classList.remove("active");
-  overlay.style.display = "none";
-  overlay.style.visibility = "hidden";
-  overlay.style.opacity = "0";
-
-  if (replayInterval) {
-    clearInterval(replayInterval);
-    replayInterval = null;
-  }
-}
-
-// =========================
-// 🎯 EVENT BINDING (FINAL FIX)
+// 🎯 EVENT BINDING (CLEAN)
 // =========================
 document.addEventListener("DOMContentLoaded", () => {
 
   const replayBtn = document.getElementById("replayBtn");
-  const overlay = document.getElementById("replayOverlay");
-  const closeBtn = document.getElementById("replayClose");
 
-  if (!overlay) return;
-
-  // 🔥 HARD FORCE HIDE (THIS IS THE FIX)
-  overlay.classList.remove("active");
-  overlay.style.display = "none";
-  overlay.style.visibility = "hidden";
-  overlay.style.opacity = "0";
-
-  // reset replay
+  // reset any running replay
   if (replayInterval) {
     clearInterval(replayInterval);
     replayInterval = null;
   }
 
-  // ▶ replay button ONLY trigger
+  // ▶ replay button
   if (replayBtn) {
-    replayBtn.onclick = () => {
-      overlay.style.visibility = "visible";
-      overlay.style.opacity = "1";
-      overlay.style.display = "flex";
-      startReplay();
-    };
+    replayBtn.onclick = startReplay;
   }
-
-  // ❌ close button
-  if (closeBtn) {
-    closeBtn.onclick = closeReplay;
-  }
-
-  // ❌ click outside
-  overlay.onclick = (e) => {
-    if (e.target === overlay) {
-      closeReplay();
-    }
-  };
 
 });
+
 </script>
 <script>
 // =========================
@@ -898,14 +831,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 });
 </script>
-<div id="replayOverlay" class="replay-overlay">
-  <div class="replay-box">
-    <div id="replayText" class="replay-text">
-      Replaying breakout sequence...
-    </div>
-
-    <button id="replayClose" class="replay-close">Close</button>
-  </div>
-</div>
+  
 </body>
 </html>
