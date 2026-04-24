@@ -641,23 +641,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 <script>
-// =========================
-// 🎬 SIMPLE REPLAY ENGINE (FINAL CLEAN)
-// =========================
-
-let replayInterval = null;
-
-// =========================
-// ▶ VISUAL REPLAY (FINAL)
-// =========================
+<script>
 function startReplay() {
 
   const highlight = document.getElementById("replayHighlight");
   const outcome = document.getElementById("replayOutcome");
-  const entryLine = document.getElementById("entryLine");
-  const chart = document.getElementById("tradingview_chart");
 
-  if (!highlight || !outcome || !entryLine || !chart) return;
+  if (!highlight || !outcome) return;
 
   // RESET
   highlight.style.opacity = 0;
@@ -665,68 +655,65 @@ function startReplay() {
   outcome.style.height = "0%";
   outcome.className = "";
 
-  // =========================
-  // 🔥 POSITION CALCULATION
-  // =========================
-  const entryPosPx = entryLine.getBoundingClientRect().top;
-  const chartTop = chart.getBoundingClientRect().top;
-  const chartHeight = chart.offsetHeight;
+  // 🔥 USE REAL PRICES (NOT DOM)
+  const entryPrice = parseFloat(entry);
+  const targetPrice = parseFloat(target);
+  const stopPrice = parseFloat(stop);
 
-  const entryPos = ((entryPosPx - chartTop) / chartHeight) * 100;
+  if (!entryPrice) return;
 
-  // =========================
+  // fake visible scale (center entry)
+  const minPrice = entryPrice * 0.9;
+  const maxPrice = entryPrice * 1.1;
+
+  function getPos(price) {
+    return ((maxPrice - price) / (maxPrice - minPrice)) * 100;
+  }
+
+  const entryPos = getPos(entryPrice);
+  const targetPos = targetPrice ? getPos(targetPrice) : entryPos - 10;
+  const stopPos = stopPrice ? getPos(stopPrice) : entryPos + 10;
+
   // STEP 1 — ENTRY
-  // =========================
   setTimeout(() => {
     highlight.style.top = entryPos + "%";
-    highlight.style.background = "yellow";
     highlight.style.opacity = 1;
+    highlight.style.background = "yellow";
   }, 300);
 
-  // =========================
   // STEP 2 — BREAKOUT
-  // =========================
   setTimeout(() => {
     highlight.style.background = "#22c55e";
   }, 1200);
 
-// =========================
-// STEP 3 — OUTCOME (VISIBLE + CORRECT)
-// =========================
-setTimeout(() => {
+  // STEP 3 — OUTCOME
+  setTimeout(() => {
 
-  const result = getTradeResult();
+    const result = targetPrice > entryPrice ? 1 : -1;
 
-  const targetLine = document.getElementById("targetLine");
-  const stopLine = document.getElementById("stopLine");
+    outcome.style.opacity = 1;
 
-  if (!targetLine || !stopLine) return;
+    if (result >= 0) {
+      outcome.classList.add("replay-win");
 
-  const targetPos = parseFloat(targetLine.style.top);
-  const stopPos = parseFloat(stopLine.style.top);
+      const height = Math.abs(entryPos - targetPos);
 
-  outcome.style.opacity = 1;
+      outcome.style.top = Math.min(entryPos, targetPos) + "%";
+      outcome.style.height = Math.max(height, 8) + "%";
 
-  if (result >= 0) {
-    // ✅ WIN → expand UP
-    outcome.classList.add("replay-win");
+    } else {
+      outcome.classList.add("replay-loss");
 
-    const height = Math.abs(entryPos - targetPos);
+      const height = Math.abs(stopPos - entryPos);
 
-    outcome.style.top = Math.min(entryPos, targetPos) + "%";
-    outcome.style.height = Math.max(height, 5) + "%"; // 👈 FORCE VISIBILITY
+      outcome.style.top = Math.min(entryPos, stopPos) + "%";
+      outcome.style.height = Math.max(height, 8) + "%";
+    }
 
-  } else {
-    // ❌ LOSS → expand DOWN
-    outcome.classList.add("replay-loss");
+  }, 2000);
 
-    const height = Math.abs(stopPos - entryPos);
-
-    outcome.style.top = Math.min(entryPos, stopPos) + "%";
-    outcome.style.height = Math.max(height, 5) + "%"; // 👈 FORCE VISIBILITY
-  }
-
-}, 2200);  
+}
+</script>
 
 
 // =========================
