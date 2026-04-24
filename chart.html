@@ -677,12 +677,14 @@ function startReplayWithResult(result) {
     replayInterval = null;
   }
 
-  overlay.style.display = "flex";
+  // ✅ FORCE CLEAN START EVERY TIME
   overlay.classList.remove("active");
+  overlay.style.display = "none";
 
   setTimeout(() => {
+    overlay.style.display = "flex";
     overlay.classList.add("active");
-  }, 10);
+  }, 50);
 
   let steps;
 
