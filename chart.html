@@ -690,48 +690,43 @@ function startReplay() {
     highlight.style.background = "#22c55e";
   }, 1200);
 
-  // =========================
-  // STEP 3 — OUTCOME (REAL MOVEMENT)
-  // =========================
-  setTimeout(() => {
+// =========================
+// STEP 3 — OUTCOME (VISIBLE + CORRECT)
+// =========================
+setTimeout(() => {
 
-    const result = getTradeResult();
+  const result = getTradeResult();
 
-    const targetLine = document.getElementById("targetLine");
-    const stopLine = document.getElementById("stopLine");
+  const targetLine = document.getElementById("targetLine");
+  const stopLine = document.getElementById("stopLine");
 
-    if (!targetLine || !stopLine) return;
+  if (!targetLine || !stopLine) return;
 
-    const targetPos = parseFloat(targetLine.style.top);
-    const stopPos = parseFloat(stopLine.style.top);
+  const targetPos = parseFloat(targetLine.style.top);
+  const stopPos = parseFloat(stopLine.style.top);
 
-    outcome.style.opacity = 1;
+  outcome.style.opacity = 1;
 
-    if (result >= 0) {
-      // ✅ WIN → expand UP
-      outcome.classList.add("replay-win");
+  if (result >= 0) {
+    // ✅ WIN → expand UP
+    outcome.classList.add("replay-win");
 
-      outcome.style.top = targetPos + "%";
-      outcome.style.height = (entryPos - targetPos) + "%";
+    const height = Math.abs(entryPos - targetPos);
 
-    } else {
-      // ❌ LOSS → expand DOWN
-      outcome.classList.add("replay-loss");
+    outcome.style.top = Math.min(entryPos, targetPos) + "%";
+    outcome.style.height = Math.max(height, 5) + "%"; // 👈 FORCE VISIBILITY
 
-      outcome.style.top = entryPos + "%";
-      outcome.style.height = (stopPos - entryPos) + "%";
-    }
+  } else {
+    // ❌ LOSS → expand DOWN
+    outcome.classList.add("replay-loss");
 
-  }, 2200);
+    const height = Math.abs(stopPos - entryPos);
 
-  // =========================
-  // CLEANUP
-  // =========================
-  setTimeout(() => {
-    highlight.style.opacity = 0;
-  }, 4000);
+    outcome.style.top = Math.min(entryPos, stopPos) + "%";
+    outcome.style.height = Math.max(height, 5) + "%"; // 👈 FORCE VISIBILITY
+  }
 
-}
+}, 2200);  
 
 
 // =========================
