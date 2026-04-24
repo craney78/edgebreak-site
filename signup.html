@@ -281,11 +281,14 @@ document.addEventListener("DOMContentLoaded", () => {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            email
+            email,
+            userId: email // ✅ FIXED (was missing)
           })
         });
 
         const session = await res.json();
+
+        console.log("RETRY SESSION:", session);
 
         if (session.url) {
           window.location.href = session.url;
@@ -351,9 +354,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // 🚀 REDIRECT TO STRIPE
     window.location.href = session.url;
 
-  }); // ✅ closes click handler
+  });
 
-}); // ✅ closes DOMContentLoaded
+});
 
 </script>
 <script>
