@@ -368,16 +368,42 @@ checkAccess();
 // =========================
 const params = new URLSearchParams(window.location.search);
 
+// core values
 let symbol = params.get("symbol") || "AAPL";
-let entry = params.get("entry") || null;
-let stop = params.get("stop") || null;
-let target = params.get("target") || null;
-let breakout = params.get("breakout") || null;
+let entry = params.get("entry");
+let stop = params.get("stop");
+let target = params.get("target");
 
+// optional (for future use)
+let result = params.get("result");
+
+// clean symbol
 symbol = symbol.toUpperCase();
 
-document.getElementById("symbolText").innerText = symbol;
-document.getElementById("tickerInput").value = symbol;
+// update UI
+const symbolText = document.getElementById("symbolText");
+const tickerInput = document.getElementById("tickerInput");
+
+if (symbolText) symbolText.innerText = symbol;
+if (tickerInput) tickerInput.value = symbol;
+
+// =========================
+// 📈 LOAD CHART
+// =========================
+loadChart(symbol);
+
+// =========================
+// 📊 DRAW LINES (IF DATA EXISTS)
+// =========================
+if (entry) {
+  drawTradeLines(entry, stop, target);
+}
+
+// 🚨 IMPORTANT: DO NOT AUTO RUN REPLAY HERE
+// (this was your bug before)
+// if (result) {
+//   startReplayWithResult(result);
+// }
 
 // =========================
 // 📈 LOAD CHART
