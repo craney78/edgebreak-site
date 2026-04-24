@@ -249,9 +249,12 @@ async function setupAuthButton() {
   const btn = document.getElementById("authBtn");
   if (!btn) return;
 
+  // 🔥 WAIT FOR SESSION TO STABILISE
+  await new Promise(resolve => setTimeout(resolve, 200));
+
   const { data: { session } } = await supabaseClient.auth.getSession();
 
-  if (session) {
+  if (session && session.user) {
     btn.innerText = "Logout";
 
     btn.onclick = async (e) => {
