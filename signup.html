@@ -269,10 +269,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("STEP 2: SIGNUP DONE", data, error);
 
+    // 🔥 SIMPLE SAFE FIX (NO RISK)
+    if (error && error.message.includes("User already registered")) {
+    errorBox.innerText = "Looks like you started before — continuing...";
+
+    setTimeout(() => {
+        window.location.href = "pricing.html";
+    }, 1200);
+
+    return;
+    }
+
+    // ❌ OTHER ERRORS
     if (error) {
-      errorBox.innerText = error.message;
-      signupBtn.disabled = false;
-      return;
+    errorBox.innerText = error.message;
+    signupBtn.disabled = false;
+    return;
     }
 
     const userId = data?.user?.id;
