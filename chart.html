@@ -634,24 +634,38 @@ function startReplay() {
 
   if (!overlay || !text) return;
 
-  // 🛑 stop previous replay
+  // stop previous replay
   if (replayInterval) {
     clearInterval(replayInterval);
     replayInterval = null;
   }
 
-  // 🔥 FORCE SHOW (THIS FIXES BUTTON)
+  // 🔥 FORCE SHOW OVERLAY (THIS IS THE FIX)
   overlay.classList.add("active");
 
+  // reset first message immediately
+  text.innerText = "Price is approaching resistance...";
+
   const steps = [
-    "Price is approaching resistance...",
     "Structure is tightening...",
     "Breakout confirmed",
     "Momentum follows through",
     "This setup met system criteria"
   ];
 
-  runReplaySteps(steps);
+  let i = 0;
+
+  replayInterval = setInterval(() => {
+    if (i >= steps.length) {
+      clearInterval(replayInterval);
+      replayInterval = null;
+      return;
+    }
+
+    text.innerText = steps[i];
+    i++;
+
+  }, 1500);
 }
 
 // =========================
@@ -747,10 +761,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!overlay) return;
 
-  // 🚨 HARD STOP ANY AUTO REPLAY
-  window.startReplay = startReplay;
-  window.startReplayWithResult = startReplayWithResult;
-
+  
   // ✅ HARD RESET (STRONGER — REPLACE OLD ONE WITH THIS)
   overlay.style.display = "none";
   overlay.classList.remove("active");
