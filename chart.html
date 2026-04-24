@@ -655,8 +655,9 @@ function startReplay() {
   const highlight = document.getElementById("replayHighlight");
   const outcome = document.getElementById("replayOutcome");
   const entryLine = document.getElementById("entryLine");
+  const chart = document.getElementById("tradingview_chart");
 
-  if (!highlight || !outcome || !entryLine) return;
+  if (!highlight || !outcome || !entryLine || !chart) return;
 
   // RESET
   highlight.style.opacity = 0;
@@ -664,18 +665,23 @@ function startReplay() {
   outcome.style.height = "0%";
   outcome.className = "";
 
-  const entryPos = entryLine.style.top;
+  // 🔥 FIXED POSITION CALC
+  const entryPosPx = entryLine.getBoundingClientRect().top;
+  const chartTop = chart.getBoundingClientRect().top;
+  const chartHeight = chart.offsetHeight;
+
+  const entryPos = ((entryPosPx - chartTop) / chartHeight) * 100;
 
   // STEP 1 — ENTRY
   setTimeout(() => {
-    highlight.style.top = entryPos;
+    highlight.style.top = entryPos + "%";
     highlight.style.background = "yellow";
     highlight.style.opacity = 1;
   }, 300);
 
   // STEP 2 — BREAKOUT
   setTimeout(() => {
-    highlight.style.background = "#22c55e"; // green
+    highlight.style.background = "#22c55e";
   }, 1200);
 
   // STEP 3 — OUTCOME
@@ -683,7 +689,7 @@ function startReplay() {
 
     const result = getTradeResult();
 
-    outcome.style.top = entryPos;
+    outcome.style.top = entryPos + "%";
     outcome.style.opacity = 1;
 
     if (result >= 0) {
@@ -696,38 +702,12 @@ function startReplay() {
 
   }, 2200);
 
-  // STEP 4 — CLEANUP
+  // CLEANUP
   setTimeout(() => {
     highlight.style.opacity = 0;
   }, 4000);
-
 }
 
-// =========================
-// 🔁 STEP ENGINE
-// =========================
-function runReplaySteps(steps) {
-
-  const text = document.getElementById("replayText");
-  if (!text) return;
-
-  let i = 0;
-  text.innerText = steps[i];
-
-  replayInterval = setInterval(() => {
-
-    i++;
-
-    if (i >= steps.length) {
-      clearInterval(replayInterval);
-      replayInterval = null;
-      return;
-    }
-
-    text.innerText = steps[i];
-
-  }, 1500);
-}
 // =========================
 // 🎯 EVENT BINDING (CLEAN)
 // =========================
