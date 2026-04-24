@@ -67,6 +67,42 @@
   color: white;
   cursor: pointer;
 }
+
+.trade-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.trade-item:hover {
+  background: rgba(30, 41, 59, 0.6);
+  transform: translateX(3px);
+}
+
+.trade-symbol {
+  font-weight: 600;
+  color: white;
+}
+
+.trade-meta {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.trade-pos {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.trade-neg {
+  color: #ef4444;
+  font-weight: 600;
+}
 </style>
 <script>
 window.supabaseClient = supabase.createClient(
@@ -234,6 +270,17 @@ checkAccess();
   <div style="font-size:12px; color:#64748b; margin-top:6px;">
     Relive how this trade unfolded
   </div>
+</div>
+
+<!-- 🎬 TRADE REPLAY LIBRARY -->
+<div class="section" style="margin-top:30px;">
+
+  <h3 style="margin-bottom:10px;">🟢 Current Setups (Live)</h3>
+  <div id="liveTradesList"></div>
+
+  <h3 style="margin:20px 0 10px;">🔵 Completed Trades (Recent)</h3>
+  <div id="historyTradesList"></div>
+
 </div>
 
     
@@ -446,80 +493,141 @@ else {
 </script>
 <script>
 // =========================
-// 🎬 SIMPLE REPLAY ENGINE (FINAL FIXED)
+// 🎬 SIMPLE REPLAY ENGINE (FINAL)
+// =========================
+
+let replayInterval = null;
+
+// =========================
+// ▶ GENERIC REPLAY (BUTTON)
+// =========================
+function startReplay() {
+
+  const overlay = document.getElementById("replayOverlay");
+  const text = document.getElementById("replayText");
+
+  if (!overlay || !text) return;
+
+  overlay.style.display = "flex";
+  setTimeout(() => overlay.classList.add("active"), 10);
+
+  const steps = [
+    "Price is approaching resistance...",
+    "Structure is tightening...",
+    "Breakout confirmed",
+    "Momentum follows through",
+    "This setup met system criteria"
+  ];
+
+  runReplaySteps(steps);
+}
+
+// =========================
+// ▶ TRADE-BASED REPLAY (NEW)
+// =========================
+function startReplayWithResult(result) {
+
+  const overlay = document.getElementById("replayOverlay");
+  const text = document.getElementById("replayText");
+
+  if (!overlay || !text) return;
+
+  overlay.style.display = "flex";
+  setTimeout(() => overlay.classList.add("active"), 10);
+
+  let steps;
+
+  if (result >= 0) {
+    steps = [
+      "Price approached resistance...",
+      "Breakout confirmed",
+      "Momentum followed through",
+      "Winning trade captured"
+    ];
+  } else {
+    steps = [
+      "Price approached resistance...",
+      "Breakout attempted",
+      "Move failed",
+      "Stop loss triggered"
+    ];
+  }
+
+  runReplaySteps(steps);
+}
+
+// =========================
+// 🔁 STEP ENGINE (SHARED)
+// =========================
+function runReplaySteps(steps) {
+
+  const text = document.getElementById("replayText");
+  if (!text) return;
+
+  // clear any previous replay
+  if (replayInterval) clearInterval(replayInterval);
+
+  let i = 0;
+  text.innerText = steps[i];
+
+  replayInterval = setInterval(() => {
+    i++;
+
+    if (i >= steps.length) {
+      clearInterval(replayInterval);
+      return;
+    }
+
+    text.innerText = steps[i];
+
+  }, 1500);
+}
+
+// =========================
+// ❌ CLOSE REPLAY
+// =========================
+function closeReplay() {
+
+  const overlay = document.getElementById("replayOverlay");
+  if (!overlay) return;
+
+  overlay.classList.remove("active");
+
+  setTimeout(() => {
+    overlay.style.display = "none";
+  }, 300);
+
+  if (replayInterval) {
+    clearInterval(replayInterval);
+  }
+}
+
+// =========================
+// 🎯 EVENT BINDING
 // =========================
 document.addEventListener("DOMContentLoaded", () => {
 
   const replayBtn = document.getElementById("replayBtn");
   const overlay = document.getElementById("replayOverlay");
-  const text = document.getElementById("replayText");
   const closeBtn = document.getElementById("replayClose");
 
-  if (!overlay || !text) return;
+  if (!overlay) return;
 
-  // ✅ CRITICAL FIX: ensure overlay is hidden on load
+  // ✅ CRITICAL: ensure overlay hidden on load
   overlay.style.display = "none";
   overlay.classList.remove("active");
 
-  let interval = null;
-
-  // ▶ START REPLAY
-  function startReplay() {
-
-    overlay.style.display = "flex";
-    setTimeout(() => overlay.classList.add("active"), 10);
-
-    const steps = [
-      "Price is approaching resistance...",
-      "Structure is tightening...",
-      "Breakout confirmed",
-      "Momentum follows through",
-      "This setup met system criteria"
-    ];
-
-    let i = 0;
-    text.innerText = steps[i];
-
-    if (interval) clearInterval(interval);
-
-    interval = setInterval(() => {
-      i++;
-
-      if (i >= steps.length) {
-        clearInterval(interval);
-        return;
-      }
-
-      text.innerText = steps[i];
-
-    }, 1500);
-  }
-
-  // ❌ CLOSE FUNCTION
-  function closeReplay() {
-
-    overlay.classList.remove("active");
-
-    setTimeout(() => {
-      overlay.style.display = "none";
-    }, 300);
-
-    if (interval) {
-      clearInterval(interval);
-    }
-  }
-
-  // ▶ BUTTON CLICK
+  // ▶ button replay
   if (replayBtn) {
     replayBtn.addEventListener("click", startReplay);
   }
 
-  // ❌ CLOSE BUTTON
+  // ❌ close button
   if (closeBtn) {
     closeBtn.addEventListener("click", closeReplay);
   }
 
-  // ❌ CLICK OUTSIDE BOX
+  // ❌ click outside box
   overlay.addEventListener("click", (e) => {
     if (e.target === overlay) {
       closeReplay();
