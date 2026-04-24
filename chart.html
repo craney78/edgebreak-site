@@ -665,26 +665,34 @@ function startReplay() {
   outcome.style.height = "0%";
   outcome.className = "";
 
-  // 🔥 FIXED POSITION CALC
+  // =========================
+  // 🔥 POSITION CALCULATION
+  // =========================
   const entryPosPx = entryLine.getBoundingClientRect().top;
   const chartTop = chart.getBoundingClientRect().top;
   const chartHeight = chart.offsetHeight;
 
   const entryPos = ((entryPosPx - chartTop) / chartHeight) * 100;
 
+  // =========================
   // STEP 1 — ENTRY
+  // =========================
   setTimeout(() => {
     highlight.style.top = entryPos + "%";
     highlight.style.background = "yellow";
     highlight.style.opacity = 1;
   }, 300);
 
+  // =========================
   // STEP 2 — BREAKOUT
+  // =========================
   setTimeout(() => {
     highlight.style.background = "#22c55e";
   }, 1200);
 
+  // =========================
   // STEP 3 — OUTCOME (REAL MOVEMENT)
+  // =========================
   setTimeout(() => {
 
     const result = getTradeResult();
@@ -700,14 +708,14 @@ function startReplay() {
     outcome.style.opacity = 1;
 
     if (result >= 0) {
-      // ✅ WIN → expand UP toward target
+      // ✅ WIN → expand UP
       outcome.classList.add("replay-win");
 
       outcome.style.top = targetPos + "%";
       outcome.style.height = (entryPos - targetPos) + "%";
 
     } else {
-      // ❌ LOSS → expand DOWN toward stop
+      // ❌ LOSS → expand DOWN
       outcome.classList.add("replay-loss");
 
       outcome.style.top = entryPos + "%";
@@ -715,6 +723,16 @@ function startReplay() {
     }
 
   }, 2200);
+
+  // =========================
+  // CLEANUP
+  // =========================
+  setTimeout(() => {
+    highlight.style.opacity = 0;
+  }, 4000);
+
+}
+
 
 // =========================
 // 🎯 EVENT BINDING (CLEAN)
@@ -735,7 +753,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
-
 </script>
 <script>
 // =========================
