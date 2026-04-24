@@ -31,17 +31,19 @@
   width: 100%;
   height: 100%;
   background: rgba(2, 6, 23, 0.85);
-  display: none;
+
+  display: none;              /* 🔥 default hidden */
   align-items: center;
   justify-content: center;
   z-index: 9999;
 
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  pointer-events: none;       /* 🔥 allow clicks through */
 }
 
+/* ONLY active state blocks screen */
 .replay-overlay.active {
-  opacity: 1;
+  display: flex;
+  pointer-events: auto;
 }
 
 .replay-box {
@@ -642,13 +644,8 @@ function startReplay() {
     replayInterval = null;
   }
 
-  // ✅ show overlay cleanly
-  overlay.style.display = "flex";
-  overlay.classList.remove("active");
-
-  setTimeout(() => {
-    overlay.classList.add("active");
-  }, 10);
+  // ✅ CLEAN SHOW (CSS controls display)
+  overlay.classList.add("active");
 
   const steps = [
     "Price is approaching resistance...",
@@ -677,14 +674,8 @@ function startReplayWithResult(result) {
     replayInterval = null;
   }
 
-  // ✅ FORCE CLEAN START EVERY TIME
-  overlay.classList.remove("active");
-  overlay.style.display = "none";
-
-  setTimeout(() => {
-    overlay.style.display = "flex";
-    overlay.classList.add("active");
-  }, 50);
+  // ✅ CLEAN SHOW (NO display manipulation)
+  overlay.classList.add("active");
 
   let steps;
 
