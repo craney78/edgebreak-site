@@ -332,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       body: JSON.stringify({
         email,
-        userId: null
+        userId: data?.user?.id || "retry-user"
       })
     });
 
