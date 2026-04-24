@@ -466,7 +466,12 @@ function selectTrade(symbol, entry, stop, target, result) {
 
   symbol = symbol.toUpperCase();
 
-  // 🔁 reload chart cleanly
+  const chartContainer = document.getElementById("tradingview_chart");
+
+  // 🔥 CLEAR OLD CHART (THIS IS THE FIX)
+  chartContainer.innerHTML = "";
+
+  // 🔁 LOAD NEW CHART
   new TradingView.widget({
     width: "100%",
     height: 600,
@@ -478,17 +483,17 @@ function selectTrade(symbol, entry, stop, target, result) {
     container_id: "tradingview_chart"
   });
 
-  // 🔁 update UI
+  // 🔁 UPDATE UI
   const symbolText = document.getElementById("symbolText");
   const tickerInput = document.getElementById("tickerInput");
 
   if (symbolText) symbolText.innerText = symbol;
   if (tickerInput) tickerInput.value = symbol;
 
-  // 🔁 draw trade levels
+  // 🔁 DRAW LINES
   drawTradeLines(entry, stop, target);
 
-  // ❌ IMPORTANT: do NOT auto replay here
+  // (leave replay OFF for now while testing)
 }
 // =========================
 // 🔁 PRIORITY 1: URL DATA
@@ -644,7 +649,7 @@ function startReplay() {
     replayInterval = null;
   }
 
-  // ✅ CLEAN SHOW (CSS controls display)
+  // 🔥 FORCE SHOW (THIS FIXES BUTTON)
   overlay.classList.add("active");
 
   const steps = [
