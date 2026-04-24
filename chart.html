@@ -381,6 +381,20 @@ let result = params.get("result");
 symbol = symbol.toUpperCase();
 
 // =========================
+// 🚫 DISABLE AUTO REPLAY (FINAL FIX)
+// =========================
+window.addEventListener("DOMContentLoaded", () => {
+
+  const url = new URL(window.location.href);
+
+  if (url.searchParams.has("result")) {
+    url.searchParams.delete("result");
+    window.history.replaceState({}, "", url);
+  }
+
+});
+
+// =========================
 // 📈 LOAD CHART (FINAL CLEAN)
 // =========================
 function loadChart(symbol) {
