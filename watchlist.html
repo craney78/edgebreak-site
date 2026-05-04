@@ -418,6 +418,30 @@ checkAccess();
 
 </div>
 
+<!-- =========================
+📊 WEEKLY PERFORMANCE
+========================= -->
+<div class="section">
+
+  <h2>This Week Performance</h2>
+
+  <p style="color:#94a3b8; margin-bottom:15px;">
+    How current tracked trades have performed over the last 7 days
+  </p>
+
+  <!-- INDIVIDUAL TRADES -->
+  <div id="weeklyTrades" class="stats"></div>
+
+  <!-- OVERALL -->
+  <div style="margin-top:20px; text-align:center;">
+    <div style="font-size:14px; color:#94a3b8;">Overall Performance</div>
+    <div id="weeklyTotal" style="font-size:28px; font-weight:bold;"></div>
+  </div>
+
+</div>
+
+</script>
+
 <!-- FOOTER -->
 <div class="footer" style="width:100%;">
 
@@ -687,7 +711,45 @@ document.addEventListener("DOMContentLoaded", function () {
       renderTrades(large, "🔵 Large Caps", "largeSection");
 
     });
+  // =========================
+  // 📊 WEEKLY PERFORMANCE
+  // =========================
 
+  const weeklyContainer = document.getElementById("weeklyTrades");
+  const weeklyTotalEl = document.getElementById("weeklyTotal");
+
+  if (weeklyContainer && weeklyTotalEl) {
+
+    let total = 0;
+    let count = 0;
+
+    weeklyContainer.innerHTML = data.map(t => {
+
+      const change = parseFloat(t.change_percent ?? 0);
+      total += change;
+      count++;
+
+      const color = change >= 0 ? "#22c55e" : "#ef4444";
+
+      return `
+        <div class="stat">
+          <div class="label">${t.symbol}</div>
+          <div class="value" style="color:${color}">
+            ${change >= 0 ? "+" : ""}${change.toFixed(2)}%
+          </div>
+        </div>
+        </div>
+      `;
+    }).join("");
+
+    const avg = count > 0 ? total / count : 0;
+
+    weeklyTotalEl.innerText =
+      (avg >= 0 ? "+" : "") + avg.toFixed(2) + "%";
+
+    weeklyTotalEl.style.color =
+      avg >= 0 ? "#22c55e" : "#ef4444";
+  }
   // =========================
   // 📊 COMBINED STATS (CLEAN FINAL)
   // =========================
@@ -1231,6 +1293,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
 });
+
 </script>
+
 </body>
 </html>
