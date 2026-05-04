@@ -1,7 +1,7 @@
 import json
 import requests
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
 
 API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
@@ -188,6 +188,29 @@ def run_tracker():
         low_price = candle["low"]
         prev_price = candle["prev_price"]
         history_data = candle["history"]
+
+        # =========================
+        # 📊 WEEKLY PERFORMANCE TRACKING
+        # =========================
+
+        today = datetime.now()
+        weekday = today.weekday()  # Monday = 0
+
+        # get this week's Monday
+        monday = today - timedelta(days=weekday)
+        monday_str = monday.strftime("%Y-%m-%d")
+
+        # 🔥 reset weekly start if new week
+        if trade.get("week_start") != monday_str:
+            trade["week_start"] = monday_str
+            trade["week_start_price"] = price
+
+        # 🔥 calculate weekly change
+        start_price = trade.get("week_start_price", price)
+
+        weekly_change = ((price - start_price) / start_price) * 100
+
+        trade["weekly_change_percent"] = round(weekly_change, 2)
 
         # =========================
         # EXACT EXIT CALL

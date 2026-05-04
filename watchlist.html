@@ -711,7 +711,7 @@ document.addEventListener("DOMContentLoaded", function () {
       renderTrades(large, "🔵 Large Caps", "largeSection");
 
       // =========================
-      // 📊 WEEKLY PERFORMANCE (FIXED)
+      // 📊 WEEKLY PERFORMANCE
       // =========================
 
       const weeklyContainer = document.getElementById("weeklyTrades");
@@ -724,7 +724,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         weeklyContainer.innerHTML = data.map(t => {
 
-          const change = parseFloat(t.change_percent ?? 0);
+          const change = parseFloat(t.weekly_change_percent ?? 0);
           total += change;
           count++;
 
