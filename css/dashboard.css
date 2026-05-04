@@ -13,24 +13,76 @@ body {
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: radial-gradient(circle at top, #0f172a 0%, #020617 60%);
+
+  /* 🔥 BRIGHTER, CLEANER BACKGROUND */
+  background: radial-gradient(
+    circle at 50% -20%,
+    #334155 0%,   /* soft top light */
+    #1e293b 35%,  /* main surface */
+    #0f172a 70%,  /* depth */
+    #020617 100%  /* base */
+  );
+
   color: #e2e8f0;
 }
 
+/* =========================
+   🧾 HEADINGS
+   ========================= */
 h1, h2, h3 {
   margin: 0 0 10px;
+  color: #f1f5f9; /* slightly brighter than body text */
 }
 
+/* =========================
+   📄 PARAGRAPHS
+   ========================= */
 p {
-  color: #94a3b8;
+  color: #cbd5f5; /* brighter, easier to read */
+  line-height: 1.6;
 }
 
-body {
-  background: linear-gradient(
-    180deg,
-    #020617 0%,
-    #0f172a 100%
-  );
+/* =========================
+   📦 BASIC CONTAINER
+   ========================= */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* =========================
+   🧱 CARD / PANEL BASE
+   ========================= */
+.card {
+  background: #111827;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+/* =========================
+   ✨ SECTION SPACING
+   ========================= */
+.section {
+  margin: 60px auto;
+}
+
+/* =========================
+   🔘 BUTTON (MATCH YOUR STYLE)
+   ========================= */
+.nav-cta {
+  background: #22c55e;
+  color: #020617;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.nav-cta:hover {
+  opacity: 0.9;
 }
 
 /* =========================
