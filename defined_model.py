@@ -2,11 +2,13 @@ import requests
 import pandas as pd
 import time
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # =========================
 # 🔑 CONFIG
 # =========================
+
+
 API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
 
 SMA_LONG = 70
@@ -16,10 +18,12 @@ STOP_DAYS = 4
 STARTING_CAPITAL = 100000
 RISK_PER_TRADE = 0.02
 
-START_DATE = "2025-01-01"
-END_DATE = datetime.now().strftime("%Y-%m-%d")
+# 🔥 DYNAMIC DATE RANGE (LAST 3 WEEKS)
+END_DATE = datetime.now()
+START_DATE = END_DATE - timedelta(days=21)
 
-RUN_LABEL = "2025_to_now"
+# (optional — just for naming outputs)
+RUN_LABEL = "last_3_weeks"
 
 # =========================
 # BUILD NASDAQ UNIVERSE
@@ -216,7 +220,7 @@ def run_backtest():
                 entry = float(data[idx]["close"])
                 entry_date = data[idx]["datetime"]
 
-                if entry_date < pd.to_datetime(START_DATE):
+                if entry_date < START_DATE:
                     continue
 
                 exit_price = entry
@@ -370,12 +374,15 @@ def run_backtest():
     # =========================
     # 📊 EXPORT RESULTS (ADD HERE)
     # =========================
-    
+
     df = pd.DataFrame(results)
 
     df.to_csv(f"trade_history_{RUN_LABEL}.csv", index=False)
 
     print(f"\n✅ Saved {len(df)} trades to trade_history_{RUN_LABEL}.csv")
+
+    # 🔥 ADD THIS
+    print(f"\n📊 Signals found (last 3 weeks): {len(results)}")
 
     # =========================
     # 📤 SAVE CLEAN JSON (ADD HERE)
