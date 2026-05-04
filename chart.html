@@ -288,14 +288,30 @@ checkAccess();
   </div>
 </div>
 
-<!-- 🎬 TRADE REPLAY LIBRARY -->
+<!-- 🎬 TRADE LIBRARY -->
 <div class="section" style="margin-top:30px;">
 
+  <!-- 🟢 LIVE TRADES -->
   <h3 style="margin-bottom:10px;">🟢 Current Setups (Live)</h3>
   <div id="liveTradesList"></div>
 
-  <h3 style="margin:20px 0 10px;">🔵 Completed Trades (Recent)</h3>
-  <div id="historyTradesList"></div>
+  <!-- =========================
+  📊 EDGE BREAK FULL TRADING HISTORY
+  ========================= -->
+  
+  <h2 style="margin:25px 0 5px;">
+    📊 EdgeBreak Full Trading History
+  </h2>
+
+  <p style="color:#94a3b8; font-size:13px; margin-bottom:15px;">
+    Complete record of all trades taken by the system.
+  </p>
+
+  <!-- 🔽 SCROLLABLE HISTORY LIST -->
+  <div id="historyTradesList" style="
+    max-height:400px;
+    overflow-y:auto;
+  "></div>
 
 </div>
 
@@ -612,9 +628,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const recent = data.slice(-15).reverse();
+      const trades = data.slice().reverse();
 
-      historyContainer.innerHTML = recent.map(t => {
+      historyContainer.innerHTML = trades.map(t => {
 
         const change = t.percent_move ?? 0;
         const color = change >= 0 ? "trade-pos" : "trade-neg";
@@ -622,14 +638,26 @@ document.addEventListener("DOMContentLoaded", () => {
         return `
           <div class="trade-item"
             onclick="selectTrade('${t.symbol}', ${t.entry_price || 0}, ${t.stop_loss || 0}, ${t.target_price || 0}, ${change})">
-            
-            <div>
-              <div class="trade-symbol">${t.symbol}</div>
-              <div class="trade-meta">${t.days_held ?? 0} days</div>
-            </div>
+    
+            <div style="display:flex; justify-content:space-between; width:100%;">
 
-            <div class="${color}">
-              ${change.toFixed(2)}%
+              <!-- LEFT -->
+              <div>
+                <div class="trade-symbol">${t.symbol}</div>
+                <div class="trade-meta">
+                  ${t.days_held ?? 0} days • ${t.exit_type ?? "EXIT"}
+                </div>
+              </div>
+
+              <!-- RIGHT -->
+              <div style="text-align:right;">
+                <div class="${color}">
+                  ${change >= 0 ? "+" : ""}${change.toFixed(2)}%
+                </div>
+                <div class="trade-meta">
+                  $${t.entry_price ?? "-"} → $${t.exit_price ?? "-"}
+                </div>
+              </div>
             </div>
 
           </div>
