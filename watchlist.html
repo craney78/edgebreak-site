@@ -423,24 +423,87 @@ checkAccess();
 ========================= -->
 <div class="section">
 
-  <h2>This Week Performance</h2>
+  <!-- HEADER -->
+  <h2 style="margin-bottom:8px;">📊 This Week Performance</h2>
 
-  <p style="color:#94a3b8; margin-bottom:15px;">
-    How current tracked trades have performed over the last 7 days
+  <p style="color:#94a3b8; margin-bottom:20px; font-size:14px;">
+    Performance from Monday → today
   </p>
 
-  <!-- INDIVIDUAL TRADES -->
-  <div id="weeklyTrades" class="stats"></div>
+  <!-- =========================
+  📊 SUMMARY CARD
+  ========================= -->
+  <div id="weeklySummary" style="
+    background:#0f172a;
+    border:1px solid #1e293b;
+    border-radius:12px;
+    padding:16px;
+    margin-bottom:24px;
+  ">
 
-  <!-- OVERALL -->
-  <div style="margin-top:20px; text-align:center;">
-    <div style="font-size:14px; color:#94a3b8;">Overall Performance</div>
-    <div id="weeklyTotal" style="font-size:28px; font-weight:bold;"></div>
+    <!-- TOP ROW -->
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:12px;
+    ">
+      <div style="font-size:13px; color:#64748b;">Weekly Summary</div>
+      <div id="weeklyMarketStatus" style="font-size:12px;"></div>
+    </div>
+
+    <!-- MAIN ROW -->
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    ">
+
+      <!-- TOTAL -->
+      <div>
+        <div style="font-size:12px; color:#64748b;">Overall</div>
+        <div id="weeklySummaryTotal" style="
+          font-size:26px;
+          font-weight:bold;
+        "></div>
+      </div>
+
+      <!-- WIN / LOSS -->
+      <div style="text-align:right;">
+        <div style="font-size:12px; color:#64748b;">Winners / Losers</div>
+        <div id="weeklyWinLoss" style="
+          font-size:16px;
+          font-weight:600;
+        "></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- =========================
+  📈 WEEKLY TRADE BARS
+  ========================= -->
+  <div id="weeklyTrades"></div>
+
+  <!-- =========================
+  📊 OVERALL (BOTTOM)
+  ========================= -->
+  <div style="
+    margin-top:30px;
+    text-align:center;
+    padding-top:15px;
+    border-top:1px solid #1e293b;
+  ">
+    <div style="font-size:13px; color:#64748b;">Overall Performance</div>
+    <div id="weeklyTotal" style="
+      font-size:28px;
+      font-weight:bold;
+      margin-top:4px;
+    "></div>
   </div>
 
 </div>
-
-</script>
 
 <!-- FOOTER -->
 <div class="footer" style="width:100%;">
@@ -711,13 +774,16 @@ document.addEventListener("DOMContentLoaded", function () {
       renderTrades(large, "🔵 Large Caps", "largeSection");
 
       // =========================
-      // 📊 WEEKLY PERFORMANCE
+      // 📊 WEEKLY PERFORMANCE (PRO VERSION)
       // =========================
 
       const weeklyContainer = document.getElementById("weeklyTrades");
       const weeklyTotalEl = document.getElementById("weeklyTotal");
 
-      if (weeklyContainer && weeklyTotalEl) {
+      if (weeklyContainer && weeklyTotalEl && data.length > 0) {
+
+        const best = Math.max(...data.map(t => t.weekly_change_percent || 0));
+        const worst = Math.min(...data.map(t => t.weekly_change_percent || 0));
 
         let total = 0;
         let count = 0;
@@ -730,23 +796,111 @@ document.addEventListener("DOMContentLoaded", function () {
 
           const color = change >= 0 ? "#22c55e" : "#ef4444";
 
+          // 🔥 badges
+          let badge = "";
+          if (change === best) badge = "🔥";
+          if (change === worst) badge = "🔻";
+
           return `
-            <div class="stat">
-              <div class="label">${t.symbol}</div>
-              <div class="value" style="color:${color}">
-                ${change >= 0 ? "+" : ""}${change.toFixed(2)}%
+            <div style="margin-bottom:18px;">
+
+              <!-- TOP ROW -->
+              <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:14px;">
+                <div style="font-weight:600;">${t.symbol} ${badge}</div>
+                <div style="color:${color}; font-weight:bold;">
+                  ${change >= 0 ? "+" : ""}${change.toFixed(2)}%
+                </div>
               </div>
+
+              <!-- BAR WRAPPER -->
+              <div style="
+                position:relative;
+                height:8px;
+                background:#1e293b;
+                border-radius:6px;
+                overflow:hidden;
+              ">
+
+                <!-- CENTER LINE -->
+                <div style="
+                  position:absolute;
+                  left:50%;
+                  top:0;
+                  bottom:0;
+                  width:1px;
+                  background:#334155;
+                "></div>
+
+                <!-- BAR -->
+                <div style="
+                  position:absolute;
+                  top:0;
+                  height:100%;
+                  ${change >= 0 ? "left:50%;" : "right:50%;"}
+                  width:${Math.min(Math.abs(change) * 4, 50)}%;
+                  background:${color};
+                  box-shadow:0 0 6px ${color};
+                  border-radius:6px;
+                  transition:width 0.4s ease;
+                "></div>
+
+              </div>
+
             </div>
           `;
         }).join("");
 
-        const avg = count > 0 ? total / count : 0;
+        const avg = total / count;
+
+        // =========================
+        // 📊 SUMMARY CARD LOGIC (ADD HERE)
+        // =========================
+
+        const summaryTotal = document.getElementById("weeklySummaryTotal");
+        const winLossEl = document.getElementById("weeklyWinLoss");
+        const marketStatus = document.getElementById("weeklyMarketStatus");
+
+        const winners = data.filter(t => (t.weekly_change_percent ?? 0) > 0).length;
+        const losers = data.filter(t => (t.weekly_change_percent ?? 0) < 0).length;
+
+        // overall %
+        summaryTotal.innerText =
+          (avg >= 0 ? "+" : "") + avg.toFixed(2) + "%";
+
+        summaryTotal.style.color =
+          avg >= 0 ? "#22c55e" : "#ef4444";
+
+        // win/loss
+        winLossEl.innerText = `${winners} / ${losers}`;
+
+        // market read
+        if (avg > 2) {
+          marketStatus.innerText = "🔥 Strong Week";
+          marketStatus.style.color = "#22c55e";
+        } else if (avg > 0) {
+          marketStatus.innerText = "🟢 Positive";
+          marketStatus.style.color = "#22c55e";
+        } else if (avg < -2) {
+          marketStatus.innerText = "🔻 Weak Week";
+          marketStatus.style.color = "#ef4444";
+        } else {
+          marketStatus.innerText = "⚖️ Flat";
+          marketStatus.style.color = "#94a3b8";
+        }
 
         weeklyTotalEl.innerText =
           (avg >= 0 ? "+" : "") + avg.toFixed(2) + "%";
 
         weeklyTotalEl.style.color =
           avg >= 0 ? "#22c55e" : "#ef4444";
+
+      } else {
+        weeklyContainer.innerHTML = `
+          <div style="color:#94a3b8; font-size:13px;">
+            No active trades this week
+          </div>
+        `;
+        weeklyTotalEl.innerText = "-";
       }
 
     });
