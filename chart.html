@@ -198,6 +198,24 @@
   background: #334155;
 }
 
+/* Force proper left/right alignment inside trade cards */
+.trade-item > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Left side (ticker + meta) */
+.trade-item > div > div:first-child {
+  text-align: left;
+}
+
+/* Right side (percent + price) */
+.trade-item > div > div:last-child {
+  text-align: right;
+}
+
 </style>
 <script>
 window.supabaseClient = supabase.createClient(
