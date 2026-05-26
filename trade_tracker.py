@@ -209,7 +209,7 @@ def run_tracker():
             trade["week_start_price"] = price
 
         # calculate weekly change
-        start_price = trade.get("week_start_price", price)
+        start_price = trade.get("week_start_price") or trade.get("entry_price") or price
 
         weekly_change = ((price - start_price) / start_price) * 100
         trade["weekly_change_percent"] = round(weekly_change, 2)
