@@ -190,7 +190,7 @@ def run_tracker():
         history_data = candle["history"]
 
         # =========================
-        # 📊 TRUE WEEKLY PERFORMANCE
+        # 📊 TRUE WEEKLY PERFORMANCE (HARD RESET FIX)
         # =========================
 
         today = datetime.now()
@@ -199,12 +199,19 @@ def run_tracker():
         monday = today - timedelta(days=weekday)
         monday_str = monday.strftime("%Y-%m-%d")
 
-        # 🔥 SET MONDAY BASELINE ONLY
+        # 🔥 FORCE FIX OLD BAD DATA (RUNS ONCE)
+        if "week_start" in trade:
+            # if stored week_start is current week BUT baseline is clearly wrong
+            if trade["week_start"] == monday_str:
+                # if weekly % is unrealistically large → reset
+                if abs(trade.get("weekly_change_percent", 0)) > 50:
+                    trade["week_start_price"] = price
+
+        # 🔥 NORMAL WEEKLY LOGIC
         if "week_start" not in trade or trade["week_start"] != monday_str:
             trade["week_start"] = monday_str
             trade["week_start_price"] = price
 
-        # 🔥 USE WEEKLY BASELINE ONLY
         start_price = trade["week_start_price"]
 
         weekly_change = ((price - start_price) / start_price) * 100
