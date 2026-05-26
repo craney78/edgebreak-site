@@ -195,7 +195,7 @@ def run_tracker():
                 history_data = candle["history"]
 
         # =========================
-        # 📊 WEEKLY PERFORMANCE TRACKING (FIXED)
+        # 📊 WEEKLY PERFORMANCE TRACKING (FINAL FIX)
         # =========================
 
         today = datetime.now()
@@ -204,8 +204,13 @@ def run_tracker():
         monday = today - timedelta(days=weekday)
         monday_str = monday.strftime("%Y-%m-%d")
 
-        # reset weekly start if new week
-        if trade.get("week_start") != monday_str:
+        # 🔥 ONLY SET ONCE PER WEEK
+        if "week_start" not in trade:
+            trade["week_start"] = monday_str
+            trade["week_start_price"] = price
+
+        # 🔥 ONLY RESET IF NEW WEEK (NOT EVERY RUN)
+        elif trade["week_start"] != monday_str:
             trade["week_start"] = monday_str
             trade["week_start_price"] = price
 
