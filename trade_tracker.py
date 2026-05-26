@@ -200,7 +200,7 @@ def run_tracker():
         monday_str = monday.strftime("%Y-%m-%d")
 
         # 🔥 SET ONLY IF IT DOES NOT EXIST
-        if "week_start" not in trade:
+        if "week_start_price" not in trade or trade["week_start_price"] == price:
             trade["week_start"] = monday_str
             trade["week_start_price"] = trade.get("entry_price", price)
 
