@@ -194,31 +194,30 @@ def run_tracker():
                 prev_price = candle["prev_price"]
                 history_data = candle["history"]
 
-        # =========================
-        # 📊 WEEKLY PERFORMANCE TRACKING (FINAL FIX)
-        # =========================
+                # =========================
+                # 📊 WEEKLY PERFORMANCE TRACKING (FINAL WORKING VERSION)
+                # =========================
 
-        today = datetime.now()
-        weekday = today.weekday()
+                today = datetime.now()
+                weekday = today.weekday()
 
-        monday = today - timedelta(days=weekday)
-        monday_str = monday.strftime("%Y-%m-%d")
+                monday = today - timedelta(days=weekday)
+                monday_str = monday.strftime("%Y-%m-%d")
 
-        # 🔥 ONLY SET ONCE PER WEEK
-        if "week_start" not in trade:
-            trade["week_start"] = monday_str
-            trade["week_start_price"] = price
+                # ONLY set once per week
+                if "week_start" not in trade:
+                    trade["week_start"] = monday_str
+                    trade["week_start_price"] = price
 
-        # 🔥 ONLY RESET IF NEW WEEK (NOT EVERY RUN)
-        elif trade["week_start"] != monday_str:
-            trade["week_start"] = monday_str
-            trade["week_start_price"] = price
+                elif trade["week_start"] != monday_str:
+                    trade["week_start"] = monday_str
+                    trade["week_start_price"] = price
 
-        # calculate weekly change
-        start_price = trade.get("week_start_price", price)
+                # calculate weekly change
+                start_price = trade.get("week_start_price", price)
 
-        weekly_change = ((price - start_price) / start_price) * 100
-        trade["weekly_change_percent"] = round(weekly_change, 2)
+                weekly_change = ((price - start_price) / start_price) * 100
+                trade["weekly_change_percent"] = round(weekly_change, 2)
 
         # =========================
         # EXACT EXIT CALL
