@@ -165,8 +165,23 @@ def run_tracker():
         entry_date = datetime.fromisoformat(entry_date_str)
         price_group = trade.get("price_group")
 
+        # =========================
+        # ✅ FIXED DATA FETCH + SETUP
+        # =========================
+
+        # increment days (ALWAYS RUN)
+        days = trade.get("days_held", 0) + 1
+
+        # ALWAYS fetch latest candle
+        candle = fetch_latest_candle(symbol)
+
+        if not candle:
+            print(f"⚠️ Skipping {symbol} (no data)")
+            active_trades.append(trade)
+            continue
+
+        # fallback price group if missing
         if not price_group:
-            # 🔥 fallback (rebuild from entry price)
             if entry < 20:
                 price_group = "SMALL"
             elif entry < 80:
@@ -174,20 +189,10 @@ def run_tracker():
             else:
                 price_group = "LARGE"
 
-            # increment days exactly like loop
-            days = trade.get("days_held", 0) + 1
-
-            candle = fetch_latest_candle(symbol)
-
-        if not candle:
-            print(f"⚠️ Skipping {symbol} (no data)")
-            active_trades.append(trade)
-            continue
-
-        price = candle["price"]
-        low_price = candle["low"]
-        prev_price = candle["prev_price"]
-        history_data = candle["history"]
+                price = candle["price"]
+                low_price = candle["low"]
+                prev_price = candle["prev_price"]
+                history_data = candle["history"]
 
         # =========================
         # 📊 WEEKLY PERFORMANCE TRACKING
