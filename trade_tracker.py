@@ -180,7 +180,44 @@ def run_tracker():
             active_trades.append(trade)
             continue
 
-        # fallback price group if missing
+        # =========================
+        # 📊 EXTRACT PRICE DATA (ALWAYS RUN)
+        # =========================
+
+        price = candle["price"]
+        low_price = candle["low"]
+        prev_price = candle["prev_price"]
+        history_data = candle["history"]
+
+        # =========================
+        # 📊 WEEKLY PERFORMANCE TRACKING (FIXED)
+        # =========================
+
+        today = datetime.now()
+        weekday = today.weekday()
+
+        monday = today - timedelta(days=weekday)
+        monday_str = monday.strftime("%Y-%m-%d")
+
+        # only set once per week
+        if "week_start" not in trade:
+            trade["week_start"] = monday_str
+            trade["week_start_price"] = price
+
+        elif trade["week_start"] != monday_str:
+            trade["week_start"] = monday_str
+            trade["week_start_price"] = price
+
+        # calculate weekly change
+        start_price = trade.get("week_start_price", price)
+
+        weekly_change = ((price - start_price) / start_price) * 100
+        trade["weekly_change_percent"] = round(weekly_change, 2)
+
+        # =========================
+        # 🧠 PRICE GROUP FALLBACK (CLEAN)
+        # =========================
+
         if not price_group:
             if entry < 20:
                 price_group = "SMALL"
@@ -188,36 +225,6 @@ def run_tracker():
                 price_group = "MID"
             else:
                 price_group = "LARGE"
-
-                price = candle["price"]
-                low_price = candle["low"]
-                prev_price = candle["prev_price"]
-                history_data = candle["history"]
-
-                # =========================
-                # 📊 WEEKLY PERFORMANCE TRACKING (FINAL WORKING VERSION)
-                # =========================
-
-                today = datetime.now()
-                weekday = today.weekday()
-
-                monday = today - timedelta(days=weekday)
-                monday_str = monday.strftime("%Y-%m-%d")
-
-                # ONLY set once per week
-                if "week_start" not in trade:
-                    trade["week_start"] = monday_str
-                    trade["week_start_price"] = price
-
-                elif trade["week_start"] != monday_str:
-                    trade["week_start"] = monday_str
-                    trade["week_start_price"] = price
-
-                # calculate weekly change
-                start_price = trade.get("week_start_price", price)
-
-                weekly_change = ((price - start_price) / start_price) * 100
-                trade["weekly_change_percent"] = round(weekly_change, 2)
 
         # =========================
         # EXACT EXIT CALL
