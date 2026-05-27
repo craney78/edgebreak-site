@@ -126,7 +126,7 @@ def run_backtest():
 
             for idx in range(100, len(data) - 2):
 
-                window = list(reversed(values[i-101:i+1]))
+                window = list(reversed(data[idx-100:idx]))
                 setup = detect_breakout_today(symbol, window)
 
                 if not setup:
