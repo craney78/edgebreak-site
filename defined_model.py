@@ -19,8 +19,8 @@ STARTING_CAPITAL = 100000
 RISK_PER_TRADE = 0.02
 
 # 🔥 DYNAMIC DATE RANGE (LAST 3 WEEKS)
+END_DATE = datetime.now()
 START_DATE = END_DATE - timedelta(days=30)
-RUN_LABEL = "last_30_days"
 
 # (optional — just for naming outputs)
 RUN_LABEL = "last_30_days"
