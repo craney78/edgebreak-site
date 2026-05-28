@@ -116,12 +116,15 @@ def process_data(data):
             values = list(reversed(values))
 
             # =========================
-            # MAIN SCAN LOOP
+            # MAIN SCAN (LIVE - TODAY ONLY)
             # =========================
             i = len(values) - 1
 
-                # 🔥 MATCH BACKTEST ORIENTATION
-            window = list(reversed(data[idx-100:idx]))
+            window = list(reversed(values[i-100:i]))
+
+            # 🔥 ADD THIS RIGHT HERE
+            if len(window) < 100:
+                continue
 
             # =========================
             # 🔥 LIQUIDITY FILTER (BACKTEST MATCH)
@@ -136,7 +139,7 @@ def process_data(data):
                 result = detect_breakout_today(symbol, window)
 
                 if not result:
-                    continue
+                    continuee
 
                 # =========================
                 # 🔥 VOLUME CONFIRMATION
