@@ -121,7 +121,7 @@ def process_data(data):
             i = len(values) - 1
 
                 # 🔥 MATCH BACKTEST ORIENTATION
-            window = list(reversed(values[i-100:i]))
+            window = list(reversed(data[idx-100:idx]))
 
             # =========================
             # 🔥 LIQUIDITY FILTER (BACKTEST MATCH)
