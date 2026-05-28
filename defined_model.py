@@ -19,11 +19,11 @@ STARTING_CAPITAL = 100000
 RISK_PER_TRADE = 0.02
 
 # 🔥 DYNAMIC DATE RANGE (LAST 3 WEEKS)
-END_DATE = datetime.now()
-START_DATE = END_DATE - timedelta(days=21)
+START_DATE = END_DATE - timedelta(days=30)
+RUN_LABEL = "last_30_days"
 
 # (optional — just for naming outputs)
-RUN_LABEL = "last_3_weeks"
+RUN_LABEL = "last_30_days"
 
 # =========================
 # BUILD NASDAQ UNIVERSE
@@ -125,6 +125,11 @@ def run_backtest():
             seen = set()
 
             for idx in range(100, len(data) - 2):
+
+                # 🔥 30 DAY FILTER
+                entry_date = data[idx]["datetime"]
+                if entry_date < START_DATE:
+                    continue
 
                 window = list(reversed(data[idx-100:idx]))
                 setup = detect_breakout_today(symbol, window)
