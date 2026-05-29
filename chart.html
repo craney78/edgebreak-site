@@ -150,6 +150,86 @@
   text-align: right;
 }
 
+/* =========================
+📊 TRADE INTEL PANEL
+========================= */
+
+.trade-intel {
+  margin-top: 30px;
+}
+
+.intel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.intel-card {
+  background: rgba(2, 6, 23, 0.6);
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.intel-meta {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.grade {
+  background: #1e293b;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.confidence.high {
+  color: #22c55e;
+}
+
+.status.fresh {
+  color: #22c55e;
+}
+
+.intel-summary {
+  font-size: 14px;
+  color: #94a3b8;
+  margin-bottom: 15px;
+}
+
+.intel-block {
+  margin-top: 15px;
+}
+
+.intel-block h4 {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #e2e8f0;
+}
+
+.intel-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 4px 0;
+  color: #94a3b8;
+}
+
+.pos {
+  color: #22c55e;
+}
+
+.neg {
+  color: #ef4444;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .intel-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 </style>
 <script>
 window.supabaseClient = supabase.createClient(
@@ -302,6 +382,74 @@ checkAccess();
 
   
 </div>
+
+</div>
+
+</div>  <!-- END OF chart-container -->
+
+</div>  <!-- END OF trading-desk-section -->
+
+
+<!-- =========================
+📊 TRADE INTELLIGENCE PANEL
+========================= -->
+<div class="section trade-intel">
+
+  <h2 style="margin-bottom:10px;">Trade Breakdown</h2>
+
+  <div class="intel-grid">
+
+    <!-- LEFT COLUMN -->
+    <div class="intel-card">
+
+      <h3 id="tradeSymbol">Loading...</h3>
+
+      <div class="intel-meta">
+        <span class="grade" id="tradeGrade">-</span>
+        <span class="confidence high">High Confidence</span>
+        <span class="status fresh">🟢 Fresh</span>
+      </div>
+
+      <p class="intel-summary" id="tradeSummary">
+        Clean breakout after multiple resistance tests with strong volume expansion and tight structure.
+      </p>
+
+      <div class="intel-block">
+        <h4>Setup Summary</h4>
+        <div class="intel-row"><span>Breakout Level</span><span>$132</span></div>
+        <div class="intel-row"><span>Risk</span><span class="neg">-5.2%</span></div>
+        <div class="intel-row"><span>Reward</span><span class="pos">+12.4%</span></div>
+        <div class="intel-row"><span>R:R</span><span>1 : 2.3</span></div>
+        <div class="intel-row"><span>Base Formation</span><span>18 days</span></div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="intel-card">
+
+      <div class="intel-block">
+        <h4>Structure</h4>
+        <div class="intel-row"><span>Trend</span><span>Higher lows</span></div>
+        <div class="intel-row"><span>Resistance</span><span>3 tests</span></div>
+        <div class="intel-row"><span>Compression</span><span>Tight range</span></div>
+      </div>
+
+      <div class="intel-block">
+        <h4>Volume</h4>
+        <div class="intel-row"><span>Breakout Volume</span><span class="pos" id="tradeVolume">-</span></div>
+        <div class="intel-row"><span>Pattern</span><span>Expansion</span></div>
+      </div>
+
+      <div class="intel-block">
+        <h4>Timing</h4>
+        <div class="intel-row"><span>Trigger</span><span>May 21</span></div>
+        <div class="intel-row"><span>Days Since</span><span>2</span></div>
+      </div>
+
+    </div>
+
+  </div>
 
 </div>
 
@@ -788,6 +936,50 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 });
 </script>
-  
+ <script>
+  const symbol = "LITE"; // temporary test
+  document.querySelector(".trade-intel h3").innerText = symbol;
+</script>
+
+<script>
+async function loadTrade() {
+
+  // =========================
+  // GET SYMBOL FROM URL
+  // =========================
+  const params = new URLSearchParams(window.location.search);
+  const symbol = params.get("symbol");
+
+  if (!symbol) return;
+
+  // =========================
+  // FETCH TRADE DATA
+  // =========================
+  const res = await fetch("active_positions.json");
+  const data = await res.json();
+
+  const trade = data.find(t => t.symbol === symbol);
+
+  if (!trade) return;
+
+  // =========================
+  // UPDATE UI
+  // =========================
+  document.getElementById("tradeSymbol").innerText = trade.symbol;
+
+  document.getElementById("tradeGrade").innerText = trade.grade;
+
+  // SIMPLE SUMMARY (can improve later)
+  document.getElementById("tradeSummary").innerText =
+    `Breakout trade with ${trade.grade} rating and strong momentum.`;
+
+  // Volume placeholder (until we add real calc)
+  document.getElementById("tradeVolume").innerText =
+    `${trade.change_percent.toFixed(2)}% move`;
+
+}
+
+loadTrade();
+</script>
 </body>
 </html>
