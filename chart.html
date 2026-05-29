@@ -936,50 +936,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 });
 </script>
- <script>
-  const symbol = "LITE"; // temporary test
-  document.querySelector(".trade-intel h3").innerText = symbol;
-</script>
 
 <script>
-async function loadTrade() {
 
-  // =========================
-  // GET SYMBOL FROM URL
-  // =========================
-  const params = new URLSearchParams(window.location.search);
-  const symbol = params.get("symbol");
-
-  if (!symbol) return;
-
-  // =========================
-  // FETCH TRADE DATA
-  // =========================
-  const res = await fetch("active_positions.json");
-  const data = await res.json();
-
-  const trade = data.find(t => t.symbol === symbol);
-
-  if (!trade) return;
-
-  // =========================
-  // UPDATE UI
-  // =========================
-  document.getElementById("tradeSymbol").innerText = trade.symbol;
-
-  document.getElementById("tradeGrade").innerText = trade.grade;
-
-  // SIMPLE SUMMARY (can improve later)
-  document.getElementById("tradeSummary").innerText =
-    `Breakout trade with ${trade.grade} rating and strong momentum.`;
-
-  // Volume placeholder (until we add real calc)
-  document.getElementById("tradeVolume").innerText =
-    `${trade.change_percent.toFixed(2)}% move`;
-
+// 🔥 UPDATE PANEL
+if (symbol) {
+  document.getElementById("tradeSymbol").innerText = symbol;
 }
 
-loadTrade();
+// optional (if you want to use entry later)
+console.log("Entry:", entry);
 </script>
+
 </body>
 </html>
