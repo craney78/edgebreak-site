@@ -217,7 +217,11 @@ def run_scanner():
 
         batch = symbols[i:i + BATCH_SIZE]
 
+        # ✅ FIXED: fetch data inside loop
         data = fetch_batch(batch)
+
+        if not data:
+            continue
 
         for symbol, content in data.items():
 
@@ -243,7 +247,7 @@ def run_scanner():
             if setup:
 
                 # =========================
-                # 📊 FORWARD PERFORMANCE
+                # 📊 FORWARD PERFORMANCE (6 MONTHS)
                 # =========================
                 closes_forward = [float(v["close"]) for v in forward_values]
 
@@ -312,3 +316,31 @@ def run_scanner():
 
     except Exception as e:
         print(f"❌ Save failed: {e}")
+
+# =========================
+# ▶ RUN
+# =========================
+if __name__ == "__main__":
+
+    start_time = time.time()
+
+    print("===================================")
+    print("🧠 SMART MONEY BACKTEST STARTING")
+    print("===================================\n")
+
+    try:
+        run_scanner()
+
+    except KeyboardInterrupt:
+        print("\n⚠️ Stopped manually")
+
+    except Exception as e:
+        print(f"\n❌ Fatal error: {e}")
+
+    end_time = time.time()
+    runtime = round(end_time - start_time, 2)
+
+    print("\n===================================")
+    print(f"⏱ Runtime: {runtime} seconds")
+    print("✅ Scan complete")
+    print("===================================")        
