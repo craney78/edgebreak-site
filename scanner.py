@@ -386,6 +386,14 @@ def append_to_active_positions(new_signals):
             "days_held": 0
         }
 
+        entry = trade["entry_price"]
+
+        stop_loss = entry * 0.93
+        target_price = entry * 1.15
+
+        trade["stop_loss"] = round(stop_loss, 2)
+        trade["target_price"] = round(target_price, 2)
+
         existing.append(trade)
         added += 1
 
