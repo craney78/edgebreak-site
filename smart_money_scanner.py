@@ -1,5 +1,5 @@
 # =========================
-# 🧠 SMART MONEY SCANNER (BASIC)
+# 🧠 SMART MONEY SCANNER (BACKTEST READY)
 # =========================
 
 import requests
@@ -7,6 +7,7 @@ import json
 import time
 import pandas as pd
 import ssl
+from datetime import datetime, timedelta
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -15,6 +16,21 @@ API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
 BATCH_SIZE = 10
 SLEEP_TIME = 2
 SCAN_LIMIT = 500
+
+# =========================
+# ⏪ BACKTEST SETTINGS
+# =========================
+
+TEST_DAYS_AGO = 180   # how far back to scan (6 months)
+MIN_LOOKBACK = 60     # data needed for smart money detection
+
+# =========================
+# 📊 OUTPUT CONTROL
+# =========================
+
+TOP_N = 10            # how many to show in final list
+SAVE_FULL = True      # save full ranked list
+SAVE_TOP = True       # save top N
 
 
 # =========================
@@ -83,149 +99,115 @@ def fetch_batch(symbols):
 
 
 # =========================
-# 🧠 SMART MONEY LOGIC (V3)
+# 🧠 PROCESS + BACKTEST + RANK
 # =========================
-def detect_smart_money(symbol, values):
+results = []
 
-    if len(values) < 60:
-        return None
+for symbol, content in data.items():
 
-    try:
-        closes = [float(v["close"]) for v in values]
-        volumes = [float(v["volume"]) for v in values]
-        lows = [float(v["low"]) for v in values]
-        highs = [float(v["high"]) for v in values]
+    values = content.get("values")
 
-        recent_closes = closes[-20:]
-        recent_volumes = volumes[-20:]
+    if not values or len(values) < TEST_DAYS_AGO + MIN_LOOKBACK:
+        continue
 
-        # =========================
-        # 📊 RANGE COMPRESSION
-        # =========================
-        recent_range = max(recent_closes) - min(recent_closes)
-        prev_range = max(closes[-40:-20]) - min(closes[-40:-20])
+    # oldest → newest
+    values = list(reversed(values))
 
-        tightening = recent_range < prev_range
+    # =========================
+    # ⏪ HISTORICAL SPLIT
+    # =========================
+    historical_values = values[:-TEST_DAYS_AGO]
+    forward_values = values[-TEST_DAYS_AGO:]
 
-        range_percent = ((max(recent_closes) - min(recent_closes)) / min(recent_closes)) * 100
+    # =========================
+    # 🧠 DETECT SMART MONEY (PAST)
+    # =========================
+    setup = detect_smart_money(symbol, historical_values)
 
-        # =========================
-        # 📊 VOLATILITY CONTRACTION (NEW 🔥)
-        # =========================
-        ranges = [highs[i] - lows[i] for i in range(-20, 0)]
-
-        avg_range_recent = sum(ranges[-5:]) / 5
-        avg_range_earlier = sum(ranges[:5]) / 5
-
-        volatility_contracting = avg_range_recent < avg_range_earlier
+    if setup:
 
         # =========================
-        # 📊 VOLUME ANALYSIS
+        # 📊 FORWARD PERFORMANCE (6 MONTHS)
         # =========================
-        avg_vol_50 = sum(volumes[-50:]) / 50
-        avg_vol_20 = sum(recent_volumes) / 20
+        closes_forward = [float(v["close"]) for v in forward_values]
 
-        volume_ratio = avg_vol_20 / avg_vol_50
+        entry_price = closes_forward[0]
 
-        # 🔥 volume bias
-        up_vol = 0
-        down_vol = 0
+        max_price = max(closes_forward)
+        min_price = min(closes_forward)
 
-        for i in range(-20, 0):
-            if closes[i] > closes[i - 1]:
-                up_vol += volumes[i]
-            else:
-                down_vol += volumes[i]
+        gain_pct = ((max_price - entry_price) / entry_price) * 100
+        drop_pct = ((min_price - entry_price) / entry_price) * 100
 
-        volume_bias = up_vol > down_vol
+        setup["forward_gain_6m"] = round(gain_pct, 2)
+        setup["forward_drop_6m"] = round(drop_pct, 2)
 
-        # =========================
-        # 📊 ABSORPTION (NEW 🔥)
-        # =========================
-        absorption = False
-
-        for i in range(-10, 0):
-            if volumes[i] > avg_vol_50 * 1.5 and closes[i] >= closes[i - 1]:
-                absorption = True
-                break
-
-        # =========================
-        # 📊 STRUCTURE (HIGHER LOWS)
-        # =========================
-        recent_lows = lows[-10:]
-
-        higher_lows = all(
-            recent_lows[i] >= recent_lows[i - 1]
-            for i in range(1, len(recent_lows))
-        )
-
-        # =========================
-        # 📊 POSITION IN BASE
-        # =========================
-        resistance = max(recent_closes)
-        current_price = closes[-1]
-
-        distance_to_high = ((resistance - current_price) / resistance) * 100
-        near_high = distance_to_high < 5
-
-        # =========================
-        # 📊 TREND FILTER (NEW 🔥)
-        # =========================
-        avg_50_price = sum(closes[-50:]) / 50
-        trend = current_price > avg_50_price
-
-        # =========================
-        # 🧠 WEIGHTED SCORING SYSTEM
-        # =========================
-        score = 0
-
-        if tightening:
-            score += 1
-        if volatility_contracting:
-            score += 2   # 🔥 very important
-        if volume_ratio > 1.2:
-            score += 1
-        if volume_bias:
-            score += 1
-        if absorption:
-            score += 2   # 🔥 strong signal
-        if higher_lows:
-            score += 1
-        if near_high:
-            score += 1
-        if trend:
-            score += 1
-
-        # =========================
-        # 🎯 FINAL FILTER
-        # =========================
-        if score >= 5 and range_percent < 25:
-            return {
-                "symbol": symbol,
-                "type": "SMART_MONEY",
-                "price": round(current_price, 2),
-                "range_percent": round(range_percent, 2),
-                "volume_ratio": round(volume_ratio, 2),
-                "distance_to_high": round(distance_to_high, 2),
-                "score": score,
-                "tightening": tightening,
-                "volatility_contracting": volatility_contracting,
-                "absorption": absorption,
-                "trend": trend
-            }
-
-    except Exception as e:
-        print(f"{symbol} error: {e}")
-
-    return None
+        results.append(setup)
 
 
 # =========================
-# 🚀 MAIN SCAN LOOP
+# 🧠 SORT BY QUALITY
+# =========================
+results = sorted(
+    results,
+    key=lambda x: (
+        x["score"],
+        -x["distance_to_high"],
+        x["volume_ratio"]
+    ),
+    reverse=True
+)
+
+
+# =========================
+# 🎯 ADD RANK + GRADE
+# =========================
+for i, r in enumerate(results):
+
+    r["rank"] = i + 1
+
+    # 🔥 grade system (based on your B+ discovery)
+    if r["score"] >= 7:
+        r["grade"] = "A"
+    elif r["score"] == 6:
+        r["grade"] = "B+"
+    elif r["score"] == 5:
+        r["grade"] = "B"
+    else:
+        r["grade"] = "C"
+
+
+# =========================
+# 🔥 TAKE TOP 30 (FOR ANALYSIS)
+# =========================
+top_results = results[:30]
+
+
+# =========================
+# 💾 SAVE FILES
+# =========================
+if SAVE_FULL:
+    with open("smart_money_full.json", "w") as f:
+        json.dump(results, f, indent=2)
+
+if SAVE_TOP:
+    with open("smart_money_top30.json", "w") as f:
+        json.dump(top_results, f, indent=2)
+
+
+# =========================
+# 📊 SUMMARY OUTPUT
+# =========================
+print(f"\n🧠 Total setups found: {len(results)}")
+print(f"🔥 Top 30 saved for analysis")
+
+
+# =========================
+# 🚀 MAIN SCAN LOOP (BACKTEST VERSION)
 # =========================
 def run_scanner():
 
-    print("🧠 RUNNING SMART MONEY SCANNER...\n")
+    print("🧠 RUNNING SMART MONEY BACKTEST...\n")
 
     symbols = build_nasdaq_universe()
 
@@ -241,35 +223,92 @@ def run_scanner():
 
             values = content.get("values")
 
-            if not values or len(values) < 50:
+            if not values or len(values) < TEST_DAYS_AGO + MIN_LOOKBACK:
                 continue
 
             # oldest → newest
             values = list(reversed(values))
 
-            setup = detect_smart_money(symbol, values)
+            # =========================
+            # ⏪ HISTORICAL SPLIT
+            # =========================
+            historical_values = values[:-TEST_DAYS_AGO]
+            forward_values = values[-TEST_DAYS_AGO:]
+
+            # =========================
+            # 🧠 DETECT SMART MONEY (PAST)
+            # =========================
+            setup = detect_smart_money(symbol, historical_values)
 
             if setup:
+
+                # =========================
+                # 📊 FORWARD PERFORMANCE
+                # =========================
+                closes_forward = [float(v["close"]) for v in forward_values]
+
+                entry_price = closes_forward[0]
+
+                max_price = max(closes_forward)
+                min_price = min(closes_forward)
+
+                gain_pct = ((max_price - entry_price) / entry_price) * 100
+                drop_pct = ((min_price - entry_price) / entry_price) * 100
+
+                setup["forward_gain_6m"] = round(gain_pct, 2)
+                setup["forward_drop_6m"] = round(drop_pct, 2)
+
                 results.append(setup)
 
         print(f"Batch {i // BATCH_SIZE + 1} processed...")
         time.sleep(SLEEP_TIME)
 
     # =========================
-    # 💾 SAVE RESULTS
+    # 🧠 SORT RESULTS
+    # =========================
+    results = sorted(
+        results,
+        key=lambda x: (
+            x["score"],
+            -x["distance_to_high"],
+            x["volume_ratio"]
+        ),
+        reverse=True
+    )
+
+    # =========================
+    # 🎯 ADD RANK + GRADE
+    # =========================
+    for i, r in enumerate(results):
+
+        r["rank"] = i + 1
+
+        if r["score"] >= 7:
+            r["grade"] = "A"
+        elif r["score"] == 6:
+            r["grade"] = "B+"
+        elif r["score"] == 5:
+            r["grade"] = "B"
+        else:
+            r["grade"] = "C"
+
+    # =========================
+    # 🔥 TAKE TOP 30
+    # =========================
+    top_results = results[:30]
+
+    # =========================
+    # 💾 SAVE FILES
     # =========================
     try:
-        with open("smart_money.json", "w") as f:
+        with open("smart_money_full.json", "w") as f:
             json.dump(results, f, indent=2)
 
-        print(f"\n🧠 Found {len(results)} smart money setups")
+        with open("smart_money_top30.json", "w") as f:
+            json.dump(top_results, f, indent=2)
+
+        print(f"\n🧠 Total setups found: {len(results)}")
+        print(f"🔥 Top 30 saved for analysis")
 
     except Exception as e:
         print(f"❌ Save failed: {e}")
-
-
-# =========================
-# ▶ RUN
-# =========================
-if __name__ == "__main__":
-    run_scanner()
