@@ -97,7 +97,139 @@ def fetch_batch(symbols):
         print(f"Fetch error: {e}")
         return {}
 
-    
+# =========================
+# 🧠 SMART MONEY LOGIC (V3)
+# =========================
+def detect_smart_money(symbol, values):
+
+    if len(values) < 60:
+        return None
+
+    try:
+        closes = [float(v["close"]) for v in values]
+        volumes = [float(v["volume"]) for v in values]
+        lows = [float(v["low"]) for v in values]
+        highs = [float(v["high"]) for v in values]
+
+        recent_closes = closes[-20:]
+        recent_volumes = volumes[-20:]
+
+        # =========================
+        # 📊 RANGE COMPRESSION
+        # =========================
+        recent_range = max(recent_closes) - min(recent_closes)
+        prev_range = max(closes[-40:-20]) - min(closes[-40:-20])
+
+        tightening = recent_range < prev_range
+
+        range_percent = ((max(recent_closes) - min(recent_closes)) / min(recent_closes)) * 100
+
+        # =========================
+        # 📊 VOLATILITY CONTRACTION
+        # =========================
+        ranges = [highs[i] - lows[i] for i in range(-20, 0)]
+
+        avg_range_recent = sum(ranges[-5:]) / 5
+        avg_range_earlier = sum(ranges[:5]) / 5
+
+        volatility_contracting = avg_range_recent < avg_range_earlier
+
+        # =========================
+        # 📊 VOLUME ANALYSIS
+        # =========================
+        avg_vol_50 = sum(volumes[-50:]) / 50
+        avg_vol_20 = sum(recent_volumes) / 20
+
+        volume_ratio = avg_vol_20 / avg_vol_50
+
+        # volume bias
+        up_vol = 0
+        down_vol = 0
+
+        for i in range(-20, 0):
+            if closes[i] > closes[i - 1]:
+                up_vol += volumes[i]
+            else:
+                down_vol += volumes[i]
+
+        volume_bias = up_vol > down_vol
+
+        # =========================
+        # 📊 ABSORPTION
+        # =========================
+        absorption = False
+
+        for i in range(-10, 0):
+            if volumes[i] > avg_vol_50 * 1.5 and closes[i] >= closes[i - 1]:
+                absorption = True
+                break
+
+        # =========================
+        # 📊 STRUCTURE
+        # =========================
+        recent_lows = lows[-10:]
+
+        higher_lows = all(
+            recent_lows[i] >= recent_lows[i - 1]
+            for i in range(1, len(recent_lows))
+        )
+
+        # =========================
+        # 📊 POSITION
+        # =========================
+        resistance = max(recent_closes)
+        current_price = closes[-1]
+
+        distance_to_high = ((resistance - current_price) / resistance) * 100
+        near_high = distance_to_high < 5
+
+        # =========================
+        # 📊 TREND
+        # =========================
+        avg_50_price = sum(closes[-50:]) / 50
+        trend = current_price > avg_50_price
+
+        # =========================
+        # 🧠 SCORE
+        # =========================
+        score = 0
+
+        if tightening:
+            score += 1
+        if volatility_contracting:
+            score += 2
+        if volume_ratio > 1.2:
+            score += 1
+        if volume_bias:
+            score += 1
+        if absorption:
+            score += 2
+        if higher_lows:
+            score += 1
+        if near_high:
+            score += 1
+        if trend:
+            score += 1
+
+        # =========================
+        # 🎯 FINAL FILTER
+        # =========================
+        if score >= 5 and range_percent < 25:
+            return {
+                "symbol": symbol,
+                "type": "SMART_MONEY",
+                "price": round(current_price, 2),
+                "range_percent": round(range_percent, 2),
+                "volume_ratio": round(volume_ratio, 2),
+                "distance_to_high": round(distance_to_high, 2),
+                "score": score
+            }
+
+    except Exception as e:
+        print(f"{symbol} error: {e}")
+
+    return None
+        
 # =========================
 # 🚀 MAIN SCAN LOOP (BACKTEST VERSION)
 # =========================
