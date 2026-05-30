@@ -748,6 +748,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
         el.innerHTML = `<h3>${title}</h3>` + trades.map(t => {
         const change = t.change_percent ?? 0;
+        const entry = parseFloat(t.entry_price || 0);
+        const current = parseFloat(t.current_price || 0);
+
+        let distance = 0;
+        if (entry > 0) {
+          distance = ((current - entry) / entry) * 100;
+        }
+
+        let entryState = "";
+        let entryColor = "";
+        let reEntryText = "";
+
+        // 🔥 ENTRY STATE LOGIC (UPDATED)
+        if (distance < 0) {
+          entryState = "🔻 Failed Breakout";
+          entryColor = "#ef4444";
+          reEntryText = "Below entry — caution";
+        }
+        else if (distance < 3) {
+          entryState = "🟢 Fresh";
+          entryColor = "#22c55e";
+          reEntryText = "Enter on breakout";
+        }
+        else if (distance < 10) {
+          entryState = "🟡 Pullback";
+          entryColor = "#f59e0b";
+          reEntryText = `Watch $${entry.toFixed(2)}`;
+        }
+        else {
+          entryState = "🔴 Extended";
+          entryColor = "#ef4444";
+          reEntryText = "Wait for pullback";
+        }
+
+        let moveStage = "";
+
+        if (distance < 5) {
+          moveStage = "Early";
+        }
+        else if (distance < 20) {
+          moveStage = "Developing";
+        }
+        else {
+          moveStage = "Extended Move";
+        }
         const color = change >= 0 ? "#22c55e" : "#ef4444";
 
         return `
@@ -768,6 +813,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
             <div style="font-size:13px; color:#94a3b8;">
               Entry: $${t.entry_price ?? "-"} | Now: $${t.current_price ?? "-"}
+            </div>
+
+            <div style="margin-top:6px; font-size:13px;">
+
+              <div style="
+                display:inline-block;
+                background:${entryColor}20;
+                color:${entryColor};
+                padding:4px 8px;
+                border-radius:6px;
+                font-weight:600;
+                font-size:12px;
+                margin-bottom:4px;
+              ">
+                ${entryState}
+              </div>
+
+              <div style="color:#94a3b8;">
+                ${distance >= 0 ? "+" : ""}${distance.toFixed(2)}% from entry
+              </div>
+
+              <div style="color:#64748b; font-size:12px;">
+                Re-entry: ${reEntryText}
+              </div>
+              
+              <div style="color:#94a3b8; font-size:12px;">
+                Stage: ${moveStage}
+              </div>
             </div>
 
             <div style="font-size:12px; color:#64748b;">
