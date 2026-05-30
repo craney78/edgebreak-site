@@ -416,10 +416,10 @@ checkAccess();
 
       <div class="intel-block">
         <h4>Setup Summary</h4>
-        <div class="intel-row"><span>Breakout Level</span><span>$132</span></div>
-        <div class="intel-row"><span>Risk</span><span class="neg">-5.2%</span></div>
-        <div class="intel-row"><span>Reward</span><span class="pos">+12.4%</span></div>
-        <div class="intel-row"><span>R:R</span><span>1 : 2.3</span></div>
+        <div class="intel-row"><span>Breakout Level</span><span id="breakoutLevel">-</span></div>
+        <div class="intel-row"><span>Risk</span><span class="neg" id="riskValue">-</span></div>
+        <div class="intel-row"><span>Reward</span><span class="pos" id="rewardValue">-</span></div>
+        <div class="intel-row"><span>R:R</span><span id="rrValue">-</span></div>
         <div class="intel-row"><span>Base Formation</span><span>18 days</span></div>
       </div>
 
@@ -944,8 +944,25 @@ if (symbol) {
   document.getElementById("tradeSymbol").innerText = symbol;
 }
 
-// optional (if you want to use entry later)
-console.log("Entry:", entry);
+// 🚀 REAL MATH (THIS IS WHAT YOU WERE MISSING)
+if (entry) {
+
+  entry = parseFloat(entry);
+
+  // breakout level = entry
+  document.getElementById("breakoutLevel").innerText = `$${entry.toFixed(2)}`;
+
+  // simple model (we refine later)
+  const risk = -7;
+  const reward = 15;
+
+  document.getElementById("riskValue").innerText = `${risk}%`;
+  document.getElementById("rewardValue").innerText = `+${reward}%`;
+
+  const rr = (reward / Math.abs(risk)).toFixed(2);
+  document.getElementById("rrValue").innerText = `1 : ${rr}`;
+}
+
 </script>
 
 </body>
