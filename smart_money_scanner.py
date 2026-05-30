@@ -98,20 +98,6 @@ def fetch_batch(symbols):
         return {}
 
 
-# =========================
-# 🧠 PROCESS + BACKTEST + RANK
-# =========================
-results = []
-
-for symbol, content in data.items():
-
-    values = content.get("values")
-
-    if not values or len(values) < TEST_DAYS_AGO + MIN_LOOKBACK:
-        continue
-
-    # oldest → newest
-    values = list(reversed(values))
 
     # =========================
     # ⏪ HISTORICAL SPLIT
