@@ -129,23 +129,55 @@ def process_data(data):
             # =========================
             # 🔥 LIQUIDITY FILTER (BACKTEST MATCH)
             # =========================
-            avg_volume = sum(float(d["volume"]) for d in window[1:21]) / 20
-            if avg_volume < 500000:
+            try:
+                volumes = [
+                    float(d["volume"])
+                    for d in window[1:21]
+                    if d.get("volume")
+                ]
+
+                if len(volumes) < 20:
+                    continue
+
+                avg_volume = sum(volumes) / len(volumes)
+
+                if avg_volume < 500000:
+                    continue
+
+            except Exception:
                 continue
 
-                # =========================
-                # 🎯 BREAKOUT LOGIC
-                # =========================
+            # =========================
+            # 🎯 BREAKOUT LOGIC
+            # =========================
+            try:
                 result = detect_breakout_today(symbol, window)
 
                 if not result:
-                    continuee
+                    continue
 
-                # =========================
-                # 🔥 VOLUME CONFIRMATION
-                # =========================
-                recent_volumes = [float(d["volume"]) for d in window[1:21]]
+            except Exception as e:
+                print(f"{symbol} breakout error: {e}")
+                continue
+
+            # =========================
+            # 🔥 VOLUME CONFIRMATION
+            # =========================
+            try:
+                recent_volumes = [
+                    float(d["volume"])
+                    for d in window[1:21]
+                    if d.get("volume")
+                ]
+
+                if len(recent_volumes) < 20:
+                    continue
+
                 avg_vol = sum(recent_volumes) / len(recent_volumes)
+
+                if avg_vol <= 0:
+                    continue
+
                 current_vol = float(window[0]["volume"])
 
                 volume_ratio = current_vol / avg_vol
@@ -153,9 +185,15 @@ def process_data(data):
                 if volume_ratio < 1.3:
                     continue
 
+                except Exception:
+                    continue
+
                 # =========================
                 # 💰 PRICE GROUP
                 # =========================
+                if not window[0].get("close"):
+                    continue
+
                 current_price = float(window[0]["close"])
 
                 if current_price < 20:
@@ -193,9 +231,12 @@ def process_data(data):
 
                 recent_lows = [float(d["low"]) for d in history[:5]]
 
+                if len(history) < 5:
+                    continue
+
                 higher_lows = sum([
-                    recent_lows[0] > recent_lows[1],
-                    recent_lows[1] > recent_lows[2]
+                    recent_lows[0] >= recent_lows[1],
+                    recent_lows[1] >= recent_lows[2]
                 ])
 
                 if higher_lows < 2:
@@ -204,6 +245,9 @@ def process_data(data):
                 # =========================
                 # 🧱 RESISTANCE FILTER (MATCH BACKTEST)
                 # =========================
+                if len(history) < 80:
+                    continue
+
                 resistance = max(float(d["high"]) for d in history[:80])
 
                 touches = sum(
