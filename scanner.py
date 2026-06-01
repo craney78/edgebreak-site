@@ -188,114 +188,114 @@ def process_data(data):
             except Exception:
                 continue
 
-                # =========================
-                # 💰 PRICE GROUP
-                # =========================
-                if not window[0].get("close"):
+            # =========================
+            # 💰 PRICE GROUP
+            # =========================
+            if not window[0].get("close"):
+                continue
+
+            current_price = float(window[0]["close"])
+
+            if current_price < 20:
+                price_group = "SMALL"
+            elif current_price < 80:
+                price_group = "MID"
+            else:
+                price_group = "LARGE"
+
+            # =========================
+            # 🔵 LARGE CAP TREND FILTER
+            # =========================
+            if price_group == "LARGE":
+                sma_long = sum(float(x["close"]) for x in window[1:71]) / 70
+
+                if current_price < sma_long:
                     continue
 
-                current_price = float(window[0]["close"])
+            # =========================
+            # 🎯 GRADE FILTER
+            # =========================
+            grade = result["grade"]
 
-                if current_price < 20:
-                    price_group = "SMALL"
-                elif current_price < 80:
-                    price_group = "MID"
-                else:
-                    price_group = "LARGE"
+            if price_group == "SMALL" and grade != "B+":
+                continue
+            if price_group == "MID" and grade != "B":
+                continue
+            if price_group == "LARGE" and grade not in ["B+", "A+"]:
+                continue
 
-                # =========================
-                # 🔵 LARGE CAP TREND FILTER
-                # =========================
-                if price_group == "LARGE":
-                    sma_long = sum(float(x["close"]) for x in window[1:71]) / 70
+            # =========================
+            # 🧱 STRUCTURE FILTER (MATCH BACKTEST)
+            # =========================
+            history = window[1:]
 
-                    if current_price < sma_long:
-                        continue
+            recent_lows = [float(d["low"]) for d in history[:5]]
 
-                # =========================
-                # 🎯 GRADE FILTER
-                # =========================
-                grade = result["grade"]
+            if len(history) < 5:
+                continue
 
-                if price_group == "SMALL" and grade != "B+":
-                    continue
-                if price_group == "MID" and grade != "B":
-                    continue
-                if price_group == "LARGE" and grade not in ["B+", "A+"]:
-                    continue
+            higher_lows = sum([
+                recent_lows[0] > recent_lows[1],
+                recent_lows[1] > recent_lows[2]
+            ])
 
-                # =========================
-                # 🧱 STRUCTURE FILTER (MATCH BACKTEST)
-                # =========================
-                history = window[1:]
+            if higher_lows < 2:
+                continue
 
-                recent_lows = [float(d["low"]) for d in history[:5]]
+            # =========================
+            # 🧱 RESISTANCE FILTER (MATCH BACKTEST)
+            # =========================
+            if len(history) < 80:
+                continue
 
-                if len(history) < 5:
-                    continue
+            resistance = max(float(d["high"]) for d in history[:80])
 
-                higher_lows = sum([
-                    recent_lows[0] >= recent_lows[1],
-                    recent_lows[1] >= recent_lows[2]
-                ])
+            touches = sum(
+                1 for d in history[:80]
+                if abs(float(d["high"]) - resistance) / resistance < 0.015
+            )
 
-                if higher_lows < 2:
-                    continue
+            if touches < 2:
+                continue
 
-                # =========================
-                # 🧱 RESISTANCE FILTER (MATCH BACKTEST)
-                # =========================
-                if len(history) < 80:
-                    continue
+            # =========================
+            # 🚫 DUPLICATE CHECK
+            # =========================
+            key = symbol
+            if key in seen:
+                continue
+            seen.add(key)
 
-                resistance = max(float(d["high"]) for d in history[:80])
+            # =========================
+            # ✅ FINAL SIGNAL
+            # =========================
+            print(
+                f"{result['symbol']} | {grade} | "
+                f"Score {result['score']} | "
+                f"Break {result['breakout_strength']}%"
+            )
 
-                touches = sum(
-                    1 for d in history[:80]
-                    if abs(float(d["high"]) - resistance) / resistance < 0.015
-                )
+            signals.append({
+                "symbol": result["symbol"],
+                "date": window[0]["datetime"],
+                "price": current_price,
+                "grade": grade,
+                "score": result["score"],
+                "breakout_strength": result["breakout_strength"],
+                "price_group": price_group,
+                "volume_ratio": round(volume_ratio, 2),
+                "resistance": resistance,
 
-                if touches < 2:
-                    continue
+                # ✅ ADD THESE (PREVENT CRASHES)
+                "setup_type": result.get("setup_type", "breakout"),
+                "insight": result.get("insight", "Breakout with volume"),
+                "day1_return": 0,
+                "day2_return": 0,
+                "result": "OPEN"
+            })
 
-                # =========================
-                # 🚫 DUPLICATE CHECK
-                # =========================
-                key = symbol
-                if key in seen:
-                    continue
-                seen.add(key)
-
-                # =========================
-                # ✅ FINAL SIGNAL
-                # =========================
-                print(
-                    f"{result['symbol']} | {grade} | "
-                    f"Score {result['score']} | "
-                    f"Break {result['breakout_strength']}%"
-                )
-
-                signals.append({
-                    "symbol": result["symbol"],
-                    "date": window[0]["datetime"],
-                    "price": current_price,
-                    "grade": grade,
-                    "score": result["score"],
-                    "breakout_strength": result["breakout_strength"],
-                    "price_group": price_group,
-                    "volume_ratio": round(volume_ratio, 2),
-                    "resistance": resistance,
-
-                    # ✅ ADD THESE (PREVENT CRASHES)
-                    "setup_type": result.get("setup_type", "breakout"),
-                    "insight": result.get("insight", "Breakout with volume"),
-                    "day1_return": 0,
-                    "day2_return": 0,
-                    "result": "OPEN"
-                })
-
-        except Exception as e:
-            print(f"{symbol} error: {e}")
+    except Exception as e:
+        print(f"{symbol} error: {e}")
 
     # =========================
     # 🔁 REMOVE DUPLICATES (KEEP BEST PER SYMBOL)
