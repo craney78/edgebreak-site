@@ -15,13 +15,13 @@ API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
 
 BATCH_SIZE = 10
 SLEEP_TIME = 2
-SCAN_LIMIT = 500
+SCAN_LIMIT = 2500
 
 # =========================
 # ⏪ BACKTEST SETTINGS
 # =========================
 
-TEST_DAYS_AGO = 180   # how far back to scan (6 months)
+TEST_DAYS_AGO = 60   # how far back to scan (2 months)
 MIN_LOOKBACK = 60     # data needed for smart money detection
 
 # =========================
@@ -229,7 +229,7 @@ def detect_smart_money(symbol, values):
         print(f"{symbol} error: {e}")
 
     return None
-        
+
 # =========================
 # 🚀 MAIN SCAN LOOP (BACKTEST VERSION)
 # =========================
