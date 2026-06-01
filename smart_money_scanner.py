@@ -98,7 +98,7 @@ def fetch_batch(symbols):
         return {}
 
 # =========================
-# 🧠 SMART MONEY LOGIC (V3)
+# 🧠 SMART MONEY LOGIC (STRICT V4)
 # =========================
 def detect_smart_money(symbol, values):
 
@@ -111,8 +111,38 @@ def detect_smart_money(symbol, values):
         lows = [float(v["low"]) for v in values]
         highs = [float(v["high"]) for v in values]
 
+        current_price = closes[-1]
+
+        # =========================
+        # 🚫 HARD FILTERS (QUALITY FIRST)
+        # =========================
+
+        # ❌ Remove penny / junk stocks
+        if current_price < 5:
+            return None
+
+        # ❌ Require real volume participation
+        avg_vol_50 = sum(volumes[-50:]) / 50
+        avg_vol_20 = sum(volumes[-20:]) / 20
+        volume_ratio = avg_vol_20 / avg_vol_50
+
+        if volume_ratio <= 1.2:
+            return None
+
+        # =========================
+        # 📊 RANGE + STRUCTURE
+        # =========================
         recent_closes = closes[-20:]
-        recent_volumes = volumes[-20:]
+
+        range_percent = ((max(recent_closes) - min(recent_closes)) / min(recent_closes)) * 100
+
+        # ❌ Remove dead flat stocks
+        if range_percent < 3:
+            return None
+
+        # ❌ Remove loose messy bases
+        if range_percent > 15:
+            return None
 
         # =========================
         # 📊 RANGE COMPRESSION
@@ -121,8 +151,6 @@ def detect_smart_money(symbol, values):
         prev_range = max(closes[-40:-20]) - min(closes[-40:-20])
 
         tightening = recent_range < prev_range
-
-        range_percent = ((max(recent_closes) - min(recent_closes)) / min(recent_closes)) * 100
 
         # =========================
         # 📊 VOLATILITY CONTRACTION
@@ -135,14 +163,8 @@ def detect_smart_money(symbol, values):
         volatility_contracting = avg_range_recent < avg_range_earlier
 
         # =========================
-        # 📊 VOLUME ANALYSIS
+        # 📊 VOLUME BEHAVIOUR
         # =========================
-        avg_vol_50 = sum(volumes[-50:]) / 50
-        avg_vol_20 = sum(recent_volumes) / 20
-
-        volume_ratio = avg_vol_20 / avg_vol_50
-
-        # volume bias
         up_vol = 0
         down_vol = 0
 
@@ -165,7 +187,7 @@ def detect_smart_money(symbol, values):
                 break
 
         # =========================
-        # 📊 STRUCTURE
+        # 📊 STRUCTURE (HIGHER LOWS)
         # =========================
         recent_lows = lows[-10:]
 
@@ -175,19 +197,22 @@ def detect_smart_money(symbol, values):
         )
 
         # =========================
-        # 📊 POSITION
+        # 📊 POSITION IN BASE
         # =========================
         resistance = max(recent_closes)
-        current_price = closes[-1]
 
         distance_to_high = ((resistance - current_price) / resistance) * 100
         near_high = distance_to_high < 5
 
         # =========================
-        # 📊 TREND
+        # 📊 TREND FILTER (CRITICAL)
         # =========================
         avg_50_price = sum(closes[-50:]) / 50
         trend = current_price > avg_50_price
+
+        # ❌ Must be in early uptrend
+        if not trend:
+            return None
 
         # =========================
         # 🧠 SCORE
@@ -198,8 +223,6 @@ def detect_smart_money(symbol, values):
             score += 1
         if volatility_contracting:
             score += 2
-        if volume_ratio > 1.2:
-            score += 1
         if volume_bias:
             score += 1
         if absorption:
@@ -208,13 +231,11 @@ def detect_smart_money(symbol, values):
             score += 1
         if near_high:
             score += 1
-        if trend:
-            score += 1
 
         # =========================
-        # 🎯 FINAL FILTER
+        # 🎯 FINAL FILTER (STRICT)
         # =========================
-        if score >= 5 and range_percent < 25:
+        if score >= 5:
             return {
                 "symbol": symbol,
                 "type": "SMART_MONEY",
