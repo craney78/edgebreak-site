@@ -18,11 +18,24 @@ SLEEP_TIME = 2
 SCAN_LIMIT = 2500
 
 # =========================
-# ⏪ BACKTEST SETTINGS
+# ⏪ BACKTEST SETTINGS (MULTI-WEEK)
 # =========================
 
-TEST_DAYS_AGO = 60   # how far back to scan (2 months)
-MIN_LOOKBACK = 60     # data needed for smart money detection
+MIN_LOOKBACK = 60   # data needed for smart money detection
+
+
+# =========================
+# 📅 GET PAST WEDNESDAYS
+# =========================
+def get_past_wednesdays(weeks=12):
+    dates = []
+    today = datetime.today()
+
+    for i in range(1, weeks + 1):
+        d = today - timedelta(days=i * 7)
+        dates.append(d)
+
+    return dates
 
 # =========================
 # 📊 OUTPUT CONTROL
@@ -259,67 +272,86 @@ def run_scanner():
 
     symbols = build_nasdaq_universe()
 
-    results = []
+    # 🔥 NEW: multi-week dates
+    scan_dates = get_past_wednesdays(weeks=12)
 
-    for i in range(0, len(symbols), BATCH_SIZE):
+    all_results = []
 
-        batch = symbols[i:i + BATCH_SIZE]
+    for scan_index, scan_date in enumerate(scan_dates):
 
-        # ✅ FIXED: fetch data inside loop
-        data = fetch_batch(batch)
+        print(f"\n📅 Week {scan_index + 1} → {scan_date.date()}")
 
-        if not data:
-            continue
+        # 🔥 NEW: dynamic backtest window
+        TEST_DAYS_AGO = (datetime.today() - scan_date).days
 
-        for symbol, content in data.items():
+        results = []
 
-            values = content.get("values")
+        for i in range(0, len(symbols), BATCH_SIZE):
 
-            if not values or len(values) < TEST_DAYS_AGO + MIN_LOOKBACK:
+            batch = symbols[i:i + BATCH_SIZE]
+
+            # ✅ FIXED: fetch data inside loop
+            data = fetch_batch(batch)
+
+            if not data:
                 continue
 
-            # oldest → newest
-            values = list(reversed(values))
+            for symbol, content in data.items():
 
-            # =========================
-            # ⏪ HISTORICAL SPLIT
-            # =========================
-            historical_values = values[:-TEST_DAYS_AGO]
-            forward_values = values[-TEST_DAYS_AGO:]
+                values = content.get("values")
 
-            # =========================
-            # 🧠 DETECT SMART MONEY (PAST)
-            # =========================
-            setup = detect_smart_money(symbol, historical_values)
+                if not values or len(values) < TEST_DAYS_AGO + MIN_LOOKBACK:
+                    continue
 
-            if setup:
+                # oldest → newest
+                values = list(reversed(values))
 
                 # =========================
-                # 📊 FORWARD PERFORMANCE (6 MONTHS)
+                # ⏪ HISTORICAL SPLIT
                 # =========================
-                closes_forward = [float(v["close"]) for v in forward_values]
+                historical_values = values[:-TEST_DAYS_AGO]
+                forward_values = values[-TEST_DAYS_AGO:]
 
-                entry_price = closes_forward[0]
+                # =========================
+                # 🧠 DETECT SMART MONEY (PAST)
+                # =========================
+                setup = detect_smart_money(symbol, historical_values)
 
-                max_price = max(closes_forward)
-                min_price = min(closes_forward)
+                if setup:
 
-                gain_pct = ((max_price - entry_price) / entry_price) * 100
-                drop_pct = ((min_price - entry_price) / entry_price) * 100
+                    # =========================
+                    # 📊 FORWARD PERFORMANCE (6 MONTHS)
+                    # =========================
+                    closes_forward = [float(v["close"]) for v in forward_values]
 
-                setup["forward_gain_6m"] = round(gain_pct, 2)
-                setup["forward_drop_6m"] = round(drop_pct, 2)
+                    entry_price = closes_forward[0]
 
-                results.append(setup)
+                    max_price = max(closes_forward)
+                    min_price = min(closes_forward)
+
+                    gain_pct = ((max_price - entry_price) / entry_price) * 100
+                    drop_pct = ((min_price - entry_price) / entry_price) * 100
+
+                    setup["forward_gain_6m"] = round(gain_pct, 2)
+                    setup["forward_drop_6m"] = round(drop_pct, 2)
+
+                    # 🔥 NEW: track week
+                    setup["scan_week"] = scan_index + 1
+                    setup["scan_date"] = str(scan_date.date())
+
+                    results.append(setup)
 
         print(f"Batch {i // BATCH_SIZE + 1} processed...")
         time.sleep(SLEEP_TIME)
+
+        # 🔥 NEW: collect all weeks
+        all_results.extend(results)
 
     # =========================
     # 🧠 SORT RESULTS
     # =========================
     results = sorted(
-        results,
+        all_results,
         key=lambda x: (
             x["score"],
             -x["distance_to_high"],
@@ -364,16 +396,16 @@ def run_scanner():
 
     except Exception as e:
         print(f"❌ Save failed: {e}")
-
+        
 # =========================
-# ▶ RUN
+# ▶ RUN (MULTI-WEEK MODE)
 # =========================
 if __name__ == "__main__":
 
     start_time = time.time()
 
     print("===================================")
-    print("🧠 SMART MONEY BACKTEST STARTING")
+    print("🧠 SMART MONEY MULTI-WEEK BACKTEST")
     print("===================================\n")
 
     try:
@@ -390,5 +422,5 @@ if __name__ == "__main__":
 
     print("\n===================================")
     print(f"⏱ Runtime: {runtime} seconds")
-    print("✅ Scan complete")
-    print("===================================")        
+    print("📊 Multi-week validation complete")
+    print("===================================")
