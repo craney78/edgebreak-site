@@ -185,8 +185,8 @@ def process_data(data):
                 if volume_ratio < 1.3:
                     continue
 
-                except Exception:
-                    continue
+            except Exception:
+                continue
 
                 # =========================
                 # 💰 PRICE GROUP
