@@ -15,7 +15,7 @@ API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
 
 BATCH_SIZE = 10
 SLEEP_TIME = 2
-SCAN_LIMIT = 2500
+SCAN_LIMIT = 3200
 
 # =========================
 # ⏪ BACKTEST SETTINGS (MULTI-WEEK)
@@ -27,7 +27,7 @@ MIN_LOOKBACK = 60   # data needed for smart money detection
 # =========================
 # 📅 GET PAST WEDNESDAYS
 # =========================
-def get_past_wednesdays(weeks=12):
+def get_past_wednesdays(weeks=78):
     dates = []
     today = datetime.today()
 
@@ -36,14 +36,6 @@ def get_past_wednesdays(weeks=12):
         dates.append(d)
 
     return dates
-
-# =========================
-# 📊 OUTPUT CONTROL
-# =========================
-
-TOP_N = 10            # how many to show in final list
-SAVE_FULL = True      # save full ranked list
-SAVE_TOP = True       # save top N
 
 
 # =========================
@@ -87,7 +79,7 @@ def fetch_batch(symbols):
         f"https://api.twelvedata.com/time_series"
         f"?symbol={','.join(symbols)}"
         f"&interval=1day"
-        f"&outputsize=200"
+        f"&outputsize=500"
         f"&apikey={API_KEY}"
     )
 
@@ -273,7 +265,7 @@ def run_scanner():
     symbols = build_nasdaq_universe()
 
     # 🔥 NEW: multi-week dates
-    scan_dates = get_past_wednesdays(weeks=12)
+    scan_dates = get_past_wednesdays(weeks=78)
 
     all_results = []
 
@@ -325,9 +317,13 @@ def run_scanner():
                     closes_forward = [float(v["close"]) for v in forward_values]
 
                     entry_price = closes_forward[0]
+                    setup["entry_price"] = round(entry_price, 2)
 
                     max_price = max(closes_forward)
                     min_price = min(closes_forward)
+
+                    setup["max_price"] = round(max_price, 2)
+                    setup["min_price"] = round(min_price, 2)
 
                     gain_pct = ((max_price - entry_price) / entry_price) * 100
                     drop_pct = ((min_price - entry_price) / entry_price) * 100
@@ -379,7 +375,7 @@ def run_scanner():
     # =========================
     # 🔥 TAKE TOP 30
     # =========================
-    top_results = results[:30]
+    top_results = results[:250]
 
     # =========================
     # 💾 SAVE FILES
@@ -388,15 +384,15 @@ def run_scanner():
         with open("smart_money_full.json", "w") as f:
             json.dump(results, f, indent=2)
 
-        with open("smart_money_top30.json", "w") as f:
+        with open("smart_money_top250.json", "w") as f:
             json.dump(top_results, f, indent=2)
 
         print(f"\n🧠 Total setups found: {len(results)}")
-        print(f"🔥 Top 30 saved for analysis")
+        print(f"🔥 Top 250 saved for analysis")
 
     except Exception as e:
         print(f"❌ Save failed: {e}")
-        
+
 # =========================
 # ▶ RUN (MULTI-WEEK MODE)
 # =========================
