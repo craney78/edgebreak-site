@@ -146,6 +146,7 @@ def process_data(data):
                     continue
 
             except Exception:
+                print(f"{symbol} error occurred while checking liquidity")
                 continue
 
             # =========================
@@ -199,8 +200,8 @@ def process_data(data):
                     )
                     continue
 
-            except Exception:
-                continue
+    except Exception:
+        continue
 
             # =========================
             # 💰 PRICE GROUP
