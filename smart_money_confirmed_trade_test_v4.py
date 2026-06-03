@@ -8,7 +8,7 @@ import requests
 import pandas as pd
 from datetime import datetime
 
-API_KEY = "YOUR_API_KEY"
+API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
 
 # ===================================
 # LOAD CONFIRMED TRADES
