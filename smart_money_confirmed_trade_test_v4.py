@@ -174,8 +174,7 @@ def test_trade(df, entry_date, entry_price):
     )
 
     highest_close = entry_price
-    trailing_active = False
-
+    
     for idx in range(1, len(trade)):
 
         close = float(
@@ -193,9 +192,7 @@ def test_trade(df, entry_date, entry_price):
 
         # Activate trailing stop after +15%
 
-        if close >= entry_price * 1.15:
-            trailing_active = True
-
+        
         # 7% hard stop
 
         if close <= stop_price:
@@ -221,34 +218,7 @@ def test_trade(df, entry_date, entry_price):
                     "STOP"
             }
 
-        # 20% trailing stop
-
-        if trailing_active:
-
-            trailing_stop = highest_close * 0.80
-
-            if close <= trailing_stop:
-
-                return {
-
-                    "exit_date":
-                        current_date.strftime("%Y-%m-%d"),
-
-                    "exit_price":
-                        round(trailing_stop, 2),
-
-                    "return_pct":
-                        round(
-                            (
-                                (trailing_stop - entry_price)
-                                / entry_price
-                            ) * 100,
-                            2
-                        ),
-
-                    "exit_reason":
-                        "TRAILING_STOP"
-                }       
+        
     # ==========================
     # STILL OPEN
     # ==========================
