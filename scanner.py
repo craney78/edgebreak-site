@@ -142,6 +142,7 @@ def process_data(data):
                 avg_volume = sum(volumes) / len(volumes)
 
                 if avg_volume < 500000:
+                    print(f"{symbol} FAILED_LIQUIDITY")
                     continue
 
             except Exception:
@@ -150,16 +151,25 @@ def process_data(data):
             # =========================
             # 🎯 BREAKOUT LOGIC
             # =========================
+            
             try:
                 result = detect_breakout_today(symbol, window)
-
-                if not result:
-                    continue
 
             except Exception as e:
                 print(f"{symbol} breakout error: {e}")
                 continue
 
+            if not result:
+                print(f"{symbol} FAILED_BREAKOUT_LOGIC")
+                continue
+
+            print(
+                f"{symbol} PASSED_BREAKOUT "
+                f"Grade={result['grade']} "
+                f"Score={result['score']}"
+            )
+
+            
             # =========================
             # 🔥 VOLUME CONFIRMATION
             # =========================
@@ -183,6 +193,10 @@ def process_data(data):
                 volume_ratio = current_vol / avg_vol
 
                 if volume_ratio < 1.3:
+                    print(
+                        f"{symbol} FAILED_VOLUME "
+                        f"Ratio={round(volume_ratio,2)}"
+                    )
                     continue
 
             except Exception:
@@ -210,6 +224,7 @@ def process_data(data):
                 sma_long = sum(float(x["close"]) for x in window[1:71]) / 70
 
                 if current_price < sma_long:
+                    print(f"{symbol} FAILED_LARGE_TREND")
                     continue
 
             # =========================
@@ -218,10 +233,17 @@ def process_data(data):
             grade = result["grade"]
 
             if price_group == "SMALL" and grade != "B+":
+                print(f"{symbol} FAILED_GRADE")
                 continue
             if price_group == "MID" and grade != "B":
+                print(f"{symbol} FAILED_GRADE")
                 continue
             if price_group == "LARGE" and grade not in ["B+", "A+"]:
+                print(
+                    f"{symbol} FAILED_GRADE "
+                    f"{grade} LARGE"
+                )
+                print(f"{symbol} FAILED_GRADE")
                 continue
 
             # =========================
@@ -240,6 +262,11 @@ def process_data(data):
             ])
 
             if higher_lows < 2:
+                print(
+                    f"{symbol} FAILED_HIGHER_LOWS "
+                    f"{higher_lows}"
+                )
+                print(f"{symbol} FAILED_HIGHER_LOWS")
                 continue
 
             # =========================
@@ -256,6 +283,11 @@ def process_data(data):
             )
 
             if touches < 2:
+                print(
+                    f"{symbol} FAILED_TOUCHES "
+                    f"{touches}"
+                )
+                print(f"{symbol} FAILED_TOUCHES")
                 continue
 
             # =========================
@@ -275,6 +307,13 @@ def process_data(data):
                 f"Break {result['breakout_strength']}%"
             )
 
+            print(
+                f"✅ FINAL SIGNAL "
+                f"{symbol} "
+                f"{grade} "
+                f"{price_group}"
+                )
+
             signals.append({
                 "symbol": result["symbol"],
                 "date": window[0]["datetime"],
@@ -292,11 +331,12 @@ def process_data(data):
                 "day1_return": 0,
                 "day2_return": 0,
                 "result": "OPEN"
-            })
 
-        except Exception as e:
-            print(f"{symbol} error: {e}")
+                    
+                })
 
+
+        
     # =========================
     # 🔁 REMOVE DUPLICATES (KEEP BEST PER SYMBOL)
     # =========================
