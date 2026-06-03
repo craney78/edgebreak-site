@@ -337,8 +337,8 @@ def process_data(data):
                     
                 })
 
-            except Exception as e:
-                print(f"{symbol} error: {e}")
+        except Exception as e:
+            print(f"{symbol} error: {e}")
         
     # =========================
     # 🔁 REMOVE DUPLICATES (KEEP BEST PER SYMBOL)
