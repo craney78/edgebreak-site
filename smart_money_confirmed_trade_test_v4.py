@@ -224,107 +224,73 @@ def test_trade(df, entry_date, entry_price):
             .mean()
     )
 
-        # ==========================
-        # STOP LOSS
-        # ==========================
+                # ==========================
+                # 7% HARD STOP
+                # ==========================
 
-        if close <= stop_price:
+                if close <= stop_price:
 
-            print(
-                f"STOP EXIT "
-                f"{current_date}"
-            )
+                    print(
+                        f"STOP EXIT "
+                        f"{current_date}"
+                    )
+
+                    return {
+
+                        "exit_date":
+                            current_date.strftime(
+                                "%Y-%m-%d"
+                            ),
+
+                        "exit_price":
+                            round(stop_price, 2),
+
+                        "return_pct":
+                            round(
+                                (
+                                    (stop_price - entry_price)
+                                    / entry_price
+                                ) * 100,
+                                2
+                            ),
+
+                        "exit_reason":
+                            "STOP"
+                    }
+
+            # ==========================
+            # STILL OPEN
+            # ==========================
+
+            print("TRADE STILL OPEN")
+
+            latest = trade.iloc[-1]
 
             return {
 
                 "exit_date":
-                    current_date.strftime(
+                    latest["date"].strftime(
                         "%Y-%m-%d"
                     ),
 
                 "exit_price":
-                    round(close, 2),
+                    round(
+                        float(latest["close"]),
+                        2
+                    ),
 
                 "return_pct":
                     round(
                         (
-                            (close - entry_price)
+                            (latest["close"] - entry_price)
                             / entry_price
                         ) * 100,
                         2
                     ),
 
                 "exit_reason":
-                "STOP"
+                    "OPEN"
             }
-
-        # ==========================
-        # SMA70 EXIT
-        # ==========================
-
-        if close < sma70:
-
-            print(
-                f"SMA70 EXIT "
-                f"{current_date}"
-            )
-
-            return {
-
-                "exit_date":
-                    current_date.strftime(
-                        "%Y-%m-%d"
-                    ),
-
-                "exit_price":
-                    round(close, 2),
-
-                "return_pct":
-                    round(
-                        (
-                            (close - entry_price)
-                            / entry_price
-                        ) * 100,
-                        2
-                    ),
-
-                "exit_reason":
-                    "SMA70"
-            }
-
-    # ==========================
-    # STILL OPEN
-    # ==========================
-
-    print("TRADE STILL OPEN")
-
-    latest = trade.iloc[-1]
-
-    return {
-
-        "exit_date":
-            latest["date"].strftime(
-                "%Y-%m-%d"
-            ),
-
-        "exit_price":
-            round(
-                float(latest["close"]),
-                2
-            ),
-
-        "return_pct":
-            round(
-                (
-                    (latest["close"] - entry_price)
-                    / entry_price
-                ) * 100,
-                2
-            ),
-
-        "exit_reason":
-            "OPEN"
-    }
     
         
 
