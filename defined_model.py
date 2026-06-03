@@ -20,9 +20,9 @@ RISK_PER_TRADE = 0.02
 
 # 🔥 DYNAMIC DATE RANGE (LAST 3 WEEKS)
 END_DATE = datetime.now()
-START_DATE = END_DATE - timedelta(weeks=78)
+START_DATE = END_DATE - timedelta(weeks=4)
 
-RUN_LABEL = "78_weeks"
+RUN_LABEL = "4_weeks"
 
 # =========================
 # BUILD NASDAQ UNIVERSE
@@ -184,7 +184,7 @@ def run_backtest():
 
                 if setup["grade"] not in VALID_GRADES:
                     continue
-                    
+
                 history = window[1:]
                 # =========================
                 # STRUCTURE
