@@ -224,107 +224,107 @@ def test_trade(df, entry_date, entry_price):
             .mean()
     )
 
-    # ==========================
-    # STOP LOSS
-    # ==========================
+        # ==========================
+        # STOP LOSS
+        # ==========================
 
-    if close <= stop_price:
+        if close <= stop_price:
 
-        print(
-            f"STOP EXIT "
-            f"{current_date}"
-        )
+            print(
+                f"STOP EXIT "
+                f"{current_date}"
+            )
 
-        return {
+            return {
 
-            "exit_date":
-                current_date.strftime(
-                    "%Y-%m-%d"
-                ),
+                "exit_date":
+                    current_date.strftime(
+                        "%Y-%m-%d"
+                    ),
 
-            "exit_price":
-                round(close, 2),
+                "exit_price":
+                    round(close, 2),
 
-            "return_pct":
-                round(
-                    (
-                        (close - entry_price)
-                        / entry_price
-                    ) * 100,
-                    2
-                ),
+                "return_pct":
+                    round(
+                        (
+                            (close - entry_price)
+                            / entry_price
+                        ) * 100,
+                        2
+                    ),
 
-            "exit_reason":
+                "exit_reason":
                 "STOP"
-        }
+            }
+
+        # ==========================
+        # SMA70 EXIT
+        # ==========================
+
+        if close < sma70:
+
+            print(
+                f"SMA70 EXIT "
+                f"{current_date}"
+            )
+
+            return {
+
+                "exit_date":
+                    current_date.strftime(
+                        "%Y-%m-%d"
+                    ),
+
+                "exit_price":
+                    round(close, 2),
+
+                "return_pct":
+                    round(
+                        (
+                            (close - entry_price)
+                            / entry_price
+                        ) * 100,
+                        2
+                    ),
+
+                "exit_reason":
+                    "SMA70"
+            }
 
     # ==========================
-    # SMA70 EXIT
+    # STILL OPEN
     # ==========================
 
-    if close < sma70:
+    print("TRADE STILL OPEN")
 
-        print(
-            f"SMA70 EXIT "
-            f"{current_date}"
-        )
+    latest = trade.iloc[-1]
 
-        return {
+    return {
 
-            "exit_date":
-                current_date.strftime(
-                    "%Y-%m-%d"
-                ),
+        "exit_date":
+            latest["date"].strftime(
+                "%Y-%m-%d"
+            ),
 
-            "exit_price":
-                round(close, 2),
+        "exit_price":
+            round(
+                float(latest["close"]),
+                2
+            ),
 
-            "return_pct":
-                round(
-                    (
-                        (close - entry_price)
-                        / entry_price
-                    ) * 100,
-                    2
-                ),
+        "return_pct":
+            round(
+                (
+                    (latest["close"] - entry_price)
+                    / entry_price
+                ) * 100,
+                2
+            ),
 
-            "exit_reason":
-                "SMA70"
-        }
-
-# ==========================
-# STILL OPEN
-# ==========================
-
-print("TRADE STILL OPEN")
-
-latest = trade.iloc[-1]
-
-return {
-
-    "exit_date":
-        latest["date"].strftime(
-            "%Y-%m-%d"
-        ),
-
-    "exit_price":
-        round(
-            float(latest["close"]),
-            2
-        ),
-
-    "return_pct":
-        round(
-            (
-                (latest["close"] - entry_price)
-                / entry_price
-            ) * 100,
-            2
-        ),
-
-    "exit_reason":
-        "OPEN"
-}
+        "exit_reason":
+            "OPEN"
+    }
     
         
 
