@@ -19,6 +19,10 @@ with open("confirmed.json", "r") as f:
 
 print(f"Loaded {len(confirmed)} confirmed setups")
 
+print("\nFIRST RECORD:")
+print(confirmed[0])    
+
+
 # ===================================
 # FETCH DATA
 # ===================================
@@ -35,15 +39,46 @@ def fetch_data(symbol):
 
     try:
 
+        print(f"\nFetching {symbol}...")
+
         r = requests.get(url, timeout=30)
 
+        print(
+            f"{symbol} "
+            f"HTTP Status: {r.status_code}"
+        )
+
         if r.status_code != 200:
+
+            print(
+                f"{symbol} "
+                f"BAD STATUS"
+            )
+
             return None
 
         data = r.json()
 
+        # ==========================
+        # DEBUG RESPONSE
+        # ==========================
+
         if "values" not in data:
+
+            print(
+                f"{symbol} "
+                f"NO VALUES RETURNED"
+            )
+
+            print(data)
+
             return None
+
+        print(
+            f"{symbol} "
+            f"Rows Returned: "
+            f"{len(data['values'])}"
+        )
 
         df = pd.DataFrame(data["values"])
 
@@ -51,7 +86,9 @@ def fetch_data(symbol):
             "datetime": "date"
         })
 
-        df["date"] = pd.to_datetime(df["date"])
+        df["date"] = pd.to_datetime(
+            df["date"]
+        )
 
         for col in [
             "open",
@@ -60,7 +97,10 @@ def fetch_data(symbol):
             "close",
             "volume"
         ]:
-            df[col] = pd.to_numeric(df[col])
+
+            df[col] = pd.to_numeric(
+                df[col]
+            )
 
         df = (
             df
@@ -68,35 +108,86 @@ def fetch_data(symbol):
             .reset_index(drop=True)
         )
 
+        print(
+            f"{symbol} "
+            f"Data Loaded: "
+            f"{len(df)} rows"
+        )
+
         return df
 
     except Exception as e:
 
-        print(symbol, e)
+        print(
+            f"{symbol} ERROR:"
+        )
+
+        print(e)
 
         return None
 
 
-# ===================================
-# TEST SINGLE TRADE
-# ===================================
+    # ===================================
+    # TEST SINGLE TRADE
+    # ===================================
 
-def test_trade(df, entry_date, entry_price):
+    def test_trade(df, entry_date, entry_price):
 
-    trade = df[
-        df["date"] >= entry_date
-    ].copy()
+        print("\n----- TEST TRADE -----")
+        print(f"Entry Date: {entry_date}")
+        print(f"Entry Price: {entry_price}")
+
+        trade = df[
+            df["date"] >= entry_date
+        ].copy()
+
+        print(f"Trade Rows: {len(trade)}")
+
+        if len(trade) > 0:
+
+            print(
+                f"First Trade Date: "
+                f"{trade.iloc[0]['date']}"
+            )
+
+            print(
+                f"Last Trade Date: "
+                f"{trade.iloc[-1]['date']}"
+            )
+
+        if len(trade) == 0:
+
+            print("NO DATA AFTER ENTRY DATE")
+
+            return {
+                "exit_date": "NONE",
+                "exit_price": 0,
+                "return_pct": 0,
+                "exit_reason": "NO_DATA"
+            }
+
+    # ==========================
+    # NOT ENOUGH DATA
+    # ==========================
 
     if len(trade) < 70:
+
+        print(
+            f"ONLY {len(trade)} ROWS"
+        )
 
         latest = trade.iloc[-1]
 
         return {
+
             "exit_date":
                 latest["date"].strftime("%Y-%m-%d"),
 
             "exit_price":
-                round(float(latest["close"]), 2),
+                round(
+                    float(latest["close"]),
+                    2
+                ),
 
             "return_pct":
                 round(
@@ -113,6 +204,11 @@ def test_trade(df, entry_date, entry_price):
 
     stop_price = entry_price * 0.93
 
+    print(
+        f"Stop Price: "
+        f"{round(stop_price,2)}"
+    )
+
     for idx in range(70, len(trade)):
 
         close = float(
@@ -127,6 +223,108 @@ def test_trade(df, entry_date, entry_price):
             trade.iloc[idx-69:idx+1]["close"]
             .mean()
         )
+
+        # ==========================
+        # STOP LOSS
+        # ==========================
+
+        if close <= stop_price:
+
+            print(
+                f"STOP EXIT "
+                f"{current_date}"
+            )
+
+            return {
+
+                "exit_date":
+                    current_date.strftime(
+                        "%Y-%m-%d"
+                    ),
+
+                "exit_price":
+                    round(close, 2),
+
+                "return_pct":
+                    round(
+                        (
+                            (close - entry_price)
+                            / entry_price
+                        ) * 100,
+                        2
+                    ),
+
+                "exit_reason":
+                    "STOP"
+            }
+
+        # ==========================
+        # SMA70 EXIT
+        # ==========================
+
+        if close < sma70:
+
+            print(
+                f"SMA70 EXIT "
+                f"{current_date}"
+            )
+
+            return {
+
+                "exit_date":
+                    current_date.strftime(
+                        "%Y-%m-%d"
+                    ),
+
+                "exit_price":
+                    round(close, 2),
+
+                "return_pct":
+                    round(
+                        (
+                            (close - entry_price)
+                            / entry_price
+                        ) * 100,
+                        2
+                    ),
+
+                "exit_reason":
+                    "SMA70"
+            }
+
+    # ==========================
+    # STILL OPEN
+    # ==========================
+
+    print("TRADE STILL OPEN")
+
+    latest = trade.iloc[-1]
+
+    return {
+
+        "exit_date":
+            latest["date"].strftime(
+                "%Y-%m-%d"
+            ),
+
+        "exit_price":
+            round(
+                float(latest["close"]),
+                2
+            ),
+
+        "return_pct":
+            round(
+                (
+                    (latest["close"] - entry_price)
+                    / entry_price
+                ) * 100,
+                2
+            ),
+
+        "exit_reason":
+            "OPEN"
+    }
 
         # ==========================
         # STOP LOSS
@@ -227,6 +425,9 @@ trade_results = []
 
 for i, trade in enumerate(confirmed):
 
+    print("\n--------------------")
+    print(trade)
+
     symbol = trade["symbol"]
 
     print(
@@ -236,8 +437,18 @@ for i, trade in enumerate(confirmed):
 
     df = fetch_data(symbol)
 
+    # ==========================
+    # DEBUG CHECK #1
+    # ==========================
+
     if df is None:
+        print(f"FAILED DATA: {symbol}")
         continue
+
+    print(
+        f"SUCCESS DATA: {symbol} "
+        f"Rows={len(df)}"
+    )
 
     entry_date = pd.to_datetime(
         trade["confirmation_date"]
@@ -247,11 +458,26 @@ for i, trade in enumerate(confirmed):
         trade["price"]
     )
 
+    # ==========================
+    # DEBUG CHECK #2
+    # ==========================
+
+    print(
+        f"Entry Date: {entry_date}"
+    )
+
+    print(
+        f"Entry Price: {entry_price}"
+    )
+
     result = test_trade(
         df,
         entry_date,
         entry_price
     )
+
+    print("RESULT:")
+    print(result)
 
     trade_results.append({
 
@@ -279,6 +505,11 @@ for i, trade in enumerate(confirmed):
         "exit_reason":
             result["exit_reason"]
     })
+
+    print(
+        f"Trades Stored: "
+        f"{len(trade_results)}"
+    )
 
 
 # ===================================
