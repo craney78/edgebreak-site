@@ -166,42 +166,6 @@ def test_trade(df, entry_date, entry_price):
             "exit_reason": "NO_DATA"
         }
 
-    # ==========================
-    # NOT ENOUGH DATA
-    # ==========================
-
-    if len(trade) < 70:
-
-        print(
-            f"ONLY {len(trade)} ROWS"
-        )
-
-        latest = trade.iloc[-1]
-
-        return {
-
-            "exit_date":
-                latest["date"].strftime("%Y-%m-%d"),
-
-            "exit_price":
-                round(
-                    float(latest["close"]),
-                    2
-                ),
-
-            "return_pct":
-                round(
-                    (
-                        (latest["close"] - entry_price)
-                        / entry_price
-                    ) * 100,
-                    2
-                ),
-
-            "exit_reason":
-                "OPEN"
-        }
-
     stop_price = entry_price * 0.93
 
     print(
@@ -209,7 +173,10 @@ def test_trade(df, entry_date, entry_price):
         f"{round(stop_price,2)}"
     )
 
-    for idx in range(70, len(trade)):
+    highest_close = entry_price
+    trailing_active = False
+
+    for idx in range(1, len(trade)):
 
         close = float(
             trade.iloc[idx]["close"]
@@ -219,28 +186,24 @@ def test_trade(df, entry_date, entry_price):
             trade.iloc[idx]["date"]
         )
 
-        sma70 = (
-            trade.iloc[idx-69:idx+1]["close"]
-            .mean()
-    )
+        # Track highest close
 
-        # ==========================
-        # 7% HARD STOP
-        # ==========================
+        if close > highest_close:
+            highest_close = close
+
+        # Activate trailing stop after +15%
+
+        if close >= entry_price * 1.15:
+            trailing_active = True
+
+        # 7% hard stop
 
         if close <= stop_price:
-
-            print(
-                f"STOP EXIT "
-                f"{current_date}"
-            )
 
             return {
 
                 "exit_date":
-                    current_date.strftime(
-                        "%Y-%m-%d"
-                    ),
+                    current_date.strftime("%Y-%m-%d"),
 
                 "exit_price":
                     round(stop_price, 2),
@@ -258,6 +221,34 @@ def test_trade(df, entry_date, entry_price):
                     "STOP"
             }
 
+        # 20% trailing stop
+
+        if trailing_active:
+
+            trailing_stop = highest_close * 0.80
+
+            if close <= trailing_stop:
+
+                return {
+
+                    "exit_date":
+                        current_date.strftime("%Y-%m-%d"),
+
+                    "exit_price":
+                        round(trailing_stop, 2),
+
+                    "return_pct":
+                        round(
+                            (
+                                (trailing_stop - entry_price)
+                                / entry_price
+                            ) * 100,
+                            2
+                        ),
+
+                    "exit_reason":
+                        "TRAILING_STOP"
+                }       
     # ==========================
     # STILL OPEN
     # ==========================
