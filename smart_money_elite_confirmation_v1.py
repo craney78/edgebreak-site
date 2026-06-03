@@ -67,36 +67,53 @@ def fetch_data(symbol):
 # ===================================
 # SMART MONEY CONFIRMATION V2
 # ===================================
+# ===================================
+# SMART MONEY CONFIRMATION V3
+# ===================================
 
 def smart_money_confirm(window):
 
-    if len(window) < 40:
+    if len(window) < 50:
         return False
 
     highs = window["high"].tolist()
     lows = window["low"].tolist()
 
-    # ---------------------------
-    # Higher High
-    # ---------------------------
+    # =========================
+    # HIGHER HIGH
+    # =========================
 
     recent_high = max(highs[-20:])
     previous_high = max(highs[-40:-20])
 
     higher_high = recent_high > previous_high
 
-    # ---------------------------
-    # Higher Low
-    # ---------------------------
+    # =========================
+    # HIGHER LOW
+    # =========================
 
     recent_low = min(lows[-20:])
     previous_low = min(lows[-40:-20])
 
     higher_low = recent_low > previous_low
 
-    # ---------------------------
-    # Gap Filter
-    # ---------------------------
+    # =========================
+    # VOLUME EXPANSION
+    # =========================
+
+    avg20_volume = window["volume"].tail(20).mean()
+    avg50_volume = window["volume"].tail(50).mean()
+
+    volume_ratio = (
+        avg20_volume / avg50_volume
+        if avg50_volume > 0 else 0
+    )
+
+    volume_expansion = volume_ratio >= 1.3
+
+    # =========================
+    # GAP FILTER
+    # =========================
 
     today_open = float(window.iloc[-1]["open"])
     yesterday_close = float(window.iloc[-2]["close"])
@@ -109,9 +126,14 @@ def smart_money_confirm(window):
     if gap_percent > 10:
         return False
 
+    # =========================
+    # CONFIRMATION
+    # =========================
+
     return (
-        higher_high and
-        higher_low
+        higher_high
+        and higher_low
+        and volume_expansion
     )
 
 # ===================================
