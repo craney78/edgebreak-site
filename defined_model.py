@@ -20,10 +20,9 @@ RISK_PER_TRADE = 0.02
 
 # 🔥 DYNAMIC DATE RANGE (LAST 3 WEEKS)
 END_DATE = datetime.now()
-START_DATE = END_DATE - timedelta(days=30)
+START_DATE = END_DATE - timedelta(weeks=78)
 
-# (optional — just for naming outputs)
-RUN_LABEL = "last_30_days"
+RUN_LABEL = "78_weeks"
 
 # =========================
 # BUILD NASDAQ UNIVERSE
@@ -177,19 +176,14 @@ def run_backtest():
                 # =========================
                 # GRADE FILTER (UNCHANGED)
                 # =========================
-                if price_group == "SMALL":
-                    if setup["grade"] != "B+":
-                        continue
+                # =========================
+                # EXPANDED GRADE FILTER
+                # =========================
 
-                elif price_group == "MID":
-                    if setup["grade"] != "B":
-                        continue
+                VALID_GRADES = ["A+", "A", "B+", "B"]
 
-                else:  # LARGE
-                    if setup["grade"] not in ["B+", "A+"]:
-                        continue
-
-                history = window[1:]
+                if setup["grade"] not in VALID_GRADES:
+                    continue
 
                 # =========================
                 # STRUCTURE
