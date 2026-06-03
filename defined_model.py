@@ -184,7 +184,8 @@ def run_backtest():
 
                 if setup["grade"] not in VALID_GRADES:
                     continue
-
+                    
+                history = window[1:]
                 # =========================
                 # STRUCTURE
                 # =========================
