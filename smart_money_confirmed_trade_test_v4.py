@@ -128,203 +128,203 @@ def fetch_data(symbol):
 
 
 # ===================================
-    # TEST SINGLE TRADE
-    # ===================================
+# TEST SINGLE TRADE
+# ===================================
 
-    def test_trade(df, entry_date, entry_price):
+def test_trade(df, entry_date, entry_price):
 
-        print("\n----- TEST TRADE -----")
-        print(f"Entry Date: {entry_date}")
-        print(f"Entry Price: {entry_price}")
+    print("\n----- TEST TRADE -----")
+    print(f"Entry Date: {entry_date}")
+    print(f"Entry Price: {entry_price}")
 
-        trade = df[
-            df["date"] >= entry_date
-        ].copy()
+    trade = df[
+        df["date"] >= entry_date
+    ].copy()
 
-        print(f"Trade Rows: {len(trade)}")
+    print(f"Trade Rows: {len(trade)}")
 
-        if len(trade) > 0:
-
-            print(
-                f"First Trade Date: "
-                f"{trade.iloc[0]['date']}"
-            )
-
-            print(
-                f"Last Trade Date: "
-                f"{trade.iloc[-1]['date']}"
-            )
-
-        if len(trade) == 0:
-
-            print("NO DATA AFTER ENTRY DATE")
-
-            return {
-                "exit_date": "NONE",
-                "exit_price": 0,
-                "return_pct": 0,
-                "exit_reason": "NO_DATA"
-            }
-
-        # ==========================
-        # NOT ENOUGH DATA
-        # ==========================
-
-        if len(trade) < 70:
-
-            print(
-                f"ONLY {len(trade)} ROWS"
-            )
-
-            latest = trade.iloc[-1]
-
-            return {
-
-                "exit_date":
-                    latest["date"].strftime("%Y-%m-%d"),
-
-                "exit_price":
-                    round(
-                        float(latest["close"]),
-                        2
-                    ),
-
-                "return_pct":
-                    round(
-                        (
-                            (latest["close"] - entry_price)
-                            / entry_price
-                        ) * 100,
-                        2
-                    ),
-
-                "exit_reason":
-                    "OPEN"
-            }
-
-        stop_price = entry_price * 0.93
+    if len(trade) > 0:
 
         print(
-            f"Stop Price: "
-            f"{round(stop_price,2)}"
+            f"First Trade Date: "
+            f"{trade.iloc[0]['date']}"
         )
 
-        for idx in range(70, len(trade)):
+        print(
+            f"Last Trade Date: "
+            f"{trade.iloc[-1]['date']}"
+        )
 
-            close = float(
-                trade.iloc[idx]["close"]
-            )
+    if len(trade) == 0:
 
-            current_date = (
-                trade.iloc[idx]["date"]
-            )
+        print("NO DATA AFTER ENTRY DATE")
 
-            sma70 = (
-                trade.iloc[idx-69:idx+1]["close"]
-                .mean()
-         )
-
-        # ==========================
-        # STOP LOSS
-        # ==========================
-
-        if close <= stop_price:
-
-            print(
-                f"STOP EXIT "
-                f"{current_date}"
-            )
-
-            return {
-
-                "exit_date":
-                    current_date.strftime(
-                        "%Y-%m-%d"
-                    ),
-
-                "exit_price":
-                    round(close, 2),
-
-                "return_pct":
-                    round(
-                        (
-                            (close - entry_price)
-                            / entry_price
-                        ) * 100,
-                        2
-                    ),
-
-                "exit_reason":
-                    "STOP"
-            }
-
-        # ==========================
-        # SMA70 EXIT
-        # ==========================
-
-        if close < sma70:
-
-            print(
-                f"SMA70 EXIT "
-                f"{current_date}"
-            )
-
-            return {
-
-                "exit_date":
-                    current_date.strftime(
-                        "%Y-%m-%d"
-                    ),
-
-                "exit_price":
-                    round(close, 2),
-
-                "return_pct":
-                    round(
-                        (
-                            (close - entry_price)
-                            / entry_price
-                        ) * 100,
-                        2
-                    ),
-
-                "exit_reason":
-                    "SMA70"
-            }
+        return {
+            "exit_date": "NONE",
+            "exit_price": 0,
+            "return_pct": 0,
+            "exit_reason": "NO_DATA"
+        }
 
     # ==========================
-    # STILL OPEN
+    # NOT ENOUGH DATA
     # ==========================
 
-    print("TRADE STILL OPEN")
+    if len(trade) < 70:
 
-    latest = trade.iloc[-1]
+        print(
+            f"ONLY {len(trade)} ROWS"
+        )
 
-    return {
+        latest = trade.iloc[-1]
 
-        "exit_date":
-            latest["date"].strftime(
-                "%Y-%m-%d"
-            ),
+        return {
 
-        "exit_price":
-            round(
-                float(latest["close"]),
-                2
-            ),
+            "exit_date":
+                latest["date"].strftime("%Y-%m-%d"),
 
-        "return_pct":
-            round(
-                (
-                    (latest["close"] - entry_price)
-                    / entry_price
-                ) * 100,
-                2
-            ),
+            "exit_price":
+                round(
+                    float(latest["close"]),
+                    2
+                ),
 
-        "exit_reason":
-            "OPEN"
-    }
+            "return_pct":
+                round(
+                    (
+                        (latest["close"] - entry_price)
+                        / entry_price
+                    ) * 100,
+                    2
+                ),
+
+            "exit_reason":
+                "OPEN"
+        }
+
+    stop_price = entry_price * 0.93
+
+    print(
+        f"Stop Price: "
+        f"{round(stop_price,2)}"
+    )
+
+    for idx in range(70, len(trade)):
+
+        close = float(
+            trade.iloc[idx]["close"]
+        )
+
+        current_date = (
+            trade.iloc[idx]["date"]
+        )
+
+        sma70 = (
+            trade.iloc[idx-69:idx+1]["close"]
+            .mean()
+    )
+
+    # ==========================
+    # STOP LOSS
+    # ==========================
+
+    if close <= stop_price:
+
+        print(
+            f"STOP EXIT "
+            f"{current_date}"
+        )
+
+        return {
+
+            "exit_date":
+                current_date.strftime(
+                    "%Y-%m-%d"
+                ),
+
+            "exit_price":
+                round(close, 2),
+
+            "return_pct":
+                round(
+                    (
+                        (close - entry_price)
+                        / entry_price
+                    ) * 100,
+                    2
+                ),
+
+            "exit_reason":
+                "STOP"
+        }
+
+    # ==========================
+    # SMA70 EXIT
+    # ==========================
+
+    if close < sma70:
+
+        print(
+            f"SMA70 EXIT "
+            f"{current_date}"
+        )
+
+        return {
+
+            "exit_date":
+                current_date.strftime(
+                    "%Y-%m-%d"
+                ),
+
+            "exit_price":
+                round(close, 2),
+
+            "return_pct":
+                round(
+                    (
+                        (close - entry_price)
+                        / entry_price
+                    ) * 100,
+                    2
+                ),
+
+            "exit_reason":
+                "SMA70"
+        }
+
+# ==========================
+# STILL OPEN
+# ==========================
+
+print("TRADE STILL OPEN")
+
+latest = trade.iloc[-1]
+
+return {
+
+    "exit_date":
+        latest["date"].strftime(
+            "%Y-%m-%d"
+        ),
+
+    "exit_price":
+        round(
+            float(latest["close"]),
+            2
+        ),
+
+    "return_pct":
+        round(
+            (
+                (latest["close"] - entry_price)
+                / entry_price
+            ) * 100,
+            2
+        ),
+
+    "exit_reason":
+        "OPEN"
+}
     
         
 
