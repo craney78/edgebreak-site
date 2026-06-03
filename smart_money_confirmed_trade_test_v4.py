@@ -173,27 +173,23 @@ def test_trade(df, entry_date, entry_price):
         f"{round(stop_price,2)}"
     )
 
-    highest_close = entry_price
-    
     for idx in range(1, len(trade)):
 
         close = float(
             trade.iloc[idx]["close"]
         )
 
+        low = float(
+            trade.iloc[idx]["low"]
+        )
+
         current_date = (
             trade.iloc[idx]["date"]
         )
 
-        # Track highest close
-
-        if close > highest_close:
-            highest_close = close
-
-        # Activate trailing stop after +15%
-
-        
-        # 7% hard stop
+        # ==========================
+        # 7% HARD STOP
+        # ==========================
 
         if close <= stop_price:
 
@@ -218,7 +214,39 @@ def test_trade(df, entry_date, entry_price):
                     "STOP"
             }
 
-        
+        # ==========================
+        # LOWER LOW EXIT
+        # ==========================
+
+        if idx >= 20:
+
+            lowest_20 = min(
+                trade.iloc[idx-20:idx]["low"]
+            )
+
+            if low < lowest_20:
+
+                return {
+
+                    "exit_date":
+                        current_date.strftime("%Y-%m-%d"),
+
+                    "exit_price":
+                        round(close, 2),
+
+                    "return_pct":
+                        round(
+                            (
+                                (close - entry_price)
+                                / entry_price
+                            ) * 100,
+                            2
+                        ),
+
+                    "exit_reason":
+                        "LOWER_LOW_EXIT"
+                }
+
     # ==========================
     # STILL OPEN
     # ==========================
