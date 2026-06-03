@@ -114,6 +114,20 @@ def fetch_data(symbol):
             f"{len(df)} rows"
         )
 
+        df["sma100"] = (
+        df["close"]
+        .astype(float)
+        .rolling(100)
+        .mean()
+        )
+
+        df["sma200"] = (
+        df["close"]
+        .astype(float)
+        .rolling(200)
+        .mean()
+        )
+
         return df
 
     except Exception as e:
@@ -179,10 +193,6 @@ def test_trade(df, entry_date, entry_price):
             trade.iloc[idx]["close"]
         )
 
-        low = float(
-            trade.iloc[idx]["low"]
-        )
-
         current_date = (
             trade.iloc[idx]["date"]
         )
@@ -215,37 +225,56 @@ def test_trade(df, entry_date, entry_price):
             }
 
         # ==========================
-        # LOWER LOW EXIT
+        # 100 / 200 SMA CROSS EXIT
         # ==========================
 
-        if idx >= 20:
+        prev_sma100 = (
+            trade.iloc[idx - 1]["sma100"]
+        )
 
-            lowest_20 = min(
-                trade.iloc[idx-20:idx]["low"]
-            )
+        prev_sma200 = (
+            trade.iloc[idx - 1]["sma200"]
+        )
 
-            if low < lowest_20:
+        sma100 = (
+            trade.iloc[idx]["sma100"]
+        )
 
-                return {
+        sma200 = (
+            trade.iloc[idx]["sma200"]
+        )
 
-                    "exit_date":
-                        current_date.strftime("%Y-%m-%d"),
+        if (
+            pd.notna(prev_sma100)
+            and pd.notna(prev_sma200)
+            and pd.notna(sma100)
+            and pd.notna(sma200)
+            and prev_sma100 >= prev_sma200
+            and sma100 < sma200
+        ):
 
-                    "exit_price":
-                        round(close, 2),
+            return {
 
-                    "return_pct":
-                        round(
-                            (
-                                (close - entry_price)
-                                / entry_price
-                            ) * 100,
-                            2
-                        ),
+                "exit_date":
+                    current_date.strftime(
+                        "%Y-%m-%d"
+                    ),
 
-                    "exit_reason":
-                        "LOWER_LOW_EXIT"
-                }
+                "exit_price":
+                    round(close, 2),
+
+                "return_pct":
+                    round(
+                        (
+                            (close - entry_price)
+                            / entry_price
+                        ) * 100,
+                        2
+                    ),
+
+                "exit_reason":
+                    "100_200_CROSS"
+            }
 
     # ==========================
     # STILL OPEN
