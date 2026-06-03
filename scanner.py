@@ -200,8 +200,9 @@ def process_data(data):
                     )
                     continue
 
-    except Exception:
-        continue
+        except Exception as e:
+            print(f"{symbol} error: {e}")
+            continue
 
             # =========================
             # 💰 PRICE GROUP
