@@ -578,3 +578,15 @@ def run():
 # =========================
 if __name__ == "__main__":
     run()
+
+# =========================
+# ✅ UPDATE SCANNER STATUS
+# =========================
+from datetime import datetime
+
+with open("scanner_status.json", "w") as f:
+    json.dump({
+        "last_scan": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }, f)
+
+print("✅ Scanner status updated")    
