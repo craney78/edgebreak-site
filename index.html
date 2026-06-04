@@ -286,26 +286,135 @@ EdgeBreak tracks breakout setups across the NASDAQ using defined rules based on 
 🧠 SMART MONEY RESEARCH WATCHLIST
 ========================= -->
 
-<div class="section">
+<section class="section">
 
-  <h2>🧠 Smart Money Research Watchlist</h2>
+  <div style="text-align:center; max-width:900px; margin:0 auto;">
 
-  <p style="
-    color:#94a3b8;
-    max-width:700px;
-    margin:0 auto 30px auto;
+    <span style="
+      display:inline-block;
+      padding:8px 16px;
+      border:1px solid #1e293b;
+      border-radius:999px;
+      font-size:13px;
+      color:#22c55e;
+      margin-bottom:20px;
+    ">
+      FREE RESEARCH WATCHLIST
+    </span>
+
+    <h2 style="margin-bottom:15px;">
+      🧠 Smart Money Research Watchlist
+    </h2>
+
+    <p style="
+      color:#94a3b8;
+      max-width:750px;
+      margin:0 auto 20px auto;
+      line-height:1.7;
+      font-size:17px;
+    ">
+      These stocks have been repeatedly identified by our Smart Money scanner
+      over the last 4 weeks.
+    </p>
+
+    <p style="
+      color:#cbd5e1;
+      max-width:750px;
+      margin:0 auto 40px auto;
+      line-height:1.7;
+    ">
+      One appearance can be interesting.
+      Multiple appearances may indicate ongoing institutional accumulation.
+      The more often a stock appears, the more attention it deserves.
+      Click any stock below to load its chart and begin your own research.
+    </p>
+
+  </div>
+
+  <!-- Watchlist Cards -->
+
+  <div
+    id="smartMoneyResearch"
+    class="grid"
+    style="margin-bottom:50px;"
+  ></div>
+
+  <!-- Chart Area -->
+
+  <div
+    id="researchChartContainer"
+    style="
+      display:none;
+      margin-top:40px;
+    "
+  >
+
+    <div class="card">
+
+      <h3
+        id="researchChartTitle"
+        style="
+          text-align:center;
+          margin-bottom:20px;
+        "
+      ></h3>
+
+      <iframe
+        id="researchChart"
+        width="100%"
+        height="650"
+        frameborder="0"
+        allowfullscreen
+      ></iframe>
+
+    </div>
+
+  </div>
+
+  <!-- Smart Money Elite CTA -->
+
+  <div class="card" style="
     text-align:center;
+    margin-top:60px;
+    max-width:900px;
+    margin-left:auto;
+    margin-right:auto;
   ">
-    Stocks repeatedly identified by our Smart Money scanner over the last 4 weeks.
-    Multiple appearances may indicate ongoing accumulation and deserve further research.
-  </p>
 
-  <div id="smartMoneyResearch" class="grid"></div>
+    <h3 style="margin-bottom:15px;">
+      Want Every Smart Money Opportunity?
+    </h3>
 
-</div>
+    <p style="
+      color:#94a3b8;
+      max-width:700px;
+      margin:0 auto 25px auto;
+      line-height:1.7;
+    ">
+      The free watchlist only shows a small sample of stocks that repeatedly
+      appeared in our Smart Money research.
+      Smart Money Elite members get access to every Smart Money signal,
+      daily updates, signal history, accumulation leaders, and exclusive
+      research tools.
+    </p>
 
-<div style="margin:90px auto; max-width:900px; text-align:center;">
-  <div style="height:1px; background:#1e293b;"></div>
+    <a href="pricing.html" class="btn">
+      Unlock Smart Money Elite →
+    </a>
+
+  </div>
+
+</section>
+
+<div style="
+  margin:90px auto;
+  max-width:900px;
+  text-align:center;
+">
+  <div style="
+    height:1px;
+    background:#1e293b;
+  "></div>
 </div>
 
 <!-- PROVEN PERFORMANCE -->
@@ -1045,117 +1154,194 @@ function captureEmail() {
 
 <script>
 
+<script>
+
 // =========================
-// 🧠 SMART MONEY RESEARCH WATCHLIST
+// 🧠 LOAD RESEARCH CHART
 // =========================
+function loadResearchChart(symbol) {
 
-fetch("elite_watchlist.json?v=" + new Date().getTime())
-  .then(res => res.json())
-  .then(data => {
+  const container =
+    document.getElementById(
+      "researchChartContainer"
+    );
 
-    const container =
-      document.getElementById(
-        "smartMoneyResearch"
-      );
+  const chart =
+    document.getElementById(
+      "researchChart"
+    );
 
-    if (!container) return;
+  const title =
+    document.getElementById(
+      "researchChartTitle"
+    );
 
-    const leaders = {};
+  if (!container || !chart || !title)
+    return;
 
-    data.forEach(stock => {
+  title.innerHTML =
+    `🧠 ${symbol} Research Chart`;
 
-      const symbol = stock.symbol;
+  chart.src =
+    `https://s.tradingview.com/widgetembed/?symbol=NASDAQ:${symbol}&interval=D&theme=dark&style=1&hide_side_toolbar=0`;
 
-      if (!leaders[symbol]) {
+  container.style.display = "block";
 
-        leaders[symbol] = {
-          symbol,
-          hits: 0,
-          dates: []
-        };
+  container.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 
-      }
+}
 
-      leaders[symbol].hits++;
+</script>
 
-      leaders[symbol].dates.push(
-        stock.scan_date
-      );
+// =========================
+// 🧠 SMART MONEY RESEARCH
+// =========================
+fetch(
+  "elite_watchlist.json?v=" +
+  new Date().getTime()
+)
+.then(res => res.json())
 
-    });
+.then(data => {
 
-    const sorted =
-      Object.values(leaders)
-      .sort((a, b) =>
-        b.hits - a.hits
-      )
-      .slice(0, 10);
+  const container =
+    document.getElementById(
+      "smartMoneyResearch"
+    );
 
-    container.innerHTML =
-      sorted.map(stock => {
+  if (!container) return;
 
-        const fire =
-          "🔥".repeat(
-            Math.min(stock.hits, 5)
-          );
+  const leaders = {};
 
-        const lastSeen =
-          stock.dates[
-            stock.dates.length - 1
-          ];
+  data.forEach(stock => {
 
-        return `
-          <div class="card">
+    const symbol = stock.symbol;
 
-            <div style="
-              font-size:24px;
-              font-weight:700;
-            ">
-              ${stock.symbol}
-            </div>
+    if (!leaders[symbol]) {
 
-            <div style="
-              font-size:20px;
-              margin-top:6px;
-            ">
-              ${fire}
-            </div>
+      leaders[symbol] = {
+        symbol,
+        hits: 0,
+        dates: []
+      };
 
-            <div style="
-              color:#22c55e;
-              margin-top:10px;
-              font-weight:600;
-            ">
-              ${stock.hits}
-              Smart Money Hit${stock.hits > 1 ? "s" : ""}
-            </div>
+    }
 
-            <div style="
-              color:#94a3b8;
-              margin-top:8px;
-              font-size:13px;
-            ">
-              Last Seen
-            </div>
+    leaders[symbol].hits++;
 
-            <div>
-              ${lastSeen}
-            </div>
-
-          </div>
-        `;
-
-      }).join("");
-
-  })
-  .catch(err => {
-
-    console.error(
-      "Smart Money Error:",
-      err
+    leaders[symbol].dates.push(
+      stock.scan_date
     );
 
   });
+
+  const sorted =
+    Object.values(leaders)
+
+    .sort((a, b) => {
+
+      if (b.hits !== a.hits) {
+        return b.hits - a.hits;
+      }
+
+      return (
+        new Date(
+          b.dates[b.dates.length - 1]
+        ) -
+        new Date(
+          a.dates[a.dates.length - 1]
+        )
+      );
+
+    })
+
+    .slice(0, 10);
+
+  container.innerHTML = sorted.map(stock => {
+
+    const fire =
+      "🔥".repeat(
+        Math.min(stock.hits, 5)
+      );
+
+    const lastSeen =
+      stock.dates[
+        stock.dates.length - 1
+      ];
+
+    return `
+
+      <div
+        class="card smart-money-card"
+        onclick="loadResearchChart('${stock.symbol}')"
+        style="
+          cursor:pointer;
+          transition:0.2s;
+        "
+      >
+
+        <div style="
+          font-size:24px;
+          font-weight:700;
+        ">
+          ${stock.symbol}
+        </div>
+
+        <div style="
+          font-size:22px;
+          margin-top:8px;
+        ">
+          ${fire}
+        </div>
+
+        <div style="
+          color:#22c55e;
+          font-weight:600;
+          margin-top:10px;
+        ">
+          ${stock.hits}
+          Smart Money Hit${stock.hits > 1 ? "s" : ""}
+        </div>
+
+        <div style="
+          color:#94a3b8;
+          margin-top:12px;
+          font-size:13px;
+        ">
+          Last Seen
+        </div>
+
+        <div>
+          ${lastSeen}
+        </div>
+
+        <div style="
+          margin-top:15px;
+          color:#60a5fa;
+          font-size:14px;
+        ">
+          Click to Research →
+        </div>
+
+      </div>
+
+    `;
+
+  }).join("");
+
+})
+
+.catch(err => {
+
+  console.error(
+    "Smart Money Error:",
+    err
+  );
+
+});
 
 </script>
 
