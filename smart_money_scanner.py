@@ -25,17 +25,23 @@ MIN_LOOKBACK = 60   # data needed for smart money detection
 
 
 # =========================
-# 📅 GET PAST WEDNESDAYS
+# 📅 GET PAST TRADING DAYS
 # =========================
-def get_past_wednesdays(weeks=78):
+def get_past_trading_days(days=20):
+
     dates = []
-    today = datetime.today()
 
-    for i in range(1, weeks + 1):
-        d = today - timedelta(days=i * 7)
-        dates.append(d)
+    current = datetime.today()
 
-    return dates
+    while len(dates) < days:
+
+        current -= timedelta(days=1)
+
+        # Monday=0 ... Friday=4
+        if current.weekday() < 5:
+            dates.append(current)
+
+    return sorted(dates)
 
 
 # =========================
@@ -265,7 +271,7 @@ def run_scanner():
     symbols = build_nasdaq_universe()
 
     # 🔥 NEW: multi-week dates
-    scan_dates = get_past_wednesdays(weeks=78)
+    scan_dates = get_past_trading_days(days=20)
 
     all_results = []
 
@@ -372,26 +378,65 @@ def run_scanner():
         else:
             r["grade"] = "C"
 
+    
     # =========================
-    # 🔥 TAKE TOP 30
+    # 📂 SPLIT RESULTS
     # =========================
-    top_results = results[:250]
+
+    free_watchlist = []
+    elite_watchlist = []
+
+    for r in results:
+
+        if r["grade"] == "A":
+            free_watchlist.append(r)
+
+        elif r["grade"] == "B+":
+            elite_watchlist.append(r)
 
     # =========================
     # 💾 SAVE FILES
     # =========================
+
     try:
-        with open("smart_money_full.json", "w") as f:
-            json.dump(results, f, indent=2)
 
-        with open("smart_money_top250.json", "w") as f:
-            json.dump(top_results, f, indent=2)
+        with open(
+            "free_watchlist.json",
+            "w"
+        ) as f:
 
-        print(f"\n🧠 Total setups found: {len(results)}")
-        print(f"🔥 Top 250 saved for analysis")
+            json.dump(
+                free_watchlist,
+                f,
+                indent=2
+            )
+
+        with open(
+            "elite_watchlist.json",
+            "w"
+        ) as f:
+
+            json.dump(
+                elite_watchlist,
+                f,
+                indent=2
+            )
+
+        print(
+            f"\n🧠 Free Watchlist: "
+            f"{len(free_watchlist)}"
+        )
+
+        print(
+            f"🚀 Elite Watchlist: "
+            f"{len(elite_watchlist)}"
+        )
 
     except Exception as e:
-        print(f"❌ Save failed: {e}")
+
+        print(
+            f"❌ Save failed: {e}"
+        )
 
 # =========================
 # ▶ RUN (MULTI-WEEK MODE)
