@@ -1154,47 +1154,35 @@ function captureEmail() {
 
 <script>
 
-<script>
-
 // =========================
 // 🧠 LOAD RESEARCH CHART
 // =========================
 function loadResearchChart(symbol) {
 
   const container =
-    document.getElementById(
-      "researchChartContainer"
-    );
+    document.getElementById("researchChartContainer");
 
   const chart =
-    document.getElementById(
-      "researchChart"
-    );
+    document.getElementById("researchChart");
 
   const title =
-    document.getElementById(
-      "researchChartTitle"
-    );
+    document.getElementById("researchChartTitle");
 
-  if (!container || !chart || !title)
-    return;
+  if (!container || !chart || !title) return;
 
   title.innerHTML =
     `🧠 ${symbol} Research Chart`;
 
   chart.src =
-    `https://s.tradingview.com/widgetembed/?symbol=NASDAQ:${symbol}&interval=D&theme=dark&style=1&hide_side_toolbar=0`;
+    `https://s.tradingview.com/widgetembed/?symbol=NASDAQ:${symbol}&interval=D&theme=dark`;
 
   container.style.display = "block";
 
   container.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
+    behavior: "smooth"
   });
 
 }
-
-</script>
 
 // =========================
 // 🧠 SMART MONEY RESEARCH
@@ -1203,6 +1191,7 @@ fetch(
   "elite_watchlist.json?v=" +
   new Date().getTime()
 )
+
 .then(res => res.json())
 
 .then(data => {
@@ -1240,97 +1229,79 @@ fetch(
 
   const sorted =
     Object.values(leaders)
+      .sort((a, b) => b.hits - a.hits)
+      .slice(0, 10);
 
-    .sort((a, b) => {
+  container.innerHTML =
+    sorted.map(stock => {
 
-      if (b.hits !== a.hits) {
-        return b.hits - a.hits;
-      }
+      const fire =
+        "🔥".repeat(
+          Math.min(stock.hits, 5)
+        );
 
-      return (
-        new Date(
-          b.dates[b.dates.length - 1]
-        ) -
-        new Date(
-          a.dates[a.dates.length - 1]
-        )
-      );
+      const lastSeen =
+        stock.dates[
+          stock.dates.length - 1
+        ];
 
-    })
+      return `
+        <div
+          class="card smart-money-card"
+          onclick="loadResearchChart('${stock.symbol}')"
+          style="
+            cursor:pointer;
+            transition:0.2s;
+          "
+        >
 
-    .slice(0, 10);
+          <div style="
+            font-size:24px;
+            font-weight:700;
+          ">
+            ${stock.symbol}
+          </div>
 
-  container.innerHTML = sorted.map(stock => {
+          <div style="
+            font-size:22px;
+            margin-top:8px;
+          ">
+            ${fire}
+          </div>
 
-    const fire =
-      "🔥".repeat(
-        Math.min(stock.hits, 5)
-      );
+          <div style="
+            color:#22c55e;
+            font-weight:600;
+            margin-top:10px;
+          ">
+            ${stock.hits}
+            Hit${stock.hits > 1 ? "s" : ""}
+          </div>
 
-    const lastSeen =
-      stock.dates[
-        stock.dates.length - 1
-      ];
+          <div style="
+            color:#94a3b8;
+            margin-top:12px;
+            font-size:13px;
+          ">
+            Last Seen
+          </div>
 
-    return `
+          <div>
+            ${lastSeen}
+          </div>
 
-      <div
-        class="card smart-money-card"
-        onclick="loadResearchChart('${stock.symbol}')"
-        style="
-          cursor:pointer;
-          transition:0.2s;
-        "
-      >
+          <div style="
+            margin-top:15px;
+            color:#60a5fa;
+            font-size:14px;
+          ">
+            Click to Research →
+          </div>
 
-        <div style="
-          font-size:24px;
-          font-weight:700;
-        ">
-          ${stock.symbol}
         </div>
+      `;
 
-        <div style="
-          font-size:22px;
-          margin-top:8px;
-        ">
-          ${fire}
-        </div>
-
-        <div style="
-          color:#22c55e;
-          font-weight:600;
-          margin-top:10px;
-        ">
-          ${stock.hits}
-          Smart Money Hit${stock.hits > 1 ? "s" : ""}
-        </div>
-
-        <div style="
-          color:#94a3b8;
-          margin-top:12px;
-          font-size:13px;
-        ">
-          Last Seen
-        </div>
-
-        <div>
-          ${lastSeen}
-        </div>
-
-        <div style="
-          margin-top:15px;
-          color:#60a5fa;
-          font-size:14px;
-        ">
-          Click to Research →
-        </div>
-
-      </div>
-
-    `;
-
-  }).join("");
+    }).join("");
 
 })
 
