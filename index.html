@@ -282,6 +282,32 @@ EdgeBreak tracks breakout setups across the NASDAQ using defined rules based on 
   <div style="height:1px; background:#1e293b; margin-bottom:20px;"></div>
 </div>
 
+<!-- =========================
+🧠 SMART MONEY RESEARCH WATCHLIST
+========================= -->
+
+<div class="section">
+
+  <h2>🧠 Smart Money Research Watchlist</h2>
+
+  <p style="
+    color:#94a3b8;
+    max-width:700px;
+    margin:0 auto 30px auto;
+    text-align:center;
+  ">
+    Stocks repeatedly identified by our Smart Money scanner over the last 4 weeks.
+    Multiple appearances may indicate ongoing accumulation and deserve further research.
+  </p>
+
+  <div id="smartMoneyResearch" class="grid"></div>
+
+</div>
+
+<div style="margin:90px auto; max-width:900px; text-align:center;">
+  <div style="height:1px; background:#1e293b;"></div>
+</div>
+
 <!-- PROVEN PERFORMANCE -->
 <div class="section" id="statsGrid">
 
@@ -1016,5 +1042,122 @@ function captureEmail() {
   emailInput.value = "";
 }
 </script>
+
+<script>
+
+// =========================
+// 🧠 SMART MONEY RESEARCH WATCHLIST
+// =========================
+
+fetch("elite_watchlist.json?v=" + new Date().getTime())
+  .then(res => res.json())
+  .then(data => {
+
+    const container =
+      document.getElementById(
+        "smartMoneyResearch"
+      );
+
+    if (!container) return;
+
+    const leaders = {};
+
+    data.forEach(stock => {
+
+      const symbol = stock.symbol;
+
+      if (!leaders[symbol]) {
+
+        leaders[symbol] = {
+          symbol,
+          hits: 0,
+          dates: []
+        };
+
+      }
+
+      leaders[symbol].hits++;
+
+      leaders[symbol].dates.push(
+        stock.scan_date
+      );
+
+    });
+
+    const sorted =
+      Object.values(leaders)
+      .sort((a, b) =>
+        b.hits - a.hits
+      )
+      .slice(0, 10);
+
+    container.innerHTML =
+      sorted.map(stock => {
+
+        const fire =
+          "🔥".repeat(
+            Math.min(stock.hits, 5)
+          );
+
+        const lastSeen =
+          stock.dates[
+            stock.dates.length - 1
+          ];
+
+        return `
+          <div class="card">
+
+            <div style="
+              font-size:24px;
+              font-weight:700;
+            ">
+              ${stock.symbol}
+            </div>
+
+            <div style="
+              font-size:20px;
+              margin-top:6px;
+            ">
+              ${fire}
+            </div>
+
+            <div style="
+              color:#22c55e;
+              margin-top:10px;
+              font-weight:600;
+            ">
+              ${stock.hits}
+              Smart Money Hit${stock.hits > 1 ? "s" : ""}
+            </div>
+
+            <div style="
+              color:#94a3b8;
+              margin-top:8px;
+              font-size:13px;
+            ">
+              Last Seen
+            </div>
+
+            <div>
+              ${lastSeen}
+            </div>
+
+          </div>
+        `;
+
+      }).join("");
+
+  })
+  .catch(err => {
+
+    console.error(
+      "Smart Money Error:",
+      err
+    );
+
+  });
+
+</script>
+
 </body>
 </html>
