@@ -520,6 +520,34 @@ def append_to_active_positions(new_signals):
 
         print(f"✅ Added {added} new trades")
 
+        # =========================
+        # SAVE FREE WATCHLIST
+        # =========================
+        save_free_watchlist(all_signals)    
+
+        watchlist = []
+
+        for s in signals:
+
+            watchlist.append({
+                "symbol": s["symbol"],
+                "scan_date": s["date"],
+                "price": s["price"],
+                "grade": s["grade"],
+                "score": s["score"],
+                "volume_ratio": s["volume_ratio"],
+                "breakout_strength": s["breakout_strength"],
+                "price_group": s["price_group"]
+            })
+
+        with open(file, "w") as f:
+            json.dump(watchlist, f, indent=2)
+
+        print(
+            f"✅ Saved {len(watchlist)} stocks "
+            f"to free_breakout_watchlist.json"
+        )        
+
 # =========================
 # MAIN RUN
 # =========================
@@ -546,6 +574,11 @@ def run():
         time.sleep(SLEEP_TIME)
 
     all_signals = sort_signals(all_signals)
+
+    # =========================
+    # SAVE FREE WATCHLIST
+    # =========================
+    save_free_watchlist(all_signals)
 
     # =========================
     # ✅ HANDLE SIGNALS
