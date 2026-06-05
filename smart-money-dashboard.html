@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Money | Follow the Footprints Before the Breakout | EdgeBreak</title>
+
+<meta name="description" content="Track stocks attracting repeated accumulation signals across the NASDAQ. Smart Money helps investors build stronger watchlists, identify emerging opportunities, and focus research where market activity appears to be building.">
+<link rel="stylesheet" href="css/dashboard.css">
+
+</head>
+<body style="background:#020617;">
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+
+        <img src="images/logo.png" class="hero-logo">
+
+        <h1>Smart Money</h1>
+
+        <p class="header-sub">
+            Follow the footprints before the breakout.
+        </p>
+
+        <p style="font-size:12px; color:#64748b; margin-top:10px; max-width:700px;">
+            Stocks appearing repeatedly on the Smart Money scanner. Multiple appearances may indicate sustained market attention and deserve further research.
+        </p>
+
+    </div>
+
+    <!-- TOP GRID -->
+    <div class="watchlist-grid">
+
+        <div class="watch-card">
+
+            <h3>Scanner Activity</h3>
+
+            <p style="font-size:13px; color:#64748b;">
+                Current Smart Money candidates
+            </p>
+
+            <div class="stat-line">
+                <span>Unique Stocks</span>
+                <span id="candidateCount">-</span>
+            </div>
+
+            <div class="stat-line">
+                <span>Repeat Candidates</span>
+                <span id="returningCandidates">-</span>
+            </div>
+
+            <div class="stat-line">
+                <span>Highest Appearance Count</span>
+                <span id="topAppearance">-</span>
+            </div>
+
+        </div>
+
+        <div class="watch-card">
+
+            <h3>Scanner Quality</h3>
+
+            <div class="stat-line">
+                <span>Average Score</span>
+                <span id="avgScore">-</span>
+            </div>
+
+            <div class="stat-line">
+                <span>Average Volume Ratio</span>
+                <span id="avgVolume">-</span>
+            </div>
+
+            <div class="stat-line">
+                <span>Average Distance To High</span>
+                <span id="avgDistance">-</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+
+        <div class="stat">
+            <div class="label">Total Records</div>
+            <div class="value" id="trackedStocks">-</div>
+        </div>
+
+        <div class="stat">
+            <div class="label">Unique Candidates</div>
+            <div class="value" id="uniqueCandidates">-</div>
+        </div>
+
+        <div class="stat">
+            <div class="label">Most Accumulated</div>
+            <div class="value green" id="highestCount">-</div>
+        </div>
+
+        <div class="stat">
+            <div class="label">Repeat Candidates</div>
+            <div class="value" id="repeatCount">-</div>
+        </div>
+
+    </div>
+
+    <!-- LEADERBOARD -->
+    <div class="current-trades">
+
+        <h2>Smart Money Leaderboard</h2>
+
+        <p>
+            Ranked by appearance frequency.
+        </p>
+
+        <div id="smartMoneyTable"></div>
+
+    </div>
+
+    <!-- RECENT APPEARANCES -->
+    <div class="section">
+
+        <h3 style="margin-bottom:15px;">
+            Most Recent Scanner Activity
+        </h3>
+
+        <div id="recentActivity"></div>
+
+    </div>
+
+    <!-- CHART -->
+    <div class="section">
+
+        <h3 style="margin-bottom:10px;">
+            Price Chart
+        </h3>
+
+        <div id="chartTitle"
+             style="color:#94a3b8;
+                    font-size:14px;
+                    margin-bottom:10px;
+                    text-align:center;">
+
+            Select a stock to view chart
+
+        </div>
+
+        <div style="max-width:900px; margin:0 auto;">
+
+            <div id="tv_chart"
+                 style="height:420px;">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TOP SCANNER SCORES -->
+    <div class="section">
+
+        <h3 style="margin-bottom:15px;">
+            Highest Quality Candidates
+        </h3>
+
+        <div id="topScores"></div>
+
+    </div>
+
+    <!-- SMART MONEY EXPLAINER -->
+    <div class="section">
+
+        <h3 style="margin-bottom:15px;">
+            What Smart Money Tracks
+        </h3>
+
+        <div class="stats">
+
+            <div class="stat">
+                <div class="value">📈</div>
+                <div class="label">Repeated Appearances</div>
+            </div>
+
+            <div class="stat">
+                <div class="value">📊</div>
+                <div class="label">Volume Expansion</div>
+            </div>
+
+            <div class="stat">
+                <div class="value">🎯</div>
+                <div class="label">Strength Near Highs</div>
+            </div>
+
+            <div class="stat">
+                <div class="value">🔍</div>
+                <div class="label">Research Candidates</div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+<script>
+fetch("/elite_watchlist.json?v=" + Date.now())
+.then(res => res.json())
+.then(data => {
+
+    // =====================
+    // BUILD APPEARANCE COUNTS
+    // =====================
+
+    const grouped = {};
+
+    data.forEach(stock => {
+
+        const symbol = stock.symbol;
+
+        if (!grouped[symbol]) {
+
+            grouped[symbol] = {
+                symbol: symbol,
+                appearances: 0,
+                lastSeen: stock.scan_date,
+                bestRank: stock.rank
+            };
+
+        }
+
+        grouped[symbol].appearances++;
+
+        if (
+            stock.scan_date >
+            grouped[symbol].lastSeen
+        ){
+            grouped[symbol].lastSeen =
+            stock.scan_date;
+        }
+
+    });
+
+    // =====================
+    // SORT
+    // =====================
+
+    const rankings =
+        Object.values(grouped)
+        .sort(
+            (a,b) =>
+            b.appearances - a.appearances
+        );
+
+    // =====================
+    // STATS
+    // =====================
+
+    document.getElementById(
+        "candidateCount"
+    ).innerText =
+        rankings.length;
+
+    document.getElementById(
+        "highestCount"
+    ).innerText =
+        rankings[0].appearances;
+
+    // =====================
+    // RENDER
+    // =====================
+
+    document.getElementById(
+        "smartMoneyTable"
+    ).innerHTML = rankings.map(
+        (stock,index) => `
+
+        <div class="box"
+             onclick="loadChart('${stock.symbol}')">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+            ">
+
+                <strong>
+                    #${index + 1}
+                    ${stock.symbol}
+                </strong>
+
+                <span style="
+                    color:#22c55e;
+                    font-weight:bold;
+                ">
+                    ${stock.appearances}x
+                </span>
+
+            </div>
+
+            <div style="
+                color:#94a3b8;
+                font-size:13px;
+                margin-top:5px;
+            ">
+                Last Seen:
+                ${stock.lastSeen}
+            </div>
+
+        </div>
+
+    `).join("");
+
+});
+
+</script>
+
+<script src="https://s3.tradingview.com/tv.js"></script>
+
+<script>
+
+function loadChart(symbol){
+
+    document.getElementById("chartTitle").innerText =
+        "NASDAQ:" + symbol;
+
+    document.getElementById("tv_chart").innerHTML = "";
+
+    new TradingView.widget({
+        width:"100%",
+        height:420,
+        symbol:"NASDAQ:" + symbol,
+        interval:"D",
+        timezone:"America/New_York",
+        theme:"dark",
+        style:"1",
+        locale:"en",
+        hide_top_toolbar:true,
+        container_id:"tv_chart"
+    });
+
+}
+
+</script>
+
+</body>
