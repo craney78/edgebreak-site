@@ -243,6 +243,64 @@ def detect_smart_money(symbol, values):
     return None
 
 # =========================
+# 💾 SAVE HISTORY
+# KEEPS 4 WEEKS OF DATA
+# =========================
+def save_history(filename, new_records):
+
+    try:
+
+        with open(filename, "r") as f:
+
+            existing = json.load(f)
+
+    except:
+
+        existing = []
+
+    # =====================
+    # ADD NEW RECORDS
+    # =====================
+
+    existing.extend(new_records)
+
+    # =====================
+    # REMOVE OLD RECORDS
+    # =====================
+
+    cutoff_date = (
+        datetime.now() -
+        timedelta(days=28)
+    ).strftime("%Y-%m-%d")
+
+    existing = [
+
+        record
+
+        for record in existing
+
+        if record.get(
+            "scan_date",
+            "1900-01-01"
+        ) >= cutoff_date
+
+    ]
+
+    # =====================
+    # SAVE FILE
+    # =====================
+
+    with open(filename, "w") as f:
+
+        json.dump(
+            existing,
+            f,
+            indent=2
+        )
+
+    return len(existing)    
+
+# =========================
 # 🚀 MAIN SCAN LOOP (BACKTEST VERSION)
 # =========================
 def run_scanner():
@@ -339,27 +397,39 @@ def run_scanner():
         # ELITE WATCHLIST
         elif grade == "B+":
             elite_watchlist.append(r)
-
+                
     # =========================
     # 💾 SAVE FILES
     # =========================
     try:
 
-        with open("free_watchlist.json", "w") as f:
-            json.dump(free_watchlist, f, indent=2)
+        free_count = save_history(
+            "free_breakout_watchlist.json",
+            free_watchlist
+        )
 
-        with open("elite_watchlist.json", "w") as f:
-            json.dump(elite_watchlist, f, indent=2)
+        elite_count = save_history(
+            "elite_watchlist.json",
+            elite_watchlist
+        )
 
-    
-        print(f"\n🧠 Free Watchlist: {len(free_watchlist)}")
-        print(f"🚀 Elite Watchlist: {len(elite_watchlist)}")
-        
+        print(
+            f"\n🧠 Free Watchlist Records: "
+            f"{free_count}"
+        )
+
+        print(
+            f"🚀 Elite Watchlist Records: "
+            f"{elite_count}"
+        )
 
     except Exception as e:
-        print(f"❌ Save failed: {e}")
 
-    
+        print(
+            f"❌ Save failed: {e}"
+        )
+
+     
 
 # =========================
 # ▶ RUN (MULTI-WEEK MODE)
