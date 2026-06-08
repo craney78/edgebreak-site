@@ -392,7 +392,52 @@ fetch("/elite_watchlist.json?v=" + Date.now())
             (a,b) =>
             b.appearances - a.appearances
         );
+    // =====================
+    // DASHBOARD STATS
+    // =====================
 
+    const repeatCandidates =
+        rankings.filter(
+            s => s.appearances > 1
+        ).length;
+
+    const totalRecords =
+        data.length;
+
+    document.getElementById(
+        "trackedStocks"
+    ).innerText =
+        totalRecords;
+
+    document.getElementById(
+        "uniqueCandidates"
+    ).innerText =
+        rankings.length;
+
+    document.getElementById(
+        "candidateCount"
+    ).innerText =
+        rankings.length;
+
+    document.getElementById(
+        "repeatCount"
+    ).innerText =
+        repeatCandidates;
+
+    document.getElementById(
+        "returningCandidates"
+    ).innerText =
+        repeatCandidates;
+
+    document.getElementById(
+        "topAppearance"
+    ).innerText =
+        rankings[0].appearances + "x";
+
+    document.getElementById(
+        "highestCount"
+    ).innerText =
+        rankings[0].appearances;
     // =====================
     // STATS
     // =====================
@@ -417,7 +462,7 @@ fetch("/elite_watchlist.json?v=" + Date.now())
         (stock,index) => `
 
         <div class="box"
-             onclick="loadChart('${stock.symbol}')">
+             onclick="loadChart('${stock.symbol}'); scrollToChart();"
 
             <div style="
                 display:flex;
@@ -455,8 +500,22 @@ fetch("/elite_watchlist.json?v=" + Date.now())
 
 </script>
 
-<script src="https://s3.tradingview.com/tv.js"></script>
+<script src="https://s3.tradingview.com/tv.js">
+function scrollToChart(){
 
+    const chart =
+        document.getElementById("tv_chart");
+
+    chart.scrollIntoView({
+
+        behavior: "smooth",
+
+        block: "start"
+
+    });
+
+}
+</script>
 <script>
 
 function loadChart(symbol){
