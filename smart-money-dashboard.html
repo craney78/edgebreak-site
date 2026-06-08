@@ -10,6 +10,63 @@
 <link rel="stylesheet" href="css/dashboard.css">
 
 </head>
+<!-- NAVBAR -->
+<div class="nav">
+  <div class="nav-inner">
+
+    <!-- LEFT -->
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="images/logo.png" class="nav-logo">
+      </a>
+      <a href="index.html" class="logo-text">EDGEBREAK</a>
+      <span class="live-badge">LIVE</span>
+    </div>
+
+    <!-- RIGHT SIDE WRAP -->
+    <div class="nav-links-wrap">
+
+      <!-- LINKS -->
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="products.html" class="nav-link">Products</a>
+        <a href="index.html#statsGrid" class="nav-link">Performance</a>
+
+        <a href="watchlist.html" class="nav-link locked-link">
+          Trading Desk <span class="lock-icon">🔒</span>
+        </a>
+        
+        <a href="breakout-guide.html" class="nav-link">Free Breakout Guide</a>
+
+        <a href="trading-guide.html" class="nav-link">Guide</a>
+
+        <a href="/blog/breakout-trading-strategy.html" class="nav-link">
+          Strategy
+        </a>
+
+        <a href="dashboard.html" class="nav-link locked-link">
+          My Dashboard <span class="lock-icon">🔒</span>
+        </a>
+
+        <a href="/chart.html?symbol=AAPL" class="nav-link locked-link">
+          Charts <span class="lock-icon">🔒</span>
+        </a>
+
+        <a href="blog.html" class="nav-link">Trade Insights</a>
+
+        <a href="#" class="nav-cta" id="authBtn">Login</a>
+      </div>
+
+      <!-- HAMBURGER -->
+      <div class="menu-toggle" id="menuToggle">
+        ☰
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
 <body style="background:#020617;">
 
 <div class="container">
@@ -203,7 +260,89 @@
     </div>
 
 </div>
+<!-- FOOTER -->
+<div class="footer" style="width:100%;">
 
+  <div class="footer-inner">
+
+    <!-- LEFT (LOGO + BRAND) -->
+    <div class="footer-col">
+      
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <img src="images/logo.png" style="width:40px; height:auto;">
+        <h3 style="color:white; margin:0;">EdgeBreak</h3>
+      </div>
+
+      <p>
+        Data-driven breakout trading framework designed to analyse and track breakout setups using structured market data
+      </p>
+
+    </div>
+
+    <!-- LINKS -->
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="index.html#performance">Performance</a>      
+      <a href="pricing.html">Pricing</a>
+      <a href="disclaimer.html">Disclaimer</a>
+      <a href="about.html">About</a>
+    </div>
+
+    <!-- RESOURCES -->
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="breakout-guide.html" class="nav-link">Free Breakout Guide</a>
+      <a href="trading-guide.html">Trading Guide</a>
+      <a href="faq.html">FAQ</a>
+      <a href="support.html">Support</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+
+    <!-- CTA -->
+    <div class="footer-col">
+      <h4>Get Access</h4>
+      <p style="margin-bottom:10px;">
+        Unlock full access to the system and tracked breakout setups
+      </p>
+      <button onclick="window.location.href='pricing.html'" class="nav-cta">
+        Get Access
+      </button>
+
+      <p style="font-size:13px; opacity:0.6;">
+        See real breakout trades before they run — updated daily
+      </p>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="footer-bottom">
+
+    <!-- EDGEBREAK INFO -->
+    <p>© 2026 EdgeBreak • All rights reserved</p>
+
+    <p class="footer-disclaimer">
+      Not financial advice. Trading involves risk.
+    </p>
+
+    <!-- WEBSITE CREDIT -->
+    <div class="footer-parent-block">
+      <a href="https://www.craneplatformlabs.com.au" target="_blank">
+        <img src="images/crane-logo.png" alt="Crane Platform Labs" class="footer-logo">
+      </a>
+
+      <p class="footer-parent">
+        Website by 
+        <a href="https://www.craneplatformlabs.com.au" target="_blank">
+          Crane Platform Labs
+        </a>
+      </p>
+    </div>
+
+  </div>
+
+</div>
 </body>
 <script>
 fetch("/elite_watchlist.json?v=" + Date.now())
@@ -345,3 +484,4 @@ function loadChart(symbol){
 </script>
 
 </body>
+</html>
