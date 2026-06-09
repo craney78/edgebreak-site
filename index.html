@@ -2,39 +2,176 @@
 <html lang="en">
 <head>
 
-  <!-- 🔤 BASIC META -->
+  <!-- ===================================
+  BASIC META
+  =================================== -->
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- 🏷️ TITLE -->
-  <title>EdgeBreak | Data-Driven Breakout Trading System</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-  <!-- 🔍 SEO -->
-  <meta name="description" content="Catch breakout moves before they run. EdgeBreak is a data-driven breakout trading system focused on high-quality NASDAQ setups with real trade tracking.">
-  <meta name="keywords" content="breakout trading, breakout stocks, trading system, stock breakouts, NASDAQ trading">
-  <meta name="robots" content="index, follow">
+  <!-- ===================================
+  PRIMARY SEO
+  =================================== -->
 
-  <!-- 🔗 CANONICAL -->
-  <link rel="canonical" href="https://www.edgebreak.ai/">
+  <title>
+    EdgeBreak | NASDAQ Stock Scanner, Breakout Stocks & Smart Money Research
+  </title>
 
-  <!-- 🌐 OPEN GRAPH -->
-  <meta property="og:title" content="EdgeBreak | Breakout Trading System">
-  <meta property="og:description" content="Data-driven breakout trading system with real trade tracking.">
-  <meta property="og:url" content="https://www.edgebreak.ai/">
-  <meta property="og:type" content="website">
+  <meta
+    name="description"
+    content="EdgeBreak is a stock research platform focused on NASDAQ breakout stocks, Smart Money accumulation research, stock watchlists, technical analysis, and trade tracking. Access Breakout Elite, Smart Money Elite, Trading Workspace tools, and historical results."
+  >
 
-  
-<link rel="stylesheet" href="css/dashboard.css">  
+  <meta
+    name="keywords"
+    content="NASDAQ stock scanner, breakout stocks, stock scanner, stock screener, breakout trading, swing trading stocks, stock watchlist, stock market research, technical analysis, smart money stocks, accumulation stocks, trading workspace, stock alerts, momentum stocks, growth stocks, active trading opportunities, stock analysis, stock trading platform, EdgeBreak"
+  >
 
-  <!-- ⚙️ JS (LOAD LAST) -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>  
+  <meta
+    name="robots"
+    content="index, follow, max-image-preview:large"
+  >
 
-<script>
-window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
-);
-</script>
+  <meta
+    name="author"
+    content="EdgeBreak"
+  >
+
+  <!-- ===================================
+  CANONICAL
+  =================================== -->
+
+  <link
+    rel="canonical"
+    href="https://www.edgebreak.ai/"
+  >
+
+  <!-- ===================================
+  OPEN GRAPH
+  =================================== -->
+
+  <meta
+    property="og:title"
+    content="EdgeBreak | NASDAQ Stock Scanner & Breakout Stock Research"
+  >
+
+  <meta
+    property="og:description"
+    content="Discover breakout stocks, Smart Money accumulation opportunities, active watchlists, technical analysis tools, and historical trade tracking with EdgeBreak."
+  >
+
+  <meta
+    property="og:url"
+    content="https://www.edgebreak.ai/"
+  >
+
+  <meta
+    property="og:type"
+    content="website"
+  >
+
+  <meta
+    property="og:image"
+    content="https://www.edgebreak.ai/images/hero.jpg"
+  >
+
+  <meta
+    property="og:site_name"
+    content="EdgeBreak"
+  >
+
+  <!-- ===================================
+  TWITTER
+  =================================== -->
+
+  <meta
+    name="twitter:card"
+    content="summary_large_image"
+  >
+
+  <meta
+    name="twitter:title"
+    content="EdgeBreak | Breakout Stocks & Smart Money Research"
+  >
+
+  <meta
+    name="twitter:description"
+    content="NASDAQ breakout stock research, Smart Money accumulation tracking, trading workspace tools, and historical trade tracking."
+  >
+
+  <meta
+    name="twitter:image"
+    content="https://www.edgebreak.ai/images/hero.jpg"
+  >
+
+  <!-- ===================================
+  BRAND
+  =================================== -->
+
+  <meta
+    name="application-name"
+    content="EdgeBreak"
+  >
+
+  <meta
+    name="theme-color"
+    content="#020617"
+  >
+
+  <!-- ===================================
+  FAVICON
+  =================================== -->
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="images/favicon.webp"
+  >
+
+  <!-- ===================================
+  STYLES
+  =================================== -->
+
+  <link
+    rel="stylesheet"
+    href="css/dashboard.css"
+  >
+
+  <!-- ===================================
+  STRUCTURED DATA
+  =================================== -->
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"EdgeBreak",
+    "url":"https://www.edgebreak.ai/",
+    "description":"NASDAQ stock scanner, breakout stock research platform, Smart Money accumulation tracking, technical analysis tools, and trade tracking.",
+    "potentialAction":{
+      "@type":"SearchAction",
+      "target":"https://www.edgebreak.ai/search?q={search_term_string}",
+      "query-input":"required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- ===================================
+  SUPABASE
+  =================================== -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+  <script>
+  window.supabaseClient = supabase.createClient(
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+  );
+  </script>
 
 </head>
 
@@ -47,7 +184,7 @@ window.supabaseClient = supabase.createClient(
     <!-- LEFT -->
     <div class="nav-left">
       <a href="index.html">
-        <img src="images/logo.png" class="nav-logo">
+        <img src="images/logo.webp" class="nav-logo">
       </a>
       <a href="index.html" class="logo-text">EDGEBREAK</a>
       <span class="live-badge">LIVE</span>
@@ -78,11 +215,11 @@ window.supabaseClient = supabase.createClient(
             </a>
 
             <a href="dashboard.html">
-              My Dashboard 🔒
+              Trading Journal 🔒
             </a>
 
             <a href="/chart.html?symbol=AAPL">
-              Charts 🔒
+              Trading Workspace 🔒
             </a>
 
           </div>
@@ -137,6 +274,8 @@ window.supabaseClient = supabase.createClient(
   </div>
 </div>
 
+<main>
+
 <!-- 🔥 HERO WRAPPER -->
 
 <div class="login-hero">
@@ -148,7 +287,7 @@ window.supabaseClient = supabase.createClient(
 ```
 <!-- LOGO -->
 <div class="hero-logo-wrap">
-  <img src="images/logo.png" class="hero-logo" width="90">
+  <img src="images/logo.webp" class="hero-logo" width="90">
 </div>
 
 <!-- CONTENT -->
@@ -354,84 +493,6 @@ EDGEBREAK PRODUCTS
 
 </div>
 
-<!-- EXAMPLE TRADE -->
-
-<div style="max-width:900px; margin:60px auto; text-align:center;">
-
-  <h2 style="margin-bottom:10px;">
-    Example Breakout Trade
-  </h2>
-
-  <p style="color:#94a3b8; margin-bottom:10px;">
-    Real trade tracked using the EdgeBreak system
-  </p>
-
-  <p style="color:#94a3b8; font-size:14px; margin-bottom:20px;">
-    INDV returned +168% while following the EdgeBreak breakout framework.
-  </p>
-
-  <div style="
-    border:1px solid #1e293b;
-    border-radius:12px;
-    overflow:hidden;
-    background:#020617;
-    padding:10px;
-  ">
-    <img src="images/indv_breakout.png"
-         alt="INDV breakout trade"
-         style="width:100%; border-radius:8px;">
-  </div>
-
-  <div style="
-    margin-top:20px;
-    display:flex;
-    justify-content:center;
-    gap:40px;
-    flex-wrap:wrap;
-    font-size:14px;
-  ">
-
-```
-<div>
-  <strong>Entry</strong><br>
-  $12.46
-</div>
-
-<div>
-  <strong>Exit</strong><br>
-  $33.46
-</div>
-
-<div>
-  <strong>Return</strong><br>
-  +168%
-</div>
-```
-
-  </div>
-
-  <p style="
-      margin-top:18px;
-      color:#64748b;
-      font-size:13px;
-      max-width:700px;
-      margin-left:auto;
-      margin-right:auto;
-  ">
-    Entry was taken on a confirmed breakout above resistance. The position was held while the trend remained intact and exited according to system rules.
-  </p>
-
-</div>
-
-<div style="margin:30px 0; text-align:center;">
-
-<button
-   onclick="window.location.href='products.html'"
-   class="nav-cta">
-Explore All Products </button>
-
-</div>
-
 
 <!-- ===================================
 BREAKOUT ELITE
@@ -589,7 +650,7 @@ REAL TRADE EXAMPLE
 ">
 
     <img
-        src="images/indv_breakout.png"
+        src="images/indv_breakout.webp"
         alt="INDV Breakout Elite Trade Example"
         style="
             width:100%;
@@ -645,60 +706,6 @@ REAL TRADE EXAMPLE
 
 </div>
 
-<!-- ===================================
-FREE BREAKOUT WATCHLIST
-=================================== -->
-
-<div style="max-width:1000px; margin:80px auto; text-align:center;">
-
-```
-<h2>
-    Free Breakout Watchlist
-</h2>
-
-<p style="
-    color:#22c55e;
-    font-weight:600;
-    font-size:18px;
-    margin-top:10px;
-    margin-bottom:20px;
-">
-    Explore Potential Opportunities For Free
-</p>
-
-<p style="
-    color:#94a3b8;
-    max-width:850px;
-    margin:0 auto 25px auto;
-    line-height:1.8;
-">
-    The Free Breakout Watchlist provides access to stocks that have appeared on the EdgeBreak scanner but have not qualified for inclusion within Breakout Elite. These stocks may still display interesting characteristics and can be useful for building watchlists, conducting research, and learning how the EdgeBreak framework identifies potential opportunities.
-</p>
-
-<p style="
-    color:#94a3b8;
-    max-width:850px;
-    margin:0 auto 25px auto;
-    line-height:1.8;
-">
-    While some Free Watchlist stocks may go on to perform well, they have not met the higher standards required for Breakout Elite. The strongest opportunities identified by the EdgeBreak framework are reserved for members through Breakout Elite and Smart Money.
-</p>
-
-<p style="
-    color:#94a3b8;
-    max-width:850px;
-    margin:0 auto 40px auto;
-    line-height:1.8;
-">
-    Think of the Free Watchlist as a way to experience the platform and see the scanning process in action. It offers transparency into how stocks move through the EdgeBreak ecosystem while highlighting the difference between general candidates and higher-conviction opportunities.
-</p>
-
-<div class="hero-highlight">
-    Free Access • Research Candidates • Build Watchlists • Learn The Process
-</div>
-```
-
-</div>
 
 <!-- ===================================
 FREE BREAKOUT WATCHLIST
@@ -833,64 +840,115 @@ WHY MEMBERS UPGRADE
 
 </div>
 
-<!-- ===================================
-FREE WATCHLIST PREVIEW
-=================================== -->
+<!-- =========================
+FREE BREAKOUT WATCHLIST
+========================= -->
 
-<div style="
-    max-width:1000px;
-    margin:60px auto;
-    text-align:center;
-">
+<section class="section">
 
-    <h3>
-        Recent Free Watchlist Candidates
-    </h3>
+  <div style="text-align:center; max-width:900px; margin:0 auto;">
+
+    <span style="
+      display:inline-block;
+      padding:8px 16px;
+      border:1px solid #1e293b;
+      border-radius:999px;
+      font-size:13px;
+      color:#22c55e;
+      margin-bottom:20px;
+    ">
+      FREE BREAKOUT WATCHLIST
+    </span>
+
+    <h2 style="margin-bottom:15px;">
+      Free Breakout Watchlist
+    </h2>
 
     <p style="
-        color:#94a3b8;
-        margin-bottom:25px;
+      color:#94a3b8;
+      max-width:750px;
+      margin:0 auto 20px auto;
+      line-height:1.7;
+      font-size:17px;
     ">
-        Examples of stocks recently identified by the EdgeBreak scanner.
+      Stocks identified by the EdgeBreak scanner that may be worthy of further research.
     </p>
 
-    <div class="stats">
+    <p style="
+      color:#cbd5e1;
+      max-width:750px;
+      margin:0 auto 40px auto;
+      line-height:1.7;
+    ">
+      The Free Breakout Watchlist provides a sample of stocks currently appearing on the EdgeBreak scanner. These candidates have not qualified for Breakout Elite but may display interesting technical characteristics for investors building watchlists and conducting research.
+    </p>
 
-        <div class="stat">
-            <div class="label">FGBI</div>
-            <div class="value">A</div>
-            <div style="font-size:12px;color:#94a3b8;">
-                Research Candidate
-            </div>
-        </div>
+  </div>
 
-        <div class="stat">
-            <div class="label">LLYVA</div>
-            <div class="value">A</div>
-            <div style="font-size:12px;color:#94a3b8;">
-                Research Candidate
-            </div>
-        </div>
+  <div
+    id="freeWatchlistContainer"
+    class="grid"
+    style="margin-bottom:50px;"
+  ></div>
 
-        <div class="stat">
-            <div class="label">FRST</div>
-            <div class="value">A</div>
-            <div style="font-size:12px;color:#94a3b8;">
-                Research Candidate
-            </div>
-        </div>
+  <div
+    id="freeWatchlistChartContainer"
+    style="
+      display:none;
+      margin-top:40px;
+    "
+  >
 
-        <div class="stat">
-            <div class="label">HFBL</div>
-            <div class="value">A</div>
-            <div style="font-size:12px;color:#94a3b8;">
-                Research Candidate
-            </div>
-        </div>
+    <div class="card">
+
+      <h3
+        id="freeWatchlistChartTitle"
+        style="
+          text-align:center;
+          margin-bottom:20px;
+        "
+      ></h3>
+
+      <iframe
+        id="freeWatchlistChart"
+        width="100%"
+        height="650"
+        frameborder="0"
+        allowfullscreen
+      ></iframe>
 
     </div>
 
-</div>
+  </div>
+
+  <div class="card" style="
+    text-align:center;
+    margin-top:60px;
+    max-width:900px;
+    margin-left:auto;
+    margin-right:auto;
+  ">
+
+    <h3 style="margin-bottom:15px;">
+      Want The Strongest Opportunities?
+    </h3>
+
+    <p style="
+      color:#94a3b8;
+      max-width:700px;
+      margin:0 auto 25px auto;
+      line-height:1.7;
+    ">
+      The Free Watchlist shows stocks identified by the scanner. Breakout Elite members gain access to the highest-conviction opportunities, complete trade tracking, historical results, and premium research tools.
+    </p>
+
+    <a href="pricing.html" class="btn">
+      Unlock Breakout Elite →
+    </a>
+
+  </div>
+
+</section>
 
 <!-- ===================================
 CTA
@@ -1173,6 +1231,278 @@ SMART MONEY STATISTICS
   "></div>
 </div>
 
+<!-- ===================================
+EVERYTHING INCLUDED
+=================================== -->
+
+<div style="max-width:1100px; margin:100px auto; text-align:center;">
+
+    <h2>
+        Everything Included With EdgeBreak
+    </h2>
+
+    <p style="
+        color:#94a3b8;
+        max-width:850px;
+        margin:20px auto 50px auto;
+        line-height:1.8;
+    ">
+        EdgeBreak is more than a stock scanner. Members gain access to active opportunities, accumulation research, historical trade tracking, advanced charting tools, and a growing suite of premium trading features designed to help investors research, monitor, and analyse the market.
+    </p>
+
+</div>
+
+<!-- ===================================
+CURRENT FEATURES
+=================================== -->
+
+<div class="feature-grid">
+
+    <!-- BREAKOUT ELITE -->
+
+    <div class="feature-card">
+
+        <img
+            src="images/placeholder-breakout-elite.jpg"
+            alt="Breakout Elite"
+            style="width:100%; border-radius:10px; margin-bottom:20px;"
+        >
+
+        <h3>Breakout Elite</h3>
+
+        <p>
+            Active breakout opportunities identified using the EdgeBreak framework. Includes trade management, performance tracking, charts, and historical results.
+        </p>
+
+    </div>
+
+    <!-- SMART MONEY -->
+
+    <div class="feature-card">
+
+        <img
+            src="images/placeholder-smart-money.jpg"
+            alt="Smart Money"
+            style="width:100%; border-radius:10px; margin-bottom:20px;"
+        >
+
+        <h3>Smart Money Elite</h3>
+
+        <p>
+            Track recurring accumulation activity and identify stocks attracting continued market attention before opportunities become obvious.
+        </p>
+
+    </div>
+
+    <!-- FREE WATCHLIST -->
+
+    <div class="feature-card">
+
+        <img
+            src="images/placeholder-free-watchlist.jpg"
+            alt="Free Watchlist"
+            style="width:100%; border-radius:10px; margin-bottom:20px;"
+        >
+
+        <h3>Free Watchlist</h3>
+
+        <p>
+            Explore stocks identified by the EdgeBreak scanner and learn how opportunities move through the EdgeBreak ecosystem.
+        </p>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+CURRENT TOOLS
+=================================== -->
+
+<div style="max-width:1100px; margin:80px auto; text-align:center;">
+
+    <h2>
+        Included Tools
+    </h2>
+
+</div>
+
+<div class="stats">
+
+    <div class="stat">
+        <div class="value">✓</div>
+        <div class="label">Historical Trade Database</div>
+    </div>
+
+    <div class="stat">
+        <div class="value">✓</div>
+        <div class="label">Active Trade Tracking</div>
+    </div>
+
+    <div class="stat">
+        <div class="value">✓</div>
+        <div class="label">Trade Management</div>
+    </div>
+
+    <div class="stat">
+        <div class="value">✓</div>
+        <div class="label">Performance Statistics</div>
+    </div>
+
+    <div class="stat">
+        <div class="value">✓</div>
+        <div class="label">TradingView Charts</div>
+    </div>
+
+    <div class="stat">
+        <div class="value">✓</div>
+        <div class="label">NASDAQ Coverage</div>
+    </div>
+
+    <div class="stat">
+        <div class="value">✓</div>
+        <div class="label">Smart Money Rankings</div>
+    </div>
+
+    <div class="stat">
+        <div class="value">✓</div>
+        <div class="label">Sector Analysis</div>
+    </div>
+
+</div>
+
+<!-- ===================================
+COMING SOON
+=================================== -->
+
+<div style="max-width:1100px; margin:100px auto 50px auto; text-align:center;">
+
+    <h2>
+        Coming Soon
+    </h2>
+
+    <p style="
+        color:#94a3b8;
+        max-width:800px;
+        margin:20px auto;
+        line-height:1.8;
+    ">
+        We are actively expanding the EdgeBreak platform with additional premium features designed to help members research opportunities, build watchlists, and improve trading workflows.
+    </p>
+
+</div>
+
+<div class="feature-grid">
+
+    <!-- WORKSPACE -->
+
+    <div class="feature-card">
+
+        <img
+            src="images/placeholder-workspace.jpg"
+            alt="Trading Workspace"
+            style="width:100%; border-radius:10px; margin-bottom:20px;"
+        >
+
+        <h3>Trading Workspace</h3>
+
+        <p>
+            Advanced TradingView workspace with indicators, drawing tools, chart layouts, and integrated EdgeBreak research.
+        </p>
+
+    </div>
+
+    <!-- STOCK INTELLIGENCE -->
+
+    <div class="feature-card">
+
+        <img
+            src="images/placeholder-stock-profile.jpg"
+            alt="Stock Intelligence"
+            style="width:100%; border-radius:10px; margin-bottom:20px;"
+        >
+
+        <h3>Stock Intelligence Pages</h3>
+
+        <p>
+            Dedicated research pages showing Smart Money history, rankings, charts, notes, and EdgeBreak analytics.
+        </p>
+
+    </div>
+
+    <!-- ALERTS -->
+
+    <div class="feature-card">
+
+        <img
+            src="images/placeholder-alerts.jpg"
+            alt="Alerts"
+            style="width:100%; border-radius:10px; margin-bottom:20px;"
+        >
+
+        <h3>Alerts</h3>
+
+        <p>
+            Receive notifications when stocks enter Breakout Elite, appear on Smart Money, or trigger custom price levels.
+        </p>
+
+    </div>
+
+    <!-- NOTES -->
+
+    <div class="feature-card">
+
+        <img
+            src="images/placeholder-notes.jpg"
+            alt="Notes"
+            style="width:100%; border-radius:10px; margin-bottom:20px;"
+        >
+
+        <h3>Personal Notes</h3>
+
+        <p>
+            Save research, support levels, resistance levels, and trade ideas directly inside the platform.
+        </p>
+
+    </div>
+
+    <!-- JOURNAL -->
+
+    <div class="feature-card">
+
+        <img
+            src="images/placeholder-journal.jpg"
+            alt="Trade Journal"
+            style="width:100%; border-radius:10px; margin-bottom:20px;"
+        >
+
+        <h3>Trade Journal</h3>
+
+        <p>
+            Record entries, exits, lessons learned, and track your personal trading performance over time.
+        </p>
+
+    </div>
+
+    <!-- MARKET PULSE -->
+
+    <div class="feature-card">
+
+        <img
+            src="images/placeholder-market-pulse.jpg"
+            alt="Market Pulse"
+            style="width:100%; border-radius:10px; margin-bottom:20px;"
+        >
+
+        <h3>Market Pulse</h3>
+
+        <p>
+            Daily overview of market strength, sector leadership, Smart Money activity, and breakout conditions.
+        </p>
+
+    </div>
+
+</div>
+
 <!-- PROVEN PERFORMANCE -->
 <div class="section" id="statsGrid">
 
@@ -1220,7 +1550,7 @@ SMART MONEY STATISTICS
 
     <!-- BLOCK 1 -->
     <div class="feature-card">
-      <img src="images/dash1.png" style="width:100%; height:auto; margin-bottom:25px;">
+      <img src="images/dash1.webp" style="width:100%; height:auto; margin-bottom:25px;">
 
       <h3>Log Your Trades</h3>
 
@@ -1235,7 +1565,7 @@ SMART MONEY STATISTICS
 
     <!-- BLOCK 2 -->
     <div class="feature-card">
-      <img src="images/dash2.png" style="width:100%; height:auto; margin-bottom:25px;">
+      <img src="images/dash2.webp" style="width:100%; height:auto; margin-bottom:25px;">
 
       <h3>Know Your Numbers</h3>
 
@@ -1250,7 +1580,7 @@ SMART MONEY STATISTICS
 
     <!-- BLOCK 3 -->
     <div class="feature-card">
-      <img src="images/dash3.png" style="width:100%; height:auto; margin-bottom:25px;">
+      <img src="images/dash3.webp" style="width:100%; height:auto; margin-bottom:25px;">
 
       <h3>Measure Performance</h3>
 
@@ -1265,7 +1595,7 @@ SMART MONEY STATISTICS
 
     <!-- BLOCK 4 -->
     <div class="feature-card">
-      <img src="images/dash4.png" style="width:100%; height:auto; margin-bottom:25px;">
+      <img src="images/dash4.webp" style="width:100%; height:auto; margin-bottom:25px;">
 
       <h3>Simulate Growth</h3>
 
@@ -1401,7 +1731,7 @@ document.getElementById("emailForm").addEventListener("submit", function(e) {
 
 <!-- IMAGE BLOCK -->
 <div style="text-align:center; margin:30px 0;">
-  <img src="images/human-trading-section.png" style="max-width:700px; width:100%; border-radius:12px;">
+  <img src="images/human-trading-section.webp" style="max-width:700px; width:100%; border-radius:12px;">
 </div>
 
 <!-- MARKET REALITY SECTION -->
@@ -1492,6 +1822,182 @@ document.getElementById("emailForm").addEventListener("submit", function(e) {
   <div style="height:1px; background:#1e293b; margin-bottom:20px;"></div>
 </div>
 
+<!-- ===================================
+FREQUENTLY ASKED QUESTIONS
+=================================== -->
+
+<div style="max-width:1000px; margin:100px auto;">
+
+    <h2 style="text-align:center;">
+        Frequently Asked Questions
+    </h2>
+
+    <p style="
+        text-align:center;
+        color:#94a3b8;
+        max-width:700px;
+        margin:20px auto 50px auto;
+    ">
+        Learn more about Breakout Elite, Smart Money Elite, the Trading Workspace, and how EdgeBreak works.
+    </p>
+
+    <!-- FAQ 1 -->
+
+    <div class="card" style="margin-bottom:20px;">
+
+        <h3>
+            What is Breakout Elite?
+        </h3>
+
+        <p>
+            <a href="products.html">Breakout Elite</a> is EdgeBreak's flagship stock research product. Thousands of NASDAQ stocks are analysed daily to identify higher-conviction breakout opportunities displaying strong technical characteristics, improving price structure, and increasing market participation.
+        </p>
+
+    </div>
+
+    <!-- FAQ 2 -->
+
+    <div class="card" style="margin-bottom:20px;">
+
+        <h3>
+            What is Smart Money Elite?
+        </h3>
+
+        <p>
+            <a href="products.html">Smart Money Elite</a> tracks stocks repeatedly appearing on the EdgeBreak accumulation scanner. Rather than focusing on confirmed breakouts, Smart Money helps investors identify stocks that may be attracting sustained buying interest before larger moves develop.
+        </p>
+
+    </div>
+
+    <!-- FAQ 3 -->
+
+    <div class="card" style="margin-bottom:20px;">
+
+        <h3>
+            What is the Trading Workspace?
+        </h3>
+
+        <p>
+            The <a href="chart.html?symbol=AAPL">Trading Workspace</a> combines TradingView charting, watchlists, trade tracking, Smart Money research, and stock analysis tools into one research environment designed for traders and investors.
+        </p>
+
+    </div>
+
+    <!-- FAQ 4 -->
+
+    <div class="card" style="margin-bottom:20px;">
+
+        <h3>
+            Can I see previous trades?
+        </h3>
+
+        <p>
+            Yes. Members can access the complete EdgeBreak trade history, including active trades, completed trades, historical performance statistics, and tracked results through the platform.
+        </p>
+
+    </div>
+
+    <!-- FAQ 5 -->
+
+    <div class="card" style="margin-bottom:20px;">
+
+        <h3>
+            Is there a free version?
+        </h3>
+
+        <p>
+            Yes. The <a href="breakout-guide.html">Free Breakout Guide</a> and Free Breakout Watchlist provide an introduction to the EdgeBreak framework and allow visitors to explore research candidates before becoming members.
+        </p>
+
+    </div>
+
+    <!-- FAQ 6 -->
+
+    <div class="card" style="margin-bottom:20px;">
+
+        <h3>
+            How are stocks selected?
+        </h3>
+
+        <p>
+            EdgeBreak uses a structured stock scanning framework that evaluates price structure, volume expansion, resistance levels, and trend characteristics across thousands of NASDAQ-listed stocks.
+        </p>
+
+        <p>
+            Learn more in our
+            <a href="/blog/breakout-trading-strategy.html">
+                Breakout Trading Strategy
+            </a>.
+        </p>
+
+    </div>
+
+    <!-- FAQ 7 -->
+
+    <div class="card" style="margin-bottom:20px;">
+
+        <h3>
+            Is EdgeBreak a stock alert service?
+        </h3>
+
+        <p>
+            No. EdgeBreak is a stock research platform designed to help investors analyse opportunities and conduct their own research. It is not financial advice and does not provide personalised investment recommendations.
+        </p>
+
+    </div>
+
+    <!-- FAQ 8 -->
+
+    <div class="card" style="margin-bottom:20px;">
+
+        <h3>
+            Who is EdgeBreak for?
+        </h3>
+
+        <p>
+            EdgeBreak is designed for traders and investors interested in breakout stocks, technical analysis, stock scanning, Smart Money research, and structured market analysis focused on the NASDAQ.
+        </p>
+
+    </div>
+
+    <!-- FAQ 9 -->
+
+    <div class="card" style="margin-bottom:20px;">
+
+        <h3>
+            What is included with membership?
+        </h3>
+
+        <p>
+            Membership includes access to
+            <a href="products.html">Breakout Elite</a>,
+            <a href="products.html">Smart Money Elite</a>,
+            the Trading Workspace, historical trade tracking, chart analysis tools, and future premium features as they are released.
+        </p>
+
+    </div>
+
+    <!-- FAQ 10 -->
+
+    <div class="card">
+
+        <h3>
+            How do I get started?
+        </h3>
+
+        <p>
+            Start by reviewing the
+            <a href="breakout-guide.html">Free Breakout Guide</a>,
+            exploring the
+            <a href="products.html">Products Page</a>,
+            and then activate your
+            <a href="pricing.html">1 Month Free Trial</a>.
+        </p>
+
+    </div>
+
+</div>
+
 <!-- 🔥 FINAL CTA -->
 <div class="section" style="text-align:center; max-width:700px; margin:80px auto;">
 
@@ -1521,7 +2027,7 @@ document.getElementById("emailForm").addEventListener("submit", function(e) {
 
 </div>
 </div>
-
+</main>
 <!-- FOOTER -->
 <div class="footer" style="width:100%;">
 
@@ -1531,7 +2037,7 @@ document.getElementById("emailForm").addEventListener("submit", function(e) {
     <div class="footer-col">
       
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-        <img src="images/logo.png" style="width:40px; height:auto;">
+        <img src="images/logo.webp" style="width:40px; height:auto;">
         <h3 style="color:white; margin:0;">EdgeBreak</h3>
       </div>
 
@@ -1591,7 +2097,7 @@ document.getElementById("emailForm").addEventListener("submit", function(e) {
     <!-- WEBSITE CREDIT -->
     <div class="footer-parent-block">
       <a href="https://www.craneplatformlabs.com.au" target="_blank">
-        <img src="images/crane-logo.png" alt="Crane Platform Labs" class="footer-logo">
+        <img src="images/crane-logo.webp" alt="Crane Platform Labs" class="footer-logo">
       </a>
 
       <p class="footer-parent">
@@ -2071,6 +2577,129 @@ fetch(
 });
 
 </script>
+<script>
 
+// =========================
+// LOAD FREE WATCHLIST CHART
+// =========================
+
+function loadFreeWatchlistChart(symbol) {
+
+  const container =
+    document.getElementById(
+      "freeWatchlistChartContainer"
+    );
+
+  const chart =
+    document.getElementById(
+      "freeWatchlistChart"
+    );
+
+  const title =
+    document.getElementById(
+      "freeWatchlistChartTitle"
+    );
+
+  title.innerHTML =
+    `📈 ${symbol} Chart`;
+
+  chart.src =
+    `https://s.tradingview.com/widgetembed/?symbol=NASDAQ:${symbol}&interval=D&theme=dark`;
+
+  container.style.display = "block";
+
+  container.scrollIntoView({
+    behavior: "smooth"
+  });
+
+}
+
+// =========================
+// LOAD FREE WATCHLIST
+// =========================
+
+fetch(
+  "free_breakout_watchlist.json?v=" +
+  new Date().getTime()
+)
+
+.then(res => res.json())
+
+.then(data => {
+
+  const container =
+    document.getElementById(
+      "freeWatchlistContainer"
+    );
+
+  if (!container) return;
+
+  container.innerHTML =
+    data.slice(0, 12).map(stock => `
+
+      <div
+        class="card"
+        onclick="loadFreeWatchlistChart('${stock.symbol}')"
+        style="
+          cursor:pointer;
+          transition:0.2s;
+        "
+      >
+
+        <div style="
+          font-size:24px;
+          font-weight:700;
+        ">
+          ${stock.symbol}
+        </div>
+
+        <div style="
+          margin-top:10px;
+          color:#22c55e;
+          font-weight:600;
+        ">
+          Grade ${stock.grade}
+        </div>
+
+        <div style="
+          margin-top:10px;
+          color:#94a3b8;
+          font-size:13px;
+        ">
+          Score: ${stock.score}
+        </div>
+
+        <div style="
+          margin-top:5px;
+          color:#94a3b8;
+          font-size:13px;
+        ">
+          Volume: ${stock.volume_ratio}x
+        </div>
+
+        <div style="
+          margin-top:15px;
+          color:#60a5fa;
+          font-size:14px;
+        ">
+          Click To Research →
+        </div>
+
+      </div>
+
+    `).join("");
+
+})
+
+.catch(err => {
+
+  console.error(
+    "Free Watchlist Error:",
+    err
+  );
+
+});
+
+</script>
 </body>
 </html>
