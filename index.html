@@ -58,32 +58,73 @@ window.supabaseClient = supabase.createClient(
 
       <!-- LINKS -->
       <div class="nav-links" id="navLinks">
+
         <a href="index.html" class="nav-link">Home</a>
-        <a href="products.html" class="nav-link">Products</a>
-        <a href="watchlist.html" class="nav-link locked-link">
-          Breakout Plus <span class="lock-icon">🔒</span>
+
+        <!-- PRODUCTS -->
+        <div class="dropdown">
+          <a href="products.html" class="nav-link">
+            Products ▼
+          </a>
+
+          <div class="dropdown-content">
+
+            <a href="watchlist.html">
+              Breakout Plus 🔒
+            </a>
+
+            <a href="smart-money-dashboard.html">
+              Smart Money Elite 🔒
+            </a>
+
+            <a href="dashboard.html">
+              My Dashboard 🔒
+            </a>
+
+            <a href="/chart.html?symbol=AAPL">
+              Charts 🔒
+            </a>
+
+          </div>
+        </div>
+
+        <!-- RESOURCES -->
+        <div class="dropdown">
+
+          <a href="#" class="nav-link">
+            Resources ▼
+          </a>
+
+          <div class="dropdown-content">
+
+            <a href="trading-guide.html">
+              Trading Guide
+            </a>
+
+            <a href="breakout-guide.html">
+              Free Breakout Guide
+            </a>
+
+            <a href="/blog/breakout-trading-strategy.html">
+              Strategy
+            </a>
+
+            <a href="blog.html">
+              Trading Insights
+            </a>
+
+          </div>
+
+        </div>
+
+        <a href="pricing.html" class="nav-link">
+          Pricing
         </a>
-        <a href="smart-money-dashboard.html" class="nav-link">Smart Money Elite</a>
 
-        <a href="breakout-guide.html" class="nav-link">Free Breakout Guide</a>
-
-        <a href="trading-guide.html" class="nav-link">Guide</a>
-
-        <a href="/blog/breakout-trading-strategy.html" class="nav-link">
-          Strategy
+        <a href="#" class="nav-cta" id="authBtn">
+          Login
         </a>
 
-        <a href="dashboard.html" class="nav-link locked-link">
-          My Dashboard <span class="lock-icon">🔒</span>
-        </a>
-
-        <a href="/chart.html?symbol=AAPL" class="nav-link locked-link">
-          Charts <span class="lock-icon">🔒</span>
-        </a>
-
-        <a href="blog.html" class="nav-link">Trade Insights</a>
-
-        <a href="#" class="nav-cta" id="authBtn">Login</a>
       </div>
 
       <!-- HAMBURGER -->

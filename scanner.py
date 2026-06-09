@@ -521,31 +521,43 @@ def append_to_active_positions(new_signals):
         print(f"✅ Added {added} new trades")
 
         # =========================
-        # SAVE FREE WATCHLIST
+        # BUILD WATCHLISTS
         # =========================
-        save_free_watchlist(all_signals)    
 
-        watchlist = []
+        free_watchlist = []
+        elite_watchlist = []
 
-        for s in signals:
+        for s in all_signals:
 
-            watchlist.append({
-                "symbol": s["symbol"],
-                "scan_date": s["date"],
-                "price": s["price"],
-                "grade": s["grade"],
-                "score": s["score"],
-                "volume_ratio": s["volume_ratio"],
-                "breakout_strength": s["breakout_strength"],
-                "price_group": s["price_group"]
-            })
+            if s["grade"] == "A":
 
-        with open(file, "w") as f:
-            json.dump(watchlist, f, indent=2)
+        free_watchlist.append(s)
+
+        elif s["grade"] == "B+":
+        elite_watchlist.append(s)
+
+        # =========================
+        # SAVE FILES
+        # =========================
+
+        free_count = save_history(
+            "free_breakout_watchlist.json",
+            free_watchlist
+        )
+
+        elite_count = save_history(
+            "elite_watchlist.json",
+            elite_watchlist
+        )
 
         print(
-            f"✅ Saved {len(watchlist)} stocks "
-            f"to free_breakout_watchlist.json"
+            f"\n🧠 Free Watchlist Records: "
+            f"{free_count}"
+        )
+
+        print(
+            f"🚀 Elite Watchlist Records: "
+            f"{elite_count}"
         )        
 
 # =========================
