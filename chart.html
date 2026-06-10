@@ -1465,33 +1465,73 @@ async function loadSmartMoneyList(){
 
     smartMoneyData.forEach(stock => {
 
-      const card =
-        document.createElement("div");
+      const gain =
+        stock.change_percent || 0;
 
-      card.className =
-        "trade-card";
+      const gainClass =
+        gain >= 0
+          ? "trade-pos"
+          : "trade-neg";
 
-      card.innerHTML = `
+      container.innerHTML += `
 
-        <div class="trade-symbol">
-          ${stock.symbol}
-        </div>
+        <div
+          class="trade-item"
+          onclick='loadSmartMoney(${JSON.stringify(stock)})'
+        >
 
-        <div class="trade-meta">
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            width:100%;
+          ">
 
-          <span>
-            ${stock.appearances || 1}x
-          </span>
+            <div>
+
+              <div class="trade-symbol">
+                ${stock.symbol}
+              </div>
+
+              <div class="trade-meta">
+
+                ${stock.days_tracked || 0}
+                days tracked
+
+                •
+
+                ${stock.appearances || 1}
+                appearances
+
+              </div>
+
+            </div>
+
+            <div style="text-align:right;">
+
+              <div class="${gainClass}">
+
+                ${gain >= 0 ? "+" : ""}
+                ${gain.toFixed(2)}%
+
+              </div>
+
+              <div class="trade-meta">
+
+                $${stock.entry_price ?? "-"}
+
+                →
+
+                $${stock.current_price ?? "-"}
+
+              </div>
+
+            </div>
+
+          </div>
 
         </div>
 
       `;
-
-      card.onclick = () => {
-        loadSmartMoney(stock);
-      };
-
-      container.appendChild(card);
 
     });
 
