@@ -679,7 +679,7 @@ checkAccess();
 <div class="section" style="margin-top:30px;">
 
   <!-- 🟢 LIVE TRADES -->
-  <h3 style="margin-bottom:10px;">🟢 Current Setups (Live)</h3>
+  <h3 style="margin-bottom:10px;">🟢 Current Elite BreakoutSetups (Live)</h3>
   <div id="liveTradesList"></div>
 
   <!-- =========================
@@ -832,43 +832,52 @@ window.addEventListener("DOMContentLoaded", () => {
 // =========================
 function loadChart(symbol) {
 
-  const container = document.getElementById("tradingview_chart");
+  const container =
+    document.getElementById("tradingview_advanced");
+
+  if (!container) {
+    console.error(
+      "TradingView container not found"
+    );
+    return;
+  }
 
   container.innerHTML = "";
 
   new TradingView.widget({
+
     autosize: true,
+
     symbol: "NASDAQ:" + symbol,
+
     interval: "D",
+
     timezone: "Australia/Sydney",
+
     theme: "dark",
+
     style: "1",
+
     locale: "en",
 
-    container_id: "tradingview_chart",
-
     allow_symbol_change: true,
-
-    studies: [
-      "Volume@tv-basicstudies"
-    ],
-
-    enabled_features: [
-      "study_templates",
-      "hide_left_toolbar_by_default"
-    ],
-
-    disabled_features: [],
 
     withdateranges: true,
 
     save_image: true,
 
     details: true,
+
     hotlist: true,
+
     calendar: true,
 
-    toolbar_bg: "#0f172a"
+    studies: [
+      "Volume@tv-basicstudies"
+    ],
+
+    container_id: "tradingview_advanced"
+
   });
 
 }
