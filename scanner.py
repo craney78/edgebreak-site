@@ -501,7 +501,7 @@ def append_to_active_positions(new_signals):
 
             "entry_price": s["price"],
             "entry_date": s["date"],
-
+            "grade": s["grade"],
             "current_price": s["price"],
             "change_percent": 0,
             "days_held": 0,
