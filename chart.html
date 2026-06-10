@@ -953,21 +953,20 @@ function selectTrade(symbol, entry, stop, target, result) {
   // 🔁 LOAD NEW CHART PAGE
   window.location.href = url.toString();
 }
+
 function loadTrade(trade){
 
-  console.log("Trade clicked:", trade);
+  console.log(
+    "Loading:",
+    trade.symbol
+  );
 
-  // Update symbol text
-  document.getElementById("symbolText").innerText =
-    trade.symbol;
-
-  // Update chart
-  loadChart(trade.symbol);
-
-  // Update intelligence panel
   showTradeInsight(trade);
 
+  loadChart(trade.symbol);
+
 }
+
 // =========================
 // 📊 GET TRADE RESULT (ADD HERE)
 // =========================
