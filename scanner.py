@@ -529,6 +529,14 @@ def append_to_active_positions(new_signals):
         trade["stop_loss"] = round(stop_loss, 2)
         trade["target_price"] = round(target_price, 2)
 
+        risk = entry - stop_loss
+        reward = target_price - entry
+
+        trade["risk_reward"] = round(
+            reward / risk,
+            2
+        )
+
         existing.append(trade)
         added += 1
 
