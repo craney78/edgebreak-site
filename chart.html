@@ -941,6 +941,17 @@ function loadTrade(trade){
   showTradeInsight(trade);
 
 }
+
+function loadTrade(trade){
+
+  showTradeInsight(trade);
+
+  loadChart(trade.symbol);
+
+  document.getElementById("symbolText").innerText =
+    trade.symbol;
+
+}
 // =========================
 // 📊 GET TRADE RESULT (ADD HERE)
 // =========================
