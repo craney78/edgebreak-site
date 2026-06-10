@@ -96,6 +96,7 @@ def fetch_batch(symbols):
 
 def process_data(data):
     signals = []
+    free_watchlist = []
     seen = set()
 
     for symbol, content in data.items():
@@ -233,6 +234,26 @@ def process_data(data):
             # 🎯 GRADE FILTER
             # =========================
             grade = result["grade"]
+            # =========================
+            # 🧠 FREE WATCHLIST
+            # =========================
+
+            if (
+                (price_group == "SMALL" and grade in ["A+", "A"]) or
+                (price_group == "MID" and grade in ["A+", "A", "B+"]) or
+                (price_group == "LARGE" and grade == "A")
+            ):
+
+                free_watchlist.append({
+                    "symbol": result["symbol"],
+                    "date": window[0]["datetime"],
+                    "price": current_price,
+                    "grade": grade,
+                    "score": result["score"],
+                    "price_group": price_group,
+                    "volume_ratio": round(volume_ratio, 2),
+                    "breakout_strength": result["breakout_strength"]
+                })
 
             if price_group == "SMALL" and grade != "B+":
                 print(f"{symbol} FAILED_GRADE")
@@ -300,6 +321,8 @@ def process_data(data):
                 continue
             seen.add(key)
 
+            
+
             # =========================
             # ✅ FINAL SIGNAL
             # =========================
@@ -351,7 +374,10 @@ def process_data(data):
         if symbol not in unique or s["score"] > unique[symbol]["score"]:
             unique[symbol] = s
 
-    return list(unique.values())
+    return {
+        "elite": list(unique.values()),
+        "watchlist": free_watchlist
+    }
 
 # =========================
 # SORT SIGNALS
@@ -416,6 +442,7 @@ FIELDNAMES = [
     "day2_return",
     "result"
 ]
+
 
 # =========================
 # APPEND TO ACTIVE POSITIONS (LIVE SYSTEM)
@@ -505,60 +532,7 @@ def append_to_active_positions(new_signals):
 
         print(f"✅ Added {added} new trades")
 
-        # =========================
-        # 🔔 ADD ACTIVITY LOG HERE
-        # =========================
-        activity.append({
-            "type": "OPEN",
-            "symbol": s["symbol"],
-            "entry_price": s["price"],
-            "date": int(time.time() * 1000)
-        })
-
-        with open(file, "w") as f:
-            json.dump(existing, f, indent=2)
-
-        print(f"✅ Added {added} new trades")
-
-        # =========================
-        # BUILD WATCHLISTS
-        # =========================
-
-        free_watchlist = []
-        elite_watchlist = []
-
-        for s in all_signals:
-
-            if s["grade"] == "A":
-
-        free_watchlist.append(s)
-
-        elif s["grade"] == "B+":
-        elite_watchlist.append(s)
-
-        # =========================
-        # SAVE FILES
-        # =========================
-
-        free_count = save_history(
-            "free_breakout_watchlist.json",
-            free_watchlist
-        )
-
-        elite_count = save_history(
-            "elite_watchlist.json",
-            elite_watchlist
-        )
-
-        print(
-            f"\n🧠 Free Watchlist Records: "
-            f"{free_count}"
-        )
-
-        print(
-            f"🚀 Elite Watchlist Records: "
-            f"{elite_count}"
-        )        
+        
 
 # =========================
 # MAIN RUN
@@ -568,6 +542,7 @@ def run():
 
     symbols = build_nasdaq_universe()[:SCAN_LIMIT]
     all_signals = []
+    all_watchlist = []
 
     for i in range(0, len(symbols), BATCH_SIZE):
         batch = symbols[i:i + BATCH_SIZE]
@@ -580,8 +555,10 @@ def run():
         if missing:
             print(f"⚠️ Missing data for: {missing}")
 
-        signals = process_data(data)
-        all_signals.extend(signals)
+        results = process_data(data)
+
+        all_signals.extend(results["elite"])
+        all_watchlist.extend(results["watchlist"])
 
         time.sleep(SLEEP_TIME)
 
@@ -590,8 +567,14 @@ def run():
     # =========================
     # SAVE FREE WATCHLIST
     # =========================
-    save_free_watchlist(all_signals)
+    with open("free_breakout_watchlist.json", "w") as f:
+        json.dump(all_watchlist, f, indent=2)
 
+    print(
+        f"🧠 Free Watchlist Saved: "
+        f"{len(all_watchlist)} stocks"
+    )
+    
     # =========================
     # ✅ HANDLE SIGNALS
     # =========================
