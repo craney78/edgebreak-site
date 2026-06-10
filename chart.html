@@ -697,7 +697,93 @@ checkAccess();
 
 </div>
 
-    
+<!-- =========================
+🧠 SMART MONEY INTELLIGENCE
+========================= -->
+<div class="section smart-intel">
+
+  <h2>🧠 Smart Money Intelligence</h2>
+
+  <div class="intel-grid">
+
+    <div class="intel-card">
+
+      <h3 id="smSymbol">
+        Select a Smart Money stock
+      </h3>
+
+      <p class="intel-summary" id="smSummary">
+        Click a stock from the Smart Money list
+        to view accumulation intelligence.
+      </p>
+
+      <div class="intel-block">
+        <h4>Accumulation Profile</h4>
+
+        <div class="intel-row">
+          <span>Appearances</span>
+          <span id="smAppearances">-</span>
+        </div>
+
+        <div class="intel-row">
+          <span>First Seen</span>
+          <span id="smFirstSeen">-</span>
+        </div>
+
+        <div class="intel-row">
+          <span>Last Seen</span>
+          <span id="smLastSeen">-</span>
+        </div>
+
+        <div class="intel-row">
+          <span>Weeks Tracked</span>
+          <span id="smWeeksTracked">-</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="intel-card">
+
+      <div class="intel-block">
+        <h4>Performance</h4>
+
+        <div class="intel-row">
+          <span>Current Gain</span>
+          <span id="smCurrentGain">-</span>
+        </div>
+
+        <div class="intel-row">
+          <span>Maximum Gain</span>
+          <span id="smMaxGain">-</span>
+        </div>
+
+        <div class="intel-row">
+          <span>Status</span>
+          <span id="smStatus">-</span>
+        </div>
+
+      </div>
+
+      <div class="intel-block">
+        <h4>Why We're Watching</h4>
+
+        <p id="smCommentary">
+          Smart Money identifies stocks showing
+          repeated signs of institutional activity.
+          These are not buy signals. They are
+          stocks worth monitoring for your own
+          trading opportunities.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
   <div class="footer-note">
     <p>Data-driven breakout system</p>
     <p>Not financial advice</p>
@@ -1314,6 +1400,208 @@ function loadTicker(){
     url.toString();
 
 }
+</script>
+<script>
+
+// =========================
+// 🧠 SMART MONEY LOADER
+// =========================
+
+let smartMoneyData = [];
+
+// =========================
+// LOAD SMART MONEY LIST
+// =========================
+async function loadSmartMoneyList(){
+
+  try {
+
+    const response = await fetch(
+      "smart_money_watchlist.json?v=" +
+      Date.now()
+    );
+
+    smartMoneyData =
+      await response.json();
+
+    const container =
+      document.getElementById(
+        "smartMoneyList"
+      );
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    smartMoneyData.forEach(stock => {
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "trade-card";
+
+      card.innerHTML = `
+
+        <div class="trade-symbol">
+          ${stock.symbol}
+        </div>
+
+        <div class="trade-meta">
+
+          <span>
+            ${stock.appearances || 1}x
+          </span>
+
+        </div>
+
+      `;
+
+      card.onclick = () => {
+        loadSmartMoney(stock);
+      };
+
+      container.appendChild(card);
+
+    });
+
+  } catch(error){
+
+    console.error(
+      "SMART MONEY ERROR",
+      error
+    );
+
+  }
+
+}
+
+// =========================
+// LOAD SMART MONEY STOCK
+// =========================
+function loadSmartMoney(stock){
+
+  showSmartMoney(stock);
+
+  const url =
+    new URL(window.location.href);
+
+  url.searchParams.set(
+    "symbol",
+    stock.symbol
+  );
+
+  window.location.href =
+    url.toString();
+
+}
+
+// =========================
+// SMART MONEY INTELLIGENCE
+// =========================
+function showSmartMoney(stock){
+
+  const setText = (id, value) => {
+
+    const el =
+      document.getElementById(id);
+
+    if(el){
+      el.innerText =
+        value ?? "-";
+    }
+
+  };
+
+  setText(
+    "smSymbol",
+    stock.symbol
+  );
+
+  setText(
+    "smAppearances",
+    stock.appearances
+  );
+
+  setText(
+    "smFirstSeen",
+    stock.first_seen
+  );
+
+  setText(
+    "smLastSeen",
+    stock.last_seen
+  );
+
+  setText(
+    "smWeeksTracked",
+    stock.weeks_tracked
+  );
+
+  setText(
+    "smCurrentGain",
+    stock.current_gain != null
+      ? stock.current_gain + "%"
+      : "-"
+  );
+
+  setText(
+    "smMaxGain",
+    stock.max_gain != null
+      ? stock.max_gain + "%"
+      : "-"
+  );
+
+  setText(
+    "smStatus",
+    stock.status || "Active"
+  );
+
+  const commentary =
+    document.getElementById(
+      "smCommentary"
+    );
+
+  if(commentary){
+
+    commentary.innerText =
+
+      `${stock.symbol} has appeared ` +
+
+      `${stock.appearances || 1} ` +
+
+      `times in Smart Money scans. ` +
+
+      `Repeated appearances may indicate ` +
+
+      `continued institutional interest ` +
+
+      `and ongoing accumulation by larger ` +
+
+      `market participants. These are not ` +
+
+      `trade signals and are intended to ` +
+
+      `help traders identify stocks worth ` +
+
+      `monitoring for their own entry setups.`;
+
+  }
+
+}
+
+// =========================
+// AUTO LOAD
+// =========================
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    loadSmartMoneyList();
+
+  }
+);
+
 </script>
 </body>
 </html>
