@@ -827,6 +827,8 @@ window.addEventListener("DOMContentLoaded", () => {
 // =========================
 function loadChart(symbol) {
 
+  symbol = (symbol || "").toUpperCase();
+
   const container =
     document.getElementById("tradingview_advanced");
 
@@ -837,8 +839,14 @@ function loadChart(symbol) {
     return;
   }
 
+  // Update chart title
+  document.getElementById("symbolText").innerText =
+    symbol;
+
+  // Clear existing chart
   container.innerHTML = "";
 
+  // Load TradingView
   new TradingView.widget({
 
     autosize: true,
@@ -933,23 +941,19 @@ function selectTrade(symbol, entry, stop, target, result) {
   // 🔁 LOAD NEW CHART PAGE
   window.location.href = url.toString();
 }
-// =========================
-// 📊 LOAD TRADE INTO WORKSPACE
-// =========================
 function loadTrade(trade){
 
-  showTradeInsight(trade);
+  console.log("Trade clicked:", trade);
 
-}
-
-function loadTrade(trade){
-
-  showTradeInsight(trade);
-
-  loadChart(trade.symbol);
-
+  // Update symbol text
   document.getElementById("symbolText").innerText =
     trade.symbol;
+
+  // Update chart
+  loadChart(trade.symbol);
+
+  // Update intelligence panel
+  showTradeInsight(trade);
 
 }
 // =========================
