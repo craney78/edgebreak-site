@@ -823,81 +823,43 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // =========================
-// 📈 LOAD CHART (FORCE RELOAD)
+// 📈 LOAD CHART
 // =========================
-function loadChart(symbol) {
+function loadInitialChart(symbol) {
 
   symbol = (symbol || "").toUpperCase();
 
-  document.getElementById(
-    "symbolText"
-  ).innerText = symbol;
+  document.getElementById("symbolText").innerText =
+    symbol;
 
-  const container =
-    document.getElementById(
-      "tradingview_advanced"
-    );
+  const url = new URL(window.location.href);
 
-  if (!container) return;
+  url.searchParams.set(
+    "symbol",
+    symbol
+  );
 
-  // Completely destroy chart
-  container.innerHTML = "";
-
-  // Create fresh container
-  const chartDiv =
-    document.createElement("div");
-
-  chartDiv.id = "tv_chart";
-
-  chartDiv.style.width = "100%";
-  chartDiv.style.height = "850px";
-
-  container.appendChild(chartDiv);
-
-  // Small delay helps TradingView rebuild
-  setTimeout(() => {
-
-    new TradingView.widget({
-
-      autosize: true,
-
-      symbol: "NASDAQ:" + symbol,
-
-      interval: "D",
-
-      timezone: "Australia/Sydney",
-
-      theme: "dark",
-
-      style: "1",
-
-      locale: "en",
-
-      allow_symbol_change: true,
-
-      withdateranges: true,
-
-      save_image: true,
-
-      details: true,
-
-      hotlist: true,
-
-      calendar: true,
-
-      studies: [
-        "Volume@tv-basicstudies"
-      ],
-
-      container_id: "tv_chart"
-
-    });
-
-  }, 50);
+  window.location.href =
+    url.toString();
 
 }
 
+// =========================
+// 📈 LOAD CHART
+// =========================
+function loadChart(symbol) {
 
+  const url = new URL(window.location.href);
+
+  url.searchParams.set(
+    "symbol",
+    symbol.toUpperCase()
+  );
+
+  window.location.href =
+    url.toString();
+
+}
 // =========================
 // 🚀 LOAD AFTER PAGE READY
 // =========================
@@ -910,7 +872,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (tickerInput) tickerInput.value = symbol;
 
   waitForTradingView(() => {
-    loadChart(symbol);
+    loadInitialChart(symbol);
   });
 
 });
@@ -954,21 +916,26 @@ function selectTrade(symbol, entry, stop, target, result) {
   window.location.href = url.toString();
 }
 
+// =========================
+// 📊 LOAD TRADE
+// =========================
 function loadTrade(trade){
 
-  console.log(
-    "Loading:",
+  const url = new URL(window.location.href);
+
+  url.searchParams.set(
+    "symbol",
     trade.symbol
   );
 
-  console.log(
-    "Current chart symbol:",
-    trade.symbol
-  );
+  if (trade.entry_price)
+    url.searchParams.set(
+      "entry",
+      trade.entry_price
+    );
 
-  showTradeInsight(trade);
-
-  loadChart(trade.symbol);
+  window.location.href =
+    url.toString();
 
 }
 
