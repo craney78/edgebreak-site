@@ -93,7 +93,26 @@ def update_tracker(
         print(e)
 
         return
+    # =========================
+    # LOAD HISTORY FILE
+    # =========================
 
+    history = []
+
+    if smart_money:
+
+        try:
+
+            with open(
+                "elite_watchlist.json",
+                "r"
+            ) as f:
+
+                history = json.load(f)
+
+        except:
+
+            history = []
     # =========================
     # LOAD EXISTING TRACKER
     # =========================
@@ -300,18 +319,49 @@ def update_tracker(
         except:
 
             t["days_tracked"] = 0
+        # =========================
+        # APPEARANCES
+        # =========================
+
+        if smart_money:
+
+            scan_dates = set()
+
+            for record in history:
+
+                if record.get("symbol") == symbol:
+
+                    scan_date = record.get(
+                        "scan_date"
+                    )
+
+                    if scan_date:
+
+                        scan_dates.add(
+                            scan_date
+                        )
+
+            t["appearances"] = len(
+                scan_dates
+            )
+
+            if scan_dates:
+
+                t["first_seen"] = min(
+                    scan_dates
+                )
+
+                t["last_seen"] = max(
+                    scan_dates
+                )
 
         # =========================
-        # SMART MONEY ONLY
+                # SMART MONEY ONLY
         # =========================
 
         if smart_money:
 
             if t["last_seen"] != today:
-
-                t["appearances"] += 1
-
-                t["last_seen"] = today
 
     # =========================
     # SAVE

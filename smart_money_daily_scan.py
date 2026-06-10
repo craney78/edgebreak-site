@@ -234,7 +234,8 @@ def detect_smart_money(symbol, values):
                 "range_percent": round(range_percent, 2),
                 "volume_ratio": round(volume_ratio, 2),
                 "distance_to_high": round(distance_to_high, 2),
-                "score": score
+                "score": score,
+                "scan_date": datetime.now().strftime("%Y-%m-%d")
             }
 
     except Exception as e:
