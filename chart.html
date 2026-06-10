@@ -905,6 +905,24 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+
+// =========================
+// RESTORE TRADE INTEL
+// =========================
+fetch("active_positions.json?v=" + Date.now())
+  .then(r => r.json())
+  .then(data => {
+
+    const trade = data.find(
+      t => t.symbol === symbol
+    );
+
+    if (trade) {
+      showTradeInsight(trade);
+    }
+
+  })
+  .catch(console.error);
 // =========================
 // ⏳ WAIT FOR TRADINGVIEW
 // =========================
@@ -950,17 +968,25 @@ function selectTrade(symbol, entry, stop, target, result) {
 // =========================
 function loadTrade(trade){
 
-  const url = new URL(
-    window.location.href
-  );
+  // Show intelligence panel first
+  showTradeInsight(trade);
 
-  url.searchParams.set(
-    "symbol",
-    trade.symbol
-  );
+  // Change chart after short delay
+  setTimeout(() => {
 
-  window.location.href =
-    url.toString();
+    const url = new URL(
+      window.location.href
+    );
+
+    url.searchParams.set(
+      "symbol",
+      trade.symbol
+    );
+
+    window.location.href =
+      url.toString();
+
+  }, 300);
 
 }
 
