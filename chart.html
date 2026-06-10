@@ -404,6 +404,50 @@ MOBILE
   }
 
 }
+
+#tradeInsight{
+  padding:10px;
+}
+
+.intel-placeholder{
+  color:#94a3b8;
+}
+
+.intel-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+  margin-top:20px;
+}
+
+.intel-row{
+  display:flex;
+  justify-content:space-between;
+  padding:12px;
+  background:#0f172a;
+  border:1px solid #1e293b;
+  border-radius:10px;
+}
+
+.intel-block{
+  margin-top:20px;
+  background:#0f172a;
+  border:1px solid #1e293b;
+  border-radius:12px;
+  padding:20px;
+}
+
+.intel-block h3{
+  margin-bottom:10px;
+}
+
+.intel-block ul{
+  padding-left:20px;
+}
+
+.intel-block li{
+  margin-bottom:8px;
+}
 </style>
 <script>
 window.supabaseClient = supabase.createClient(
@@ -611,69 +655,20 @@ checkAccess();
 
 </div>  <!-- END OF trading-desk-section -->
 
+<div class="section workspace-card">
 
-<!-- =========================
-📊 TRADE INTELLIGENCE PANEL
-========================= -->
-<div class="section trade-intel">
+  <div id="tradeInsight">
 
-  <h2 style="margin-bottom:10px;">Trade Breakdown</h2>
+    <h2>Trade Intelligence</h2>
 
-  <div class="intel-grid">
-
-    <!-- LEFT COLUMN -->
-    <div class="intel-card">
-
-      <h3 id="tradeSymbol">Loading...</h3>
-
-      <div class="intel-meta">
-        <span class="grade" id="tradeGrade">-</span>
-        <span class="confidence high">High Confidence</span>
-        <span class="status fresh">🟢 Fresh</span>
-      </div>
-
-      <p class="intel-summary" id="tradeSummary">
-        Clean breakout after multiple resistance tests with strong volume expansion and tight structure.
-      </p>
-
-      <div class="intel-block">
-        <h4>Setup Summary</h4>
-        <div class="intel-row"><span>Breakout Level</span><span id="breakoutLevel">-</span></div>
-        <div class="intel-row"><span>Risk</span><span class="neg" id="riskValue">-</span></div>
-        <div class="intel-row"><span>Reward</span><span class="pos" id="rewardValue">-</span></div>
-        <div class="intel-row"><span>R:R</span><span id="rrValue">-</span></div>
-        <div class="intel-row"><span>Base Formation</span><span>18 days</span></div>
-      </div>
-
-    </div>
-
-    <!-- RIGHT COLUMN -->
-    <div class="intel-card">
-
-      <div class="intel-block">
-        <h4>Structure</h4>
-        <div class="intel-row"><span>Trend</span><span>Higher lows</span></div>
-        <div class="intel-row"><span>Resistance</span><span>3 tests</span></div>
-        <div class="intel-row"><span>Compression</span><span>Tight range</span></div>
-      </div>
-
-      <div class="intel-block">
-        <h4>Volume</h4>
-        <div class="intel-row"><span>Breakout Volume</span><span class="pos" id="tradeVolume">-</span></div>
-        <div class="intel-row"><span>Pattern</span><span>Expansion</span></div>
-      </div>
-
-      <div class="intel-block">
-        <h4>Timing</h4>
-        <div class="intel-row"><span>Trigger</span><span id="triggerDate">-</span></div>
-        <div class="intel-row"><span>Days Since</span><span id="daysSince">-</span></div>
-      </div>
-
-    </div>
+    <p class="intel-placeholder">
+      Select a trade from the Active Trades or Trade History list to view detailed EdgeBreak analysis.
+    </p>
 
   </div>
 
 </div>
+
 
 <!-- 🎬 TRADE LIBRARY -->
 <div class="section" style="margin-top:30px;">
@@ -895,57 +890,9 @@ document.addEventListener("DOMContentLoaded", () => {
   if (tickerInput) tickerInput.value = symbol;
 
   waitForTradingView(() => {
-
     loadChart(symbol);
-
-    waitForTradingView(() => {
-      loadChart(symbol);
-    });
-
   });
 
-});
-
-// =========================
-// 📊 LOAD TRADE DATA SAFELY (FINAL)
-// =========================
-document.addEventListener("DOMContentLoaded", () => {
-
-  if (entry) return; // already handled from URL
-
-  fetch("active_positions.json?v=" + Date.now())
-    .then(res => res.json())
-    .then(data => {
-
-      if (!Array.isArray(data)) return;
-
-      fetch("active_positions.json?v=" + Date.now())
-  .then(res => res.json())
-  .then(data => {
-
-    if (!Array.isArray(data)) return;
-
-    const trade = data.find(t =>
-      t.symbol &&
-      t.symbol.toUpperCase() === symbol
-    );
-
-    if (!trade) return;
-
-    console.log(
-      "Active Trade Found:",
-      trade.symbol
-    );
-
-  })
-  .catch(() => {
-    console.log(
-      "No trade data found"
-    );
-  });
-    
-
-});
 
 // =========================
 // ⏳ WAIT FOR TRADINGVIEW
@@ -1005,8 +952,9 @@ function getTradeResult() {
   return target > entry ? 1 : -1;
 }
 
-</script>
-<script>
+
+
+
 // =========================
 // 📊 TRADE LIST ENGINE (FINAL WORKING)
 // =========================
@@ -1196,7 +1144,88 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 });
 </script>
+<script>
+function showTradeInsight(trade, isClosed = false){
 
+  const status = isClosed
+    ? "🔵 Closed Position"
+    : "🟢 Active Position";
 
+  document.getElementById("tradeInsight").innerHTML = `
+
+    <h2>${trade.symbol}</h2>
+
+    <p style="color:#22c55e;">
+      ${status}
+    </p>
+
+    <div class="intel-grid">
+
+      <div class="intel-row">
+        <span>Entry Price</span>
+        <span>$${trade.entry_price}</span>
+      </div>
+
+      <div class="intel-row">
+        <span>Current Price</span>
+        <span>$${trade.current_price || "-"}</span>
+      </div>
+
+      <div class="intel-row">
+        <span>Return</span>
+        <span>${trade.change_percent || 0}%</span>
+      </div>
+
+      <div class="intel-row">
+        <span>Days Held</span>
+        <span>${trade.days_held || 0}</span>
+      </div>
+
+      <div class="intel-row">
+        <span>Breakout Strength</span>
+        <span>${trade.breakout_strength ?? "N/A"}</span>
+      </div>
+
+      <div class="intel-row">
+        <span>Volume Expansion</span>
+        <span>${trade.volume_ratio ?? "N/A"}x</span>
+      </div>
+
+      <div class="intel-row">
+        <span>Resistance Tests</span>
+        <span>${trade.touches ?? "N/A"}</span>
+      </div>
+
+      <div class="intel-row">
+        <span>Higher Lows</span>
+        <span>${trade.higher_lows ?? "N/A"}</span>
+      </div>
+
+      <div class="intel-row">
+        <span>Score</span>
+        <span>${trade.score ?? "N/A"}</span>
+      </div>
+
+      <div class="intel-row">
+        <span>Price Group</span>
+        <span>${trade.price_group ?? "-"}</span>
+      </div>
+
+    </div>
+
+    <div class="intel-block">
+
+      <h3>Scanner Insight</h3>
+
+      <p>
+        ${trade.insight || "Breakout with volume confirmation."}
+      </p>
+
+    </div>
+
+  `;
+
+}
+</script>
 </body>
 </html>
