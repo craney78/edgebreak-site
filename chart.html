@@ -230,6 +230,180 @@
   }
 }
 
+/* =========================
+🚀 WORKSPACE HERO
+========================= */
+
+.workspace-hero {
+  margin-bottom: 25px;
+}
+
+.workspace-header h1 {
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.workspace-header p {
+  color: #94a3b8;
+  max-width: 700px;
+  font-size: 16px;
+}
+
+.workspace-badge {
+  display: inline-block;
+  background: rgba(34,197,94,0.12);
+  color: #22c55e;
+  border: 1px solid rgba(34,197,94,0.25);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+}
+
+/* =========================
+🔍 SEARCH
+========================= */
+
+.workspace-search {
+  display: flex;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.workspace-search input {
+  flex: 1;
+  background: rgba(15,23,42,0.8);
+  border: 1px solid #1e293b;
+  color: white;
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-size: 15px;
+}
+
+.workspace-search button {
+  background: linear-gradient(
+    135deg,
+    #22c55e,
+    #16a34a
+  );
+  border: none;
+  color: white;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.workspace-search button:hover {
+  transform: translateY(-1px);
+}
+
+/* =========================
+📊 WORKSPACE CARD
+========================= */
+
+.workspace-card {
+
+  background: linear-gradient(
+    180deg,
+    rgba(15,23,42,0.95),
+    rgba(2,6,23,0.95)
+  );
+
+  border: 1px solid #1e293b;
+
+  border-radius: 18px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.02),
+    0 20px 60px rgba(0,0,0,0.45);
+
+}
+
+/* =========================
+HEADER
+========================= */
+
+.workspace-card-header {
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 20px 24px;
+
+  border-bottom: 1px solid #1e293b;
+
+}
+
+.workspace-card-header h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.workspace-card-header p {
+  margin-top: 5px;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.workspace-live {
+
+  background: rgba(34,197,94,0.12);
+
+  color: #22c55e;
+
+  border: 1px solid rgba(34,197,94,0.25);
+
+  padding: 8px 14px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+}
+
+/* =========================
+CHART
+========================= */
+
+.chart-container {
+  padding: 0;
+}
+
+.tradingview-widget-container {
+  min-height: 850px;
+}
+
+/* =========================
+MOBILE
+========================= */
+
+@media (max-width:768px){
+
+  .workspace-header h1{
+    font-size:32px;
+  }
+
+  .workspace-search{
+    flex-direction:column;
+  }
+
+  .workspace-card-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+  }
+
+}
 </style>
 <script>
 window.supabaseClient = supabase.createClient(
@@ -345,47 +519,95 @@ checkAccess();
 
 
 <div class="container">
-  <div class="section chart-title">
-  <h1>
-    Chart — <span class="highlight" id="symbolText">Loading...</span>
-  </h1>
-</div>
 
-<div class="chart-search">
-  <input 
-    type="text" 
-    id="tickerInput" 
-    placeholder="Enter ticker (e.g. TSLA)"
-  >
-  <button onclick="loadTicker()">Load</button>
-</div>
+  <!-- =========================
+  🚀 WORKSPACE HERO
+  ========================= -->
+  <div class="section workspace-hero">
 
-    <div class="section trading-desk-section">
+    <div class="workspace-header">
 
-  <div class="chart-container">
-  <div id="tradingview_chart"></div>
+      <div>
+        <div class="workspace-badge">
+          MY WORKSPACE
+        </div>
 
-  <div id="entryLine"></div>
-  <div id="entryLabel"></div>
+        <h1>
+          Trade Smarter.
+          <span class="highlight">
+            Build Your Edge.
+          </span>
+        </h1>
 
-  <div id="stopLine"></div>
-  <div id="stopLabel"></div>
+        <p>
+          Analyse charts, monitor breakout setups, review Smart Money activity,
+          journal your trades and build a repeatable trading process.
+        </p>
+      </div>
 
-  <div id="targetLine"></div>
-  <div id="targetLabel"></div>
+    </div>
 
-  <div id="breakoutZone"></div>
+    <!-- SEARCH BAR -->
+    <div class="workspace-search">
 
-  <div id="riskBox"></div>
-  <div id="rewardBox"></div>
-  <div id="rrLabel"></div>
+      <input
+        type="text"
+        id="tickerInput"
+        placeholder="Enter ticker (e.g. NVDA, TSLA, PLTR)"
+      >
 
-  
-</div>
+      <button onclick="loadTicker()">
+        Load Chart
+      </button>
 
-</div>
+    </div>
 
-</div>  <!-- END OF chart-container -->
+  </div>
+
+  <!-- =========================
+  📊 ADVANCED CHART
+  ========================= -->
+  <div class="section trading-desk-section">
+
+    <div class="workspace-card">
+
+      <div class="workspace-card-header">
+
+        <div>
+          <h2>
+            <span id="symbolText">Loading...</span>
+          </h2>
+
+          <p>
+            Professional charting powered by TradingView
+          </p>
+        </div>
+
+        <div class="workspace-live">
+          LIVE
+        </div>
+
+      </div>
+
+      <div class="chart-container">
+
+        <div
+          class="tradingview-widget-container"
+          style="height:850px;width:100%;"
+        >
+
+          <div
+            id="tradingview_advanced"
+            style="height:100%;width:100%;"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </div>  <!-- END OF trading-desk-section -->
 
@@ -612,23 +834,43 @@ function loadChart(symbol) {
 
   const container = document.getElementById("tradingview_chart");
 
-  if (!container) {
-    console.error("Chart container not found");
-    return;
-  }
-
   container.innerHTML = "";
 
   new TradingView.widget({
-    width: "100%",
-    height: 600,
+    autosize: true,
     symbol: "NASDAQ:" + symbol,
     interval: "D",
     timezone: "Australia/Sydney",
     theme: "dark",
     style: "1",
-    container_id: "tradingview_chart"
+    locale: "en",
+
+    container_id: "tradingview_chart",
+
+    allow_symbol_change: true,
+
+    studies: [
+      "Volume@tv-basicstudies"
+    ],
+
+    enabled_features: [
+      "study_templates",
+      "hide_left_toolbar_by_default"
+    ],
+
+    disabled_features: [],
+
+    withdateranges: true,
+
+    save_image: true,
+
+    details: true,
+    hotlist: true,
+    calendar: true,
+
+    toolbar_bg: "#0f172a"
   });
+
 }
 
 
