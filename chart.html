@@ -825,39 +825,68 @@ window.addEventListener("DOMContentLoaded", () => {
 // =========================
 // 📈 LOAD CHART
 // =========================
-function loadInitialChart(symbol) {
+function loadChart(symbol) {
 
   symbol = (symbol || "").toUpperCase();
 
-  document.getElementById("symbolText").innerText =
-    symbol;
+  document.getElementById(
+    "symbolText"
+  ).innerText = symbol;
 
-  const url = new URL(window.location.href);
+  const container =
+    document.getElementById(
+      "tradingview_advanced"
+    );
 
-  url.searchParams.set(
-    "symbol",
-    symbol
-  );
+  if (!container) return;
 
-  window.location.href =
-    url.toString();
+  container.innerHTML = "";
 
-}
+  const chartDiv =
+    document.createElement("div");
 
-// =========================
-// 📈 LOAD CHART
-// =========================
-function loadChart(symbol) {
+  chartDiv.id = "tv_chart";
 
-  const url = new URL(window.location.href);
+  chartDiv.style.width = "100%";
+  chartDiv.style.height = "850px";
 
-  url.searchParams.set(
-    "symbol",
-    symbol.toUpperCase()
-  );
+  container.appendChild(chartDiv);
 
-  window.location.href =
-    url.toString();
+  new TradingView.widget({
+
+    autosize: true,
+
+    symbol: symbol,
+
+    interval: "D",
+
+    timezone: "Australia/Sydney",
+
+    theme: "dark",
+
+    style: "1",
+
+    locale: "en",
+
+    allow_symbol_change: true,
+
+    withdateranges: true,
+
+    save_image: true,
+
+    details: true,
+
+    hotlist: true,
+
+    calendar: true,
+
+    studies: [
+      "Volume@tv-basicstudies"
+    ],
+
+    container_id: "tv_chart"
+
+  });
 
 }
 // =========================
@@ -921,18 +950,14 @@ function selectTrade(symbol, entry, stop, target, result) {
 // =========================
 function loadTrade(trade){
 
-  const url = new URL(window.location.href);
+  const url = new URL(
+    window.location.href
+  );
 
   url.searchParams.set(
     "symbol",
     trade.symbol
   );
-
-  if (trade.entry_price)
-    url.searchParams.set(
-      "entry",
-      trade.entry_price
-    );
 
   window.location.href =
     url.toString();
@@ -1237,6 +1262,9 @@ function showTradeInsight(trade, isClosed = false){
 
 </script>
 <script>
+// =========================
+// 🔍 LOAD TICKER
+// =========================
 function loadTicker(){
 
   const ticker =
@@ -1245,10 +1273,19 @@ function loadTicker(){
     .trim()
     .toUpperCase();
 
-  if(!ticker) return;
+  if (!ticker) return;
+
+  const url = new URL(
+    window.location.href
+  );
+
+  url.searchParams.set(
+    "symbol",
+    ticker
+  );
 
   window.location.href =
-    `chart.html?symbol=${ticker}`;
+    url.toString();
 
 }
 </script>
