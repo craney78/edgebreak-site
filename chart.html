@@ -823,65 +823,77 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // =========================
-// 📈 LOAD CHART (FINAL CLEAN)
+// 📈 LOAD CHART (FORCE RELOAD)
 // =========================
 function loadChart(symbol) {
 
   symbol = (symbol || "").toUpperCase();
 
+  document.getElementById(
+    "symbolText"
+  ).innerText = symbol;
+
   const container =
-    document.getElementById("tradingview_advanced");
-
-  if (!container) {
-    console.error(
-      "TradingView container not found"
+    document.getElementById(
+      "tradingview_advanced"
     );
-    return;
-  }
 
-  // Update chart title
-  document.getElementById("symbolText").innerText =
-    symbol;
+  if (!container) return;
 
-  // Clear existing chart
+  // Completely destroy chart
   container.innerHTML = "";
 
-  // Load TradingView
-  new TradingView.widget({
+  // Create fresh container
+  const chartDiv =
+    document.createElement("div");
 
-    autosize: true,
+  chartDiv.id = "tv_chart";
 
-    symbol: "NASDAQ:" + symbol,
+  chartDiv.style.width = "100%";
+  chartDiv.style.height = "850px";
 
-    interval: "D",
+  container.appendChild(chartDiv);
 
-    timezone: "Australia/Sydney",
+  // Small delay helps TradingView rebuild
+  setTimeout(() => {
 
-    theme: "dark",
+    new TradingView.widget({
 
-    style: "1",
+      autosize: true,
 
-    locale: "en",
+      symbol: "NASDAQ:" + symbol,
 
-    allow_symbol_change: true,
+      interval: "D",
 
-    withdateranges: true,
+      timezone: "Australia/Sydney",
 
-    save_image: true,
+      theme: "dark",
 
-    details: true,
+      style: "1",
 
-    hotlist: true,
+      locale: "en",
 
-    calendar: true,
+      allow_symbol_change: true,
 
-    studies: [
-      "Volume@tv-basicstudies"
-    ],
+      withdateranges: true,
 
-    container_id: "tradingview_advanced"
+      save_image: true,
 
-  });
+      details: true,
+
+      hotlist: true,
+
+      calendar: true,
+
+      studies: [
+        "Volume@tv-basicstudies"
+      ],
+
+      container_id: "tv_chart"
+
+    });
+
+  }, 50);
 
 }
 
