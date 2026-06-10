@@ -893,7 +893,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadChart(symbol);
   });
 
-
+});
 // =========================
 // ⏳ WAIT FOR TRADINGVIEW
 // =========================
@@ -933,7 +933,14 @@ function selectTrade(symbol, entry, stop, target, result) {
   // 🔁 LOAD NEW CHART PAGE
   window.location.href = url.toString();
 }
+// =========================
+// 📊 LOAD TRADE INTO WORKSPACE
+// =========================
+function loadTrade(trade){
 
+  showTradeInsight(trade);
+
+}
 // =========================
 // 📊 GET TRADE RESULT (ADD HERE)
 // =========================
@@ -951,8 +958,6 @@ function getTradeResult() {
 
   return target > entry ? 1 : -1;
 }
-
-
 
 
 // =========================
@@ -984,7 +989,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return `
           <div class="trade-item"
-            onclick="selectTrade('${t.symbol}', ${t.entry_price || 0}, ${t.stop_loss || 0}, ${t.target_price || 0}, ${change})">
+           onclick='loadTrade(${JSON.stringify(t)})'>
             
             <div>
               <div class="trade-symbol">${t.symbol}</div>
@@ -1026,7 +1031,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return `
           <div class="trade-item"
-            onclick="selectTrade('${t.symbol}', ${t.entry_price || 0}, ${t.stop_loss || 0}, ${t.target_price || 0}, ${change})">
+            onclick='loadTrade(${JSON.stringify(t)})'>
     
             <div style="display:flex; justify-content:space-between; width:100%;">
 
@@ -1173,7 +1178,11 @@ function showTradeInsight(trade, isClosed = false){
 
       <div class="intel-row">
         <span>Return</span>
-        <span>${trade.change_percent || 0}%</span>
+        <span>${
+          trade.change_percent ??
+          trade.percent_move ??
+          0
+        }%</span>
       </div>
 
       <div class="intel-row">
@@ -1224,6 +1233,24 @@ function showTradeInsight(trade, isClosed = false){
     </div>
 
   `;
+
+}
+
+
+</script>
+<script>
+function loadTicker(){
+
+  const ticker =
+    document.getElementById("tickerInput")
+    .value
+    .trim()
+    .toUpperCase();
+
+  if(!ticker) return;
+
+  window.location.href =
+    `chart.html?symbol=${ticker}`;
 
 }
 </script>
