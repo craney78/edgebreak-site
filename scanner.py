@@ -234,6 +234,13 @@ def process_data(data):
             # 🎯 GRADE FILTER
             # =========================
             grade = result["grade"]
+
+            print(
+                f"WATCHLIST CHECK | "
+                f"{symbol} | "
+                f"{price_group} | "
+                f"{grade}"
+            )
             # =========================
             # 🧠 FREE WATCHLIST
             # =========================
