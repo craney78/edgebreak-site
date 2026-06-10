@@ -898,9 +898,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loadChart(symbol);
 
-    if (entry) {
-      drawTradeLines(entry, stop, target);
-    }
+    waitForTradingView(() => {
+      loadChart(symbol);
+    });
 
   });
 
@@ -919,22 +919,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!Array.isArray(data)) return;
 
-      const trade = data.find(t =>
-        t.symbol && t.symbol.toUpperCase() === symbol
-      );
+      fetch("active_positions.json?v=" + Date.now())
+  .then(res => res.json())
+  .then(data => {
 
-      if (!trade) return;
+    if (!Array.isArray(data)) return;
 
-      drawTradeLines(
-        trade.entry_price,
-        trade.stop_loss,
-        trade.target_price
-      );
+    const trade = data.find(t =>
+      t.symbol &&
+      t.symbol.toUpperCase() === symbol
+    );
 
-    })
-    .catch(() => {
-      console.log("No trade data found");
-    });
+    if (!trade) return;
+
+    console.log(
+      "Active Trade Found:",
+      trade.symbol
+    );
+
+  })
+  .catch(() => {
+    console.log(
+      "No trade data found"
+    );
+  });
+    
 
 });
 

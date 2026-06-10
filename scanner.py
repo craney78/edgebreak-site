@@ -354,7 +354,8 @@ def process_data(data):
                 "price_group": price_group,
                 "volume_ratio": round(volume_ratio, 2),
                 "resistance": resistance,
-
+                "touches": touches,
+                "higher_lows": higher_lows,
                 # ✅ ADD THESE (PREVENT CRASHES)
                 "setup_type": result.get("setup_type", "breakout"),
                 "insight": result.get("insight", "Breakout with volume"),
@@ -495,14 +496,29 @@ def append_to_active_positions(new_signals):
             continue
 
         trade = {
+
             "symbol": s["symbol"],
+
             "entry_price": s["price"],
             "entry_date": s["date"],
-            "grade": s["grade"],
-            "price_group": s["price_group"],
+
             "current_price": s["price"],
             "change_percent": 0,
-            "days_held": 0
+            "days_held": 0,
+
+            "price_group": s["price_group"],
+            "touches": s.get("touches", 0),
+            "higher_lows": s.get("higher_lows", 0),
+            # EdgeBreak Metrics
+            "score": s.get("score", 0),
+            "breakout_strength": s.get("breakout_strength", 0),
+            "volume_ratio": s.get("volume_ratio", 0),
+
+            "resistance": s.get("resistance", 0),
+
+            "setup_type": s.get("setup_type", ""),
+            "insight": s.get("insight", "")
+
         }
 
         entry = trade["entry_price"]
