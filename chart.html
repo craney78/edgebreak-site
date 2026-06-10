@@ -764,6 +764,38 @@ checkAccess();
           <span id="smStatus">-</span>
         </div>
 
+        <div class="intel-row">
+          <span>Days Tracked</span>
+          <span id="smDaysTracked">-</span>
+        </div>
+
+        <div class="intel-row">
+          <span>Current Price</span>
+          <span id="smCurrentPrice">-</span>
+        </div>    
+        </div>
+
+        <div class="intel-row">
+          <span>Current Gain</span>
+          <span id="smCurrentGain">-</span>
+        </div>
+
+        <div class="intel-row">
+          <span>Maximum Gain</span>
+          <span id="smMaxGain">-</span>
+        </div>
+
+        <div class="intel-row">
+          <span>Highest Price</span>
+          <span id="smHighestPrice">-</span>
+        </div>    
+        </div>
+
+        <div class="intel-row">
+          <span>Status</span>
+          <span id="smStatus">ACTIVE</span>
+        </div>
+
       </div>
 
       <div class="intel-block">
@@ -1447,7 +1479,7 @@ async function loadSmartMoneyList(){
   try {
 
     const response = await fetch(
-      "elite_watchlist.json?v=" +
+      "elite_watchlist_tracker.json?v=" +
       Date.now()
     );
 
@@ -1483,6 +1515,7 @@ async function loadSmartMoneyList(){
           <div style="
             display:flex;
             justify-content:space-between;
+            align-items:center;
             width:100%;
           ">
 
@@ -1506,7 +1539,9 @@ async function loadSmartMoneyList(){
 
             </div>
 
-            <div style="text-align:right;">
+            <div style="
+              text-align:right;
+            ">
 
               <div class="${gainClass}">
 
@@ -1517,11 +1552,11 @@ async function loadSmartMoneyList(){
 
               <div class="trade-meta">
 
-                $${stock.entry_price ?? "-"}
+                $${stock.entry_price?.toFixed(2) || "-"}
 
                 →
 
-                $${stock.current_price ?? "-"}
+                $${stock.current_price?.toFixed(2) || "-"}
 
               </div>
 
@@ -1571,92 +1606,78 @@ function loadSmartMoney(stock){
 // =========================
 function showSmartMoney(stock){
 
-  const setText = (id, value) => {
+  document.getElementById(
+    "smSymbol"
+  ).innerText =
+    stock.symbol || "-";
 
-    const el =
-      document.getElementById(id);
+  document.getElementById(
+    "smAppearances"
+  ).innerText =
+    stock.appearances || "-";
 
-    if(el){
-      el.innerText =
-        value ?? "-";
-    }
+  document.getElementById(
+    "smDaysTracked"
+  ).innerText =
+    stock.days_tracked || "-";
 
-  };
+  document.getElementById(
+    "smFirstSeen"
+  ).innerText =
+    stock.first_seen || "-";
 
-  setText(
-    "smSymbol",
-    stock.symbol
-  );
+  document.getElementById(
+    "smCurrentPrice"
+  ).innerText =
+    "$" +
+    (
+      stock.current_price || 0
+    ).toFixed(2);
 
-  setText(
-    "smAppearances",
-    stock.appearances
-  );
+  document.getElementById(
+    "smCurrentGain"
+  ).innerText =
+    (
+      stock.change_percent || 0
+    ).toFixed(2) + "%";
 
-  setText(
-    "smFirstSeen",
-    stock.first_seen
-  );
+  document.getElementById(
+    "smMaxGain"
+  ).innerText =
+    (
+      stock.max_gain || 0
+    ).toFixed(2) + "%";
 
-  setText(
-    "smLastSeen",
-    stock.last_seen
-  );
+  document.getElementById(
+    "smHighestPrice"
+  ).innerText =
+    "$" +
+    (
+      stock.max_price || 0
+    ).toFixed(2);
 
-  setText(
-    "smWeeksTracked",
-    stock.weeks_tracked
-  );
+  document.getElementById(
+    "smStatus"
+  ).innerText =
+    "ACTIVE";
 
-  setText(
-    "smCurrentGain",
-    stock.current_gain != null
-      ? stock.current_gain + "%"
-      : "-"
-  );
+  document.getElementById(
+    "smCommentary"
+  ).innerText =
 
-  setText(
-    "smMaxGain",
-    stock.max_gain != null
-      ? stock.max_gain + "%"
-      : "-"
-  );
+    `${stock.symbol} has appeared ` +
 
-  setText(
-    "smStatus",
-    stock.status || "Active"
-  );
+    `${stock.appearances || 1} times ` +
 
-  const commentary =
-    document.getElementById(
-      "smCommentary"
-    );
+    `in Smart Money scans and has been ` +
 
-  if(commentary){
+    `tracked for ${stock.days_tracked || 0} days. ` +
 
-    commentary.innerText =
+    `The stock has produced a maximum gain ` +
 
-      `${stock.symbol} has appeared ` +
+    `of ${(stock.max_gain || 0).toFixed(2)}% ` +
 
-      `${stock.appearances || 1} ` +
-
-      `times in Smart Money scans. ` +
-
-      `Repeated appearances may indicate ` +
-
-      `continued institutional interest ` +
-
-      `and ongoing accumulation by larger ` +
-
-      `market participants. These are not ` +
-
-      `trade signals and are intended to ` +
-
-      `help traders identify stocks worth ` +
-
-      `monitoring for their own entry setups.`;
-
-  }
+    `since first appearing on the Smart Money watchlist.`;
 
 }
 
