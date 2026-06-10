@@ -236,10 +236,8 @@ def process_data(data):
             grade = result["grade"]
 
             print(
-                f"WATCHLIST CHECK | "
-                f"{symbol} | "
-                f"{price_group} | "
-                f"{grade}"
+                f"WATCHLIST TEST | {symbol} | "
+                f"{price_group} | {grade}"
             )
             # =========================
             # 🧠 FREE WATCHLIST
