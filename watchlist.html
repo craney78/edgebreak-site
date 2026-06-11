@@ -389,6 +389,311 @@ body{
 
 }
 
+/* =========================
+   ELITE NAVBAR
+========================= */
+
+.nav{
+    position:sticky;
+    top:0;
+    z-index:9999;
+
+    background:#08111f;
+    border-bottom:1px solid #1e293b;
+
+    backdrop-filter:blur(10px);
+}
+
+.nav-inner{
+    max-width:1700px;
+    margin:auto;
+
+    height:72px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 25px;
+}
+
+/* =========================
+   LEFT SIDE
+========================= */
+
+.nav-left{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.nav-logo{
+    width:46px;
+    height:auto;
+    display:block;
+}
+
+.logo-text{
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:1px;
+
+    color:white;
+    text-decoration:none;
+}
+
+/* =========================
+   LIVE BADGE
+========================= */
+
+.live-badge{
+    background:#16a34a;
+    color:white;
+
+    padding:5px 10px;
+
+    border-radius:999px;
+
+    font-size:11px;
+    font-weight:700;
+
+    letter-spacing:.5px;
+}
+
+/* =========================
+   LINKS
+========================= */
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:24px;
+}
+
+.nav-link{
+    color:#94a3b8;
+    text-decoration:none;
+
+    font-size:14px;
+    font-weight:500;
+
+    transition:.2s;
+}
+
+.nav-link:hover{
+    color:white;
+}
+
+/* =========================
+   ACTIVE PAGE
+========================= */
+
+.nav-link.active{
+    color:#22c55e;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.nav-cta{
+    background:#22c55e;
+
+    color:white;
+    text-decoration:none;
+
+    padding:10px 18px;
+
+    border-radius:10px;
+
+    font-size:14px;
+    font-weight:700;
+
+    transition:.2s;
+}
+
+.nav-cta:hover{
+    transform:translateY(-1px);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+.menu-toggle{
+    display:none;
+}
+
+@media(max-width:900px){
+
+    .menu-toggle{
+        display:block;
+        color:white;
+        font-size:28px;
+        cursor:pointer;
+    }
+
+    .nav-links{
+        display:none;
+    }
+
+    .nav-links.active{
+        display:flex;
+
+        position:absolute;
+
+        top:72px;
+        left:0;
+        right:0;
+
+        background:#08111f;
+
+        flex-direction:column;
+
+        padding:20px;
+
+        border-bottom:1px solid #1e293b;
+    }
+
+}
+
+/* =========================
+   ELITE FOOTER
+========================= */
+
+.footer{
+    margin-top:50px;
+
+    background:#08111f;
+    border-top:1px solid #1e293b;
+
+    padding:50px 0 20px;
+}
+
+.footer-inner{
+    max-width:1700px;
+    margin:auto;
+
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr 1fr;
+
+    gap:40px;
+
+    padding:0 30px;
+}
+
+.footer-col h4{
+    color:white;
+    font-size:15px;
+    margin-bottom:15px;
+}
+
+.footer-col p{
+    color:#94a3b8;
+    line-height:1.7;
+    font-size:14px;
+}
+
+.footer-col a{
+    display:block;
+
+    color:#94a3b8;
+    text-decoration:none;
+
+    margin-bottom:10px;
+
+    font-size:14px;
+
+    transition:.2s;
+}
+
+.footer-col a:hover{
+    color:white;
+}
+
+/* =========================
+   BRAND BLOCK
+========================= */
+
+.footer-brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:15px;
+}
+
+.footer-brand img{
+    width:45px;
+}
+
+.footer-brand h3{
+    margin:0;
+    font-size:22px;
+    color:white;
+}
+
+/* =========================
+   BOTTOM BAR
+========================= */
+
+.footer-bottom{
+    max-width:1700px;
+
+    margin:40px auto 0;
+
+    padding:20px 30px 0;
+
+    border-top:1px solid #1e293b;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+.footer-bottom p{
+    color:#64748b;
+    font-size:13px;
+}
+
+.footer-parent-block{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.footer-logo{
+    width:28px;
+    opacity:.7;
+}
+
+.footer-parent a{
+    color:#94a3b8;
+    text-decoration:none;
+}
+
+.footer-parent a:hover{
+    color:white;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+    .footer-inner{
+        grid-template-columns:1fr;
+    }
+
+    .footer-bottom{
+        flex-direction:column;
+        text-align:center;
+    }
+
+}
 </style>  
 
 </head>
