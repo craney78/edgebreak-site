@@ -1271,9 +1271,9 @@ QUOTE SECTION
 
     <div class="elite-panel chart-panel">
 
-    <div id="chartTitle" class="chart-title">
-        Select a stock to view the live breakout setup
-    </div>
+        <div id="chartTitle" class="chart-title">
+            Select a stock to view the live breakout setup
+        </div>
 
     <div id="tv_chart"></div>
 
@@ -1285,24 +1285,18 @@ QUOTE SECTION
 
         <div id="todayActivityFeed">
 
-            <div class="activity-item open">
-                <div class="activity-type">OPENED</div>
-                <div class="activity-symbol">NVDA</div>
+            <div style="
+                color:#94a3b8;
+                font-size:13px;
+                padding:10px 0;
+            ">
+                Loading activity...
             </div>
 
-            <div class="activity-item open">
-                <div class="activity-type">OPENED</div>
-                <div class="activity-symbol">PLTR</div>
-            </div>
-
-            <div class="activity-item closed">
-                <div class="activity-type">CLOSED</div>
-                <div class="activity-symbol">AMD</div>
-                <div class="activity-return">+14.2%</div>
             </div>
 
         </div>
-            
+         
 
     <!-- INSPIRATIONAL QUOTE -->
 
@@ -1918,7 +1912,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("todayOpen").innerText = open;
     document.getElementById("todayClosed").innerText = closed;
 
-    document.getElementById("todayActivity").innerHTML = html || `
+    document.getElementById("todayActivityFeed").innerHTML = html || `
       <div style="color:#94a3b8; font-size:13px;">
         No trades triggered yet today
       </div>
