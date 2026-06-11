@@ -760,37 +760,32 @@ body{
 <div class="elite-container">
 
 ```
-<!-- =========================
-BREAKOUT ELITE HEADER
-========================== -->
+<!-- HERO -->
 
-<div class="elite-header">
+<div class="elite-banner">
 
-    <div class="elite-brand">
+    <div>
 
-        <img src="images/logo.png" class="elite-logo">
+        <h1>BREAKOUT ELITE</h1>
 
-        <div>
-            <h1>BREAKOUT ELITE</h1>
+        <p>
+            High conviction NASDAQ breakout opportunities identified
+            using the EdgeBreak framework.
+        </p>
 
-            <p>
-                High Conviction NASDAQ Breakout Opportunities
-            </p>
-        </div>
+    </div>
 
+    <div class="elite-badge">
+        Updated Daily
     </div>
 
 </div>
 
-<!-- =========================
-TERMINAL LAYOUT
-========================== -->
+<!-- TERMINAL -->
 
 <div class="elite-terminal">
 
-    <!-- =========================
-    WATCHLIST
-    ========================== -->
+    <!-- WATCHLIST -->
 
     <div class="elite-panel watchlist-panel">
 
@@ -801,9 +796,7 @@ TERMINAL LAYOUT
         <div id="todayActivity"></div>
 
         <div id="noTradesMessage" class="no-trades">
-            <p>
-                The system is waiting for valid breakout conditions
-            </p>
+            The system is waiting for valid breakout conditions
         </div>
 
         <div id="smallSection"></div>
@@ -814,16 +807,11 @@ TERMINAL LAYOUT
 
     </div>
 
-    <!-- =========================
-    CHART
-    ========================== -->
+    <!-- CHART -->
 
     <div class="elite-panel chart-panel">
 
-        <div
-            id="chartTitle"
-            class="chart-title"
-        >
+        <div id="chartTitle" class="chart-title">
             Select a position to view chart
         </div>
 
@@ -831,43 +819,30 @@ TERMINAL LAYOUT
 
     </div>
 
-    <!-- =========================
-    SIDEBAR
-    ========================== -->
+    <!-- SIDEBAR -->
 
     <div class="elite-sidebar">
 
         <div class="elite-panel">
 
-            <div class="panel-title">
-                Breakout Elite
-            </div>
+            <h3>Why Breakout Elite?</h3>
 
-            <p class="elite-copy">
-                High conviction breakout opportunities identified using
-                the EdgeBreak framework. Positions remain active until
-                exit criteria are met.
-            </p>
+            <ul class="elite-list">
+                <li>✓ Daily monitored opportunities</li>
+                <li>✓ Structured breakout framework</li>
+                <li>✓ Historical performance tracking</li>
+                <li>✓ NASDAQ focused universe</li>
+                <li>✓ Rule based trade management</li>
+            </ul>
 
         </div>
 
         <div class="elite-panel">
 
-            <div class="panel-title">
-                Framework Strength
-            </div>
+            <h3>Framework Strength</h3>
 
-            <div class="performance-wrapper">
-
-                <div class="performance-bar">
-
-                    <div
-                        id="winBar"
-                        class="performance-fill"
-                    ></div>
-
-                </div>
-
+            <div class="performance-bar">
+                <div id="winBar" class="performance-fill"></div>
             </div>
 
         </div>
@@ -876,55 +851,155 @@ TERMINAL LAYOUT
 
 </div>
 
-<!-- =========================
-PERFORMANCE CARDS
-========================== -->
+<!-- MAIN STATS -->
 
 <div class="elite-stats-row">
 
     <div class="elite-stat-card">
-
         <span>Tracked Positions</span>
-
         <strong id="activeCount">-</strong>
-
     </div>
 
     <div class="elite-stat-card">
-
         <span>Win Rate</span>
-
         <strong id="winRate">-</strong>
-
     </div>
 
     <div class="elite-stat-card">
-
         <span>Average Return</span>
-
         <strong id="avgReturn">-</strong>
-
     </div>
 
     <div class="elite-stat-card">
-
         <span>Best Trade</span>
-
         <strong id="bestTrade">-</strong>
+    </div>
+
+</div>
+
+<!-- MARKET INTELLIGENCE -->
+
+<div class="elite-grid">
+
+    <div class="elite-panel">
+
+        <h3>Market Breakdown</h3>
+
+        <div class="metric">
+            <span>Small Caps</span>
+            <strong id="smallCount">-</strong>
+        </div>
+
+        <div class="metric">
+            <span>Mid Caps</span>
+            <strong id="midCount">-</strong>
+        </div>
+
+        <div class="metric">
+            <span>Large Caps</span>
+            <strong id="largeCount">-</strong>
+        </div>
+
+    </div>
+
+    <div class="elite-panel">
+
+        <h3>Trade Quality</h3>
+
+        <div class="metric">
+            <span>Profit Factor</span>
+            <strong id="profitFactor">-</strong>
+        </div>
+
+        <div class="metric">
+            <span>Average Hold</span>
+            <strong id="avgHold">-</strong>
+        </div>
+
+        <div id="avgPerTrade"></div>
+
+    </div>
+
+    <div class="elite-panel">
+
+        <h3>EdgeBreak Intelligence</h3>
+
+        <div class="metric">
+            <span>Framework</span>
+            <strong>Elite</strong>
+        </div>
+
+        <div class="metric">
+            <span>Market</span>
+            <strong>NASDAQ</strong>
+        </div>
+
+        <div class="metric">
+            <span>Updates</span>
+            <strong>Daily</strong>
+        </div>
 
     </div>
 
 </div>
 
-<!-- =========================
-WEEKLY PERFORMANCE
-========================== -->
+<!-- PERFORMANCE -->
+
+<div class="elite-grid">
+
+    <div class="elite-panel">
+
+        <h3>Best Trades</h3>
+
+        <div id="topTrades"></div>
+
+    </div>
+
+    <div class="elite-panel">
+
+        <h3>Worst Trades</h3>
+
+        <div id="worstTrades"></div>
+
+    </div>
+
+</div>
+
+<!-- CATEGORY PERFORMANCE -->
+
+<div class="elite-grid">
+
+    <div class="elite-panel">
+
+        <h3>Small Cap Performance</h3>
+
+        <div id="smallStats"></div>
+
+    </div>
+
+    <div class="elite-panel">
+
+        <h3>Mid Cap Performance</h3>
+
+        <div id="midStats"></div>
+
+    </div>
+
+    <div class="elite-panel">
+
+        <h3>Large Cap Performance</h3>
+
+        <div id="largeStats"></div>
+
+    </div>
+
+</div>
+
+<!-- WEEKLY PERFORMANCE -->
 
 <div class="elite-panel weekly-panel">
 
-    <h2>
-        Weekly Performance
-    </h2>
+    <h2>Weekly Performance</h2>
 
     <p class="elite-subtitle">
         Performance from Monday through today
@@ -934,15 +1009,7 @@ WEEKLY PERFORMANCE
 
     <div id="weeklyTrades"></div>
 
-    <div
-        id="weeklyTotal"
-        style="
-            text-align:center;
-            margin-top:20px;
-            font-size:28px;
-            font-weight:700;
-        "
-    ></div>
+    <div id="weeklyTotal"></div>
 
 </div>
 ```
@@ -950,7 +1017,6 @@ WEEKLY PERFORMANCE
 </div>
 
 </main>
-
 
 <!-- FOOTER -->
 <div class="footer" style="width:100%;">
