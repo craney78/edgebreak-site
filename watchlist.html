@@ -985,6 +985,44 @@ QUOTE SECTION
     }
 
 }
+.metric{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:10px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.metric:last-child{
+    border-bottom:none;
+}
+
+.metric span{
+    color:#94a3b8;
+    font-size:13px;
+}
+
+.metric strong{
+    color:white;
+    font-weight:700;
+}
+
+.elite-feature-icons{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:25px;
+    margin-top:25px;
+}
+
+@media(max-width:900px){
+
+    .elite-feature-icons{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
 </style>  
 
 </head>
@@ -1329,8 +1367,6 @@ QUOTE SECTION
         <div class="health-score">
 
             <div class="health-gauge">
-
-                <div id="healthFill" class="health-fill"></div>
 
                 <div class="health-center">
 
@@ -2942,6 +2978,27 @@ function rotateStatus(){
 
 rotateStatus();
 setInterval(rotateStatus, 10000);
+</script>
+<script>
+function updateHealth(score){
+
+    document.getElementById("healthValue").textContent = score;
+
+    const gauge =
+        document.querySelector(".health-gauge");
+
+    const angle =
+        score * 3.6;
+
+    gauge.style.background =
+        `conic-gradient(
+            #22c55e 0deg,
+            #22c55e ${angle}deg,
+            #1e293b ${angle}deg,
+            #1e293b 360deg
+        )`;
+
+}
 </script>
 </body>
 </html>
