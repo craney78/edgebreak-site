@@ -2021,17 +2021,19 @@ document.addEventListener("DOMContentLoaded", function () {
       const small = [];
       const mid = [];
       const large = [];
-      
+
       window.tradeMap = {};
 
       data.forEach(t => {
 
-        window.tradeMap[t.symbol] = t;
+          window.tradeMap[t.symbol] = t;
 
-        const g = (t.price_group || t.group || "").toUpperCase();
-        if (g === "SMALL") small.push(t);
-        else if (g === "MID") mid.push(t);
-        else if (g === "LARGE") large.push(t);
+          const g = (t.price_group || t.group || "").toUpperCase();
+
+          if (g === "SMALL") small.push(t);
+          else if (g === "MID") mid.push(t);
+          else if (g === "LARGE") large.push(t);
+
       });
 
       document.getElementById("smallCount").innerText = small.length;
@@ -2188,21 +2190,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       }     
 
-      function selectTrade(symbol){
-
-          loadChart(symbol);
-
-          const trade =
-              window.tradeMap[symbol];
-
-          if(!trade) return;
-
-          const health =
-              getHealthScore(trade);
-
-          updateHealth(health);
-
-      }
+      
       // =========================
       // 📊 WEEKLY PERFORMANCE (PRO VERSION)
       // =========================
@@ -2894,6 +2882,24 @@ function getHealthScore(trade){
 
     return Math.max(0, Math.min(score,100));
 }
+
+</script>
+<script>
+function selectTrade(symbol){
+
+          loadChart(symbol);
+
+          const trade =
+              window.tradeMap[symbol];
+
+          if(!trade) return;
+
+          const health =
+              getHealthScore(trade);
+
+          updateHealth(health);
+
+      }
 </script>
 <script>
 const quotes = [
