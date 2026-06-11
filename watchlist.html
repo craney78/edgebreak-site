@@ -832,6 +832,45 @@ body{
     font-size:13px;
     color:white;
 }
+
+.activity-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:12px 15px;
+    margin-bottom:10px;
+
+    border:1px solid #1e293b;
+    border-radius:10px;
+
+    background:#0b1220;
+}
+
+.activity-type{
+    font-size:12px;
+    font-weight:700;
+    color:#94a3b8;
+}
+
+.activity-symbol{
+    font-size:16px;
+    font-weight:700;
+    color:white;
+}
+
+.activity-return{
+    color:#22c55e;
+    font-weight:700;
+}
+
+.open{
+    border-left:4px solid #22c55e;
+}
+
+.closed{
+    border-left:4px solid #3b82f6;
+}
 </style>  
 
 </head>
@@ -1087,6 +1126,56 @@ body{
         <div id="tv_chart"></div>
 
     </div>
+
+    <div class="elite-panel">
+
+    <h3>Today's Activity</h3>
+
+    <div id="todayActivityFeed">
+
+        <div class="activity-item open">
+
+            <div class="activity-type">
+                OPENED
+            </div>
+
+            <div class="activity-symbol">
+                NVDA
+            </div>
+
+        </div>
+
+        <div class="activity-item open">
+
+            <div class="activity-type">
+                OPENED
+            </div>
+
+            <div class="activity-symbol">
+                PLTR
+            </div>
+
+        </div>
+
+        <div class="activity-item closed">
+
+            <div class="activity-type">
+                CLOSED
+            </div>
+
+            <div class="activity-symbol">
+                AMD
+            </div>
+
+            <div class="activity-return">
+                +14.2%
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
     <div class="elite-sidebar">
 
