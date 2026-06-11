@@ -2982,11 +2982,30 @@ setInterval(rotateStatus, 10000);
 <script>
 function updateHealth(score){
 
+    // safety
+    score = Math.max(0, Math.min(100, score));
+
     const gauge =
         document.querySelector(".health-gauge");
 
-    const angle =
-        score * 3.6;
+    const value =
+        document.getElementById("healthValue");
+
+    const label =
+        document.getElementById("healthLabel");
+
+    const trend =
+        document.getElementById("trendStatus");
+
+    const momentum =
+        document.getElementById("momentumStatus");
+
+    const structure =
+        document.getElementById("structureStatus");
+
+    if(!gauge || !value) return;
+
+    const angle = score * 3.6;
 
     gauge.style.background =
         `conic-gradient(
@@ -2996,36 +3015,47 @@ function updateHealth(score){
             #1e293b 360deg
         )`;
 
-    document.getElementById("healthValue").textContent =
-        score;
+    value.textContent = score;
 
-    if(score >= 80){
+    if(score >= 85){
 
-        document.getElementById("healthLabel").textContent =
-            "Excellent Breakout";
+        label.textContent = "Excellent Breakout";
 
-        document.getElementById("trendStatus").textContent =
-            "Bullish";
+        trend.textContent = "Bullish";
+        momentum.textContent = "Strong";
+        structure.textContent = "Intact";
 
-        document.getElementById("momentumStatus").textContent =
-            "Strong";
+    }
+    else if(score >= 70){
 
-        document.getElementById("structureStatus").textContent =
-            "Intact";
+        label.textContent = "Healthy Setup";
 
-    }else if(score >= 60){
+        trend.textContent = "Positive";
+        momentum.textContent = "Building";
+        structure.textContent = "Strong";
 
-        document.getElementById("healthLabel").textContent =
-            "Healthy Setup";
+    }
+    else if(score >= 50){
 
-    }else{
+        label.textContent = "Neutral";
 
-        document.getElementById("healthLabel").textContent =
-            "Weak Structure";
+        trend.textContent = "Mixed";
+        momentum.textContent = "Average";
+        structure.textContent = "Developing";
+
+    }
+    else{
+
+        label.textContent = "Weak Structure";
+
+        trend.textContent = "Weak";
+        momentum.textContent = "Fading";
+        structure.textContent = "Risk";
 
     }
 
 }
+updateHealth(87);
 </script>
 </body>
 </html>
