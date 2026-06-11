@@ -750,6 +750,52 @@ body{
 #tv_chart{
     height:760px;
 }
+
+.health-gauge{
+    position:relative;
+    width:180px;
+    height:180px;
+    margin:20px auto;
+    border-radius:50%;
+
+    background:
+    conic-gradient(
+        #ef4444 0deg,
+        #f59e0b 120deg,
+        #22c55e 240deg,
+        #22c55e 360deg
+    );
+}
+
+.health-gauge::after{
+    content:"";
+    position:absolute;
+    inset:18px;
+    background:#0b1220;
+    border-radius:50%;
+}
+
+.health-center{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:2;
+}
+
+.health-center span{
+    font-size:38px;
+    font-weight:800;
+    color:white;
+}
+
+.health-label{
+    text-align:center;
+    margin-top:10px;
+    color:#94a3b8;
+    font-size:14px;
+}
 </style>  
 
 </head>
@@ -927,6 +973,46 @@ body{
 
     </div>
 
+    <div class="elite-panel">
+
+        <h3>Breakout Health</h3>
+
+        <div class="health-score">
+
+            <div class="health-gauge">
+
+                <div id="healthFill" class="health-fill"></div>
+
+                <div class="health-center">
+
+                    <span id="healthValue">--</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="healthLabel" class="health-label">
+            Select a stock
+        </div>
+
+    </div>
+
+    <div class="metric">
+        <span>Trend</span>
+        <strong id="trendStatus">Bullish</strong>
+    </div>
+
+    <div class="metric">
+        <span>Momentum</span>
+        <strong id="momentumStatus">Strong</strong>
+    </div>
+
+    <div class="metric">
+        <span>Structure</span>
+        <strong id="structureStatus">Intact</strong>
+    </div>
     <!-- MEMBERS -->
 
     <div class="elite-panel">
@@ -2376,6 +2462,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 </script>
+<script>
+function getHealthScore(trade){
 
+    let score = 50;
+
+    if(trade.change_percent > 5) score += 15;
+    if(trade.change_percent > 10) score += 15;
+
+    if(trade.days_held < 15) score += 10;
+
+    if(trade.change_percent < 0) score -= 20;
+
+    return Math.max(0, Math.min(score,100));
+}
+</script>
 </body>
 </html>
