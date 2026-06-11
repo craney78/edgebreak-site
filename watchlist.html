@@ -892,6 +892,81 @@ TODAY'S ACTIVITY
 .activity-item.closed{
     border-left:4px solid #3b82f6;
 }
+
+/* =========================
+QUOTE SECTION
+========================= */
+
+.elite-quote{
+
+    margin-top:25px;
+    padding:30px;
+
+    background:rgba(255,255,255,0.02);
+
+    border:1px solid #1e293b;
+    border-radius:12px;
+
+    overflow:hidden;
+}
+
+.quote-line{
+
+    width:60px;
+    height:3px;
+
+    background:#22c55e;
+
+    margin:0 auto 20px auto;
+
+    border-radius:999px;
+}
+
+.quote-wrapper{
+
+    text-align:center;
+
+    animation:slideQuote 0.8s ease;
+}
+
+.quote-wrapper p{
+
+    font-size:18px;
+    line-height:1.8;
+
+    color:#e2e8f0;
+
+    font-style:italic;
+
+    margin-bottom:12px;
+}
+
+.quote-wrapper span{
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+    letter-spacing:1px;
+}
+
+@keyframes slideQuote{
+
+    from{
+
+        opacity:0;
+        transform:translateX(100px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateX(0);
+
+    }
+
+}
 </style>  
 
 </head>
@@ -1169,12 +1244,28 @@ TODAY'S ACTIVITY
                 <div class="activity-symbol">AMD</div>
                 <div class="activity-return">+14.2%</div>
             </div>
+    <!-- INSPIRATIONAL QUOTE -->
+
+    <div class="elite-quote">
+
+        <div class="quote-line"></div>
+
+        <div class="quote-wrapper">
+
+            <p id="quoteText">
+                The stock market is a device for transferring money from the impatient to the patient.
+            </p>
+
+            <span id="quoteAuthor">
+                — Warren Buffett
+        </span>
 
         </div>
 
     </div>
 
-</div>
+</div>        
+        
 
     <!-- RIGHT SIDEBAR -->
 
@@ -2722,5 +2813,73 @@ function getHealthScore(trade){
     return Math.max(0, Math.min(score,100));
 }
 </script>
+<script>
+const quotes = [
+
+{
+    text:"The stock market is a device for transferring money from the impatient to the patient.",
+    author:"Warren Buffett"
+},
+
+{
+    text:"Risk comes from not knowing what you're doing.",
+    author:"Warren Buffett"
+},
+
+{
+    text:"It's not whether you're right or wrong, but how much you make when you're right and how much you lose when you're wrong.",
+    author:"George Soros"
+},
+
+{
+    text:"The goal of a successful trader is to make the best trades. Money is secondary.",
+    author:"Alexander Elder"
+},
+
+{
+    text:"The trend is your friend until the end when it bends.",
+    author:"Ed Seykota"
+},
+
+{
+    text:"Amateurs think about how much money they can make. Professionals think about how much money they could lose.",
+    author:"Jack Schwager"
+}
+
+];
+
+function rotateQuote(){
+
+    const quote =
+        quotes[Math.floor(Math.random() * quotes.length)];
+
+    const wrapper =
+        document.querySelector(".quote-wrapper");
+
+    wrapper.style.animation = "none";
+
+    setTimeout(() => {
+
+        document.getElementById("quoteText").textContent =
+            quote.text;
+
+        document.getElementById("quoteAuthor").textContent =
+            "— " + quote.author;
+
+        wrapper.style.animation =
+            "slideQuote 0.8s ease";
+
+    }, 50);
+
+}
+
+rotateQuote();
+
+setInterval(
+    rotateQuote,
+    10000
+);
+</script>
+
 </body>
 </html>
