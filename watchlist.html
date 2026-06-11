@@ -2023,6 +2023,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const large = [];
 
       data.forEach(t => {
+
+        window.tradeMap[t.symbol] = t;
+
         const g = (t.price_group || t.group || "").toUpperCase();
         if (g === "SMALL") small.push(t);
         else if (g === "MID") mid.push(t);
@@ -2092,7 +2095,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const color = change >= 0 ? "#22c55e" : "#ef4444";
 
         return `
-          <div class="box" onclick="loadChart('${t.symbol}'); updateHealth(85);">
+          <div class="box" onclick="selectTrade('${t.symbol}')">
             <div style="display:flex; justify-content:space-between;">
       
               <strong 
@@ -2164,7 +2167,7 @@ document.addEventListener("DOMContentLoaded", function () {
       ========================= */
       function getHealthScore(trade){
 
-          let score = 60;
+          let score = 50;
 
           const change =
               parseFloat(trade.change_percent || 0);
@@ -2172,28 +2175,25 @@ document.addEventListener("DOMContentLoaded", function () {
           const days =
               parseInt(trade.days_held || 0);
 
-          if(change > 0)
-              score += 10;
+          if(change > 0) score += 10;
+          if(change > 3) score += 10;
+          if(change > 10) score += 10;
 
-          if(change > 5)
-              score += 10;
-
-          if(change > 10)
-              score += 10;
-
-          if(days > 5)
-              score += 5;
-
-          if(days > 20)
-              score += 5;
+          if(days > 5) score += 10;
+          if(days > 20) score += 10;
 
           return Math.min(score,100);
 
-      }
+      }     
 
-      function selectTrade(trade){
+      function selectTrade(symbol){
 
-          loadChart(trade.symbol);
+          loadChart(symbol);
+
+          const trade =
+              window.tradeMap[symbol];
+
+          if(!trade) return;
 
           const health =
               getHealthScore(trade);
