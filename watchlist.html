@@ -2092,7 +2092,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const color = change >= 0 ? "#22c55e" : "#ef4444";
 
         return `
-          <div class="box" onclick="loadChart('${t.symbol}')">
+          <div class="box" onclick='selectTrade(${JSON.stringify(t)})'>
             <div style="display:flex; justify-content:space-between;">
       
               <strong 
@@ -2159,6 +2159,48 @@ document.addEventListener("DOMContentLoaded", function () {
       renderTrades(mid, "🟡 Mid Caps", "midSection");
       renderTrades(large, "🔵 Large Caps", "largeSection");
 
+      /* =========================
+      BREAKOUT HEALTH
+      ========================= */
+      function getHealthScore(trade){
+
+          let score = 60;
+
+          const change =
+              parseFloat(trade.change_percent || 0);
+
+          const days =
+              parseInt(trade.days_held || 0);
+
+          if(change > 0)
+              score += 10;
+
+          if(change > 5)
+              score += 10;
+
+          if(change > 10)
+              score += 10;
+
+          if(days > 5)
+              score += 5;
+
+          if(days > 20)
+              score += 5;
+
+          return Math.min(score,100);
+
+      }
+
+      function selectTrade(trade){
+
+          loadChart(trade.symbol);
+
+          const health =
+              getHealthScore(trade);
+
+          updateHealth(health);
+
+      }
       // =========================
       // 📊 WEEKLY PERFORMANCE (PRO VERSION)
       // =========================
@@ -3055,7 +3097,7 @@ function updateHealth(score){
     }
 
 }
-updateHealth(87);
+
 </script>
 </body>
 </html>
