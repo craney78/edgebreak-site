@@ -2980,25 +2980,25 @@ rotateStatus();
 setInterval(rotateStatus, 10000);
 </script>
 <script>
-function updateHealth(score){
-
-    document.getElementById("healthValue").textContent = score;
+document.addEventListener("DOMContentLoaded", () => {
 
     const gauge =
         document.querySelector(".health-gauge");
 
-    const angle =
-        score * 3.6;
-
     gauge.style.background =
         `conic-gradient(
             #22c55e 0deg,
-            #22c55e ${angle}deg,
-            #1e293b ${angle}deg,
+            #22c55e 300deg,
+            #1e293b 300deg,
             #1e293b 360deg
         )`;
 
-}
+    document.getElementById("healthValue").textContent = "83";
+
+    document.getElementById("healthLabel").textContent =
+        "Excellent Breakout";
+
+});
 </script>
 </body>
 </html>
