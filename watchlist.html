@@ -2092,7 +2092,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const color = change >= 0 ? "#22c55e" : "#ef4444";
 
         return `
-          <div class="box" onclick='selectTrade(${JSON.stringify(t)})'>
+          <div class="box" onclick="loadChart('${t.symbol}'); updateHealth(85);">
             <div style="display:flex; justify-content:space-between;">
       
               <strong 
