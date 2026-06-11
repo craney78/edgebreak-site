@@ -967,6 +967,24 @@ QUOTE SECTION
     }
 
 }
+
+.status-wrapper{
+    animation:slideStatus 0.8s ease;
+}
+
+@keyframes slideStatus{
+
+    from{
+        opacity:0;
+        transform:translateX(80px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+
+}
 </style>  
 
 </head>
@@ -1344,6 +1362,38 @@ QUOTE SECTION
         </div>
 
     </div>
+
+    <div class="elite-panel">
+
+        <h3>Framework Status</h3>
+
+        <div class="status-wrapper">
+
+            <div class="metric">
+                <span id="statusLabel1">Scanner</span>
+                <strong id="statusValue1">Active</strong>
+            </div>
+
+            <div class="metric">
+                <span id="statusLabel2">Market</span>
+                <strong id="statusValue2">NASDAQ</strong>
+            </div>
+
+            <div class="metric">
+                <span id="statusLabel3">Updates</span>
+                <strong id="statusValue3">Daily</strong>
+            </div>
+
+            <div class="metric">
+                <span id="statusLabel4">Universe</span>
+                <strong id="statusValue4">3,000+ Stocks</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
     <!-- MEMBERS -->
 
@@ -2866,5 +2916,65 @@ setInterval(
 );
 </script>
 
+<script>
+const statusSets = [
+
+{
+    labels:["Scanner","Market","Updates","Universe"],
+    values:["Active","NASDAQ","Daily","3,000+ Stocks"]
+},
+
+{
+    labels:["Framework","Monitoring","Coverage","Status"],
+    values:["Elite","Daily","NASDAQ","Operational"]
+},
+
+{
+    labels:["Signals","Research","Tracking","Focus"],
+    values:["Live","Active","Continuous","Breakouts"]
+},
+
+{
+    labels:["Performance","Database","Updates","Analysis"],
+    values:["Tracked","Growing","Automatic","Structured"]
+}
+
+];
+
+function rotateStatus(){
+
+    const set =
+        statusSets[Math.floor(Math.random() * statusSets.length)];
+
+    const wrapper =
+        document.querySelector(".status-wrapper");
+
+    if(!wrapper) return;
+
+    wrapper.style.animation = "none";
+
+    setTimeout(() => {
+
+        document.getElementById("statusLabel1").textContent = set.labels[0];
+        document.getElementById("statusValue1").textContent = set.values[0];
+
+        document.getElementById("statusLabel2").textContent = set.labels[1];
+        document.getElementById("statusValue2").textContent = set.values[1];
+
+        document.getElementById("statusLabel3").textContent = set.labels[2];
+        document.getElementById("statusValue3").textContent = set.values[2];
+
+        document.getElementById("statusLabel4").textContent = set.labels[3];
+        document.getElementById("statusValue4").textContent = set.values[3];
+
+        wrapper.style.animation = "slideStatus 0.8s ease";
+
+    }, 50);
+
+}
+
+rotateStatus();
+setInterval(rotateStatus, 10000);
+</script>
 </body>
 </html>
