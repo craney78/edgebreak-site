@@ -1937,6 +1937,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+<script>
+// =========================
+// 🎯 SELECT STOCK (INTERACTIVE GAUGE)
+// =========================
+function selectStock(symbol) {
+
+  // load chart as before
+  loadChart(symbol);
+
+  // find stock from dataset
+  const stock = window.smartMoneyData.find(s => s.symbol === symbol);
+
+  if (!stock) return;
+
+  const score = Number(stock.score || 0);
+  const vol = Number(stock.volume_ratio || 0);
+  const dist = Number(stock.distance_to_high || 0);
+
+  // normalize
+  const scorePart = score / 10;
+  const volPart = Math.min(vol / 1.5, 1);
+  const distPart = 1 - Math.min(Math.abs(dist / 5), 1);
+
+  let healthScore =
+    (scorePart * 0.4) +
+    (volPart * 0.3) +
+    (distPart * 0.3);
+
+  healthScore = Math.max(0, Math.min(1, healthScore));
+
+  const healthPercent = Math.round(healthScore * 100);
+
+  // update bar
+  const bar = document.getElementById("winBar");
+  if (bar) bar.style.width = healthPercent + "%";
+
+  // update number
+  const value = document.getElementById("healthValue");
+  if (value) value.innerText = healthPercent;
+
+  // update label
+  const label = document.getElementById("healthLabel");
+  if (label) {
+    if (healthPercent > 70) label.innerText = "Strong accumulation";
+    else if (healthPercent > 50) label.innerText = "Building pressure";
+    else if (healthPercent > 30) label.innerText = "Early accumulation";
+    else label.innerText = "Weak activity";
+  }
+
+}
+</script>
 <script>     
 // =========================
 // 🧠 SMART MONEY WATCHLIST
@@ -1967,7 +2018,7 @@ fetch("/elite_watchlist.json?v=" + Date.now())
 
       const price = parseFloat(t.price || 0);
 
-      // group by price
+      // group by price (keep for now)
       if (price < 20) small.push(t);
       else if (price < 80) mid.push(t);
       else large.push(t);
@@ -1989,7 +2040,7 @@ fetch("/elite_watchlist.json?v=" + Date.now())
     document.getElementById("activeCount").innerText = data.length;
 
     // =========================
-    // 📊 AVERAGES (SMART MONEY)
+    // 📊 AVERAGES
     // =========================
     const count = data.length || 1;
 
@@ -2000,6 +2051,45 @@ fetch("/elite_watchlist.json?v=" + Date.now())
     document.getElementById("avgReturn").innerText = avgScore;
     document.getElementById("winRate").innerText = avgVol;
     document.getElementById("bestTrade").innerText = avgDist + "%";
+
+    // =========================
+    // 🧠 INSTITUTIONAL INTEREST (FIXED)
+    // =========================
+    const scoreNum = Number(avgScore);
+    const volNum = Number(avgVol);
+    const distNum = Number(avgDist);
+
+    const maxScore = Math.max(...data.map(t => t.score || 0));
+
+    const scorePart = maxScore / 10;
+    const volPart = Math.min(volNum / 1.5, 1);
+    const distPart = 1 - Math.min(Math.abs(distNum / 5), 1);
+
+    let healthScore =
+      (scorePart * 0.4) +
+      (volPart * 0.3) +
+      (distPart * 0.3);
+
+    healthScore = Math.max(0, Math.min(1, healthScore));
+
+    const healthPercent = Math.round(healthScore * 100);
+
+    // update bar
+    const bar = document.getElementById("winBar");
+    if (bar) bar.style.width = healthPercent + "%";
+
+    // update number
+    const value = document.getElementById("healthValue");
+    if (value) value.innerText = healthPercent;
+
+    // update label
+    const label = document.getElementById("healthLabel");
+    if (label) {
+      if (healthPercent > 70) label.innerText = "Strong accumulation";
+      else if (healthPercent > 50) label.innerText = "Building pressure";
+      else if (healthPercent > 30) label.innerText = "Early accumulation";
+      else label.innerText = "Weak activity";
+    }
 
     // =========================
     // 📊 RENDER WATCHLIST
@@ -2020,38 +2110,8 @@ fetch("/elite_watchlist.json?v=" + Date.now())
         const vol = t.volume_ratio || 0;
         const dist = t.distance_to_high || 0;
 
-        // =========================
-        // 🧠 INSTITUTIONAL INTEREST SCORE
-        // =========================
-
-        let healthScore = 0;
-
-        // normalize components
-        const scorePart = avgScore / 10;          // score out of ~10
-        const volPart = Math.min(vol / 1.5, 1);              // 1.0–2.0 typical
-        const distPart = 1 - Math.min(Math.abs(dist / 5), 1); // closer to high = better
-        const maxScore = Math.max(...data.map(t => t.score || 0));
-        // combine
-        healthScore = (scorePart * 0.4) + (volPart * 0.3) + (distPart * 0.3);
-
-        // convert to %
-        healthScore = Math.max(0, Math.min(1, healthScore));
-        const healthPercent = Math.round(healthScore * 100);
-
-        // bar
-        const bar = document.getElementById("winBar");
-        if (bar) {
-          bar.style.width = healthPercent + "%";
-        }
-
-        // number
-        const value = document.getElementById("healthValue");
-        if (value) {
-          value.innerText = healthPercent;
-        }
-
         return `
-          <div class="box" onclick="loadChart('${t.symbol}')">
+          onclick="selectStock('${t.symbol}')"
 
             <div style="display:flex; justify-content:space-between;">
               <strong>${t.symbol}</strong>
@@ -2074,7 +2134,7 @@ fetch("/elite_watchlist.json?v=" + Date.now())
     render(large, "largeSection");
 
   })
-  .catch(err => console.error("Smart Money Error:", err));      
+  .catch(err => console.error("Smart Money Error:", err));     
 </script>
 <script>
 async function setupAuthButton() {
