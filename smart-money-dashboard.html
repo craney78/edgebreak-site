@@ -2028,9 +2028,9 @@ fetch("/elite_watchlist.json?v=" + Date.now())
 
         // normalize components
         const scorePart = avgScore / 10;          // score out of ~10
-        const volPart = avgVol / 2;               // 1.0–2.0 typical
-        const distPart = 1 - Math.abs(avgDist / 10); // closer to high = better
-
+        const volPart = Math.min(vol / 1.5, 1);              // 1.0–2.0 typical
+        const distPart = 1 - Math.min(Math.abs(dist / 5), 1); // closer to high = better
+        const maxScore = Math.max(...data.map(t => t.score || 0));
         // combine
         healthScore = (scorePart * 0.4) + (volPart * 0.3) + (distPart * 0.3);
 
