@@ -2092,26 +2092,26 @@ fetch("/elite_watchlist.json?v=" + Date.now())
     }
 
     // =========================
-    // 📊 RENDER WATCHLIST
+    // 📊 RENDER WATCHLIST (FIXED)
     // =========================
     function render(list, id) {
 
-      const el = document.getElementById(id);
-      if (!el) return;
+    const el = document.getElementById(id);
+    if (!el) return;
 
-      if (list.length === 0) {
+    if (list.length === 0) {
         el.innerHTML = `<p style="color:#64748b;">No stocks</p>`;
         return;
-      }
+    }
 
-      el.innerHTML = list.map(t => {
+    el.innerHTML = list.map(t => {
 
         const score = t.score || 0;
         const vol = t.volume_ratio || 0;
         const dist = t.distance_to_high || 0;
 
         return `
-          onclick="selectStock('${t.symbol}')"
+        <div class="box" onclick="selectStock('${t.symbol}')">
 
             <div style="display:flex; justify-content:space-between;">
               <strong>${t.symbol}</strong>
@@ -2122,13 +2122,14 @@ fetch("/elite_watchlist.json?v=" + Date.now())
               Vol: ${vol.toFixed(2)} | Dist: ${dist.toFixed(2)}%
             </div>
 
-          </div>
+        </div>
         `;
 
-      }).join("");
+    }).join("");
 
     }
 
+    // render sections
     render(small, "smallSection");
     render(mid, "midSection");
     render(large, "largeSection");
