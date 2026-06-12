@@ -2,14 +2,1138 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>Live Breakout Trades | EdgeBreak Trading Desk</title>
+
+<meta name="description" content="View live breakout trading setups with structure, volume, and real-time tracking using the EdgeBreak Trading Desk.">
+
+<meta name="keywords" content="breakout stocks live, trading desk, breakout scanner, live trades">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Smart Money | Follow the Footprints Before the Breakout | EdgeBreak</title>
+<link rel="canonical" href="https://www.edgebreak.ai/watchlist.html">
 
-<meta name="description" content="Track stocks attracting repeated accumulation signals across the NASDAQ. Smart Money helps investors build stronger watchlists, identify emerging opportunities, and focus research where market activity appears to be building.">
-<link rel="stylesheet" href="css/dashboard.css">
+<meta name="robots" content="index, follow">
+
+<meta property="og:title" content="Live Breakout Trades">
+<meta property="og:description" content="See real breakout setups updated daily using data-driven analysis.">
+<meta property="og:url" content="https://www.edgebreak.ai/watchlist.html">
+<meta property="og:type" content="website">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<link rel="canonical" href="https://www.edgebreak.ai/watchlist.html">
+<script>
+window.supabaseClient = supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+);
+</script>
+<script>
+// =========================
+// 🔒 HARD PAGE LOCK
+// =========================
+document.documentElement.style.visibility = "hidden";
+
+const supabaseClient = window.supabaseClient;
+
+// =========================
+// 🔐 ACCESS CONTROL
+// =========================
+async function checkAccess() {
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+      window.location.replace("/login.html");
+      return;
+    }
+
+    const { data: profile, error } = await supabaseClient
+      .from("profiles")
+      .select("is_active")
+      .eq("id", user.id)
+      .single();
+
+    if (error || !profile || !profile.is_active) {
+      window.location.replace("/pricing.html");
+      return;
+    }
+
+    document.documentElement.style.visibility = "visible";
+
+  } catch (err) {
+    console.error(err);
+    window.location.replace("/login.html");
+  }
+}
+
+// 🚀 RUN
+checkAccess();
+
+</script>
+<style>
+/* =========================
+   BREAKOUT ELITE THEME
+========================= */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#050b14;
+  color:#ffffff;
+  font-family:Inter,Segoe UI,sans-serif;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.elite-container{
+  max-width:1700px;
+  margin:auto;
+  padding:30px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.elite-header{
+  margin-bottom:30px;
+}
+
+.elite-brand{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
+.elite-logo{
+  width:70px;
+  height:auto;
+}
+
+.elite-brand h1{
+  font-size:42px;
+  font-weight:800;
+  letter-spacing:1px;
+  margin-bottom:6px;
+}
+
+.elite-brand p{
+  color:#94a3b8;
+  font-size:15px;
+}
+
+/* =========================
+   TERMINAL
+========================= */
+
+.elite-terminal{
+  display:grid;
+  grid-template-columns:320px 1fr 280px;
+  gap:20px;
+  margin-bottom:25px;
+}
+
+/* =========================
+   PANELS
+========================= */
+
+.elite-panel{
+  background:#0b1220;
+  border:1px solid #1e293b;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:
+  0 0 0 1px rgba(255,255,255,.02),
+  0 10px 30px rgba(0,0,0,.4);
+}
+
+.panel-title{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:18px;
+  color:#ffffff;
+}
+
+/* =========================
+   WATCHLIST
+========================= */
+
+.watchlist-panel{
+  min-height:750px;
+  overflow-y:auto;
+}
+
+.watchlist-panel .box{
+  background:#111827;
+  border:1px solid #1f2937;
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:12px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.watchlist-panel .box:hover{
+  border-color:#22c55e;
+  transform:translateY(-2px);
+}
+
+.watchlist-panel strong{
+  color:white;
+  font-size:15px;
+}
+
+/* =========================
+   CHART
+========================= */
+
+.chart-panel{
+  min-height:750px;
+}
+
+.chart-title{
+  text-align:center;
+  color:#94a3b8;
+  font-size:14px;
+  margin-bottom:15px;
+}
+
+#tv_chart{
+  height:650px;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+/* =========================
+   RIGHT SIDEBAR
+========================= */
+
+.elite-sidebar{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.elite-copy{
+  color:#94a3b8;
+  line-height:1.7;
+  font-size:14px;
+}
+
+/* =========================
+   PERFORMANCE BAR
+========================= */
+
+.performance-wrapper{
+  margin-top:10px;
+}
+
+.performance-bar{
+  width:100%;
+  height:12px;
+  background:#111827;
+  border-radius:50px;
+  overflow:hidden;
+}
+
+.performance-fill{
+  width:0%;
+  height:100%;
+  background:linear-gradient(
+      90deg,
+      #22c55e,
+      #16a34a
+  );
+  transition:.4s;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.elite-stats-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+  margin-bottom:25px;
+}
+
+.elite-stat-card{
+  background:#0b1220;
+  border:1px solid #1e293b;
+  border-radius:16px;
+  padding:24px;
+  text-align:center;
+}
+
+.elite-stat-card span{
+  display:block;
+  color:#94a3b8;
+  font-size:13px;
+  margin-bottom:10px;
+}
+
+.elite-stat-card strong{
+  display:block;
+  font-size:34px;
+  font-weight:800;
+  color:white;
+}
+
+/* =========================
+   WEEKLY PERFORMANCE
+========================= */
+
+.weekly-panel{
+  margin-top:10px;
+}
+
+.weekly-panel h2{
+  margin-bottom:8px;
+}
+
+.elite-subtitle{
+  color:#94a3b8;
+  margin-bottom:20px;
+}
+
+/* =========================
+   NO TRADES
+========================= */
+
+.no-trades{
+  background:#111827;
+  border:1px dashed #334155;
+  border-radius:12px;
+  padding:20px;
+  text-align:center;
+  color:#94a3b8;
+  margin-bottom:20px;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar{
+  width:8px;
+}
+
+::-webkit-scrollbar-track{
+  background:#0b1220;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#334155;
+  border-radius:20px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:1200px){
+
+  .elite-terminal{
+    grid-template-columns:280px 1fr;
+  }
+
+  .elite-sidebar{
+    grid-column:1 / -1;
+    flex-direction:row;
+  }
+
+}
+
+@media(max-width:900px){
+
+  .elite-terminal{
+    grid-template-columns:1fr;
+  }
+
+  .elite-sidebar{
+    flex-direction:column;
+  }
+
+  .elite-stats-row{
+    grid-template-columns:1fr 1fr;
+  }
+
+  #tv_chart{
+    height:500px;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .elite-container{
+    padding:15px;
+  }
+
+  .elite-brand h1{
+    font-size:30px;
+  }
+
+  .elite-stats-row{
+    grid-template-columns:1fr;
+  }
+
+}
+
+/* =========================
+   ELITE NAVBAR
+========================= */
+
+.nav{
+    position:sticky;
+    top:0;
+    z-index:9999;
+
+    background:#08111f;
+    border-bottom:1px solid #1e293b;
+
+    backdrop-filter:blur(10px);
+}
+
+.nav-inner{
+    max-width:1700px;
+    margin:auto;
+
+    height:72px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 25px;
+}
+
+/* =========================
+   LEFT SIDE
+========================= */
+
+.nav-left{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.nav-logo{
+    width:46px;
+    height:auto;
+    display:block;
+}
+
+.logo-text{
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:1px;
+
+    color:white;
+    text-decoration:none;
+}
+
+/* =========================
+   LIVE BADGE
+========================= */
+
+.live-badge{
+    background:#16a34a;
+    color:white;
+
+    padding:5px 10px;
+
+    border-radius:999px;
+
+    font-size:11px;
+    font-weight:700;
+
+    letter-spacing:.5px;
+}
+
+/* =========================
+   LINKS
+========================= */
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:24px;
+}
+
+.nav-link{
+    color:#94a3b8;
+    text-decoration:none;
+
+    font-size:14px;
+    font-weight:500;
+
+    transition:.2s;
+}
+
+.nav-link:hover{
+    color:white;
+}
+
+/* =========================
+   ACTIVE PAGE
+========================= */
+
+.nav-link.active{
+    color:#22c55e;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.nav-cta{
+    background:#22c55e;
+
+    color:white;
+    text-decoration:none;
+
+    padding:10px 18px;
+
+    border-radius:10px;
+
+    font-size:14px;
+    font-weight:700;
+
+    transition:.2s;
+}
+
+.nav-cta:hover{
+    transform:translateY(-1px);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+.menu-toggle{
+    display:none;
+}
+
+@media(max-width:900px){
+
+    .menu-toggle{
+        display:block;
+        color:white;
+        font-size:28px;
+        cursor:pointer;
+    }
+
+    .nav-links{
+        display:none;
+    }
+
+    .nav-links.active{
+        display:flex;
+
+        position:absolute;
+
+        top:72px;
+        left:0;
+        right:0;
+
+        background:#08111f;
+
+        flex-direction:column;
+
+        padding:20px;
+
+        border-bottom:1px solid #1e293b;
+    }
+
+}
+
+/* =========================
+   ELITE FOOTER
+========================= */
+
+.footer{
+    margin-top:50px;
+
+    background:#08111f;
+    border-top:1px solid #1e293b;
+
+    padding:50px 0 20px;
+}
+
+.footer-inner{
+    max-width:1700px;
+    margin:auto;
+
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr 1fr;
+
+    gap:40px;
+
+    padding:0 30px;
+}
+
+.footer-col h4{
+    color:white;
+    font-size:15px;
+    margin-bottom:15px;
+}
+
+.footer-col p{
+    color:#94a3b8;
+    line-height:1.7;
+    font-size:14px;
+}
+
+.footer-col a{
+    display:block;
+
+    color:#94a3b8;
+    text-decoration:none;
+
+    margin-bottom:10px;
+
+    font-size:14px;
+
+    transition:.2s;
+}
+
+.footer-col a:hover{
+    color:white;
+}
+
+/* =========================
+   BRAND BLOCK
+========================= */
+
+.footer-brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:15px;
+}
+
+.footer-brand img{
+    width:45px;
+}
+
+.footer-brand h3{
+    margin:0;
+    font-size:22px;
+    color:white;
+}
+
+/* =========================
+   BOTTOM BAR
+========================= */
+
+.footer-bottom{
+    max-width:1700px;
+
+    margin:40px auto 0;
+
+    padding:20px 30px 0;
+
+    border-top:1px solid #1e293b;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+.footer-bottom p{
+    color:#64748b;
+    font-size:13px;
+}
+
+.footer-parent-block{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.footer-logo{
+    width:28px;
+    opacity:.7;
+}
+
+.footer-parent a{
+    color:#94a3b8;
+    text-decoration:none;
+}
+
+.footer-parent a:hover{
+    color:white;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+    .footer-inner{
+        grid-template-columns:1fr;
+    }
+
+    .footer-bottom{
+        flex-direction:column;
+        text-align:center;
+    }
+
+}
+
+.elite-featured{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    margin-bottom:25px;
+    padding:25px;
+    border-radius:18px;
+    background:linear-gradient(135deg,#0b1220,#111827);
+    border:1px solid #1e293b;
+}
+
+.featured-tag{
+    display:inline-block;
+    padding:6px 12px;
+    background:#14532d;
+    color:#4ade80;
+    border-radius:999px;
+    margin-bottom:10px;
+    font-size:12px;
+    font-weight:700;
+}
+
+.featured-pill{
+    background:#22c55e;
+    color:#fff;
+    padding:12px 18px;
+    border-radius:999px;
+    font-weight:700;
+}
+
+.elite-highlight-banner{
+    margin:30px 0;
+    padding:35px;
+    text-align:center;
+    border-radius:18px;
+    background:linear-gradient(135deg,#0f172a,#111827);
+    border:1px solid #1e293b;
+}
+
+.elite-highlight-banner h2{
+    margin-bottom:10px;
+}
+
+.elite-highlight-banner p{
+    color:#94a3b8;
+}
+
+.chart-panel{
+    min-height:900px;
+}
+
+#tv_chart{
+    height:760px;
+}
+
+.health-gauge{
+    position:relative;
+    width:180px;
+    height:180px;
+    margin:20px auto;
+    border-radius:50%;
+
+    background:
+    conic-gradient(
+        #ef4444 0deg,
+        #f59e0b 120deg,
+        #22c55e 240deg,
+        #22c55e 360deg
+    );
+}
+
+.health-gauge::after{
+    content:"";
+    position:absolute;
+    inset:18px;
+    background:#0b1220;
+    border-radius:50%;
+}
+
+.health-center{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:2;
+}
+
+.health-center span{
+    font-size:38px;
+    font-weight:800;
+    color:white;
+}
+
+.health-label{
+    text-align:center;
+    margin-top:10px;
+    color:#94a3b8;
+    font-size:14px;
+}
+
+.feature-icon{
+    width:48px;
+    height:48px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#22c55e;
+}
+
+.feature-icon svg{
+    width:32px;
+    height:32px;
+    stroke:#22c55e;
+}
+
+.feature-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.feature-item span{
+    display:block;
+    font-size:11px;
+    color:#94a3b8;
+    letter-spacing:1px;
+}
+
+.feature-item strong{
+    display:block;
+    font-size:13px;
+    color:white;
+}
+
+.chart-panel{
+    display:flex;
+    flex-direction:column;
+}
+
+#tv_chart{
+    height:650px;
+    min-height:650px;
+}
+
+.chart-bottom{
+    margin-top:20px;
+    padding-top:20px;
+    border-top:1px solid #1e293b;
+}
+
+/* =========================
+TODAY'S ACTIVITY
+========================= */
+
+.activity-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:12px 15px;
+    margin-bottom:10px;
+
+    background:#0b1220;
+    border:1px solid #1e293b;
+    border-radius:10px;
+}
+
+.activity-type{
+    font-size:12px;
+    font-weight:700;
+    color:#94a3b8;
+    letter-spacing:1px;
+}
+
+.activity-symbol{
+    font-size:15px;
+    font-weight:700;
+    color:#ffffff;
+}
+
+.activity-return{
+    font-size:14px;
+    font-weight:700;
+    color:#22c55e;
+}
+
+.activity-item.open{
+    border-left:4px solid #22c55e;
+}
+
+.activity-item.closed{
+    border-left:4px solid #3b82f6;
+}
+
+/* =========================
+QUOTE SECTION
+========================= */
+
+.elite-quote{
+
+    margin-top:25px;
+    padding:30px;
+
+    background:rgba(255,255,255,0.02);
+
+    border:1px solid #1e293b;
+    border-radius:12px;
+
+    overflow:hidden;
+}
+
+.quote-line{
+
+    width:60px;
+    height:3px;
+
+    background:#22c55e;
+
+    margin:0 auto 20px auto;
+
+    border-radius:999px;
+}
+
+.quote-wrapper{
+
+    text-align:center;
+
+    animation:slideQuote 0.8s ease;
+}
+
+.quote-wrapper p{
+
+    font-size:18px;
+    line-height:1.8;
+
+    color:#e2e8f0;
+
+    font-style:italic;
+
+    margin-bottom:12px;
+}
+
+.quote-wrapper span{
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+    letter-spacing:1px;
+}
+
+@keyframes slideQuote{
+
+    from{
+
+        opacity:0;
+        transform:translateX(100px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateX(0);
+
+    }
+
+}
+
+.status-wrapper{
+    animation:slideStatus 0.8s ease;
+}
+
+@keyframes slideStatus{
+
+    from{
+        opacity:0;
+        transform:translateX(80px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+
+}
+.metric{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:10px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.metric:last-child{
+    border-bottom:none;
+}
+
+.metric span{
+    color:#94a3b8;
+    font-size:13px;
+}
+
+.metric strong{
+    color:white;
+    font-weight:700;
+}
+
+.elite-feature-icons{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:25px;
+    margin-top:25px;
+}
+
+@media(max-width:900px){
+
+    .elite-feature-icons{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+/* =========================
+HERO
+========================= */
+
+.elite-banner{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+
+    margin-bottom:25px;
+    padding:30px;
+
+    border-radius:18px;
+
+    background:linear-gradient(
+        135deg,
+        #08111f,
+        #0f172a
+    );
+
+    border:1px solid #1e293b;
+}
+
+.elite-banner h1{
+    font-size:42px;
+    font-weight:800;
+    margin-bottom:10px;
+}
+
+.elite-banner p{
+    color:#94a3b8;
+    max-width:700px;
+    line-height:1.7;
+}
+
+.elite-badge{
+    background:#22c55e;
+    color:white;
+
+    padding:12px 18px;
+
+    border-radius:999px;
+
+    font-weight:700;
+    white-space:nowrap;
+}
+
+/* =========================
+GRID PANELS
+========================= */
+
+.elite-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:20px;
+    margin-bottom:25px;
+}
+
+/* =========================
+LISTS
+========================= */
+
+.elite-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+
+.elite-list li{
+    padding:10px 0;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    color:#cbd5e1;
+}
+
+.elite-list li:last-child{
+    border-bottom:none;
+}
+
+/* =========================
+HIGHLIGHT PANEL
+========================= */
+
+.elite-highlight{
+    background:linear-gradient(
+        135deg,
+        rgba(34,197,94,.12),
+        rgba(34,197,94,.04)
+    );
+
+    border:1px solid rgba(34,197,94,.3);
+}
+
+/* =========================
+WEEKLY PANEL
+========================= */
+
+.weekly-mini-panel{
+    margin-top:25px;
+
+    padding:20px;
+
+    border:1px solid #1e293b;
+    border-radius:12px;
+
+    background:#08111f;
+}
+</style>  
 
 </head>
+<body style="background:#020617;">
+
 <!-- NAVBAR -->
 <div class="nav">
   <div class="nav-inner">
@@ -29,13 +1153,12 @@
       <!-- LINKS -->
       <div class="nav-links" id="navLinks">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="products.html" class="nav-link">Products</a>
         <a href="index.html#statsGrid" class="nav-link">Performance</a>
 
         <a href="watchlist.html" class="nav-link locked-link">
           Trading Desk <span class="lock-icon">🔒</span>
         </a>
-        
+
         <a href="breakout-guide.html" class="nav-link">Free Breakout Guide</a>
 
         <a href="trading-guide.html" class="nav-link">Guide</a>
@@ -67,199 +1190,612 @@
   </div>
 </div>
 
-<body style="background:#020617;">
+<main>
 
-<div class="container">
+<div class="elite-container">
 
-    <!-- HEADER -->
-    <div class="header">
+```
+<!-- HERO -->
 
-        <img src="images/logo.png" class="hero-logo">
+<div class="elite-banner">
 
-        <h1>Smart Money</h1>
+    <div>
 
-        <p class="header-sub">
-            Follow the footprints before the breakout.
-        </p>
-
-        <p style="font-size:12px; color:#64748b; margin-top:10px; max-width:700px;">
-            Stocks appearing repeatedly on the Smart Money scanner. Multiple appearances may indicate sustained market attention and deserve further research.
-        </p>
-
-    </div>
-
-    <!-- TOP GRID -->
-    <div class="watchlist-grid">
-
-        <div class="watch-card">
-
-            <h3>Scanner Activity</h3>
-
-            <p style="font-size:13px; color:#64748b;">
-                Current Smart Money candidates
-            </p>
-
-            <div class="stat-line">
-                <span>Unique Stocks</span>
-                <span id="candidateCount">-</span>
-            </div>
-
-            <div class="stat-line">
-                <span>Repeat Candidates</span>
-                <span id="returningCandidates">-</span>
-            </div>
-
-            <div class="stat-line">
-                <span>Highest Appearance Count</span>
-                <span id="topAppearance">-</span>
-            </div>
-
-        </div>
-
-        <div class="watch-card">
-
-            <h3>Scanner Quality</h3>
-
-            <div class="stat-line">
-                <span>Average Score</span>
-                <span id="avgScore">-</span>
-            </div>
-
-            <div class="stat-line">
-                <span>Average Volume Ratio</span>
-                <span id="avgVolume">-</span>
-            </div>
-
-            <div class="stat-line">
-                <span>Average Distance To High</span>
-                <span id="avgDistance">-</span>
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- STATS -->
-    <div class="stats">
-
-        <div class="stat">
-            <div class="label">Total Records</div>
-            <div class="value" id="trackedStocks">-</div>
-        </div>
-
-        <div class="stat">
-            <div class="label">Unique Candidates</div>
-            <div class="value" id="uniqueCandidates">-</div>
-        </div>
-
-        <div class="stat">
-            <div class="label">Most Accumulated</div>
-            <div class="value green" id="highestCount">-</div>
-        </div>
-
-        <div class="stat">
-            <div class="label">Repeat Candidates</div>
-            <div class="value" id="repeatCount">-</div>
-        </div>
-
-    </div>
-
-    <!-- LEADERBOARD -->
-    <div class="current-trades">
-
-        <h2>Smart Money Leaderboard</h2>
+        <h1>SMART MONEY</h1>
 
         <p>
-            Ranked by appearance frequency.
+            Track stocks repeatedly appearing on the EdgeBreak accumulation scanner.
+            Identify where market interest may be building before a breakout becomes obvious.
         </p>
-
-        <div id="smartMoneyTable"></div>
 
     </div>
 
-    <!-- RECENT APPEARANCES -->
-    <div class="section">
+    <div class="elite-badge">
+        Updated Daily
+    </div>
 
-        <h3 style="margin-bottom:15px;">
-            Most Recent Scanner Activity
-        </h3>
+</div>
 
-        <div id="recentActivity"></div>
+<div class="elite-featured">
+
+    <div>
+
+        <div class="featured-tag">
+            SMART MONEY ELITE
+        </div>
+
+        <h2>
+            Institutional Watchlist
+        </h2>
+
+        <p>
+            Stocks repeatedly identified by the EdgeBreak accumulation framework
+            and ranked by appearance frequency, market interest, and research potential.
+        </p>
+
+    </div>
+
+    <div class="elite-feature-icons">
+
+        <!-- APPEARANCES -->
+
+        <div class="feature-item">
+
+            <div class="feature-icon">
+
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+                    <circle cx="12" cy="12" r="8"></circle>
+                    <circle cx="12" cy="12" r="2"></circle>
+                    <line x1="12" y1="2" x2="12" y2="6"></line>
+                    <line x1="12" y1="18" x2="12" y2="22"></line>
+                    <line x1="2" y1="12" x2="6" y2="12"></line>
+                    <line x1="18" y1="12" x2="22" y2="12"></line>
+
+                </svg>
+
+            </div>
+
+            <div>
+
+                <span>SMART MONEY</span>
+                <strong>APPEARANCES</strong>
+
+            </div>
+
+        </div>
+
+        <!-- RANKINGS -->
+
+        <div class="feature-item">
+
+            <div class="feature-icon">
+
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+                    <polyline points="3,16 8,11 13,15 21,6"></polyline>
+                    <polyline points="17,6 21,6 21,10"></polyline>
+
+                </svg>
+
+            </div>
+
+            <div>
+
+                <span>ACCUMULATION</span>
+                <strong>RANKINGS</strong>
+
+            </div>
+
+        </div>
+
+        <!-- RESEARCH -->
+
+        <div class="feature-item">
+
+            <div class="feature-icon">
+
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+                    <path d="M12 2 A10 10 0 1 1 2 12"></path>
+                    <line x1="12" y1="12" x2="18" y2="8"></line>
+
+                </svg>
+
+            </div>
+
+            <div>
+
+                <span>RESEARCH</span>
+                <strong>CANDIDATES</strong>
+
+            </div>
+
+        </div>
+
+        <!-- MARKET INTEREST -->
+
+        <div class="feature-item">
+
+            <div class="feature-icon">
+
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+                    <line x1="4" y1="20" x2="4" y2="10"></line>
+                    <line x1="10" y1="20" x2="10" y2="6"></line>
+                    <line x1="16" y1="20" x2="16" y2="13"></line>
+                    <line x1="22" y1="20" x2="22" y2="3"></line>
+
+                </svg>
+
+            </div>
+
+            <div>
+
+                <span>MARKET</span>
+                <strong>INTEREST</strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="featured-pill">
+        NASDAQ ONLY
+    </div>
+
+</div>
+
+<!-- TERMINAL -->
+
+<div class="elite-terminal">
+
+    <!-- WATCHLIST -->
+
+    <div class="elite-panel watchlist-panel">
+
+        <div class="panel-title">
+            Institutional Watchlist
+        </div>
+
+        <div id="todayActivity"></div>
+
+        <div id="noTradesMessage" class="no-trades">
+            No accumulation leaders currently available
+        </div>
+
+        <div id="smallSection"></div>
+
+        <div id="midSection"></div>
+
+        <div id="largeSection"></div>
 
     </div>
 
     <!-- CHART -->
-    <div class="section">
 
-        <h3 style="margin-bottom:10px;">
-            Price Chart
-        </h3>
+    <div class="elite-panel chart-panel">
 
-        <div id="chartTitle"
-             style="color:#94a3b8;
-                    font-size:14px;
-                    margin-bottom:10px;
-                    text-align:center;">
+        <div id="chartTitle" class="chart-title">
+            Institutional Accumulation Analysis
+        </div>
 
-            Select a stock to view chart
+        <div id="tv_chart"></div>
+
+        <!-- INSIDE THE CHART PANEL -->
+
+        <div class="chart-bottom">
+
+            <h3>Scanner Activity</h3>
+
+            <div id="todayActivityFeed">
+
+                <div style="
+                    color:#94a3b8;
+                    font-size:13px;
+                    padding:10px 0;
+                ">
+                    Loading scanner activity...
+                </div>
+
+            </div>
 
         </div>
 
-        <div style="max-width:900px; margin:0 auto;">
+        <!-- APPEARANCE RANKINGS -->
 
-            <div id="tv_chart"
-                 style="height:420px;">
+        <div class="weekly-mini-panel">
+
+            <h3>Top Appearance Rankings</h3>
+
+            <p class="elite-subtitle" style="
+                margin-bottom:15px;
+                font-size:13px;
+            ">
+                Most frequently appearing stocks across the Smart Money scanner
+            </p>
+
+            <div id="weeklyTrades"></div>
+
+            <div id="weeklyTotal" style="
+                margin-top:15px;
+                text-align:right;
+                font-size:18px;
+                font-weight:700;
+                color:#22c55e;
+            ">
+                -
+            </div>
+
+        </div>
+
+        <!-- INSPIRATIONAL QUOTE -->
+
+        <div class="elite-quote">
+
+            <div class="quote-line"></div>
+
+            <div class="quote-wrapper">
+
+                <p id="quoteText">
+                    The biggest opportunities are often being accumulated long before they become obvious.
+                </p>
+
+                <span id="quoteAuthor">
+                    — EdgeBreak Research
+                </span>
+
             </div>
 
         </div>
 
     </div>
 
-    <!-- TOP SCANNER SCORES -->
-    <div class="section">
+       
 
-        <h3 style="margin-bottom:15px;">
-            Highest Quality Candidates
-        </h3>
+    <!-- RIGHT SIDEBAR -->
 
-        <div id="topScores"></div>
+    <div class="elite-sidebar">
 
-    </div>
+        <!-- ABOUT -->
 
-    <!-- SMART MONEY EXPLAINER -->
-    <div class="section">
+        <div class="elite-panel">
 
-        <h3 style="margin-bottom:15px;">
-            What Smart Money Tracks
-        </h3>
+            <h3>Smart Money Elite</h3>
 
-        <div class="stats">
+            <p>
+                Stocks repeatedly appearing on the EdgeBreak accumulation scanner.
 
-            <div class="stat">
-                <div class="value">📈</div>
-                <div class="label">Repeated Appearances</div>
-            </div>
+                Multiple appearances may indicate sustained market interest,
+                improving market conditions, or continued accumulation before a larger move develops.
+            </p>
 
-            <div class="stat">
-                <div class="value">📊</div>
-                <div class="label">Volume Expansion</div>
-            </div>
+        </div>
 
-            <div class="stat">
-                <div class="value">🎯</div>
-                <div class="label">Strength Near Highs</div>
-            </div>
+        <!-- SCANNER STRENGTH -->
 
-            <div class="stat">
-                <div class="value">🔍</div>
-                <div class="label">Research Candidates</div>
+        <div class="elite-panel">
+
+            <h3>Scanner Strength</h3>
+
+            <div class="performance-bar">
+                <div id="winBar" class="performance-fill"></div>
             </div>
 
         </div>
+
+    
+
+    <!-- SMART MONEY STRENGTH -->
+
+    <div class="elite-panel">
+
+        <h3>Institutional Interest</h3>
+
+        <div class="health-score">
+
+            <div class="health-gauge">
+
+                <div class="health-center">
+
+                    <span id="healthValue">--</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="healthLabel" class="health-label">
+            Select a stock
+        </div>
+
+        <div class="metric">
+            <span>Appearances</span>
+            <strong id="trendStatus">--</strong>
+        </div>
+
+        <div class="metric">
+            <span>Ranking</span>
+            <strong id="momentumStatus">--</strong>
+        </div>
+
+        <div class="metric">
+            <span>Last Seen</span>
+            <strong id="structureStatus">--</strong>
+        </div>
+
+    </div>
+
+    <!-- FRAMEWORK STATUS -->
+
+    <div class="elite-panel">
+
+        <h3>Framework Status</h3>
+
+        <div class="status-wrapper">
+
+            <div class="metric">
+                <span id="statusLabel1">Scanner</span>
+                <strong id="statusValue1">Active</strong>
+            </div>
+
+            <div class="metric">
+                <span id="statusLabel2">Market</span>
+                <strong id="statusValue2">NASDAQ</strong>
+            </div>
+
+            <div class="metric">
+                <span id="statusLabel3">Updates</span>
+                <strong id="statusValue3">Daily</strong>
+            </div>
+
+            <div class="metric">
+                <span id="statusLabel4">Universe</span>
+                <strong id="statusValue4">3,000+ Stocks</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RESEARCH INTELLIGENCE -->
+
+    <div class="elite-panel">
+
+        <h3>Research Intelligence</h3>
+
+        <p>
+            Smart Money highlights stocks repeatedly appearing on the accumulation scanner.
+            These stocks may warrant additional research before a breakout becomes obvious.
+        </p>
+
+        <div class="metric">
+            <span>Monitoring</span>
+            <strong>Daily</strong>
+        </div>
+
+        <div class="metric">
+            <span>Execution</span>
+            <strong>User Controlled</strong>
+        </div>
+
+    </div>
+
+    <!-- BREAKDOWN -->
+
+    <div class="elite-panel">
+
+        <h3>Market Breakdown</h3>
+
+        <div class="metric">
+            <span>Small Leaders</span>
+            <strong id="smallCount">-</strong>
+        </div>
+
+        <div class="metric">
+            <span>Mid Leaders</span>
+            <strong id="midCount">-</strong>
+        </div>
+
+        <div class="metric">
+            <span>Large Leaders</span>
+            <strong id="largeCount">-</strong>
+        </div>
+
+    </div>
+
+    <!-- MEMBER BENEFITS -->
+
+    <div class="elite-panel">
+
+        <h3>Member Benefits</h3>
+
+        <ul class="elite-list">
+            <li>✓ Institutional Watchlist</li>
+            <li>✓ Appearance Tracking</li>
+            <li>✓ Research Candidates</li>
+            <li>✓ Historical Rankings</li>
+            <li>✓ Daily Updates</li>
+        </ul>
+
+    </div>
+
+    <!-- EDUCATION -->
+
+    <div class="elite-panel">
+
+        <h3>Before You Research</h3>
+
+        <p>
+            Smart Money identifies recurring accumulation signals.
+
+            Every stock should be researched independently before making investment decisions.
+        </p>
+
+    </div>
+
+    <!-- CTA -->
+
+    <div class="elite-panel elite-highlight">
+
+        <h3>Smart Money Framework</h3>
+
+        <p>
+            Built to identify stocks repeatedly attracting attention across the EdgeBreak accumulation framework.
+        </p>
+
+    </div>
+
+</div> <!-- END elite-sidebar -->
+
+</div> <!-- END elite-terminal -->
+<!-- END elite-terminal -->
+
+
+    
+
+<!-- SCANNER INTELLIGENCE -->
+
+<div class="elite-grid">
+
+    <div class="elite-panel">
+
+        <h3>Current Scanner Environment</h3>
+
+        <p>
+            Smart Money scans more than 3,000 NASDAQ stocks daily looking for
+            recurring accumulation signals and unusual market interest.
+        </p>
+
+        <div class="metric">
+            <span>Market Focus</span>
+            <strong>NASDAQ</strong>
+        </div>
+
+        <div class="metric">
+            <span>Scanner Status</span>
+            <strong>Active</strong>
+        </div>
+
+        <div class="metric">
+            <span>Update Frequency</span>
+            <strong>Daily</strong>
+        </div>
+
+    </div>
+
+    <div class="elite-panel">
+
+        <h3>What Creates A Smart Money Signal?</h3>
+
+        <ul class="elite-list">
+            <li>✓ Multiple appearances over time</li>
+            <li>✓ Sustained accumulation activity</li>
+            <li>✓ Relative market strength</li>
+            <li>✓ Increasing investor interest</li>
+            <li>✓ Ranking progression</li>
+        </ul>
 
     </div>
 
 </div>
+
+<!-- SMART MONEY STATS -->
+
+<div class="elite-stats-row">
+
+    <div class="elite-stat-card">
+        <span>Tracked Stocks</span>
+        <strong id="activeCount">0</strong>
+    </div>
+
+    <div class="elite-stat-card">
+        <span>Total Appearances</span>
+        <strong id="winRate">0</strong>
+    </div>
+
+    <div class="elite-stat-card">
+        <span>Highest Ranked</span>
+        <strong id="avgReturn">-</strong>
+    </div>
+
+    <div class="elite-stat-card">
+        <span>New This Week</span>
+        <strong id="bestTrade">0</strong>
+    </div>
+
+</div>
+
+<!-- RANKINGS -->
+
+<div class="elite-grid">
+
+    <div class="elite-panel">
+
+        <h3>Institutional Watchlist Leaders</h3>
+
+        <div id="topTrades"></div>
+
+    </div>
+
+    <div class="elite-panel">
+
+        <h3>Emerging Opportunities</h3>
+
+        <div id="worstTrades"></div>
+
+    </div>
+
+</div>
+
+<!-- MARKET BREAKDOWN -->
+
+<div class="elite-grid">
+
+    <div class="elite-panel">
+
+        <h3>Small Cap Leaders</h3>
+
+        <div id="smallStats"></div>
+
+    </div>
+
+    <div class="elite-panel">
+
+        <h3>Mid Cap Leaders</h3>
+
+        <div id="midStats"></div>
+
+    </div>
+
+    <div class="elite-panel">
+
+        <h3>Large Cap Leaders</h3>
+
+        <div id="largeStats"></div>
+
+    </div>
+
+</div>
+
+<div class="elite-highlight-banner">
+
+    <h2>
+        Follow The Footprints Before The Breakout
+    </h2>
+
+    <p>
+        Smart Money Elite tracks recurring accumulation signals across the NASDAQ,
+        helping investors focus their research on stocks attracting sustained
+        market attention before they become obvious to the broader market.
+    </p>
+
+</div>
+</div> <!-- elite-container -->
+</main>
+
 <!-- FOOTER -->
 <div class="footer" style="width:100%;">
 
@@ -343,221 +1879,1248 @@
   </div>
 
 </div>
-</body>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://s3.tradingview.com/tv.js"></script>
+
 <script>
-fetch("/elite_watchlist.json?v=" + Date.now())
-.then(res => res.json())
-.then(data => {
+function loadChart(symbol) {
 
-    // =====================
-    // BUILD APPEARANCE COUNTS
-    // =====================
+  const cleanSymbol = symbol.toUpperCase().trim();
+  const finalSymbol = "NASDAQ:" + cleanSymbol;
 
-    const grouped = {};
+  document.getElementById("tv_chart").innerHTML = "";
 
-    data.forEach(stock => {
+  // 👇 SHOW SYMBOL TO USER
+  document.getElementById("chartTitle").innerText = finalSymbol;
 
-        const symbol = stock.symbol;
+  new TradingView.widget({
+    width: "100%",
+    height: 420,
+    symbol: finalSymbol,
+    interval: "D",
+    timezone: "America/New_York",
+    theme: "dark",
+    style: "1",
+    locale: "en",
+    hide_top_toolbar: true,
+    hide_legend: false,   // 👈 IMPORTANT (shows ticker inside chart too)
+    container_id: "tv_chart"
+  });
 
-        if (!grouped[symbol]) {
+}
 
-            grouped[symbol] = {
-                symbol: symbol,
-                appearances: 0,
-                lastSeen: stock.scan_date,
-                bestRank: stock.rank
-            };
+document.addEventListener("DOMContentLoaded", function () {
+
+  console.log("✅ PAGE RUNNING");
+
+
+  // =========================
+  // 🎬 NUMBER ANIMATION
+  // =========================
+  function animateValue(id, end) {
+    const el = document.getElementById(id);
+    if (!el || isNaN(end)) return;
+
+    let start = 0;
+    const duration = 800;
+    let startTime = null;
+
+    function animate(time) {
+      if (!startTime) startTime = time;
+
+      const progress = Math.min((time - startTime) / duration, 1);
+      const value = start + (end - start) * progress;
+
+      el.innerText = value.toFixed(2) + "%";
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        el.innerText = end.toFixed(2) + "%";
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  // =========================
+  // 🔔 TODAY ACTIVITY
+  // =========================
+  fetch("/activity.json?v=" + Date.now())
+  .then(res => res.json())
+  .then(data => {
+
+    if (!Array.isArray(data)) data = [];
+
+    let open = 0;
+    let closed = 0;
+
+    const html = data.slice(-5).reverse().map(a => {
+
+      if (a.type === "OPEN") {
+        open++;
+        return `<div class="green">🟢 ${a.symbol}</div>`;
+      }
+
+      if (a.type === "CLOSED") {
+        closed++;
+        const result = a.result ?? a.percent_move ?? 0;
+        const color = result >= 0 ? "#22c55e" : "#ef4444";
+
+        return `
+          <div>
+            🔴 ${a.symbol}
+            <span style="color:${color}; font-weight:bold;">
+              ${result.toFixed(2)}%
+            </span>
+          </div>
+        `;
+      }
+
+      return "";
+
+    }).join("");
+
+    const todayOpenEl = document.getElementById("todayOpen");
+    const todayClosedEl = document.getElementById("todayClosed");
+
+    if (todayOpenEl) todayOpenEl.innerText = open;
+    if (todayClosedEl) todayClosedEl.innerText = closed;
+
+    document.getElementById("todayActivityFeed").innerHTML = html || `
+      <div style="color:#94a3b8; font-size:13px;">
+        No trades triggered yet today
+      </div>
+    `;
+
+  })
+  .catch(() => {
+    console.log("Failed to load activity");
+  });
+
+  // =========================
+  // 📊 LIVE TRADES + BREAKDOWN
+  // =========================
+  fetch("/active_positions.json?v=" + Date.now())
+    .then(res => res.json())
+    .then(data => {
+
+      if (!Array.isArray(data)) data = [];
+
+      const noTrades = document.getElementById("noTradesMessage");
+
+      // hide if trades exist
+      if (data.length > 0) {
+        noTrades.style.display = "none";
+      } else {
+        noTrades.style.display = "block";
+      }
+      const small = [];
+      const mid = [];
+      const large = [];
+
+      window.tradeMap = {};
+
+      data.forEach(t => {
+
+          window.tradeMap[t.symbol] = t;
+
+          const g = (t.price_group || t.group || "").toUpperCase();
+
+          if (g === "SMALL") small.push(t);
+          else if (g === "MID") mid.push(t);
+          else if (g === "LARGE") large.push(t);
+
+      });
+
+      document.getElementById("smallCount").innerText = small.length;
+      document.getElementById("midCount").innerText = mid.length;
+      document.getElementById("largeCount").innerText = large.length;
+
+      function renderTrades(trades, title, id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        if (trades.length === 0) {
+          el.innerHTML = `<h3>${title}</h3><p style="color:#64748b;">No active trades</p>`;
+          return;
+        }
+
+        el.innerHTML = `<h3>${title}</h3>` + trades.map(t => {
+        const change = t.change_percent ?? 0;
+        const entry = parseFloat(t.entry_price || 0);
+        const current = parseFloat(t.current_price || 0);
+
+        let distance = 0;
+        if (entry > 0) {
+          distance = ((current - entry) / entry) * 100;
+        }
+
+        let entryState = "";
+        let entryColor = "";
+        let reEntryText = "";
+
+        // 🔥 ENTRY STATE LOGIC (UPDATED)
+        if (distance < 0) {
+          entryState = "🔻 Failed Breakout";
+          entryColor = "#ef4444";
+          reEntryText = "Below entry — caution";
+        }
+        else if (distance < 3) {
+          entryState = "🟢 Fresh";
+          entryColor = "#22c55e";
+          reEntryText = "Enter on breakout";
+        }
+        else if (distance < 10) {
+          entryState = "🟡 Pullback";
+          entryColor = "#f59e0b";
+          reEntryText = `Watch $${entry.toFixed(2)}`;
+        }
+        else {
+          entryState = "🔴 Extended";
+          entryColor = "#ef4444";
+          reEntryText = "Wait for pullback";
+        }
+
+        let moveStage = "";
+
+        if (distance < 5) {
+          moveStage = "Early";
+        }
+        else if (distance < 20) {
+          moveStage = "Developing";
+        }
+        else {
+          moveStage = "Extended Move";
+        }
+        const color = change >= 0 ? "#22c55e" : "#ef4444";
+
+        return `
+          <div class="box" onclick="selectTrade('${t.symbol}')">
+            <div style="display:flex; justify-content:space-between;">
+      
+              <strong 
+                style="cursor:pointer;"
+                onclick="window.location.href='chart.html?symbol=${t.symbol}'"
+              >
+                ${t.symbol}
+              </strong>
+
+              <span style="color:${color}; font-weight:bold;">
+                ${change.toFixed(2)}%
+              </span>
+            </div>
+
+            <div style="font-size:13px; color:#94a3b8;">
+              Entry: $${t.entry_price ?? "-"} | Now: $${t.current_price ?? "-"}
+            </div>
+
+            <div style="margin-top:6px; font-size:13px;">
+
+              <div style="
+                display:inline-block;
+                background:${entryColor}20;
+                color:${entryColor};
+                padding:4px 8px;
+                border-radius:6px;
+                font-weight:600;
+                font-size:12px;
+                margin-bottom:4px;
+              ">
+                ${entryState}
+              </div>
+
+              <div style="color:#94a3b8;">
+                ${distance >= 0 ? "+" : ""}${distance.toFixed(2)}% from entry
+              </div>
+
+              <div style="color:#64748b; font-size:12px;">
+                Re-entry: ${reEntryText}
+              </div>
+
+              <div style="
+                margin-top:4px;
+                display:inline-block;
+                background:#1e293b;
+                color:#cbd5f5;
+                padding:3px 8px;
+                border-radius:6px;
+                font-size:11px;
+              ">
+                Stage: ${moveStage}
+              </div>
+            </div>
+
+            <div style="font-size:12px; color:#64748b;">
+              ${t.days_held ?? 0} days
+            </div>
+          </div>
+        `;
+      }).join("");
+      }
+
+      renderTrades(small, "🟢 Small Caps", "smallSection");
+      renderTrades(mid, "🟡 Mid Caps", "midSection");
+      renderTrades(large, "🔵 Large Caps", "largeSection");
+
+      /* =========================
+      BREAKOUT HEALTH
+      ========================= */
+      function getHealthScore(trade){
+
+          let score = 50;
+
+          const change =
+              parseFloat(trade.change_percent || 0);
+
+          const days =
+              parseInt(trade.days_held || 0);
+
+          if(change > 0) score += 10;
+          if(change > 3) score += 10;
+          if(change > 10) score += 10;
+
+          if(days > 5) score += 10;
+          if(days > 20) score += 10;
+
+          return Math.min(score,100);
+
+      }     
+
+      
+      // =========================
+      // 📊 WEEKLY PERFORMANCE (PRO VERSION)
+      // =========================
+
+      const weeklyContainer = document.getElementById("weeklyTrades");
+      const weeklyTotalEl = document.getElementById("weeklyTotal");
+
+      if (weeklyContainer && weeklyTotalEl && data.length > 0) {
+
+        const best = Math.max(...data.map(t => t.weekly_change_percent || 0));
+        const worst = Math.min(...data.map(t => t.weekly_change_percent || 0));
+
+        let total = 0;
+        let count = 0;
+
+        weeklyContainer.innerHTML = data.map(t => {
+
+          const change = parseFloat(t.weekly_change_percent ?? 0);
+          total += change;
+          count++;
+
+          const color = change >= 0 ? "#22c55e" : "#ef4444";
+
+          // 🔥 badges
+          let badge = "";
+          if (change === best) badge = "🔥";
+          if (change === worst) badge = "🔻";
+
+          return `
+            <div style="margin-bottom:18px;">
+
+              <!-- TOP ROW -->
+              <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:14px;">
+                <div style="font-weight:600;">${t.symbol} ${badge}</div>
+                <div style="color:${color}; font-weight:bold;">
+                  ${change >= 0 ? "+" : ""}${change.toFixed(2)}%
+                </div>
+              </div>
+
+              <!-- BAR WRAPPER -->
+              <div style="
+                position:relative;
+                height:8px;
+                background:#1e293b;
+                border-radius:6px;
+                overflow:hidden;
+              ">
+
+                <!-- CENTER LINE -->
+                <div style="
+                  position:absolute;
+                  left:50%;
+                  top:0;
+                  bottom:0;
+                  width:1px;
+                  background:#334155;
+                "></div>
+
+                <!-- BAR -->
+                <div style="
+                  position:absolute;
+                  top:0;
+                  height:100%;
+                  ${change >= 0 ? "left:50%;" : "right:50%;"}
+                  width:${Math.min(Math.abs(change) * 4, 50)}%;
+                  background:${color};
+                  box-shadow:0 0 6px ${color};
+                  border-radius:6px;
+                  transition:width 0.4s ease;
+                "></div>
+
+              </div>
+
+            </div>
+          `;
+        }).join("");
+
+        const avg = total / count;
+
+        // =========================
+        // 📊 SUMMARY CARD LOGIC
+        // =========================
+
+        const summaryTotal = document.getElementById("weeklySummaryTotal");
+        const winLossEl = document.getElementById("weeklyWinLoss");
+        const marketStatus = document.getElementById("weeklyMarketStatus");
+
+        const winners = data.filter(
+          t => (t.weekly_change_percent ?? 0) > 0
+        ).length;
+
+        const losers = data.filter(
+          t => (t.weekly_change_percent ?? 0) < 0
+        ).length;
+
+        // Only update if the elements actually exist
+        if (summaryTotal && winLossEl && marketStatus) {
+
+          // overall %
+          summaryTotal.innerText =
+            (avg >= 0 ? "+" : "") + avg.toFixed(2) + "%";
+
+          summaryTotal.style.color =
+            avg >= 0 ? "#22c55e" : "#ef4444";
+
+          // win/loss
+          winLossEl.innerText = `${winners} / ${losers}`;
+
+          // market read
+          if (avg > 2) {
+
+            marketStatus.innerText = "🔥 Strong Week";
+            marketStatus.style.color = "#22c55e";
+
+          } else if (avg > 0) {
+
+            marketStatus.innerText = "🟢 Positive";
+            marketStatus.style.color = "#22c55e";
+
+          } else if (avg < -2) {
+
+            marketStatus.innerText = "🔻 Weak Week";
+            marketStatus.style.color = "#ef4444";
+
+          } else {
+
+            marketStatus.innerText = "⚖️ Flat";
+            marketStatus.style.color = "#94a3b8";
+
+          }
 
         }
 
-        grouped[symbol].appearances++;
+        weeklyTotalEl.innerText =
+          (avg >= 0 ? "+" : "") + avg.toFixed(2) + "%";
 
-        if (
-            stock.scan_date >
-            grouped[symbol].lastSeen
-        ){
-            grouped[symbol].lastSeen =
-            stock.scan_date;
+        weeklyTotalEl.style.color =
+          avg >= 0 ? "#22c55e" : "#ef4444";
+
+        } else {
+
+          weeklyContainer.innerHTML = `
+            <div style="color:#94a3b8; font-size:13px;">
+              No active trades this week
+            </div>
+          `;
+
+          weeklyTotalEl.innerText = "-";
+
         }
+        }); // CLOSE active_positions fetch
+  // =========================
+  // 📊 COMBINED STATS (CLEAN FINAL)
+  // =========================
+  console.log("🔥 STATS BLOCK RUNNING");
+  
+  Promise.all([
+    fetch("/active_positions.json?v=" + Date.now()).then(r => r.json()),
+    fetch("/live_trade_history.json?v=" + Date.now()).then(r => r.json())
+  ])
+  .then(([active, history]) => {
+
+    console.log("ACTIVE:", active);
+    console.log("HISTORY:", history);
+
+    // safety
+    if (!Array.isArray(active)) active = [];
+    if (!Array.isArray(history)) history = [];
+
+    // =========================
+    // ✅ ALWAYS SHOW LIVE COUNT
+    // =========================
+    document.getElementById("activeCount").innerText = active.length;
+
+    // =========================
+    // ❌ NO HISTORY → DEFAULT UI
+    // =========================
+    if (history.length === 0) {
+      document.getElementById("avgReturn").innerText = "0%";
+      document.getElementById("winRate").innerText = "0%";
+      document.getElementById("bestTrade").innerText = "-";
+      document.getElementById("winBar").style.width = "0%";
+      return;
+    }
+
+    // =========================
+    // 🔥 COMBINED STATS (BEST VERSION)
+    // =========================
+
+    // combine ALL trades for performance
+    const all = history.map(t => ({
+      percent_move: t.percent_move ?? t.result ?? 0,
+      symbol: t.symbol
+    }));
+
+    // =========================
+    // 📊 CALCULATIONS
+    // =========================
+    let wins = 0;
+    let total = 0;
+
+    // use history for win rate
+    history.forEach(t => {
+      const r = parseFloat(t.percent_move ?? t.result ?? 0);
+      if (r > 0) wins++;
+    });
+
+    // use ALL for avg + best
+    let best = all[0];
+
+    all.forEach(t => {
+      const r = parseFloat(t.percent_move ?? 0);
+
+      total += r;
+
+      const bestValue = parseFloat(best.percent_move ?? 0);
+
+      if (r > bestValue) {
+        best = t;
+      }
+    });
+
+    // final stats
+    const win = history.length > 0 ? (wins / history.length) * 100 : 0;
+    const avg = all.length > 0 ? total / all.length : 0;
+
+    // =========================
+    // 💰 PROFIT FACTOR
+    // =========================
+
+    let totalWins = 0;
+    let totalLosses = 0;
+
+    history.forEach(t => {
+      const r = parseFloat(t.percent_move ?? t.result ?? 0);
+
+      if (r > 0) totalWins += r;
+      if (r < 0) totalLosses += Math.abs(r);
+    });
+
+    const profitFactor =
+      totalLosses > 0 ? totalWins / totalLosses : 0;
+
+    // update UI
+    document.getElementById("profitFactor").innerText =
+      profitFactor.toFixed(2) + "x";
+
+    // =========================
+    // 📊 AVG HOLD TIME + RETURN
+    // =========================
+
+    let totalDays = 0;
+    let totalReturn = 0;
+
+    history.forEach(t => {
+      const days = parseFloat(t.days_held ?? 0);
+      const r = parseFloat(t.percent_move ?? t.result ?? 0);
+
+      totalDays += days;
+      totalReturn += r;
+    });
+
+    const avgDays = history.length > 0 ? totalDays / history.length : 0;
+    const avgTrade = history.length > 0 ? totalReturn / history.length : 0;
+
+    // update UI
+    document.getElementById("avgHold").innerText =
+      avgDays.toFixed(0) + " days";
+
+    document.getElementById("avgPerTrade").innerText =
+      (avgTrade >= 0 ? "+" : "") + avgTrade.toFixed(2) + "% per trade";
+
+    // =========================
+    // 📊 CATEGORY STATS (FIXED POSITION)
+    // =========================
+
+    const smallTrades = [];
+    const midTrades = [];
+    const largeTrades = [];
+
+    history.forEach(t => {
+
+      const price = parseFloat(t.entry_price ?? 0);
+
+      if (price < 20) smallTrades.push(t);
+      else if (price < 80) midTrades.push(t);
+      else largeTrades.push(t);
 
     });
 
-    // =====================
-    // SORT
-    // =====================
+    function getStats(trades) {
 
-    const rankings =
-        Object.values(grouped)
-        .sort(
-            (a,b) =>
-            b.appearances - a.appearances
-        );
-    // =====================
-    // DASHBOARD STATS
-    // =====================
+      if (trades.length === 0) return "-";
 
-    const repeatCandidates =
-        rankings.filter(
-            s => s.appearances > 1
-        ).length;
+      let total = 0;
+      let wins = 0;
 
-    const totalRecords =
-        data.length;
+      trades.forEach(t => {
+        const r = parseFloat(t.percent_move ?? 0);
+        total += r;
+        if (r > 0) wins++;
+      });
 
-    document.getElementById(
-        "trackedStocks"
-    ).innerText =
-        totalRecords;
+      const avg = total / trades.length;
+      const win = (wins / trades.length) * 100;
 
-    document.getElementById(
-        "uniqueCandidates"
-    ).innerText =
-        rankings.length;
-
-    document.getElementById(
-        "candidateCount"
-    ).innerText =
-        rankings.length;
-
-    document.getElementById(
-        "repeatCount"
-    ).innerText =
-        repeatCandidates;
-
-    document.getElementById(
-        "returningCandidates"
-    ).innerText =
-        repeatCandidates;
-
-    document.getElementById(
-        "topAppearance"
-    ).innerText =
-        rankings[0].appearances + "x";
-
-    document.getElementById(
-        "highestCount"
-    ).innerText =
-        rankings[0].appearances;
-    // =====================
-    // STATS
-    // =====================
-
-    document.getElementById(
-        "candidateCount"
-    ).innerText =
-        rankings.length;
-
-    document.getElementById(
-        "highestCount"
-    ).innerText =
-        rankings[0].appearances;
-
-    // =====================
-    // RENDER
-    // =====================
-
-    document.getElementById(
-        "smartMoneyTable"
-    ).innerHTML = rankings.map(
-        (stock,index) => `
-
-        <div class="box"
-             onclick="loadChart('${stock.symbol}'); scrollToChart();"
-
-            <div style="
-                display:flex;
-                justify-content:space-between;
-            ">
-
-                <strong>
-                    #${index + 1}
-                    ${stock.symbol}
-                </strong>
-
-                <span style="
-                    color:#22c55e;
-                    font-weight:bold;
-                ">
-                    ${stock.appearances}x
-                </span>
-
-            </div>
-
-            <div style="
-                color:#94a3b8;
-                font-size:13px;
-                margin-top:5px;
-            ">
-                Last Seen:
-                ${stock.lastSeen}
-            </div>
-
+      return `
+        <div style="font-size:14px;">
+          ${trades.length} trades<br>
+          ${avg.toFixed(2)}% avg<br>
+          ${win.toFixed(0)}% win
         </div>
+      `;
+    }
 
-    `).join("");
+    document.getElementById("smallStats").innerHTML = getStats(smallTrades);
+    document.getElementById("midStats").innerHTML = getStats(midTrades);
+    document.getElementById("largeStats").innerHTML = getStats(largeTrades);
+
+    // =========================
+    // 💰 PORTFOLIO SIMULATOR
+    // =========================
+
+    function runSimulation() {
+
+      const startInput = document.getElementById("startCapital");
+      const sizeInput = document.getElementById("positionSize");
+
+      if (!startInput || !sizeInput) return;
+
+      const startValue = parseFloat(startInput.value || 10000);
+      const positionSize = parseFloat(sizeInput.value || 1);
+
+      // sort trades by date (important)
+      // get selected time range
+      const range = document.getElementById("timeRange")?.value || "ALL";
+
+      // current time
+      const now = Date.now();
+
+      // filter trades
+      let filtered = history;
+
+      if (range !== "ALL") {
+
+        const months = parseInt(range);
+        const cutoff = now - (months * 30 * 24 * 60 * 60 * 1000);
+
+        filtered = history.filter(t => {
+          return (t.entry_date ?? 0) >= cutoff;
+        });
+
+      }
+
+      // sort filtered trades
+      const sortedHistory = [...filtered].sort((a, b) => {
+        return (a.entry_date ?? 0) - (b.entry_date ?? 0);
+      });
+
+      
+      // =========================
+      // 📈 EQUITY CURVE (FIXED)
+      // =========================
+            
+      let chartCapital = startValue;
+
+      const values = [1];
+      const drawdowns = [0];
+      const labels = ["Start"];
+
+      let peak = 1;
+
+        let bestIndex = 0;
+        let bestValue = -Infinity;
+        
+        sortedHistory.forEach((t, i) => {
+
+        const r = parseFloat(t.percent_move ?? t.result ?? 0);
+
+        // 🔥 track best trade
+        if (r > bestValue) {
+          bestValue = r;
+          bestIndex = i + 1; // +1 because of "Start"
+        }
+
+        chartCapital = chartCapital * (1 + (r / 100) * positionSize);
+
+        const normalized = chartCapital / startValue;
+
+        values.push(normalized);
+        labels.push(i + 1);
+
+        if (normalized > peak) peak = normalized;
+
+        const dd = (normalized - peak) / peak;
+        drawdowns.push(dd);
+
+      });    
+      
+      // =========================
+      // 📉 MAX DRAWDOWN
+      // =========================
+      const maxDD = Math.min(...drawdowns) * 100;
+
+      const ddEl = document.getElementById("maxDrawdown");
+      if (ddEl) {
+        ddEl.innerText = maxDD.toFixed(2) + "%";
+      }
+
+      // =========================
+      // 💰 FINAL VALUES
+      // =========================
+
+      const final = chartCapital;
+      const totalReturn = ((final - startValue) / startValue) * 100;
+
+      // update UI
+      document.getElementById("finalValue").innerText =
+        "$" + final.toLocaleString(undefined, { maximumFractionDigits: 0 });
+
+      document.getElementById("totalReturn").innerText =
+        totalReturn.toFixed(2) + "%";
+
+      // =========================
+      // 📊 RENDER CHART
+      // =========================
+
+      const ctx = document.getElementById("equityChart");
+
+      if (ctx) {
+
+        if (window.equityChartInstance) {
+          window.equityChartInstance.destroy();
+        }
+
+        window.equityChartInstance = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                data: values,
+                borderColor: "#22c55e",
+                backgroundColor: "rgba(34,197,94,0.1)",
+                tension: 0.45,
+                fill: true,
+                borderWidth: 3,
+                pointRadius: 0
+              },
+              {
+                data: drawdowns.map(d => 1 + d),
+                borderColor: "#ef4444",
+                backgroundColor: "rgba(239,68,68,0.1)",
+                tension: 0.45,
+                fill: true,
+                borderWidth: 2,
+                pointRadius: 0
+              },
+              {
+                data: values.map((v, i) => i === bestIndex ? v : null),
+                borderColor: "#facc15",
+                backgroundColor: "#facc15",
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                showLine: false
+              }
+            ]
+          },
+          options: {
+            plugins: {
+              legend: { display: false },
+
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    if (context.datasetIndex === 2 && context.raw !== null) {
+                      return "Best Trade: +" + bestValue.toFixed(2) + "%";
+                    }
+                    return "";
+                  }
+                }
+              }
+
+            },
+            scales: {
+              x: {
+                ticks: { display: false },
+                grid: { display: false }
+              },
+              y: {
+                min: 0.9,
+                ticks: {
+                  color: "#94a3b8",
+                  callback: function(v) {
+                    return "$" + Math.round(v * startValue).toLocaleString();
+                  }
+                },
+                grid: { color: "#1e293b" }
+              }
+            }
+          }
+        });
+
+      } // ✅ END if (ctx)
+
+      } // ✅ CLOSE runSimulation()
+      
+        
+
+      // run once
+      runSimulation();
+
+      // listeners
+      document.getElementById("startCapital")?.addEventListener("input", runSimulation);
+      document.getElementById("positionSize")?.addEventListener("change", runSimulation);
+      document.getElementById("timeRange")?.addEventListener("change", runSimulation);
+
+    
+
+    // =========================
+    // 🏆 TOP & WORST TRADES
+    // =========================
+
+        // use history only (closed trades)
+        const sorted = [...history].sort((a, b) => {
+          return (b.percent_move ?? 0) - (a.percent_move ?? 0);
+        });
+    
+    // top 3 winners
+    const top = sorted.slice(0, 3);
+
+    // worst 3 losers
+    const worst = sorted.slice(-3).reverse();
+
+    function renderTradeList(trades, isPositive = true) {
+
+      if (trades.length === 0) return "No trades";
+
+      return trades.map(t => {
+        const move = parseFloat(t.percent_move ?? 0);
+        const color = move >= 0 ? "#22c55e" : "#ef4444";
+
+        return `
+          <div style="font-size:14px; margin-bottom:6px;">
+            <strong 
+              style="cursor:pointer;"
+              onclick="window.location.href='chart.html?symbol=${t.symbol}'"
+            >
+              ${t.symbol}
+            </strong>
+            <span style="color:${color}; float:right;">
+              ${move.toFixed(2)}%
+            </span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // update UI
+    document.getElementById("topTrades").innerHTML = renderTradeList(top, true);
+    document.getElementById("worstTrades").innerHTML = renderTradeList(worst, false);
+
+    // =========================
+    // 📊 UPDATE UI
+    // =========================
+
+    // animate
+    animateValue("avgReturn", avg);
+    animateValue("winRate", win);
+
+    // BEST TRADE
+    const bestMove = parseFloat(best.percent_move ?? best.result ?? 0);
+
+    document.getElementById("bestTrade").innerHTML = `
+  <div style="font-size:22px; font-weight:bold; color:#22c55e;">
+    ${best.symbol}
+  </div>
+  <div style="font-size:14px; color:#94a3b8;">
+    +${bestMove.toFixed(2)}%
+  </div>
+`;
+
+   
+    // =========================
+    // 📈 PERFORMANCE BAR (YOUR RULES)
+    // =========================
+    const bar = document.getElementById("winBar");
+
+    let width = 0;
+
+    // WIDTH LOGIC
+    if (avg <= 0) {
+      width = 0;
+    } else if (avg >= 5) {
+      width = 100;
+    } else {
+      width = (avg / 5) * 100;
+    }
+
+    // APPLY WIDTH
+    bar.style.width = width + "%";
+
+    // COLOR LOGIC
+    if (avg < 0) {
+      bar.style.background = "#ef4444"; // red
+    } else if (avg < 5) {
+      bar.style.background = "#f59e0b"; // yellow
+    } else {
+      bar.style.background = "#22c55e"; // green
+    }
+
+    }) // closes .then()
+
+    .catch(err => {
+      console.error("STATS ERROR:", err);
+    });
+
+    }); // ✅ closes MAIN DOMContentLoaded
+
+</script>
+
+<script>
+async function setupAuthButton() {
+
+  const btn = document.getElementById("authBtn");
+  if (!btn) return;
+
+  const { data: { user } } = await supabaseClient.auth.getUser();
+
+  if (user) {
+    btn.innerText = "Logout";
+
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      await supabaseClient.auth.signOut();
+      window.location.href = "/login.html";
+    };
+
+  } else {
+    btn.innerText = "Login";
+    btn.href = "/login.html";
+  }
+}
+
+setupAuthButton();
+
+supabaseClient.auth.onAuthStateChange(() => {
+  setupAuthButton();
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const toggle = document.getElementById("menuToggle");
+  const nav = document.getElementById("navLinks");
+
+  if (!toggle || !nav) return;
+
+  toggle.addEventListener("click", () => {
+    nav.classList.toggle("active");
+  });
+
+  document.querySelectorAll("#navLinks a").forEach(link => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("active");
+    });
+  });
+
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if (!user) return;
+
+  const { data: profile } = await supabaseClient
+    .from("profiles")
+    .select("is_active")
+    .eq("id", user.id)
+    .single();
+
+  if (!profile || profile.is_active !== true) return;
+
+  // ✅ REMOVE LOCK ICONS ONLY (VISUAL FIX)
+  document.querySelectorAll(".lock-icon").forEach(icon => icon.remove());
+
+  document.querySelectorAll(".locked-link").forEach(link => {
+    link.classList.remove("locked-link");
+  });
 
 });
 
 </script>
-
-<script src="https://s3.tradingview.com/tv.js"></script>
-
 <script>
+function getHealthScore(trade){
 
-function scrollToChart(){
+    let score = 50;
 
-    const chart =
-        document.getElementById(
-            "chartSection"
-        );
+    if(trade.change_percent > 5) score += 15;
+    if(trade.change_percent > 10) score += 15;
 
-    chart.scrollIntoView({
+    if(trade.days_held < 15) score += 10;
 
-        behavior: "smooth",
+    if(trade.change_percent < 0) score -= 20;
 
-        block: "start"
-
-    });
-
+    return Math.max(0, Math.min(score,100));
 }
 
-function loadChart(symbol){
+</script>
+<script>
+function selectTrade(symbol){
 
-    scrollToChart();
+          loadChart(symbol);
 
-    document.getElementById(
-        "chartTitle"
-    ).innerText =
-        "NASDAQ:" + symbol;
+          const trade =
+              window.tradeMap[symbol];
 
-    document.getElementById(
-        "tv_chart"
-    ).innerHTML = "";
+          if(!trade) return;
+
+          const health =
+              getHealthScore(trade);
+
+          updateHealth(health);
+
+      }
+</script>
+<script>
+const quotes = [
+
+{
+    text:"The stock market is a device for transferring money from the impatient to the patient.",
+    author:"Warren Buffett"
+},
+
+{
+    text:"Risk comes from not knowing what you're doing.",
+    author:"Warren Buffett"
+},
+
+{
+    text:"It's not whether you're right or wrong, but how much you make when you're right and how much you lose when you're wrong.",
+    author:"George Soros"
+},
+
+{
+    text:"The goal of a successful trader is to make the best trades. Money is secondary.",
+    author:"Alexander Elder"
+},
+
+{
+    text:"The trend is your friend until the end when it bends.",
+    author:"Ed Seykota"
+},
+
+{
+    text:"Amateurs think about how much money they can make. Professionals think about how much money they could lose.",
+    author:"Jack Schwager"
+}
+
+];
+
+function rotateQuote(){
+
+    const quote =
+        quotes[Math.floor(Math.random() * quotes.length)];
+
+    const wrapper =
+        document.querySelector(".quote-wrapper");
+
+    wrapper.style.animation = "none";
 
     setTimeout(() => {
 
-        new TradingView.widget({
+        document.getElementById("quoteText").textContent =
+            quote.text;
 
-            width:"100%",
-            height:420,
-            symbol:"NASDAQ:" + symbol,
-            interval:"D",
-            timezone:"America/New_York",
-            theme:"dark",
-            style:"1",
-            locale:"en",
-            hide_top_toolbar:true,
-            container_id:"tv_chart"
+        document.getElementById("quoteAuthor").textContent =
+            "— " + quote.author;
 
-        });
+        wrapper.style.animation =
+            "slideQuote 0.8s ease";
 
-    }, 250);
+    }, 50);
+
+}
+
+rotateQuote();
+
+setInterval(
+    rotateQuote,
+    10000
+);
+</script>
+
+<script>
+const statusSets = [
+
+{
+    labels:["Scanner","Market","Updates","Universe"],
+    values:["Active","NASDAQ","Daily","3,000+ Stocks"]
+},
+
+{
+    labels:["Framework","Monitoring","Coverage","Status"],
+    values:["Elite","Daily","NASDAQ","Operational"]
+},
+
+{
+    labels:["Signals","Research","Tracking","Focus"],
+    values:["Live","Active","Continuous","Breakouts"]
+},
+
+{
+    labels:["Performance","Database","Updates","Analysis"],
+    values:["Tracked","Growing","Automatic","Structured"]
+}
+
+];
+
+function rotateStatus(){
+
+    const set =
+        statusSets[Math.floor(Math.random() * statusSets.length)];
+
+    const wrapper =
+        document.querySelector(".status-wrapper");
+
+    if(!wrapper) return;
+
+    wrapper.style.animation = "none";
+
+    setTimeout(() => {
+
+        document.getElementById("statusLabel1").textContent = set.labels[0];
+        document.getElementById("statusValue1").textContent = set.values[0];
+
+        document.getElementById("statusLabel2").textContent = set.labels[1];
+        document.getElementById("statusValue2").textContent = set.values[1];
+
+        document.getElementById("statusLabel3").textContent = set.labels[2];
+        document.getElementById("statusValue3").textContent = set.values[2];
+
+        document.getElementById("statusLabel4").textContent = set.labels[3];
+        document.getElementById("statusValue4").textContent = set.values[3];
+
+        wrapper.style.animation = "slideStatus 0.8s ease";
+
+    }, 50);
+
+}
+
+rotateStatus();
+setInterval(rotateStatus, 10000);
+</script>
+<script>
+function updateHealth(score){
+
+    // safety
+    score = Math.max(0, Math.min(100, score));
+
+    const gauge =
+        document.querySelector(".health-gauge");
+
+    const value =
+        document.getElementById("healthValue");
+
+    const label =
+        document.getElementById("healthLabel");
+
+    const trend =
+        document.getElementById("trendStatus");
+
+    const momentum =
+        document.getElementById("momentumStatus");
+
+    const structure =
+        document.getElementById("structureStatus");
+
+    if(!gauge || !value) return;
+
+    const angle = score * 3.6;
+
+    gauge.style.background =
+        `conic-gradient(
+            #22c55e 0deg,
+            #22c55e ${angle}deg,
+            #1e293b ${angle}deg,
+            #1e293b 360deg
+        )`;
+
+    value.textContent = score;
+
+    if(score >= 85){
+
+        label.textContent = "Excellent Breakout";
+
+        trend.textContent = "Bullish";
+        momentum.textContent = "Strong";
+        structure.textContent = "Intact";
+
+    }
+    else if(score >= 70){
+
+        label.textContent = "Healthy Setup";
+
+        trend.textContent = "Positive";
+        momentum.textContent = "Building";
+        structure.textContent = "Strong";
+
+    }
+    else if(score >= 50){
+
+        label.textContent = "Neutral";
+
+        trend.textContent = "Mixed";
+        momentum.textContent = "Average";
+        structure.textContent = "Developing";
+
+    }
+    else{
+
+        label.textContent = "Weak Structure";
+
+        trend.textContent = "Weak";
+        momentum.textContent = "Fading";
+        structure.textContent = "Risk";
+
+    }
 
 }
 
 </script>
-
-
-
 </body>
 </html>
