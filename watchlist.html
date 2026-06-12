@@ -2193,39 +2193,57 @@ document.addEventListener("DOMContentLoaded", function () {
         const avg = total / count;
 
         // =========================
-        // 📊 SUMMARY CARD LOGIC (ADD HERE)
+        // 📊 SUMMARY CARD LOGIC
         // =========================
 
         const summaryTotal = document.getElementById("weeklySummaryTotal");
         const winLossEl = document.getElementById("weeklyWinLoss");
         const marketStatus = document.getElementById("weeklyMarketStatus");
 
-        const winners = data.filter(t => (t.weekly_change_percent ?? 0) > 0).length;
-        const losers = data.filter(t => (t.weekly_change_percent ?? 0) < 0).length;
+        const winners = data.filter(
+          t => (t.weekly_change_percent ?? 0) > 0
+        ).length;
 
-        // overall %
-        summaryTotal.innerText =
-          (avg >= 0 ? "+" : "") + avg.toFixed(2) + "%";
+        const losers = data.filter(
+          t => (t.weekly_change_percent ?? 0) < 0
+        ).length;
 
-        summaryTotal.style.color =
-          avg >= 0 ? "#22c55e" : "#ef4444";
+        // Only update if the elements actually exist
+        if (summaryTotal && winLossEl && marketStatus) {
 
-        // win/loss
-        winLossEl.innerText = `${winners} / ${losers}`;
+          // overall %
+          summaryTotal.innerText =
+            (avg >= 0 ? "+" : "") + avg.toFixed(2) + "%";
 
-        // market read
-        if (avg > 2) {
-          marketStatus.innerText = "🔥 Strong Week";
-          marketStatus.style.color = "#22c55e";
-        } else if (avg > 0) {
-          marketStatus.innerText = "🟢 Positive";
-          marketStatus.style.color = "#22c55e";
-        } else if (avg < -2) {
-          marketStatus.innerText = "🔻 Weak Week";
-          marketStatus.style.color = "#ef4444";
-        } else {
-          marketStatus.innerText = "⚖️ Flat";
-          marketStatus.style.color = "#94a3b8";
+          summaryTotal.style.color =
+            avg >= 0 ? "#22c55e" : "#ef4444";
+
+          // win/loss
+          winLossEl.innerText = `${winners} / ${losers}`;
+
+          // market read
+          if (avg > 2) {
+
+            marketStatus.innerText = "🔥 Strong Week";
+            marketStatus.style.color = "#22c55e";
+
+          } else if (avg > 0) {
+
+            marketStatus.innerText = "🟢 Positive";
+            marketStatus.style.color = "#22c55e";
+
+          } else if (avg < -2) {
+
+            marketStatus.innerText = "🔻 Weak Week";
+            marketStatus.style.color = "#ef4444";
+
+          } else {
+
+            marketStatus.innerText = "⚖️ Flat";
+            marketStatus.style.color = "#94a3b8";
+
+          }
+
         }
 
         weeklyTotalEl.innerText =
@@ -2234,16 +2252,17 @@ document.addEventListener("DOMContentLoaded", function () {
         weeklyTotalEl.style.color =
           avg >= 0 ? "#22c55e" : "#ef4444";
 
-      } else {
-        weeklyContainer.innerHTML = `
-          <div style="color:#94a3b8; font-size:13px;">
-            No active trades this week
-          </div>
-        `;
-        weeklyTotalEl.innerText = "-";
-      }
+        } else {
 
-    });
+          weeklyContainer.innerHTML = `
+            <div style="color:#94a3b8; font-size:13px;">
+              No active trades this week
+            </div>
+          `;
+
+          weeklyTotalEl.innerText = "-";
+
+        }
   
   // =========================
   // 📊 COMBINED STATS (CLEAN FINAL)
