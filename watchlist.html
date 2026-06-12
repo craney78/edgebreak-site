@@ -1909,8 +1909,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }).join("");
 
-    document.getElementById("todayOpen").innerText = open;
-    document.getElementById("todayClosed").innerText = closed;
+    const todayOpenEl = document.getElementById("todayOpen");
+    const todayClosedEl = document.getElementById("todayClosed");
+
+    if (todayOpenEl) todayOpenEl.innerText = open;
+    if (todayClosedEl) todayClosedEl.innerText = closed;
 
     document.getElementById("todayActivityFeed").innerHTML = html || `
       <div style="color:#94a3b8; font-size:13px;">
@@ -2731,8 +2734,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     }); // ✅ closes MAIN DOMContentLoaded
-
-
 
 </script>
 
