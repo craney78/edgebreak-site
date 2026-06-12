@@ -2020,6 +2020,36 @@ fetch("/elite_watchlist.json?v=" + Date.now())
         const vol = t.volume_ratio || 0;
         const dist = t.distance_to_high || 0;
 
+        // =========================
+        // 🧠 INSTITUTIONAL INTEREST SCORE
+        // =========================
+
+        let healthScore = 0;
+
+        // normalize components
+        const scorePart = avgScore / 10;          // score out of ~10
+        const volPart = avgVol / 2;               // 1.0–2.0 typical
+        const distPart = 1 - Math.abs(avgDist / 10); // closer to high = better
+
+        // combine
+        healthScore = (scorePart * 0.4) + (volPart * 0.3) + (distPart * 0.3);
+
+        // convert to %
+        healthScore = Math.max(0, Math.min(1, healthScore));
+        const healthPercent = Math.round(healthScore * 100);
+
+        // bar
+        const bar = document.getElementById("winBar");
+        if (bar) {
+          bar.style.width = healthPercent + "%";
+        }
+
+        // number
+        const value = document.getElementById("healthValue");
+        if (value) {
+          value.innerText = healthPercent;
+        }
+
         return `
           <div class="box" onclick="loadChart('${t.symbol}')">
 
