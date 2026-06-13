@@ -2152,6 +2152,55 @@ fetch("/elite_watchlist.json?v=" + Date.now())
   .catch(err => console.error("Smart Money Error:", err));     
 </script>
 <script>
+// =========================
+// 🔥 TOP STOCK PANEL (NO GRADE)
+// =========================
+
+if (data.length > 0) {
+
+  const bestStock = data.reduce((best, current) => {
+    return (current.score || 0) > (best.score || 0) ? current : best;
+  }, data[0]);
+
+  const container = document.getElementById("topStockCard");
+
+  if (container) {
+
+    const score = Number(bestStock.score || 0);
+    const vol = Number(bestStock.volume_ratio || 0);
+    const dist = Number(bestStock.distance_to_high || 0);
+
+    // simple interpretation
+    let status =
+      dist > -2 ? "Near highs" :
+      dist > -6 ? "Building pressure" :
+      "Early accumulation";
+
+    container.innerHTML = `
+      <div onclick="selectStock('${bestStock.symbol}')">
+
+        <div style="display:flex; justify-content:space-between;">
+          <strong style="font-size:18px;">${bestStock.symbol}</strong>
+          <span style="color:#22c55e;">#${bestStock.rank || "-"}</span>
+        </div>
+
+        <div style="font-size:13px; color:#94a3b8; margin-top:5px;">
+          Score ${score}
+        </div>
+
+        <div style="font-size:12px; color:#64748b; margin-top:5px;">
+          Vol ${vol.toFixed(2)} • ${status}
+        </div>
+
+      </div>
+    `;
+  }
+
+  // auto select it
+  selectStock(bestStock.symbol);
+}
+</script>
+<script>
 async function setupAuthButton() {
 
   const btn = document.getElementById("authBtn");
