@@ -1948,12 +1948,26 @@ function selectStock(symbol) {
 
   // find stock from dataset
   const stock = window.smartMoneyData.find(s => s.symbol === symbol);
+  // =========================
+  // 📊 UPDATE STOCK DETAILS
+  // =========================
 
-  if (!stock) return;
+  const rankEl = document.getElementById("rankValue");
+  if (rankEl) rankEl.innerText = "#" + (stock.rank || "-");
 
-  const score = Number(stock.score || 0);
-  const vol = Number(stock.volume_ratio || 0);
-  const dist = Number(stock.distance_to_high || 0);
+  const scoreEl = document.getElementById("scoreValue");
+  if (scoreEl) scoreEl.innerText = stock.score || "-";
+
+  const volEl = document.getElementById("volumeValue");
+  if (volEl) volEl.innerText = stock.volume_ratio.toFixed(2);
+
+// =========================
+// 🧠 CALCULATE STOCK HEALTH
+// =========================
+
+const score = Number(stock.score || 0);
+const vol = Number(stock.volume_ratio || 0);
+const dist = Number(stock.distance_to_high || 0);
 
   // normalize
   const scorePart = score / 10;
