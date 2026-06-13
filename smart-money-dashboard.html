@@ -2232,82 +2232,82 @@ fetch("/elite_watchlist.json?v=" + Date.now())
     render(mid, "midSection");
     render(large, "largeSection");
 
+    // =========================
+    // 🔥 TOP STOCK PANEL (FINAL)
+    // =========================
+
+    if (data.length > 0) {
+
+      const bestStock = data.reduce((best, current) => {
+        return (current.score || 0) > (best.score || 0) ? current : best;
+      }, data[0]);
+
+      const container = document.getElementById("topStockCard");
+
+      if (container) {
+
+        const score = Number(bestStock.score || 0);
+        const vol = Number(bestStock.volume_ratio || 0);
+        const dist = Number(bestStock.distance_to_high || 0);
+
+          let status =
+            dist > -2 ? "Near highs" :
+            dist > -6 ? "Building pressure" :
+            "Early accumulation";
+
+        // =========================
+        // 🧠 EXPLANATION LINE
+        // =========================
+
+        let explanation = "";
+
+        if (vol > 1.3 && dist > -2) {
+          explanation = "Accumulation building with strong volume near highs";
+        }
+        else if (vol > 1.2) {
+          explanation = "Increasing volume suggests growing market interest";
+        }
+        else if (dist > -3) {
+          explanation = "Price holding near highs with early accumulation signs";
+        }
+        else {
+          explanation = "Early-stage accumulation with limited confirmation";
+        }
+
+        container.innerHTML = `
+          <div class="top-stock-inner" onclick="selectStock('${bestStock.symbol}')">
+
+            <div class="top-stock-header">
+              <strong class="top-stock-symbol">${bestStock.symbol}</strong>
+              <span class="top-stock-rank">#${bestStock.rank || "-"}</span>
+            </div>
+
+            <div class="top-stock-meta">
+              Score ${score} • Vol ${vol.toFixed(2)}
+            </div>
+
+            <div class="top-stock-status">
+              ${status}
+            </div>
+
+            <div class="top-stock-explanation">
+              ${explanation}
+            </div>
+
+          </div>
+        `;
+      }
+
+      // safe auto select
+      if (bestStock && bestStock.symbol) {
+        selectStock(bestStock.symbol);
+      }
+    }
+
   })
   .catch(err => console.error("Smart Money Error:", err));     
 </script>
-<script>
-// =========================
-// 🔥 TOP STOCK PANEL (FINAL)
-// =========================
 
-if (data.length > 0) {
-
-  const bestStock = data.reduce((best, current) => {
-    return (current.score || 0) > (best.score || 0) ? current : best;
-  }, data[0]);
-
-  const container = document.getElementById("topStockCard");
-
-  if (container) {
-
-    const score = Number(bestStock.score || 0);
-    const vol = Number(bestStock.volume_ratio || 0);
-    const dist = Number(bestStock.distance_to_high || 0);
-
-    let status =
-      dist > -2 ? "Near highs" :
-      dist > -6 ? "Building pressure" :
-      "Early accumulation";
-
-    // =========================
-    // 🧠 EXPLANATION LINE
-    // =========================
-
-    let explanation = "";
-
-    if (vol > 1.3 && dist > -2) {
-      explanation = "Accumulation building with strong volume near highs";
-    }
-    else if (vol > 1.2) {
-      explanation = "Increasing volume suggests growing market interest";
-    }
-    else if (dist > -3) {
-      explanation = "Price holding near highs with early accumulation signs";
-    }
-    else {
-      explanation = "Early-stage accumulation with limited confirmation";
-    }
-
-    container.innerHTML = `
-      <div class="top-stock-inner" onclick="selectStock('${bestStock.symbol}')">
-
-        <div class="top-stock-header">
-          <strong class="top-stock-symbol">${bestStock.symbol}</strong>
-          <span class="top-stock-rank">#${bestStock.rank || "-"}</span>
-        </div>
-
-        <div class="top-stock-meta">
-          Score ${score} • Vol ${vol.toFixed(2)}
-        </div>
-
-        <div class="top-stock-status">
-          ${status}
-        </div>
-
-        <div class="top-stock-explanation">
-          ${explanation}
-        </div>
-
-      </div>
-    `;
-  }
-
-  // safe auto select
-  if (bestStock && bestStock.symbol) {
-    selectStock(bestStock.symbol);
-  }
-}
-</script>
 <script>
 async function setupAuthButton() {
 
