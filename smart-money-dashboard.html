@@ -1129,6 +1129,71 @@ WEEKLY PANEL
 
     background:#08111f;
 }
+
+/* =========================
+🔥 TOP STOCK PANEL
+========================= */
+
+#topStockCard {
+  border: 1px solid rgba(34,197,94,0.4);
+  border-radius: 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(34,197,94,0.08),
+    rgba(2,6,23,0.4)
+  );
+  box-shadow: 0 0 20px rgba(34,197,94,0.15);
+  transition: all 0.2s ease;
+}
+
+#topStockCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(34,197,94,0.25);
+}
+
+/* inner layout */
+.top-stock-inner {
+  padding: 14px;
+  cursor: pointer;
+}
+
+/* header */
+.top-stock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* symbol */
+.top-stock-symbol {
+  font-size: 18px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+/* rank badge */
+.top-stock-rank {
+  font-size: 12px;
+  color: #22c55e;
+  background: rgba(34,197,94,0.15);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+/* meta line */
+.top-stock-meta {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* status line */
+.top-stock-status {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #22c55e;
+}
 </style>  
 
 </head>
@@ -1364,6 +1429,11 @@ WEEKLY PANEL
         <!-- =========================
         🔥 TOP STOCK PANEL
         ========================= -->
+
+        <h3 style="font-size:13px; color:#94a3b8; margin-bottom:6px;">
+          Highest ranked accumulation signal
+        </h3>
+
         <div id="topStockPanel" style="margin:15px 0;">
           <div id="topStockCard" class="box"></div>
         </div>
@@ -2160,7 +2230,7 @@ fetch("/elite_watchlist.json?v=" + Date.now())
 </script>
 <script>
 // =========================
-// 🔥 TOP STOCK PANEL (NO GRADE)
+// 🔥 TOP STOCK PANEL (FINAL)
 // =========================
 
 if (data.length > 0) {
@@ -2177,34 +2247,35 @@ if (data.length > 0) {
     const vol = Number(bestStock.volume_ratio || 0);
     const dist = Number(bestStock.distance_to_high || 0);
 
-    // simple interpretation
     let status =
       dist > -2 ? "Near highs" :
       dist > -6 ? "Building pressure" :
       "Early accumulation";
 
     container.innerHTML = `
-      <div onclick="selectStock('${bestStock.symbol}')">
+      <div class="top-stock-inner" onclick="selectStock('${bestStock.symbol}')">
 
-        <div style="display:flex; justify-content:space-between;">
-          <strong style="font-size:18px;">${bestStock.symbol}</strong>
-          <span style="color:#22c55e;">#${bestStock.rank || "-"}</span>
+        <div class="top-stock-header">
+          <strong class="top-stock-symbol">${bestStock.symbol}</strong>
+          <span class="top-stock-rank">#${bestStock.rank || "-"}</span>
         </div>
 
-        <div style="font-size:13px; color:#94a3b8; margin-top:5px;">
-          Score ${score}
+        <div class="top-stock-meta">
+          Score ${score} • Vol ${vol.toFixed(2)}
         </div>
 
-        <div style="font-size:12px; color:#64748b; margin-top:5px;">
-          Vol ${vol.toFixed(2)} • ${status}
+        <div class="top-stock-status">
+          ${status}
         </div>
 
       </div>
     `;
   }
 
-  // auto select it
-  selectStock(bestStock.symbol);
+  // safe auto select
+  if (bestStock && bestStock.symbol) {
+    selectStock(bestStock.symbol);
+  }
 }
 </script>
 <script>
