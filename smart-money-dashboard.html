@@ -2250,10 +2250,20 @@ fetch("/elite_watchlist.json?v=" + Date.now())
         const vol = Number(bestStock.volume_ratio || 0);
         const dist = Number(bestStock.distance_to_high || 0);
 
-          let status =
-            dist > -2 ? "Near highs" :
-            dist > -6 ? "Building pressure" :
-            "Early accumulation";
+          let status = "";
+
+            if (dist >= -1 && vol > 1.2) {
+              status = "Near highs with strong interest";
+            }
+            else if (dist >= -3) {
+              status = "Holding near highs";
+            }
+            else if (dist >= -8) {
+              status = "Building below resistance";
+            }
+            else {
+              status = "Not near highs (early stage)";
+            }
 
         // =========================
         // 🧠 EXPLANATION LINE
