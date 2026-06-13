@@ -56,6 +56,91 @@ window.supabaseClient = supabase.createClient(
   "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
+<style>
+/* =========================
+📊 TRADE INSIGHTS PAGE FIX
+========================= */
+
+/* page background */
+body {
+  background: #020617;
+  color: #e2e8f0;
+}
+
+/* main article container */
+.blog-container,
+.blog-post,
+.blog-card {
+  background: #020617 !important;
+}
+
+/* content card */
+.blog-content {
+  background: #0f172a;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 800px;
+  margin: 40px auto;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+/* headings */
+.blog-content h1 {
+  font-size: 32px;
+  margin-bottom: 15px;
+  color: #e2e8f0;
+}
+
+.blog-content h2 {
+  margin-top: 30px;
+  color: #22c55e;
+}
+
+/* paragraph text */
+.blog-content p {
+  color: #cbd5f5;
+  line-height: 1.6;
+}
+
+/* meta line */
+.blog-meta {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+/* divider */
+.blog-divider {
+  height: 1px;
+  background: rgba(148,163,184,0.2);
+  margin: 20px 0;
+}
+
+/* highlight first letter (optional style fix) */
+.blog-content p::first-letter {
+  font-size: 36px;
+  font-weight: bold;
+  color: #22c55e;
+  margin-right: 5px;
+}
+
+/* =========================
+📱 MOBILE
+========================= */
+
+@media(max-width: 768px) {
+
+  .blog-content {
+    padding: 20px;
+    margin: 20px;
+  }
+
+  .blog-content h1 {
+    font-size: 24px;
+  }
+
+}
+</style>
 </head>
 
 <body style="background:#020617;">
