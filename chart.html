@@ -610,275 +610,261 @@ checkAccess();
 </div>
 
 
-<div class="container">
+<main>
 
-  <!-- =========================
-  🚀 WORKSPACE HERO
-  ========================= -->
-  <div class="section workspace-hero">
+<div class="elite-container">
 
-    <div class="workspace-header">
+    <!-- HERO -->
 
-      <div>
-        <div class="workspace-badge">
-          MY WORKSPACE
-        </div>
-
-        <h1>
-          Trade Smarter.
-          <span class="highlight">
-            Build Your Edge.
-          </span>
-        </h1>
-
-        <p>
-          Analyse charts, monitor breakout setups, review Smart Money activity,
-          journal your trades and build a repeatable trading process.
-        </p>
-      </div>
-
-    </div>
-
-    <!-- SEARCH BAR -->
-    <div class="workspace-search">
-
-      <input
-        type="text"
-        id="tickerInput"
-        placeholder="Enter ticker (e.g. NVDA, TSLA, PLTR)"
-      >
-
-      <button onclick="loadTicker()">
-        Load Chart
-      </button>
-
-    </div>
-
-  </div>
-
-  <!-- =========================
-  📊 ADVANCED CHART
-  ========================= -->
-  <div class="section trading-desk-section">
-
-    <div class="workspace-card">
-
-      <div class="workspace-card-header">
+    <div class="elite-banner">
 
         <div>
-          <h2>
-            <span id="symbolText">Loading...</span>
-          </h2>
 
-          <p>
-            Professional charting powered by TradingView
-          </p>
+            <h1>MY WORKSPACE</h1>
+
+            <p>
+                Your personal trading environment for chart analysis,
+                research, watchlists, journaling and trade planning.
+            </p>
+
         </div>
 
-        <div class="workspace-live">
-          LIVE
+        <div class="elite-badge">
+            Workspace
         </div>
 
-      </div>
+    </div>
 
-      <div class="chart-container">
+    <!-- SEARCH -->
+
+    <div class="elite-panel" style="margin-bottom:20px;">
+
+        <div class="workspace-search">
+
+            <input
+                type="text"
+                id="tickerInput"
+                placeholder="Enter ticker (NVDA, TSLA, PLTR...)"
+            >
+
+            <button onclick="loadTicker()">
+                Load Chart
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- MASSIVE CHART -->
+
+    <div class="elite-panel">
+
+        <div class="workspace-card-header">
+
+            <div>
+
+                <h2>
+                    <span id="symbolText">Loading...</span>
+                </h2>
+
+                <p>
+                    Professional charting powered by TradingView
+                </p>
+
+            </div>
+
+            <div class="workspace-live">
+                LIVE
+            </div>
+
+        </div>
 
         <div
-          class="tradingview-widget-container"
-          style="height:850px;width:100%;"
+            class="tradingview-widget-container"
+            style="
+                width:100%;
+                height:1100px;
+            "
         >
 
-          <div
-            id="tradingview_advanced"
-            style="height:100%;width:100%;"
-          ></div>
+            <div
+                id="tradingview_advanced"
+                style="
+                    width:100%;
+                    height:100%;
+                "
+            ></div>
 
         </div>
 
-      </div>
+    </div>
+
+    <!-- NOTES -->
+
+    <div class="elite-grid" style="margin-top:25px;">
+
+        <div class="elite-panel">
+
+            <div id="tradeInsight">
+
+                <h2>Research Notes</h2>
+
+                <p class="intel-placeholder">
+                    Load a stock and record your research,
+                    catalysts, risks, support levels and trade ideas.
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
-  </div>
+    <!-- WATCHLISTS -->
 
-</div>  <!-- END OF trading-desk-section -->
+    <div class="elite-grid">
 
-<div class="section workspace-card">
+        <div class="elite-panel">
 
-  <div id="tradeInsight">
+            <h3>Breakout Elite</h3>
 
-    <h2>Trade Intelligence</h2>
+            <div id="liveTradesList"></div>
 
-    <p class="intel-placeholder">
-      Select a trade from the Active Trades or Trade History list to view detailed EdgeBreak analysis.
-    </p>
+        </div>
 
-  </div>
+        <div class="elite-panel">
 
-</div>
+            <h3>Trading History</h3>
 
+            <div id="historyTradesList"
+                 style="
+                 max-height:500px;
+                 overflow-y:auto;
+                 ">
+            </div>
 
-<!-- 🎬 TRADE LIBRARY -->
-<div class="section" style="margin-top:30px;">
-
-  <!-- 🟢 LIVE TRADES -->
-  <h3 style="margin-bottom:10px;">🟢 Current Elite BreakoutSetups (Live)</h3>
-  <div id="liveTradesList"></div>
-
-  <!-- =========================
-  📊 EDGE BREAK FULL TRADING HISTORY
-  ========================= -->
-  
-  <h2 style="margin:25px 0 5px;">
-    📊 EdgeBreak Full Trading History
-  </h2>
-
-  <p style="color:#94a3b8; font-size:13px; margin-bottom:15px;">
-    Complete record of all trades taken by the system.
-  </p>
-
-  <!-- 🔽 SCROLLABLE HISTORY LIST -->
-  <div id="historyTradesList" style="
-    max-height:400px;
-    overflow-y:auto;
-  "></div>
-
-</div>
-
-<!-- =========================
-🧠 SMART MONEY INTELLIGENCE
-========================= -->
-<div class="section smart-intel">
-
-  <h2>
-    🧠 Smart Money Intelligence
-  </h2>
-
-  <div class="smart-grid">
-
-    <!-- LEFT -->
-
-    <div class="smart-card">
-
-      <h3 id="smSymbol">
-        Select a Smart Money Stock
-      </h3>
-
-      <div class="intel-row">
-        <span>Appearances</span>
-        <span id="smAppearances">-</span>
-      </div>
-
-      <div class="intel-row">
-        <span>Days Tracked</span>
-        <span id="smDaysTracked">-</span>
-      </div>
-
-      <div class="intel-row">
-        <span>First Seen</span>
-        <span id="smFirstSeen">-</span>
-      </div>
-
-      <div class="intel-row">
-        <span>Last Seen</span>
-        <span id="smLastSeen">-</span>
-      </div>
-
-      <div class="intel-row">
-        <span>Status</span>
-        <span id="smStatus">ACTIVE</span>
-      </div>
+        </div>
 
     </div>
 
-    <!-- RIGHT -->
+    <!-- SMART MONEY -->
 
-    <div class="smart-card">
+    <div class="elite-grid">
 
-      <h3>
-        📈 Performance
-      </h3>
+        <div class="elite-panel">
 
-      <div class="intel-row">
-        <span>Current Price</span>
-        <span id="smCurrentPrice">-</span>
-      </div>
+            <h3 id="smSymbol">
+                Smart Money Intelligence
+            </h3>
 
-      <div class="intel-row">
-        <span>Current Gain</span>
-        <span id="smCurrentGain">-</span>
-      </div>
+            <div class="metric">
+                <span>Appearances</span>
+                <strong id="smAppearances">-</strong>
+            </div>
 
-      <div class="intel-row">
-        <span>Maximum Gain</span>
-        <span id="smMaxGain">-</span>
-      </div>
+            <div class="metric">
+                <span>Days Tracked</span>
+                <strong id="smDaysTracked">-</strong>
+            </div>
 
-      <div class="intel-row">
-        <span>Highest Price</span>
-        <span id="smHighestPrice">-</span>
-      </div>
+            <div class="metric">
+                <span>First Seen</span>
+                <strong id="smFirstSeen">-</strong>
+            </div>
+
+            <div class="metric">
+                <span>Last Seen</span>
+                <strong id="smLastSeen">-</strong>
+            </div>
+
+        </div>
+
+        <div class="elite-panel">
+
+            <h3>Performance Tracking</h3>
+
+            <div class="metric">
+                <span>Current Price</span>
+                <strong id="smCurrentPrice">-</strong>
+            </div>
+
+            <div class="metric">
+                <span>Current Gain</span>
+                <strong id="smCurrentGain">-</strong>
+            </div>
+
+            <div class="metric">
+                <span>Maximum Gain</span>
+                <strong id="smMaxGain">-</strong>
+            </div>
+
+            <div class="metric">
+                <span>Highest Price</span>
+                <strong id="smHighestPrice">-</strong>
+            </div>
+
+        </div>
 
     </div>
 
-  </div>
+    <div class="elite-panel">
 
-  <!-- FULL WIDTH -->
+        <h3>Institutional Commentary</h3>
 
-  <div class="smart-card smart-commentary">
+        <p id="smCommentary">
 
-    <h3>
-      🏦 Institutional Activity
-    </h3>
+            Smart Money identifies stocks repeatedly attracting
+            attention across the EdgeBreak accumulation framework.
 
-    <p id="smCommentary">
+        </p>
 
-      Smart Money identifies stocks showing
-      repeated signs of institutional activity.
+    </div>
 
-    </p>
+    <!-- SMART MONEY WATCHLIST -->
 
-  </div>
+    <div class="elite-panel">
 
-</div>
+        <div class="workspace-card-header">
 
-<!-- =========================
-🧠 SMART MONEY ELITE
-========================= -->
-<div class="section">
+            <h2>Smart Money Elite</h2>
 
-  <div class="section-header">
-    <h2>🧠 Smart Money Elite</h2>
-    <span class="section-badge">
-      Institutional Watchlist
-    </span>
-  </div>
+            <div class="elite-badge">
+                Watchlist
+            </div>
 
-  <p class="section-description">
-    Stocks showing repeated signs of institutional
-    accumulation. These are not trade signals.
-    Monitor for your own entry opportunities.
-  </p>
+        </div>
 
-  <div
-    id="smartMoneyList"
-    class="trade-grid"
-  >
+        <p style="
+            color:#94a3b8;
+            margin-bottom:20px;
+        ">
+            Stocks showing repeated signs of accumulation and
+            continued market interest.
+        </p>
 
-    Loading Smart Money...
+        <div
+            id="smartMoneyList"
+            class="trade-grid"
+        >
+            Loading Smart Money...
+        </div>
 
-  </div>
+    </div>
 
 </div>
 
+<div class="footer-note">
 
-  <div class="footer-note">
-    <p>Data-driven breakout system</p>
+    <p>Data-driven research environment</p>
     <p>Not financial advice</p>
-  </div>
 
-  <!-- TradingView -->
-  <script src="https://s3.tradingview.com/tv.js"></script>
+</div>
+
+<script src="https://s3.tradingview.com/tv.js"></script>
+
+</main>
+
+
 
 <!-- FOOTER -->
 <div class="footer" style="width:100%;">
