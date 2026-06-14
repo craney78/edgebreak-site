@@ -1232,54 +1232,45 @@ QUOTE SECTION
 🚀 TERMINAL (MAIN APP)
 ========================= -->
 
+<!-- =========================
+🚀 TERMINAL (CORRECT STRUCTURE)
+========================= -->
+
 <div class="elite-terminal">
 
-    <!-- LEFT COLUMN -->
-    <div class="elite-main">
+    <!-- WATCHLIST -->
+    <div class="elite-panel watchlist-panel">
 
-        <!-- WATCHLIST -->
-        <div class="elite-panel watchlist-panel">
-
-            <div class="panel-title">
-                Active Opportunities
-            </div>
-
-            <div style="font-size:12px; color:#64748b; margin-bottom:10px;">
-                Free setups update daily • Elite filters the highest conviction trades →
-            </div>
-
-            <div id="todayActivity"></div>
-
-            <div id="noTradesMessage" class="no-trades">
-                The system is waiting for valid breakout conditions
-            </div>
-
-            <div id="smallSection"></div>
-            <div id="midSection"></div>
-            <div id="largeSection"></div>
-
+        <div class="panel-title">
+            Active Opportunities
         </div>
 
-        <!-- CHART PANEL -->
-        <div class="elite-panel">
-
-            <h3>Free Watchlist</h3>
-
-            <p>
-                These setups meet baseline breakout criteria.  
-                Breakout Elite focuses on fewer, higher conviction opportunities with full trade tracking.
-            </p>
-
-            <a href="pricing.html" class="nav-cta" style="margin-top:10px; display:inline-block;">
-                View Breakout Elite →
-            </a>
-
+        <div style="font-size:12px; color:#64748b; margin-bottom:10px;">
+            Free setups update daily • Elite filters the highest conviction trades →
         </div>
 
-        <!-- ✅ IMPORTANT: WRAP CHART -->
-        <div class="chart-panel">
-            <div id="tv_chart"></div>
+        <div id="todayActivity"></div>
+
+        <div id="noTradesMessage" class="no-trades">
+            The system is waiting for valid breakout conditions
         </div>
+
+        <div id="smallSection"></div>
+        <div id="midSection"></div>
+        <div id="largeSection"></div>
+
+    </div>
+
+
+    <!-- CHART (MATCHES ELITE) -->
+    <div class="elite-panel chart-panel">
+
+        <!-- REQUIRED FOR JS -->
+        <div id="chartTitle" class="chart-title">
+            Select a stock to view the breakout setup
+        </div>
+
+        <div id="tv_chart"></div>
 
         <!-- ACTIVITY -->
         <div class="chart-bottom">
@@ -1321,22 +1312,6 @@ QUOTE SECTION
 
         </div>
 
-        <!-- PROMO -->
-        <div class="elite-highlight-banner">
-
-            <h2>Not All Setups Are Equal</h2>
-
-            <p>
-                The free watchlist shows all qualifying opportunities.  
-                Breakout Elite focuses on the setups with the strongest structure, volume, and follow-through.
-            </p>
-
-            <a href="pricing.html" class="nav-cta" style="margin-top:15px; display:inline-block;">
-                Upgrade to Breakout Elite
-            </a>
-
-        </div>
-
         <!-- QUOTE -->
         <div class="elite-quote">
 
@@ -1358,6 +1333,52 @@ QUOTE SECTION
 
     </div>
 
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="elite-sidebar">
+
+        <div class="elite-panel">
+            <h3>Breakout Elite</h3>
+            <p>High conviction opportunities selected from thousands of NASDAQ stocks.</p>
+        </div>
+
+        <div class="elite-panel">
+            <h3>Framework Strength</h3>
+            <div class="performance-bar">
+                <div id="winBar" class="performance-fill"></div>
+            </div>
+        </div>
+
+        <div class="elite-panel">
+            <h3>Breakout Health</h3>
+
+            <div class="health-score">
+                <div class="health-gauge">
+                    <div class="health-center">
+                        <span id="healthValue">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="healthLabel" class="health-label">
+                Select a stock
+            </div>
+
+            <div class="metric"><span>Trend</span><strong id="trendStatus">Bullish</strong></div>
+            <div class="metric"><span>Momentum</span><strong id="momentumStatus">Strong</strong></div>
+            <div class="metric"><span>Structure</span><strong id="structureStatus">Intact</strong></div>
+        </div>
+
+        <div class="elite-panel">
+            <h3>Market Breakdown</h3>
+            <div class="metric"><span>Small Caps</span><strong id="smallCount">-</strong></div>
+            <div class="metric"><span>Mid Caps</span><strong id="midCount">-</strong></div>
+            <div class="metric"><span>Large Caps</span><strong id="largeCount">-</strong></div>
+        </div>
+
+    </div>
+
+</div>
          
 
 <!-- =========================
