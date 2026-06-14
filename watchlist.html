@@ -1271,16 +1271,21 @@ QUOTE SECTION
 
 </div>
 
-<!-- TERMINAL -->
+<!-- =========================
+🚀 TERMINAL (CORRECT STRUCTURE)
+========================= -->
 
 <div class="elite-terminal">
 
     <!-- WATCHLIST -->
-
     <div class="elite-panel watchlist-panel">
 
         <div class="panel-title">
             Active Opportunities
+        </div>
+
+        <div style="font-size:12px; color:#64748b; margin-bottom:10px;">
+            Free setups update daily • Elite filters the highest conviction trades →
         </div>
 
         <div id="todayActivity"></div>
@@ -1290,91 +1295,129 @@ QUOTE SECTION
         </div>
 
         <div id="smallSection"></div>
-
         <div id="midSection"></div>
-
         <div id="largeSection"></div>
 
     </div>
 
-    <!-- CHART -->
 
+    <!-- CHART (MATCHES ELITE) -->
     <div class="elite-panel chart-panel">
 
+        <!-- REQUIRED FOR JS -->
         <div id="chartTitle" class="chart-title">
-            Select a stock to view the live breakout setup
+            Select a stock to view the breakout setup
         </div>
 
-    <div id="tv_chart"></div>
+        <div id="tv_chart"></div>
 
-    <!-- INSIDE THE CHART PANEL -->
+        <!-- ACTIVITY -->
+        <div class="chart-bottom">
 
-    <div class="chart-bottom">
+            <h3>Today's Activity</h3>
 
-        <h3>Today's Activity</h3>
-
-        <div id="todayActivityFeed">
-
-            <div style="
-                color:#94a3b8;
-                font-size:13px;
-                padding:10px 0;
-            ">
-                Loading activity...
+            <div id="todayActivityFeed">
+                <div style="color:#94a3b8; font-size:13px; padding:10px 0;">
+                    Loading activity...
+                </div>
             </div>
 
+            <div style="margin-top:10px; font-size:12px; color:#64748b;">
+                Elite tracks every trade from entry to exit with full performance data.
             </div>
 
         </div>
-    
-    <!-- WEEKLY PERFORMANCE -->
 
-      <div class="weekly-mini-panel">
+        <!-- WEEKLY PERFORMANCE -->
+        <div class="weekly-mini-panel">
 
-        <h3>Weekly Performance</h3>
+            <h3>Weekly Performance</h3>
 
-        <p class="elite-subtitle" style="
-            margin-bottom:15px;
-            font-size:13px;
-        ">
-            Performance from Monday through today
-        </p>
-
-        <div id="weeklyTrades"></div>
-
-        <div id="weeklyTotal" style="
-            margin-top:15px;
-            text-align:right;
-            font-size:18px;
-            font-weight:700;
-            color:#22c55e;
-        ">
-            -
-        </div>
-
-    </div>        
-
-    <!-- INSPIRATIONAL QUOTE -->
-
-    <div class="elite-quote">
-
-        <div class="quote-line"></div>
-
-        <div class="quote-wrapper">
-
-            <p id="quoteText">
-                The stock market is a device for transferring money from the impatient to the patient.
+            <p class="elite-subtitle" style="margin-bottom:15px; font-size:13px;">
+                Performance from Monday through today
             </p>
 
-            <span id="quoteAuthor">
-                — Warren Buffett
-            </span>
+            <div id="weeklyTrades"></div>
+
+            <div id="weeklyTotal" style="
+                margin-top:15px;
+                text-align:right;
+                font-size:18px;
+                font-weight:700;
+                color:#22c55e;
+            ">
+                -
+            </div>
+
+        </div>
+
+        <!-- QUOTE -->
+        <div class="elite-quote">
+
+            <div class="quote-line"></div>
+
+            <div class="quote-wrapper">
+
+                <p id="quoteText">
+                    The stock market is a device for transferring money from the impatient to the patient.
+                </p>
+
+                <span id="quoteAuthor">
+                    — Warren Buffett
+                </span>
+
+            </div>
 
         </div>
 
     </div>
 
-  </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="elite-sidebar">
+
+        <div class="elite-panel">
+            <h3>Breakout Elite</h3>
+            <p>High conviction opportunities selected from thousands of NASDAQ stocks.</p>
+        </div>
+
+        <div class="elite-panel">
+            <h3>Framework Strength</h3>
+            <div class="performance-bar">
+                <div id="winBar" class="performance-fill"></div>
+            </div>
+        </div>
+
+        <div class="elite-panel">
+            <h3>Breakout Health</h3>
+
+            <div class="health-score">
+                <div class="health-gauge">
+                    <div class="health-center">
+                        <span id="healthValue">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="healthLabel" class="health-label">
+                Select a stock
+            </div>
+
+            <div class="metric"><span>Trend</span><strong id="trendStatus">Bullish</strong></div>
+            <div class="metric"><span>Momentum</span><strong id="momentumStatus">Strong</strong></div>
+            <div class="metric"><span>Structure</span><strong id="structureStatus">Intact</strong></div>
+        </div>
+
+        <div class="elite-panel">
+            <h3>Market Breakdown</h3>
+            <div class="metric"><span>Small Caps</span><strong id="smallCount">-</strong></div>
+            <div class="metric"><span>Mid Caps</span><strong id="midCount">-</strong></div>
+            <div class="metric"><span>Large Caps</span><strong id="largeCount">-</strong></div>
+        </div>
+
+    </div>
+
+</div>
 
        
 
