@@ -1275,17 +1275,16 @@ QUOTE SECTION
 🚀 TERMINAL (CORRECT STRUCTURE)
 ========================= -->
 
+<!-- TERMINAL -->
+
 <div class="elite-terminal">
 
     <!-- WATCHLIST -->
+
     <div class="elite-panel watchlist-panel">
 
         <div class="panel-title">
             Active Opportunities
-        </div>
-
-        <div style="font-size:12px; color:#64748b; margin-bottom:10px;">
-            Free setups update daily • Elite filters the highest conviction trades →
         </div>
 
         <div id="todayActivity"></div>
@@ -1295,82 +1294,91 @@ QUOTE SECTION
         </div>
 
         <div id="smallSection"></div>
+
         <div id="midSection"></div>
+
         <div id="largeSection"></div>
 
     </div>
 
+    <!-- CHART -->
 
-    <!-- CHART (MATCHES ELITE) -->
     <div class="elite-panel chart-panel">
 
-        <!-- REQUIRED FOR JS -->
         <div id="chartTitle" class="chart-title">
-            Select a stock to view the breakout setup
+            Select a stock to view the live breakout setup
         </div>
 
-        <div id="tv_chart"></div>
+    <div id="tv_chart"></div>
 
-        <!-- ACTIVITY -->
-        <div class="chart-bottom">
+    <!-- INSIDE THE CHART PANEL -->
 
-            <h3>Today's Activity</h3>
+    <div class="chart-bottom">
 
-            <div id="todayActivityFeed">
-                <div style="color:#94a3b8; font-size:13px; padding:10px 0;">
-                    Loading activity...
-                </div>
+        <h3>Today's Activity</h3>
+
+        <div id="todayActivityFeed">
+
+            <div style="
+                color:#94a3b8;
+                font-size:13px;
+                padding:10px 0;
+            ">
+                Loading activity...
             </div>
 
-            <div style="margin-top:10px; font-size:12px; color:#64748b;">
-                Elite tracks every trade from entry to exit with full performance data.
             </div>
 
         </div>
+    
+    <!-- WEEKLY PERFORMANCE -->
 
-        <!-- WEEKLY PERFORMANCE -->
-        <div class="weekly-mini-panel">
+      <div class="weekly-mini-panel">
 
-            <h3>Weekly Performance</h3>
+        <h3>Weekly Performance</h3>
 
-            <p class="elite-subtitle" style="margin-bottom:15px; font-size:13px;">
-                Performance from Monday through today
+        <p class="elite-subtitle" style="
+            margin-bottom:15px;
+            font-size:13px;
+        ">
+            Performance from Monday through today
+        </p>
+
+        <div id="weeklyTrades"></div>
+
+        <div id="weeklyTotal" style="
+            margin-top:15px;
+            text-align:right;
+            font-size:18px;
+            font-weight:700;
+            color:#22c55e;
+        ">
+            -
+        </div>
+
+    </div>        
+
+    <!-- INSPIRATIONAL QUOTE -->
+
+    <div class="elite-quote">
+
+        <div class="quote-line"></div>
+
+        <div class="quote-wrapper">
+
+            <p id="quoteText">
+                The stock market is a device for transferring money from the impatient to the patient.
             </p>
 
-            <div id="weeklyTrades"></div>
-
-            <div id="weeklyTotal" style="
-                margin-top:15px;
-                text-align:right;
-                font-size:18px;
-                font-weight:700;
-                color:#22c55e;
-            ">
-                -
-            </div>
-
-        </div>
-
-        <!-- QUOTE -->
-        <div class="elite-quote">
-
-            <div class="quote-line"></div>
-
-            <div class="quote-wrapper">
-
-                <p id="quoteText">
-                    The stock market is a device for transferring money from the impatient to the patient.
-                </p>
-
-                <span id="quoteAuthor">
-                    — Warren Buffett
-                </span>
-
-            </div>
+            <span id="quoteAuthor">
+                — Warren Buffett
+            </span>
 
         </div>
 
     </div>
+
+  </div>
 
 
     <!-- RIGHT SIDEBAR -->
