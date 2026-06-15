@@ -250,14 +250,31 @@ def process_data(data):
             ):
 
                 free_watchlist.append({
+
                     "symbol": result["symbol"],
-                    "date": window[0]["datetime"],
-                    "price": current_price,
+
+                    "entry_price": current_price,
+                    "entry_date": window[0]["datetime"],
+
                     "grade": grade,
-                    "score": result["score"],
+
+                    "current_price": current_price,
+                    "change_percent": 0,
+                    "days_held": 0,
+
                     "price_group": price_group,
+
+                    "score": result["score"],
+                    "breakout_strength": result["breakout_strength"],
                     "volume_ratio": round(volume_ratio, 2),
-                    "breakout_strength": result["breakout_strength"]
+
+                    "resistance": resistance,
+                    "touches": touches,
+                    "higher_lows": higher_lows,
+
+                    "setup_type": result.get("setup_type", "breakout"),
+                    "insight": result.get("insight", "Breakout with volume")
+
                 })
 
             if price_group == "SMALL" and grade != "B+":
