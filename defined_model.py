@@ -22,7 +22,7 @@ RISK_PER_TRADE = 0.02
 END_DATE = datetime.now()
 START_DATE = END_DATE - timedelta(weeks=4)
 
-RUN_LABEL = "4_weeks"
+RUN_LABEL = "8_weeks"
 
 # =========================
 # BUILD NASDAQ UNIVERSE
@@ -180,7 +180,7 @@ def run_backtest():
                 # EXPANDED GRADE FILTER
                 # =========================
 
-                VALID_GRADES = ["A+", "A", "B+", "B"]
+                VALID_GRADES = ["A+", "A", "B"]
 
                 if setup["grade"] not in VALID_GRADES:
                     continue
@@ -376,6 +376,25 @@ def run_backtest():
     # =========================
 
     df = pd.DataFrame(results)
+
+    # =========================
+    # FREE BREAKOUT BACKTEST
+    # =========================
+
+    free_breakout_results = df[
+        df["grade"].isin(["A+", "A", "B"])
+    ]
+
+    free_breakout_results.to_json(
+        "free_breakout_backtest_results.json",
+        orient="records",
+        indent=2
+    )
+
+    print(
+        f"✅ Saved {len(free_breakout_results)} "
+        "records to free_breakout_backtest_results.json"
+    )
 
     df.to_csv(f"trade_history_{RUN_LABEL}.csv", index=False)
 
