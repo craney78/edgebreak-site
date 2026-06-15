@@ -20,7 +20,7 @@ RISK_PER_TRADE = 0.02
 
 # 🔥 DYNAMIC DATE RANGE (LAST 3 WEEKS)
 END_DATE = datetime.now()
-START_DATE = END_DATE - timedelta(weeks=4)
+START_DATE = END_DATE - timedelta(weeks=8)
 
 RUN_LABEL = "8_weeks"
 
@@ -401,7 +401,7 @@ def run_backtest():
     print(f"\n✅ Saved {len(df)} trades to trade_history_{RUN_LABEL}.csv")
 
     # 🔥 ADD THIS
-    print(f"\n📊 Signals found (last 3 weeks): {len(results)}")
+    print(f"\n📊 Signals found (last 8 weeks): {len(results)}")
 
     # =========================
     # 📤 SAVE CLEAN JSON (ADD HERE)
