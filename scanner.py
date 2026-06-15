@@ -593,15 +593,68 @@ def run():
 
     all_signals = sort_signals(all_signals)
 
+    
     # =========================
-    # SAVE FREE WATCHLIST
+    # UPDATE FREE WATCHLIST
     # =========================
-    with open("free_breakout_watchlist.json", "w") as f:
-        json.dump(all_watchlist, f, indent=2)
+
+    watchlist_file = "free_breakout_watchlist.json"
+
+    if os.path.exists(watchlist_file):
+
+        with open(watchlist_file, "r") as f:
+            try:
+                existing = json.load(f)
+            except:
+                existing = []
+
+    else:
+        existing = []
+
+    existing_symbols = {
+        x["symbol"]
+        for x in existing
+    }
+
+    added = 0
+
+    for stock in all_watchlist:
+
+        if stock["symbol"] not in existing_symbols:
+
+            existing.append({
+
+                "symbol": stock["symbol"],
+
+                "entry_price": stock["price"],
+
+                "entry_date": stock["date"],
+
+                "grade": stock["grade"],
+
+                "current_price": stock["price"],
+
+                "change_percent": 0,
+
+                "days_held": 0,
+
+                "price_group": stock["price_group"],
+
+                "score": stock["score"],
+
+                "volume_ratio": stock["volume_ratio"],
+
+                "breakout_strength": stock["breakout_strength"]
+
+            })
+
+            added += 1
+
+    with open(watchlist_file, "w") as f:
+        json.dump(existing, f, indent=2)
 
     print(
-        f"🧠 Free Watchlist Saved: "
-        f"{len(all_watchlist)} stocks"
+        f"🧠 Added {added} new free watchlist stocks"
     )
     
     # =========================
