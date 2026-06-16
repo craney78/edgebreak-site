@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NASDAQ Stock Scanner | Find Breakout Stocks & Trading Opportunities | EdgeBreak</title>
+
+<meta name="description" content="Search thousands of NASDAQ stocks using the EdgeBreak Stock Scanner. Filter stocks by resistance touches, higher lows, compression, volume expansion, new highs and breakout strength to discover potential trading opportunities.">
+
+<meta name="keywords" content="NASDAQ stock scanner, NASDAQ scanner, stock scanner, market scanner, NASDAQ screener, breakout stocks, breakout scanner, stock screener, trading scanner, breakout opportunities">
+
+<meta name="robots" content="index, follow, max-image-preview:large">
+
+<link rel="canonical" href="https://www.edgebreak.ai/nasdaq-stock-scanner.html">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="NASDAQ Stock Scanner | EdgeBreak">
+<meta property="og:description" content="Search thousands of NASDAQ stocks using advanced price action filters including resistance touches, higher lows, compression and volume expansion.">
+<meta property="og:url" content="https://www.edgebreak.ai/nasdaq-stock-scanner.html">
+<meta property="og:image" content="https://www.edgebreak.ai/images/nasdaq-stock-scanner.webp">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="NASDAQ Stock Scanner | EdgeBreak">
+<meta name="twitter:description" content="Find potential breakout stocks using the EdgeBreak NASDAQ Stock Scanner.">
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/nasdaq-stock-scanner.webp">
+
+<!-- Brand -->
+<meta name="author" content="EdgeBreak">
+<meta name="application-name" content="EdgeBreak">
+
+<!-- Theme -->
+<meta name="theme-color" content="#0f172a">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+
+    {
+      "@type":"Organization",
+      "@id":"https://www.edgebreak.ai/#organization",
+      "name":"EdgeBreak",
+      "url":"https://www.edgebreak.ai",
+      "logo":"https://www.edgebreak.ai/images/logo.webp"
+    },
+
+    {
+      "@type":"WebPage",
+      "@id":"https://www.edgebreak.ai/nasdaq-stock-scanner.html#webpage",
+      "url":"https://www.edgebreak.ai/nasdaq-stock-scanner.html",
+      "name":"NASDAQ Stock Scanner",
+      "description":"Search thousands of NASDAQ stocks using EdgeBreak price action filters including resistance touches, higher lows, compression, volume expansion, new highs and breakout strength.",
+      "isPartOf":{
+        "@id":"https://www.edgebreak.ai/#website"
+      },
+      "about":{
+        "@type":"Thing",
+        "name":"NASDAQ Stock Scanner"
+      },
+      "publisher":{
+        "@id":"https://www.edgebreak.ai/#organization"
+      }
+    },
+
+    {
+      "@type":"SoftwareApplication",
+      "@id":"https://www.edgebreak.ai/nasdaq-stock-scanner.html#software",
+      "name":"EdgeBreak NASDAQ Stock Scanner",
+      "applicationCategory":"FinanceApplication",
+      "operatingSystem":"Web",
+      "url":"https://www.edgebreak.ai/nasdaq-stock-scanner.html",
+      "description":"A stock market scanning tool that filters NASDAQ stocks using resistance touches, higher lows, compression, volume expansion, breakout strength and new high analysis.",
+      "offers":{
+        "@type":"Offer",
+        "price":"0",
+        "priceCurrency":"USD"
+      },
+      "publisher":{
+        "@id":"https://www.edgebreak.ai/#organization"
+      }
+    },
+
+    {
+      "@type":"Dataset",
+      "@id":"https://www.edgebreak.ai/nasdaq-stock-scanner.html#dataset",
+      "name":"NASDAQ Stock Scanner Database",
+      "description":"Daily updated database of NASDAQ stocks including resistance touches, higher lows, compression scores, volume ratios, breakout strength and price action metrics.",
+      "keywords":[
+        "NASDAQ",
+        "Stock Scanner",
+        "Market Scanner",
+        "Breakout Stocks",
+        "Stock Market Data",
+        "Price Action"
+      ],
+      "creator":{
+        "@id":"https://www.edgebreak.ai/#organization"
+      },
+      "license":"https://www.edgebreak.ai/terms.html"
+    },
+
+    {
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {
+          "@type":"ListItem",
+          "position":1,
+          "name":"Home",
+          "item":"https://www.edgebreak.ai/"
+        },
+        {
+          "@type":"ListItem",
+          "position":2,
+          "name":"NASDAQ Scanner",
+          "item":"https://www.edgebreak.ai/nasdaq-stock-scanner.html"
+        }
+      ]
+    }
+
+  ]
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+window.supabaseClient = supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+);
+</script>
+
+
+<script>
+// =========================
+// 🔒 HARD PAGE LOCK
+// =========================
+document.documentElement.style.visibility = "hidden";
+
+const supabaseClient = window.supabaseClient;
+
+// =========================
+// 🔐 ACCESS CONTROL
+// =========================
+async function checkAccess() {
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+      window.location.replace("/login.html");
+      return;
+    }
+
+    const { data: profile, error } = await supabaseClient
+      .from("profiles")
+      .select("is_active")
+      .eq("id", user.id)
+      .single();
+
+    if (error || !profile || !profile.is_active) {
+      window.location.replace("/pricing.html");
+      return;
+    }
+
+    document.documentElement.style.visibility = "visible";
+
+  } catch (err) {
+    console.error(err);
+    window.location.replace("/login.html");
+  }
+}
+
+// 🚀 RUN
+checkAccess();
+
+</script>
+<style>
+/* =========================
+   BREAKOUT ELITE THEME
+========================= */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#050b14;
+  color:#ffffff;
+  font-family:Inter,Segoe UI,sans-serif;
+}    
+
+/* =========================
+   HEADER
+========================= */
+
+.elite-header{
+  margin-bottom:30px;
+}
+
+.elite-brand{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
+.elite-logo{
+  width:70px;
+  height:auto;
+}
+
+.elite-brand h1{
+  font-size:42px;
+  font-weight:800;
+  letter-spacing:1px;
+  margin-bottom:6px;
+}
+
+.elite-brand p{
+  color:#94a3b8;
+  font-size:15px;
+}
+/* =========================
+SCANNER CHART
+========================= */
+
+.scanner-chart{
+  background:#0b1220;
+  border:1px solid #1e293b;
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:25px;
+}
+
+.chart-title{
+  text-align:center;
+  color:#94a3b8;
+  margin-bottom:15px;
+  font-size:14px;
+}
+
+#tv_chart{
+  height:700px;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+/* =========================
+SCANNER LAYOUT
+========================= */
+
+.scanner-layout{
+  display:grid;
+  grid-template-columns:320px 1fr 320px;
+  gap:20px;
+  margin-top:25px;
+}
+
+.scanner-panel{
+  background:#0b1220;
+  border:1px solid #1e293b;
+  border-radius:16px;
+  padding:20px;
+}
+
+.scanner-panel h3{
+  margin-bottom:20px;
+  color:white;
+}
+
+/* =========================
+FILTERS
+========================= */
+
+.filter-group{
+  margin-bottom:16px;
+}
+
+.filter-group label{
+  display:block;
+  color:#94a3b8;
+  font-size:13px;
+  margin-bottom:6px;
+}
+
+.filter-group select{
+  width:100%;
+  background:#111827;
+  border:1px solid #334155;
+  color:white;
+  padding:10px;
+  border-radius:8px;
+}
+
+.scanner-btn{
+  width:100%;
+  background:#22c55e;
+  color:white;
+  border:none;
+  padding:12px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.scanner-btn:hover{
+  opacity:.9;
+}
+
+/* =========================
+RESULTS TABLE
+========================= */
+
+#scannerTable{
+  width:100%;
+  border-collapse:collapse;
+}
+
+#scannerTable th{
+  padding:12px;
+  text-align:left;
+  color:#94a3b8;
+  border-bottom:1px solid #1e293b;
+}
+
+#scannerTable td{
+  padding:12px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+#scannerTable tbody tr{
+  cursor:pointer;
+  transition:.2s;
+}
+
+#scannerTable tbody tr:hover{
+  background:#111827;
+}
+
+/* =========================
+METRICS
+========================= */
+
+.metric{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.metric:last-child{
+  border-bottom:none;
+}
+
+.metric span{
+  color:#94a3b8;
+  font-size:13px;
+}
+
+.metric strong{
+  color:white;
+  font-weight:700;
+}
+
+/* =========================
+SEO SECTION
+========================= */
+
+.scanner-seo{
+  margin-top:40px;
+  background:#0b1220;
+  border:1px solid #1e293b;
+  border-radius:16px;
+  padding:30px;
+}
+
+.scanner-seo h2{
+  margin-bottom:12px;
+}
+
+.scanner-seo p{
+  color:#94a3b8;
+  line-height:1.8;
+  margin-bottom:20px;
+}
+
+/* =========================
+MOBILE
+========================= */
+
+@media(max-width:1200px){
+
+  .scanner-layout{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:900px){
+
+  #tv_chart{
+    height:500px;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .elite-container{
+    padding:15px;
+  }
+
+}
+
+/* =========================
+BASE
+========================= */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#050b14;
+  color:#fff;
+  font-family:Inter,Segoe UI,sans-serif;
+}
+
+.elite-container{
+  max-width:1700px;
+  margin:auto;
+  padding:30px;
+}
+
+/* =========================
+HERO BANNER
+========================= */
+
+.elite-banner{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+
+  padding:30px;
+
+  margin-bottom:25px;
+
+  background:linear-gradient(
+    135deg,
+    #0b1220,
+    #111827
+  );
+
+  border:1px solid #1e293b;
+  border-radius:18px;
+}
+
+.elite-banner h1{
+  font-size:42px;
+  font-weight:800;
+  margin-bottom:10px;
+}
+
+.elite-banner p{
+  color:#94a3b8;
+  line-height:1.7;
+  max-width:800px;
+}
+
+.elite-badge{
+  background:#22c55e;
+  color:white;
+
+  padding:12px 18px;
+
+  border-radius:999px;
+
+  font-weight:700;
+  white-space:nowrap;
+}
+
+/* =========================
+FEATURE BAR
+========================= */
+
+.elite-featured{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+
+  margin-bottom:25px;
+  padding:25px;
+
+  border-radius:18px;
+
+  background:linear-gradient(
+    135deg,
+    #0b1220,
+    #111827
+  );
+
+  border:1px solid #1e293b;
+}
+
+.featured-tag{
+  display:inline-block;
+
+  padding:6px 12px;
+
+  background:#14532d;
+  color:#4ade80;
+
+  border-radius:999px;
+
+  margin-bottom:10px;
+
+  font-size:12px;
+  font-weight:700;
+}
+
+.featured-pill{
+  background:#22c55e;
+  color:white;
+
+  padding:12px 18px;
+
+  border-radius:999px;
+
+  font-weight:700;
+}
+
+.elite-feature-icons{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:25px;
+  margin-top:25px;
+}
+
+.feature-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.feature-icon{
+  width:48px;
+  height:48px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.feature-icon svg{
+  width:32px;
+  height:32px;
+  stroke:#22c55e;
+}
+
+.feature-item span{
+  display:block;
+  color:#94a3b8;
+  font-size:11px;
+}
+
+.feature-item strong{
+  display:block;
+  color:white;
+  font-size:13px;
+}
+
+/* =========================
+METRICS
+========================= */
+
+.metric{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:10px 0;
+
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.metric:last-child{
+  border-bottom:none;
+}
+
+.metric span{
+  color:#94a3b8;
+  font-size:13px;
+}
+
+.metric strong{
+  color:white;
+}
+
+/* =========================
+SCROLLBAR
+========================= */
+
+::-webkit-scrollbar{
+  width:8px;
+}
+
+::-webkit-scrollbar-track{
+  background:#0b1220;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#334155;
+  border-radius:20px;
+}
+
+/* =========================
+MOBILE
+========================= */
+
+@media(max-width:900px){
+
+  .elite-banner{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .elite-featured{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .elite-feature-icons{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .elite-container{
+    padding:15px;
+  }
+
+  .elite-feature-icons{
+    grid-template-columns:1fr;
+  }
+
+  .elite-banner h1{
+    font-size:30px;
+  }
+
+}
+
+/* =========================
+   ELITE NAVBAR
+========================= */
+
+.nav{
+    position:sticky;
+    top:0;
+    z-index:9999;
+
+    background:#08111f;
+    border-bottom:1px solid #1e293b;
+
+    backdrop-filter:blur(10px);
+}
+
+.nav-inner{
+    max-width:1700px;
+    margin:auto;
+
+    height:72px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 25px;
+}
+
+/* =========================
+   LEFT SIDE
+========================= */
+
+.nav-left{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.nav-logo{
+    width:46px;
+    height:auto;
+    display:block;
+}
+
+.logo-text{
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:1px;
+
+    color:white;
+    text-decoration:none;
+}
+
+/* =========================
+   LIVE BADGE
+========================= */
+
+.live-badge{
+    background:#16a34a;
+    color:white;
+
+    padding:5px 10px;
+
+    border-radius:999px;
+
+    font-size:11px;
+    font-weight:700;
+
+    letter-spacing:.5px;
+}
+
+/* =========================
+   LINKS
+========================= */
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:24px;
+}
+
+.nav-link{
+    color:#94a3b8;
+    text-decoration:none;
+
+    font-size:14px;
+    font-weight:500;
+
+    transition:.2s;
+}
+
+.nav-link:hover{
+    color:white;
+}
+
+/* =========================
+   ACTIVE PAGE
+========================= */
+
+.nav-link.active{
+    color:#22c55e;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.nav-cta{
+    background:#22c55e;
+
+    color:white;
+    text-decoration:none;
+
+    padding:10px 18px;
+
+    border-radius:10px;
+
+    font-size:14px;
+    font-weight:700;
+
+    transition:.2s;
+}
+
+.nav-cta:hover{
+    transform:translateY(-1px);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+.menu-toggle{
+    display:none;
+}
+
+@media(max-width:900px){
+
+    .menu-toggle{
+        display:block;
+        color:white;
+        font-size:28px;
+        cursor:pointer;
+    }
+
+    .nav-links{
+        display:none;
+    }
+
+    .nav-links.active{
+        display:flex;
+
+        position:absolute;
+
+        top:72px;
+        left:0;
+        right:0;
+
+        background:#08111f;
+
+        flex-direction:column;
+
+        padding:20px;
+
+        border-bottom:1px solid #1e293b;
+    }
+
+}
+
+/* =========================
+   ELITE FOOTER
+========================= */
+
+.footer{
+    margin-top:50px;
+
+    background:#08111f;
+    border-top:1px solid #1e293b;
+
+    padding:50px 0 20px;
+}
+
+.footer-inner{
+    max-width:1700px;
+    margin:auto;
+
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr 1fr;
+
+    gap:40px;
+
+    padding:0 30px;
+}
+
+.footer-col h4{
+    color:white;
+    font-size:15px;
+    margin-bottom:15px;
+}
+
+.footer-col p{
+    color:#94a3b8;
+    line-height:1.7;
+    font-size:14px;
+}
+
+.footer-col a{
+    display:block;
+
+    color:#94a3b8;
+    text-decoration:none;
+
+    margin-bottom:10px;
+
+    font-size:14px;
+
+    transition:.2s;
+}
+
+.footer-col a:hover{
+    color:white;
+}
+
+/* =========================
+   BRAND BLOCK
+========================= */
+
+.footer-brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:15px;
+}
+
+.footer-brand img{
+    width:45px;
+}
+
+.footer-brand h3{
+    margin:0;
+    font-size:22px;
+    color:white;
+}
+
+/* =========================
+   BOTTOM BAR
+========================= */
+
+.footer-bottom{
+    max-width:1700px;
+
+    margin:40px auto 0;
+
+    padding:20px 30px 0;
+
+    border-top:1px solid #1e293b;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+.footer-bottom p{
+    color:#64748b;
+    font-size:13px;
+}
+
+.footer-parent-block{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.footer-logo{
+    width:28px;
+    opacity:.7;
+}
+
+.footer-parent a{
+    color:#94a3b8;
+    text-decoration:none;
+}
+
+.footer-parent a:hover{
+    color:white;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+    .footer-inner{
+        grid-template-columns:1fr;
+    }
+
+    .footer-bottom{
+        flex-direction:column;
+        text-align:center;
+    }
+
+}
+</style>
+</head>
+<body style="background:#020617;">
+
+<!-- NAVBAR -->
+<div class="nav">
+  <div class="nav-inner">
+
+    <!-- LEFT -->
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="images/logo.png" class="nav-logo">
+      </a>
+      <a href="index.html" class="logo-text">EDGEBREAK</a>
+      <span class="live-badge">LIVE</span>
+    </div>
+
+    <!-- RIGHT SIDE WRAP -->
+    <div class="nav-links-wrap">
+
+      <!-- LINKS -->
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="index.html#statsGrid" class="nav-link">Performance</a>
+
+        <a href="watchlist.html" class="nav-link locked-link">
+          Trading Desk <span class="lock-icon">🔒</span>
+        </a>
+
+        <a href="breakout-guide.html" class="nav-link">Free Breakout Guide</a>
+
+        <a href="trading-guide.html" class="nav-link">Guide</a>
+
+        <a href="/blog/breakout-trading-strategy.html" class="nav-link">
+          Strategy
+        </a>
+
+        <a href="dashboard.html" class="nav-link locked-link">
+          My Dashboard <span class="lock-icon">🔒</span>
+        </a>
+
+        <a href="/chart.html?symbol=AAPL" class="nav-link locked-link">
+          Charts <span class="lock-icon">🔒</span>
+        </a>
+
+        <a href="blog.html" class="nav-link">Trade Insights</a>
+
+        <a href="#" class="nav-cta" id="authBtn">Login</a>
+      </div>
+
+      <!-- HAMBURGER -->
+      <div class="menu-toggle" id="menuToggle">
+        ☰
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<main>
+<!-- =========================
+📈 MARKET TICKER TAPE
+========================= -->
+<div class="ticker-wrapper">
+
+    <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+
+        <script
+            type="text/javascript"
+            src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
+            async>
+        {
+          "symbols": [
+            {
+              "proName": "NASDAQ:QQQ",
+              "title": "QQQ"
+            },
+            {
+              "proName": "AMEX:SPY",
+              "title": "SPY"
+            },
+            {
+              "proName": "NASDAQ:NVDA",
+              "title": "NVDA"
+            },
+            {
+              "proName": "NASDAQ:MSFT",
+              "title": "MSFT"
+            },
+            {
+              "proName": "NASDAQ:AAPL",
+              "title": "AAPL"
+            },
+            {
+              "proName": "NASDAQ:AMZN",
+              "title": "AMZN"
+            },
+            {
+              "proName": "NASDAQ:META",
+              "title": "META"
+            },
+            {
+              "proName": "NASDAQ:TSLA",
+              "title": "TSLA"
+            },
+            {
+              "proName": "NASDAQ:PLTR",
+              "title": "PLTR"
+            },
+            {
+              "proName": "NASDAQ:RKLB",
+              "title": "RKLB"
+            }
+          ],
+          "showSymbolLogo": true,
+          "isTransparent": true,
+          "displayMode": "adaptive",
+          "colorTheme": "dark",
+          "locale": "en"
+        }
+        </script>
+    </div>
+
+</div>
+
+<div class="elite-container">
+
+<!-- HERO -->
+
+<div class="elite-banner">
+
+    <div>
+
+        <h1>NASDAQ MARKET SCANNER</h1>
+
+        <p>
+            Search thousands of NASDAQ stocks using EdgeBreak price action filters.
+            Identify stocks showing resistance touches, higher lows, compression,
+            volume expansion and breakout potential.
+        </p>
+
+    </div>
+
+    <div class="elite-badge">
+        Updated Daily
+    </div>
+
+</div>
+
+<div class="elite-featured">
+
+    <div>
+
+        <div class="featured-tag">
+            NASDAQ STOCK SCANNER
+        </div>
+
+        <h2>
+            Search Thousands Of NASDAQ Stocks
+        </h2>
+
+        <p>
+            Filter stocks using EdgeBreak price action metrics including
+            resistance touches, higher lows, compression, volume expansion,
+            new highs and breakout strength.
+        </p>
+
+    </div>
+
+    <div class="elite-feature-icons">
+
+    <!-- RESISTANCE -->
+
+    <div class="feature-item">
+
+        <div class="feature-icon">
+
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="4" y1="12" x2="20" y2="12"></line>
+                <line x1="4" y1="8" x2="20" y2="8"></line>
+            </svg>
+
+        </div>
+
+        <div>
+
+            <span>RESISTANCE</span>
+            <strong>TOUCHES</strong>
+
+        </div>
+
+    </div>
+
+    <!-- HIGHER LOWS -->
+
+    <div class="feature-item">
+
+        <div class="feature-icon">
+
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3,18 8,14 13,11 21,6"></polyline>
+            </svg>
+
+        </div>
+
+        <div>
+
+            <span>HIGHER</span>
+            <strong>LOWS</strong>
+
+        </div>
+
+    </div>
+
+    <!-- COMPRESSION -->
+
+    <div class="feature-item">
+
+        <div class="feature-icon">
+
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="4,6 10,10 14,12 20,13"></polyline>
+                <polyline points="4,18 10,15 14,14 20,13"></polyline>
+            </svg>
+
+        </div>
+
+        <div>
+
+            <span>PRICE</span>
+            <strong>COMPRESSION</strong>
+
+        </div>
+
+    </div>
+
+    <!-- VOLUME -->
+
+    <div class="feature-item">
+
+        <div class="feature-icon">
+
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="20" x2="5" y2="12"></line>
+                <line x1="10" y1="20" x2="10" y2="8"></line>
+                <line x1="15" y1="20" x2="15" y2="5"></line>
+                <line x1="20" y1="20" x2="20" y2="10"></line>
+            </svg>
+
+        </div>
+
+        <div>
+
+            <span>VOLUME</span>
+            <strong>EXPANSION</strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+    <div class="featured-pill">
+        UPDATED DAILY
+    </div>
+
+</div>
+<!-- CHART -->
+<div class="scanner-chart-panel">
+
+    <div id="tradingview_scanner_chart"></div>
+
+</div>
+
+<!-- =========================================
+📊 NASDAQ STOCK SCANNER
+========================================= -->
+
+<div class="scanner-layout">
+
+    <!-- =========================================
+    FILTERS
+    ========================================= -->
+    <div class="scanner-panel">
+
+        <h3>Scanner Filters</h3>
+
+        <div class="filter-group">
+
+            <label>Lookback Period</label>
+            <select id="lookback">
+                <option value="10">10 Days</option>
+                <option value="20">20 Days</option>
+                <option value="30" selected>30 Days</option>
+                <option value="60">60 Days</option>
+                <option value="90">90 Days</option>
+            </select>
+
+        </div>
+
+        <div class="filter-group">
+
+            <label>Resistance Touches</label>
+            <select id="touches">
+                <option value="">Any</option>
+                <option value="2">2+</option>
+                <option value="3">3+</option>
+                <option value="4">4+</option>
+                <option value="5">5+</option>
+            </select>
+
+        </div>
+
+        <div class="filter-group">
+
+            <label>Higher Lows</label>
+            <select id="higherLows">
+                <option value="">Any</option>
+                <option value="3">3+</option>
+                <option value="5">5+</option>
+                <option value="10">10+</option>
+                <option value="15">15+</option>
+            </select>
+
+        </div>
+
+        <div class="filter-group">
+
+            <label>Compression</label>
+            <select id="compression">
+                <option value="">Any</option>
+                <option value="3">3+</option>
+                <option value="5">5+</option>
+                <option value="10">10+</option>
+            </select>
+
+        </div>
+
+        <div class="filter-group">
+
+            <label>Volume Ratio</label>
+            <select id="volumeRatio">
+                <option value="">Any</option>
+                <option value="1">1.0+</option>
+                <option value="1.5">1.5+</option>
+                <option value="2">2.0+</option>
+                <option value="3">3.0+</option>
+            </select>
+
+        </div>
+
+        <div class="filter-group">
+
+            <label>Average Volume</label>
+            <select id="avgVolume">
+                <option value="">Any</option>
+                <option value="500000">500k+</option>
+                <option value="1000000">1M+</option>
+                <option value="2000000">2M+</option>
+            </select>
+
+        </div>
+
+        <div class="filter-group">
+
+            <label>Distance To High</label>
+            <select id="distanceHigh">
+                <option value="">Any</option>
+                <option value="1">Within 1%</option>
+                <option value="2">Within 2%</option>
+                <option value="5">Within 5%</option>
+            </select>
+
+        </div>
+
+        <div class="filter-group">
+
+            <label>New High</label>
+            <select id="newHigh">
+                <option value="">Any</option>
+                <option value="10">10 Day High</option>
+                <option value="20">20 Day High</option>
+                <option value="30">30 Day High</option>
+                <option value="60">60 Day High</option>
+                <option value="90">90 Day High</option>
+            </select>
+
+        </div>
+
+        <div class="filter-group">
+
+            <label>Price Group</label>
+            <select id="priceGroup">
+                <option value="">Any</option>
+                <option value="SMALL">Small</option>
+                <option value="MID">Mid</option>
+                <option value="LARGE">Large</option>
+            </select>
+
+        </div>
+
+        <button id="scannerSearchBtn" class="scanner-btn">
+            Search Scanner
+        </button>
+
+    </div>
+
+    <!-- =========================================
+    RESULTS
+    ========================================= -->
+    <div class="scanner-panel scanner-results">
+
+        <h3>Scanner Results</h3>
+
+        <table id="scannerTable">
+
+            <thead>
+
+                <tr>
+                    <th>Ticker</th>
+                    <th>Price</th>
+                    <th>Score</th>
+                    <th>Volume</th>
+                    <th>Touches</th>
+                    <th>HL</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="scannerResults">
+
+                <tr>
+                    <td colspan="6">
+                        Select filters and click Search.
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- =========================================
+    STOCK METRICS
+    ========================================= -->
+    <div class="scanner-panel">
+
+        <h3>Stock Metrics</h3>
+
+        <div id="scannerMetrics">
+
+            <p>Select a stock to view metrics.</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+FULL WIDTH CHART
+========================================= -->
+
+<div class="scanner-chart-wrapper">
+
+    <div id="tradingview_scanner_chart"></div>
+
+</div>
+
+<!-- =========================================
+SEO CONTENT
+========================================= -->
+
+<div class="scanner-seo">
+
+    <h2>NASDAQ Stock Scanner</h2>
+
+    <p>
+        Search thousands of NASDAQ stocks using EdgeBreak
+        price action filters. Identify stocks showing
+        resistance touches, higher lows, compression,
+        volume expansion and breakout strength.
+    </p>
+
+    <h2>Price Action Scanner Filters</h2>
+
+    <p>
+        The EdgeBreak Scanner allows traders to locate
+        stocks near resistance, approaching new highs
+        and displaying increasing market participation.
+        Use multiple filters to uncover potential
+        breakout opportunities before they become obvious.
+    </p>
+
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<div class="footer" style="width:100%;">
+
+  <div class="footer-inner">
+
+    <!-- LEFT (LOGO + BRAND) -->
+    <div class="footer-col">
+      
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <img src="images/logo.png" style="width:40px; height:auto;">
+        <h3 style="color:white; margin:0;">EdgeBreak</h3>
+      </div>
+
+      <p>
+        Data-driven breakout trading framework designed to analyse and track breakout setups using structured market data
+      </p>
+
+    </div>
+
+    <!-- LINKS -->
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="index.html#performance">Performance</a>      
+      <a href="pricing.html">Pricing</a>
+      <a href="disclaimer.html">Disclaimer</a>
+      <a href="about.html">About</a>
+    </div>
+
+    <!-- RESOURCES -->
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="breakout-guide.html" class="nav-link">Free Breakout Guide</a>
+      <a href="trading-guide.html">Trading Guide</a>
+      <a href="faq.html">FAQ</a>
+      <a href="support.html">Support</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+
+    <!-- CTA -->
+    <div class="footer-col">
+      <h4>Get Access</h4>
+      <p style="margin-bottom:10px;">
+        Unlock full access to the system and tracked breakout setups
+      </p>
+      <button onclick="window.location.href='pricing.html'" class="nav-cta">
+        Get Access
+      </button>
+
+      <p style="font-size:13px; opacity:0.6;">
+        See real breakout trades before they run — updated daily
+      </p>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="footer-bottom">
+
+    <!-- EDGEBREAK INFO -->
+    <p>© 2026 EdgeBreak • All rights reserved</p>
+
+    <p class="footer-disclaimer">
+      Not financial advice. Trading involves risk.
+    </p>
+
+    <!-- WEBSITE CREDIT -->
+    <div class="footer-parent-block">
+      <a href="https://www.craneplatformlabs.com.au" target="_blank">
+        <img src="images/crane-logo.png" alt="Crane Platform Labs" class="footer-logo">
+      </a>
+
+      <p class="footer-parent">
+        Website by 
+        <a href="https://www.craneplatformlabs.com.au" target="_blank">
+          Crane Platform Labs
+        </a>
+      </p>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://s3.tradingview.com/tv.js"></script>
+
+<script>
+function loadChart(symbol) {
+
+  const cleanSymbol = symbol.toUpperCase().trim();
+  const finalSymbol = "NASDAQ:" + cleanSymbol;
+
+  document.getElementById("tv_chart").innerHTML = "";
+
+  // 👇 SHOW SYMBOL TO USER
+  document.getElementById("chartTitle").innerText = finalSymbol;
+
+  new TradingView.widget({
+    width: "100%",
+    height: 420,
+    symbol: finalSymbol,
+    interval: "D",
+    timezone: "America/New_York",
+    theme: "dark",
+    style: "1",
+    locale: "en",
+    hide_top_toolbar: true,
+    hide_legend: false,   // 👈 IMPORTANT (shows ticker inside chart too)
+    container_id: "tv_chart"
+  });
+
+}
+
+
+</script>
+<script>
+
+window.scannerData = [];
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    loadChart("AAPL");
+
+    fetch("/scanner_database.json?v=" + Date.now())
+    .then(res => res.json())
+    .then(data => {
+
+        window.scannerData = data;
+
+        console.log(
+            "Scanner Loaded:",
+            data.length,
+            "stocks"
+        );
+
+    })
+    .catch(err => {
+
+        console.error(
+            "Scanner load failed",
+            err
+        );
+
+    });
+
+});
+
+function runScanner(){
+
+    const lookback =
+        document.getElementById("lookback").value;
+
+    const touches =
+        parseInt(
+            document.getElementById("touches").value || 0
+        );
+
+    const higherLows =
+        parseInt(
+            document.getElementById("higherLows").value || 0
+        );
+
+    const compression =
+        parseInt(
+            document.getElementById("compression").value || 0
+        );
+
+    const volumeRatio =
+        parseFloat(
+            document.getElementById("volumeRatio").value || 0
+        );
+
+    const avgVolume =
+        parseInt(
+            document.getElementById("avgVolume").value || 0
+        );
+
+    const distanceHigh =
+        parseFloat(
+            document.getElementById("distanceHigh").value || 999
+        );
+
+    const priceGroup =
+        document.getElementById("priceGroup").value;
+
+    const results =
+        window.scannerData.filter(stock => {
+
+            if (
+                touches &&
+                stock[`resistance_touches_${lookback}`] < touches
+            ) return false;
+
+            if (
+                higherLows &&
+                stock[`higher_lows_${lookback}`] < higherLows
+            ) return false;
+
+            if (
+                compression &&
+                stock[`compression_${lookback}`] < compression
+            ) return false;
+
+            if (
+                volumeRatio &&
+                stock.volume_ratio < volumeRatio
+            ) return false;
+
+            if (
+                avgVolume &&
+                stock.avg_volume < avgVolume
+            ) return false;
+
+            if (
+                distanceHigh &&
+                stock[`distance_to_${lookback}_high`] > distanceHigh
+            ) return false;
+
+            if (
+                priceGroup &&
+                stock.price_group !== priceGroup
+            ) return false;
+
+            return true;
+
+        });
+
+    results.sort(
+        (a,b) =>
+        b.scanner_score - a.scanner_score
+    );
+
+    renderResults(results);
+
+}
+
+function renderResults(results){
+
+    const tbody =
+        document.getElementById("scannerResults");
+
+    if(results.length === 0){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6">
+                    No matches found
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    tbody.innerHTML =
+        results.slice(0,100).map(stock => `
+
+            <tr onclick="selectStock('${stock.symbol}')">
+
+                <td>${stock.symbol}</td>
+
+                <td>
+                    $${Number(
+                        stock.current_price || 0
+                    ).toFixed(2)}
+                </td>
+
+                <td>${stock.scanner_score}</td>
+
+                <td>
+                    ${Number(
+                        stock.volume_ratio || 0
+                    ).toFixed(2)}
+                </td>
+
+                <td>
+                    ${stock.resistance_touches_30 || 0}
+                </td>
+
+                <td>
+                    ${stock.higher_lows_30 || 0}
+                </td>
+
+            </tr>
+
+        `).join("");
+
+}
+
+function selectStock(symbol){
+
+    const stock =
+        window.scannerData.find(
+            s => s.symbol === symbol
+        );
+
+    if(!stock) return;
+
+    loadChart(symbol);
+
+    document.getElementById(
+        "scannerMetrics"
+    ).innerHTML = `
+
+        <div class="metric">
+            <span>Symbol</span>
+            <strong>${stock.symbol}</strong>
+        </div>
+
+        <div class="metric">
+            <span>Scanner Score</span>
+            <strong>${stock.scanner_score}</strong>
+        </div>
+
+        <div class="metric">
+            <span>Structure Score</span>
+            <strong>${stock.structure_score}</strong>
+        </div>
+
+        <div class="metric">
+            <span>Breakout Strength</span>
+            <strong>${stock.breakout_strength}</strong>
+        </div>
+
+        <div class="metric">
+            <span>Volume Ratio</span>
+            <strong>${stock.volume_ratio}</strong>
+        </div>
+
+        <div class="metric">
+            <span>Average Volume</span>
+            <strong>
+                ${Number(
+                    stock.avg_volume || 0
+                ).toLocaleString()}
+            </strong>
+        </div>
+
+    `;
+
+}
+
+</script>
+
+<script>
+async function setupAuthButton() {
+
+  const btn = document.getElementById("authBtn");
+  if (!btn) return;
+
+  const { data: { user } } = await supabaseClient.auth.getUser();
+
+  if (user) {
+    btn.innerText = "Logout";
+
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      await supabaseClient.auth.signOut();
+      window.location.href = "/login.html";
+    };
+
+  } else {
+    btn.innerText = "Login";
+    btn.href = "/login.html";
+  }
+}
+
+setupAuthButton();
+
+supabaseClient.auth.onAuthStateChange(() => {
+  setupAuthButton();
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const toggle = document.getElementById("menuToggle");
+  const nav = document.getElementById("navLinks");
+
+  if (!toggle || !nav) return;
+
+  toggle.addEventListener("click", () => {
+    nav.classList.toggle("active");
+  });
+
+  document.querySelectorAll("#navLinks a").forEach(link => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("active");
+    });
+  });
+
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const { data: { user } } = await supabaseClient.auth.getUser();
+  if (!user) return;
+
+  const { data: profile } = await supabaseClient
+    .from("profiles")
+    .select("is_active")
+    .eq("id", user.id)
+    .single();
+
+  if (!profile || profile.is_active !== true) return;
+
+  // ✅ REMOVE LOCK ICONS ONLY (VISUAL FIX)
+  document.querySelectorAll(".lock-icon").forEach(icon => icon.remove());
+
+  document.querySelectorAll(".locked-link").forEach(link => {
+    link.classList.remove("locked-link");
+  });
+
+});
+
+</script>
+
+
+</body>
+</html>
