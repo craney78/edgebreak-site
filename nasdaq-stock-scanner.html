@@ -1237,9 +1237,16 @@ MOBILE
 
 </div>
 <!-- CHART -->
-<div class="scanner-chart-panel">
+<div class="scanner-chart">
 
-    <div id="tradingview_scanner_chart"></div>
+    <div
+        id="chartTitle"
+        class="chart-title"
+    >
+        NASDAQ:AAPL
+    </div>
+
+    <div id="tv_chart"></div>
 
 </div>
 
@@ -1433,7 +1440,7 @@ MOBILE
 FULL WIDTH CHART
 ========================================= -->
 
-<div class="scanner-chart-wrapper">
+<div class="scanner-chart"></div>
 
     <div id="tradingview_scanner_chart"></div>
 
@@ -1592,6 +1599,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loadChart("AAPL");
 
+    document
+        .getElementById("scannerSearchBtn")
+        .addEventListener("click", runScanner);
+
     fetch("/scanner_database.json?v=" + Date.now())
     .then(res => res.json())
     .then(data => {
@@ -1654,6 +1665,9 @@ function runScanner(){
     const priceGroup =
         document.getElementById("priceGroup").value;
 
+    const newHigh =
+        document.getElementById("newHigh").value;    
+
     const results =
         window.scannerData.filter(stock => {
 
@@ -1690,6 +1704,11 @@ function runScanner(){
             if (
                 priceGroup &&
                 stock.price_group !== priceGroup
+            ) return false;
+
+            if (
+                newHigh &&
+                !stock[`new_${newHigh}_high`]
             ) return false;
 
             return true;
