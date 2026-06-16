@@ -548,7 +548,9 @@ def is_new_high(df, lookback):
             lookback
         )
 
-        return current_price >= high
+        return bool(
+            current_price >= high
+        )
 
     except:
 
@@ -807,9 +809,11 @@ def process_data(data):
 
                 record[
                     f"new_{days}_high"
-                ] = is_new_high(
-                    df,
-                    days
+                ] = bool(
+                    is_new_high(
+                        df,
+                        days
+                    )
                 )
 
             # =========================
