@@ -245,9 +245,9 @@ SCANNER CHART
 }
 
 #tv_chart{
-  height:700px;
-  border-radius:12px;
-  overflow:hidden;
+    height:1100px;
+    border-radius:12px;
+    overflow:hidden;
 }
 
 /* =========================
@@ -397,9 +397,14 @@ MOBILE
 
 @media(max-width:1200px){
 
-  .scanner-layout{
-    grid-template-columns:1fr;
-  }
+    .scanner-layout{
+        display:flex;
+        flex-direction:column;
+    }
+
+    .scanner-panel{
+        width:100%;
+    }
 
 }
 
@@ -1440,7 +1445,7 @@ MOBILE
 FULL WIDTH CHART
 ========================================= -->
 
-<div class="scanner-chart"></div>
+<div class="scanner-chart" id="chartSection"></div>
 
     <div id="tradingview_scanner_chart"></div>
 
@@ -1787,6 +1792,12 @@ function selectStock(symbol){
     if(!stock) return;
 
     loadChart(symbol);
+
+    // Scroll back to chart
+    document.getElementById("chartSection").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
 
     document.getElementById(
         "scannerMetrics"
