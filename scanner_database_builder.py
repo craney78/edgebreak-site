@@ -399,6 +399,10 @@ def get_resistance(data, lookback):
     return round(best_level, 2)
 
 
+# =========================
+# RESISTANCE TOUCHES
+# =========================
+
 def count_resistance_touches(
     data,
     lookback
@@ -415,12 +419,11 @@ def count_resistance_touches(
     )
 
     if resistance == 0:
-
         return 0
 
     count = 0
 
-    for p in pivots:
+    for p in reversed(pivots):
 
         if abs(
             p - resistance
@@ -428,8 +431,11 @@ def count_resistance_touches(
 
             count += 1
 
-    return count
+        else:
 
+            break
+
+    return count
 
 # =========================
 # HIGHER LOWS
@@ -446,8 +452,11 @@ def count_higher_lows(
     )
 
     if len(pivots) < 2:
-
         return 0
+
+    pivots = list(
+        reversed(pivots)
+    )
 
     count = 0
 
@@ -456,9 +465,13 @@ def count_higher_lows(
         len(pivots)
     ):
 
-        if pivots[i] > pivots[i-1]:
+        if pivots[i-1] > pivots[i]:
 
             count += 1
+
+        else:
+
+            break
 
     return count
 

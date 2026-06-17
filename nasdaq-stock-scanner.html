@@ -1653,7 +1653,14 @@ function runScanner(){
 function renderResults(results){
 
     const tbody =
-        document.getElementById("scannerResults");
+        document.getElementById(
+            "scannerResults"
+        );
+
+    const lookback =
+        document.getElementById(
+            "lookback"
+        ).value;
 
     if(results.length === 0){
 
@@ -1682,11 +1689,19 @@ function renderResults(results){
                 </td>
 
                 <td>
-                    ${stock.resistance_touches_60 || 0}
+                    ${
+                        stock[
+                            `resistance_touches_${lookback}`
+                        ] || 0
+                    }
                 </td>
 
                 <td>
-                    ${stock.higher_lows_60 || 0}
+                    ${
+                        stock[
+                            `higher_lows_${lookback}`
+                        ] || 0
+                    }
                 </td>
 
             </tr>
@@ -1697,22 +1712,66 @@ function renderResults(results){
 
 function selectStock(symbol){
 
-    console.log("CLICKED:", symbol);
+    const lookback =
+        document.getElementById("lookback").value;
 
     const stock =
         window.scannerData.find(
             s => s.symbol === symbol
         );
 
-    console.log(stock);
-
-    if(!stock){
-        console.log("Stock not found");
-        return;
-    }
+    if(!stock) return;
 
     loadChart(symbol);
 
+    document.getElementById(
+        "scannerMetrics"
+    ).innerHTML = `
+
+        <div class="metric">
+            <span>Symbol</span>
+            <strong>${stock.symbol}</strong>
+        </div>
+
+        <div class="metric">
+            <span>Price</span>
+            <strong>$${stock.current_price}</strong>
+        </div>
+
+        <div class="metric">
+            <span>Resistance</span>
+            <strong>
+                ${
+                    stock[
+                        `resistance_${lookback}`
+                    ] || "-"
+                }
+            </strong>
+        </div>
+
+        <div class="metric">
+            <span>Touches</span>
+            <strong>
+                ${
+                    stock[
+                        `resistance_touches_${lookback}`
+                    ] || 0
+                }
+            </strong>
+        </div>
+
+        <div class="metric">
+            <span>Higher Lows</span>
+            <strong>
+                ${
+                    stock[
+                        `higher_lows_${lookback}`
+                    ] || 0
+                }
+            </strong>
+        </div>
+
+    `;
 }
 </script>
 
