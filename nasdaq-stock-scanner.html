@@ -1265,7 +1265,7 @@ MOBILE
 
 </div>
 <!-- CHART -->
-<div class="scanner-chart" id="chartSection"></div>
+<div class="scanner-chart" id="chartSection">
 
     <div
         id="chartTitle"
@@ -1697,52 +1697,22 @@ function renderResults(results){
 
 function selectStock(symbol){
 
+    console.log("CLICKED:", symbol);
+
     const stock =
         window.scannerData.find(
             s => s.symbol === symbol
         );
 
+    console.log(stock);
+
     if(!stock){
+        console.log("Stock not found");
         return;
     }
 
     loadChart(symbol);
 
-    document.getElementById(
-        "scannerMetrics"
-    ).innerHTML = `
-
-        <div class="metric">
-            <span>Symbol</span>
-            <strong>${stock.symbol}</strong>
-        </div>
-
-        <div class="metric">
-            <span>Price</span>
-            <strong>$${stock.current_price}</strong>
-        </div>
-
-        <div class="metric">
-            <span>Price Group</span>
-            <strong>${stock.price_group}</strong>
-        </div>
-
-        <div class="metric">
-            <span>Resistance</span>
-            <strong>${stock.resistance_60 || "-"}</strong>
-        </div>
-
-        <div class="metric">
-            <span>Touches</span>
-            <strong>${stock.resistance_touches_60 || 0}</strong>
-        </div>
-
-        <div class="metric">
-            <span>Higher Lows</span>
-            <strong>${stock.higher_lows_60 || 0}</strong>
-        </div>
-
-    `;
 }
 </script>
 
