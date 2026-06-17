@@ -1250,7 +1250,7 @@ MOBILE
 
 </div>
 <!-- CHART -->
-<div class="scanner-chart">
+<div class="scanner-chart" id="chartSection"></div>
 
     <div
         id="chartTitle"
@@ -1449,15 +1449,7 @@ MOBILE
 
 </div>
 
-<!-- =========================================
-FULL WIDTH CHART
-========================================= -->
 
-<div class="scanner-chart" id="chartSection"></div>
-
-    <div id="tradingview_scanner_chart"></div>
-
-</div>
 
 <!-- =========================================
 SEO CONTENT
@@ -1587,17 +1579,32 @@ function loadChart(symbol) {
   document.getElementById("chartTitle").innerText = finalSymbol;
 
   new TradingView.widget({
-    width: "100%",
-    height: 420,
-    symbol: finalSymbol,
-    interval: "D",
-    timezone: "America/New_York",
-    theme: "dark",
-    style: "1",
-    locale: "en",
-    hide_top_toolbar: true,
-    hide_legend: false,   // 👈 IMPORTANT (shows ticker inside chart too)
-    container_id: "tv_chart"
+
+      width: "100%",
+      height: 1100,
+
+      symbol: finalSymbol,
+
+      interval: "D",
+
+      timezone: "America/New_York",
+
+      theme: "dark",
+
+      style: "1",
+
+      locale: "en",
+
+      hide_top_toolbar: false,
+
+      hide_side_toolbar: false,
+
+      allow_symbol_change: true,
+
+      withdateranges: true,
+
+      container_id: "tv_chart"
+
   });
 
 }
