@@ -136,16 +136,11 @@ API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
 BATCH_SIZE = 10
 SLEEP_TIME = 2
 
-MIN_BARS = 100
+MIN_BARS = 120
 
 LOOKBACKS = [10,20,30,40,50,60,70,80,90]
 
-HIGH_LOOKBACKS = [10,20,30,60,90]
 
-AVG_VOLUME_OPTIONS = [
-    500000,
-    1000000
-]
 
 DATABASE_FILE = "scanner_database.json"
 
@@ -159,13 +154,7 @@ processed = 0
 saved = 0
 failed = 0
 
-# =========================
-# FUTURE SETTINGS
-# =========================
 
-SMART_MONEY_FILE = "smart_money_database.json"
-
-FREE_WATCHLIST_FILE = "free_breakout_watchlist.json"
 # ===================================
 
 # BUILD NASDAQ UNIVERSE
@@ -279,78 +268,7 @@ def get_price_group(price):
     return "LARGE"
 
 
-def get_avg_volume(df):
 
-    try:
-
-        return int(
-            df["volume"]
-            .astype(float)
-            .tail(20)
-            .mean()
-        )
-
-    except:
-
-        return 0
-
-
-def get_volume_ratio(df):
-
-    try:
-
-        current_volume = safe_float(
-            df.iloc[-1]["volume"]
-        )
-
-        avg_volume = (
-            df["volume"]
-            .astype(float)
-            .tail(20)
-            .mean()
-        )
-
-        if avg_volume == 0:
-
-            return 0
-
-        return round(
-            current_volume / avg_volume,
-            2
-        )
-
-    except:
-
-        return 0
-
-
-def get_gap_percent(df):
-
-    try:
-
-        today_open = safe_float(
-            df.iloc[-1]["open"]
-        )
-
-        yesterday_close = safe_float(
-            df.iloc[-2]["close"]
-        )
-
-        if yesterday_close == 0:
-
-            return 0
-
-        return round(
-            (
-                (today_open - yesterday_close)
-                / yesterday_close
-            ) * 100,
-            2
-        )
-
-    except:
-
-        return 0
 # =========================
 # PIVOTS
 # =========================
@@ -545,311 +463,13 @@ def count_higher_lows(
     return count
 
 
-# =========================
-# COMPRESSION
-# =========================
 
-def get_compression(
-    data,
-    lookback
-):
-
-    pivots_high = get_pivot_highs(
-        data,
-        lookback
-    )
-
-    pivots_low = get_pivot_lows(
-        data,
-        lookback
-    )
-
-    if (
-        len(pivots_high) < 2
-        or
-        len(pivots_low) < 2
-    ):
-
-        return 0
-
-    compression = 0
-
-    for i in range(
-        1,
-        min(
-            len(pivots_high),
-            len(pivots_low)
-        )
-    ):
-
-        range_now = (
-            pivots_high[i]
-            -
-            pivots_low[i]
-        )
-
-        range_prev = (
-            pivots_high[i-1]
-            -
-            pivots_low[i-1]
-        )
-
-        if range_now < range_prev:
-
-            compression += 1
-
-    return compression
-
-# =========================
-# STRUCTURE TIGHTNESS
-# =========================
-
-def get_structure_tightness(data, lookback):
-
-    try:
-
-        highs = [
-            float(d["high"])
-            for d in data[:lookback]
-        ]
-
-        lows = [
-            float(d["low"])
-            for d in data[:lookback]
-        ]
-
-        highest = max(highs)
-        lowest = min(lows)
-
-        if highest == 0:
-            return 999
-
-        return round(
-            (
-                (highest - lowest)
-                / highest
-            ) * 100,
-            2
-        )
-
-    except:
-
-        return 999
-
-# =========================
-# HIGHS
-# =========================
-
-def get_high(df, lookback):
-
-    try:
-
-        return round(
-            df.tail(lookback)
-            ["high"]
-            .astype(float)
-            .max(),
-            2
-        )
-
-    except:
-
-        return 0
-
-
-def distance_to_high(df, lookback):
-
-    try:
-
-        current_price = safe_float(
-            df.iloc[-1]["close"]
-        )
-
-        high = get_high(
-            df,
-            lookback
-        )
-
-        if high == 0:
-
-            return 999
-
-        return round(
-            (
-                (high - current_price)
-                / high
-            ) * 100,
-            2
-        )
-
-    except:
-
-        return 999
-
-
-def is_new_high(df, lookback):
-
-    try:
-
-        current_price = safe_float(
-            df.iloc[-1]["close"]
-        )
-
-        high = get_high(
-            df,
-            lookback
-        )
-
-        return bool(
-            current_price >= high
-        )
-
-    except:
-
-        return False
-
-# =========================
-# EDGEBREAK STRUCTURE
-# =========================
-
-def calculate_structure_score(record):
-
-    touches = record.get(
-        "resistance_touches_30",
-        0
-    )
-
-    higher_lows = record.get(
-        "higher_lows_30",
-        0
-    )
-
-    compression = record.get(
-        "compression_30",
-        0
-    )
-
-    score = (
-
-        touches * 10
-
-        +
-
-        higher_lows * 15
-
-        +
-
-        compression * 5
-
-    )
-
-    return round(score, 2)
-
-
-# =========================
-# SCANNER SCORE
-# =========================
-
-def calculate_scanner_score(record):
-
-    score = 0
-
-    # =========================
-    # STRUCTURE
-    # =========================
-
-    score += (
-        calculate_structure_score(
-            record
-        )
-    )
-
-    # =========================
-    # VOLUME
-    # =========================
-
-    score += (
-        min(
-            record.get(
-                "volume_ratio",
-                0
-            ),
-            3
-        ) * 10
-    )
-
-    # =========================
-    # DISTANCE TO HIGH
-    # =========================
-
-    distance = record.get(
-        "distance_to_30_high",
-        999
-    )
-
-    if distance <= 1:
-
-        score += 20
-
-    elif distance <= 2:
-
-        score += 15
-
-    elif distance <= 5:
-
-        score += 10
-
-    elif distance <= 10:
-
-        score += 5
-
-    # =========================
-    # STRUCTURE TIGHTNESS
-    # =========================
-
-    tightness = record.get(
-        "tightness_30",
-        999
-    )
-
-    if tightness <= 5:
-
-        score += 25
-
-    elif tightness <= 10:
-
-        score += 15
-
-    elif tightness <= 15:
-
-        score += 5
-
-    else:
-
-        score -= 20
-
-    # =========================
-    # GAPS
-    # =========================
-
-    gap = abs(
-        record.get(
-            "gap_percent",
-            0
-        )
-    )
-
-    if gap > 2:
-
-        score += 5
-
-    return round(score, 2)
-
+    
 # ===================================
 # PROCESS
 # ===================================
-def process_data(data):
 
+def process_data(data):
 
     global database
     global processed
@@ -889,48 +509,33 @@ def process_data(data):
                 df.iloc[-1]["close"]
             )
 
+            # =========================
+            # RECORD
+            # =========================
+
             record = {
 
-            # =========================
-            # BASIC
-            # =========================
+                "symbol":
+                    symbol,
 
-            "symbol": symbol,
+                "current_price":
+                    round(
+                        current_price,
+                        2
+                    ),
 
-            
-            "current_price":
-                round(current_price, 2),
+                "price_group":
+                    get_price_group(
+                        current_price
+                    ),
 
-            "price_group":
-                get_price_group(
-                    current_price
-                ),
+                "scan_date":
+                    datetime.now()
+                    .strftime("%Y-%m-%d"),
 
-            "close_price":
-                round(current_price, 2),
-
-            "avg_volume":
-                get_avg_volume(df),
-
-            "volume_ratio":
-                get_volume_ratio(df),
-
-            "gap_percent":
-                get_gap_percent(df),
-
-            
-
-            # =========================
-            # META
-            # =========================
-
-            "scan_date":
-                datetime.now()
-                .strftime("%Y-%m-%d"),
-
-            "last_updated":
-                datetime.now()
-                .strftime("%Y-%m-%d")
+                "last_updated":
+                    datetime.now()
+                    .strftime("%Y-%m-%d")
 
             }
 
@@ -968,105 +573,8 @@ def process_data(data):
                 )
 
             # =========================
-            # COMPRESSION
+            # SAVE RECORD
             # =========================
-
-            for days in LOOKBACKS:
-
-                record[
-                    f"compression_{days}"
-                ] = get_compression(
-                    history,
-                    days
-                )
-            # =========================
-            # TIGHTNESS
-            # =========================
-
-            for days in LOOKBACKS:
-
-                record[
-                    f"tightness_{days}"
-                ] = get_structure_tightness(
-                    history,
-                    days
-                )
-            # =========================
-            # HIGHS
-            # =========================
-
-            for days in HIGH_LOOKBACKS:
-
-                record[
-                    f"high_{days}"
-                ] = get_high(
-                    df,
-                    days
-                )
-
-                record[
-                    f"distance_to_{days}_high"
-                ] = distance_to_high(
-                    df,
-                    days
-                )
-
-                record[
-                    f"new_{days}_high"
-                ] = bool(
-                    is_new_high(
-                        df,
-                        days
-                    )
-                )
-
-            # =========================
-            # EDGEBREAK SCORES
-            # =========================
-
-            record[
-                "setup_score"
-            ] = calculate_structure_score(
-                record
-            )
-
-            record[
-                "scanner_score"
-            ] = calculate_scanner_score(
-                record
-            )
-
-            
-            # =========================
-            # FUTURE PLACEHOLDERS
-            # =========================
-
-            record[
-                "relative_strength"
-            ] = 0
-
-            record[
-                "momentum_score"
-            ] = 0
-
-            record[
-                "accumulation_score"
-            ] = 0
-
-            record[
-                "institutional_score"
-            ] = 0
-
-            # =========================
-            # REJECT NOISY STRUCTURES
-            # =========================
-
-            #if record.get(
-                #"tightness_30",
-                #999
-            #) > 25:
-
-                #continue
 
             database.append(
                 record
@@ -1081,9 +589,6 @@ def process_data(data):
             print(
                 f"{symbol} failed: {e}"
             )
-
-
-
 # ===================================
 
 # MAIN
