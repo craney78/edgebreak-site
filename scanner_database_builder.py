@@ -711,19 +711,20 @@ def calculate_structure_score(record):
 
     return round(score, 2)
 
-    # =========================
-    # STRUCTURE
-    # =========================
+
+# =========================
+# SCANNER SCORE
+# =========================
+
+def calculate_scanner_score(record):
+
+    score = 0
 
     score += (
         calculate_structure_score(
             record
-        ) * 1.0
+        )
     )
-
-    # =========================
-    # VOLUME
-    # =========================
 
     score += (
         min(
@@ -734,10 +735,6 @@ def calculate_structure_score(record):
             3
         ) * 10
     )
-
-    # =========================
-    # DISTANCE TO HIGH
-    # =========================
 
     distance = record.get(
         "distance_to_30_high",
@@ -759,10 +756,6 @@ def calculate_structure_score(record):
     elif distance <= 10:
 
         score += 5
-
-    # =========================
-    # GAP
-    # =========================
 
     gap = abs(
         record.get(
