@@ -1294,11 +1294,16 @@ MOBILE
         <div class="filter-group">
 
             <label>Lookback Period</label>
+
             <select id="lookback">
                 <option value="10">10 Days</option>
                 <option value="20">20 Days</option>
-                <option value="30" selected>30 Days</option>
-                <option value="60">60 Days</option>
+                <option value="30">30 Days</option>
+                <option value="40">40 Days</option>
+                <option value="50">50 Days</option>
+                <option value="60" selected>60 Days</option>
+                <option value="70">70 Days</option>
+                <option value="80">80 Days</option>
                 <option value="90">90 Days</option>
             </select>
 
@@ -1307,6 +1312,7 @@ MOBILE
         <div class="filter-group">
 
             <label>Resistance Touches</label>
+
             <select id="touches">
                 <option value="">Any</option>
                 <option value="2">2+</option>
@@ -1320,75 +1326,14 @@ MOBILE
         <div class="filter-group">
 
             <label>Higher Lows</label>
+
             <select id="higherLows">
                 <option value="">Any</option>
+                <option value="1">1+</option>
+                <option value="2">2+</option>
                 <option value="3">3+</option>
+                <option value="4">4+</option>
                 <option value="5">5+</option>
-                <option value="10">10+</option>
-                <option value="15">15+</option>
-            </select>
-
-        </div>
-
-        <div class="filter-group">
-
-            <label>Compression</label>
-            <select id="compression">
-                <option value="">Any</option>
-                <option value="3">3+</option>
-                <option value="5">5+</option>
-                <option value="10">10+</option>
-            </select>
-
-        </div>
-
-        <div class="filter-group">
-
-            <label>Volume Ratio</label>
-            <select id="volumeRatio">
-                <option value="">Any</option>
-                <option value="1">1.0+</option>
-                <option value="1.5">1.5+</option>
-                <option value="2">2.0+</option>
-                <option value="3">3.0+</option>
-            </select>
-
-        </div>
-
-        <div class="filter-group">
-
-            <label>Average Volume</label>
-            <select id="avgVolume">
-                <option value="">Any</option>
-                <option value="500000">500k+</option>
-                <option value="1000000">1M+</option>
-                <option value="2000000">2M+</option>
-            </select>
-
-        </div>
-
-        <div class="filter-group">
-
-            <label>Distance To High</label>
-            <select id="distanceHigh">
-                <option value="">Any</option>
-                <option value="1">Within 1%</option>
-                <option value="2">Within 2%</option>
-                <option value="5">Within 5%</option>
-            </select>
-
-        </div>
-
-        <div class="filter-group">
-
-            <label>New High</label>
-            <select id="newHigh">
-                <option value="">Any</option>
-                <option value="10">10 Day High</option>
-                <option value="20">20 Day High</option>
-                <option value="30">30 Day High</option>
-                <option value="60">60 Day High</option>
-                <option value="90">90 Day High</option>
             </select>
 
         </div>
@@ -1396,6 +1341,7 @@ MOBILE
         <div class="filter-group">
 
             <label>Price Group</label>
+
             <select id="priceGroup">
                 <option value="">Any</option>
                 <option value="SMALL">Small</option>
@@ -1405,7 +1351,10 @@ MOBILE
 
         </div>
 
-        <button id="scannerSearchBtn" class="scanner-btn">
+        <button
+            id="scannerSearchBtn"
+            class="scanner-btn"
+        >
             Search Scanner
         </button>
 
@@ -1425,10 +1374,8 @@ MOBILE
                 <tr>
                     <th>Ticker</th>
                     <th>Price</th>
-                    <th>Score</th>
-                    <th>Volume</th>
                     <th>Touches</th>
-                    <th>HL</th>
+                    <th>Higher Lows</th>
                 </tr>
 
             </thead>
@@ -1436,7 +1383,7 @@ MOBILE
             <tbody id="scannerResults">
 
                 <tr>
-                    <td colspan="6">
+                    <td colspan="4">
                         Select filters and click Search.
                     </td>
                 </tr>
@@ -1452,19 +1399,17 @@ MOBILE
     ========================================= -->
     <div class="scanner-panel">
 
-        <h3>Stock Metrics</h3>
+        <h3>Stock Structure</h3>
 
         <div id="scannerMetrics">
 
-            <p>Select a stock to view metrics.</p>
+            <p>Select a stock to view structure.</p>
 
         </div>
 
     </div>
 
 </div>
-
-
 
 <!-- =========================================
 SEO CONTENT
@@ -1475,24 +1420,23 @@ SEO CONTENT
     <h2>NASDAQ Stock Scanner</h2>
 
     <p>
-        Search thousands of NASDAQ stocks using EdgeBreak
-        price action filters. Identify stocks showing
-        resistance touches, higher lows, compression,
-        volume expansion and breakout strength.
+        Search thousands of NASDAQ stocks using the
+        EdgeBreak price action framework. Identify
+        stocks repeatedly testing resistance while
+        forming higher lows beneath key price levels.
     </p>
 
-    <h2>Price Action Scanner Filters</h2>
+    <h2>Resistance and Higher Low Scanner</h2>
 
     <p>
-        The EdgeBreak Scanner allows traders to locate
-        stocks near resistance, approaching new highs
-        and displaying increasing market participation.
-        Use multiple filters to uncover potential
-        breakout opportunities before they become obvious.
+        The EdgeBreak Scanner focuses on market
+        structure rather than indicators. Search
+        for stocks showing multiple resistance
+        tests and rising demand underneath resistance
+        to uncover potential breakout candidates.
     </p>
 
 </div>
-
 </main>
 
 <!-- FOOTER -->
