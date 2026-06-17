@@ -352,101 +352,198 @@ def get_gap_percent(df):
 
         return 0
 # =========================
-# CLUSTER DETECTION
+# PIVOTS
 # =========================
 
-def count_touch_clusters(
-    data,
-    resistance,
-    tolerance=0.015,
-    lookback=30
-):
+def get_pivot_highs(data, lookback):
 
-    cluster_count = 0
-    in_cluster = False
+    pivots = []
 
-    for d in data[:lookback]:
+    try:
 
-        high = float(d["high"])
+        bars = data[:lookback]
 
-        if abs(
-            high - resistance
-        ) / resistance < tolerance:
+        for i in range(2, len(bars)-2):
 
-            if not in_cluster:
+            high = float(bars[i]["high"])
 
-                cluster_count += 1
-                in_cluster = True
+            if (
 
-        else:
+                high >
+                float(bars[i-1]["high"])
 
-            in_cluster = False
+                and
 
-    return cluster_count
+                high >
+                float(bars[i-2]["high"])
+
+                and
+
+                high >
+                float(bars[i+1]["high"])
+
+                and
+
+                high >
+                float(bars[i+2]["high"])
+
+            ):
+
+                pivots.append(high)
+
+    except:
+
+        pass
+
+    return pivots
+
+
+def get_pivot_lows(data, lookback):
+
+    pivots = []
+
+    try:
+
+        bars = data[:lookback]
+
+        for i in range(2, len(bars)-2):
+
+            low = float(bars[i]["low"])
+
+            if (
+
+                low <
+                float(bars[i-1]["low"])
+
+                and
+
+                low <
+                float(bars[i-2]["low"])
+
+                and
+
+                low <
+                float(bars[i+1]["low"])
+
+                and
+
+                low <
+                float(bars[i+2]["low"])
+
+            ):
+
+                pivots.append(low)
+
+    except:
+
+        pass
+
+    return pivots
+
 
 # =========================
-# RESISTANCE
+# RESISTANCE TOUCHES
 # =========================
 
 def get_resistance(data, lookback):
 
-    try:
+    pivots = get_pivot_highs(
+        data,
+        lookback
+    )
 
-        highs = [
-            float(d["high"])
-            for d in data[:lookback]
-        ]
-
-        return max(highs)
-
-    except:
+    if len(pivots) == 0:
 
         return 0
 
+    best_level = 0
+    best_count = 0
 
-def count_resistance_touches(data, lookback):
+    for level in pivots:
 
-    try:
+        count = sum(
 
-        resistance = get_resistance(
-            data,
-            lookback
+            1
+
+            for p in pivots
+
+            if abs(
+                p - level
+            ) / level <= 0.015
+
         )
 
-        return count_touch_clusters(
-            data,
-            resistance,
-            lookback=lookback
-        )
+        if count > best_count:
 
-    except:
+            best_count = count
+            best_level = level
+
+    return round(best_level, 2)
+
+
+def count_resistance_touches(
+    data,
+    lookback
+):
+
+    pivots = get_pivot_highs(
+        data,
+        lookback
+    )
+
+    resistance = get_resistance(
+        data,
+        lookback
+    )
+
+    if resistance == 0:
 
         return 0
+
+    count = 0
+
+    for p in pivots:
+
+        if abs(
+            p - resistance
+        ) / resistance <= 0.015:
+
+            count += 1
+
+    return count
+
 
 # =========================
 # HIGHER LOWS
 # =========================
 
-def count_higher_lows(data, lookback):
+def count_higher_lows(
+    data,
+    lookback
+):
 
-    try:
+    pivots = get_pivot_lows(
+        data,
+        lookback
+    )
 
-        lows = [
-            float(d["low"])
-            for d in data[:lookback]
-        ]
-
-        return sum(
-            1
-            for i in range(
-                len(lows) - 1
-            )
-            if lows[i] > lows[i + 1]
-        )
-
-    except:
+    if len(pivots) < 2:
 
         return 0
+
+    count = 0
+
+    for i in range(
+        1,
+        len(pivots)
+    ):
+
+        if pivots[i] > pivots[i-1]:
+
+            count += 1
+
+    return count
+
 
 # =========================
 # COMPRESSION
@@ -457,32 +554,53 @@ def get_compression(
     lookback
 ):
 
-    try:
+    pivots_high = get_pivot_highs(
+        data,
+        lookback
+    )
 
-        ranges = [
+    pivots_low = get_pivot_lows(
+        data,
+        lookback
+    )
 
-            float(d["high"])
-            - float(d["low"])
-
-            for d in data[:lookback]
-
-        ]
-
-        return sum(
-
-            1
-
-            for i in range(
-                len(ranges) - 1
-            )
-
-            if ranges[i] < ranges[i + 1]
-
-        )
-
-    except:
+    if (
+        len(pivots_high) < 2
+        or
+        len(pivots_low) < 2
+    ):
 
         return 0
+
+    compression = 0
+
+    for i in range(
+        1,
+        min(
+            len(pivots_high),
+            len(pivots_low)
+        )
+    ):
+
+        range_now = (
+            pivots_high[i]
+            -
+            pivots_low[i]
+        )
+
+        range_prev = (
+            pivots_high[i-1]
+            -
+            pivots_low[i-1]
+        )
+
+        if range_now < range_prev:
+
+            compression += 1
+
+    return compression
+
+
 
 # =========================
 # HIGHS
@@ -562,51 +680,50 @@ def is_new_high(df, lookback):
 
 def calculate_structure_score(record):
 
-    score = 0
-
-    # Resistance
-
-    score += (
-        record.get(
-            "resistance_touches_30",
-            0
-        ) * 3
+    touches = record.get(
+        "resistance_touches_30",
+        0
     )
 
-    # Higher Lows
-
-    score += (
-        record.get(
-            "higher_lows_30",
-            0
-        ) * 2
+    higher_lows = record.get(
+        "higher_lows_30",
+        0
     )
 
-    # Compression
+    compression = record.get(
+        "compression_30",
+        0
+    )
 
-    score += (
-        record.get(
-            "compression_30",
-            0
-        ) * 2
+    score = (
+
+        touches * 10
+
+        +
+
+        higher_lows * 15
+
+        +
+
+        compression * 5
+
     )
 
     return round(score, 2)
 
-
-def calculate_scanner_score(record):
-
-    score = 0
-
-    # Structure
+    # =========================
+    # STRUCTURE
+    # =========================
 
     score += (
         calculate_structure_score(
             record
-        ) * 0.5
+        ) * 1.0
     )
 
-    # Volume
+    # =========================
+    # VOLUME
+    # =========================
 
     score += (
         min(
@@ -618,7 +735,9 @@ def calculate_scanner_score(record):
         ) * 10
     )
 
-    # Near High
+    # =========================
+    # DISTANCE TO HIGH
+    # =========================
 
     distance = record.get(
         "distance_to_30_high",
@@ -627,17 +746,23 @@ def calculate_scanner_score(record):
 
     if distance <= 1:
 
-        score += 15
+        score += 20
 
     elif distance <= 2:
 
-        score += 10
+        score += 15
 
     elif distance <= 5:
 
+        score += 10
+
+    elif distance <= 10:
+
         score += 5
 
-    # Gap
+    # =========================
+    # GAP
+    # =========================
 
     gap = abs(
         record.get(
@@ -817,11 +942,11 @@ def process_data(data):
                 )
 
             # =========================
-            # EDGEBREAK STRUCTURE
+            # EDGEBREAK SCORES
             # =========================
 
             record[
-                "structure_score"
+                "setup_score"
             ] = calculate_structure_score(
                 record
             )
@@ -830,22 +955,6 @@ def process_data(data):
                 "scanner_score"
             ] = calculate_scanner_score(
                 record
-            )
-
-            record[
-                "breakout_strength"
-            ] = round(
-                (
-                    record[
-                        "structure_score"
-                    ] * 0.6
-                ) +
-                (
-                    record[
-                        "volume_ratio"
-                    ] * 10 * 0.4
-                ),
-                2
             )
 
             # =========================
