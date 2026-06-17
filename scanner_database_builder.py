@@ -600,7 +600,41 @@ def get_compression(
 
     return compression
 
+# =========================
+# STRUCTURE TIGHTNESS
+# =========================
 
+def get_structure_tightness(data, lookback):
+
+    try:
+
+        highs = [
+            float(d["high"])
+            for d in data[:lookback]
+        ]
+
+        lows = [
+            float(d["low"])
+            for d in data[:lookback]
+        ]
+
+        highest = max(highs)
+        lowest = min(lows)
+
+        if highest == 0:
+            return 999
+
+        return round(
+            (
+                (highest - lowest)
+                / highest
+            ) * 100,
+            2
+        )
+
+    except:
+
+        return 999
 
 # =========================
 # HIGHS
@@ -720,11 +754,19 @@ def calculate_scanner_score(record):
 
     score = 0
 
+    # =========================
+    # STRUCTURE
+    # =========================
+
     score += (
         calculate_structure_score(
             record
         )
     )
+
+    # =========================
+    # VOLUME
+    # =========================
 
     score += (
         min(
@@ -735,6 +777,10 @@ def calculate_scanner_score(record):
             3
         ) * 10
     )
+
+    # =========================
+    # DISTANCE TO HIGH
+    # =========================
 
     distance = record.get(
         "distance_to_30_high",
@@ -756,6 +802,35 @@ def calculate_scanner_score(record):
     elif distance <= 10:
 
         score += 5
+
+    # =========================
+    # STRUCTURE TIGHTNESS
+    # =========================
+
+    tightness = record.get(
+        "tightness_30",
+        999
+    )
+
+    if tightness <= 5:
+
+        score += 25
+
+    elif tightness <= 10:
+
+        score += 15
+
+    elif tightness <= 15:
+
+        score += 5
+
+    else:
+
+        score -= 20
+
+    # =========================
+    # GAPS
+    # =========================
 
     gap = abs(
         record.get(
@@ -904,7 +979,18 @@ def process_data(data):
                     history,
                     days
                 )
+            # =========================
+            # TIGHTNESS
+            # =========================
 
+            for days in LOOKBACKS:
+
+                record[
+                    f"tightness_{days}"
+                ] = get_structure_tightness(
+                    history,
+                    days
+                )
             # =========================
             # HIGHS
             # =========================
@@ -950,6 +1036,7 @@ def process_data(data):
                 record
             )
 
+            
             # =========================
             # FUTURE PLACEHOLDERS
             # =========================
@@ -969,6 +1056,17 @@ def process_data(data):
             record[
                 "institutional_score"
             ] = 0
+
+            # =========================
+            # REJECT NOISY STRUCTURES
+            # =========================
+
+            #if record.get(
+                #"tightness_30",
+                #999
+            #) > 25:
+
+                #continue
 
             database.append(
                 record
