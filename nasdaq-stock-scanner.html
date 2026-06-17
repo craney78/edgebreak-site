@@ -1621,31 +1621,8 @@ function runScanner(){
             document.getElementById("higherLows").value || 0
         );
 
-    const compression =
-        parseInt(
-            document.getElementById("compression").value || 0
-        );
-
-    const volumeRatio =
-        parseFloat(
-            document.getElementById("volumeRatio").value || 0
-        );
-
-    const avgVolume =
-        parseInt(
-            document.getElementById("avgVolume").value || 0
-        );
-
-    const distanceHigh =
-        parseFloat(
-            document.getElementById("distanceHigh").value || 999
-        );
-
     const priceGroup =
         document.getElementById("priceGroup").value;
-
-    const newHigh =
-        document.getElementById("newHigh").value;    
 
     const results =
         window.scannerData.filter(stock => {
@@ -1661,43 +1638,13 @@ function runScanner(){
             ) return false;
 
             if (
-                compression &&
-                stock[`compression_${lookback}`] < compression
-            ) return false;
-
-            if (
-                volumeRatio &&
-                stock.volume_ratio < volumeRatio
-            ) return false;
-
-            if (
-                avgVolume &&
-                stock.avg_volume < avgVolume
-            ) return false;
-
-            if (
-                distanceHigh &&
-                stock[`distance_to_${lookback}_high`] > distanceHigh
-            ) return false;
-
-            if (
                 priceGroup &&
                 stock.price_group !== priceGroup
-            ) return false;
-
-            if (
-                newHigh &&
-                !stock[`new_${newHigh}_high`]
             ) return false;
 
             return true;
 
         });
-
-    results.sort(
-        (a,b) =>
-        b.scanner_score - a.scanner_score
-    );
 
     renderResults(results);
 
@@ -1712,7 +1659,7 @@ function renderResults(results){
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="6">
+                <td colspan="4">
                     No matches found
                 </td>
             </tr>
@@ -1734,20 +1681,12 @@ function renderResults(results){
                     ).toFixed(2)}
                 </td>
 
-                <td>${stock.scanner_score}</td>
-
                 <td>
-                    ${Number(
-                        stock.volume_ratio || 0
-                    ).toFixed(2)}
+                    ${stock.resistance_touches_60 || 0}
                 </td>
 
                 <td>
-                    ${stock.resistance_touches_30 || 0}
-                </td>
-
-                <td>
-                    ${stock.higher_lows_30 || 0}
+                    ${stock.higher_lows_60 || 0}
                 </td>
 
             </tr>
@@ -1756,64 +1695,41 @@ function renderResults(results){
 
 }
 
-function selectStock(symbol){
+document.getElementById(
+    "scannerMetrics"
+).innerHTML = `
 
-    const stock =
-        window.scannerData.find(
-            s => s.symbol === symbol
-        );
+    <div class="metric">
+        <span>Symbol</span>
+        <strong>${stock.symbol}</strong>
+    </div>
 
-    if(!stock) return;
+    <div class="metric">
+        <span>Price</span>
+        <strong>$${stock.current_price}</strong>
+    </div>
 
-    loadChart(symbol);
+    <div class="metric">
+        <span>Price Group</span>
+        <strong>${stock.price_group}</strong>
+    </div>
 
-    // Scroll back to chart
-    document.getElementById("chartSection").scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
+    <div class="metric">
+        <span>Resistance (60d)</span>
+        <strong>${stock.resistance_60}</strong>
+    </div>
 
-    document.getElementById(
-        "scannerMetrics"
-    ).innerHTML = `
+    <div class="metric">
+        <span>Touches (60d)</span>
+        <strong>${stock.resistance_touches_60}</strong>
+    </div>
 
-        <div class="metric">
-            <span>Symbol</span>
-            <strong>${stock.symbol}</strong>
-        </div>
+    <div class="metric">
+        <span>Higher Lows (60d)</span>
+        <strong>${stock.higher_lows_60}</strong>
+    </div>
 
-        <div class="metric">
-            <span>Scanner Score</span>
-            <strong>${stock.scanner_score}</strong>
-        </div>
-
-        <div class="metric">
-            <span>Structure Score</span>
-            <strong>${stock.structure_score}</strong>
-        </div>
-
-        <div class="metric">
-            <span>Breakout Strength</span>
-            <strong>${stock.breakout_strength}</strong>
-        </div>
-
-        <div class="metric">
-            <span>Volume Ratio</span>
-            <strong>${stock.volume_ratio}</strong>
-        </div>
-
-        <div class="metric">
-            <span>Average Volume</span>
-            <strong>
-                ${Number(
-                    stock.avg_volume || 0
-                ).toLocaleString()}
-            </strong>
-        </div>
-
-    `;
-
-}
+`;
 
 </script>
 
