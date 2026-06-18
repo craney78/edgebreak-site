@@ -640,6 +640,18 @@ def process_data(data):
                     history,
                     days
                 )
+
+            # =========================
+            # ACTIVE HIGHER LOW STATUS
+            # =========================
+
+            record[
+                "active_higher_lows"
+            ] = has_active_higher_lows(
+                history,
+                30
+            ) 
+              
             # =========================
             # REJECT BROKEN STRUCTURE
             # =========================
