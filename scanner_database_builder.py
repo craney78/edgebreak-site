@@ -649,6 +649,24 @@ def process_data(data):
                 30
             ):
                 continue
+
+            # =========================
+            # PRICE MUST HOLD
+            # MOST RECENT HIGHER LOW
+            # =========================
+
+            pivots = get_pivot_lows(
+                history,
+                30
+            )
+
+            if len(pivots) > 0:
+
+                latest_pivot = pivots[-1]
+
+                if current_price < latest_pivot * 0.98:
+
+                    continue
             # =========================
             # SAVE RECORD
             # =========================
