@@ -1646,6 +1646,11 @@ function runScanner(){
     const priceGroup =
         document.getElementById("priceGroup").value;
 
+    const activeHigherLows =
+        document.getElementById(
+            "activeHigherLows"
+        ).value;    
+
     const results =
         window.scannerData.filter(stock => {
 
@@ -1662,6 +1667,16 @@ function runScanner(){
             if (
                 priceGroup &&
                 stock.price_group !== priceGroup
+            ) return false;
+
+            if (
+                activeHigherLows === "active" &&
+                stock.active_higher_lows !== true
+            ) return false;
+
+            if (
+                activeHigherLows === "failed" &&
+                stock.active_higher_lows === true
             ) return false;
 
             return true;
