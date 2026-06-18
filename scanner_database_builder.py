@@ -437,6 +437,8 @@ def count_resistance_touches(
 
     return count
 
+
+
 # =========================
 # HIGHER LOWS
 # =========================
@@ -451,17 +453,29 @@ def count_higher_lows(
         lookback
     )
 
-    if len(pivots) < 2:
+    if len(pivots) < 3:
         return 0
 
     pivots = list(
         reversed(pivots)
     )
 
-    count = 0
+    newest = pivots[0]
+
+    previous = pivots[1]
+
+    # =========================
+    # STRUCTURE BROKEN
+    # =========================
+
+    if newest < previous:
+
+        return 0
+
+    count = 1
 
     for i in range(
-        1,
+        2,
         len(pivots)
     ):
 
@@ -475,6 +489,48 @@ def count_higher_lows(
 
     return count
 
+# =========================
+# ACTIVE HIGHER LOWS
+# =========================
+
+def has_active_higher_lows(
+    data,
+    lookback,
+    tolerance=0.02
+):
+
+    pivots = get_pivot_lows(
+        data,
+        lookback
+    )
+
+    if len(pivots) < 3:
+
+        return False
+
+    # newest first
+    pivots = list(
+        reversed(pivots)
+    )
+
+    # =========================
+    # CHECK MOST RECENT SWINGS
+    # =========================
+
+    newest = pivots[0]
+    previous = pivots[1]
+    older = pivots[2]
+
+    # allow small noise
+    if newest < previous * (1 - tolerance):
+
+        return False
+
+    if previous < older * (1 - tolerance):
+
+        return False
+
+    return True
 
 
     
@@ -584,7 +640,15 @@ def process_data(data):
                     history,
                     days
                 )
+            # =========================
+            # REJECT BROKEN STRUCTURE
+            # =========================
 
+            if not has_active_higher_lows(
+                history,
+                30
+            ):
+                continue
             # =========================
             # SAVE RECORD
             # =========================
