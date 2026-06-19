@@ -127,9 +127,10 @@ def process_data(data):
                 continue
 
             # =========================
-            # 🔥 LIQUIDITY FILTER (BACKTEST MATCH)
+            # 🔥 VOLUME DATA
             # =========================
             try:
+
                 volumes = [
                     float(d["volume"])
                     for d in window[1:21]
@@ -141,12 +142,12 @@ def process_data(data):
 
                 avg_volume = sum(volumes) / len(volumes)
 
-                if avg_volume < 100000:
-                    print(f"{symbol} FAILED_LIQUIDITY")
-                    continue
-
             except Exception:
-                print(f"{symbol} error occurred while checking liquidity")
+
+                print(
+                    f"{symbol} error occurred while calculating volume"
+                )
+
                 continue
 
             # =========================
