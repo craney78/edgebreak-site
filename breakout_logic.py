@@ -215,7 +215,7 @@ def detect_breakout_today(symbol, window, debug=False):
         close_price > resistance * 1.002 and
         breakout_strength > 0.015 and
         close_price > open_price and
-        volume_ratio > 1.5 and
+        volume_ratio > 0.05 and
         strong_candle
     )
 

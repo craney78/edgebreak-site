@@ -114,7 +114,7 @@ def run_backtest():
             # =========================
             avg_volume = sum(float(d["volume"]) for d in data[-20:]) / 20
 
-            if avg_volume < 500000:
+            if avg_volume < 100000:
                 continue    
 
             
@@ -139,14 +139,12 @@ def run_backtest():
                 # =========================
                 # BREAKOUT VOLUME CONFIRMATION 🔥
                 # =========================
+                
                 recent_volumes = [float(d["volume"]) for d in window[1:21]]
                 avg_vol = sum(recent_volumes) / len(recent_volumes)
                 current_vol = float(window[0]["volume"])
 
                 volume_ratio = current_vol / avg_vol
-
-                if volume_ratio < 1.3:
-                    continue
 
                 # =========================
                 # PRICE + GROUP
@@ -196,8 +194,7 @@ def run_backtest():
                     recent_lows[1] > recent_lows[2]
                 ])
 
-                if higher_lows < 2:
-                    continue
+                # Record only
 
                 resistance = max(float(d["high"]) for d in history[:80])
 
