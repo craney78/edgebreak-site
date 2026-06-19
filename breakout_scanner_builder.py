@@ -153,22 +153,50 @@ def process_data(data):
             # =========================
             # 🎯 BREAKOUT LOGIC
             # =========================
-            
-            try:
-                result = detect_breakout_today(symbol, window)
 
-            except Exception as e:
-                print(f"{symbol} breakout error: {e}")
+            history = window[1:]
+
+            if len(history) < 80:
                 continue
 
-            if not result:
-                print(f"{symbol} FAILED_BREAKOUT_LOGIC")
+            # Resistance = highest high
+            resistance = max(
+                float(d["high"])
+                for d in history[:80]
+            )
+
+            # Count touches/clusters
+            touches = sum(
+                1
+                for d in history[:80]
+                if abs(
+                    float(d["high"]) - resistance
+                ) / resistance < 0.015
+            )
+
+            if touches < 2:
+                print(
+                    f"{symbol} FAILED_TOUCHES "
+                    f"{touches}"
+                )
+                continue
+
+            current_close = float(
+                window[0]["close"]
+            )
+
+            # Must close above resistance today
+            if current_close <= resistance:
+                print(
+                    f"{symbol} FAILED_BREAKOUT "
+                    f"Close={round(current_close,2)} "
+                    f"Resistance={round(resistance,2)}"
+                )
                 continue
 
             print(
                 f"{symbol} PASSED_BREAKOUT "
-                f"Grade={result['grade']} "
-                f"Score={result['score']}"
+                f"Touches={touches}"
             )
 
             
@@ -194,13 +222,7 @@ def process_data(data):
 
                 volume_ratio = current_vol / avg_vol
 
-                if volume_ratio < 1.0:
-                    print(
-                        f"{symbol} FAILED_VOLUME "
-                        f"Ratio={round(volume_ratio,2)}"
-                    )
-                    continue
-
+                
             except Exception as e:
                 print(f"{symbol} error: {e}")
                 continue
@@ -224,22 +246,17 @@ def process_data(data):
             # =========================
             # 🎯 GRADE FILTER
             # =========================
-            grade = result["grade"]
-            if grade == "B+":
+            if touches >= 5:
+                grade = "B+"
                 rank = "GOLD"
 
-            elif grade == "A+":
+            elif touches >= 4:
+                grade = "A+"
                 rank = "SILVER"
 
-            elif grade == "A":
-                rank = "BRONZE"
-
             else:
-                rank = "WATCHLIST"
-            print(
-                f"WATCHLIST TEST | {symbol} | "
-                f"{price_group} | {grade}"
-            )
+                grade = "A"
+                rank = "BRONZE"
                        
 
             # =========================
@@ -265,27 +282,7 @@ def process_data(data):
                 print(f"{symbol} FAILED_HIGHER_LOWS")
                 continue
 
-            # =========================
-            # 🧱 RESISTANCE FILTER (MATCH BACKTEST)
-            # =========================
-            if len(history) < 80:
-                continue
-
-            resistance = max(float(d["high"]) for d in history[:80])
-
-            touches = sum(
-                1 for d in history[:80]
-                if abs(float(d["high"]) - resistance) / resistance < 0.015
-            )
-
-            if touches < 2:
-                print(
-                    f"{symbol} FAILED_TOUCHES "
-                    f"{touches}"
-                )
-                print(f"{symbol} FAILED_TOUCHES")
-                continue
-
+            
             # =========================
             # 🚫 DUPLICATE CHECK
             # =========================
@@ -300,9 +297,8 @@ def process_data(data):
             # ✅ FINAL SIGNAL
             # =========================
             print(
-                f"{result['symbol']} | {grade} | "
-                f"Score {result['score']} | "
-                f"Break {result['breakout_strength']}%"
+                f"{symbol} | {grade} | "
+                f"Touches={touches}"
             )
 
             print(
@@ -320,7 +316,7 @@ def process_data(data):
 
                 "rank": rank,
 
-                "symbol": result["symbol"],
+                "symbol": symbol,
 
                 "scan_date": window[0]["datetime"],
 
@@ -337,10 +333,7 @@ def process_data(data):
 
                 "grade": grade,
 
-                "score": round(
-                    result["score"],
-                    2
-                ),
+                "score": touches,
 
                 # =========================
                 # BREAKOUT
@@ -360,7 +353,7 @@ def process_data(data):
                 ),
 
                 "breakout_strength": round(
-                    result["breakout_strength"],
+                    ((current_price - resistance) / resistance) * 100,
                     2
                 ),
 
@@ -385,15 +378,9 @@ def process_data(data):
                 # SETUP INFO
                 # =========================
 
-                "setup_type": result.get(
-                    "setup_type",
-                    "Breakout"
-                ),
+                "setup_type": "Resistance Breakout",
 
-                "insight": result.get(
-                    "insight",
-                    ""
-                )
+                "insight": f"{touches} resistance touches"
 
             })
 
