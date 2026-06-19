@@ -141,7 +141,7 @@ def process_data(data):
 
                 avg_volume = sum(volumes) / len(volumes)
 
-                if avg_volume < 500000:
+                if avg_volume < 100000:
                     print(f"{symbol} FAILED_LIQUIDITY")
                     continue
 
