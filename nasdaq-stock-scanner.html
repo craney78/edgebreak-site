@@ -1404,12 +1404,19 @@ MOBILE
 
             <thead>
 
-                <tr>
-                    <th>Rank</th>
-                    <th>Ticker</th>
-                    <th>Price</th>
-                    <th>Touches</th>
-                </tr>
+              <tr>
+
+                  <th>Rank</th>
+
+                  <th>Ticker</th>
+
+                  <th>Price</th>
+
+                  <th>Touches</th>
+
+                  <th>Volume</th>
+
+              </tr>
 
             </thead>
 
@@ -2205,23 +2212,37 @@ function renderBreakoutResults(results){
         results.map(stock => `
 
             <tr
-              onclick="selectBreakout('${stock.symbol}')"
-              style="cursor:pointer;"
-          >
+                onclick="selectBreakout('${stock.symbol}')"
+                style="cursor:pointer;"
+            >
 
-              <td>${stock.rank}</td>
+                <td>
+                    ${
+                        stock.rank === "GOLD"
+                        ? "🥇"
+                        : stock.rank === "SILVER"
+                        ? "🥈"
+                        : "🥉"
+                    }
+                </td>
 
-              <td>${stock.symbol}</td>
+                <td>
+                    <strong>
+                        ${stock.symbol}
+                    </strong>
+                </td>
 
-              <td>
-                  $${Number(
-                      stock.price || 0
-                  ).toFixed(2)}
-              </td>
+                <td>
+                    $${Number(
+                        stock.price || 0
+                    ).toFixed(2)}
+                </td>
 
-              <td>${stock.touches}</td>
+                <td>
+                    ${stock.touches}
+                </td>
 
-          </tr>
+            </tr>
 
         `).join("");
 
