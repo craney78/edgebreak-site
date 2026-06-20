@@ -1463,6 +1463,7 @@ MOBILE
                   <th>Price</th>
                   <th>Touches</th>
                   <th>Volume</th>
+                  <th>Add</th>
 
               </tr>
 
@@ -1472,7 +1473,7 @@ MOBILE
 
                 <tr>
 
-                    <td colspan="5">
+                    <td colspan="6">
                         Select filters and click Search.
                     </td>
 
@@ -2310,7 +2311,7 @@ function renderBreakoutResults(results){
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="5">
+                <td colspan="6">
                     No breakouts found
                 </td>
             </tr>
@@ -2326,21 +2327,7 @@ function renderBreakoutResults(results){
 
                 <td>${stock.rank}</td>
 
-                <td>
-
-                    ${stock.symbol}
-
-                    <button
-                        onclick="
-                            event.stopPropagation();
-                            addToWatchlist('${stock.symbol}');
-                        "
-                        class="watchlist-btn"
-                    >
-                        +
-                    </button>
-
-                </td>
+                <td>${stock.symbol}</td>
 
                 <td>
                     $${Number(
@@ -2352,6 +2339,20 @@ function renderBreakoutResults(results){
 
                 <td>
                     ${(stock.volume_ratio || 0).toFixed(2)}x
+                </td>
+
+                <td>
+
+                    <button
+                        class="watchlist-btn"
+                        onclick="
+                            event.stopPropagation();
+                            addToWatchlist('${stock.symbol}');
+                        "
+                    >
+                        Add
+                    </button>
+
                 </td>
 
             </tr>
