@@ -2209,7 +2209,7 @@ function renderBreakoutResults(results){
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="4">
+                <td colspan="5">
                     No breakouts found
                 </td>
             </tr>
@@ -2250,6 +2250,10 @@ function renderBreakoutResults(results){
 
                 <td>
                     ${stock.touches}
+                </td>
+
+                <td>
+                    ${(stock.volume_ratio || 0).toFixed(2)}x
                 </td>
 
             </tr>
