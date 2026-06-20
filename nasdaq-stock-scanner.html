@@ -1008,6 +1008,53 @@ MOBILE
     }
 
 }
+
+.watchlist-btn{
+
+    margin-left:8px;
+
+    background:#22c55e;
+
+    color:white;
+
+    border:none;
+
+    border-radius:4px;
+
+    width:22px;
+
+    height:22px;
+
+    cursor:pointer;
+
+    font-weight:700;
+
+}
+
+#watchlistTable{
+  width:100%;
+  border-collapse:collapse;
+}
+
+#watchlistTable th{
+  padding:12px;
+  text-align:left;
+  color:#94a3b8;
+  border-bottom:1px solid #1e293b;
+}
+
+#watchlistTable td{
+  padding:12px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+#watchlistTable tbody tr{
+  cursor:pointer;
+}
+
+#watchlistTable tbody tr:hover{
+  background:#111827;
+}
 </style>
 </head>
 <body style="background:#020617;">
@@ -1613,6 +1660,48 @@ MOBILE
 </div>
 
 <!-- =========================================
+⭐ MY WATCHLIST
+========================================= -->
+
+<div class="scanner-layout">
+
+    <div class="scanner-panel">
+
+        <h3>My Watchlist</h3>
+
+        <table id="watchlistTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>Ticker</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="watchlistResults">
+
+                <tr>
+
+                    <td colspan="2">
+                        No watchlist stocks added.
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- =========================================
 SEO CONTENT
 ========================================= -->
 
@@ -1896,7 +1985,21 @@ function renderResults(results){
 
             <tr onclick="selectStock('${stock.symbol}')">
 
-                <td>${stock.symbol}</td>
+                <td>
+
+                    ${stock.symbol}
+
+                    <button
+                        onclick="
+                            event.stopPropagation();
+                            addToWatchlist('${stock.symbol}');
+                        "
+                        class="watchlist-btn"
+                    >
+                        +
+                    </button>
+
+                </td>
 
                 <td>
                     $${Number(
@@ -2223,7 +2326,21 @@ function renderBreakoutResults(results){
 
                 <td>${stock.rank}</td>
 
-                <td>${stock.symbol}</td>
+                <td>
+
+                    ${stock.symbol}
+
+                    <button
+                        onclick="
+                            event.stopPropagation();
+                            addToWatchlist('${stock.symbol}');
+                        "
+                        class="watchlist-btn"
+                    >
+                        +
+                    </button>
+
+                </td>
 
                 <td>
                     $${Number(
@@ -2315,6 +2432,106 @@ function selectBreakout(symbol){
 }
 
 </script>
+<script>
+// =========================================
+// WATCHLIST
+// =========================================
 
+window.watchlist = JSON.parse(
+    localStorage.getItem("watchlist") || "[]"
+);
+
+renderWatchlist();
+
+function addToWatchlist(symbol){
+
+    if(
+        window.watchlist.includes(symbol)
+    ){
+        return;
+    }
+
+    window.watchlist.push(symbol);
+
+    localStorage.setItem(
+        "watchlist",
+        JSON.stringify(
+            window.watchlist
+        )
+    );
+
+    renderWatchlist();
+
+}
+
+function removeFromWatchlist(symbol){
+
+    window.watchlist =
+        window.watchlist.filter(
+            s => s !== symbol
+        );
+
+    localStorage.setItem(
+        "watchlist",
+        JSON.stringify(
+            window.watchlist
+        )
+    );
+
+    renderWatchlist();
+
+}
+
+function renderWatchlist(){
+
+    const tbody =
+        document.getElementById(
+            "watchlistResults"
+        );
+
+    if(!tbody) return;
+
+    if(
+        window.watchlist.length === 0
+    ){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="2">
+                    No watchlist stocks added.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+    tbody.innerHTML =
+        window.watchlist.map(symbol => `
+
+            <tr onclick="loadChart('${symbol}')">
+
+                <td>${symbol}</td>
+
+                <td>
+
+                    <button
+                        onclick="
+                            event.stopPropagation();
+                            removeFromWatchlist('${symbol}');
+                        "
+                    >
+                        Remove
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `).join("");
+
+}
+</script>
 </body>
 </html>
