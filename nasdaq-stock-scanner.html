@@ -2204,21 +2204,24 @@ function renderBreakoutResults(results){
     tbody.innerHTML =
         results.map(stock => `
 
-            <tr onclick="selectBreakout('${stock.symbol}')">
+            <tr
+              onclick="selectBreakout('${stock.symbol}')"
+              style="cursor:pointer;"
+          >
 
-                <td>${stock.rank}</td>
+              <td>${stock.rank}</td>
 
-                <td>${stock.symbol}</td>
+              <td>${stock.symbol}</td>
 
-                <td>
-                    $${Number(
-                        stock.price || 0
-                    ).toFixed(2)}
-                </td>
+              <td>
+                  $${Number(
+                      stock.price || 0
+                  ).toFixed(2)}
+              </td>
 
-                <td>${stock.touches}</td>
+              <td>${stock.touches}</td>
 
-            </tr>
+          </tr>
 
         `).join("");
 
