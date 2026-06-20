@@ -2577,56 +2577,114 @@ function selectBreakout(symbol){
 </script>
 <script>
 // =========================================
-// WATCHLIST
+// WATCHLIST (SUPABASE)
 // =========================================
 
-window.watchlist = JSON.parse(
-    localStorage.getItem("watchlist") || "[]"
-);
+window.watchlist = [];
 
 document.addEventListener(
     "DOMContentLoaded",
-    () => {
-        renderWatchlist();
+    async () => {
+
+        await loadWatchlist();
+
     }
 );
 
-function addToWatchlist(symbol){
+async function loadWatchlist(){
 
-    if(
-        window.watchlist.includes(symbol)
-    ){
+    const {
+        data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    if(!user) return;
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("watchlist")
+        .select("*")
+        .eq(
+            "user_id",
+            user.id
+        )
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
+
+    if(error){
+
+        console.error(error);
         return;
+
     }
 
-    window.watchlist.push(symbol);
-
-    localStorage.setItem(
-        "watchlist",
-        JSON.stringify(
-            window.watchlist
-        )
-    );
+    window.watchlist =
+        data || [];
 
     renderWatchlist();
 
 }
 
-function removeFromWatchlist(symbol){
+async function addToWatchlist(symbol){
 
-    window.watchlist =
-        window.watchlist.filter(
-            s => s !== symbol
+    const {
+        data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    if(!user) return;
+
+    const exists =
+        window.watchlist.find(
+            x => x.symbol === symbol
         );
 
-    localStorage.setItem(
-        "watchlist",
-        JSON.stringify(
-            window.watchlist
-        )
-    );
+    if(exists) return;
 
-    renderWatchlist();
+    const { error } =
+        await supabaseClient
+            .from("watchlist")
+            .insert([
+                {
+                    user_id:user.id,
+                    symbol:symbol
+                }
+            ]);
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    await loadWatchlist();
+
+}
+
+async function removeFromWatchlist(id){
+
+    const { error } =
+        await supabaseClient
+            .from("watchlist")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    await loadWatchlist();
 
 }
 
@@ -2656,18 +2714,21 @@ function renderWatchlist(){
     }
 
     tbody.innerHTML =
-        window.watchlist.map(symbol => `
+        window.watchlist.map(stock => `
 
-            <tr onclick="loadChart('${symbol}')">
+            <tr onclick="loadChart('${stock.symbol}')">
 
-                <td>${symbol}</td>
+                <td>
+                    ${stock.symbol}
+                </td>
 
                 <td>
 
                     <button
+                        class="watchlist-btn"
                         onclick="
                             event.stopPropagation();
-                            removeFromWatchlist('${symbol}');
+                            removeFromWatchlist(${stock.id});
                         "
                     >
                         Remove
