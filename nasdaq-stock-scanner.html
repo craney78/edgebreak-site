@@ -1099,6 +1099,46 @@ MOBILE
     background:rgba(255,255,255,0.03);
 
 }
+
+#scannerTable{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+#scannerTable th{
+
+    text-align:left;
+
+    padding:14px 12px;
+
+    color:#94a3b8;
+
+    border-bottom:1px solid #1e293b;
+
+}
+
+#scannerTable td{
+
+    padding:14px 12px;
+
+    border-bottom:1px solid #1e293b;
+
+}
+
+#scannerTable tr{
+
+    cursor:pointer;
+
+}
+
+#scannerTable tbody tr:hover{
+
+    background:rgba(255,255,255,0.03);
+
+}
 </style>
 </head>
 <body style="background:#020617;">
@@ -1653,36 +1693,35 @@ MOBILE
     <!-- =========================================
     RESULTS
     ========================================= -->
-    <div class="scanner-panel scanner-results">
+    <table id="scannerTable">
 
-        <h3>Scanner Results</h3>
+      <thead>
 
-        <table id="scannerTable">
+          <tr>
 
-            <thead>
+              <th>Ticker</th>
+              <th>Price</th>
+              <th>Touches</th>
+              <th>Higher Lows</th>
+              <th>Add To Watchlist</th>
 
-                <tr>
-                    <th>Ticker</th>
-                    <th>Price</th>
-                    <th>Touches</th>
-                    <th>Higher Lows</th>
-                </tr>
+          </tr>
 
-            </thead>
+      </thead>
 
-            <tbody id="scannerResults">
+      <tbody id="scannerResults">
 
-                <tr>
-                    <td colspan="4">
-                        Select filters and click Search.
-                    </td>
-                </tr>
+          <tr>
 
-            </tbody>
+              <td colspan="5">
+                  Select filters and click Search.
+              </td>
 
-        </table>
+          </tr>
 
-    </div>
+      </tbody>
+
+  </table>
 
     <!-- =========================================
     STOCK METRICS
@@ -2013,7 +2052,7 @@ function renderResults(results){
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="4">
+                <td colspan="5">
                     No matches found
                 </td>
             </tr>
@@ -2028,19 +2067,7 @@ function renderResults(results){
             <tr onclick="selectStock('${stock.symbol}')">
 
                 <td>
-
                     ${stock.symbol}
-
-                    <button
-                        onclick="
-                            event.stopPropagation();
-                            addToWatchlist('${stock.symbol}');
-                        "
-                        class="watchlist-btn"
-                    >
-                        +
-                    </button>
-
                 </td>
 
                 <td>
@@ -2063,6 +2090,20 @@ function renderResults(results){
                             `higher_lows_${lookback}`
                         ] || 0
                     }
+                </td>
+
+                <td>
+
+                    <button
+                        onclick="
+                            event.stopPropagation();
+                            addToWatchlist('${stock.symbol}');
+                        "
+                        class="watchlist-btn"
+                    >
+                        Add
+                    </button>
+
                 </td>
 
             </tr>
