@@ -1659,45 +1659,45 @@ MOBILE
 
 </div>
 
+
 <!-- =========================================
 ⭐ MY WATCHLIST
 ========================================= -->
 
-<div class="scanner-layout">
+<div
+    class="scanner-panel"
+    style="margin-top:25px;"
+>
 
-    <div class="scanner-panel">
+    <h3>My Watchlist</h3>
 
-        <h3>My Watchlist</h3>
+    <table id="watchlistTable">
 
-        <table id="watchlistTable">
+        <thead>
 
-            <thead>
+            <tr>
 
-                <tr>
+                <th>Ticker</th>
 
-                    <th>Ticker</th>
+                <th>Action</th>
 
-                    <th>Action</th>
+            </tr>
 
-                </tr>
+        </thead>
 
-            </thead>
+        <tbody id="watchlistResults">
 
-            <tbody id="watchlistResults">
+            <tr>
 
-                <tr>
+                <td colspan="2">
+                    No watchlist stocks added.
+                </td>
 
-                    <td colspan="2">
-                        No watchlist stocks added.
-                    </td>
+            </tr>
 
-                </tr>
+        </tbody>
 
-            </tbody>
-
-        </table>
-
-    </div>
+    </table>
 
 </div>
 
@@ -2441,7 +2441,12 @@ window.watchlist = JSON.parse(
     localStorage.getItem("watchlist") || "[]"
 );
 
-renderWatchlist();
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+        renderWatchlist();
+    }
+);
 
 function addToWatchlist(symbol){
 
