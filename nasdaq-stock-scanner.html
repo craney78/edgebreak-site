@@ -1409,19 +1409,15 @@ MOBILE
 
             <thead>
 
-                <tr>
+              <tr>
 
-                    <th>Rank</th>
+                  <th>Rank</th>
+                  <th>Ticker</th>
+                  <th>Price</th>
+                  <th>Touches</th>
+                  <th>Volume</th>
 
-                    <th>Ticker</th>
-
-                    <th>Price</th>
-
-                    <th>Touches</th>
-
-                    <th>Volume</th>
-
-                </tr>
+              </tr>
 
             </thead>
 
@@ -2068,7 +2064,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 </script>
+
 <script>
+
 // =========================================
 // 🥇 BREAKOUT SCANNER
 // =========================================
@@ -2081,11 +2079,11 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(res => res.json())
     .then(data => {
 
-        window.breakoutData = data;
+        window.breakoutData = data || [];
 
         console.log(
             "Breakout Scanner Loaded:",
-            data.length,
+            window.breakoutData.length,
             "breakouts"
         );
 
@@ -2221,26 +2219,11 @@ function renderBreakoutResults(results){
     tbody.innerHTML =
         results.map(stock => `
 
-            <tr
-                onclick="selectBreakout('${stock.symbol}')"
-                style="cursor:pointer;"
-            >
+            <tr onclick="selectBreakout('${stock.symbol}')">
 
-                <td>
-                    ${
-                        stock.rank === "GOLD"
-                        ? "🥇"
-                        : stock.rank === "SILVER"
-                        ? "🥈"
-                        : "🥉"
-                    }
-                </td>
+                <td>${stock.rank}</td>
 
-                <td>
-                    <strong>
-                        ${stock.symbol}
-                    </strong>
-                </td>
+                <td>${stock.symbol}</td>
 
                 <td>
                     $${Number(
@@ -2248,9 +2231,7 @@ function renderBreakoutResults(results){
                     ).toFixed(2)}
                 </td>
 
-                <td>
-                    ${stock.touches}
-                </td>
+                <td>${stock.touches}</td>
 
                 <td>
                     ${(stock.volume_ratio || 0).toFixed(2)}x
@@ -2273,9 +2254,14 @@ function selectBreakout(symbol){
 
     loadChart(symbol);
 
-    document.getElementById(
-        "breakoutMetrics"
-    ).innerHTML = `
+    const metrics =
+        document.getElementById(
+            "breakoutMetrics"
+        );
+
+    if(!metrics) return;
+
+    metrics.innerHTML = `
 
         <div class="metric">
             <span>Rank</span>
@@ -2289,7 +2275,14 @@ function selectBreakout(symbol){
 
         <div class="metric">
             <span>Price</span>
-            <strong>$${stock.price}</strong>
+            <strong>$${Number(
+                stock.price || 0
+            ).toFixed(2)}</strong>
+        </div>
+
+        <div class="metric">
+            <span>Resistance</span>
+            <strong>${stock.resistance}</strong>
         </div>
 
         <div class="metric">
@@ -2313,11 +2306,6 @@ function selectBreakout(symbol){
         </div>
 
         <div class="metric">
-            <span>Resistance</span>
-            <strong>${stock.resistance}</strong>
-        </div>
-
-        <div class="metric">
             <span>Setup Type</span>
             <strong>${stock.setup_type}</strong>
         </div>
@@ -2325,6 +2313,8 @@ function selectBreakout(symbol){
     `;
 
 }
+
 </script>
+
 </body>
 </html>
