@@ -38,8 +38,17 @@ window.supabaseClient = supabase.createClient(
 
     <!-- LEFT -->
     <div class="nav-left">
-      <a href="index.html">
-        <img src="images/logo.png" class="nav-logo">
+      <a
+          href="index.html"
+          aria-label="EdgeBreak Home"
+      >
+        <img
+          src="images/logo.webp"
+          class="nav-logo"
+          alt="EdgeBreak NASDAQ Market Intelligence"
+          width="40"
+          height="40"
+        >
       </a>
       <a href="index.html" class="logo-text">EDGEBREAK</a>
       <span class="live-badge">LIVE</span>
@@ -50,32 +59,69 @@ window.supabaseClient = supabase.createClient(
 
       <!-- LINKS -->
       <div class="nav-links" id="navLinks">
+
         <a href="index.html" class="nav-link">Home</a>
-        <a href="index.html#statsGrid" class="nav-link">Performance</a>
 
-        <a href="watchlist.html" class="nav-link locked-link">
-          Trading Desk <span class="lock-icon">🔒</span>
+        <!-- PRODUCTS -->
+        <div class="dropdown">
+          <a href="products.html" class="nav-link">
+            Products ▼
+          </a>
+
+          <div class="dropdown-content">
+
+            <a href="watchlist.html">
+              Edgebreak Trades
+            </a>
+
+            <a href="smart-money-dashboard.html">
+              Smart Money Watchlist
+            </a>
+
+            <a href="/nasdaq-stock-scanner.html">
+              NASDAQ Scanner 🔒
+            </a>
+            
+          </div>
+        </div>
+
+        <!-- RESOURCES -->
+        <div class="dropdown">
+
+          <a href="#" class="nav-link">
+            Resources ▼
+          </a>
+
+          <div class="dropdown-content">
+
+            <a href="trading-guide.html">
+              EdgeBreak Trading Guide
+            </a>
+
+            <a href="breakout-guide.html">
+              Free Breakout Guide
+            </a>
+
+            <a href="/blog/breakout-trading-strategy.html">
+              Strategy
+            </a>
+
+            <a href="blog.html">
+              Trading Insights
+            </a>
+
+          </div>
+
+        </div>
+
+        <a href="pricing.html" class="nav-link">
+          Pricing
         </a>
 
-        <a href="breakout-guide.html" class="nav-link">Free Breakout Guide</a>
-
-        <a href="trading-guide.html" class="nav-link">Guide</a>
-
-        <a href="/blog/breakout-trading-strategy.html" class="nav-link">
-          Strategy
+        <a href="#" class="nav-cta" id="authBtn">
+          Login
         </a>
 
-        <a href="dashboard.html" class="nav-link locked-link">
-          My Dashboard <span class="lock-icon">🔒</span>
-        </a>
-
-        <a href="/chart.html?symbol=AAPL" class="nav-link locked-link">
-          Charts <span class="lock-icon">🔒</span>
-        </a>
-
-        <a href="blog.html" class="nav-link">Trade Insights</a>
-
-        <a href="#" class="nav-cta" id="authBtn">Login</a>
       </div>
 
       <!-- HAMBURGER -->
