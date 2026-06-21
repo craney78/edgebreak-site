@@ -91,7 +91,7 @@ content="https://www.edgebreak.ai/"
 
 <meta
 property="og:image"
-content="https://www.edgebreak.ai/images/hero.jpg"
+content="https://www.edgebreak.ai/images/hero.webp"
 >
 
 <meta
@@ -120,7 +120,7 @@ content="Find NASDAQ stocks showing accumulation, buying pressure and breakout p
 
 <meta
 name="twitter:image"
-content="https://www.edgebreak.ai/images/hero.jpg"
+content="https://www.edgebreak.ai/images/hero.webp"
 >
 
 <!-- ===================================
@@ -315,6 +315,63 @@ FAQ SCHEMA
      }
    }
 
+ ]
+}
+</script>
+
+<!-- ===================================
+WEBPAGE SCHEMA
+=================================== -->
+
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"WebPage",
+ "name":"EdgeBreak",
+ "url":"https://www.edgebreak.ai/",
+ "description":"NASDAQ stock scanner featuring Smart Money and Breakout scanners, stock screening tools and trading education.",
+ "isPartOf":{
+   "@type":"WebSite",
+   "name":"EdgeBreak",
+   "url":"https://www.edgebreak.ai/"
+ }
+}
+</script>
+
+<!-- ===================================
+SPEAKABLE SCHEMA
+=================================== -->
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebPage",
+  "speakable":{
+    "@type":"SpeakableSpecification",
+    "cssSelector":[
+      ".hero-title",
+      ".hero-sub",
+      ".hero-desc"
+    ]
+  }
+}
+</script>
+
+<!-- ===================================
+BREADCRUMB SCHEMA
+=================================== -->
+
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"BreadcrumbList",
+ "itemListElement":[
+   {
+     "@type":"ListItem",
+     "position":1,
+     "name":"Home",
+     "item":"https://www.edgebreak.ai/"
+   }
  ]
 }
 </script>
@@ -539,7 +596,7 @@ HERO
             </div>
 
             <h1 class="hero-title">
-                Research Smarter. Ignore The Noise.
+                NASDAQ Stock Scanner For Smart Money & Breakout Opportunities
             </h1>
 
             <h2 class="hero-sub">
@@ -1093,13 +1150,57 @@ PERFORMANCE
         Winners, losers, failed breakouts and stopped positions are all included.
     </p>
 
-    <div id="statsGridBoxes" class="stats-grid"></div>
+    <div class="stats-grid">
 
-    <div
-        id="groupStats"
-        class="stats-grid"
-        style="margin-top:20px;"
-    ></div>
+        <div class="card">
+            <div>TOTAL TRADES</div>
+            <div class="big">63</div>
+        </div>
+
+        <div class="card">
+            <div>WIN RATE</div>
+            <div class="big">28.33%</div>
+        </div>
+
+        <div class="card">
+            <div>AVG RETURN / LOSS PER TRADE</div>
+            <div class="big">+15.33%</div>
+        </div>
+
+        <div class="card green">
+            <div>BEST TRADE</div>
+            <div class="big">+518.75%</div>
+            <div style="
+                font-size:12px;
+                color:#94a3b8;
+                margin-top:6px;
+            ">
+                LITE
+            </div>
+        </div>
+
+        <div class="card red">
+            <div>WORST TRADE</div>
+            <div class="big">-7.00%</div>
+            <div style="
+                font-size:12px;
+                color:#94a3b8;
+                margin-top:6px;
+            ">
+                Stop Loss
+            </div>
+        </div>
+
+    </div>
+
+    <p style="
+        text-align:center;
+        margin-top:25px;
+        color:#64748b;
+        font-size:13px;
+    ">
+        Last Updated: June 2026
+    </p>
 
     <p style="
         margin-top:35px;
@@ -1768,30 +1869,7 @@ FOOTER
 
 
 
-<script>
-// =========================
-// 🔐 NAV LOGIN / LOGOUT
-// =========================
-const user = localStorage.getItem("edgebreak_user");
-const navBtn = document.querySelector(".nav-cta");
 
-if (navBtn) {
-  if (user) {
-    navBtn.innerText = "Logout";
-    navBtn.href = "#";
-
-    navBtn.onclick = function (e) {
-      e.preventDefault();
-      localStorage.removeItem("edgebreak_user");
-      window.location.href = "index.html";
-    };
-
-  } else {
-    navBtn.innerText = "Login";
-    navBtn.href = "login.html";
-  }
-}  
-</script>
 <script>
 // =========================
 // 🔐 NAV LOGIN / LOGOUT
