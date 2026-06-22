@@ -751,51 +751,6 @@ body{
     height:760px;
 }
 
-.health-gauge{
-    position:relative;
-    width:180px;
-    height:180px;
-    margin:20px auto;
-    border-radius:50%;
-
-    background:
-    conic-gradient(
-        #ef4444 0deg,
-        #f59e0b 120deg,
-        #22c55e 240deg,
-        #22c55e 360deg
-    );
-}
-
-.health-gauge::after{
-    content:"";
-    position:absolute;
-    inset:18px;
-    background:#0b1220;
-    border-radius:50%;
-}
-
-.health-center{
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:2;
-}
-
-.health-center span{
-    font-size:38px;
-    font-weight:800;
-    color:white;
-}
-
-.health-label{
-    text-align:center;
-    margin-top:10px;
-    color:#94a3b8;
-    font-size:14px;
-}
 
 .feature-icon{
     width:48px;
@@ -1910,55 +1865,7 @@ QUOTE SECTION
     </div>
 
   </div>
-
-
-    <!-- RIGHT SIDEBAR -->
-    <div class="elite-sidebar">
-
-        <div class="elite-panel">
-            <h3>Breakout Elite</h3>
-            <p>High conviction opportunities selected from thousands of NASDAQ stocks.</p>
-        </div>
-
-        <div class="elite-panel">
-            <h3>Framework Strength</h3>
-            <div class="performance-bar">
-                <div id="winBar" class="performance-fill"></div>
-            </div>
-        </div>
-
-        <div class="elite-panel">
-            <h3>Breakout Health</h3>
-
-            <div class="health-score">
-                <div class="health-gauge">
-                    <div class="health-center">
-                        <span id="healthValue">--</span>
-                    </div>
-                </div>
-            </div>
-
-            <div id="healthLabel" class="health-label">
-                Select a stock
-            </div>
-
-            <div class="metric"><span>Trend</span><strong id="trendStatus">Bullish</strong></div>
-            <div class="metric"><span>Momentum</span><strong id="momentumStatus">Strong</strong></div>
-            <div class="metric"><span>Structure</span><strong id="structureStatus">Intact</strong></div>
-        </div>
-
-        <div class="elite-panel">
-            <h3>Market Breakdown</h3>
-            <div class="metric"><span>Small Caps</span><strong id="smallCount">-</strong></div>
-            <div class="metric"><span>Mid Caps</span><strong id="midCount">-</strong></div>
-            <div class="metric"><span>Large Caps</span><strong id="largeCount">-</strong></div>
-        </div>
-
-    </div>
-
-</div>
-
-       
+        
 
     <!-- RIGHT SIDEBAR -->
 
@@ -1986,33 +1893,7 @@ QUOTE SECTION
         <div class="performance-bar">
             <div id="winBar" class="performance-fill"></div>
         </div>
-
-    </div>
-
-    <!-- HEALTH -->
-
-    <div class="elite-panel">
-
-        <h3>Breakout Health</h3>
-
-        <div class="health-score">
-
-            <div class="health-gauge">
-
-                <div class="health-center">
-
-                    <span id="healthValue">--</span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div id="healthLabel" class="health-label">
-            Select a stock
-        </div>
-
+    
         <div class="metric">
             <span>Trend</span>
             <strong id="trendStatus">Bullish</strong>
@@ -2952,31 +2833,7 @@ document.addEventListener("DOMContentLoaded", function () {
       renderTrades(mid, "🟡 Mid Caps", "midSection");
       renderTrades(large, "🔵 Large Caps", "largeSection");
 
-      /* =========================
-      BREAKOUT HEALTH
-      ========================= */
-      function getHealthScore(trade){
-
-          let score = 50;
-
-          const change =
-              parseFloat(trade.change_percent || 0);
-
-          const days =
-              parseInt(trade.days_held || 0);
-
-          if(change > 0) score += 10;
-          if(change > 3) score += 10;
-          if(change > 10) score += 10;
-
-          if(days > 5) score += 10;
-          if(days > 20) score += 10;
-
-          return Math.min(score,100);
-
-      }     
-
-      
+            
       // =========================
       // 📊 WEEKLY PERFORMANCE (PRO VERSION)
       // =========================
@@ -3671,22 +3528,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 </script>
-<script>
-function getHealthScore(trade){
 
-    let score = 50;
-
-    if(trade.change_percent > 5) score += 15;
-    if(trade.change_percent > 10) score += 15;
-
-    if(trade.days_held < 15) score += 10;
-
-    if(trade.change_percent < 0) score -= 20;
-
-    return Math.max(0, Math.min(score,100));
-}
-
-</script>
 <script>
 function selectTrade(symbol){
 
@@ -3832,83 +3674,6 @@ function rotateStatus(){
 rotateStatus();
 setInterval(rotateStatus, 10000);
 </script>
-<script>
-function updateHealth(score){
 
-    // safety
-    score = Math.max(0, Math.min(100, score));
-
-    const gauge =
-        document.querySelector(".health-gauge");
-
-    const value =
-        document.getElementById("healthValue");
-
-    const label =
-        document.getElementById("healthLabel");
-
-    const trend =
-        document.getElementById("trendStatus");
-
-    const momentum =
-        document.getElementById("momentumStatus");
-
-    const structure =
-        document.getElementById("structureStatus");
-
-    if(!gauge || !value) return;
-
-    const angle = score * 3.6;
-
-    gauge.style.background =
-        `conic-gradient(
-            #22c55e 0deg,
-            #22c55e ${angle}deg,
-            #1e293b ${angle}deg,
-            #1e293b 360deg
-        )`;
-
-    value.textContent = score;
-
-    if(score >= 85){
-
-        label.textContent = "Excellent Breakout";
-
-        trend.textContent = "Bullish";
-        momentum.textContent = "Strong";
-        structure.textContent = "Intact";
-
-    }
-    else if(score >= 70){
-
-        label.textContent = "Healthy Setup";
-
-        trend.textContent = "Positive";
-        momentum.textContent = "Building";
-        structure.textContent = "Strong";
-
-    }
-    else if(score >= 50){
-
-        label.textContent = "Neutral";
-
-        trend.textContent = "Mixed";
-        momentum.textContent = "Average";
-        structure.textContent = "Developing";
-
-    }
-    else{
-
-        label.textContent = "Weak Structure";
-
-        trend.textContent = "Weak";
-        momentum.textContent = "Fading";
-        structure.textContent = "Risk";
-
-    }
-
-}
-
-</script>
 </body>
 </html>
