@@ -14,7 +14,38 @@ window.supabaseClient = supabase.createClient(
 );
 </script>
 </head>
+<style>
+.feature-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:16px;
+    margin:30px 0;
+}
 
+.feature-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:18px;
+    background:#111827;
+    border:1px solid rgba(34,197,94,.15);
+    border-radius:12px;
+}
+
+.feature-card svg{
+    width:22px;
+    height:22px;
+    color:#22c55e;
+    stroke-width:2;
+    flex-shrink:0;
+}
+
+.feature-card span{
+    color:#e2e8f0;
+    font-weight:600;
+}
+
+</style>
 <body>
 
 <!-- NAVBAR -->
@@ -124,7 +155,11 @@ window.supabaseClient = supabase.createClient(
 
   <!-- LOGO -->
   <div class="hero-logo-wrap">
-    <img src="images/logo.png" class="hero-logo">
+    <img
+      src="images/logo.webp"
+      class="hero-logo"
+      alt="EdgeBreak NASDAQ Stock Research Platform"
+    >
   </div>
 
   <!-- CONTENT -->
@@ -135,82 +170,78 @@ window.supabaseClient = supabase.createClient(
     </h1>
 
     <h2 class="hero-sub">
-      A structured, data-driven platform
+      A NASDAQ Stock Research Platform
     </h2>
 
     <p class="hero-desc">
-      Built to analyse and track breakout behaviour in the NASDAQ market
+      Built to identify and track stocks displaying accumulation, buying pressure, volume expansion and breakout potential through structured market analysis.
     </p>
 
-    <!-- OPTIONAL (matches index spacing style) -->
-    <p style="color:#22c55e; font-weight:600; margin-top:10px;">
-      Built on real trade tracking • Focused on structure • Designed for consistency
-    </p>
+    <!-- FEATURE TAGS -->
+    <div class="hero-features">
+
+      <div class="hero-feature">
+        <span class="footer-icon"></span>
+        NASDAQ Focused
+      </div>
+
+      <div class="hero-feature">
+        <span class="footer-icon"></span>
+        Transparent Tracking
+      </div>
+
+      <div class="hero-feature">
+        <span class="footer-icon"></span>
+        Research Driven
+      </div>
+
+    </div>
 
   </div>
 
 </div>
 
+<!-- WHY EDGEBREAK EXISTS -->
 <div class="section">
 
-  <div style="max-width:800px; margin:0 auto;">
+  <div style="max-width:900px; margin:0 auto;">
 
     <h2>Why EdgeBreak Exists</h2>
 
     <p>
-      I didn’t come into the market with a background in finance or a proven system. Like most people, I started with a simple goal — to build something that could support my family and create a better future.
+      Financial markets generate an enormous amount of information every day. Thousands of stocks, endless news, countless indicators and constant market commentary can make it difficult for investors to focus on what matters most.
     </p>
 
     <p>
-      What followed was a long and difficult journey.
+      EdgeBreak was created to simplify that process.
     </p>
 
     <p>
-      I spent years trying different strategies, buying tools, reading books, and searching for something that actually worked. I lost money. I made emotional decisions. I sold trades too early, only to watch them continue higher. I held losing positions longer than I should have. I changed approaches constantly, never really trusting the process.
+      Rather than requiring users to manually review hundreds of charts each day, EdgeBreak applies a structured research framework across the NASDAQ market to identify stocks displaying specific characteristics such as accumulation, buying pressure, volume expansion and breakout potential.
     </p>
 
     <p>
-      At one point, I nearly gave up completely.
+      The platform was built on a simple belief: better decisions start with better research.
     </p>
 
     <p>
-      I had a stable, well-paying job and convinced myself the market just wasn’t for me. It felt like time, money, and effort were all being wasted.
+      By focusing exclusively on NASDAQ-listed stocks, EdgeBreak is able to provide a more targeted and consistent research experience rather than attempting to cover every market and asset class.
     </p>
 
     <p>
-      What I eventually realised was that the problem wasn’t the market — it was the lack of structure.
+      Transparency is a core part of the platform. Opportunities identified by the framework are tracked over time, allowing users to review both successful and unsuccessful outcomes through a single historical record.
     </p>
 
     <p>
-      I had never built a consistent, rules-based approach. I was reacting to every move, checking trades constantly, and letting emotion drive decisions. There was no system — just noise.
-    </p>
-
-    <p>
-      Everything changed when I simplified my process and committed to following strict rules. I stopped reacting. I stopped overtrading. I let trades develop over time instead of interfering with them.
-    </p>
-
-    <p>
-      At the same time, I was spending hours every day scanning charts, trying to find setups manually. It was exhausting and inefficient — and still inconsistent.
-    </p>
-
-    <p>
-      That’s where the idea for EdgeBreak came from.
-    </p>
-
-    <p>
-      A structured system that removes the need to manually search through hundreds of charts, and instead presents setups in a clear, consistent, data-driven way.
-    </p>
-
-    <p>
-      EdgeBreak is not about shortcuts or guarantees. It’s built around the lessons learned from years of trial, error, and experience — and designed to help others avoid the same path.
+      EdgeBreak is not designed to predict markets or provide investment recommendations. Its purpose is to help investors organise information, identify opportunities for further research and better understand how structured market analysis performs over time.
     </p>
 
     <p>
       The goal is simple:
     </p>
 
-    <p>
-      To provide a structured way to track, analyse, and understand the market — so that everyday people can build their own consistency over time without going through the same long and difficult process.
+    <p style="font-weight:600; color:#22c55e;">
+      To make structured NASDAQ stock research more accessible through data, transparency and consistency.
     </p>
 
   </div>
@@ -225,77 +256,110 @@ window.supabaseClient = supabase.createClient(
     <h2>What We Do</h2>
 
     <p>
-      EdgeBreak is a software platform that analyses and tracks breakout setups using structured market data, historical patterns, and consistent rules.
+      EdgeBreak is a NASDAQ stock research platform designed to help investors identify stocks displaying accumulation, buying pressure, volume expansion and breakout potential.
     </p>
 
     <p>
-      The system focuses on analysing and monitoring breakout conditions across a wide range of NASDAQ-listed stocks, presenting this information in a clear and structured format.
+      The platform combines structured market analysis, daily scanners, watchlists and historical tracking to simplify the research process and reduce the need to manually review hundreds of charts.
     </p>
 
     <p>
-      Rather than overwhelming users with constant activity, EdgeBreak is designed around selectivity — highlighting setups that meet defined criteria and tracking them over time.
+      Rather than attempting to predict market outcomes, EdgeBreak focuses on identifying stocks meeting predefined research criteria and presenting those opportunities in a clear and transparent format.
     </p>
-
 
     <h2>What You Get From EdgeBreak</h2>
 
-    <p>
-      EdgeBreak is built to support a more disciplined and data-driven approach.
-    </p>
+    <div class="feature-grid">
 
-    <ul>
-      <li>Track breakout setups and how they develop over time</li>
-      <li>Monitor performance across multiple trades and market conditions</li>
-      <li>Understand patterns in win rate, returns, and consistency</li>
-      <li>Reduce noise by focusing on structured setups rather than constant signals</li>
-      <li>Build a repeatable process based on data rather than emotion</li>
-    </ul>
+      <div class="feature-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M3 17L9 11L13 15L21 7"/>
+        </svg>
+        <span>NASDAQ Stock Scanner</span>
+      </div>
 
-    <p>
-      The platform provides the structure — how that structure is applied remains the responsibility of the user.
-    </p>
+      <div class="feature-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="12" cy="12" r="8"/>
+          <path d="M12 8V12L15 15"/>
+        </svg>
+        <span>Smart Money Scanner</span>
+      </div>
 
+      <div class="feature-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M4 20V10"/>
+          <path d="M10 20V4"/>
+          <path d="M16 20V14"/>
+          <path d="M22 20V8"/>
+        </svg>
+        <span>Breakout Opportunity Tracking</span>
+      </div>
+
+      <div class="feature-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M3 3H21V21H3Z"/>
+          <path d="M7 12H17"/>
+          <path d="M7 8H17"/>
+          <path d="M7 16H13"/>
+        </svg>
+        <span>Historical Performance Records</span>
+      </div>
+
+      <div class="feature-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M4 4H20V20H4Z"/>
+          <path d="M8 8H16"/>
+          <path d="M8 12H16"/>
+          <path d="M8 16H12"/>
+        </svg>
+        <span>My Workspace Research Tools</span>
+      </div>
+
+      <div class="feature-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M4 5H20V19H4Z"/>
+          <path d="M8 9H16"/>
+          <path d="M8 13H14"/>
+        </svg>
+        <span>Trading Guides & Resources</span>
+      </div>
+
+    </div>
 
     <h2>How the Platform Works</h2>
 
     <p>
-      EdgeBreak operates using a structured end-of-day process.
+      EdgeBreak operates using a structured end-of-day process. Market data is analysed after each trading session and opportunities are identified using predefined price action, volume and market structure criteria.
     </p>
 
     <p>
-      Market data is analysed after each trading session, and breakout setups are highlighted based on predefined criteria including price behaviour, volume patterns, and structural conditions.
+      Opportunities are then tracked over time, allowing users to review how setups develop and compare current market activity with historical examples.
     </p>
 
     <p>
-      These setups are then tracked over time, allowing users to observe how they evolve and how performance develops across multiple trades.
+      The platform is designed to be reviewed once per day, helping investors maintain a consistent research process without the pressure of monitoring markets throughout the day.
     </p>
-
-    <p>
-      The platform is designed to be reviewed once per day, helping users stay consistent without the pressure of real-time decision making.
-    </p>
-
 
     <h2>Our Approach</h2>
 
     <p>
-      EdgeBreak is built on the idea that consistency comes from following a structured process over time, not from predicting individual outcomes.
+      EdgeBreak is built on the belief that consistency comes from following a structured research process rather than attempting to predict individual market outcomes.
     </p>
 
     <p>
-      Markets move in cycles, and not every period will produce strong conditions. The system is designed to reflect that reality by prioritising selectivity and consistency over constant activity.
+      By applying the same methodology across the NASDAQ market each day, the platform aims to reduce noise and help users focus on stocks displaying specific research characteristics.
     </p>
 
     <p>
-      By tracking both positive and negative outcomes, EdgeBreak provides a balanced view of performance and reinforces a long-term, disciplined approach.
+      Transparency remains central to the framework, with tracked opportunities recorded over time to provide a balanced view of historical performance.
     </p>
 
-
-    <h2>Where We’re Based</h2>
+    <h2>Where We're Based</h2>
 
     <p>
-      EdgeBreak is developed and operated from Australia, with a focus on delivering a globally accessible, high-performance trading platform.
+      EdgeBreak is developed and operated from Australia and is designed to serve investors researching NASDAQ-listed stocks around the world.
     </p>
-
 
     <h2>Our Company</h2>
 
@@ -308,13 +372,12 @@ window.supabaseClient = supabase.createClient(
       ABN 41 946 218 773
     </p>
 
-
     <div style="margin-top:40px; font-size:12px; color:#64748b;">
       <p>
-        EdgeBreak is a data analysis platform and does not provide financial advice, trade recommendations, or execution services.
+        EdgeBreak provides market research tools and does not provide financial advice, investment recommendations or personal financial services.
       </p>
       <p>
-        All trading involves risk. Past performance is not indicative of future results.
+        Past performance does not guarantee future results. Users should conduct their own research before making investment decisions.
       </p>
     </div>
 
