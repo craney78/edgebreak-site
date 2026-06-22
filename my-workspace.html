@@ -815,6 +815,13 @@ img{
     margin:0;
     padding:0;
 }
+
+.trade-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fill,minmax(180px,1fr));
+    gap:12px;
+}
 </style>
 <script>
 window.supabaseClient = supabase.createClient(
@@ -2531,6 +2538,20 @@ async function loadUserWatchlist(){
         `).join("");
 
 }
+</script>
+<script>
+// =========================================
+// LOAD WATCHLIST ON PAGE LOAD
+// =========================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        await loadUserWatchlist();
+
+    }
+);
 </script>
 </body>
 </html>
