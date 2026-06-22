@@ -824,145 +824,185 @@ img{
 }
 
 /* =========================
-FOOTER
+   MOBILE
+========================= */
+
+.menu-toggle{
+    display:none;
+}
+
+@media(max-width:900px){
+
+    .menu-toggle{
+        display:block;
+        color:white;
+        font-size:28px;
+        cursor:pointer;
+    }
+
+    .nav-links{
+        display:none;
+    }
+
+    .nav-links.active{
+        display:flex;
+
+        position:absolute;
+
+        top:72px;
+        left:0;
+        right:0;
+
+        background:#08111f;
+
+        flex-direction:column;
+
+        padding:20px;
+
+        border-bottom:1px solid #1e293b;
+    }
+
+}
+
+/* =========================
+   ELITE FOOTER
 ========================= */
 
 .footer{
-    margin-top:40px;
-    background:#0b1220;
+    margin-top:50px;
+
+    background:#08111f;
     border-top:1px solid #1e293b;
+
+    padding:50px 0 20px;
 }
 
 .footer-inner{
-    max-width:1800px;
+    max-width:1700px;
     margin:auto;
-    padding:50px 30px;
 
     display:grid;
     grid-template-columns:2fr 1fr 1fr 1fr;
+
     gap:40px;
+
+    padding:0 30px;
 }
 
 .footer-col h4{
-    margin-bottom:18px;
-    font-size:16px;
+    color:white;
+    font-size:15px;
+    margin-bottom:15px;
+}
+
+.footer-col p{
+    color:#94a3b8;
+    line-height:1.7;
+    font-size:14px;
 }
 
 .footer-col a{
     display:block;
+
     color:#94a3b8;
     text-decoration:none;
-    margin-bottom:12px;
+
+    margin-bottom:10px;
+
+    font-size:14px;
+
     transition:.2s;
 }
 
 .footer-col a:hover{
-    color:#22c55e;
+    color:white;
 }
 
-.footer-brand-header{
+/* =========================
+   BRAND BLOCK
+========================= */
+
+.footer-brand{
     display:flex;
     align-items:center;
-    gap:15px;
-    margin-bottom:20px;
+    gap:12px;
+    margin-bottom:15px;
+}
+
+.footer-brand img{
+    width:45px;
 }
 
 .footer-brand h3{
-    font-size:24px;
-    margin-bottom:4px;
-}
-
-.footer-brand p{
-    color:#94a3b8;
-    line-height:1.8;
-}
-
-.footer-tagline{
-    margin-top:15px;
-    color:#22c55e;
-    font-weight:700;
-}
-
-.footer-status{
-    color:#94a3b8;
-    font-size:13px;
-}
-
-.status-dot{
-    width:8px;
-    height:8px;
-    background:#22c55e;
-    border-radius:50%;
-    display:inline-block;
-    margin-right:6px;
-}
-
-.footer-highlight{
-    border-top:1px solid #1e293b;
-    border-bottom:1px solid #1e293b;
-
-    padding:25px 30px;
-
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:25px;
-
-    max-width:1800px;
-    margin:auto;
-}
-
-.footer-highlight strong{
-    display:block;
+    margin:0;
+    font-size:22px;
     color:white;
-    margin-bottom:5px;
 }
 
-.footer-highlight span{
-    color:#94a3b8;
-    font-size:13px;
-}
+/* =========================
+   BOTTOM BAR
+========================= */
 
 .footer-bottom{
-    max-width:1800px;
-    margin:auto;
+    max-width:1700px;
 
-    padding:30px;
+    margin:40px auto 0;
+
+    padding:20px 30px 0;
+
+    border-top:1px solid #1e293b;
 
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:30px;
+
+    flex-wrap:wrap;
+    gap:15px;
 }
 
-.footer-disclaimer{
-    margin-top:10px;
-    color:#94a3b8;
-    line-height:1.7;
-    max-width:900px;
+.footer-bottom p{
+    color:#64748b;
+    font-size:13px;
 }
 
 .footer-parent-block{
-    text-align:right;
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
 .footer-logo{
-    width:120px;
-    height:auto;
-    margin-left:auto;
-    margin-bottom:10px;
+    width:28px;
+    opacity:.7;
 }
 
-.footer-parent,
 .footer-parent a{
     color:#94a3b8;
     text-decoration:none;
 }
 
 .footer-parent a:hover{
-    color:#22c55e;
+    color:white;
 }
 
-/* MOBILE */
+.scanner-top{
+
+    display:grid;
+
+    grid-template-columns:
+        300px
+        1fr
+        280px;
+
+    gap:20px;
+
+    margin-bottom:30px;
+
+}
+
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:900px){
 
@@ -970,29 +1010,11 @@ FOOTER
         grid-template-columns:1fr;
     }
 
-    .footer-highlight{
-        grid-template-columns:1fr 1fr;
-    }
-
     .footer-bottom{
         flex-direction:column;
-        align-items:flex-start;
+        text-align:center;
     }
 
-    .footer-parent-block{
-        text-align:left;
-    }
-
-    .footer-logo{
-        margin-left:0;
-    }
-}
-
-@media(max-width:600px){
-
-    .footer-highlight{
-        grid-template-columns:1fr;
-    }
 }
 </style>
 <script>
