@@ -149,6 +149,57 @@ ul { margin-left: 20px; color: #cbd5f5; }
     margin-bottom:30px;
 }
 
+.guide-callout{
+    background:rgba(34,197,94,.08);
+    border:1px solid rgba(34,197,94,.15);
+    border-left:4px solid #22c55e;
+    border-radius:12px;
+    padding:20px;
+    margin:30px 0;
+}
+
+.guide-callout strong{
+    color:#22c55e;
+    display:block;
+    margin-bottom:10px;
+}
+
+.faq-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:20px;
+    margin-top:30px;
+}
+
+.faq-card{
+    display:flex;
+    gap:18px;
+    align-items:flex-start;
+    background:#111827;
+    border:1px solid rgba(34,197,94,.15);
+    border-radius:16px;
+    padding:24px;
+}
+
+.faq-svg{
+    width:24px;
+    height:24px;
+    color:#22c55e;
+    stroke-width:2;
+    flex-shrink:0;
+    margin-top:2px;
+}
+
+.faq-card h3{
+    color:#f8fafc;
+    margin-bottom:12px;
+}
+
+.faq-card p{
+    color:#94a3b8;
+    line-height:1.7;
+}
+
 </style>
 </head>
 
@@ -322,74 +373,674 @@ ul { margin-left: 20px; color: #cbd5f5; }
 
 </div>
 
+
 <div class="guide-logo-wrap">
 
-    <img
-        src="images/logo.webp"
-        class="hero-logo pricing-logo guide-logo"
-        alt="EdgeBreak NASDAQ Stock Scanner"
-    >
+
+<img
+    src="images/logo.webp"
+    class="hero-logo pricing-logo guide-logo"
+    alt="EdgeBreak Breakout Trading Guide"
+>
+
 
 </div>
 
-
-<!-- CONTENT (UNCHANGED) -->
 <div class="guide-container">
 
-      
 
-<h1>Free Breakout Trading Guide</h1>
+<h1>Free Breakout Guide</h1>
 
-<p>
-Learn how to identify, execute, and manage breakout trades using structure, volume, and price action.
+<p class="guide-intro">
+    Learn how investors research breakout opportunities using resistance levels, higher lows, volume expansion and market structure. This guide explains the concepts behind breakout analysis and the factors many investors consider when evaluating potential opportunities.
 </p>
 
 <div class="cta-box">
-<h2>Stop Guessing. Trade Breakouts With Data.</h2>
-<p>Join EdgeBreak to receive real-time breakout alerts backed by structure, volume, and disciplined execution.</p>
-<button onclick="startTrial()">Start Free Trial</button>
+
+    <h2>
+        Understand Breakouts. Research With Structure.
+    </h2>
+
+    <p>
+        EdgeBreak helps investors research NASDAQ stocks displaying accumulation, buying pressure and breakout characteristics through a structured, data-driven approach.
+    </p>
+
+    <button onclick="window.location.href='pricing.html'">
+        Start Free Trial
+    </button>
+
 </div>
 
-<img src="images/structure_guide.png" style="width:100%; border-radius:12px; margin:40px 0;">
+<img
+    src="images/structure_guide.png"
+    style="width:100%; border-radius:12px; margin:40px 0;"
+    alt="Breakout Structure Guide"
+>
 
-<h2>Introduction</h2>
-<p>Breakout trading focuses on identifying when price moves from consolidation into expansion.</p>
+<h2>What Is A Breakout?</h2>
 
-<h2>Market Structure and Build-Up</h2>
+<p>
+    A breakout occurs when a stock moves above a well-defined resistance level after a period of consolidation.
+</p>
+
+<p>
+    Many investors monitor breakouts because they can indicate increasing demand, improving market sentiment and a potential shift in market structure.
+</p>
+
+<p>
+    Not all breakouts succeed. This is why many investors also analyse volume, price action and broader market conditions before researching opportunities further.
+</p>
+
+<h2>Understanding Resistance Levels</h2>
+
+<p>
+    Resistance is a price level where selling pressure has historically prevented a stock from moving higher.
+</p>
+
+<p>
+    When a stock repeatedly tests resistance without breaking through, investors often pay close attention because it may signal increasing buying pressure.
+</p>
+
 <ul>
-<li>Multiple resistance tests</li>
-<li>Higher lows forming</li>
-<li>Tightening price range</li>
+    <li>Multiple resistance touches</li>
+    <li>Repeated rejection near the same level</li>
+    <li>Improving support beneath resistance</li>
+    <li>Tightening price action</li>
 </ul>
 
-<img src="images/structure_build_up.png" style="width:100%; border-radius:12px; margin:40px 0;">
+<img
+    src="images/structure_build_up.png"
+    style="width:100%; border-radius:12px; margin:40px 0;"
+    alt="Resistance Build Up"
+>
 
-<h2>Volume Confirmation</h2>
+<h2>The Importance Of Higher Lows</h2>
+
+<p>
+    Higher lows occur when buyers step in at progressively higher prices during a consolidation phase.
+</p>
+
+<p>
+    This behaviour can indicate increasing demand and may suggest that buying pressure is gradually absorbing available supply.
+</p>
+
 <ul>
-<li>Low volume = consolidation</li>
-<li>High volume = breakout confirmation</li>
+    <li>Improving market structure</li>
+    <li>Potential accumulation behaviour</li>
+    <li>Increasing demand beneath resistance</li>
+    <li>Tightening trading range</li>
 </ul>
 
-<img src="images/volume_confirmation.png" style="width:100%; border-radius:12px; margin:30px 0;">
+<h2>Why Volume Matters</h2>
 
-<h2>Execution</h2>
+<p>
+    Volume provides insight into participation and conviction behind a price move.
+</p>
+
+<p>
+    Many investors analyse volume because stronger participation can help validate price action and provide additional context around potential breakouts.
+</p>
+
 <ul>
-<li>Enter on breakout close</li>
-<li>Or next candle continuation</li>
+    <li>Lower volume during consolidation</li>
+    <li>Increasing volume near resistance</li>
+    <li>Volume expansion during breakout attempts</li>
+    <li>Sustained participation after breakout</li>
 </ul>
 
-<img src="images/entry_point.png" style="width:100%; border-radius:12px; margin:30px 0;">
+<img
+    src="images/volume_confirmation.png"
+    style="width:100%; border-radius:12px; margin:30px 0;"
+    alt="Volume Confirmation"
+>
+
+<h2>Accumulation Before Breakouts</h2>
+
+<p>
+Many breakout opportunities do not appear suddenly. In many cases, stocks spend weeks or even months building a foundation before attempting to move higher.
+</p>
+
+<p>
+This process is often referred to as accumulation. During accumulation, buyers gradually absorb available supply while price remains within a relatively defined range.
+</p>
+
+<p>
+Although accumulation can take many forms, investors often look for characteristics such as improving price structure, repeated support at higher levels and increasing participation as a stock approaches resistance.
+</p>
+
+<ul>
+    <li>Higher lows forming over time</li>
+    <li>Price holding above key support levels</li>
+    <li>Increasing demand near resistance</li>
+    <li>Periods of reduced selling pressure</li>
+    <li>Improving volume trends</li>
+</ul>
+
+<p>
+Accumulation does not guarantee a breakout will occur. However, many investors monitor these characteristics because they may indicate growing interest in a stock before a significant price move develops.
+</p>
+
+<p>
+The EdgeBreak Smart Money Scanner focuses on identifying stocks displaying accumulation characteristics and sustained buying pressure across the NASDAQ market.
+</p>
+
+<h2>Why Most Breakouts Fail</h2>
+
+<p>
+While breakout opportunities can attract significant attention, many breakouts fail to produce sustained upward movement. Understanding why breakouts fail can be just as important as understanding why they succeed.
+</p>
+
+<p>
+A breakout occurs when price moves above resistance, but a successful breakout typically requires continued demand after the initial move. Without sufficient buying pressure, price can quickly return back into its previous trading range.
+</p>
+
+<p>
+Investors often research several factors when evaluating breakout quality, including market structure, volume participation and the strength of the build-up beneath resistance.
+</p>
+
+<ul>
+    <li>Weak volume during the breakout attempt</li>
+    <li>Poor price structure leading into resistance</li>
+    <li>Limited accumulation before the breakout</li>
+    <li>Broad market weakness</li>
+    <li>Immediate selling pressure after the breakout</li>
+    <li>Failure to remain above the breakout level</li>
+</ul>
+
+<p>
+Many unsuccessful breakouts show signs of weakness before the breakout attempt occurs. For this reason, investors often analyse the quality of the setup rather than focusing solely on the breakout itself.
+</p>
+
+<p>
+The EdgeBreak framework places significant emphasis on structure, accumulation characteristics and volume behaviour because these factors can provide additional context when researching breakout opportunities.
+</p>
+
+<div class="guide-callout">
+
+    <strong>Research Focus</strong>
+
+    <p>
+        A breakout alone does not necessarily indicate strength. Many investors place greater importance on the structure leading into the breakout than on the breakout event itself.
+    </p>
+
+</div>
+
+<div class="guide-callout">
+
+    <strong>EdgeBreak Insight</strong>
+
+    <p>
+        Many of the strongest historical opportunities tracked by EdgeBreak spent weeks building beneath resistance before eventually breaking higher. Understanding accumulation can help investors better recognise developing market structure.
+    </p>
+
+</div>
 
 <h2>False Breakouts</h2>
+
+<p>
+    Not every breakout continues higher. Some stocks briefly move above resistance before reversing back into their previous range.
+</p>
+
+<p>
+    These situations are often referred to as false breakouts.
+</p>
+
 <ul>
-<li>Weak breakout candles</li>
-<li>Immediate rejection</li>
-<li>Falls below resistance</li>
+    <li>Weak price movement above resistance</li>
+    <li>Low participation or declining volume</li>
+    <li>Immediate rejection after breakout</li>
+    <li>Failure to remain above the breakout level</li>
 </ul>
 
-<img src="images/false_breakout.png" style="width:100%; border-radius:12px; margin:30px 0;">
+<img
+    src="images/false_breakout.png"
+    style="width:100%; border-radius:12px; margin:30px 0;"
+    alt="False Breakout Example"
+>
+
+<h2>Breakout Research Checklist</h2>
+
+<ul>
+    <li>Multiple resistance touches</li>
+    <li>Higher lows developing beneath resistance</li>
+    <li>Tightening price structure</li>
+    <li>Increasing volume participation</li>
+    <li>Improving market structure</li>
+    <li>Strong relative strength compared to recent price action</li>
+</ul>
+
+<h2>How EdgeBreak Helps</h2>
+
+<p>
+    EdgeBreak simplifies the process of researching NASDAQ stocks by automatically analysing thousands of stocks each day using structured criteria.
+</p>
+
+<p>
+    Through the NASDAQ Scanner, Smart Money Scanner and Breakout Opportunities, investors can quickly identify stocks displaying characteristics often associated with accumulation and breakout behaviour.
+</p>
+
 
 </div>
+
+<h2>How EdgeBreak Helps</h2>
+
+<p>
+Researching breakout opportunities manually can be time-consuming. Investors often need to review hundreds or even thousands of charts looking for resistance levels, higher lows, accumulation characteristics and volume expansion.
+</p>
+
+<p>
+EdgeBreak was built to simplify this process by applying a structured research framework across the NASDAQ market each day.
+</p>
+
+<p>
+Rather than manually searching for opportunities, investors can use EdgeBreak to identify stocks displaying characteristics commonly associated with accumulation, buying pressure and breakout potential.
+</p>
+
+<div class="feature-grid">
+
+    <div class="feature-card">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="8"/>
+            <path d="M12 8V12L15 15"/>
+        </svg>
+
+        <h3>NASDAQ Scanner</h3>
+
+        <p>
+            Search thousands of NASDAQ stocks using resistance touches, higher lows, volume expansion and market structure filters.
+        </p>
+
+    </div>
+
+    <div class="feature-card">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 3L4 7V12C4 17 7.5 20.5 12 22C16.5 20.5 20 17 20 12V7L12 3Z"/>
+        </svg>
+
+        <h3>Smart Money Scanner</h3>
+
+        <p>
+            Identify stocks displaying accumulation characteristics and sustained buying pressure.
+        </p>
+
+    </div>
+
+    <div class="feature-card">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M3 17L9 11L13 15L21 7"/>
+        </svg>
+
+        <h3>Breakout Opportunities</h3>
+
+        <p>
+            Review opportunities currently being tracked through the EdgeBreak research framework.
+        </p>
+
+    </div>
+
+    <div class="feature-card">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M4 4H20V20H4Z"/>
+            <path d="M8 8H16"/>
+            <path d="M8 12H16"/>
+            <path d="M8 16H12"/>
+        </svg>
+
+        <h3>Transparency</h3>
+
+        <p>
+            Every tracked opportunity remains part of the historical record, helping investors understand both successful and unsuccessful outcomes.
+        </p>
+
+    </div>
+
+</div>
+
+<p>
+The goal is not to predict future market outcomes. The goal is to provide a structured and transparent way to research NASDAQ stocks displaying specific market characteristics.
+</p>
+
+<p>
+By combining scanners, watchlists, historical tracking and educational resources, EdgeBreak helps investors build a more consistent research process over time.
+</p>
+
+<h2>How EdgeBreak Helps</h2>
+
+<p>
+Researching breakout opportunities manually can be time-consuming. Investors often need to review hundreds or even thousands of charts looking for resistance levels, higher lows, accumulation characteristics and volume expansion.
+</p>
+
+<p>
+EdgeBreak was built to simplify this process by applying a structured research framework across the NASDAQ market each day.
+</p>
+
+<p>
+Rather than manually searching for opportunities, investors can use EdgeBreak to identify stocks displaying characteristics commonly associated with accumulation, buying pressure and breakout potential.
+</p>
+
+<div class="feature-grid">
+
+    <div class="feature-card">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="8"/>
+            <path d="M12 8V12L15 15"/>
+        </svg>
+
+        <h3>NASDAQ Scanner</h3>
+
+        <p>
+            Search thousands of NASDAQ stocks using resistance touches, higher lows, volume expansion and market structure filters.
+        </p>
+
+    </div>
+
+    <div class="feature-card">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 3L4 7V12C4 17 7.5 20.5 12 22C16.5 20.5 20 17 20 12V7L12 3Z"/>
+        </svg>
+
+        <h3>Smart Money Scanner</h3>
+
+        <p>
+            Identify stocks displaying accumulation characteristics and sustained buying pressure.
+        </p>
+
+    </div>
+
+    <div class="feature-card">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M3 17L9 11L13 15L21 7"/>
+        </svg>
+
+        <h3>Breakout Opportunities</h3>
+
+        <p>
+            Review opportunities currently being tracked through the EdgeBreak research framework.
+        </p>
+
+    </div>
+
+    <div class="feature-card">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M4 4H20V20H4Z"/>
+            <path d="M8 8H16"/>
+            <path d="M8 12H16"/>
+            <path d="M8 16H12"/>
+        </svg>
+
+        <h3>Transparency</h3>
+
+        <p>
+            Every tracked opportunity remains part of the historical record, helping investors understand both successful and unsuccessful outcomes.
+        </p>
+
+    </div>
+
+</div>
+
+<p>
+The goal is not to predict future market outcomes. The goal is to provide a structured and transparent way to research NASDAQ stocks displaying specific market characteristics.
+</p>
+
+<p>
+By combining scanners, watchlists, historical tracking and educational resources, EdgeBreak helps investors build a more consistent research process over time.
+</p>
+
+<!-- ===================================
+FAQ
+=================================== -->
+
+<div class="section">
+
+
+<h2>Frequently Asked Questions</h2>
+
+<div class="faq-grid">
+
+    <!-- FAQ 1 -->
+
+    <div class="faq-card">
+
+        <svg class="faq-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M3 17L9 11L13 15L21 7"/>
+        </svg>
+
+        <div>
+
+            <h3>
+                What is a breakout stock?
+            </h3>
+
+            <p>
+                A breakout stock is a stock that moves above a significant resistance level after a period of consolidation. Many investors monitor breakouts because they can indicate increasing demand and changing market structure.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- FAQ 2 -->
+
+    <div class="faq-card">
+
+        <svg class="faq-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M5 19L12 5L19 19"/>
+            <path d="M8 14H16"/>
+        </svg>
+
+        <div>
+
+            <h3>
+                What causes a breakout?
+            </h3>
+
+            <p>
+                Breakouts are often associated with increasing demand, improving market sentiment and sustained buying pressure. However, multiple factors can contribute to a breakout and no single factor guarantees success.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- FAQ 3 -->
+
+    <div class="faq-card">
+
+        <svg class="faq-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M6 6L18 18"/>
+            <path d="M18 6L6 18"/>
+        </svg>
+
+        <div>
+
+            <h3>
+                Why do breakouts fail?
+            </h3>
+
+            <p>
+                Breakouts may fail when there is insufficient buying pressure, weak volume participation or poor market structure leading into resistance. Many investors analyse these factors before researching opportunities further.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- FAQ 4 -->
+
+    <div class="faq-card">
+
+        <svg class="faq-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M4 20V10"/>
+            <path d="M10 20V4"/>
+            <path d="M16 20V14"/>
+            <path d="M22 20V8"/>
+        </svg>
+
+        <div>
+
+            <h3>
+                What are higher lows?
+            </h3>
+
+            <p>
+                Higher lows occur when buyers consistently step in at progressively higher prices. Many investors view higher lows as a sign of improving market structure and increasing demand.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- FAQ 5 -->
+
+    <div class="faq-card">
+
+        <svg class="faq-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M3 12H7"/>
+            <path d="M10 8V16"/>
+            <path d="M14 5V19"/>
+            <path d="M18 9V15"/>
+            <path d="M21 11V13"/>
+        </svg>
+
+        <div>
+
+            <h3>
+                Why is volume important?
+            </h3>
+
+            <p>
+                Volume provides insight into participation behind a price move. Many investors use volume analysis to better understand the strength of consolidation, accumulation and breakout activity.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- FAQ 6 -->
+
+    <div class="faq-card">
+
+        <svg class="faq-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 3L4 7V12C4 17 7.5 20.5 12 22C16.5 20.5 20 17 20 12V7L12 3Z"/>
+        </svg>
+
+        <div>
+
+            <h3>
+                What is accumulation?
+            </h3>
+
+            <p>
+                Accumulation refers to a period where buying activity gradually absorbs available supply while a stock remains within a defined range. Some investors monitor accumulation characteristics when researching potential breakout opportunities.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- FAQ 7 -->
+
+    <div class="faq-card">
+
+        <svg class="faq-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="8"/>
+            <path d="M12 8V12L15 15"/>
+        </svg>
+
+        <div>
+
+            <h3>
+                How does EdgeBreak identify opportunities?
+            </h3>
+
+            <p>
+                EdgeBreak applies a structured research framework across NASDAQ-listed stocks, analysing factors such as resistance touches, higher lows, volume behaviour, accumulation characteristics and market structure.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- FAQ 8 -->
+
+    <div class="faq-card">
+
+        <svg class="faq-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 3L4 7V12C4 17 7.5 20.5 12 22C16.5 20.5 20 17 20 12V7L12 3Z"/>
+        </svg>
+
+        <div>
+
+            <h3>
+                Does EdgeBreak provide financial advice?
+            </h3>
+
+            <p>
+                No. EdgeBreak is a stock research platform that provides educational content, market analysis and research tools. It does not provide financial advice, investment recommendations or personal financial services.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- FAQ 9 -->
+
+    <div class="faq-card">
+
+        <svg class="faq-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="8"/>
+        </svg>
+
+        <div>
+
+            <h3>
+                What market does EdgeBreak cover?
+            </h3>
+
+            <p>
+                EdgeBreak focuses exclusively on NASDAQ-listed stocks, allowing the platform to apply a consistent research framework across a specialised universe of companies.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- FAQ 10 -->
+
+    <div class="faq-card">
+
+        <svg class="faq-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="8"/>
+            <path d="M12 8V12L15 15"/>
+        </svg>
+
+        <div>
+
+            <h3>
+                How often is EdgeBreak updated?
+            </h3>
+
+            <p>
+                EdgeBreak operates using an end-of-day process. Market data, scanners, watchlists and tracked opportunities are updated after each trading session.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>
+
 
 <!-- ===================================
 FOOTER
