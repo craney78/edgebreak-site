@@ -1053,17 +1053,17 @@ checkAccess();
         <h1>MY WORKSPACE</h1>
 
         <p>
-            Your personal trading environment for chart analysis,
-            watchlists, research, journaling and trade planning.
+            My Workspace brings together chart analysis and personal watchlists in a single environment.
 
-            Monitor stocks, track ideas and build a repeatable process
-            using the EdgeBreak framework.
+            Save stocks directly from the NASDAQ Scanner, analyse price action using professional TradingView charts and maintain a personalised list of stocks you want to research and monitor.
+
+            Additional watchlist integration for Breakout Elite and Smart Money Elite is planned for future updates.
         </p>
 
     </div>
 
     <div class="elite-badge">
-        Active Workspace
+        Personal Workspace
     </div>
 
 </div>
@@ -1074,16 +1074,15 @@ checkAccess();
 
         <div class="featured-tag">
             PERSONAL
-            Trading Environment
+            Research Workspace
         </div>
 
         <h2>
-            Research. Analyse. Execute.
+            Research. Analyse. Monitor.
         </h2>
 
         <p>
-            Load any NASDAQ stock, analyse charts, review Smart Money activity,
-            track breakout opportunities and build your own trading workflow.
+            Load any NASDAQ stock, analyse price action, review market structure and monitor stocks saved from the NASDAQ Scanner in your own research workspace.
         </p>
 
     </div>
@@ -1155,14 +1154,14 @@ checkAccess();
 
             <div>
 
-                <span>STOCK</span>
+                <span>NASDAQ</span>
                 <strong>RESEARCH</strong>
 
             </div>
 
         </div>
 
-        <!-- JOURNAL -->
+        <!-- MONITOR -->
 
         <div class="feature-item">
 
@@ -1179,8 +1178,8 @@ checkAccess();
 
             <div>
 
-                <span>TRADE</span>
-                <strong>JOURNAL</strong>
+                <span>SAVE &</span>
+                <strong>MONITOR</strong>
 
             </div>
 
@@ -1202,7 +1201,7 @@ checkAccess();
     <div class="elite-panel">
 
         <div class="panel-title">
-            Workspace Search
+            NASDAQ Stock Search
         </div>
 
         <div class="workspace-search">
@@ -1210,11 +1209,11 @@ checkAccess();
             <input
                 type="text"
                 id="tickerInput"
-                placeholder="Enter ticker (NVDA, TSLA, PLTR...)"
+                placeholder="Search NASDAQ ticker (NVDA, TSLA, PLTR...)"
             >
 
             <button onclick="loadTicker()">
-                Load Chart
+                Load Stock
             </button>
 
         </div>
@@ -1276,10 +1275,47 @@ checkAccess();
         <h2>Research Notes</h2>
 
         <p class="intel-placeholder">
-            Load a stock and record your research,
-            catalysts, support levels, risks and trade ideas.
+            Coming Soon
         </p>
 
+        <p>
+            Research notes, watchlist comments, trade journals and
+            stock-specific observations will be added in a future update.
+        </p>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+MY WATCHLIST
+=================================== -->
+
+<div class="elite-panel">
+
+    <div class="workspace-card-header">
+
+        <div>
+
+            <h2>My Watchlist</h2>
+
+            <p>
+                Stocks saved from the NASDAQ Scanner for future research and monitoring.
+            </p>
+
+        </div>
+
+        <div class="elite-badge">
+            Personal
+        </div>
+
+    </div>
+
+    <div
+        id="userWatchlist"
+        class="trade-grid"
+    >
+        No stocks saved yet.
     </div>
 
 </div>
@@ -2418,6 +2454,83 @@ document.addEventListener(
   }
 );
 
+</script>
+<script>
+// =========================================
+// MY WATCHLIST
+// =========================================
+
+async function loadUserWatchlist(){
+
+    const {
+        data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    if(!user) return;
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("watchlist")
+        .select("*")
+        .eq(
+            "user_id",
+            user.id
+        )
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    const container =
+        document.getElementById(
+            "userWatchlist"
+        );
+
+    if(!container) return;
+
+    if(!data || data.length === 0){
+
+        container.innerHTML = `
+            <div class="empty-state">
+                No watchlist stocks saved yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+    container.innerHTML =
+        data.map(stock => `
+
+            <div
+                class="trade-card"
+                onclick="
+                    document.getElementById('tickerInput').value='${stock.symbol}';
+                    loadTicker();
+                "
+            >
+
+                <div class="trade-symbol">
+                    ${stock.symbol}
+                </div>
+
+            </div>
+
+        `).join("");
+
+}
 </script>
 </body>
 </html>
