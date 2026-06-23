@@ -187,8 +187,17 @@ window.supabaseClient = supabase.createClient(
 
     <!-- LEFT -->
     <div class="nav-left">
-      <a href="index.html">
-        <img src="images/logo.png" class="nav-logo">
+      <a
+          href="index.html"
+          aria-label="EdgeBreak Home"
+      >
+        <img
+          src="images/logo.webp"
+          class="nav-logo"
+          alt="EdgeBreak NASDAQ Market Intelligence"
+          width="40"
+          height="40"
+        >
       </a>
       <a href="index.html" class="logo-text">EDGEBREAK</a>
       <span class="live-badge">LIVE</span>
@@ -199,33 +208,69 @@ window.supabaseClient = supabase.createClient(
 
       <!-- LINKS -->
       <div class="nav-links" id="navLinks">
+
         <a href="index.html" class="nav-link">Home</a>
-        <a href="products.html" class="nav-link">Products</a>
-        <a href="index.html#statsGrid" class="nav-link">Performance</a>
 
-        <a href="watchlist.html" class="nav-link locked-link">
-          Trading Desk <span class="lock-icon">🔒</span>
+        <!-- PRODUCTS -->
+        <div class="dropdown">
+          <a href="products.html" class="nav-link">
+            Products ▼
+          </a>
+
+          <div class="dropdown-content">
+
+            <a href="watchlist.html">
+              Edgebreak Trades
+            </a>
+
+            <a href="smart-money-dashboard.html">
+              Smart Money Watchlist
+            </a>
+
+            <a href="/nasdaq-stock-scanner.html">
+              NASDAQ Scanner 🔒
+            </a>
+            
+          </div>
+        </div>
+
+        <!-- RESOURCES -->
+        <div class="dropdown">
+
+          <a href="#" class="nav-link">
+            Resources ▼
+          </a>
+
+          <div class="dropdown-content">
+
+            <a href="trading-guide.html">
+              EdgeBreak Trading Guide
+            </a>
+
+            <a href="breakout-guide.html">
+              Free Breakout Guide
+            </a>
+
+            <a href="/blog/breakout-trading-strategy.html">
+              Strategy
+            </a>
+
+            <a href="/blog.html">
+              Trading Insights
+            </a>
+
+          </div>
+
+        </div>
+
+        <a href="pricing.html" class="nav-link">
+          Pricing
         </a>
-        
-        <a href="breakout-guide.html" class="nav-link">Free Breakout Guide</a>
 
-        <a href="trading-guide.html" class="nav-link">Guide</a>
-
-        <a href="/blog/breakout-trading-strategy.html" class="nav-link">
-          Strategy
+        <a href="#" class="nav-cta" id="authBtn">
+          Login
         </a>
 
-        <a href="dashboard.html" class="nav-link locked-link">
-          My Dashboard <span class="lock-icon">🔒</span>
-        </a>
-
-        <a href="/chart.html?symbol=AAPL" class="nav-link locked-link">
-          Charts <span class="lock-icon">🔒</span>
-        </a>
-
-        <a href="blog.html" class="nav-link">Trade Insights</a>
-
-        <a href="#" class="nav-cta" id="authBtn">Login</a>
       </div>
 
       <!-- HAMBURGER -->
@@ -243,39 +288,40 @@ PRODUCTS HERO
 =================================== -->
 
 <section class="hero">
+
     <div class="hero-logo-wrap">
-      <img src="images/logo.png" class="hero-logo" width="90">
+        <img src="images/logo.png" class="hero-logo" width="90">
     </div>
-    
+
     <div class="container">
 
         <div class="hero-content">
 
             <div class="hero-tag">
-                EDGEBREAK MEMBERSHIP
+                NASDAQ STOCK RESEARCH PLATFORM
             </div>
 
             <h1>
-                One Membership.<br>
-                Three Powerful Trading Tools.
+                Research The NASDAQ Market<br>
+                With EdgeBreak
             </h1>
 
             <p>
-                EdgeBreak is a NASDAQ-focused stock research platform that helps traders and investors discover breakout stocks, monitor elite watchlists, and identify recurring accumulation activity through Smart Money research.
+                EdgeBreak is a specialised NASDAQ stock research platform designed to help investors identify stocks displaying resistance tests, higher lows, breakout structures and signs of increasing market participation.
             </p>
 
             <p>
-                Every membership includes full access to Breakout Plus, Breakout Elite, and Smart Money, providing a complete stock scanner, watchlist, and research platform designed to help you focus on opportunities worth investigating.
+                Search more than 3,000 NASDAQ-listed stocks using a focused price action framework, build personal watchlists and analyse opportunities through a consistent research process.
             </p>
 
             <div class="hero-highlight">
-                1 Month Free Trial • Full Access Included
+                NASDAQ Focused • 1 Month Free Trial
             </div>
 
             <br><br>
 
-            <a href="pricing.html" class="btn">
-                Start Free Trial
+            <a href="nasdaq-stock-scanner.html" class="btn">
+                Explore NASDAQ Scanner
             </a>
 
         </div>
@@ -295,23 +341,23 @@ INTRODUCTION
         <div class="info-box">
 
             <h2>
-                NASDAQ Stock Scanner, Breakout Research & Smart Money Analysis
+                Why EdgeBreak Focuses Exclusively On NASDAQ
             </h2>
 
             <p>
-                Thousands of stocks trade every day. Finding opportunities with strong technical characteristics can take hours of research and chart analysis.
+                Most stock scanners attempt to cover every exchange, market and asset class. EdgeBreak takes a different approach by focusing exclusively on NASDAQ-listed stocks.
             </p>
 
             <br>
 
             <p>
-                EdgeBreak helps simplify the process by combining breakout stock scanning, elite candidate rankings, and Smart Money accumulation tracking into a single platform focused exclusively on NASDAQ-listed stocks.
+                The NASDAQ is home to many of the world's leading technology, healthcare, biotechnology and growth companies. These sectors frequently produce the strong trends, accumulation phases and breakout structures that the EdgeBreak research framework is designed to identify.
             </p>
 
             <br>
 
             <p>
-                Whether you're looking for breakout stocks, momentum opportunities, swing trading candidates, or stocks attracting repeated market attention, EdgeBreak provides tools designed to help narrow the search.
+                By focusing on a single market of more than 3,000 listed companies, EdgeBreak can apply a consistent research process across every stock analysed. Rather than scanning everything, we focus on understanding one market deeply and helping investors research opportunities more efficiently.
             </p>
 
         </div>
@@ -321,7 +367,7 @@ INTRODUCTION
 </section>
 
 <!-- ===================================
-PRODUCTS
+WHAT'S INCLUDED
 =================================== -->
 
 <section>
@@ -331,11 +377,11 @@ PRODUCTS
         <div class="section-title">
 
             <h2>
-                Included With Every Membership
+                What's Included With Every Membership
             </h2>
 
             <p>
-                Three powerful products working together to help traders discover opportunities, monitor stronger candidates, and research where market activity may be building.
+                Everything inside EdgeBreak is built around a single goal: helping investors research NASDAQ stocks more efficiently.
             </p>
 
         </div>
@@ -345,11 +391,11 @@ PRODUCTS
             <div class="card">
 
                 <h3>
-                    Breakout Plus
+                    NASDAQ Scanner
                 </h3>
 
                 <p>
-                    Active breakout opportunities generated by the EdgeBreak trading system.
+                    Search more than 3,000 NASDAQ stocks using resistance touches, higher lows, breakout structures and volume-based filters.
                 </p>
 
             </div>
@@ -357,11 +403,11 @@ PRODUCTS
             <div class="card">
 
                 <h3>
-                    Breakout Elite
+                    My Workspace
                 </h3>
 
                 <p>
-                    Higher conviction candidates displaying stronger technical characteristics.
+                    Save stocks to your personal watchlist, analyse charts using TradingView and monitor opportunities worth researching further.
                 </p>
 
             </div>
@@ -369,11 +415,11 @@ PRODUCTS
             <div class="card">
 
                 <h3>
-                    Smart Money
+                    Research Tools
                 </h3>
 
                 <p>
-                    Tracks recurring appearances across our accumulation scanner.
+                    Access Smart Money research, breakout examples, educational resources and market insights designed to support your research process.
                 </p>
 
             </div>
@@ -385,7 +431,7 @@ PRODUCTS
 </section>
 
 <!-- ===================================
-BREAKOUT PLUS
+NASDAQ SCANNER
 =================================== -->
 
 <section class="dark">
@@ -395,11 +441,11 @@ BREAKOUT PLUS
         <div class="section-title">
 
             <h2>
-                Breakout Plus
+                NASDAQ Stock Scanner
             </h2>
 
             <p>
-                Active breakout opportunities.
+                The core EdgeBreak research platform.
             </p>
 
         </div>
@@ -407,89 +453,40 @@ BREAKOUT PLUS
         <div class="info-box">
 
             <p>
-                Breakout Plus is the core EdgeBreak product. Stocks meeting our breakout criteria are added to the active watchlist where members can monitor progress, review charts, and track performance over time.
+                The EdgeBreak NASDAQ Scanner is designed to help investors research stocks displaying resistance tests, higher lows, breakout structures and signs of increasing market participation.
             </p>
 
             <br>
 
             <p>
-                Breakout Plus focuses on identifying active breakout opportunities showing strong technical characteristics, improving volume behaviour, and price strength. Members can monitor opportunities, review historical performance, and access charts designed to support further analysis.
+                Rather than relying on hundreds of indicators, EdgeBreak focuses on price action and market structure that can be visually verified on a chart. Every stock is analysed using a consistent framework across more than 3,000 NASDAQ-listed companies.
+            </p>
+
+            <br>
+
+            <p>
+                Members can search for active breakouts, developing pre-breakout setups and stocks displaying characteristics commonly associated with accumulation and improving market structure.
             </p>
 
             <br>
 
             <ul class="checklist">
 
-                <li>Active breakout opportunities</li>
-                <li>Performance tracking</li>
-                <li>Trade history</li>
-                <li>TradingView charts</li>
-                <li>Daily updates</li>
-                <li>NASDAQ focused opportunities</li>
-
-            </ul>
-
-            <br>
-
-            <a href="breakout-plus.html" class="btn">
-                Learn More About Breakout Plus
-            </a>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ===================================
-BREAKOUT ELITE
-=================================== -->
-
-<section>
-
-    <div class="container">
-
-        <div class="section-title">
-
-            <h2>
-                Breakout Elite
-            </h2>
-
-            <p>
-                Higher conviction setups.
-            </p>
-
-        </div>
-
-        <div class="info-box">
-
-            <p>
-                Breakout Elite focuses on a smaller group of candidates displaying stronger technical characteristics and higher quality setups.
-            </p>
-
-            <br>
-
-            <p>
-                Breakout Elite is designed for traders who prefer a more focused watchlist. Candidates included within Breakout Elite have demonstrated stronger characteristics relative to the broader market and may warrant additional research.
-            </p>
-
-            <br>
-
-            <ul class="checklist">
-
-                <li>Elite watchlist</li>
-                <li>Premium candidates</li>
-                <li>Higher conviction setups</li>
-                <li>Technical rankings</li>
-                <li>TradingView charts</li>
+                <li>NASDAQ market coverage</li>
+                <li>Resistance touch filters</li>
+                <li>Higher low filters</li>
+                <li>Breakout scanner</li>
+                <li>Pre-breakout scanner</li>
+                <li>Volume analysis</li>
+                <li>TradingView chart integration</li>
                 <li>Daily updates</li>
 
             </ul>
 
             <br>
 
-            <a href="breakout-elite.html" class="btn">
-                Learn More About Breakout Elite
+            <a href="nasdaq-stock-scanner.html" class="btn">
+                Explore NASDAQ Scanner
             </a>
 
         </div>
@@ -499,70 +496,7 @@ BREAKOUT ELITE
 </section>
 
 <!-- ===================================
-SMART MONEY
-=================================== -->
-
-<section class="dark">
-
-    <div class="container">
-
-        <div class="section-title">
-
-            <h2>
-                Smart Money
-            </h2>
-
-            <p>
-                Follow the footprints before the breakout.
-            </p>
-
-        </div>
-
-        <div class="info-box">
-
-            <p>
-                Smart Money tracks stocks appearing repeatedly on our accumulation scanner. By recording appearances over time, members can focus their research on stocks attracting ongoing market attention.
-            </p>
-
-            <br>
-
-            <p>
-                Smart Money tracks recurring appearances across our accumulation scanner over a rolling four-week period. While no scanner can identify who is buying or why, repeated appearances may indicate ongoing market interest and help investors build stronger watchlists.
-            </p>
-
-            <br>
-
-            <p>
-                One appearance may be interesting. Multiple appearances may deserve further investigation.
-            </p>
-
-            <br>
-
-            <ul class="checklist">
-
-                <li>Appearance tracking</li>
-                <li>Smart Money rankings</li>
-                <li>4 week history</li>
-                <li>Sector activity</li>
-                <li>Research dashboard</li>
-                <li>TradingView charts</li>
-
-            </ul>
-
-            <br>
-
-            <a href="smart-money.html" class="btn">
-                Learn More About Smart Money
-            </a>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ===================================
-WHY USE ALL THREE
+WHY NASDAQ?
 =================================== -->
 
 <section>
@@ -572,8 +506,12 @@ WHY USE ALL THREE
         <div class="section-title">
 
             <h2>
-                Why Use All Three?
+                Why Focus Exclusively On NASDAQ?
             </h2>
+
+            <p>
+                EdgeBreak was built on the belief that understanding one market deeply is more valuable than attempting to scan every market superficially.
+            </p>
 
         </div>
 
@@ -582,11 +520,11 @@ WHY USE ALL THREE
             <div class="card">
 
                 <h3>
-                    Find Opportunities
+                    Growth & Innovation
                 </h3>
 
                 <p>
-                    Breakout Plus helps identify active opportunities currently meeting our trading criteria.
+                    NASDAQ is home to many of the world's leading technology, healthcare, biotechnology and growth companies, creating an environment where strong trends and breakout structures regularly develop.
                 </p>
 
             </div>
@@ -594,11 +532,11 @@ WHY USE ALL THREE
             <div class="card">
 
                 <h3>
-                    Focus On Quality
+                    Consistent Research
                 </h3>
 
                 <p>
-                    Breakout Elite narrows the market further by identifying stronger candidates displaying higher quality technical characteristics.
+                    By focusing on a single exchange, EdgeBreak can apply the same research framework, filters and market structure analysis across every stock in the universe.
                 </p>
 
             </div>
@@ -606,11 +544,11 @@ WHY USE ALL THREE
             <div class="card">
 
                 <h3>
-                    Research Earlier
+                    More Than Enough Opportunity
                 </h3>
 
                 <p>
-                    Smart Money helps identify recurring accumulation activity before opportunities become widely discussed.
+                    With more than 3,000 listed companies, the NASDAQ provides a deep pool of opportunities without the need to scan multiple exchanges, markets or asset classes.
                 </p>
 
             </div>
@@ -622,7 +560,7 @@ WHY USE ALL THREE
 </section>
 
 <!-- ===================================
-WHICH PRODUCT IS RIGHT FOR YOU
+WHO EDGEBREAK IS FOR
 =================================== -->
 
 <section class="dark">
@@ -632,8 +570,12 @@ WHICH PRODUCT IS RIGHT FOR YOU
         <div class="section-title">
 
             <h2>
-                Which Product Is Right For You?
+                Who EdgeBreak Is For
             </h2>
+
+            <p>
+                EdgeBreak is designed for investors and traders who prefer a structured approach to researching NASDAQ stocks.
+            </p>
 
         </div>
 
@@ -642,11 +584,11 @@ WHICH PRODUCT IS RIGHT FOR YOU
             <div class="card">
 
                 <h3>
-                    Breakout Plus
+                    Breakout Traders
                 </h3>
 
                 <p>
-                    Ideal for traders seeking active breakout opportunities and ongoing trade tracking.
+                    Research stocks displaying resistance tests, higher lows and developing breakout structures.
                 </p>
 
             </div>
@@ -654,11 +596,11 @@ WHICH PRODUCT IS RIGHT FOR YOU
             <div class="card">
 
                 <h3>
-                    Breakout Elite
+                    Swing Traders
                 </h3>
 
                 <p>
-                    Perfect for traders wanting a smaller list of stronger technical candidates.
+                    Monitor developing opportunities and build watchlists of stocks showing improving market structure.
                 </p>
 
             </div>
@@ -666,11 +608,11 @@ WHICH PRODUCT IS RIGHT FOR YOU
             <div class="card">
 
                 <h3>
-                    Smart Money
+                    Active Investors
                 </h3>
 
                 <p>
-                    Designed for investors and traders interested in accumulation patterns and recurring market activity.
+                    Focus research on NASDAQ companies attracting market attention and displaying strong price action characteristics.
                 </p>
 
             </div>
@@ -703,14 +645,37 @@ MEMBERSHIP INCLUDES
 
         <div class="cards">
 
-            <div class="card"><h3>✓ Breakout Plus</h3></div>
-            <div class="card"><h3>✓ Breakout Elite</h3></div>
-            <div class="card"><h3>✓ Smart Money</h3></div>
-            <div class="card"><h3>✓ Daily Updates</h3></div>
-            <div class="card"><h3>✓ TradingView Charts</h3></div>
-            <div class="card"><h3>✓ Historical Results</h3></div>
-            <div class="card"><h3>✓ NASDAQ Coverage</h3></div>
-            <div class="card"><h3>✓ Members Dashboard</h3></div>
+            <div class="card">
+                <h3>✓ NASDAQ Stock Scanner</h3>
+            </div>
+
+            <div class="card">
+                <h3>✓ Breakout Scanner</h3>
+            </div>
+
+            <div class="card">
+                <h3>✓ Pre-Breakout Scanner</h3>
+            </div>
+
+            <div class="card">
+                <h3>✓ My Workspace</h3>
+            </div>
+
+            <div class="card">
+                <h3>✓ Personal Watchlists</h3>
+            </div>
+
+            <div class="card">
+                <h3>✓ TradingView Charts</h3>
+            </div>
+
+            <div class="card">
+                <h3>✓ Daily Updates</h3>
+            </div>
+
+            <div class="card">
+                <h3>✓ NASDAQ Market Coverage</h3>
+            </div>
 
         </div>
 
@@ -741,47 +706,57 @@ FAQ
             </h3>
 
             <p>
-                EdgeBreak focuses exclusively on NASDAQ-listed stocks.
+                EdgeBreak focuses exclusively on NASDAQ-listed stocks. By concentrating on a single market, the platform can apply a consistent research framework across more than 3,000 companies.
             </p>
 
             <br>
 
             <h3>
-                Does membership include all products?
+                Why does EdgeBreak only scan NASDAQ stocks?
             </h3>
 
             <p>
-                Yes. Every membership includes Breakout Plus, Breakout Elite, and Smart Money.
+                The NASDAQ contains many of the world's leading technology, healthcare, biotechnology and growth companies. Rather than scanning every market, EdgeBreak focuses on understanding one market deeply and applying a consistent research process.
             </p>
 
             <br>
 
             <h3>
-                Is EdgeBreak financial advice?
+                What does the NASDAQ Scanner look for?
             </h3>
 
             <p>
-                No. EdgeBreak provides research tools, rankings, watchlists, and market insights designed to support independent decision making.
+                The scanner focuses on price action and market structure, including resistance touches, higher lows, breakout structures and volume expansion characteristics.
             </p>
 
             <br>
 
             <h3>
-                What is Smart Money?
+                Does EdgeBreak provide financial advice?
             </h3>
 
             <p>
-                Smart Money tracks stocks appearing repeatedly on our accumulation scanner over a rolling four-week period.
+                No. EdgeBreak is a stock research platform. The information provided is for educational and research purposes only and should not be considered financial advice.
             </p>
 
             <br>
 
             <h3>
-                What is Breakout Elite?
+                What is included with membership?
             </h3>
 
             <p>
-                Breakout Elite provides access to higher conviction candidates displaying stronger technical characteristics.
+                Membership includes access to the NASDAQ Scanner, Breakout Scanner, Pre-Breakout Scanner, My Workspace, personal watchlists, TradingView charts and daily market updates.
+            </p>
+
+            <br>
+
+            <h3>
+                How often is the scanner updated?
+            </h3>
+
+            <p>
+                Scanner data is updated daily using the latest available market information and EdgeBreak research criteria.
             </p>
 
         </div>
@@ -805,7 +780,7 @@ FREE TRIAL
             </h2>
 
             <p>
-                Explore every EdgeBreak product with full access for one month.
+                Explore the full EdgeBreak platform with no commitment.
             </p>
 
         </div>
@@ -813,13 +788,19 @@ FREE TRIAL
         <div class="info-box">
 
             <p>
-                Your membership includes complete access to Breakout Plus, Breakout Elite, Smart Money, historical results, chart access, and daily updates from day one.
+                Gain full access to the NASDAQ Scanner, Breakout Scanner, Pre-Breakout Scanner, My Workspace, personal watchlists, TradingView charts and daily scanner updates from day one.
+            </p>
+
+            <br>
+
+            <p>
+                Research more than 3,000 NASDAQ-listed stocks using a structured framework built around resistance levels, higher lows, breakout structures and market participation.
             </p>
 
             <br>
 
             <div class="hero-highlight">
-                Full Platform Access Included
+                Full Platform Access • 1 Month Free Trial
             </div>
 
         </div>
@@ -837,15 +818,15 @@ FINAL CTA
     <div class="container">
 
         <h2>
-            Ready To Improve Your Edge?
+            Ready To Explore The NASDAQ Market?
         </h2>
 
         <p>
-            Join EdgeBreak and access Breakout Plus, Breakout Elite, and Smart Money through a single membership built for NASDAQ traders and investors.
+            Research more than 3,000 NASDAQ stocks using resistance touches, higher lows, breakout structures and volume-based market analysis through the EdgeBreak platform.
         </p>
 
         <div class="hero-highlight">
-            1 Month Free Trial • Cancel Anytime
+            1 Month Free Trial • Full Platform Access
         </div>
 
         <br><br>
@@ -857,6 +838,244 @@ FINAL CTA
     </div>
 
 </section>
+
+<!-- ===================================
+FOOTER
+=================================== -->
+
+<footer class="footer">
+
+
+<div class="footer-inner">
+
+    <!-- BRAND -->
+
+    <div class="footer-col footer-brand">
+
+        <div class="footer-brand-header">
+
+            <img
+                src="images/logo.webp"
+                alt="EdgeBreak"
+                width="50"
+                height="50"
+            >
+
+            <div>
+
+                <h3>EdgeBreak</h3>
+
+                <div class="footer-status">
+
+                    <span class="status-dot"></span>
+                    NASDAQ Data Updated Daily
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <p>
+            EdgeBreak is a NASDAQ stock research platform designed to help investors identify stocks showing accumulation, buying pressure and breakout potential through simplified market research tools.
+        </p>
+
+        <p class="footer-tagline">
+            Research Smarter. Invest With Confidence.
+        </p>
+
+    </div>
+
+    <!-- PLATFORM -->
+
+    <div class="footer-col">
+
+        <h4>
+            <span class="footer-icon"></span>
+            Platform
+        </h4>
+
+        <a href="smart-money-dashboard.html">
+            Smart Money Scanner
+        </a>
+
+        <a href="nasdaq-stock-scanner.html">
+            NASDAQ Screener
+        </a>
+
+        <a href="edgebreak-trades.html">
+            EdgeBreak Trades
+        </a>
+
+        <a href="pricing.html">
+            Pricing
+        </a>
+
+    </div>
+
+    <!-- LEARNING -->
+
+    <div class="footer-col">
+
+        <h4>
+            <span class="footer-icon"></span>
+            Learning Centre
+        </h4>
+
+        <a href="trading-guide.html">
+            Trading Guide
+        </a>
+
+        <a href="breakout-guide.html">
+            Breakout Guide
+        </a>
+
+        <a href="strategy.html">
+            Strategy
+        </a>
+
+        <a href="trading-insights.html">
+            Trading Insights
+        </a>
+
+    </div>
+
+    <!-- COMPANY -->
+
+    <div class="footer-col">
+
+        <h4>
+            <span class="footer-icon"></span>
+            Company
+        </h4>
+
+        <a href="about.html">
+            About EdgeBreak
+        </a>
+
+        <a href="support.html">
+            Support
+        </a>
+
+        <a href="privacy.html">
+            Privacy Policy
+        </a>
+
+        <a href="terms.html">
+            Terms of Service
+        </a>
+
+        <a href="disclaimer.html">
+            Disclaimer
+        </a>
+
+    </div>
+
+</div>
+
+<!-- FEATURE STRIP -->
+
+<div class="footer-highlight">
+
+    <div>
+
+        <strong>Smart Money Scanner</strong>
+
+        <span>
+            Accumulation & Institutional Interest
+        </span>
+
+    </div>
+
+    <div>
+
+        <strong>Breakout Scanner</strong>
+
+        <span>
+            Confirmed Resistance Breakouts
+        </span>
+
+    </div>
+
+    <div>
+
+        <strong>NASDAQ Screener</strong>
+
+        <span>
+            Research Thousands Of Stocks
+        </span>
+
+    </div>
+
+    <div>
+
+        <strong>Transparent Trades</strong>
+
+        <span>
+            Every Winner, Loser And Active Position
+        </span>
+
+    </div>
+
+</div>
+
+<!-- BOTTOM BAR -->
+
+<div class="footer-bottom">
+
+    <div>
+
+        <p>
+            © 2026 EdgeBreak. All rights reserved.
+        </p>
+
+        <p class="footer-disclaimer">
+
+            Educational and research purposes only.
+
+            EdgeBreak does not provide financial advice,
+            investment recommendations or personal financial services.
+
+            Trading and investing involve risk and may result in loss of capital.
+
+        </p>
+
+    </div>
+
+    <div class="footer-parent-block">
+
+        <a href="https://www.craneplatformlabs.com.au"
+           target="_blank"
+           rel="noopener">
+
+            <img
+                src="images/crane-logo.webp"
+                alt="Crane Platform Labs"
+                class="footer-logo"
+            >
+
+        </a>
+
+        <p class="footer-parent">
+
+            Website by
+
+            <a href="https://www.craneplatformlabs.com.au"
+               target="_blank"
+               rel="noopener">
+
+                Crane Platform Labs
+
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+
+</footer>
 
 <script>
 // =========================
