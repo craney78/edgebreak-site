@@ -389,7 +389,43 @@ window.supabaseClient = supabase.createClient(
   "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
+<style>
+/* ===================================
+HERO SECONDARY BUTTON
+=================================== */
 
+.hero-secondary-btn{
+    background:transparent;
+    color:#ffffff;
+    border:1px solid rgba(255,255,255,0.2);
+    padding:14px 28px;
+    border-radius:12px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .25s ease;
+}
+
+.hero-secondary-btn:hover{
+    background:rgba(255,255,255,0.05);
+    border-color:#22c55e;
+    color:#22c55e;
+    transform:translateY(-2px);
+}
+
+/* Mobile */
+
+@media (max-width:768px){
+
+    .hero-secondary-btn{
+        width:100%;
+        max-width:320px;
+        padding:14px 20px;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
@@ -640,7 +676,7 @@ HERO
 
                 <button
                     onclick="window.location.href='edgebreak-trades.html'"
-                    class="btn">
+                    class="hero-secondary-btn">
                     View EdgeBreak Trades
                 </button>
 
