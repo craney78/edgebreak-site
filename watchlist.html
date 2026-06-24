@@ -28,49 +28,7 @@ window.supabaseClient = supabase.createClient(
   "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<script>
-// =========================
-// 🔒 HARD PAGE LOCK
-// =========================
-document.documentElement.style.visibility = "hidden";
 
-const supabaseClient = window.supabaseClient;
-
-// =========================
-// 🔐 ACCESS CONTROL
-// =========================
-async function checkAccess() {
-  try {
-    const { data: { user } } = await supabaseClient.auth.getUser();
-
-    if (!user) {
-      window.location.replace("/login.html");
-      return;
-    }
-
-    const { data: profile, error } = await supabaseClient
-      .from("profiles")
-      .select("is_active")
-      .eq("id", user.id)
-      .single();
-
-    if (error || !profile || !profile.is_active) {
-      window.location.replace("/pricing.html");
-      return;
-    }
-
-    document.documentElement.style.visibility = "visible";
-
-  } catch (err) {
-    console.error(err);
-    window.location.replace("/login.html");
-  }
-}
-
-// 🚀 RUN
-checkAccess();
-
-</script>
 <style>
 
 /* =========================
@@ -3699,35 +3657,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </script>
 
-<script>
-async function setupAuthButton() {
 
-  const btn = document.getElementById("authBtn");
-  if (!btn) return;
-
-  const { data: { user } } = await supabaseClient.auth.getUser();
-
-  if (user) {
-    btn.innerText = "Logout";
-
-    btn.onclick = async (e) => {
-      e.preventDefault();
-      await supabaseClient.auth.signOut();
-      window.location.href = "/login.html";
-    };
-
-  } else {
-    btn.innerText = "Login";
-    btn.href = "/login.html";
-  }
-}
-
-setupAuthButton();
-
-supabaseClient.auth.onAuthStateChange(() => {
-  setupAuthButton();
-});
-</script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -3748,30 +3678,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
-<script>
-document.addEventListener("DOMContentLoaded", async () => {
 
-  const { data: { user } } = await supabaseClient.auth.getUser();
-  if (!user) return;
-
-  const { data: profile } = await supabaseClient
-    .from("profiles")
-    .select("is_active")
-    .eq("id", user.id)
-    .single();
-
-  if (!profile || profile.is_active !== true) return;
-
-  // ✅ REMOVE LOCK ICONS ONLY (VISUAL FIX)
-  document.querySelectorAll(".lock-icon").forEach(icon => icon.remove());
-
-  document.querySelectorAll(".locked-link").forEach(link => {
-    link.classList.remove("locked-link");
-  });
-
-});
-
-</script>
 
 <script>
 function selectTrade(symbol){
