@@ -149,6 +149,23 @@ body{
   font-size:15px;
 }
 
+.watchlist-btn{
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    background:#22c55e;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.watchlist-btn:hover{
+    background:#16a34a;
+}
+
 /* =========================
    CHART
 ========================= */
@@ -3039,6 +3056,24 @@ document.addEventListener("DOMContentLoaded", function () {
             <div style="font-size:12px; color:#64748b;">
               ${t.days_held ?? 0} days
             </div>
+
+            <button
+              class="watchlist-btn"
+              onclick="event.stopPropagation(); addToWatchlist('${t.symbol}')"
+              style="
+                margin-top:8px;
+                width:100%;
+                padding:8px;
+                border:none;
+                border-radius:8px;
+                background:#22c55e;
+                color:white;
+                font-weight:600;
+                cursor:pointer;
+              "
+            >
+              ⭐ Add To Watchlist
+            </button>
           </div>
         `;
       }).join("");
@@ -3668,6 +3703,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }); // ✅ closes MAIN DOMContentLoaded
 
+async function addToWatchlist(symbol){
+
+    const {
+        data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    if(!user){
+        alert("Please login first");
+        return;
+    }
+
+    const { error } = await supabaseClient
+        .from("watchlist")
+        .insert([
+            {
+                user_id: user.id,
+                symbol: symbol
+            }
+        ]);
+
+    if(error){
+        console.log(error);
+        return;
+    }
+
+    alert(symbol + " added to watchlist");
+}
 </script>
 
 
