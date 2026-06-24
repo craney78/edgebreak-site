@@ -3687,7 +3687,18 @@ function rotateStatus(){
 
 rotateStatus();
 setInterval(rotateStatus, 10000);
-</script>
 
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const {
+        data: { session }
+    } = await supabaseClient.auth.getSession();
+
+    console.log("WATCHLIST SESSION:", session);
+
+});
+</script>
 </body>
 </html>
