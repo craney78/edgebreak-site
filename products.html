@@ -1233,30 +1233,7 @@ FOOTER
 
 </footer>
 
-<script>
-// =========================
-// 🔐 NAV LOGIN / LOGOUT
-// =========================
-const user = localStorage.getItem("edgebreak_user");
-const navBtn = document.querySelector(".nav-cta");
 
-if (navBtn) {
-  if (user) {
-    navBtn.innerText = "Logout";
-    navBtn.href = "#";
-
-    navBtn.onclick = function (e) {
-      e.preventDefault();
-      localStorage.removeItem("edgebreak_user");
-      window.location.href = "index.html";
-    };
-
-  } else {
-    navBtn.innerText = "Login";
-    navBtn.href = "login.html";
-  }
-}  
-</script>
 <script>
 
 // =========================
