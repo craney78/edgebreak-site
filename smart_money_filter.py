@@ -133,7 +133,7 @@ def passes_smart_money_filter(data):
             ) / daily_range
 
             if (
-                volumes[i] > avg_volume_50 * 1.5
+                volumes[i] > avg_volume_50 * 1.3
                 and daily_range < avg_range_20
                 and close_position > 0.60
             ):
@@ -297,133 +297,179 @@ def save_history(filename, new_records):
     return len(existing)    
 
 # =========================
-
 # 🚀 MAIN SCAN LOOP
-
 # =========================
 
 def run_scanner():
 
+    print("🧠 RUNNING SMART MONEY SCAN...\n")
 
-print("🧠 RUNNING SMART MONEY SCAN...\n")
+    symbols = build_nasdaq_universe()
 
-symbols = build_nasdaq_universe()
+    all_results = []
 
-all_results = []
+    for i in range(0, len(symbols), BATCH_SIZE):
 
-for i in range(0, len(symbols), BATCH_SIZE):
-
-    batch = symbols[i:i + BATCH_SIZE]
-
-    print(
-        f"Batch {(i // BATCH_SIZE) + 1}"
-    )
-
-    data = fetch_batch(batch)
-
-    if not data:
-        continue
-
-    for symbol, content in data.items():
-
-        values = content.get("values")
-
-        if not values:
-            continue
-
-        values = list(
-            reversed(values)
-        )
-
-        if len(values) < MIN_LOOKBACK:
-            continue
-
-        result = passes_smart_money_filter(
-            values
-        )
-
-        if not result:
-            continue
-
-        all_results.append({
-
-            "symbol": symbol,
-
-            "scan_date": datetime.now().strftime(
-                "%Y-%m-%d"
-            ),
-
-            "absorption_count":
-                result["absorption_count"],
-
-            "high_volume_days":
-                result["high_volume_days"],
-
-            "strong_close_days":
-                result["strong_close_days"],
-
-            "range_percent":
-                result["range_percent"]
-
-        })
+        batch = symbols[i:i + BATCH_SIZE]
 
         print(
-            f"{symbol} "
-            f"ABS={result['absorption_count']} "
-            f"VOL={result['high_volume_days']} "
-            f"CLOSES={result['strong_close_days']} "
-            f"RANGE={result['range_percent']}%"
+            f"Batch {(i // BATCH_SIZE) + 1}"
         )
 
-    time.sleep(
-        SLEEP_TIME
-    )
+        data = fetch_batch(batch)
 
-# =========================
-# SORT RESULTS
-# =========================
+        if not data:
+            continue
 
-results = sorted(
+        for symbol, content in data.items():
 
-    all_results,
+            values = content.get("values")
 
-    key=lambda x: (
+            if not values:
+                continue
 
-        x["absorption_count"],
-        x["high_volume_days"],
-        x["strong_close_days"]
+            values = list(
+                reversed(values)
+            )
 
-    ),
+            if len(values) < MIN_LOOKBACK:
+                continue
 
-    reverse=True
+            result = passes_smart_money_filter(
+                values
+            )
 
-)
+            if not result:
+                continue
 
-# =========================
-# SAVE SINGLE FILE
-# =========================
+            all_results.append({
 
-try:
+                "symbol": symbol,
 
-    with open(
-        "smart_money_filter.json",
-        "w"
-    ) as f:
+                "scan_date": datetime.now().strftime(
+                    "%Y-%m-%d"
+                ),
 
-        json.dump(
-            results,
-            f,
-            indent=2
+                "smart_money": True,
+
+                "absorption_count":
+                    result["absorption_count"],
+
+                "high_volume_days":
+                    result["high_volume_days"],
+
+                "strong_close_days":
+                    result["strong_close_days"],
+
+                "range_percent":
+                    result["range_percent"]
+
+            })
+
+            print(
+                f"{symbol} "
+                f"ABS={result['absorption_count']} "
+                f"VOL={result['high_volume_days']} "
+                f"CLOSES={result['strong_close_days']} "
+                f"RANGE={result['range_percent']}%"
+            )
+
+        time.sleep(
+            SLEEP_TIME
         )
 
-    print(
-        f"\n🧠 Smart Money Results: "
-        f"{len(results)}"
+    # =========================
+    # SORT RESULTS
+    # =========================
+
+    results = sorted(
+
+        all_results,
+
+        key=lambda x: (
+
+            x["absorption_count"],
+            x["high_volume_days"],
+            x["strong_close_days"]
+
+        ),
+
+        reverse=True
+
     )
 
-except Exception as e:
+    # =========================
+    # SAVE FILE
+    # =========================
 
-    print(
-        f"❌ Save failed: {e}"
+    try:
+
+        with open(
+            "smart_money_filter.json",
+            "w"
+        ) as f:
+
+            json.dump(
+                results,
+                f,
+                indent=2
+            )
+
+        print(
+            f"\n🧠 Smart Money Results: "
+            f"{len(results)}"
+        )
+
+        print(
+            "💾 Saved to smart_money_filter.json"
+        )
+
+    except Exception as e:
+
+        print(
+            f"❌ Save failed: {e}"
+        )
+
+# =========================
+# ▶ RUN
+# =========================
+
+if __name__ == "__main__":
+
+    start_time = time.time()
+
+    print("===================================")
+    print("🧠 SMART MONEY SCANNER")
+    print("===================================\n")
+
+    try:
+
+        run_scanner()
+
+    except KeyboardInterrupt:
+
+        print(
+            "\n⚠️ Stopped manually"
+        )
+
+    except Exception as e:
+
+        print(
+            f"\n❌ Fatal error: {e}"
+        )
+
+    end_time = time.time()
+
+    runtime = round(
+        end_time - start_time,
+        2
     )
 
+    print("\n===================================")
+    print(
+        f"⏱ Runtime: {runtime} seconds"
+    )
+    print(
+        "📊 Smart Money scan complete"
+    )
+    print("===================================")        
