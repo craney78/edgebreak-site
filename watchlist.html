@@ -2876,6 +2876,18 @@ function loadChart(symbol) {
 
 }
 
+function selectTrade(symbol) {
+
+    loadChart(symbol);
+
+    const title = document.getElementById("chartTitle");
+
+    if (title) {
+        title.innerText = symbol + " Breakout Analysis";
+    }
+
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 
   console.log("✅ PAGE RUNNING");
