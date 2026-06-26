@@ -2896,6 +2896,13 @@ document.addEventListener("DOMContentLoaded", () => {
         .getElementById("scannerSearchBtn")
         .addEventListener("click", runScanner);
 
+    document
+        .getElementById("applyScannerSmartMoney")
+        ?.addEventListener(
+            "click",
+            applyScannerSmartMoney
+        );    
+
     fetch("/scanner_database.json?v=" + Date.now())
     .then(res => res.json())
     .then(data => {
@@ -2941,6 +2948,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+
+
 
 function runScanner(){
 
@@ -3172,6 +3181,12 @@ function selectStock(symbol){
         </div>
 
     `;
+}
+
+function applyScannerSmartMoney(){
+
+    alert("Smart Money filter connected!");
+
 }
 </script>
 
