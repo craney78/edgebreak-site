@@ -3048,6 +3048,16 @@ function selectStock(symbol){
 
     loadChart(symbol);
 
+    setTimeout(() => {
+
+        document.getElementById("chartSection")
+            ?.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+    }, 200);
+
     document.getElementById(
         "scannerMetrics"
     ).innerHTML = `
@@ -3396,6 +3406,16 @@ function selectBreakout(symbol){
     if(!stock) return;
 
     loadChart(symbol);
+
+    setTimeout(() => {
+
+        document.getElementById("chartSection")
+            ?.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+    }, 200);
 
     const metrics =
         document.getElementById(
