@@ -306,6 +306,31 @@ def run_scanner():
 
     symbols = build_nasdaq_universe()
 
+    # =========================
+    # LOAD EXISTING RESULTS
+    # =========================
+
+    try:
+
+        with open(
+            "smart_money_filter.json",
+            "r"
+        ) as f:
+
+            existing = json.load(f)
+
+    except:
+
+        existing = []
+
+    history = {
+
+        item["symbol"]: item
+
+        for item in existing
+
+    }
+
     all_results = []
 
     for i in range(0, len(symbols), BATCH_SIZE):
@@ -342,15 +367,41 @@ def run_scanner():
             if not result:
                 continue
 
+            today = datetime.now().strftime("%Y-%m-%d")
+
+            previous = history.get(symbol)
+
+            if previous:
+
+                count = previous.get(
+                    "smart_money_count",
+                    0
+                ) + 1
+
+                first_seen = previous.get(
+                    "smart_money_first_seen",
+                    today
+                )
+
+            else:
+
+                count = 1
+
+                first_seen = today
+
             all_results.append({
 
                 "symbol": symbol,
 
-                "scan_date": datetime.now().strftime(
-                    "%Y-%m-%d"
-                ),
+                "scan_date": today,
 
                 "smart_money": True,
+
+                "smart_money_count": count,
+
+                "smart_money_first_seen": first_seen,
+
+                "smart_money_last_seen": today,
 
                 "absorption_count":
                     result["absorption_count"],
