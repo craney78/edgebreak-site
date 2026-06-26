@@ -2113,7 +2113,10 @@ EDGEBREAK TOOLS
     BREAKOUT RESULTS
     ========================================= -->
 
-    <div class="scanner-panel scanner-results">
+    <div
+        class="scanner-panel breakout-results"
+        id="breakoutResultsSection"
+    >   
 
         <h3>Breakout Results</h3>
 
@@ -2278,7 +2281,10 @@ EDGEBREAK TOOLS
     RESULTS
     ========================================= -->
 
-    <div class="scanner-panel scanner-results">
+    <div
+        class="scanner-panel scanner-results"
+        id="scannerResultsSection"
+    >
 
         <h3>Scanner Results</h3>
 
@@ -3002,8 +3008,30 @@ function renderResults(results){
             </tr>
 
         `).join("");
+    
+    // 📱 Scroll to results on mobile
+    if (window.innerWidth <= 768) {
+
+        const resultsSection =
+            document.getElementById("scannerResultsSection");
+
+        if (resultsSection) {
+
+            setTimeout(() => {
+
+                window.scrollTo({
+                    top: resultsSection.offsetTop - 15,
+                    behavior: "smooth"
+                });
+
+            }, 100);
+
+        }
+
+    }
 
 }
+
 
 function selectStock(symbol){
 
