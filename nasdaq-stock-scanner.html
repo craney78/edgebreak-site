@@ -2157,7 +2157,7 @@ EDGEBREAK TOOLS
 
         <label>Smart Money Appearances</label>
 
-        <select id="scannerSmartMoneyAppearances">
+        <select id="breakoutSmartMoneyAppearances">
 
             <option value="">Any</option>
             <option value="1">1+</option>
@@ -2174,7 +2174,7 @@ EDGEBREAK TOOLS
 
         <label>Time Period</label>
 
-        <select id="scannerSmartMoneyPeriod">
+        <select id="breakoutSmartMoneyPeriod">
 
             <option value="30">Past Month</option>
             <option value="60">Past 2 Months</option>
@@ -2185,13 +2185,11 @@ EDGEBREAK TOOLS
     </div>
 
     <button
-        id="applyScannerSmartMoney"
+        id="applyBreakoutSmartMoney"
         class="scanner-btn"
     >
         Apply Smart Money Filter
     </button>
-
-</div>
 
 </div>
 
@@ -2359,6 +2357,48 @@ EDGEBREAK TOOLS
             </tbody>
 
         </table>
+
+        <div style="margin-top:25px;">
+
+    <div class="filter-group">
+
+        <label>Smart Money Appearances</label>
+
+            <select id="scannerSmartMoneyAppearances">
+
+                <option value="">Any</option>
+                <option value="1">1+</option>
+                <option value="2">2+</option>
+                <option value="3">3+</option>
+                <option value="4">4+</option>
+                <option value="5">5+</option>
+
+            </select>
+
+        </div>
+
+    <div class="filter-group">
+
+        <label>Time Period</label>
+
+        <select id="scannerSmartMoneyPeriod">
+
+            <option value="30">Past Month</option>
+            <option value="60">Past 2 Months</option>
+            <option value="90" selected>Past 3 Months</option>
+
+        </select>
+
+    </div>
+
+    <button
+        id="applyScannerSmartMoney"
+        class="scanner-btn"
+    >
+        Apply Smart Money Filter
+    </button>
+
+</div>
 
     </div>
 
@@ -2888,6 +2928,9 @@ window.scannerData = [];
 
 window.smartMoneyData = [];
 
+// Stores the latest scanner search
+window.currentScannerResults = [];
+
 document.addEventListener("DOMContentLoaded", () => {
 
     loadChart("AAPL");
@@ -3005,10 +3048,12 @@ function runScanner(){
             return true;
 
         });
+        
+        window.currentScannerResults = results;
 
-    renderResults(results);
+        renderResults(results);
 
-}
+        }
 
 function renderResults(results){
 
