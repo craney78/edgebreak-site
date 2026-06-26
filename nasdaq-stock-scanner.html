@@ -2151,7 +2151,49 @@ EDGEBREAK TOOLS
 
         </table>
 
+<div style="margin-top:25px;">
+
+    <div class="filter-group">
+
+        <label>Smart Money Appearances</label>
+
+        <select id="scannerSmartMoneyAppearances">
+
+            <option value="">Any</option>
+            <option value="1">1+</option>
+            <option value="2">2+</option>
+            <option value="3">3+</option>
+            <option value="4">4+</option>
+            <option value="5">5+</option>
+
+        </select>
+
     </div>
+
+    <div class="filter-group">
+
+        <label>Time Period</label>
+
+        <select id="scannerSmartMoneyPeriod">
+
+            <option value="30">Past Month</option>
+            <option value="60">Past 2 Months</option>
+            <option value="90" selected>Past 3 Months</option>
+
+        </select>
+
+    </div>
+
+    <button
+        id="applyScannerSmartMoney"
+        class="scanner-btn"
+    >
+        Apply Smart Money Filter
+    </button>
+
+</div>
+
+</div>
 
     <!-- =========================================
     BREAKOUT DETAILS
@@ -2377,7 +2419,7 @@ EDGEBREAK TOOLS
 
     </table>
 
-</div>
+
 
 <!-- =========================================
 🚀 EDGEBREAK TOOLS
@@ -2844,6 +2886,8 @@ function loadChart(symbol) {
 
 window.scannerData = [];
 
+window.smartMoneyData = [];
+
 document.addEventListener("DOMContentLoaded", () => {
 
     loadChart("AAPL");
@@ -2869,6 +2913,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.error(
             "Scanner load failed",
+            err
+        );
+
+    });
+
+    fetch("/smart_money_filter.json?v=" + Date.now())
+    .then(res => res.json())
+    .then(data => {
+
+        window.smartMoneyData = data;
+
+        console.log(
+            "Smart Money Loaded:",
+            data.length,
+            "stocks"
+        );
+
+    })
+    .catch(err => {
+
+        console.error(
+            "Smart Money load failed",
             err
         );
 

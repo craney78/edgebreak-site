@@ -306,6 +306,9 @@ def run_scanner():
 
     symbols = build_nasdaq_universe()
 
+    # Today's date (used throughout the scan)
+    today = datetime.now().strftime("%Y-%m-%d")
+
     # =========================
     # LOAD EXISTING RESULTS
     # =========================
@@ -331,7 +334,17 @@ def run_scanner():
 
     }
 
-    all_results = []
+    # =========================
+    # RESET TODAY'S STATUS
+    # =========================
+
+    for stock in history.values():
+
+        stock["smart_money"] = False
+
+    all_results = history.copy()
+
+    
 
     for i in range(0, len(symbols), BATCH_SIZE):
 
@@ -367,29 +380,32 @@ def run_scanner():
             if not result:
                 continue
 
-            today = datetime.now().strftime("%Y-%m-%d")
-
+            
             previous = history.get(symbol)
 
             if previous:
 
-                count = previous.get(
-                    "smart_money_count",
-                    0
-                ) + 1
-
-                first_seen = previous.get(
-                    "smart_money_first_seen",
-                    today
+                smart_money_dates = previous.get(
+                    "smart_money_dates",
+                    []
                 )
 
+                # Don't add today's date twice
+                if today not in smart_money_dates:
+
+                    smart_money_dates.append(today)
+
             else:
+                
+                smart_money_dates = [today]
 
-                count = 1
+                        
 
-                first_seen = today
+            # =========================
+            # SAVE / UPDATE RECORD
+            # =========================
 
-            all_results.append({
+            all_results[symbol] = {
 
                 "symbol": symbol,
 
@@ -397,11 +413,9 @@ def run_scanner():
 
                 "smart_money": True,
 
-                "smart_money_count": count,
-
-                "smart_money_first_seen": first_seen,
-
-                "smart_money_last_seen": today,
+                "smart_money_dates": sorted(
+                    smart_money_dates
+                ),
 
                 "absorption_count":
                     result["absorption_count"],
@@ -415,7 +429,7 @@ def run_scanner():
                 "range_percent":
                     result["range_percent"]
 
-            })
+            }
 
             print(
                 f"{symbol} "
@@ -435,9 +449,9 @@ def run_scanner():
 
     results = sorted(
 
-        all_results,
+        all_results.values(),
 
-        key=lambda x: (
+        key=lambda x:(
 
             x["absorption_count"],
             x["high_volume_days"],
@@ -445,9 +459,11 @@ def run_scanner():
 
         ),
 
-        reverse=True
+    reverse=True
 
-    )
+)
+
+     
 
     # =========================
     # SAVE FILE
