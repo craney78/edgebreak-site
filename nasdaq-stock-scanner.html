@@ -2928,6 +2928,8 @@ window.scannerData = [];
 
 window.smartMoneyData = [];
 
+window.smartMoneyLookup = {};
+
 // Stores the latest scanner search
 window.currentScannerResults = [];
 
@@ -2961,12 +2963,12 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch(err => {
 
-        console.error(
-            "Scanner load failed",
-            err
-        );
+    console.error(
+        "Scanner load failed",
+        err
+    );
 
-    });
+});
 
     fetch("/smart_money_filter.json?v=" + Date.now())
     .then(res => res.json())
@@ -2974,11 +2976,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
         window.smartMoneyData = data;
 
-        console.log(
-            "Smart Money Loaded:",
-            data.length,
-            "stocks"
-        );
+        window.smartMoneyLookup = {};
+
+    data.forEach(stock => {
+
+        window.smartMoneyLookup[
+            stock.symbol
+        ] = stock;
+
+    });
+
+console.log(
+    "Smart Money Loaded:",
+    data.length,
+    "stocks"
+);
 
     })
     .catch(err => {
@@ -3230,7 +3242,68 @@ function selectStock(symbol){
 
 function applyScannerSmartMoney(){
 
-    alert("Smart Money filter connected!");
+    const minimum =
+        parseInt(
+            document.getElementById(
+                "scannerSmartMoneyAppearances"
+            ).value || 0
+        );
+
+    const period =
+        parseInt(
+            document.getElementById(
+                "scannerSmartMoneyPeriod"
+            ).value
+        );
+
+    if(minimum === 0){
+
+        renderResults(
+            window.currentScannerResults
+        );
+
+        return;
+
+    }
+
+    const filtered =
+        window.currentScannerResults.filter(stock => {
+
+            const record =
+                window.smartMoneyLookup[stock.symbol];
+
+    
+                if(!record)
+                    return false;
+
+                let count = 0;
+
+                if(period === 30){
+
+                    count =
+                        record.smart_money_30 || 0;
+
+                }
+
+            else if(period === 60){
+
+                count =
+                    record.smart_money_60 || 0;
+
+            }
+
+            else{
+
+                count =
+                    record.smart_money_90 || 0;
+
+            }
+
+            return count >= minimum;
+
+        });
+
+    renderResults(filtered);
 
 }
 </script>
