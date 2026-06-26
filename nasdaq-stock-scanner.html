@@ -3373,9 +3373,9 @@ function renderBreakoutResults(results){
 
             setTimeout(() => {
 
-                window.scrollTo({
-                    top: resultsSection.offsetTop - 15,
-                    behavior: "smooth"
+                resultsSection.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
                 });
 
             }, 100);
