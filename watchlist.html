@@ -2966,6 +2966,27 @@ function selectTrade(symbol) {
         title.innerText = symbol + " Breakout Analysis";
     }
 
+    // Mobile only
+    if (window.innerWidth <= 768) {
+
+        const panel = document.getElementById("chartPanel");
+
+        if (panel) {
+
+            // Give TradingView a moment to begin loading
+            setTimeout(() => {
+
+                panel.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            }, 100);
+
+        }
+
+    }
+
 }
 
 document.addEventListener("DOMContentLoaded", function () {
