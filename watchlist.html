@@ -2969,25 +2969,24 @@ function selectTrade(symbol) {
     // Mobile only
     if (window.innerWidth <= 768) {
 
-        const panel = document.getElementById("chartPanel");
+        const chart = document.querySelector(".chart-panel");
 
-        if (panel) {
+        if (chart) {
 
-            // Give TradingView a moment to begin loading
             setTimeout(() => {
 
-                panel.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
+                window.scrollTo({
+
+                    top: chart.offsetTop - 20,
+                    behavior: "smooth"
+
                 });
 
-            }, 100);
+            }, 300);
 
         }
 
     }
-
-}
 
 document.addEventListener("DOMContentLoaded", function () {
 
