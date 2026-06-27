@@ -874,9 +874,9 @@ HERO
         NASDAQ STOCK RESEARCH PLATFORM
     </div>
 
-    <h2>
+    <h1>
         How To Use EdgeBreak
-    </h2>
+    </h1>
 
     <p class="header-sub">
         Learn how to find opportunities, build watchlists,
@@ -892,9 +892,9 @@ WORKFLOW
 
 <div class="section">
 
-    <h1>
+    <h2>
         The EdgeBreak Workflow
-    </h1>
+    </h2>
 
     <p class="section-intro">
         EdgeBreak is designed around a simple repeatable process.
@@ -1531,26 +1531,7 @@ function toggleMenu() {
 }
 </script>
 
-<script>
-const user = localStorage.getItem("edgebreak_user");
-const navBtn = document.querySelector(".nav-cta");
 
-if (navBtn) {
-  if (user) {
-    navBtn.innerText = "Logout";
-    navBtn.href = "#";
-
-    navBtn.onclick = function (e) {
-      e.preventDefault();
-      localStorage.removeItem("edgebreak_user");
-      window.location.href = "index.html";
-    };
-  } else {
-    navBtn.innerText = "Login";
-    navBtn.href = "login.html";
-  }
-}
-</script>
 <script>
 
 // =========================
