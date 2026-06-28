@@ -698,6 +698,89 @@ MOBILE
     gap:30px;
 
 }
+
+/* ===================================
+GLASS BUTTONS
+=================================== */
+
+.button-row{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:18px;
+    flex-wrap:wrap;
+
+    margin-top:35px;
+
+}
+
+.glass-btn{
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    min-width:220px;
+
+    padding:14px 28px;
+
+    border-radius:14px;
+
+    color:#ffffff;
+    text-decoration:none;
+    font-weight:600;
+    font-size:15px;
+
+    background:rgba(255,255,255,.06);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+
+    transition:.25s ease;
+
+}
+
+.glass-btn:hover{
+
+    transform:translateY(-3px);
+
+    background:rgba(74,222,128,.12);
+
+    border-color:#4ADE80;
+
+    box-shadow:0 10px 30px rgba(74,222,128,.18);
+
+    color:#ffffff;
+
+}
+
+.glass-btn:active{
+
+    transform:translateY(0);
+
+}
+
+@media (max-width:768px){
+
+    .button-row{
+
+        flex-direction:column;
+
+        gap:14px;
+
+    }
+
+    .glass-btn{
+
+        width:100%;
+        max-width:320px;
+
+    }
+
+}
 </style>
 </head>
 
@@ -837,15 +920,15 @@ HEADER
 
     </p>
 
-    <div class="button-row" style="justify-content:center; margin-top:35px;">
+        <div class="button-row">
 
-        <a href="#contact-support" class="nav-cta">
-            Contact Support
-        </a>
+          <a href="/nasdaq-stock-scanner.html" class="glass-btn">
+              Explore NASDAQ Scanner
+          </a>
 
-        <a href="/trading-guide.html" class="secondary-btn">
-            Trading Guide
-        </a>
+          <a href="/trading-guide.html" class="glass-btn">
+              Trading Guide
+          </a>
 
     </div>
 
@@ -1181,21 +1264,15 @@ CTA
 
         <div class="button-row">
 
-            <a href="pricing.html"
-               class="nav-cta">
+          <a href="/pricing.html" class="glass-btn">
+              Start Free Trial
+          </a>
 
-                Start Free Trial
+          <a href="/nasdaq-stock-scanner.html" class="glass-btn">
+              Explore NASDAQ Scanner
+          </a>
 
-            </a>
-
-            <a href="nasdaq-stock-scanner.html"
-               class="secondary-btn">
-
-                Explore NASDAQ Scanner
-
-            </a>
-
-        </div>
+      </div>
 
     </div>
 
