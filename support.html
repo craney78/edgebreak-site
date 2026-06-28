@@ -578,6 +578,126 @@ SUPPORT PAGE MOBILE
 }
 
 }
+
+/* ===================================
+SUPPORT PAGE
+=================================== */
+
+.support-icon{
+
+    width:52px;
+    height:52px;
+
+    margin:0 auto 20px;
+
+    display:block;
+
+    fill:none;
+
+    stroke:#45e07f;
+    stroke-width:1.8;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+
+    transition:.25s ease;
+
+}
+
+.feature-card{
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    text-align:center;
+
+    padding:35px 30px;
+
+    transition:.25s ease;
+
+}
+
+.feature-card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.feature-card:hover .support-icon{
+
+    transform:scale(1.08);
+
+}
+
+.feature-card h3{
+
+    margin:8px 0 14px;
+
+}
+
+.feature-card p{
+
+    color:#94a3b8;
+
+    line-height:1.7;
+
+    margin:0;
+
+}
+
+/* ===================================
+MOBILE
+=================================== */
+
+@media (max-width:768px){
+
+    .feature-grid{
+
+        grid-template-columns:1fr;
+
+        gap:22px;
+
+    }
+
+    .feature-card{
+
+        padding:28px 22px;
+
+    }
+
+    .support-icon{
+
+        width:44px;
+        height:44px;
+
+        margin-bottom:18px;
+
+    }
+
+    .feature-card h3{
+
+        font-size:22px;
+
+    }
+
+    .feature-card p{
+
+        font-size:15px;
+
+    }
+
+}
+
+.support-grid{
+
+    max-width:1100px;
+
+    margin:40px auto 0;
+
+    gap:30px;
+
+}
 </style>
 </head>
 
@@ -694,6 +814,7 @@ SUPPORT PAGE MOBILE
   </div>
 </div>
 
+
 <!-- ===================================
 HEADER
 =================================== -->
@@ -712,129 +833,25 @@ HEADER
 
     <p class="header-sub">
 
-        Find answers, learn how EdgeBreak works and get help using the NASDAQ Scanner, Smart Money Filter and other research tools.
+        Need help using EdgeBreak? Find answers to common questions, learn how the platform works and contact our support team if you need additional assistance.
 
     </p>
 
-    <div class="hero-features">
+    <div class="button-row" style="justify-content:center; margin-top:35px;">
 
-        <div class="hero-feature">
-            <span class="footer-icon"></span>
-            Platform Support
-        </div>
+        <a href="#contact-support" class="nav-cta">
+            Contact Support
+        </a>
 
-        <div class="hero-feature">
-            <span class="footer-icon"></span>
-            Account Assistance
-        </div>
-
-        <div class="hero-feature">
-            <span class="footer-icon"></span>
-            Research Resources
-        </div>
+        <a href="/trading-guide.html" class="secondary-btn">
+            Trading Guide
+        </a>
 
     </div>
 
 </div>
 
-<div class="feature-grid support-grid" style="margin-top:40px;">
 
-    <div class="feature-card support-card">
-
-        <svg class="support-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <circle cx="12" cy="8" r="4"/>
-            <path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"/>
-        </svg>
-
-        <h3>Account & Login</h3>
-
-        <p>
-            Sign in, password, account access and profile support.
-        </p>
-
-    </div>
-
-    <div class="feature-card support-card">
-
-        <svg class="support-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="3" y="6" width="18" height="12" rx="2"/>
-            <path d="M3 10h18"/>
-        </svg>
-
-        <h3>Membership & Billing</h3>
-
-        <p>
-            Free trial, subscriptions and payment questions.
-        </p>
-
-    </div>
-
-    <div class="feature-card support-card">
-
-        <svg class="support-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M4 20h16"/>
-            <path d="M7 16V8"/>
-            <path d="M12 16V4"/>
-            <path d="M17 16v-6"/>
-        </svg>
-
-        <h3>NASDAQ Scanner</h3>
-
-        <p>
-            Scanner features, filters and research tools.
-        </p>
-
-    </div>
-
-    <div class="feature-card support-card">
-
-        <svg class="support-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <circle cx="10" cy="10" r="6"/>
-            <path d="M21 21l-5-5"/>
-            <path d="M7 10h6"/>
-            <path d="M10 7v6"/>
-        </svg>
-
-        <h3>Smart Money Filter</h3>
-
-        <p>
-            Understanding accumulation and market structure.
-        </p>
-
-    </div>
-
-    <div class="feature-card support-card">
-
-        <svg class="support-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M19.4 15a1.6 1.6 0 0 0 .3 1.7l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.7-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.2a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.7.3l-.1.1a2 2 0 0 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.7 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.2a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.7.3 1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.2a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.7-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.7 1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.2a1.6 1.6 0 0 0-1.4 1z"/>
-        </svg>
-
-        <h3>Technical Support</h3>
-
-        <p>
-            Platform issues, bugs and technical assistance.
-        </p>
-
-    </div>
-
-    <div class="feature-card support-card">
-
-        <svg class="support-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M4 5h16v14H4z"/>
-            <path d="M8 9h8"/>
-            <path d="M8 13h6"/>
-        </svg>
-
-        <h3>Platform Questions</h3>
-
-        <p>
-            Learn how EdgeBreak works and where to start.
-        </p>
-
-    </div>
-
-</div>
 
 
 <!-- ===================================
@@ -843,15 +860,15 @@ GETTING STARTED
 
 <div class="section">
 
-    <div style="max-width:1000px; margin:0 auto; text-align:center;">
+    <div style="max-width:1100px; margin:0 auto; text-align:center;">
 
         <h2>
-            Getting Started
+            New to EdgeBreak?
         </h2>
 
         <p class="section-intro">
 
-            New to EdgeBreak? These resources will help you understand the platform, learn the research process and start exploring NASDAQ stocks using a structured workflow.
+            Start with these resources to learn how EdgeBreak works, understand the research methodology and begin exploring NASDAQ stocks using a structured workflow.
 
         </p>
 
@@ -859,7 +876,7 @@ GETTING STARTED
 
             <!-- Trading Guide -->
 
-            <div class="feature-card">
+            <a href="trading-guide.html" class="feature-card">
 
                 <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M6 4h10a2 2 0 0 1 2 2v14H8a2 2 0 0 0-2 2V4z"/>
@@ -872,19 +889,15 @@ GETTING STARTED
 
                 <p>
 
-                    Learn the EdgeBreak research methodology, understand market structure and discover how the platform is designed to be used.
+                    Learn the EdgeBreak research process, understand market structure and discover how each platform feature works together.
 
                 </p>
 
-                <a href="/trading-guide.html">
-                    Read the Trading Guide →
-                </a>
-
-            </div>
+            </a>
 
             <!-- NASDAQ Scanner -->
 
-            <div class="feature-card">
+            <a href="nasdaq-stock-scanner.html" class="feature-card">
 
                 <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M4 20h16"/>
@@ -897,44 +910,15 @@ GETTING STARTED
 
                 <p>
 
-                    Search thousands of NASDAQ-listed stocks using structured filters including resistance touches, higher lows and breakout characteristics.
+                    Search thousands of NASDAQ stocks using resistance touches, higher lows and breakout research filters.
 
                 </p>
 
-                <a href="/nasdaq-stock-scanner.html">
-                    Explore the Scanner →
-                </a>
+            </a>
 
-            </div>
+            <!-- Educational Articles -->
 
-            <!-- Smart Money Filter -->
-
-            <div class="feature-card">
-
-                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="11" cy="11" r="6"/>
-                    <path d="M20 20l-4.2-4.2"/>
-                    <path d="M11 8v6"/>
-                    <path d="M8 11h6"/>
-                </svg>
-
-                <h3>Smart Money Filter</h3>
-
-                <p>
-
-                    Research stocks displaying accumulation characteristics, improving market structure and changing volume behaviour.
-
-                </p>
-
-                <a href="/smart-money-dashboard.html">
-                    Learn More →
-                </a>
-
-            </div>
-
-            <!-- Trading Insights -->
-
-            <div class="feature-card">
+            <a href="blog.html" class="feature-card">
 
                 <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M6 3h9l3 3v15H6z"/>
@@ -947,21 +931,39 @@ GETTING STARTED
 
                 <p>
 
-                    Build your understanding of breakout research through detailed educational articles covering market structure, resistance levels and volume analysis.
+                    Build your knowledge with educational articles covering breakout research, volume analysis and market structure.
 
                 </p>
 
-                <a href="/blog.html">
-                    Browse Articles →
-                </a>
+            </a>
 
-            </div>
+            <!-- Workspace -->
+
+            <a href="my-workspace.html" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="4" y="5" width="16" height="14" rx="2"/>
+                    <path d="M8 9h8"/>
+                    <path d="M8 13h5"/>
+                </svg>
+
+                <h3>My Workspace</h3>
+
+                <p>
+
+                    Organise your watchlist, research charts and keep everything in one place while analysing opportunities.
+
+                </p>
+
+            </a>
 
         </div>
 
     </div>
 
 </div>
+
+
 
 
 
