@@ -1239,6 +1239,1034 @@ TRADINGVIEW CHART
     margin-top:30px;
 
 }
+
+/* ======================================================
+   SCANNER LAYOUT
+====================================================== */
+
+.scanner-layout{
+
+    display:grid;
+
+    grid-template-columns:320px 1fr 320px;
+
+    gap:24px;
+
+    margin:35px 0;
+
+    align-items:start;
+
+}
+
+/* ======================================================
+   SCANNER PANELS
+====================================================== */
+
+.scanner-panel{
+
+    background:linear-gradient(
+        180deg,
+        #101828 0%,
+        #0b1220 100%
+    );
+
+    border:1px solid #1f2c3d;
+
+    border-radius:18px;
+
+    padding:28px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.35),
+        inset 0 1px 0 rgba(255,255,255,.02);
+
+    min-height:100%;
+
+}
+
+/* ======================================================
+   PANEL HEADINGS
+====================================================== */
+
+.scanner-panel h3{
+
+    font-size:30px;
+
+    font-weight:800;
+
+    color:#ffffff;
+
+    margin:0 0 24px;
+
+    line-height:1.2;
+
+}
+
+/* ======================================================
+   RESULTS PANEL
+====================================================== */
+
+.breakout-results,
+.scanner-results{
+
+    overflow:hidden;
+
+}
+
+/* ======================================================
+   METRICS PANEL
+====================================================== */
+
+#breakoutMetrics,
+#scannerMetrics{
+
+    color:#cbd5e1;
+
+    font-size:15px;
+
+    line-height:1.8;
+
+}
+
+#breakoutMetrics p,
+#scannerMetrics p{
+
+    color:#94a3b8;
+
+}
+
+/* ======================================================
+   DESKTOP
+====================================================== */
+
+@media(min-width:1200px){
+
+    .scanner-layout{
+
+        grid-template-columns:
+            320px
+            minmax(700px,1fr)
+            320px;
+
+    }
+
+}
+
+/* ======================================================
+   FILTER GROUPS
+====================================================== */
+
+.filter-group{
+
+    margin-bottom:20px;
+
+}
+
+.filter-group label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#94a3b8;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:.08em;
+
+    text-transform:uppercase;
+
+}
+
+/* ======================================================
+   SELECT DROPDOWNS
+====================================================== */
+
+.filter-group select{
+
+    width:100%;
+
+    height:48px;
+
+    padding:0 16px;
+
+    background:#111827;
+
+    color:#ffffff;
+
+    border:1px solid #273549;
+
+    border-radius:12px;
+
+    font-size:14px;
+
+    font-weight:500;
+
+    outline:none;
+
+    transition:.2s ease;
+
+    appearance:none;
+
+    cursor:pointer;
+
+}
+
+.filter-group select:hover{
+
+    border-color:#3b4d66;
+
+}
+
+.filter-group select:focus{
+
+    border-color:#22c55e;
+
+    box-shadow:0 0 0 3px rgba(34,197,94,.15);
+
+}
+
+/* ======================================================
+   BUTTONS
+====================================================== */
+
+.scanner-btn{
+
+    width:100%;
+
+    margin-top:10px;
+
+    height:50px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#22c55e;
+
+    color:#ffffff;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+
+}
+
+.scanner-btn:hover{
+
+    background:#16a34a;
+
+    transform:translateY(-1px);
+
+    box-shadow:0 10px 24px rgba(34,197,94,.25);
+
+}
+
+.scanner-btn:active{
+
+    transform:translateY(0);
+
+}
+
+/* ======================================================
+   SECOND FILTER BLOCK
+====================================================== */
+
+.breakout-results .filter-group,
+.scanner-results .filter-group{
+
+    margin-top:20px;
+
+}
+
+/* ======================================================
+   SCANNER TABLES
+====================================================== */
+
+#breakoutTable,
+#scannerTable{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:20px;
+
+    background:transparent;
+
+}
+
+/* ======================================================
+   TABLE HEADERS
+====================================================== */
+
+#breakoutTable thead,
+#scannerTable thead{
+
+    background:#111827;
+
+}
+
+#breakoutTable th,
+#scannerTable th{
+
+    padding:16px 18px;
+
+    text-align:left;
+
+    color:#94a3b8;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:.08em;
+
+    text-transform:uppercase;
+
+    border-bottom:1px solid #233246;
+
+}
+
+/* ======================================================
+   TABLE ROWS
+====================================================== */
+
+#breakoutTable tbody tr,
+#scannerTable tbody tr{
+
+    transition:.18s ease;
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+
+}
+
+#breakoutTable tbody tr:hover,
+#scannerTable tbody tr:hover{
+
+    background:rgba(34,197,94,.05);
+
+    cursor:pointer;
+
+}
+
+/* ======================================================
+   TABLE CELLS
+====================================================== */
+
+#breakoutTable td,
+#scannerTable td{
+
+    padding:16px 18px;
+
+    color:#e2e8f0;
+
+    font-size:15px;
+
+    vertical-align:middle;
+
+}
+
+/* ======================================================
+   TICKER COLUMN
+====================================================== */
+
+#breakoutTable td:nth-child(2),
+#scannerTable td:first-child{
+
+    font-weight:700;
+
+    color:#22c55e;
+
+    font-size:16px;
+
+    letter-spacing:.02em;
+
+}
+
+/* ======================================================
+   EMPTY RESULTS
+====================================================== */
+
+#breakoutTable tbody td[colspan],
+#scannerTable tbody td[colspan]{
+
+    padding:45px 20px;
+
+    text-align:center;
+
+    color:#64748b;
+
+    font-style:italic;
+
+}
+
+/* ======================================================
+   RANK BADGES
+====================================================== */
+
+.rank-gold{
+
+    background:#c99b19;
+
+    color:#ffffff;
+
+}
+
+.rank-silver{
+
+    background:#7c8796;
+
+    color:#ffffff;
+
+}
+
+.rank-bronze{
+
+    background:#9a5d23;
+
+    color:#ffffff;
+
+}
+
+.rank-gold,
+.rank-silver,
+.rank-bronze{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-width:74px;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+/* ======================================================
+   WATCHLIST BUTTON
+====================================================== */
+
+.watchlist-btn{
+
+    width:34px;
+
+    height:34px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:8px;
+
+    border:1px solid rgba(34,197,94,.30);
+
+    background:transparent;
+
+    color:#22c55e;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+    transition:.18s ease;
+
+}
+
+.watchlist-btn:hover{
+
+    background:#22c55e;
+
+    color:#08111f;
+
+}
+
+/* ======================================================
+   SCROLLABLE TABLE
+====================================================== */
+
+.breakout-results,
+.scanner-results{
+
+    overflow-x:auto;
+
+}
+
+/* ======================================================
+   METRICS PANEL
+====================================================== */
+
+#breakoutMetrics,
+#scannerMetrics{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+    margin-top:10px;
+
+}
+
+/* ======================================================
+   METRIC CARD
+====================================================== */
+
+.metric{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:16px 18px;
+
+    background:#111827;
+
+    border:1px solid rgba(255,255,255,.05);
+
+    border-radius:12px;
+
+    transition:.2s ease;
+
+}
+
+.metric:hover{
+
+    border-color:rgba(34,197,94,.25);
+
+    background:#141f30;
+
+}
+
+/* ======================================================
+   METRIC LABEL
+====================================================== */
+
+.metric span{
+
+    color:#94a3b8;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    letter-spacing:.08em;
+
+    text-transform:uppercase;
+
+}
+
+/* ======================================================
+   METRIC VALUE
+====================================================== */
+
+.metric strong{
+
+    color:#ffffff;
+
+    font-size:22px;
+
+    font-weight:800;
+
+}
+
+/* ======================================================
+   STATUS COLOURS
+====================================================== */
+
+.metric .good{
+
+    color:#22c55e;
+
+}
+
+.metric .neutral{
+
+    color:#fbbf24;
+
+}
+
+.metric .bad{
+
+    color:#ef4444;
+
+}
+
+/* ======================================================
+   DETAILS TITLE
+====================================================== */
+
+.metrics-title{
+
+    font-size:13px;
+
+    color:#64748b;
+
+    text-transform:uppercase;
+
+    letter-spacing:.08em;
+
+    margin-bottom:8px;
+
+}
+
+/* ======================================================
+   PLACEHOLDER
+====================================================== */
+
+#breakoutMetrics p,
+#scannerMetrics p{
+
+    text-align:center;
+
+    padding:50px 20px;
+
+    color:#64748b;
+
+    line-height:1.8;
+
+    font-size:15px;
+
+}
+
+/* ======================================================
+   INSIGHT BOX
+====================================================== */
+
+.metric-insight{
+
+    margin-top:12px;
+
+    padding:18px;
+
+    background:rgba(34,197,94,.05);
+
+    border-left:4px solid #22c55e;
+
+    border-radius:10px;
+
+    color:#cbd5e1;
+
+    line-height:1.7;
+
+    font-size:14px;
+
+}
+
+/* ======================================================
+   PROGRESS BAR
+====================================================== */
+
+.metric-bar{
+
+    margin-top:8px;
+
+    height:8px;
+
+    border-radius:999px;
+
+    overflow:hidden;
+
+    background:#1f2937;
+
+}
+
+.metric-bar-fill{
+
+    height:100%;
+
+    border-radius:999px;
+
+    background:linear-gradient(
+        90deg,
+        #22c55e,
+        #4ade80
+    );
+
+}
+
+/* ======================================================
+   SCANNER POLISH
+====================================================== */
+
+/* Smooth transitions */
+
+.scanner-panel,
+.scanner-btn,
+.filter-group select,
+#breakoutTable tbody tr,
+#scannerTable tbody tr{
+
+    transition:all .2s ease;
+
+}
+
+/* ======================================================
+   PANEL HOVER
+====================================================== */
+
+.scanner-panel:hover{
+
+    border-color:rgba(34,197,94,.18);
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.30),
+        0 0 0 1px rgba(34,197,94,.05);
+
+}
+
+/* ======================================================
+   TABLE HEADER STICKY
+====================================================== */
+
+.breakout-results table thead th,
+.scanner-results table thead th{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:10;
+
+    background:#101828;
+
+}
+
+/* ======================================================
+   SCROLL AREA
+====================================================== */
+
+.breakout-results,
+.scanner-results{
+
+    overflow:auto;
+
+    max-height:900px;
+
+}
+
+/* ======================================================
+   CUSTOM SCROLLBAR
+====================================================== */
+
+.breakout-results::-webkit-scrollbar,
+.scanner-results::-webkit-scrollbar{
+
+    width:10px;
+
+    height:10px;
+
+}
+
+.breakout-results::-webkit-scrollbar-track,
+.scanner-results::-webkit-scrollbar-track{
+
+    background:#0b1220;
+
+}
+
+.breakout-results::-webkit-scrollbar-thumb,
+.scanner-results::-webkit-scrollbar-thumb{
+
+    background:#263548;
+
+    border-radius:999px;
+
+}
+
+.breakout-results::-webkit-scrollbar-thumb:hover,
+.scanner-results::-webkit-scrollbar-thumb:hover{
+
+    background:#22c55e;
+
+}
+
+/* ======================================================
+   PANEL DIVIDERS
+====================================================== */
+
+.scanner-panel hr{
+
+    border:none;
+
+    height:1px;
+
+    margin:24px 0;
+
+    background:rgba(255,255,255,.05);
+
+}
+
+/* ======================================================
+   TABLE ROW ANIMATION
+====================================================== */
+
+#breakoutTable tbody tr,
+#scannerTable tbody tr{
+
+    transform:translateY(0);
+
+}
+
+#breakoutTable tbody tr:hover,
+#scannerTable tbody tr:hover{
+
+    transform:translateY(-1px);
+
+}
+
+/* ======================================================
+   EMPTY STATE
+====================================================== */
+
+#breakoutResults td[colspan],
+#scannerResults td[colspan]{
+
+    color:#64748b;
+
+    font-size:15px;
+
+    padding:70px 20px;
+
+}
+
+/* ======================================================
+   PANEL SPACING
+====================================================== */
+
+.breakout-results h3,
+.scanner-results h3{
+
+    margin-bottom:25px;
+
+}
+
+/* ======================================================
+   FILTER SPACING
+====================================================== */
+
+.filter-group:last-of-type{
+
+    margin-bottom:28px;
+
+}
+
+/* ======================================================
+   BUTTON SPACING
+====================================================== */
+
+.scanner-btn + .scanner-btn{
+
+    margin-top:12px;
+
+}
+
+/* ======================================================
+   TABLE NUMBERS
+====================================================== */
+
+#breakoutTable td,
+#scannerTable td{
+
+    font-variant-numeric:tabular-nums;
+
+}
+
+/* ======================================================
+   GREEN GLOW
+====================================================== */
+
+.scanner-btn:hover{
+
+    box-shadow:0 0 25px rgba(34,197,94,.25);
+
+}
+
+/* ======================================================
+   FILTER PANEL POLISH
+====================================================== */
+
+.scanner-panel:first-child{
+
+    position:sticky;
+
+    top:100px;
+
+}
+
+/* ======================================================
+   FILTER GROUP
+====================================================== */
+
+.filter-group{
+
+    margin-bottom:22px;
+
+}
+
+.filter-group:last-child{
+
+    margin-bottom:0;
+
+}
+
+/* ======================================================
+   LABEL
+====================================================== */
+
+.filter-group label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#7dd3fc;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:.12em;
+
+    text-transform:uppercase;
+
+}
+
+/* ======================================================
+   SELECT
+====================================================== */
+
+.filter-group select{
+
+    width:100%;
+
+    height:48px;
+
+    padding:0 16px;
+
+    background:#08111f;
+
+    border:1px solid #243244;
+
+    border-radius:12px;
+
+    color:#ffffff;
+
+    font-size:14px;
+
+    outline:none;
+
+}
+
+.filter-group select:hover{
+
+    border-color:#3b82f6;
+
+}
+
+.filter-group select:focus{
+
+    border-color:#22c55e;
+
+    box-shadow:
+        0 0 0 3px rgba(34,197,94,.15);
+
+}
+
+/* ======================================================
+   BUTTON
+====================================================== */
+
+.scanner-btn{
+
+    width:100%;
+
+    height:52px;
+
+    margin-top:15px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:linear-gradient(
+        180deg,
+        #22c55e,
+        #16a34a
+    );
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.scanner-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 14px 28px rgba(34,197,94,.25);
+
+}
+
+/* ======================================================
+   FILTER DIVIDER
+====================================================== */
+
+.filter-group{
+
+    position:relative;
+
+}
+
+.filter-group:after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    bottom:-11px;
+
+    height:1px;
+
+    background:rgba(255,255,255,.04);
+
+}
+
+.filter-group:last-of-type:after{
+
+    display:none;
+
+}
 </style>  
 </head>
 <body style="background:#020617;">
