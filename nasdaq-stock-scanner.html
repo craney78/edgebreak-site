@@ -892,125 +892,135 @@ checkAccess();
     color: white;
 }
 
-/* ===========================
-HERO
-=========================== */
+/* ======================================================
+   NASDAQ HERO
+====================================================== */
 
 .elite-banner{
-
     display:flex;
-    align-items:center;
     justify-content:space-between;
+    align-items:center;
+    gap:60px;
 
-    gap:24px;
+    margin-bottom:30px;
+    padding:42px 45px;
 
-    padding:30px;
-
-    margin-bottom:25px;
+    border-radius:22px;
 
     background:linear-gradient(
         135deg,
-        #08111f,
-        #0f172a
+        #08111f 0%,
+        #0f172a 100%
     );
 
     border:1px solid #1e293b;
-    border-radius:18px;
-
 }
 
-.hero-content{
-
+.elite-banner > div:first-child{
     flex:1;
-
 }
 
-.hero-content h1{
-
-    margin:0 0 12px;
-
-    font-size:42px;
+.elite-banner h1{
+    font-size:46px;
     font-weight:800;
-    line-height:1.15;
-
-    color:#ffffff;
-
+    line-height:1.1;
+    letter-spacing:-0.02em;
+    margin-bottom:18px;
+    color:#fff;
 }
 
-.hero-content p{
-
-    margin:0;
-
+.elite-banner p{
+    font-size:17px;
+    line-height:1.85;
     color:#94a3b8;
-
-    font-size:16px;
-
-    line-height:1.7;
-
+    max-width:950px;
 }
 
-.hero-content .btn{
+.elite-badge{
 
-    margin-top:24px;
+    flex-shrink:0;
 
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:14px 24px;
+
+    background:#22c55e;
+
+    color:#fff;
+
+    border-radius:999px;
+
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:.03em;
+
+    white-space:nowrap;
 }
 
-/* ===================================
-FEATURE SECTION
-=================================== */
+/* ======================================================
+   FEATURE SECTION
+====================================================== */
 
 .elite-featured{
 
-    display:grid;
-    grid-template-columns:1.6fr 420px;
-
-    gap:50px;
-
+    display:flex;
+    justify-content:space-between;
     align-items:center;
+
+    gap:60px;
 
     margin-bottom:35px;
 
-    padding:32px;
+    padding:38px 40px;
 
-    background:#0b1220;
+    border-radius:22px;
+
+    background:linear-gradient(
+        135deg,
+        #0b1220,
+        #111827
+    );
 
     border:1px solid #1e293b;
+}
 
-    border-radius:18px;
-
+.elite-featured > div:first-child{
+    flex:1;
 }
 
 .featured-tag{
 
-    display:inline-block;
+    display:inline-flex;
+    align-items:center;
 
-    margin-bottom:16px;
+    padding:7px 16px;
 
-    padding:7px 14px;
-
-    border-radius:999px;
+    margin-bottom:18px;
 
     background:#14532d;
 
     color:#4ade80;
 
+    border-radius:999px;
+
     font-size:12px;
     font-weight:700;
-    letter-spacing:.08em;
 
+    letter-spacing:.08em;
 }
 
 .elite-featured h2{
 
-    margin:0 0 18px;
-
     font-size:34px;
     font-weight:800;
 
-    color:#ffffff;
-
     line-height:1.2;
 
+    margin-bottom:18px;
+
+    color:#fff;
 }
 
 .elite-featured p{
@@ -1021,34 +1031,40 @@ FEATURE SECTION
 
     line-height:1.8;
 
+    max-width:850px;
 }
+
+/* ======================================================
+   FEATURE ICON GRID
+====================================================== */
 
 .elite-feature-icons{
 
     display:grid;
 
-    grid-template-columns:1fr;
+    grid-template-columns:repeat(5,1fr);
 
-    gap:18px;
+    gap:24px;
 
-    width:100%;
+    align-items:start;
 
+    flex-shrink:0;
 }
 
 .feature-item{
 
     display:flex;
-
     align-items:center;
 
-    gap:16px;
+    gap:14px;
 
+    min-width:150px;
 }
 
 .feature-icon{
 
-    width:46px;
-    height:46px;
+    width:52px;
+    height:52px;
 
     display:flex;
     align-items:center;
@@ -1056,8 +1072,13 @@ FEATURE SECTION
 
     flex-shrink:0;
 
-    color:#22c55e;
+    border-radius:14px;
 
+    background:rgba(34,197,94,.06);
+
+    border:1px solid rgba(34,197,94,.18);
+
+    color:#22c55e;
 }
 
 .feature-icon svg{
@@ -1065,54 +1086,66 @@ FEATURE SECTION
     width:28px;
     height:28px;
 
+    stroke:#22c55e;
 }
 
 .feature-item span{
 
     display:block;
 
-    font-size:11px;
-
     color:#94a3b8;
 
-    letter-spacing:1px;
+    font-size:11px;
 
+    font-weight:600;
+
+    letter-spacing:.08em;
+
+    margin-bottom:4px;
 }
 
 .feature-item strong{
 
     display:block;
 
-    margin-top:2px;
+    color:#fff;
 
-    font-size:15px;
+    font-size:14px;
 
-    color:#ffffff;
+    font-weight:700;
 
+    line-height:1.2;
 }
+
+/* ======================================================
+   UPDATED DAILY PILL
+====================================================== */
 
 .featured-pill{
 
-    display:inline-flex;
+    align-self:flex-start;
 
+    flex-shrink:0;
+
+    display:flex;
     align-items:center;
     justify-content:center;
 
-    margin-top:28px;
-
-    padding:12px 22px;
-
-    border-radius:999px;
+    padding:14px 24px;
 
     background:#22c55e;
 
-    color:#ffffff;
+    color:#fff;
+
+    border-radius:999px;
 
     font-size:14px;
     font-weight:700;
 
-}
+    letter-spacing:.03em;
 
+    white-space:nowrap;
+}
 /* ===================================
 TRADINGVIEW CHART
 =================================== */
