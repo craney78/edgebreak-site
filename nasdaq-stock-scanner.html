@@ -2589,17 +2589,7 @@ TRADINGVIEW CHART
 
 }
 
-.signup-logo{
 
-    display:block;
-
-    width:140px;
-
-    height:auto;
-
-    margin:0 auto 30px;
-
-}
 </style>  
 </head>
 <body style="background:#020617;">
@@ -3384,27 +3374,41 @@ TRADINGVIEW CHART
 
     <div class="watchlist-header">
 
-        <div>
+        <div class="watchlist-title">
 
-            <h3>My Watchlist</h3>
+            <!-- Bookmark / Saved -->
 
-            <p class="watchlist-subtitle">
-                Your saved stocks for research and tracking.
-            </p>
-
-        </div>
-
-        <div class="watchlist-count">
-
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/>
             </svg>
 
-            <span id="watchlistCount">
-                0 Stocks Saved
-            </span>
+            <div>
+
+                <h3>My Watchlist</h3>
+
+                <p class="watchlist-subtitle">
+                    Your saved stocks for research and tracking.
+                </p>
+
+            </div>
 
         </div>
+
+        <span
+            class="watchlist-count"
+            id="watchlistCount"
+        >
+
+            0 Stocks Saved
+
+        </span>
 
     </div>
 
@@ -3417,8 +3421,6 @@ TRADINGVIEW CHART
                 <th>Ticker</th>
 
                 <th>Added</th>
-
-                <th>Source</th>
 
                 <th class="center">
                     Open Chart
@@ -3436,7 +3438,7 @@ TRADINGVIEW CHART
 
             <tr class="watchlist-empty">
 
-                <td colspan="5">
+                <td colspan="4">
 
                     No watchlist stocks added yet.
 
@@ -3447,26 +3449,6 @@ TRADINGVIEW CHART
         </tbody>
 
     </table>
-
-    <div class="watchlist-footer">
-
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-
-            <circle cx="12" cy="12" r="10"></circle>
-
-            <path d="M12 17v.01"></path>
-
-            <path d="M12 13V7"></path>
-
-        </svg>
-
-        <span>
-
-            Tip: Click any stock in the Breakout Scanner or NASDAQ Scanner to add it to your watchlist.
-
-        </span>
-
-    </div>
 
 </div>
 <!-- =========================================
