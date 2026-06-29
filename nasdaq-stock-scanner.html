@@ -1044,22 +1044,21 @@ checkAccess();
    FEATURE ICON GRID
 ====================================================== */
 
-/* ======================================================
-   FEATURE ICON GRID
-====================================================== */
-
 .elite-feature-icons{
 
     display:flex;
 
     align-items:center;
-    justify-content:space-between;
 
-    gap:26px;
+    justify-content:flex-start;
 
-    width:100%;
+    gap:34px;
 
-    flex-wrap:nowrap;
+    width:auto;
+
+    flex:0 0 auto;
+
+    white-space:nowrap;
 
 }
 
@@ -1073,11 +1072,13 @@ checkAccess();
 
     align-items:center;
 
+    justify-content:flex-start;
+
     gap:14px;
 
-    flex:1;
+    flex:0 0 auto;
 
-    min-width:0;
+    white-space:nowrap;
 
 }
 
@@ -1090,11 +1091,11 @@ checkAccess();
     width:56px;
     height:56px;
 
-    flex:0 0 56px;
-
     display:flex;
     align-items:center;
     justify-content:center;
+
+    flex:0 0 56px;
 
     border-radius:14px;
 
@@ -1119,15 +1120,13 @@ checkAccess();
    FEATURE TEXT
 ====================================================== */
 
-.feature-item div:last-child{
+.feature-item > div:last-child{
 
     display:flex;
 
     flex-direction:column;
 
     justify-content:center;
-
-    min-width:0;
 
 }
 
@@ -1139,7 +1138,7 @@ checkAccess();
 
     display:block;
 
-    margin-bottom:3px;
+    margin:0 0 4px;
 
     color:#94a3b8;
 
@@ -1149,7 +1148,7 @@ checkAccess();
 
     letter-spacing:.08em;
 
-    line-height:1.2;
+    line-height:1;
 
     white-space:nowrap;
 
@@ -1169,7 +1168,7 @@ checkAccess();
 
     font-weight:700;
 
-    line-height:1.25;
+    line-height:1.15;
 
     white-space:nowrap;
 
@@ -1181,28 +1180,30 @@ checkAccess();
 
 .featured-pill{
 
-    align-self:flex-start;
-
-    flex-shrink:0;
-
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     padding:14px 24px;
 
     background:#22c55e;
 
-    color:#fff;
+    color:#ffffff;
 
     border-radius:999px;
 
     font-size:14px;
+
     font-weight:700;
 
     letter-spacing:.03em;
 
     white-space:nowrap;
+
+    flex-shrink:0;
+
 }
 /* ===================================
 TRADINGVIEW CHART
