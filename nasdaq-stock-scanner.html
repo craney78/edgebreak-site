@@ -892,75 +892,21 @@ checkAccess();
     color: white;
 }
 
-/* =========================
-   MOBILE
-========================= */
-
-.menu-toggle {
-    display: none;
-}
-
-@media (max-width: 1100px) {
-
-    .menu-toggle {
-        display: block;
-        color: white;
-        font-size: 30px;
-        cursor: pointer;
-    }
-
-    .nav-links {
-        display: none;
-    }
-
-    .nav-links.active {
-        display: flex;
-        flex-direction: column;
-
-        position: absolute;
-        top: 88px;
-        left: 0;
-        right: 0;
-
-        background: #050b18;
-        padding: 20px;
-        gap: 18px;
-
-        border-top: 1px solid rgba(255,255,255,0.08);
-    }
-
-}
-
-
-@media(max-width:768px){
-
-    .btn{
-
-        display:flex;
-
-        width:100%;
-        max-width:320px;
-
-        margin:25px auto 0;
-
-        padding:16px 20px;
-
-        text-align:center;
-
-    }
-
-}
+/* ===========================
+HERO
+=========================== */
 
 .elite-banner{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:20px;
 
-    margin-bottom:25px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:24px;
+
     padding:30px;
 
-    border-radius:18px;
+    margin-bottom:25px;
 
     background:linear-gradient(
         135deg,
@@ -969,30 +915,45 @@ checkAccess();
     );
 
     border:1px solid #1e293b;
+    border-radius:18px;
+
 }
 
-.elite-banner h1{
+.hero-content{
+
+    flex:1;
+
+}
+
+.hero-content h1{
+
+    margin:0 0 12px;
+
     font-size:42px;
     font-weight:800;
-    margin-bottom:10px;
+    line-height:1.15;
+
+    color:#ffffff;
+
 }
 
-.elite-banner p{
+.hero-content p{
+
+    margin:0;
+
     color:#94a3b8;
-    width:100%;
-    max-width:none;
+
+    font-size:16px;
+
     line-height:1.7;
+
 }
 
-.elite-badge{
-    background:#22c55e;
-    color:white;
-    padding:12px 18px;
-    border-radius:999px;
-    font-weight:700;
-    white-space:nowrap;
-}
+.hero-content .btn{
 
+    margin-top:24px;
+
+}
 </style>  
 </head>
 <body style="background:#020617;">
