@@ -3368,9 +3368,33 @@ TRADINGVIEW CHART
 ⭐ MY WATCHLIST
 ========================================= -->
 
-<div class="scanner-panel" style="margin-top:25px;">
+<div class="scanner-panel watchlist-panel">
 
-    <h3>My Watchlist</h3>
+    <div class="watchlist-header">
+
+        <div>
+
+            <h3>My Watchlist</h3>
+
+            <p class="watchlist-subtitle">
+                Your saved stocks for research and tracking.
+            </p>
+
+        </div>
+
+        <div class="watchlist-count">
+
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+
+            <span id="watchlistCount">
+                0 Stocks Saved
+            </span>
+
+        </div>
+
+    </div>
 
     <table id="watchlistTable">
 
@@ -3384,9 +3408,13 @@ TRADINGVIEW CHART
 
                 <th>Source</th>
 
-                <th class="center">Open</th>
+                <th class="center">
+                    Open Chart
+                </th>
 
-                <th class="center">Remove</th>
+                <th class="center">
+                    Remove
+                </th>
 
             </tr>
 
@@ -3394,11 +3422,11 @@ TRADINGVIEW CHART
 
         <tbody id="watchlistResults">
 
-            <tr>
+            <tr class="watchlist-empty">
 
                 <td colspan="5">
 
-                    No watchlist stocks added.
+                    No watchlist stocks added yet.
 
                 </td>
 
@@ -3407,6 +3435,26 @@ TRADINGVIEW CHART
         </tbody>
 
     </table>
+
+    <div class="watchlist-footer">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+            <circle cx="12" cy="12" r="10"></circle>
+
+            <path d="M12 17v.01"></path>
+
+            <path d="M12 13V7"></path>
+
+        </svg>
+
+        <span>
+
+            Tip: Click any stock in the Breakout Scanner or NASDAQ Scanner to add it to your watchlist.
+
+        </span>
+
+    </div>
 
 </div>
 <!-- =========================================
@@ -4673,17 +4721,19 @@ async function loadWatchlist(){
 
     }
 
-    window.watchlist =
-        data || [];
+    window.watchlist = data || [];
 
     renderWatchlist();
 
 }
 
-async function addToWatchlist(symbol){
+async function addToWatchlist(
+    symbol,
+    source="Manual"
+){
 
     const {
-        data: { user }
+        data:{ user }
     } = await supabaseClient.auth.getUser();
 
     if(!user) return;
@@ -4701,7 +4751,8 @@ async function addToWatchlist(symbol){
             .insert([
                 {
                     user_id:user.id,
-                    symbol:symbol
+                    symbol:symbol,
+                    source:source
                 }
             ]);
 
@@ -4747,15 +4798,17 @@ function renderWatchlist(){
 
     if(!tbody) return;
 
-    if(
-        window.watchlist.length === 0
-    ){
+    if(window.watchlist.length===0){
 
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="2">
+        tbody.innerHTML=`
+            <tr class="watchlist-empty">
+
+                <td colspan="5">
+
                     No watchlist stocks added.
+
                 </td>
+
             </tr>
         `;
 
@@ -4764,31 +4817,145 @@ function renderWatchlist(){
     }
 
     tbody.innerHTML =
-        window.watchlist.map(stock => `
+        window.watchlist.map(stock=>{
 
-            <tr onclick="loadChart('${stock.symbol}')">
+            const added =
+                new Date(stock.created_at);
 
-                <td>
-                    ${stock.symbol}
-                </td>
+            const today =
+                new Date();
 
-                <td>
+            const diff =
+                Math.floor(
+                    (today-added)/(1000*60*60*24)
+                );
 
-                    <button
-                        class="watchlist-btn"
-                        onclick="
-                            event.stopPropagation();
-                            removeFromWatchlist(${stock.id});
-                        "
-                    >
-                        Remove
-                    </button>
+            let label="Today";
 
-                </td>
+            if(diff===1)
+                label="Yesterday";
 
-            </tr>
+            if(diff>1)
+                label=`${diff} days ago`;
 
-        `).join("");
+            const dateText =
+                added.toLocaleDateString(
+                    "en-AU",
+                    {
+                        day:"2-digit",
+                        month:"short",
+                        year:"numeric"
+                    }
+                );
+
+            const source =
+                stock.source || "Manual";
+
+            let badgeClass =
+                "source-manual";
+
+            switch(source){
+
+                case "Breakout":
+
+                    badgeClass =
+                        "source-breakout";
+
+                    break;
+
+                case "Scanner":
+
+                    badgeClass =
+                        "source-scanner";
+
+                    break;
+
+                case "Smart Money":
+
+                    badgeClass =
+                        "source-smart";
+
+                    break;
+
+            }
+
+            return `
+
+<tr>
+
+<td>
+
+<a
+href="#"
+class="watchlist-symbol"
+onclick="
+event.preventDefault();
+loadChart('${stock.symbol}');
+">
+
+${stock.symbol}
+
+</a>
+
+</td>
+
+<td>
+
+<div class="watchlist-added">
+
+<strong>${label}</strong>
+
+<span>${dateText}</span>
+
+</div>
+
+</td>
+
+<td>
+
+<span class="source-badge ${badgeClass}">
+
+${source}
+
+</span>
+
+</td>
+
+<td class="center">
+
+<button
+class="watchlist-open"
+onclick="
+event.stopPropagation();
+loadChart('${stock.symbol}');
+">
+
+Open Chart
+
+</button>
+
+</td>
+
+<td class="center">
+
+<button
+class="watchlist-remove"
+onclick="
+event.stopPropagation();
+removeFromWatchlist(${stock.id});
+">
+
+×
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+        }).join("");
 
 }
 </script>
