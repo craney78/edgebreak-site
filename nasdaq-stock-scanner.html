@@ -1044,21 +1044,28 @@ checkAccess();
    FEATURE ICON GRID
 ====================================================== */
 
+/* ======================================================
+   FEATURE ICON GRID
+====================================================== */
+
 .elite-feature-icons{
 
-    display:grid;
-
-    grid-template-columns:repeat(5,1fr);
-
-    gap:30px;
+    display:flex;
 
     align-items:center;
+    justify-content:space-between;
 
-    justify-items:start;
+    gap:26px;
 
     width:100%;
 
+    flex-wrap:nowrap;
+
 }
+
+/* ======================================================
+   FEATURE ITEM
+====================================================== */
 
 .feature-item{
 
@@ -1068,22 +1075,26 @@ checkAccess();
 
     gap:14px;
 
-    width:100%;
+    flex:1;
 
     min-width:0;
 
 }
+
+/* ======================================================
+   FEATURE ICON
+====================================================== */
 
 .feature-icon{
 
     width:56px;
     height:56px;
 
+    flex:0 0 56px;
+
     display:flex;
     align-items:center;
     justify-content:center;
-
-    flex-shrink:0;
 
     border-radius:14px;
 
@@ -1104,6 +1115,10 @@ checkAccess();
 
 }
 
+/* ======================================================
+   FEATURE TEXT
+====================================================== */
+
 .feature-item div:last-child{
 
     display:flex;
@@ -1112,7 +1127,13 @@ checkAccess();
 
     justify-content:center;
 
+    min-width:0;
+
 }
+
+/* ======================================================
+   FEATURE LABEL
+====================================================== */
 
 .feature-item span{
 
@@ -1133,6 +1154,10 @@ checkAccess();
     white-space:nowrap;
 
 }
+
+/* ======================================================
+   FEATURE TITLE
+====================================================== */
 
 .feature-item strong{
 
