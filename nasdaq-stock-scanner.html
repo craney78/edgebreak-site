@@ -4911,7 +4911,13 @@ href="#"
 class="watchlist-symbol"
 onclick="
 event.preventDefault();
+
 loadChart('${stock.symbol}');
+
+document.getElementById('tv_chart').scrollIntoView({
+    behavior:'smooth',
+    block:'start'
+});
 ">
 
 ${stock.symbol}
@@ -4937,7 +4943,14 @@ ${stock.symbol}
 <button
 type="button"
 class="watchlist-open"
-onclick="loadChart('${stock.symbol}')"
+onclick="
+loadChart('${stock.symbol}');
+
+document.getElementById('tv_chart').scrollIntoView({
+    behavior:'smooth',
+    block:'start'
+});
+"
 >
 
 Open Chart
@@ -4951,7 +4964,9 @@ Open Chart
 <button
 type="button"
 class="watchlist-remove"
-onclick="removeFromWatchlist(${stock.id})"
+onclick="
+removeFromWatchlist(${stock.id});
+"
 >
 
 ×
