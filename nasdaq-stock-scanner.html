@@ -2283,23 +2283,21 @@ TRADINGVIEW CHART
    MY WATCHLIST
 ====================================================== */
 
-.watchlist-table{
+#watchlistTable{
 
     width:100%;
 
-    border-collapse:separate;
+    border-collapse:collapse;
 
-    border-spacing:0 10px;
+    margin-top:20px;
 
 }
 
-/* ======================================================
-   HEADERS
-====================================================== */
+#watchlistTable thead th{
 
-.watchlist-table thead th{
+    padding:0 0 18px;
 
-    padding:0 18px 12px;
+    border-bottom:1px solid rgba(255,255,255,.08);
 
     text-align:left;
 
@@ -2309,107 +2307,71 @@ TRADINGVIEW CHART
 
     font-weight:700;
 
-    letter-spacing:.12em;
+    letter-spacing:.10em;
 
     text-transform:uppercase;
 
 }
 
-.watchlist-table thead th:last-child{
+#watchlistTable thead th:last-child{
 
     text-align:right;
 
 }
 
-/* ======================================================
-   ROWS
-====================================================== */
-
-.watchlist-table tbody tr{
-
-    background:#101828;
-
-    transition:.18s ease;
-
-}
-
-.watchlist-table tbody tr:hover{
-
-    background:#162132;
-
-    transform:translateY(-1px);
-
-    box-shadow:0 8px 20px rgba(0,0,0,.25);
-
-}
-
-/* ======================================================
-   CELLS
-====================================================== */
-
-.watchlist-table tbody td{
-
-    padding:16px 18px;
-
-    color:#ffffff;
-
-    vertical-align:middle;
-
-    border-top:1px solid rgba(255,255,255,.05);
+#watchlistTable tbody tr{
 
     border-bottom:1px solid rgba(255,255,255,.05);
 
+    transition:.18s;
+
 }
 
-.watchlist-table tbody td:first-child{
+#watchlistTable tbody tr:hover{
 
-    border-left:1px solid rgba(255,255,255,.05);
+    background:rgba(34,197,94,.04);
 
-    border-radius:12px 0 0 12px;
+}
+
+#watchlistTable tbody td{
+
+    padding:16px 0;
+
+    color:#ffffff;
 
     font-size:16px;
+
+    vertical-align:middle;
+
+}
+
+#watchlistTable tbody td:first-child{
 
     font-weight:700;
 
     color:#22c55e;
 
-    cursor:pointer;
-
 }
 
-.watchlist-table tbody td:last-child{
-
-    border-right:1px solid rgba(255,255,255,.05);
-
-    border-radius:0 12px 12px 0;
+#watchlistTable tbody td:last-child{
 
     text-align:right;
 
-    width:120px;
+    width:140px;
 
 }
 
-/* ======================================================
-   REMOVE BUTTON
-====================================================== */
+#watchlistTable button{
 
-.remove-btn{
+    padding:8px 16px;
 
-    display:inline-flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:8px 14px;
-
-    background:rgba(239,68,68,.10);
-
-    border:1px solid rgba(239,68,68,.30);
+    border:none;
 
     border-radius:10px;
 
-    color:#f87171;
+    background:#dc2626;
+
+    color:#ffffff;
 
     font-size:13px;
 
@@ -2417,35 +2379,25 @@ TRADINGVIEW CHART
 
     cursor:pointer;
 
-    transition:.18s ease;
+    transition:.18s;
 
 }
 
-.remove-btn:hover{
+#watchlistTable button:hover{
 
     background:#ef4444;
 
-    border-color:#ef4444;
-
-    color:#ffffff;
-
 }
 
-/* ======================================================
-   EMPTY WATCHLIST
-====================================================== */
-
-.watchlist-table tbody td[colspan]{
-
-    text-align:center;
+#watchlistTable td[colspan]{
 
     padding:50px 20px;
+
+    text-align:center;
 
     color:#64748b;
 
     font-style:italic;
-
-    border:none;
 
 }
 </style>  
