@@ -963,23 +963,21 @@ checkAccess();
    FEATURE SECTION
 ====================================================== */
 
-/* ======================================================
-   FEATURE SECTION
-====================================================== */
-
 .elite-featured{
 
     display:flex;
 
     align-items:center;
 
+    justify-content:space-between;
+
     gap:40px;
 
-    padding:40px;
+    padding:35px;
 
-    margin-bottom:35px;
+    margin-bottom:30px;
 
-    border-radius:22px;
+    border-radius:18px;
 
     background:linear-gradient(135deg,#0b1220,#111827);
 
@@ -989,31 +987,53 @@ checkAccess();
 
 .elite-featured > div:first-child{
 
-    flex:0 0 46%;
-
-    max-width:46%;
-
-}
-
-.elite-feature-icons{
-
     flex:1;
 
-    display:grid;
+}
 
-    grid-template-columns:repeat(5,minmax(115px,1fr));
+.featured-tag{
 
-    gap:20px;
+    display:inline-block;
 
-    align-items:center;
+    padding:6px 12px;
+
+    margin-bottom:12px;
+
+    background:#14532d;
+
+    color:#4ade80;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:700;
 
 }
 
-.featured-pill{
+.elite-featured h2{
 
-    margin-left:20px;
+    font-size:34px;
 
-    flex-shrink:0;
+    font-weight:800;
+
+    margin-bottom:16px;
+
+    color:#ffffff;
+
+    line-height:1.2;
+
+}
+
+.elite-featured p{
+
+    color:#94a3b8;
+
+    font-size:16px;
+
+    line-height:1.8;
+
+    max-width:820px;
 
 }
 
@@ -1023,19 +1043,13 @@ checkAccess();
 
 .elite-feature-icons{
 
-    display:flex;
+    display:grid;
 
-    align-items:center;
+    grid-template-columns:repeat(5,1fr);
 
-    justify-content:flex-start;
+    gap:24px;
 
-    gap:34px;
-
-    width:auto;
-
-    flex:0 0 auto;
-
-    white-space:nowrap;
+    margin-top:25px;
 
 }
 
@@ -1053,10 +1067,15 @@ checkAccess();
 
 }
 
+/* ======================================================
+   FEATURE ICON
+====================================================== */
+
 .feature-icon{
 
-    width:50px;
-    height:50px;
+    width:48px;
+
+    height:48px;
 
     display:flex;
 
@@ -1066,82 +1085,15 @@ checkAccess();
 
     flex-shrink:0;
 
-    border-radius:12px;
-
-    background:rgba(34,197,94,.05);
-
-    border:1px solid rgba(34,197,94,.18);
-
-}
-
-.feature-icon svg{
-
-    width:26px;
-    height:26px;
-
-}
-
-.feature-item span{
-
-    display:block;
-
-    color:#94a3b8;
-
-    font-size:10px;
-
-    letter-spacing:.08em;
-
-    margin-bottom:2px;
-
-    white-space:nowrap;
-
-}
-
-.feature-item strong{
-
-    display:block;
-
-    color:#fff;
-
-    font-size:13px;
-
-    font-weight:700;
-
-    line-height:1.2;
-
-    white-space:nowrap;
-
-}
-
-/* ======================================================
-   FEATURE ICON
-====================================================== */
-
-.feature-icon{
-
-    width:56px;
-    height:56px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    flex:0 0 56px;
-
-    border-radius:14px;
-
-    background:rgba(34,197,94,.06);
-
-    border:1px solid rgba(34,197,94,.18);
-
     color:#22c55e;
 
 }
 
 .feature-icon svg{
 
-    width:30px;
-    height:30px;
+    width:32px;
+
+    height:32px;
 
     stroke:#22c55e;
 
@@ -1151,7 +1103,7 @@ checkAccess();
    FEATURE TEXT
 ====================================================== */
 
-.feature-item > div:last-child{
+.feature-item div{
 
     display:flex;
 
@@ -1169,19 +1121,13 @@ checkAccess();
 
     display:block;
 
-    margin:0 0 4px;
+    font-size:11px;
 
     color:#94a3b8;
 
-    font-size:11px;
+    letter-spacing:1px;
 
-    font-weight:600;
-
-    letter-spacing:.08em;
-
-    line-height:1;
-
-    white-space:nowrap;
+    margin-bottom:3px;
 
 }
 
@@ -1193,15 +1139,13 @@ checkAccess();
 
     display:block;
 
-    color:#ffffff;
+    font-size:13px;
 
-    font-size:14px;
+    color:#ffffff;
 
     font-weight:700;
 
-    line-height:1.15;
-
-    white-space:nowrap;
+    line-height:1.2;
 
 }
 
@@ -1211,25 +1155,17 @@ checkAccess();
 
 .featured-pill{
 
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:14px 24px;
-
     background:#22c55e;
 
     color:#ffffff;
+
+    padding:12px 18px;
 
     border-radius:999px;
 
     font-size:14px;
 
     font-weight:700;
-
-    letter-spacing:.03em;
 
     white-space:nowrap;
 
