@@ -1037,6 +1037,24 @@ MOBILE
 
 }
 
+@media(max-width:900px){
+
+  .elite-banner{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .elite-featured{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .elite-feature-icons{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
 @media(max-width:600px){
 
   .elite-container{
@@ -1044,29 +1062,7 @@ MOBILE
   }
 
   .elite-feature-icons{
-    display:flex;
-    flex-direction:column;
-    gap:18px;
-    width:100%;
-  }
-
-  .feature-item{
-    display:flex;
-    align-items:center;
-    justify-content:flex-start;
-    gap:16px;
-  }
-
-  .feature-icon{
-    width:48px;
-    min-width:48px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-  }
-
-  .feature-item div:last-child{
-    text-align:left;
+    grid-template-columns:1fr;
   }
 
   .elite-banner h1{
@@ -1083,7 +1079,7 @@ MOBILE
     font-size:30px;
   }
 
-}
+
 
 /* =========================
    ELITE NAVBAR
