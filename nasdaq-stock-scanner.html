@@ -1244,21 +1244,19 @@ TRADINGVIEW CHART
    SCANNER LAYOUT
 ====================================================== */
 
-/* ======================================================
-   SCANNER LAYOUT
-====================================================== */
-
 .scanner-layout{
 
     display:grid;
 
-    grid-template-columns:320px 1fr 320px;
+    grid-template-columns:320px minmax(0,1fr) 320px;
 
-    gap:24px;
+    gap:28px;
 
-    margin:35px 0;
+    margin:35px 0 45px;
 
-    align-items:start;
+    align-items:stretch;
+
+    width:100%;
 
 }
 
@@ -1268,10 +1266,14 @@ TRADINGVIEW CHART
 
 .scanner-panel{
 
+    display:flex;
+
+    flex-direction:column;
+
     background:linear-gradient(
         180deg,
-        #101828,
-        #0b1220
+        #101828 0%,
+        #0b1220 100%
     );
 
     border:1px solid #1f2c3d;
@@ -1282,14 +1284,15 @@ TRADINGVIEW CHART
 
     box-sizing:border-box;
 
-    height:auto;
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.35),
+        inset 0 1px 0 rgba(255,255,255,.02);
 
-    min-height:0;
+    height:100%;
 
     overflow:hidden;
 
 }
-
 
 
 /* ======================================================
