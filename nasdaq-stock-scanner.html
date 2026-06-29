@@ -2487,6 +2487,64 @@ WEEKLY PANEL
     text-shadow:0 0 8px rgba(34,197,94,.4);
 
 }
+
+/* ===================================
+FIX FEATURE ICON ALIGNMENT (MOBILE)
+=================================== */
+
+@media (max-width:600px){
+
+    .elite-feature-icons{
+
+        display:flex !important;
+        flex-direction:column !important;
+        gap:18px !important;
+        width:100%;
+
+    }
+
+    .feature-item{
+
+        display:grid !important;
+        grid-template-columns:48px 1fr;
+        align-items:center;
+        column-gap:14px;
+
+        width:100%;
+        margin:0;
+        padding:0;
+
+    }
+
+    .feature-icon{
+
+        width:48px;
+        height:48px;
+
+        display:flex;
+        justify-content:center;
+        align-items:center;
+
+    }
+
+    .feature-item > div:last-child{
+
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+
+        text-align:left;
+
+    }
+
+    .feature-item span,
+    .feature-item strong{
+
+        margin:0;
+
+    }
+
+}
 </style>  
 </head>
 <body style="background:#020617;">
