@@ -2959,19 +2959,25 @@ TRADINGVIEW CHART
    FEATURE ICONS - MOBILE
 ====================================================== */
 
+/* ======================================================
+   FEATURE SECTION - MOBILE
+====================================================== */
+
 @media (max-width:768px){
 
     .elite-feature-icons{
 
-        display:grid;
+        display:flex;
 
-        grid-template-columns:repeat(2,1fr);
+        flex-direction:column;
 
-        gap:20px;
+        align-items:flex-start;
 
-        margin-top:30px;
+        gap:18px;
 
         width:100%;
+
+        margin-top:30px;
 
     }
 
@@ -2979,15 +2985,11 @@ TRADINGVIEW CHART
 
         display:flex;
 
-        flex-direction:column;
+        flex-direction:row;
 
         align-items:center;
 
-        justify-content:flex-start;
-
-        text-align:center;
-
-        gap:12px;
+        gap:16px;
 
         width:100%;
 
@@ -2995,31 +2997,47 @@ TRADINGVIEW CHART
 
     .feature-icon{
 
-        width:60px;
+        width:42px;
 
-        height:60px;
+        height:42px;
 
-        margin:0 auto;
+        flex-shrink:0;
 
     }
 
     .feature-icon svg{
 
-        width:30px;
+        width:24px;
 
-        height:30px;
+        height:24px;
+
+    }
+
+    .feature-item div{
+
+        display:flex;
+
+        flex-direction:column;
+
+        align-items:flex-start;
 
     }
 
     .feature-item span{
 
-        display:block;
+        margin-bottom:2px;
+
+        font-size:10px;
+
+        text-align:left;
+
+    }
+
+    .feature-item strong{
 
         font-size:14px;
 
-        line-height:1.4;
-
-        max-width:120px;
+        text-align:left;
 
     }
 
