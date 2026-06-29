@@ -2113,6 +2113,55 @@ WEEKLY PANEL
 }
 
 /* =========================
+MOBILE
+========================= */
+
+@media (max-width:900px){
+
+    .elite-banner{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .elite-featured{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .elite-feature-icons{
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:20px;
+        width:100%;
+    }
+
+}
+
+@media (max-width:600px){
+
+    .elite-container{
+        padding:15px;
+    }
+
+    .elite-banner h1{
+        font-size:30px;
+    }
+
+    .elite-feature-icons{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:16px;
+    }
+
+    .feature-item{
+        display:flex;
+        align-items:center;
+        gap:12px;
+    }
+
+}
+
+/* =========================
    CTA BANNER
 ========================= */
 
@@ -2541,6 +2590,138 @@ FIX FEATURE ICON ALIGNMENT (MOBILE)
     .feature-item strong{
 
         margin:0;
+
+    }
+
+}
+
+.elite-featured{
+
+    display:grid;
+    grid-template-columns:1.3fr 420px;
+    gap:60px;
+    align-items:center;
+
+}
+
+.elite-feature-icons{
+
+    display:grid;
+    gap:22px;
+
+}
+
+.feature-item{
+
+    display:flex;
+    align-items:center;
+    gap:18px;
+
+}
+
+.feature-icon{
+
+    width:58px;
+    height:58px;
+
+    border-radius:14px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(38,209,94,.08);
+
+    color:#26d15e;
+
+    flex-shrink:0;
+
+}
+
+.feature-icon svg{
+
+    width:28px;
+    height:28px;
+
+}
+
+.feature-item span{
+
+    display:block;
+
+    color:#94a3b8;
+
+    font-size:15px;
+
+    line-height:1.2;
+
+}
+
+.feature-item strong{
+
+    display:block;
+
+    color:#fff;
+
+    font-size:18px;
+
+    margin-top:2px;
+
+}
+
+.featured-pill{
+
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:18px 36px;
+
+    border-radius:999px;
+
+    background:#26d15e;
+
+    color:#fff;
+
+    font-weight:700;
+
+    font-size:20px;
+
+    margin-top:30px;
+
+}
+
+@media (max-width:900px){
+
+    .elite-featured{
+
+        grid-template-columns:1fr;
+        gap:40px;
+
+    }
+
+}
+
+@media (max-width:600px){
+
+    .feature-item{
+
+        gap:16px;
+
+    }
+
+    .feature-icon{
+
+        width:52px;
+        height:52px;
+
+    }
+
+    .featured-pill{
+
+        width:100%;
+        justify-content:center;
 
     }
 
