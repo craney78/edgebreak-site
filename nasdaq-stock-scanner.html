@@ -2794,7 +2794,331 @@ TRADINGVIEW CHART
 
 }
 
+.workspace-btn{
 
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-decoration:none;
+
+    box-sizing:border-box;
+
+}
+
+/* ======================================================
+   MOBILE
+====================================================== */
+
+@media (max-width:900px){
+
+    /* Hero */
+
+    .elite-banner{
+
+        flex-direction:column;
+
+        text-align:center;
+
+        gap:24px;
+
+        padding:26px;
+
+    }
+
+    .elite-banner h1{
+
+        font-size:32px;
+
+    }
+
+    .elite-banner p{
+
+        font-size:16px;
+
+    }
+
+    /* Feature Section */
+
+    .elite-featured{
+
+        flex-direction:column;
+
+        text-align:center;
+
+        gap:30px;
+
+        padding:26px;
+
+    }
+
+    .elite-featured > div:first-child{
+
+        max-width:100%;
+
+        flex:1;
+
+    }
+
+    .elite-feature-icons{
+
+        flex-wrap:wrap;
+
+        justify-content:center;
+
+        gap:24px;
+
+        margin:0;
+
+    }
+
+    .featured-pill{
+
+        margin:0;
+
+    }
+
+    /* Chart */
+
+    #tv_chart{
+
+        height:500px;
+
+    }
+
+    /* Scanner Layout */
+
+    .scanner-layout{
+
+        display:flex;
+
+        flex-direction:column;
+
+        gap:20px;
+
+    }
+
+    .scanner-panel{
+
+        height:auto;
+
+    }
+
+    .scanner-panel:first-child{
+
+        position:static;
+
+    }
+
+    /* Tables */
+
+    .breakout-results,
+    .scanner-results{
+
+        overflow-x:auto;
+
+    }
+
+    /* Watchlist */
+
+    #watchlistTable{
+
+        min-width:700px;
+
+    }
+
+    /* EdgeBreak Tools */
+
+    .scanner-panel > div[style*="grid-template-columns"]{
+
+        grid-template-columns:1fr !important;
+
+    }
+
+    /* SEO */
+
+    .scanner-seo-panel{
+
+        flex-direction:column;
+
+        text-align:center;
+
+    }
+
+    .scanner-seo-icon{
+
+        margin:0 auto;
+
+    }
+
+}
+
+/* ======================================================
+   TABLET
+====================================================== */
+
+@media (max-width:768px){
+
+    /* General */
+
+    .scanner-panel{
+
+        padding:20px;
+
+        border-radius:16px;
+
+    }
+
+    .scanner-panel h3{
+
+        font-size:24px;
+
+        margin-bottom:18px;
+
+    }
+
+    /* Hero */
+
+    .elite-banner{
+
+        padding:22px;
+
+    }
+
+    .elite-banner h1{
+
+        font-size:28px;
+
+    }
+
+    .elite-banner p{
+
+        font-size:15px;
+
+        line-height:1.7;
+
+    }
+
+    .elite-badge{
+
+        width:100%;
+
+        justify-content:center;
+
+    }
+
+    /* Featured */
+
+    .elite-featured{
+
+        padding:22px;
+
+    }
+
+    .elite-featured h2{
+
+        font-size:24px;
+
+    }
+
+    .feature-item{
+
+        width:45%;
+
+        justify-content:center;
+
+    }
+
+    .feature-icon{
+
+        width:34px;
+
+        height:34px;
+
+    }
+
+    .feature-icon svg{
+
+        width:20px;
+
+        height:20px;
+
+    }
+
+    /* Chart */
+
+    #tv_chart{
+
+        height:420px;
+
+    }
+
+    /* Scanner Tables */
+
+    #breakoutTable,
+    #scannerTable{
+
+        min-width:900px;
+
+    }
+
+    /* Watchlist */
+
+    #watchlistTable{
+
+        min-width:760px;
+
+    }
+
+    /* Tool Cards */
+
+    .scanner-panel > div[style*="grid-template-columns"]{
+
+        gap:18px !important;
+
+    }
+
+    /* SEO */
+
+    .scanner-seo-panel{
+
+        padding:24px;
+
+    }
+
+    .scanner-seo-icon{
+
+        width:70px;
+
+        height:70px;
+
+    }
+
+    .scanner-seo-icon svg{
+
+        width:34px;
+
+        height:34px;
+
+    }
+
+    .scanner-seo-content h2{
+
+        font-size:20px;
+
+    }
+
+    .scanner-seo-content p{
+
+        font-size:15px;
+
+        line-height:1.7;
+
+    }
+
+}
 </style>  
 </head>
 <body style="background:#020617;">
@@ -3691,15 +4015,11 @@ TRADINGVIEW CHART
 
             <a
                 href="/my-workspace.html"
-                class="scanner-btn"
-                style="
-                display:block;
-                text-align:center;
-                text-decoration:none;
-                "
+                class="scanner-btn workspace-btn"
             >
                 Open Workspace
             </a>
+               
 
         </div>
 
