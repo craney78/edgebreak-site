@@ -3127,23 +3127,62 @@ TRADINGVIEW CHART
    MOBILE RESULTS PANELS
 ====================================================== */
 
+/* ======================================================
+   MOBILE BREAKOUT TABLE
+====================================================== */
+
 @media (max-width:768px){
 
-    .breakout-results,
-    .scanner-results{
+    /* Hide Rank */
 
-        width:100%;
+    #breakoutTable th:nth-child(1),
+    #breakoutTable td:nth-child(1){
 
-        overflow-x:auto;
-
-        -webkit-overflow-scrolling:touch;
+        display:none;
 
     }
 
-    #breakoutTable,
-    #scannerTable{
+    /* Hide Touches */
 
-        min-width:900px;
+    #breakoutTable th:nth-child(4),
+    #breakoutTable td:nth-child(4){
+
+        display:none;
+
+    }
+
+    /* Hide Volume */
+
+    #breakoutTable th:nth-child(5),
+    #breakoutTable td:nth-child(5){
+
+        display:none;
+
+    }
+
+}
+
+/* ======================================================
+   MOBILE SCANNER TABLE
+====================================================== */
+
+@media (max-width:768px){
+
+    /* Hide Touches */
+
+    #scannerTable th:nth-child(3),
+    #scannerTable td:nth-child(3){
+
+        display:none;
+
+    }
+
+    /* Hide Higher Lows */
+
+    #scannerTable th:nth-child(4),
+    #scannerTable td:nth-child(4){
+
+        display:none;
 
     }
 
