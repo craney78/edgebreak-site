@@ -3356,7 +3356,7 @@ TRADINGVIEW CHART
 
                 <tr>
 
-                    <td colspan="5">
+                    <td colspan="4">
                         Select filters and click Search.
                     </td>
 
@@ -4783,10 +4783,7 @@ async function loadWatchlist(){
 
 }
 
-async function addToWatchlist(
-    symbol,
-    source="Manual"
-){
+async function addToWatchlist(symbol){
 
     const {
         data:{ user }
@@ -4807,8 +4804,7 @@ async function addToWatchlist(
             .insert([
                 {
                     user_id:user.id,
-                    symbol:symbol,
-                    source:source
+                    symbol:symbol
                 }
             ]);
 
@@ -4859,7 +4855,7 @@ function renderWatchlist(){
         tbody.innerHTML=`
             <tr class="watchlist-empty">
 
-                <td colspan="5">
+                <td colspan="4">
 
                     No watchlist stocks added.
 
@@ -4904,37 +4900,6 @@ function renderWatchlist(){
                     }
                 );
 
-            const source =
-                stock.source || "Manual";
-
-            let badgeClass =
-                "source-manual";
-
-            switch(source){
-
-                case "Breakout":
-
-                    badgeClass =
-                        "source-breakout";
-
-                    break;
-
-                case "Scanner":
-
-                    badgeClass =
-                        "source-scanner";
-
-                    break;
-
-                case "Smart Money":
-
-                    badgeClass =
-                        "source-smart";
-
-                    break;
-
-            }
-
             return `
 
 <tr>
@@ -4967,24 +4932,13 @@ ${stock.symbol}
 
 </td>
 
-<td>
-
-<span class="source-badge ${badgeClass}">
-
-${source}
-
-</span>
-
-</td>
-
 <td class="center">
 
 <button
+type="button"
 class="watchlist-open"
-onclick="
-event.stopPropagation();
-loadChart('${stock.symbol}');
-">
+onclick="loadChart('${stock.symbol}')"
+>
 
 Open Chart
 
@@ -4995,11 +4949,10 @@ Open Chart
 <td class="center">
 
 <button
+type="button"
 class="watchlist-remove"
-onclick="
-event.stopPropagation();
-removeFromWatchlist(${stock.id});
-">
+onclick="removeFromWatchlist(${stock.id})"
+>
 
 ×
 
