@@ -5104,6 +5104,8 @@ function selectStock(symbol){
 
 function applyScannerSmartMoney(){
 
+    console.log("Breakout Smart Money button clicked");
+
     const minimum =
         parseInt(
             document.getElementById(
@@ -5252,6 +5254,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 window.breakoutData = [];
 
+// Stores latest breakout search
+window.currentBreakoutResults = [];
+
 document.addEventListener("DOMContentLoaded", () => {
 
     fetch("/breakout_scanner.json?v=" + Date.now())
@@ -5289,6 +5294,15 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
     }
+
+    document
+        .getElementById(
+            "applyBreakoutSmartMoney"
+        )
+        ?.addEventListener(
+            "click",
+            applyBreakoutSmartMoney
+        );
 
 });
 
@@ -5368,6 +5382,8 @@ function runBreakoutScanner(){
             return true;
 
         });
+
+    window.currentBreakoutResults = results;
 
     renderBreakoutResults(results);
 
@@ -5535,6 +5551,74 @@ function selectBreakout(symbol){
         </div>
 
     `;
+
+}
+
+function applyBreakoutSmartMoney(){
+
+    const minimum =
+        parseInt(
+            document.getElementById(
+                "breakoutSmartMoneyAppearances"
+            ).value || 0
+        );
+
+    const period =
+        parseInt(
+            document.getElementById(
+                "breakoutSmartMoneyPeriod"
+            ).value
+        );
+
+    if(minimum === 0){
+
+        renderBreakoutResults(
+            window.currentBreakoutResults
+        );
+
+        return;
+
+    }
+
+    const filtered =
+        window.currentBreakoutResults.filter(stock => {
+
+            const record =
+                window.smartMoneyLookup[
+                    stock.symbol
+                ];
+
+            if(!record)
+                return false;
+
+            let count = 0;
+
+            if(period === 30){
+
+                count =
+                    record.smart_money_30 || 0;
+
+            }
+
+            else if(period === 60){
+
+                count =
+                    record.smart_money_60 || 0;
+
+            }
+
+            else{
+
+                count =
+                    record.smart_money_90 || 0;
+
+            }
+
+            return count >= minimum;
+
+        });
+
+    renderBreakoutResults(filtered);
 
 }
 
