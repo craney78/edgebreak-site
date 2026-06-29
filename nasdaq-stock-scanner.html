@@ -2279,61 +2279,173 @@ TRADINGVIEW CHART
 
 }
 
+/* ======================================================
+   MY WATCHLIST
+====================================================== */
+
 .watchlist-table{
 
     width:100%;
 
-    border-collapse:collapse;
+    border-collapse:separate;
 
-    table-layout:fixed;
+    border-spacing:0 10px;
 
 }
 
+/* ======================================================
+   HEADERS
+====================================================== */
+
 .watchlist-table thead th{
 
-    padding:0 0 18px;
+    padding:0 18px 12px;
 
     text-align:left;
 
-    color:#94a3b8;
+    color:#64748b;
 
-    font-size:12px;
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:.12em;
 
     text-transform:uppercase;
 
 }
 
+.watchlist-table thead th:last-child{
+
+    text-align:right;
+
+}
+
+/* ======================================================
+   ROWS
+====================================================== */
+
+.watchlist-table tbody tr{
+
+    background:#101828;
+
+    transition:.18s ease;
+
+}
+
+.watchlist-table tbody tr:hover{
+
+    background:#162132;
+
+    transform:translateY(-1px);
+
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+
+}
+
+/* ======================================================
+   CELLS
+====================================================== */
+
 .watchlist-table tbody td{
 
-    padding:12px 0;
+    padding:16px 18px;
 
     color:#ffffff;
 
     vertical-align:middle;
 
-}
+    border-top:1px solid rgba(255,255,255,.05);
 
-.watchlist-table th:first-child,
-.watchlist-table td:first-child{
-
-    width:85%;
+    border-bottom:1px solid rgba(255,255,255,.05);
 
 }
 
-.watchlist-table th:last-child,
-.watchlist-table td:last-child{
+.watchlist-table tbody td:first-child{
 
-    width:15%;
+    border-left:1px solid rgba(255,255,255,.05);
+
+    border-radius:12px 0 0 12px;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    color:#22c55e;
+
+    cursor:pointer;
 
 }
+
+.watchlist-table tbody td:last-child{
+
+    border-right:1px solid rgba(255,255,255,.05);
+
+    border-radius:0 12px 12px 0;
+
+    text-align:right;
+
+    width:120px;
+
+}
+
+/* ======================================================
+   REMOVE BUTTON
+====================================================== */
 
 .remove-btn{
 
-    display:inline-block;
+    display:inline-flex;
 
-    padding:6px 14px;
+    align-items:center;
 
-    border-radius:8px;
+    justify-content:center;
+
+    padding:8px 14px;
+
+    background:rgba(239,68,68,.10);
+
+    border:1px solid rgba(239,68,68,.30);
+
+    border-radius:10px;
+
+    color:#f87171;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.18s ease;
+
+}
+
+.remove-btn:hover{
+
+    background:#ef4444;
+
+    border-color:#ef4444;
+
+    color:#ffffff;
+
+}
+
+/* ======================================================
+   EMPTY WATCHLIST
+====================================================== */
+
+.watchlist-table tbody td[colspan]{
+
+    text-align:center;
+
+    padding:50px 20px;
+
+    color:#64748b;
+
+    font-style:italic;
+
+    border:none;
 
 }
 </style>  
