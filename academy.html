@@ -91,8 +91,1071 @@ window.supabaseClient = supabase.createClient(
   "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
+<style>
+
+/*==================================================
+EDGEBREAK ACADEMY
+==================================================*/
+
+:root{
+
+    --academy-bg:#071225;
+
+    --academy-card:#101b2d;
+
+    --academy-card-hover:#16253c;
+
+    --academy-border:#243956;
+
+    --academy-primary:#3b82f6;
+
+    --academy-primary-hover:#60a5fa;
+
+    --academy-text:#ffffff;
+
+    --academy-text-light:#b6c4d7;
+
+    --academy-radius:18px;
+
+    --academy-shadow:
+        0 12px 35px rgba(0,0,0,.28);
+
+}
 
 
+/*==================================================
+PAGE
+==================================================*/
+
+body{
+
+    background:var(--academy-bg);
+
+    color:var(--academy-text);
+
+    font-family:
+        Inter,
+        Arial,
+        sans-serif;
+
+    line-height:1.7;
+
+}
+
+
+/*==================================================
+CONTAINER
+==================================================*/
+
+.academy-container{
+
+    width:min(1400px,92%);
+
+    margin:auto;
+
+}
+
+
+/*==================================================
+SECTIONS
+==================================================*/
+
+.academy-section{
+
+    padding:90px 0;
+
+}
+
+
+/*==================================================
+HEADINGS
+==================================================*/
+
+.academy-section h2{
+
+    font-size:2.3rem;
+
+    font-weight:700;
+
+    margin-bottom:25px;
+
+    color:#fff;
+
+}
+
+.academy-section h3{
+
+    font-size:1.3rem;
+
+    font-weight:600;
+
+    margin-bottom:15px;
+
+}
+
+.section-sub{
+
+    max-width:900px;
+
+    margin:auto;
+
+    color:var(--academy-text-light);
+
+    font-size:1.1rem;
+
+    line-height:1.8;
+
+}
+
+
+/*==================================================
+MODULE SPACING
+==================================================*/
+
+.academy-module{
+
+    padding:90px 0;
+
+    border-top:1px solid
+        rgba(255,255,255,.08);
+
+}
+
+.academy-module:first-of-type{
+
+    border-top:none;
+
+}
+
+
+/*==================================================
+ACADEMY HERO
+==================================================*/
+
+.academy-hero{
+
+    position:relative;
+
+    padding:120px 0 100px;
+
+    text-align:center;
+
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            180deg,
+            #071225 0%,
+            #0b1830 100%
+        );
+
+}
+
+.academy-hero::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(59,130,246,.12),
+            transparent 65%
+        );
+
+    pointer-events:none;
+
+}
+
+.academy-hero .academy-container{
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+/*==================================================
+TAG
+==================================================*/
+
+.hero-tag{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:10px 20px;
+
+    border-radius:50px;
+
+    background:rgba(59,130,246,.12);
+
+    border:1px solid rgba(59,130,246,.35);
+
+    color:var(--academy-primary);
+
+    font-size:.85rem;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+
+    margin-bottom:25px;
+
+}
+
+/*==================================================
+HERO TITLE
+==================================================*/
+
+.academy-hero h1{
+
+    font-size:clamp(2.8rem,5vw,4.8rem);
+
+    font-weight:800;
+
+    line-height:1.1;
+
+    margin-bottom:25px;
+
+    color:#fff;
+
+}
+
+.hero-sub{
+
+    max-width:900px;
+
+    margin:0 auto 45px;
+
+    color:var(--academy-text-light);
+
+    font-size:1.2rem;
+
+    line-height:1.8;
+
+}
+
+/*==================================================
+STATS
+==================================================*/
+
+.academy-stats{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:25px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:45px;
+
+}
+
+.stat{
+
+    min-width:140px;
+
+    padding:22px;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:16px;
+
+    backdrop-filter:blur(8px);
+
+}
+
+.stat strong{
+
+    display:block;
+
+    font-size:2rem;
+
+    color:#fff;
+
+    margin-bottom:8px;
+
+}
+
+.stat span{
+
+    color:var(--academy-text-light);
+
+    font-size:.95rem;
+
+}
+
+/*==================================================
+BUTTONS
+==================================================*/
+
+.academy-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:30px;
+
+}
+
+.hero-note{
+
+    color:var(--academy-text-light);
+
+    font-size:.95rem;
+
+}
+
+
+/*==================================================
+MODULES
+==================================================*/
+
+.academy-module{
+
+    padding:100px 0;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+}
+
+.academy-module:first-of-type{
+
+    border-top:none;
+
+}
+
+
+/*==================================================
+MODULE HEADER
+==================================================*/
+
+.module-header{
+
+    max-width:900px;
+
+    margin:0 auto 50px;
+
+    text-align:center;
+
+}
+
+.module-tag{
+
+    display:inline-block;
+
+    padding:8px 18px;
+
+    margin-bottom:20px;
+
+    background:rgba(59,130,246,.12);
+
+    border:1px solid rgba(59,130,246,.35);
+
+    border-radius:40px;
+
+    color:var(--academy-primary);
+
+    font-size:.85rem;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+
+}
+
+.module-header h2{
+
+    font-size:2.6rem;
+
+    margin-bottom:20px;
+
+}
+
+.module-sub{
+
+    max-width:800px;
+
+    margin:auto;
+
+    color:var(--academy-text-light);
+
+    font-size:1.15rem;
+
+    line-height:1.8;
+
+}
+
+
+/*==================================================
+MODULE CONTENT
+==================================================*/
+
+.module-info{
+
+    max-width:1000px;
+
+    margin:40px auto;
+
+}
+
+.module-info h3{
+
+    margin-bottom:15px;
+
+    color:#fff;
+
+}
+
+.module-info p{
+
+    color:var(--academy-text-light);
+
+    line-height:1.8;
+
+}
+
+
+/*==================================================
+LEARNING OUTCOMES
+==================================================*/
+
+.academy-list{
+
+    margin:25px 0;
+
+    padding-left:20px;
+
+}
+
+.academy-list li{
+
+    margin-bottom:12px;
+
+    color:var(--academy-text-light);
+
+    line-height:1.8;
+
+}
+
+
+/*==================================================
+LESSON GRID
+==================================================*/
+
+.lesson-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:25px;
+
+    margin-top:45px;
+
+}
+
+
+/*==================================================
+LESSON CARD
+==================================================*/
+
+.lesson-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    min-height:190px;
+
+    padding:30px;
+
+    text-decoration:none;
+
+    color:var(--academy-text);
+
+    background:var(--academy-card);
+
+    border:1px solid var(--academy-border);
+
+    border-radius:var(--academy-radius);
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        background .25s ease,
+        box-shadow .25s ease;
+
+    box-shadow:var(--academy-shadow);
+
+}
+
+.lesson-card:hover{
+
+    transform:translateY(-6px);
+
+    background:var(--academy-card-hover);
+
+    border-color:var(--academy-primary);
+
+}
+
+
+/*==================================================
+LESSON NUMBER
+==================================================*/
+
+.lesson-number{
+
+    display:inline-block;
+
+    margin-bottom:18px;
+
+    color:var(--academy-primary);
+
+    font-size:.9rem;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+}
+
+
+/*==================================================
+LESSON TITLE
+==================================================*/
+
+.lesson-card h4{
+
+    margin:0 0 25px;
+
+    font-size:1.35rem;
+
+    font-weight:700;
+
+    line-height:1.4;
+
+    color:#fff;
+
+}
+
+
+/*==================================================
+LESSON TIME
+==================================================*/
+
+.lesson-time{
+
+    margin-top:auto;
+
+    color:var(--academy-text-light);
+
+    font-size:.9rem;
+
+    font-weight:500;
+
+}
+
+
+/*==================================================
+ACTIVE CARD
+==================================================*/
+
+.lesson-card.active{
+
+    border-color:var(--academy-primary);
+
+    background:rgba(59,130,246,.08);
+
+}
+
+
+/*==================================================
+WHY EDGEBREAK ACADEMY
+==================================================*/
+
+.academy-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:25px;
+
+    margin-top:50px;
+
+}
+
+.academy-card{
+
+    background:var(--academy-card);
+
+    border:1px solid var(--academy-border);
+
+    border-radius:var(--academy-radius);
+
+    padding:35px;
+
+    transition:.25s;
+
+}
+
+.academy-card:hover{
+
+    transform:translateY(-5px);
+
+    border-color:var(--academy-primary);
+
+    background:var(--academy-card-hover);
+
+}
+
+.academy-icon{
+
+    width:60px;
+
+    height:60px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin-bottom:25px;
+
+    border-radius:14px;
+
+    background:rgba(59,130,246,.08);
+
+    color:var(--academy-primary);
+
+}
+
+.academy-icon svg{
+
+    width:30px;
+
+    height:30px;
+
+}
+
+.academy-card h3{
+
+    margin-bottom:15px;
+
+    font-size:1.35rem;
+
+}
+
+.academy-card p{
+
+    color:var(--academy-text-light);
+
+    line-height:1.8;
+
+}
+
+
+/*==================================================
+CTA
+==================================================*/
+
+.academy-cta{
+
+    max-width:900px;
+
+    margin:auto;
+
+    text-align:center;
+
+    padding:70px 50px;
+
+    background:linear-gradient(
+        180deg,
+        #101b2d,
+        #16253c
+    );
+
+    border:1px solid var(--academy-border);
+
+    border-radius:24px;
+
+}
+
+.academy-cta h2{
+
+    margin:25px 0;
+
+}
+
+.academy-cta p{
+
+    color:var(--academy-text-light);
+
+    line-height:1.9;
+
+}
+
+.academy-note{
+
+    margin-top:30px;
+
+    font-size:.95rem;
+
+}
+
+
+/*==================================================
+FAQ
+==================================================*/
+
+.faq-container{
+
+    max-width:1000px;
+
+    margin:50px auto 0;
+
+}
+
+.faq-item{
+
+    padding:35px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.faq-item:last-child{
+
+    border-bottom:none;
+
+}
+
+.faq-item h3{
+
+    margin-bottom:15px;
+
+}
+
+.faq-item p{
+
+    color:var(--academy-text-light);
+
+    line-height:1.8;
+
+}
+
+
+/*==================================================
+DISCLAIMER
+==================================================*/
+
+.academy-disclaimer{
+
+    max-width:1000px;
+
+    margin:auto;
+
+    padding:45px;
+
+    background:#101b2d;
+
+    border-left:4px solid var(--academy-primary);
+
+    border-radius:18px;
+
+}
+
+.academy-disclaimer h2{
+
+    margin:20px 0;
+
+}
+
+.academy-disclaimer p{
+
+    color:var(--academy-text-light);
+
+    line-height:1.8;
+
+}
+
+
+/*==================================================
+RESPONSIVE
+==================================================*/
+
+/*------------------------------
+1400px
+------------------------------*/
+
+@media (max-width:1400px){
+
+    .academy-container{
+
+        width:94%;
+
+    }
+
+}
+
+
+/*------------------------------
+1200px
+------------------------------*/
+
+@media (max-width:1200px){
+
+    .lesson-grid{
+
+        grid-template-columns:repeat(4,1fr);
+
+        gap:20px;
+
+    }
+
+    .academy-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+
+/*------------------------------
+992px
+------------------------------*/
+
+@media (max-width:992px){
+
+    .academy-hero{
+
+        padding:90px 0 70px;
+
+    }
+
+    .academy-hero h1{
+
+        font-size:3rem;
+
+    }
+
+    .module-header h2{
+
+        font-size:2.2rem;
+
+    }
+
+    .lesson-grid{
+
+        grid-template-columns:repeat(3,1fr);
+
+    }
+
+    .academy-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+
+/*------------------------------
+768px
+------------------------------*/
+
+@media (max-width:768px){
+
+    .academy-section{
+
+        padding:70px 0;
+
+    }
+
+    .academy-module{
+
+        padding:70px 0;
+
+    }
+
+    .academy-hero h1{
+
+        font-size:2.5rem;
+
+    }
+
+    .hero-sub{
+
+        font-size:1.05rem;
+
+    }
+
+    .academy-buttons{
+
+        flex-direction:column;
+
+        align-items:center;
+
+    }
+
+    .academy-stats{
+
+        gap:15px;
+
+    }
+
+    .stat{
+
+        min-width:120px;
+
+        padding:18px;
+
+    }
+
+    .lesson-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+        gap:18px;
+
+    }
+
+    .academy-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+        gap:18px;
+
+    }
+
+    .lesson-card{
+
+        min-height:170px;
+
+        padding:22px;
+
+    }
+
+    .academy-card{
+
+        padding:25px;
+
+    }
+
+}
+
+
+/*------------------------------
+480px
+------------------------------*/
+
+@media (max-width:480px){
+
+    .academy-hero{
+
+        padding:70px 0 60px;
+
+    }
+
+    .academy-hero h1{
+
+        font-size:2rem;
+
+    }
+
+    .hero-sub{
+
+        font-size:1rem;
+
+    }
+
+    .academy-section h2{
+
+        font-size:1.8rem;
+
+    }
+
+    .module-header h2{
+
+        font-size:1.9rem;
+
+    }
+
+    .lesson-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+        gap:15px;
+
+    }
+
+    .academy-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .lesson-card{
+
+        min-height:155px;
+
+        padding:18px;
+
+    }
+
+    .lesson-card h4{
+
+        font-size:1rem;
+
+    }
+
+    .lesson-number{
+
+        font-size:.8rem;
+
+    }
+
+    .lesson-time{
+
+        font-size:.8rem;
+
+    }
+
+    .academy-cta{
+
+        padding:45px 25px;
+
+    }
+
+}
+
+</style>
 </head>
 
 <body>
