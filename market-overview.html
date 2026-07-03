@@ -1,3 +1,443 @@
+<html>
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Market Overview | Live US Markets, News & Economic Calendar | EdgeBreak</title>
+
+<meta name="description"
+      content="Monitor live US market indices, stock market heatmaps, market news, economic events and financial markets before researching NASDAQ breakout opportunities with EdgeBreak.">
+
+<meta name="keywords"
+      content="market overview, US stock market, NASDAQ market, S&P 500, Dow Jones, market heatmap, stock market news, economic calendar, financial markets, market movers, EdgeBreak">
+
+<meta name="robots"
+      content="index, follow, max-image-preview:large">
+
+<meta name="author"
+      content="EdgeBreak">
+
+<meta name="theme-color"
+      content="#071225">
+
+<link rel="canonical"
+      href="https://www.edgebreak.ai/market-overview.html">
+
+<!-- ===================================
+OPEN GRAPH
+=================================== -->
+
+<meta property="og:type"
+      content="website">
+
+<meta property="og:title"
+      content="Market Overview | Live US Markets | EdgeBreak">
+
+<meta property="og:description"
+      content="Track US market indices, market heatmaps, financial news and economic events before researching NASDAQ breakout opportunities.">
+
+<meta property="og:url"
+      content="https://www.edgebreak.ai/market-overview.html">
+
+<meta property="og:image"
+      content="https://www.edgebreak.ai/images/logo.webp">
+
+<meta property="og:image:alt"
+      content="EdgeBreak Market Overview">
+
+<meta property="og:site_name"
+      content="EdgeBreak">
+
+<meta property="og:locale"
+      content="en_AU">
+
+<!-- ===================================
+TWITTER CARDS
+=================================== -->
+
+<meta name="twitter:card"
+      content="summary_large_image">
+
+<meta name="twitter:title"
+      content="Market Overview | EdgeBreak">
+
+<meta name="twitter:description"
+      content="Monitor live US markets, financial news, market heatmaps and economic events in one place.">
+
+<meta name="twitter:image"
+      content="https://www.edgebreak.ai/images/logo.webp">
+
+<meta name="twitter:image:alt"
+      content="EdgeBreak Market Overview">
+
+<!-- ===================================
+CSS
+=================================== -->
+
+<link rel="stylesheet"
+      href="/css/dashboard.css">
+
+<link rel="stylesheet"
+      href="/css/tool-page.css">
+
+<!-- ===================================
+SUPABASE
+=================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+window.supabaseClient = supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+);
+</script>
+
+</head>
+<style>
+/* ==========================================
+MARKET OVERVIEW
+========================================== */
+
+.market-header{
+
+    text-align:center;
+
+    max-width:850px;
+
+    margin:0 auto 50px;
+
+}
+
+.market-header h1{
+
+    color:#fff;
+
+    font-size:2.8rem;
+
+    margin-bottom:20px;
+
+}
+
+.market-header p{
+
+    color:#94a3b8;
+
+    line-height:1.8;
+
+    font-size:1.08rem;
+
+}
+
+/* ==========================================
+SECTION SPACING
+========================================== */
+
+.market-section{
+
+    margin:45px 0;
+
+}
+
+.market-section h2,
+.market-section h3{
+
+    color:#fff;
+
+    margin-bottom:15px;
+
+}
+
+.market-section p{
+
+    color:#94a3b8;
+
+    line-height:1.8;
+
+    margin-bottom:25px;
+
+}
+
+/* ==========================================
+TRADINGVIEW WIDGETS
+========================================== */
+
+.tradingview-widget-container{
+
+    width:100%;
+
+}
+
+.tradingview-widget-container__widget{
+
+    overflow:hidden;
+
+    border-radius:18px;
+
+}
+
+/* ==========================================
+INFORMATION CARDS
+========================================== */
+
+.market-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(280px,1fr));
+
+    gap:24px;
+
+    margin:50px 0;
+
+}
+
+.market-card{
+
+    background:#0b1628;
+
+    border:1px solid rgba(255,255,255,.05);
+
+    border-radius:18px;
+
+    padding:35px;
+
+    text-align:center;
+
+    transition:.25s;
+
+}
+
+.market-card:hover{
+
+    transform:translateY(-5px);
+
+    border-color:#00d084;
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,.35);
+
+}
+
+.market-card h3{
+
+    color:#fff;
+
+    margin:22px 0 15px;
+
+}
+
+.market-card p{
+
+    color:#94a3b8;
+
+    line-height:1.8;
+
+    margin:0;
+
+}
+
+/* ==========================================
+SVG ICONS
+========================================== */
+
+.market-icon{
+
+    width:72px;
+
+    height:72px;
+
+    margin:0 auto;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:rgba(0,208,132,.08);
+
+    border:1px solid rgba(0,208,132,.18);
+
+    border-radius:18px;
+
+    color:#00d084;
+
+}
+
+.market-icon svg{
+
+    width:34px;
+
+    height:34px;
+
+}
+
+/* ==========================================
+ELITE PANELS
+========================================== */
+
+.elite-panel{
+
+    padding:40px;
+
+}
+
+.elite-panel h2{
+
+    text-align:center;
+
+    color:#fff;
+
+    margin-bottom:20px;
+
+}
+
+.elite-panel p{
+
+    color:#94a3b8;
+
+    line-height:1.9;
+
+    max-width:850px;
+
+    margin:auto;
+
+    text-align:center;
+
+}
+
+/* ==========================================
+RETURN BUTTON
+========================================== */
+
+.return-section{
+
+    text-align:center;
+
+    margin:70px 0;
+
+}
+
+.return-section h2{
+
+    color:#fff;
+
+    margin-bottom:20px;
+
+}
+
+.return-section p{
+
+    color:#94a3b8;
+
+    max-width:700px;
+
+    margin:0 auto 35px;
+
+    line-height:1.8;
+
+}
+
+.return-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:15px 34px;
+
+    border-radius:12px;
+
+    background:#00d084;
+
+    color:#071225;
+
+    font-weight:700;
+
+    text-decoration:none;
+
+    transition:.25s;
+
+    box-shadow:
+        0 12px 30px rgba(0,208,132,.25);
+
+}
+
+.return-btn:hover{
+
+    background:#18e89a;
+
+    transform:translateY(-3px);
+
+}
+
+/* ==========================================
+MOBILE
+========================================== */
+
+@media (max-width:900px){
+
+    .elite-banner{
+
+        text-align:center;
+
+    }
+
+    .elite-badge{
+
+        margin-top:20px;
+
+    }
+
+    .market-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .market-card{
+
+        padding:28px;
+
+    }
+
+    .market-icon{
+
+        width:60px;
+
+        height:60px;
+
+    }
+
+    .market-icon svg{
+
+        width:30px;
+
+        height:30px;
+
+    }
+
+    .return-btn{
+
+        width:100%;
+
+        max-width:
+
+    }
+    
+}    
+
+</style>
+
+<body>
+
 <!-- =========================================
 HEADER
 ========================================= -->
@@ -404,3 +844,5 @@ RETURN
     </div>
 
 </div>
+</body>
+</html>
