@@ -85,7 +85,106 @@ window.supabaseClient = supabase.createClient(
 );
 </script>
 
+<style>
+.graduation-modal{
 
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.75);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    z-index:99999;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:.4s;
+
+}
+
+.graduation-modal.show{
+
+    opacity:1;
+    visibility:visible;
+
+}
+
+.graduation-card{
+
+    width:min(90%,600px);
+
+    padding:50px;
+
+    border-radius:20px;
+
+    background:#101827;
+
+    border:1px solid rgba(0,255,170,.25);
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.45),
+        0 0 40px rgba(0,255,170,.15);
+
+    text-align:center;
+
+}
+
+.grad-icon{
+
+    font-size:72px;
+    margin-bottom:20px;
+
+}
+
+.graduation-card h2{
+
+    font-size:42px;
+    color:#fff;
+    margin-bottom:20px;
+
+}
+
+.graduation-card p{
+
+    color:#cbd5e1;
+    line-height:1.7;
+    margin-bottom:18px;
+
+}
+
+.graduation-card button{
+
+    margin-top:25px;
+
+    background:#00d084;
+
+    color:#fff;
+
+    border:none;
+
+    padding:16px 34px;
+
+    font-size:18px;
+
+    border-radius:999px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.graduation-card button:hover{
+
+    transform:translateY(-2px);
+
+}
+
+</style>
 
 
 
@@ -645,6 +744,41 @@ MODULE 6 · LESSON 30
 </div>
 
 </main>
+
+<div id="graduationModal" class="graduation-modal">
+
+    <div class="graduation-card">
+
+        <div class="grad-icon">
+            🎓
+        </div>
+
+        <h2>Congratulations!</h2>
+
+        <p>
+
+            You've successfully completed all
+            <strong>30 EdgeBreak Academy lessons.</strong>
+
+        </p>
+
+        <p>
+
+            You now have a structured framework for researching
+            NASDAQ stocks using the complete EdgeBreak platform.
+
+        </p>
+
+        <button id="closeGraduation">
+
+            Start Using EdgeBreak →
+
+        </button>
+
+    </div>
+
+</div>
+
 <!-- ===================================
 FOOTER
 =================================== -->
@@ -1014,6 +1148,134 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
+    // Only celebrate once
+    if (localStorage.getItem("academyGraduated"))
+        return;
+
+    localStorage.setItem("academyGraduated", "true");
+
+    // Small delay so page loads first
+    setTimeout(() => {
+
+        const duration = 3500;
+        const animationEnd = Date.now() + duration;
+
+        const defaults = {
+            startVelocity: 35,
+            spread: 360,
+            ticks: 120,
+            zIndex: 9999
+        };
+
+        function randomInRange(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        const interval = setInterval(() => {
+
+            const timeLeft = animationEnd - Date.now();
+
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+                return;
+            }
+
+            const particleCount = 70 * (timeLeft / duration);
+
+            confetti(Object.assign({}, defaults, {
+                particleCount,
+                origin: {
+                    x: randomInRange(0.1, 0.3),
+                    y: Math.random() * 0.3
+                }
+            }));
+
+            confetti(Object.assign({}, defaults, {
+                particleCount,
+                origin: {
+                    x: randomInRange(0.7, 0.9),
+                    y: Math.random() * 0.3
+                }
+            }));
+
+        }, 250);
+
+    }, 700);
+
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+    if(localStorage.getItem("academyGraduation"))
+        return;
+
+    localStorage.setItem(
+        "academyGraduation",
+        "complete"
+    );
+
+    setTimeout(()=>{
+
+        const duration=3500;
+        const end=Date.now()+duration;
+
+        const timer=setInterval(()=>{
+
+            const timeLeft=end-Date.now();
+
+            if(timeLeft<=0){
+
+                clearInterval(timer);
+
+                document
+                    .getElementById("graduationModal")
+                    .classList
+                    .add("show");
+
+                return;
+
+            }
+
+            confetti({
+
+                particleCount:70,
+
+                spread:360,
+
+                startVelocity:35,
+
+                origin:{
+                    x:Math.random(),
+                    y:Math.random()*.4
+                }
+
+            });
+
+        },220);
+
+    },700);
+
+    document
+        .getElementById("closeGraduation")
+        .onclick=()=>{
+
+            document
+                .getElementById("graduationModal")
+                .classList
+                .remove("show");
+
+        };
+
+});
+
+</script>
 </body>
 </html>
