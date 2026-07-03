@@ -1,0 +1,488 @@
+<html>
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Margin Loan Calculator | EdgeBreak Tools</title>
+
+<meta name="description"
+      content="Estimate your margin loan, equity contribution and Loan-to-Value Ratio (LVR) using the free EdgeBreak Margin Loan Calculator.">
+
+<meta name="robots"
+      content="index, follow, max-image-preview:large">
+
+<meta name="author"
+      content="EdgeBreak">
+
+<meta name="theme-color"
+      content="#071225">
+
+<link rel="canonical"
+      href="https://www.edgebreak.ai/margin-loan-calculator.html">
+
+<!-- ===================================
+OPEN GRAPH
+=================================== -->
+
+<meta property="og:type"
+      content="website">
+
+<meta property="og:title"
+      content="Margin Loan Calculator | EdgeBreak">
+
+<meta property="og:description"
+      content="Free margin loan calculator to estimate borrowing requirements, equity contribution and Loan-to-Value Ratio (LVR).">
+
+<meta property="og:url"
+      content="https://www.edgebreak.ai/margin-loan-calculator.html">
+
+<meta property="og:image"
+      content="https://www.edgebreak.ai/images/logo.webp">
+
+<meta property="og:image:alt"
+      content="EdgeBreak Margin Loan Calculator">
+
+<meta property="og:site_name"
+      content="EdgeBreak">
+
+<meta property="og:locale"
+      content="en_AU">
+
+<!-- ===================================
+TWITTER CARDS
+=================================== -->
+
+<meta name="twitter:card"
+      content="summary_large_image">
+
+<meta name="twitter:title"
+      content="Margin Loan Calculator | EdgeBreak">
+
+<meta name="twitter:description"
+      content="Estimate your margin loan, equity contribution and LVR using this free EdgeBreak calculator.">
+
+<meta name="twitter:image"
+      content="https://www.edgebreak.ai/images/logo.webp">
+
+<meta name="twitter:image:alt"
+      content="EdgeBreak Margin Loan Calculator">
+
+<!-- ===================================
+CSS
+=================================== -->
+
+<link rel="stylesheet"
+      href="/css/dashboard.css">
+<style>
+/* ==========================================
+UTILITY PAGES
+========================================== */
+
+.tool-page{
+
+    max-width:950px;
+    margin:70px auto;
+    padding:0 20px;
+
+}
+
+.tool-page h1{
+
+    color:#ffffff;
+    text-align:center;
+    font-size:2.8rem;
+    margin-bottom:18px;
+
+}
+
+.intro{
+
+    max-width:760px;
+    margin:0 auto 45px;
+    text-align:center;
+    color:#94a3b8;
+    font-size:1.08rem;
+    line-height:1.8;
+
+}
+
+/* ==========================================
+CARD
+========================================== */
+
+.tool-card{
+
+    background:#0b1628;
+    border:1px solid rgba(255,255,255,.05);
+    border-radius:18px;
+    padding:40px;
+    text-align:center;
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+
+}
+
+.tool-card iframe{
+
+    border:none;
+    border-radius:16px;
+    overflow:hidden;
+
+}
+
+/* ==========================================
+FORM
+========================================== */
+
+.margin-form{
+
+    max-width:500px;
+    margin:auto;
+
+}
+
+.field{
+
+    margin-bottom:22px;
+    text-align:left;
+
+}
+
+.field label{
+
+    display:block;
+    color:#ffffff;
+    font-weight:600;
+    margin-bottom:8px;
+
+}
+
+.field input{
+
+    width:100%;
+    padding:15px;
+
+    border:none;
+    border-radius:12px;
+
+    background:#071225;
+    color:#ffffff;
+
+    font-size:16px;
+    outline:none;
+
+    transition:.25s;
+
+}
+
+.field input:focus{
+
+    box-shadow:0 0 0 2px #00d084;
+
+}
+
+/* ==========================================
+BUTTON
+========================================== */
+
+.return-btn{
+
+    display:inline-block;
+
+    margin-top:10px;
+
+    padding:15px 28px;
+
+    background:#00d084;
+    color:#071225;
+
+    border:none;
+    border-radius:12px;
+
+    font-weight:700;
+    font-size:15px;
+
+    text-decoration:none;
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.return-btn:hover{
+
+    transform:translateY(-2px);
+
+    background:#14e896;
+
+    box-shadow:0 12px 30px rgba(0,208,132,.30);
+
+}
+
+/* ==========================================
+RESULTS
+========================================== */
+
+.margin-results{
+
+    margin-top:35px;
+
+}
+
+.margin-results div{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:18px 20px;
+    margin-bottom:15px;
+
+    background:#071225;
+
+    border-radius:12px;
+
+}
+
+.margin-results span{
+
+    color:#94a3b8;
+
+}
+
+.margin-results strong{
+
+    color:#00d084;
+    font-size:18px;
+
+}
+
+/* ==========================================
+RETURN SECTION
+========================================== */
+
+.return-section{
+
+    margin-top:50px;
+    text-align:center;
+
+}
+
+.return-section h2{
+
+    color:#ffffff;
+    margin-bottom:15px;
+
+}
+
+.return-section p{
+
+    max-width:650px;
+    margin:0 auto 30px;
+
+    color:#94a3b8;
+    line-height:1.8;
+
+}
+
+/* ==========================================
+RESPONSIVE
+========================================== */
+
+@media(max-width:768px){
+
+    .tool-page{
+
+        margin:40px auto;
+
+    }
+
+    .tool-page h1{
+
+        font-size:2rem;
+
+    }
+
+    .tool-card{
+
+        padding:25px;
+
+    }
+
+    .margin-results div{
+
+        flex-direction:column;
+        gap:8px;
+
+        text-align:center;
+
+    }
+
+}      
+</style>
+<!-- ===================================
+SUPABASE
+=================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+window.supabaseClient = supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+);
+</script>
+
+</head>
+
+<body>
+
+<div class="tool-page">
+
+    <h1>Margin Loan Calculator</h1>
+
+    <p class="intro">
+        Estimate your borrowing amount, equity contribution and Loan-to-Value Ratio (LVR) before purchasing shares using a margin loan.
+    </p>
+
+    <div class="tool-card">
+
+        <div class="margin-form">
+
+            <div class="field">
+
+                <label for="purchase">
+                    Total Share Purchase Value ($)
+                </label>
+
+                <input
+                    type="number"
+                    id="purchase"
+                    placeholder="10000"
+                    min="0"
+                >
+
+            </div>
+
+            <div class="field">
+
+                <label for="deposit">
+                    Your Deposit ($)
+                </label>
+
+                <input
+                    type="number"
+                    id="deposit"
+                    placeholder="3000"
+                    min="0"
+                >
+
+            </div>
+
+            <button
+                class="return-btn"
+                onclick="calculateMargin()"
+            >
+                Calculate Margin Loan
+            </button>
+
+            <div
+                id="results"
+                class="margin-results"
+            >
+
+                <div>
+
+                    <span>
+                        Margin Loan Required
+                    </span>
+
+                    <strong id="loan">
+                        $0.00
+                    </strong>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        Loan-to-Value Ratio (LVR)
+                    </span>
+
+                    <strong id="lvr">
+                        0.0%
+                    </strong>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        Your Equity
+                    </span>
+
+                    <strong id="equity">
+                        $0.00
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="elite-panel" style="margin-top:40px;">
+
+        <h2>
+            Understanding Margin Loans
+        </h2>
+
+        <p>
+            A margin loan allows investors to borrow money to purchase shares.
+            Your own contribution is known as your equity, while the remaining
+            amount is borrowed from the lender.
+        </p>
+
+        <p>
+            The Loan-to-Value Ratio (LVR) measures the percentage of your
+            investment funded by the loan. Lower LVRs generally provide a
+            greater buffer against market movements, while higher LVRs increase
+            borrowing risk.
+        </p>
+
+        <p>
+            This calculator is provided as a simple educational tool to assist
+            with understanding margin lending concepts. It should not be
+            considered financial advice.
+        </p>
+
+    </div>
+
+    <div class="return-section">
+
+        <h2>
+            Continue Your Research
+        </h2>
+
+        <p>
+            Finished using the Margin Loan Calculator? Return to the NASDAQ
+            Scanner and continue researching breakout opportunities.
+        </p>
+
+        <a
+            href="/nasdaq-stock-scanner.html"
+            class="return-btn"
+        >
+            ← Return to NASDAQ Scanner
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
