@@ -1206,16 +1206,41 @@ document.addEventListener("DOMContentLoaded",()=>{
 
     document
         .getElementById("closeGraduation")
-        .onclick=()=>{
+        .addEventListener("click", async () => {
 
-            document
-                .getElementById("graduationModal")
-                .classList
-                .remove("show");
+            const {
+                data: { session }
+            } = await supabaseClient.auth.getSession();
 
-        };
+            // Not logged in
+            if (!session || !session.user) {
 
-});
+                window.location.href = "pricing.html";
+                return;
+
+            }
+
+            // Check subscription
+            const { data: profile } = await supabaseClient
+                .from("profiles")
+                .select("is_active")
+                .eq("id", session.user.id)
+                .single();
+
+            // Subscription inactive
+            if (!profile || profile.is_active !== true) {
+
+                window.location.href = "pricing.html";
+                return;
+
+            }
+
+            // Active subscriber
+            window.location.href = "nasdaq-stock-scanner.html";
+
+        });
+
+    });
 
 </script>
 </body>
