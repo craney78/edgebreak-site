@@ -1,0 +1,406 @@
+<!-- =========================================
+HEADER
+========================================= -->
+
+<div class="elite-container">
+
+    <div class="elite-banner">
+
+        <div>
+
+            <div class="featured-tag">
+                LIVE MARKET DATA
+            </div>
+
+            <h1>
+                Market Overview
+            </h1>
+
+            <p>
+                Stay informed with a live snapshot of today's markets before
+                researching NASDAQ breakout opportunities using the EdgeBreak
+                platform.
+            </p>
+
+        </div>
+
+        <div class="elite-badge">
+            Live Markets
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+MARKET OVERVIEW
+========================================= -->
+
+<div class="elite-container">
+
+    <div class="scanner-panel">
+
+        <h2>
+            Market Overview
+        </h2>
+
+        <p class="intel-placeholder">
+
+            Live market information powered by trusted financial data providers.
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+US MARKET INDICES
+========================================= -->
+
+<div class="elite-container">
+
+    <div class="scanner-panel">
+
+        <h3>
+            🇺🇸 US Market Indices
+        </h3>
+
+        <p style="
+            color:#94a3b8;
+            margin-bottom:25px;
+        ">
+            Track the performance of the major US stock market indices.
+        </p>
+
+        <!-- TradingView Widget BEGIN -->
+
+        <div class="tradingview-widget-container">
+
+            <div class="tradingview-widget-container__widget"></div>
+
+            <script
+                type="text/javascript"
+                src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js"
+                async>
+            {
+            "width":"100%",
+            "height":450,
+            "symbolsGroups":[
+              {
+                "name":"US Indices",
+                "symbols":[
+                  {
+                    "name":"FOREXCOM:SPXUSD",
+                    "displayName":"S&P 500"
+                  },
+                  {
+                    "name":"FOREXCOM:NSXUSD",
+                    "displayName":"NASDAQ 100"
+                  },
+                  {
+                    "name":"FOREXCOM:DJI",
+                    "displayName":"Dow Jones"
+                  },
+                  {
+                    "name":"CAPITALCOM:RUSSELL2000",
+                    "displayName":"Russell 2000"
+                  },
+                  {
+                    "name":"TVC:VIX",
+                    "displayName":"VIX"
+                  }
+                ]
+              }
+            ],
+            "showSymbolLogo":true,
+            "isTransparent":true,
+            "colorTheme":"dark",
+            "locale":"en"
+            }
+            </script>
+
+        </div>
+
+        <!-- TradingView Widget END -->
+
+    </div>
+
+</div>
+
+<!-- =========================================
+MARKET HEATMAP
+========================================= -->
+
+<div class="elite-container">
+
+    <div class="scanner-panel">
+
+        <h3>
+            🗺 US Stock Market Heatmap
+        </h3>
+
+        <p style="
+            color:#94a3b8;
+            margin-bottom:25px;
+        ">
+            Visualise market performance across sectors using a live stock market heatmap.
+        </p>
+
+        <!-- TradingView Widget BEGIN -->
+
+        <div class="tradingview-widget-container">
+
+            <div class="tradingview-widget-container__widget"></div>
+
+            <script
+                type="text/javascript"
+                src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js"
+                async>
+            {
+              "dataSource":"NASDAQ100",
+              "blockSize":"market_cap_basic",
+              "blockColor":"change",
+              "grouping":"sector",
+              "locale":"en",
+              "symbolUrl":"",
+              "colorTheme":"dark",
+              "hasTopBar":true,
+              "isDataSetEnabled":true,
+              "isZoomEnabled":true,
+              "hasSymbolTooltip":true,
+              "isMonoSize":false,
+              "width":"100%",
+              "height":650
+            }
+            </script>
+
+        </div>
+
+        <!-- TradingView Widget END -->
+
+    </div>
+
+</div>
+
+<!-- =========================================
+TOP GAINERS
+========================================= -->
+
+<div class="elite-container">
+
+    <div class="scanner-panel">
+
+        <h3>
+            📈 Top Gainers
+        </h3>
+
+        <div
+            id="topGainers"
+            style="
+                min-height:350px;
+                margin-top:20px;
+            "
+        >
+
+            <!-- Widget -->
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+TOP LOSERS
+========================================= -->
+
+<div class="elite-container">
+
+    <div class="scanner-panel">
+
+        <h3>
+            📉 Top Losers
+        </h3>
+
+        <div
+            id="topLosers"
+            style="
+                min-height:350px;
+                margin-top:20px;
+            "
+        >
+
+            <!-- Widget -->
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+MOST ACTIVE
+========================================= -->
+
+<div class="elite-container">
+
+    <div class="scanner-panel">
+
+        <h3>
+            🔥 Most Active Stocks
+        </h3>
+
+        <div
+            id="mostActive"
+            style="
+                min-height:350px;
+                margin-top:20px;
+            "
+        >
+
+            <!-- Widget -->
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+MARKET NEWS
+========================================= -->
+
+<div class="elite-container">
+
+    <div class="scanner-panel">
+
+        <h3>
+            📰 Latest Market News
+        </h3>
+
+        <p style="
+            color:#94a3b8;
+            margin-bottom:25px;
+        ">
+            Stay up to date with breaking market news, earnings announcements and major economic events affecting US markets.
+        </p>
+
+        <!-- TradingView Widget BEGIN -->
+
+        <div class="tradingview-widget-container">
+
+            <div class="tradingview-widget-container__widget"></div>
+
+            <script
+                type="text/javascript"
+                src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js"
+                async>
+            {
+              "feedMode":"market",
+              "market":"stock",
+              "colorTheme":"dark",
+              "isTransparent":true,
+              "displayMode":"regular",
+              "width":"100%",
+              "height":650,
+              "locale":"en"
+            }
+            </script>
+
+        </div>
+
+        <!-- TradingView Widget END -->
+
+    </div>
+
+</div>
+
+<!-- =========================================
+ECONOMIC CALENDAR
+========================================= -->
+
+<div class="elite-container">
+
+    <div class="scanner-panel">
+
+        <h3>
+            📅 Economic Calendar
+        </h3>
+
+        <p style="
+            color:#94a3b8;
+            margin-bottom:25px;
+        ">
+            Monitor upcoming economic events, central bank announcements and
+            key economic data releases that may impact US markets.
+        </p>
+
+        <!-- TradingView Widget BEGIN -->
+
+        <div class="tradingview-widget-container">
+
+            <div class="tradingview-widget-container__widget"></div>
+
+            <script
+                type="text/javascript"
+                src="https://s3.tradingview.com/external-embedding/embed-widget-events.js"
+                async>
+            {
+              "colorTheme":"dark",
+              "isTransparent":true,
+              "width":"100%",
+              "height":650,
+              "locale":"en",
+              "importanceFilter":"0,1"
+            }
+            </script>
+
+        </div>
+
+        <!-- TradingView Widget END -->
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================
+RETURN
+========================================= -->
+
+<div class="elite-container">
+
+    <div
+        class="elite-panel"
+        style="text-align:center;"
+    >
+
+        <h2>
+            Continue Your Research
+        </h2>
+
+        <p
+            style="
+                color:#94a3b8;
+                max-width:700px;
+                margin:15px auto 30px;
+                line-height:1.8;
+            "
+        >
+            Once you've reviewed today's market activity, continue researching
+            breakout opportunities using the EdgeBreak NASDAQ Scanner.
+        </p>
+
+        <a
+            href="/nasdaq-stock-scanner.html"
+            class="scanner-btn workspace-btn"
+        >
+            ← Return to NASDAQ Scanner
+        </a>
+
+    </div>
+
+</div>
