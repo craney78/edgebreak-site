@@ -1148,66 +1148,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
 
-    // Only celebrate once
-    if (localStorage.getItem("academyGraduated"))
-        return;
-
-    localStorage.setItem("academyGraduated", "true");
-
-    // Small delay so page loads first
-    setTimeout(() => {
-
-        const duration = 3500;
-        const animationEnd = Date.now() + duration;
-
-        const defaults = {
-            startVelocity: 35,
-            spread: 360,
-            ticks: 120,
-            zIndex: 9999
-        };
-
-        function randomInRange(min, max) {
-            return Math.random() * (max - min) + min;
-        }
-
-        const interval = setInterval(() => {
-
-            const timeLeft = animationEnd - Date.now();
-
-            if (timeLeft <= 0) {
-                clearInterval(interval);
-                return;
-            }
-
-            const particleCount = 70 * (timeLeft / duration);
-
-            confetti(Object.assign({}, defaults, {
-                particleCount,
-                origin: {
-                    x: randomInRange(0.1, 0.3),
-                    y: Math.random() * 0.3
-                }
-            }));
-
-            confetti(Object.assign({}, defaults, {
-                particleCount,
-                origin: {
-                    x: randomInRange(0.7, 0.9),
-                    y: Math.random() * 0.3
-                }
-            }));
-
-        }, 250);
-
-    }, 700);
-
-});
-</script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <script>
