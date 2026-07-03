@@ -221,7 +221,7 @@ STRUCTURED DATA
               Smart Money Filter
             </a>
 
-          <li>
+          
               <a
                 href="/nasdaq-stock-scanner.html"
                 class="locked-link"
@@ -232,7 +232,7 @@ STRUCTURED DATA
                       🔒
                   </span>
               </a>
-          </li>
+          
             
           </div>
         </div>
@@ -1000,7 +1000,7 @@ async function setupAuthButton() {
       await supabaseClient.auth.signOut();
 
       window.location.href =
-        "login.html";
+        "/login.html";
     };
 
   } else {
@@ -1088,7 +1088,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (this.classList.contains("locked-link")) {
         e.preventDefault();
-        window.location.href = "pricing.html";
+        window.location.href = "/pricing.html";
       }
 
     });

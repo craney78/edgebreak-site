@@ -811,7 +811,7 @@ async function setupAuthButton() {
       await supabaseClient.auth.signOut();
 
       window.location.href =
-        "login.html";
+        "/login.html";
     };
 
   } else {
@@ -899,7 +899,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (this.classList.contains("locked-link")) {
         e.preventDefault();
-        window.location.href = "pricing.html";
+        window.location.href = "/pricing.html";
       }
 
     });
