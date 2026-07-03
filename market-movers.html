@@ -265,6 +265,364 @@ MARKET MOVERS PAGE
 
 }
 
+/* ==========================================
+MARKET MOVERS PAGE
+========================================== */
+
+.tool-page{
+
+    max-width:1200px;
+    margin:70px auto;
+    padding:0 20px;
+
+}
+
+.tool-page h1{
+
+    color:#fff;
+    text-align:center;
+    font-size:2.8rem;
+    margin-bottom:20px;
+
+}
+
+.intro{
+
+    max-width:820px;
+    margin:0 auto 45px;
+
+    text-align:center;
+
+    color:#94a3b8;
+
+    font-size:1.08rem;
+
+    line-height:1.8;
+
+}
+
+/* ==========================================
+TRADINGVIEW WIDGET
+========================================== */
+
+.market-widget{
+
+    margin-bottom:50px;
+
+}
+
+.tradingview-widget-container{
+
+    width:100%;
+
+}
+
+.tradingview-widget-container__widget{
+
+    border-radius:18px;
+    overflow:hidden;
+
+}
+
+/* ==========================================
+FEATURE CARDS
+========================================== */
+
+.market-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(280px,1fr)
+        );
+
+    gap:24px;
+
+    margin:50px 0;
+
+}
+
+.market-card{
+
+    background:#0b1628;
+
+    border:1px solid rgba(255,255,255,.05);
+
+    border-radius:18px;
+
+    padding:35px;
+
+    text-align:center;
+
+    transition:.25s;
+
+}
+
+.market-card:hover{
+
+    transform:translateY(-5px);
+
+    border-color:#00d084;
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,.35);
+
+}
+
+.market-card h3{
+
+    color:#fff;
+
+    margin:20px 0 15px;
+
+}
+
+.market-card p{
+
+    color:#94a3b8;
+
+    line-height:1.8;
+
+    margin:0;
+
+}
+
+/* ==========================================
+SVG ICONS
+========================================== */
+
+.market-icon{
+
+    width:72px;
+    height:72px;
+
+    margin:0 auto;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:18px;
+
+    background:
+        rgba(0,208,132,.08);
+
+    border:
+        1px solid
+        rgba(0,208,132,.15);
+
+    color:#00d084;
+
+}
+
+.market-icon svg{
+
+    width:36px;
+    height:36px;
+
+}
+
+/* ==========================================
+RESEARCH PANEL
+========================================== */
+
+.elite-panel{
+
+    margin:50px 0;
+
+    padding:40px;
+
+}
+
+.elite-panel h2{
+
+    text-align:center;
+
+    color:#fff;
+
+    margin-bottom:20px;
+
+}
+
+.elite-panel p{
+
+    max-width:850px;
+
+    margin:auto;
+
+    text-align:center;
+
+    color:#94a3b8;
+
+    line-height:1.9;
+
+}
+
+/* ==========================================
+RETURN
+========================================== */
+
+.return-section{
+
+    margin:60px 0;
+
+    text-align:center;
+
+}
+
+.return-section h2{
+
+    color:#fff;
+
+}
+
+.return-section p{
+
+    max-width:700px;
+
+    margin:20px auto 35px;
+
+    color:#94a3b8;
+
+    line-height:1.8;
+
+}
+
+.return-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:15px 30px;
+
+    border-radius:12px;
+
+    background:#00d084;
+
+    color:#071225;
+
+    font-weight:700;
+
+    text-decoration:none;
+
+    transition:.25s;
+
+    box-shadow:
+        0 10px 25px
+        rgba(0,208,132,.25);
+
+}
+
+.return-btn:hover{
+
+    background:#13e693;
+
+    transform:translateY(-2px);
+
+}
+
+/* ==========================================
+MOBILE
+========================================== */
+
+@media(max-width:900px){
+
+    .tool-page{
+
+        margin:40px auto;
+
+    }
+
+    .tool-page h1{
+
+        font-size:2.1rem;
+
+    }
+
+    .intro{
+
+        font-size:1rem;
+
+        margin-bottom:30px;
+
+    }
+
+    .market-grid{
+
+        grid-template-columns:1fr;
+
+        gap:18px;
+
+    }
+
+    .market-card{
+
+        padding:28px;
+
+    }
+
+    .market-icon{
+
+        width:60px;
+        height:60px;
+
+    }
+
+    .market-icon svg{
+
+        width:30px;
+        height:30px;
+
+    }
+
+    .elite-panel{
+
+        padding:30px 22px;
+
+    }
+
+    .return-btn{
+
+        width:100%;
+
+        max-width:340px;
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    .tool-page h1{
+
+        font-size:1.8rem;
+
+    }
+
+    .market-card{
+
+        padding:24px;
+
+    }
+
+    .market-card h3{
+
+        font-size:1.1rem;
+
+    }
+
+    .market-card p{
+
+        font-size:.95rem;
+
+    }
+
+}
+
 </style>
 </head>
 
@@ -280,11 +638,11 @@ MARKET MOVERS PAGE
         opportunities with the EdgeBreak NASDAQ Scanner.
     </p>
 
-    <div class="tool-card">
+    <!-- =========================================
+    MARKET MOVERS WIDGET
+    ========================================== -->
 
-        <!-- =========================================
-        TRADINGVIEW MARKET MOVERS
-        ========================================== -->
+    <div class="tool-card market-widget">
 
         <div class="tradingview-widget-container">
 
@@ -306,14 +664,14 @@ MARKET MOVERS PAGE
               "showFloatingTooltip":false,
               "width":"100%",
               "height":650,
-              "plotLineColorGrowing":"rgba(41,98,255,1)",
-              "plotLineColorFalling":"rgba(41,98,255,1)",
+              "plotLineColorGrowing":"rgba(0,208,132,1)",
+              "plotLineColorFalling":"rgba(239,68,68,1)",
               "gridLineColor":"rgba(42,46,57,0)",
               "scaleFontColor":"rgba(219,219,219,1)",
-              "belowLineFillColorGrowing":"rgba(41,98,255,0.12)",
-              "belowLineFillColorFalling":"rgba(41,98,255,0.12)",
-              "belowLineFillColorGrowingBottom":"rgba(41,98,255,0)",
-              "belowLineFillColorFallingBottom":"rgba(41,98,255,0)"
+              "belowLineFillColorGrowing":"rgba(0,208,132,.15)",
+              "belowLineFillColorFalling":"rgba(239,68,68,.15)",
+              "belowLineFillColorGrowingBottom":"rgba(0,208,132,0)",
+              "belowLineFillColorFallingBottom":"rgba(239,68,68,0)"
             }
             </script>
 
@@ -321,31 +679,137 @@ MARKET MOVERS PAGE
 
     </div>
 
-    <div class="elite-panel" style="margin-top:40px;">
+    <!-- =========================================
+    INFORMATION
+    ========================================== -->
+
+    <div class="market-grid">
+
+        <!-- GAINERS -->
+
+        <div class="market-card">
+
+            <div class="market-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+
+                    <path d="M4 18L10 12L14 16L20 8"/>
+                    <path d="M15 8H20V13"/>
+
+                </svg>
+
+            </div>
+
+            <h3>
+                Biggest Gainers
+            </h3>
+
+            <p>
+                Stocks recording the largest percentage gains during today's
+                trading session. Strong momentum often attracts additional
+                market attention and liquidity.
+            </p>
+
+        </div>
+
+        <!-- LOSERS -->
+
+        <div class="market-card">
+
+            <div class="market-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+
+                    <path d="M4 6L10 12L14 8L20 16"/>
+                    <path d="M20 11V16H15"/>
+
+                </svg>
+
+            </div>
+
+            <h3>
+                Biggest Losers
+            </h3>
+
+            <p>
+                Monitor stocks experiencing the largest percentage declines and
+                identify companies facing increased selling pressure or changing
+                market sentiment.
+            </p>
+
+        </div>
+
+        <!-- MOST ACTIVE -->
+
+        <div class="market-card">
+
+            <div class="market-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+
+                    <path d="M4 12H20"/>
+                    <path d="M8 8L12 4L16 8"/>
+                    <path d="M8 16L12 20L16 16"/>
+
+                </svg>
+
+            </div>
+
+            <h3>
+                Most Active
+            </h3>
+
+            <p>
+                Follow the companies attracting the highest trading volume and
+                discover where market participation is strongest throughout the
+                session.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- =========================================
+    RESEARCH NOTE
+    ========================================== -->
+
+    <div class="elite-panel">
 
         <h2>
-            Why Monitor Market Movers?
+            Research Before You Trade
         </h2>
 
         <p>
-            Monitoring the day's biggest gainers, biggest losers and most
-            active stocks provides valuable insight into where capital is
-            flowing throughout the market.
-        </p>
-
-        <p>
-            Strong price movement and unusually high trading activity often
-            highlight stocks that deserve further research. While these
-            movements do not indicate future performance, they can help
-            identify companies attracting significant investor attention.
-        </p>
-
-        <p>
-            EdgeBreak uses structured market research to help investigate these
-            opportunities rather than relying solely on daily price movement.
+            Market movers highlight where activity is occurring today, but
+            strong daily performance alone does not indicate a quality trading
+            opportunity. Use the EdgeBreak NASDAQ Scanner to research price
+            structure, resistance levels, higher lows, accumulation and volume
+            before making investment decisions.
         </p>
 
     </div>
+
+    <!-- =========================================
+    RETURN
+    ========================================== -->
 
     <div class="return-section">
 
@@ -354,8 +818,9 @@ MARKET MOVERS PAGE
         </h2>
 
         <p>
-            Finished reviewing today's market activity? Return to the EdgeBreak
-            NASDAQ Scanner and continue researching breakout opportunities.
+            Finished reviewing today's market activity? Return to the NASDAQ
+            Scanner and continue researching breakout opportunities using the
+            EdgeBreak framework.
         </p>
 
         <a
