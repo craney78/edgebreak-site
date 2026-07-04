@@ -484,5 +484,61 @@ window.supabaseClient = supabase.createClient(
 
 </div>
 
+<script>
+function calculateMargin(){
+
+    const purchase =
+        parseFloat(document.getElementById("purchase").value) || 0;
+
+    const deposit =
+        parseFloat(document.getElementById("deposit").value) || 0;
+
+    // Basic validation
+    if(purchase <= 0){
+
+        alert("Please enter the total share purchase value.");
+
+        return;
+    }
+
+    if(deposit < 0){
+
+        alert("Please enter a valid deposit.");
+
+        return;
+    }
+
+    if(deposit > purchase){
+
+        alert("Your deposit cannot be greater than the purchase value.");
+
+        return;
+    }
+
+    const loan = purchase - deposit;
+
+    const lvr =
+        purchase > 0
+            ? (loan / purchase) * 100
+            : 0;
+
+    document.getElementById("loan").innerText =
+        "$" + loan.toLocaleString(undefined,{
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        });
+
+    document.getElementById("lvr").innerText =
+        lvr.toFixed(1) + "%";
+
+    document.getElementById("equity").innerText =
+        "$" + deposit.toLocaleString(undefined,{
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        });
+
+}
+</script>
+
 </body>
 </html>
