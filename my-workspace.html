@@ -1218,6 +1218,422 @@ img{
     }
 
 }
+
+/* ===================================
+BROKER CENTRE
+=================================== */
+
+.broker-card{
+
+    margin-top:40px;
+
+    padding:35px;
+
+    border-radius:18px;
+
+    background:#111827;
+
+    border:1px solid rgba(255,255,255,.08);
+
+}
+
+.broker-header h2{
+
+    margin-top:10px;
+
+    font-size:32px;
+
+}
+
+.broker-header p{
+
+    max-width:700px;
+
+    color:#b8c1cc;
+
+    line-height:1.7;
+
+}
+
+.broker-tag{
+
+    display:inline-block;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    background:#1f2937;
+
+    color:#8ec5ff;
+
+    font-size:12px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.08em;
+
+}
+
+.broker-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+
+    gap:25px;
+
+    margin-top:35px;
+
+}
+
+.broker-tile{
+
+    background:#0f172a;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    padding:28px;
+
+    transition:.25s;
+
+}
+
+.broker-tile:hover{
+
+    transform:translateY(-4px);
+
+    border-color:#3b82f6;
+
+}
+
+.broker-logo{
+
+    height:55px;
+
+    display:flex;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+.broker-logo img{
+
+    max-height:40px;
+
+}
+
+.broker-status{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin:18px 0;
+
+    font-weight:600;
+
+}
+
+.broker-status .dot{
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+}
+
+.disconnected{
+
+    color:#f59e0b;
+
+}
+
+.disconnected .dot{
+
+    background:#f59e0b;
+
+}
+
+.connected{
+
+    color:#22c55e;
+
+}
+
+.connected .dot{
+
+    background:#22c55e;
+
+}
+
+.broker-tile ul{
+
+    padding-left:18px;
+
+    margin:20px 0;
+
+    line-height:2;
+
+    color:#cbd5e1;
+
+}
+
+.broker-tile button{
+
+    width:100%;
+
+    margin-top:15px;
+
+}
+
+.broker-tile small{
+
+    display:block;
+
+    margin-top:15px;
+
+    text-align:center;
+
+    color:#94a3b8;
+
+}
+
+.trade-modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.75);
+
+    backdrop-filter:blur(8px);
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:99999;
+
+}
+
+.trade-window{
+
+    width:700px;
+
+    max-width:95%;
+
+    background:#0b1220;
+
+    border:1px solid #1e293b;
+
+    border-radius:20px;
+
+    padding:35px;
+
+    position:relative;
+
+}
+
+.trade-close{
+
+    position:absolute;
+
+    right:20px;
+
+    top:20px;
+
+    border:none;
+
+    background:none;
+
+    color:white;
+
+    font-size:26px;
+
+    cursor:pointer;
+
+}
+
+.trade-tag{
+
+    display:inline-block;
+
+    background:#14532d;
+
+    color:#4ade80;
+
+    padding:6px 14px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+}
+
+.trade-header h2{
+
+    margin-top:15px;
+
+    font-size:36px;
+
+}
+
+.trade-broker{
+
+    margin-top:15px;
+
+    color:#22c55e;
+
+    font-weight:700;
+
+}
+
+.trade-broker span{
+
+    color:#94a3b8;
+
+    margin-left:8px;
+
+}
+
+.trade-summary{
+
+    margin:30px 0;
+
+    padding:20px;
+
+    background:#111827;
+
+    border-radius:14px;
+
+}
+
+.trade-summary ul{
+
+    margin-top:15px;
+
+    line-height:2;
+
+}
+
+.trade-form{
+
+    display:grid;
+
+    gap:12px;
+
+}
+
+.trade-form input,
+.trade-form select{
+
+    background:#020617;
+
+    border:1px solid #334155;
+
+    color:white;
+
+    padding:14px;
+
+    border-radius:10px;
+
+}
+
+.trade-total{
+
+    margin:30px 0;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    font-size:20px;
+
+}
+
+.trade-buttons{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:15px;
+
+}
+
+/* ===================================
+TRADE BUTTON
+=================================== */
+
+.trade-btn{
+
+    width:100%;
+
+    margin-top:10px;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#16a34a;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.trade-btn:hover{
+
+    background:#15803d;
+
+}
+
+/* ===================================
+WATCHLIST ACTIONS
+=================================== */
+
+.watchlist-actions{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-top:12px;
+
+}
+
+.watchlist-actions button{
+
+    flex:1;
+
+}
+
+.watchlist-actions .btn,
+.watchlist-actions .trade-btn{
+
+    margin-top:0;
+
+}
 </style>
 <script>
 window.supabaseClient = supabase.createClient(
@@ -1734,6 +2150,203 @@ MY WATCHLIST
         class="trade-grid"
     >
         No stocks saved yet.
+    </div>
+
+</div>
+
+<!-- ===================================
+🏦 BROKER CENTRE
+=================================== -->
+
+<div class="elite-panel broker-card">
+
+    <div class="broker-header">
+
+        <div>
+
+            <span class="broker-tag">
+
+                Integrated Brokerage Partner
+
+            </span>
+
+            <h2>
+
+                Broker Centre
+
+            </h2>
+
+            <p>
+
+                Connect your existing Interactive Brokers account to execute trades directly from EdgeBreak. Your broker credentials are never stored by EdgeBreak and remain securely with Interactive Brokers.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="broker-grid">
+
+        <div class="broker-tile">
+
+            <div class="broker-logo">
+
+                <img
+                    src="images/ibkr-logo.webp"
+                    alt="Interactive Brokers"
+                >
+
+            </div>
+
+            <h3>
+
+                Interactive Brokers
+
+            </h3>
+
+            <div class="broker-status disconnected">
+
+                <span class="dot"></span>
+
+                Not Connected
+
+            </div>
+
+            <div class="broker-info">
+
+                <div class="broker-row">
+
+                    <span>Status</span>
+
+                    <strong>Not Connected</strong>
+
+                </div>
+
+                <div class="broker-row">
+
+                    <span>Trading</span>
+
+                    <strong>Unavailable</strong>
+
+                </div>
+
+                <div class="broker-row">
+
+                    <span>Portfolio</span>
+
+                    <strong>Coming Soon</strong>
+
+                </div>
+
+                <div class="broker-row">
+
+                    <span>Orders</span>
+
+                    <strong>Coming Soon</strong>
+
+                </div>
+
+            </div>
+
+            <div class="broker-features">
+
+                <div>✓ Execute trades directly from EdgeBreak</div>
+
+                <div>✓ Secure Interactive Brokers authentication</div>
+
+                <div>✓ No passwords stored by EdgeBreak</div>
+
+                <div>✓ Portfolio & positions (coming soon)</div>
+
+                <div>✓ Order history (coming soon)</div>
+
+            </div>
+
+            <button
+                class="btn-primary"
+                onclick="showBrokerComingSoon()"
+            >
+
+                Connect Interactive Brokers
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+BROKER COMING SOON MODAL
+=================================== -->
+
+<div
+    id="brokerModal"
+    class="trade-modal"
+>
+
+    <div class="trade-window">
+
+        <button
+            class="trade-close"
+            onclick="closeBrokerModal()"
+        >
+            ✕
+        </button>
+
+        <span class="trade-tag">
+
+            Integrated Brokerage Partner
+
+        </span>
+
+        <h2>
+
+            Interactive Brokers
+
+        </h2>
+
+        <p>
+
+            Secure broker connectivity is currently being completed.
+
+            Soon you'll be able to connect your existing Interactive Brokers account and execute trades directly from EdgeBreak without sharing your login credentials with us.
+
+        </p>
+
+        <div class="trade-summary">
+
+            <ul>
+
+                <li>✓ Broker login handled by Interactive Brokers</li>
+
+                <li>✓ EdgeBreak never stores your password</li>
+
+                <li>✓ Execute Market & Limit Orders</li>
+
+                <li>✓ View Portfolio & Open Positions</li>
+
+                <li>✓ Order History & Performance Tracking</li>
+
+            </ul>
+
+        </div>
+
+        <div class="trade-buttons">
+
+            <button
+                class="btn-primary"
+                onclick="closeBrokerModal()"
+            >
+
+                Coming Soon
+
+            </button>
+
+        </div>
+
     </div>
 
 </div>
@@ -2519,6 +3132,58 @@ function loadTicker(){
     url.toString();
 
 }
+
+
+// ===================================
+// TRADE MODAL
+// ===================================
+
+function openTradeModal(symbol){
+
+    // Symbol
+    document.getElementById(
+        "tradeSymbol"
+    ).innerText = symbol;
+
+    // Company placeholder
+    document.getElementById(
+        "tradeCompany"
+    ).innerText = "Loading...";
+
+    // Open modal
+    document.getElementById(
+        "tradeModal"
+    ).style.display = "flex";
+
+}
+
+function closeTradeModal(){
+
+    document.getElementById(
+        "tradeModal"
+    ).style.display = "none";
+
+}
+
+// ===================================
+// BROKER MODAL
+// ===================================
+
+function showBrokerComingSoon(){
+
+    document.getElementById(
+        "brokerModal"
+    ).style.display = "flex";
+
+}
+
+function closeBrokerModal(){
+
+    document.getElementById(
+        "brokerModal"
+    ).style.display = "none";
+
+}
 </script>
 
 
@@ -2581,16 +3246,42 @@ async function loadUserWatchlist(){
     container.innerHTML =
         data.map(stock => `
 
-            <div
-                class="trade-item"
-                onclick="
-                    document.getElementById('tickerInput').value='${stock.symbol}';
-                    loadTicker();
-                "
-            >
+            <div class="trade-item">
 
-                <div class="trade-symbol">
+                <div
+                    class="trade-symbol"
+                    onclick="
+                        document.getElementById('tickerInput').value='${stock.symbol}';
+                        loadTicker();
+                    "
+                    style="cursor:pointer;"
+                >
                     ${stock.symbol}
+                </div>
+
+                <div class="watchlist-actions">
+
+                    <button
+                        class="btn"
+                        onclick="
+                            event.stopPropagation();
+                            document.getElementById('tickerInput').value='${stock.symbol}';
+                            loadTicker();
+                        "
+                    >
+                        Chart
+                    </button>
+
+                    <button
+                        class="trade-btn"
+                        onclick="
+                            event.stopPropagation();
+                            openTradeModal('${stock.symbol}');
+                        "
+                    >
+                        Trade
+                    </button>
+
                 </div>
 
             </div>
@@ -2613,5 +3304,165 @@ document.addEventListener(
     }
 );
 </script>
+<!-- ===================================
+TRADE MODAL
+=================================== -->
+
+<div
+    id="tradeModal"
+    class="trade-modal"
+>
+
+    <div class="trade-window">
+
+        <button
+            class="trade-close"
+            onclick="closeTradeModal()"
+        >
+            ✕
+        </button>
+
+        <div class="trade-header">
+
+            <span class="trade-tag">
+
+                Trade Through EdgeBreak
+
+            </span>
+
+            <h2 id="tradeSymbol">
+
+                NVDA
+
+            </h2>
+
+            <p id="tradeCompany">
+
+                Company information coming soon
+
+            </p>
+
+            <div class="trade-broker">
+
+                Interactive Brokers
+
+                <span>
+
+                    Connected
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="trade-summary">
+
+            <h3>
+
+                Research Summary
+
+            </h3>
+
+            <ul>
+
+                <li>✓ Gold Breakout</li>
+
+                <li>✓ Resistance Confirmed</li>
+
+                <li>✓ 4 Higher Lows</li>
+
+                <li>✓ Volume Expansion</li>
+
+                <li>✓ Smart Money</li>
+
+            </ul>
+
+        </div>
+
+        <div class="trade-form">
+
+            <label>
+
+                Shares
+
+            </label>
+
+            <input
+                type="number"
+                value="10"
+            >
+
+            <label>
+
+                Order Type
+
+            </label>
+
+            <select>
+
+                <option>
+
+                    Market
+
+                </option>
+
+                <option>
+
+                    Limit
+
+                </option>
+
+            </select>
+
+            <label>
+
+                Limit Price
+
+            </label>
+
+            <input
+                type="number"
+                placeholder="Optional"
+            >
+
+        </div>
+
+        <div class="trade-total">
+
+            Estimated Value
+
+            <strong id="tradeEstimate">
+
+            --
+
+            </strong>
+
+        </div>
+
+        <div class="trade-buttons">
+
+            <button
+                class="btn"
+                onclick="closeTradeModal()"
+            >
+
+                Cancel
+
+            </button>
+
+            <button
+                class="btn-primary"
+            >
+
+                Place Trade
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 </body>
 </html>
