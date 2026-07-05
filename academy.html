@@ -1458,13 +1458,23 @@ RESPONSIVE
 
     display:grid;
 
-    grid-template-columns:repeat(2,380px);
+    grid-template-columns:repeat(2,minmax(320px,420px));
 
     justify-content:center;
 
     gap:30px;
 
     margin-top:50px;
+
+}
+
+@media (max-width:768px){
+
+    .lesson-grid{
+
+        grid-template-columns:1fr;
+
+    }
 
 }
 
