@@ -623,6 +623,65 @@ GLASS CTA BUTTON
 
 }
 
+.checklist{
+
+    max-width:650px;
+    margin:35px auto 0;
+    padding:0;
+
+    list-style:none;
+
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px 40px;
+
+}
+
+.checklist li{
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    color:#e2e8f0;
+    font-size:16px;
+    line-height:1.6;
+
+}
+
+.checklist li::before{
+
+    content:"✓";
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    width:24px;
+    height:24px;
+
+    border-radius:50%;
+
+    background:#00d084;
+    color:#071225;
+
+    font-weight:700;
+    font-size:14px;
+
+    flex-shrink:0;
+
+}
+
+@media(max-width:768px){
+
+    .checklist{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
 </style>
 </head>
 
@@ -953,28 +1012,41 @@ NASDAQ SCANNER
                 "
             >
 
-            <ul class="checklist">
+            <!-- FEATURES -->
 
-                <li>NASDAQ market coverage</li>
-                <li>Resistance touch filters</li>
-                <li>Higher low filters</li>
-                <li>Breakout scanner</li>
-                <li>Pre-breakout scanner</li>
-                <li>Volume analysis</li>
-                <li>TradingView chart integration</li>
-                <li>Daily updates</li>
+            <div style="
+                max-width:700px;
+                margin:0 auto;
+            ">
 
-            </ul>
+                <ul class="checklist">
 
-            <br>
+                    <li>NASDAQ market coverage</li>
+                    <li>Resistance touch filters</li>
+                    <li>Higher low filters</li>
+                    <li>Breakout Scanner</li>
+                    <li>Pre-Breakout Scanner</li>
+                    <li>Volume analysis</li>
+                    <li>TradingView chart integration</li>
+                    <li>Daily scanner updates</li>
 
-            <a href="nasdaq-stock-scanner.html" class="btn">
-                Explore NASDAQ Scanner
-            </a>
+                </ul>
 
-        </div>
+                <div style="
+                    text-align:center;
+                    margin-top:35px;
+                ">
 
-    </div>
+                    <a
+                        href="/nasdaq-stock-scanner.html"
+                        class="btn"
+                    >
+                        Explore NASDAQ Scanner
+                    </a>
+
+                </div>
+
+            </div>
 
 </section>
 
