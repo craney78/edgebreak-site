@@ -1634,6 +1634,58 @@ WATCHLIST ACTIONS
     margin-top:0;
 
 }
+
+/* ===================================
+WORKSPACE NAVIGATION
+=================================== */
+
+.workspace-nav{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin:25px auto;
+
+}
+
+.workspace-link{
+
+    padding:12px 22px;
+
+    background:#111827;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:10px;
+
+    color:white;
+
+    text-decoration:none;
+
+    transition:.25s;
+
+}
+
+.workspace-link:hover{
+
+    border-color:#22c55e;
+
+}
+
+.workspace-link.active{
+
+    background:#22c55e;
+
+    color:#071225;
+
+    font-weight:700;
+
+}
 </style>
 <script>
 window.supabaseClient = supabase.createClient(
@@ -1866,7 +1918,45 @@ checkAccess();
     </div>
 
 </div>
+<!-- ===================================
+WORKSPACE NAVIGATION
+=================================== -->
 
+<div class="workspace-nav">
+
+    <a
+        href="my-workspace.html"
+        class="workspace-link">
+
+        My Workspace
+
+    </a>
+
+    <a
+        href="portfolio.html"
+        class="workspace-link">
+
+        Portfolio
+
+    </a>
+
+    <a
+        href="orders.html"
+        class="workspace-link">
+
+        Orders
+
+    </a>
+
+    <a
+        href="broker-centre.html"
+        class="workspace-link active">
+
+        Broker Centre
+
+    </a>
+
+</div>
 <!-- HERO -->
 
 <div class="elite-banner">
@@ -2160,33 +2250,33 @@ MY WATCHLIST
 
 <div class="elite-panel broker-card">
 
-    <div class="broker-header">
+    <div class="workspace-card-header">
 
         <div>
 
-            <span class="broker-tag">
-
-                Integrated Brokerage Partner
-
-            </span>
-
-            <h2>
-
-                Broker Centre
-
-            </h2>
+            <h2>Broker Centre</h2>
 
             <p>
 
-                Connect your existing Interactive Brokers account to execute trades directly from EdgeBreak. Your broker credentials are never stored by EdgeBreak and remain securely with Interactive Brokers.
+                Connect your existing broker account to trade directly from EdgeBreak.
+                Authentication is handled securely by your broker using OAuth.
+                EdgeBreak never stores your broker username or password.
 
             </p>
+
+        </div>
+
+        <div class="elite-badge">
+
+            Broker Ready
 
         </div>
 
     </div>
 
     <div class="broker-grid">
+
+        <!-- INTERACTIVE BROKERS -->
 
         <div class="broker-tile">
 
@@ -2205,67 +2295,99 @@ MY WATCHLIST
 
             </h3>
 
-            <div class="broker-status disconnected">
+            <div
+                id="ibkrStatus"
+                class="broker-status disconnected"
+            >
 
                 <span class="dot"></span>
 
-                Not Connected
+                <span id="ibkrStatusText">
+
+                    Not Connected
+
+                </span>
 
             </div>
 
             <div class="broker-info">
 
-                <div class="broker-row">
+                <div class="metric">
 
-                    <span>Status</span>
+                    <span>Account</span>
 
-                    <strong>Not Connected</strong>
+                    <strong id="ibkrAccount">
 
-                </div>
+                        —
 
-                <div class="broker-row">
-
-                    <span>Trading</span>
-
-                    <strong>Unavailable</strong>
+                    </strong>
 
                 </div>
 
-                <div class="broker-row">
+                <div class="metric">
 
-                    <span>Portfolio</span>
+                    <span>Portfolio Value</span>
 
-                    <strong>Coming Soon</strong>
+                    <strong id="ibkrPortfolio">
+
+                        —
+
+                    </strong>
 
                 </div>
 
-                <div class="broker-row">
+                <div class="metric">
 
-                    <span>Orders</span>
+                    <span>Buying Power</span>
 
-                    <strong>Coming Soon</strong>
+                    <strong id="ibkrBuyingPower">
+
+                        —
+
+                    </strong>
+
+                </div>
+
+                <div class="metric">
+
+                    <span>Last Synced</span>
+
+                    <strong id="ibkrLastSync">
+
+                        Never
+
+                    </strong>
 
                 </div>
 
             </div>
 
-            <div class="broker-features">
+            <div class="watchlist-actions">
 
-                <div>✓ Execute trades directly from EdgeBreak</div>
+                <button
+                    class="btn"
+                    onclick="openPortfolio()"
+                >
 
-                <div>✓ Secure Interactive Brokers authentication</div>
+                    Portfolio
 
-                <div>✓ No passwords stored by EdgeBreak</div>
+                </button>
 
-                <div>✓ Portfolio & positions (coming soon)</div>
+                <button
+                    class="btn"
+                    onclick="openOrders()"
+                >
 
-                <div>✓ Order history (coming soon)</div>
+                    Orders
+
+                </button>
 
             </div>
 
             <button
-                class="btn-primary"
-                onclick="showBrokerComingSoon()"
+                id="connectBrokerBtn"
+                class="trade-btn"
+                onclick="showBrokerModal()"
             >
 
                 Connect Interactive Brokers
@@ -2279,7 +2401,7 @@ MY WATCHLIST
 </div>
 
 <!-- ===================================
-BROKER COMING SOON MODAL
+BROKER CONNECT MODAL
 =================================== -->
 
 <div
@@ -2297,38 +2419,44 @@ BROKER COMING SOON MODAL
         </button>
 
         <span class="trade-tag">
-
-            Integrated Brokerage Partner
-
+            Broker Connection
         </span>
 
-        <h2>
+        <div class="trade-header">
 
-            Interactive Brokers
+            <h2>
+                Connect Interactive Brokers
+            </h2>
 
-        </h2>
+            <p>
 
-        <p>
+                Connect your existing Interactive Brokers account to execute trades directly from EdgeBreak.
 
-            Secure broker connectivity is currently being completed.
+                Authentication is handled entirely by Interactive Brokers using secure OAuth. EdgeBreak never stores your broker username or password.
 
-            Soon you'll be able to connect your existing Interactive Brokers account and execute trades directly from EdgeBreak without sharing your login credentials with us.
+            </p>
 
-        </p>
+        </div>
 
         <div class="trade-summary">
 
+            <h3>
+                What You'll Get
+            </h3>
+
             <ul>
 
-                <li>✓ Broker login handled by Interactive Brokers</li>
+                <li>✓ Secure OAuth authentication</li>
 
-                <li>✓ EdgeBreak never stores your password</li>
+                <li>✓ Place Market & Limit Orders</li>
 
-                <li>✓ Execute Market & Limit Orders</li>
+                <li>✓ View live portfolio</li>
 
-                <li>✓ View Portfolio & Open Positions</li>
+                <li>✓ Monitor open positions</li>
 
-                <li>✓ Order History & Performance Tracking</li>
+                <li>✓ Access order history</li>
+
+                <li>✓ Automatic journal integration</li>
 
             </ul>
 
@@ -2337,12 +2465,17 @@ BROKER COMING SOON MODAL
         <div class="trade-buttons">
 
             <button
-                class="btn-primary"
+                class="btn"
                 onclick="closeBrokerModal()"
             >
+                Cancel
+            </button>
 
-                Coming Soon
-
+            <button
+                class="btn-primary"
+                onclick="connectBroker()"
+            >
+                Connect Interactive Brokers
             </button>
 
         </div>
@@ -3169,7 +3302,7 @@ function closeTradeModal(){
 // BROKER MODAL
 // ===================================
 
-function showBrokerComingSoon(){
+function showBrokerModal(){
 
     document.getElementById(
         "brokerModal"
@@ -3182,6 +3315,127 @@ function closeBrokerModal(){
     document.getElementById(
         "brokerModal"
     ).style.display = "none";
+
+}
+
+// ===================================
+// CONNECT BROKER
+// ===================================
+
+async function connectBroker(){
+
+    const {
+        data:{user}
+    } = await supabaseClient.auth.getUser();
+
+    if(!user){
+
+        window.location.href="/login.html";
+        return;
+
+    }
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("broker_connections")
+        .select("*")
+        .eq("user_id",user.id)
+        .eq("broker","IBKR")
+        .maybeSingle();
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    // Already connected
+    if(data){
+
+        alert("Interactive Brokers is already connected.");
+        return;
+
+    }
+
+    // OAuth later
+    alert("OAuth connection will begin here.");
+
+}
+
+// ===================================
+// LOAD BROKER STATUS
+// ===================================
+
+async function loadBrokerStatus(){
+
+    const {
+        data:{user}
+    } = await supabaseClient.auth.getUser();
+
+    if(!user) return;
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("broker_connections")
+        .select("*")
+        .eq("user_id",user.id)
+        .eq("broker","IBKR")
+        .maybeSingle();
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    if(!data){
+
+        document.getElementById("ibkrStatus")
+            .className="broker-status disconnected";
+
+        document.getElementById("ibkrStatusText")
+            .innerText="Not Connected";
+
+        return;
+
+    }
+
+    document.getElementById("ibkrStatus")
+        .className="broker-status connected";
+
+    document.getElementById("ibkrStatusText")
+        .innerText="Connected";
+
+    document.getElementById("ibkrAccount")
+        .innerText=
+            data.broker_account_id || "Connected";
+
+    document.getElementById("connectBrokerBtn")
+        .innerText="Manage Connection";
+
+}
+
+// ===================================
+// OPEN PORTFOLIO
+// ===================================
+
+function openPortfolio(){
+
+    window.location.href =
+        "/portfolio.html";
+
+}
+
+function openOrders(){
+
+    window.location.href =
+        "/orders.html";
 
 }
 </script>
@@ -3292,7 +3546,7 @@ async function loadUserWatchlist(){
 </script>
 <script>
 // =========================================
-// LOAD WATCHLIST ON PAGE LOAD
+// LOAD WATCHLIST + broker StatusON PAGE LOAD
 // =========================================
 
 document.addEventListener(
@@ -3300,6 +3554,7 @@ document.addEventListener(
     async () => {
 
         await loadUserWatchlist();
+        await loadBrokerStatus();
 
     }
 );

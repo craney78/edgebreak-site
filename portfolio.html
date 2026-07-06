@@ -1,0 +1,2355 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Portfolio | Connected Brokerage Portfolio Dashboard | EdgeBreak</title>
+
+<meta name="description"
+      content="Monitor your connected brokerage portfolio, open positions, buying power, cash balance and trading performance from your EdgeBreak trading workspace.">
+
+<meta name="keywords"
+      content="portfolio dashboard, stock portfolio, Interactive Brokers portfolio, trading workspace, buying power, open positions, EdgeBreak portfolio">
+
+<meta name="robots"
+      content="index, follow, max-image-preview:large">
+
+<link rel="canonical"
+      href="https://www.edgebreak.ai/portfolio.html">
+
+<!-- ===================================
+PERFORMANCE
+=================================== -->
+
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link rel="preconnect"
+      href="https://qmonyhukamuuunxxxdlk.supabase.co"
+      crossorigin>
+
+<link rel="dns-prefetch"
+      href="//cdn.jsdelivr.net">
+
+<!-- ===================================
+FAVICONS
+=================================== -->
+
+<link rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/favicon-32.png">
+
+<link rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/favicon-16.png">
+
+<link rel="apple-touch-icon"
+      href="/images/apple-touch-icon.png">
+
+<!-- ===================================
+OPEN GRAPH
+=================================== -->
+
+<meta property="og:type"
+      content="website">
+
+<meta property="og:title"
+      content="Portfolio | EdgeBreak">
+
+<meta property="og:description"
+      content="Monitor your connected brokerage account, open positions, buying power and portfolio performance from one professional trading workspace.">
+
+<meta property="og:url"
+      content="https://www.edgebreak.ai/portfolio.html">
+
+<meta property="og:site_name"
+      content="EdgeBreak">
+
+<meta property="og:image"
+      content="https://www.edgebreak.ai/images/logo.webp">
+
+<meta property="og:image:alt"
+      content="EdgeBreak Portfolio Dashboard">
+
+<meta property="og:locale"
+      content="en_AU">
+
+<!-- ===================================
+TWITTER CARDS
+=================================== -->
+
+<meta name="twitter:card"
+      content="summary_large_image">
+
+<meta name="twitter:title"
+      content="Portfolio | EdgeBreak">
+
+<meta name="twitter:description"
+      content="Track your connected brokerage account, portfolio performance and trading activity using the EdgeBreak Portfolio Dashboard.">
+
+<meta name="twitter:image"
+      content="https://www.edgebreak.ai/images/logo.webp">
+
+<meta name="twitter:image:alt"
+      content="EdgeBreak Portfolio Dashboard">
+
+<!-- ===================================
+CSS
+=================================== -->
+
+<link rel="stylesheet"
+      href="css/dashboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+window.supabaseClient = supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+);
+</script>
+
+<!-- ===================================
+ORGANIZATION SCHEMA
+=================================== -->
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Organization",
+  "name":"EdgeBreak",
+  "url":"https://www.edgebreak.ai",
+  "logo":{
+    "@type":"ImageObject",
+    "url":"https://www.edgebreak.ai/images/logo.webp"
+  },
+  "description":"EdgeBreak is a NASDAQ stock research platform with integrated portfolio management, market research and brokerage connectivity."
+}
+</script>
+
+<!-- ===================================
+WEBSITE SCHEMA
+=================================== -->
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebSite",
+  "name":"EdgeBreak",
+  "url":"https://www.edgebreak.ai",
+  "publisher":{
+    "@type":"Organization",
+    "name":"EdgeBreak"
+  }
+}
+</script>
+
+<!-- ===================================
+WEBPAGE SCHEMA
+=================================== -->
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebPage",
+  "@id":"https://www.edgebreak.ai/portfolio.html",
+  "name":"Portfolio",
+  "url":"https://www.edgebreak.ai/portfolio.html",
+  "description":"Monitor your connected brokerage portfolio, buying power, open positions and trading performance using the EdgeBreak Portfolio Dashboard.",
+  "isPartOf":{
+    "@type":"WebSite",
+    "name":"EdgeBreak",
+    "url":"https://www.edgebreak.ai"
+  },
+  "about":[
+    {
+      "@type":"Thing",
+      "name":"Investment Portfolio"
+    },
+    {
+      "@type":"Thing",
+      "name":"Brokerage Account"
+    },
+    {
+      "@type":"Thing",
+      "name":"Portfolio Management"
+    },
+    {
+      "@type":"Thing",
+      "name":"Trading Performance"
+    }
+  ],
+  "primaryImageOfPage":{
+    "@type":"ImageObject",
+    "url":"https://www.edgebreak.ai/images/logo.webp"
+  },
+  "breadcrumb":{
+    "@id":"https://www.edgebreak.ai/portfolio.html#breadcrumb"
+  },
+  "inLanguage":"en-AU"
+}
+</script>
+
+<!-- ===================================
+BREADCRUMB SCHEMA
+=================================== -->
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BreadcrumbList",
+  "@id":"https://www.edgebreak.ai/portfolio.html#breadcrumb",
+  "itemListElement":[
+    {
+      "@type":"ListItem",
+      "position":1,
+      "name":"Home",
+      "item":"https://www.edgebreak.ai/"
+    },
+    {
+      "@type":"ListItem",
+      "position":2,
+      "name":"Portfolio",
+      "item":"https://www.edgebreak.ai/portfolio.html"
+    }
+  ]
+}
+</script>
+
+<!-- ===================================
+SPEAKABLE SCHEMA
+=================================== -->
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebPage",
+  "url":"https://www.edgebreak.ai/portfolio.html",
+  "name":"Portfolio",
+  "speakable":{
+    "@type":"SpeakableSpecification",
+    "cssSelector":[
+      "h1",
+      ".header-sub",
+      ".section h2:first-of-type",
+      ".section p:first-of-type"
+    ]
+  },
+  "inLanguage":"en-AU"
+}
+</script>
+<style>
+/* ===================================
+PORTFOLIO OVERVIEW
+=================================== */
+
+.portfolio-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:20px;
+
+    margin-top:25px;
+
+}
+
+.portfolio-card{
+
+    background:#111827;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    padding:24px;
+
+    transition:.25s;
+
+}
+
+.portfolio-card:hover{
+
+    border-color:#22c55e;
+
+    transform:translateY(-3px);
+
+}
+
+.portfolio-card span{
+
+    display:block;
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+    margin-bottom:12px;
+
+}
+
+.portfolio-card strong{
+
+    display:block;
+
+    font-size:34px;
+
+    font-weight:700;
+
+    color:white;
+
+}
+
+.positive{
+
+    color:#22c55e !important;
+
+}
+
+.negative{
+
+    color:#ef4444 !important;
+
+}
+
+/* ===================================
+OPEN POSITIONS
+=================================== */
+
+.portfolio-table-wrapper{
+
+    overflow-x:auto;
+
+    margin-top:20px;
+
+}
+
+.portfolio-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.portfolio-table th{
+
+    text-align:left;
+
+    padding:16px;
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+    border-bottom:1px solid #1e293b;
+
+}
+
+.portfolio-table td{
+
+    padding:18px 16px;
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+
+}
+
+.portfolio-table tr:hover{
+
+    background:#111827;
+
+}
+
+.position-symbol{
+
+    font-weight:700;
+
+    font-size:15px;
+
+}
+
+.position-company{
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+}
+
+.position-actions{
+
+    display:flex;
+
+    gap:8px;
+
+}
+
+.position-actions button{
+
+    padding:8px 14px;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
+
+/* ===================================
+PORTFOLIO ALLOCATION
+=================================== */
+
+.allocation-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+    gap:20px;
+
+    margin-top:25px;
+
+}
+
+.allocation-card{
+
+    background:#111827;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    padding:24px;
+
+    text-align:center;
+
+    transition:.25s;
+
+}
+
+.allocation-card:hover{
+
+    transform:translateY(-3px);
+
+    border-color:#22c55e;
+
+}
+
+.allocation-card span{
+
+    display:block;
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+    margin-bottom:10px;
+
+}
+
+.allocation-card strong{
+
+    font-size:32px;
+
+    color:#22c55e;
+
+}
+
+/* ===================================
+PERFORMANCE
+=================================== */
+
+.performance-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:20px;
+
+    margin-top:25px;
+
+}
+
+.performance-card{
+
+    background:#111827;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    padding:24px;
+
+    transition:.25s;
+
+}
+
+.performance-card:hover{
+
+    border-color:#22c55e;
+
+    transform:translateY(-3px);
+
+}
+
+.performance-card span{
+
+    display:block;
+
+    color:#94a3b8;
+
+    margin-bottom:12px;
+
+    font-size:13px;
+
+}
+
+.performance-card strong{
+
+    font-size:30px;
+
+    color:white;
+
+    font-weight:700;
+
+}
+
+/* ===================================
+RECENT ORDERS
+=================================== */
+
+.orders-table-wrapper{
+
+    overflow-x:auto;
+
+    margin-top:20px;
+
+}
+
+.orders-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.orders-table th{
+
+    text-align:left;
+
+    padding:16px;
+
+    color:#94a3b8;
+
+    border-bottom:1px solid #1e293b;
+
+    font-size:13px;
+
+}
+
+.orders-table td{
+
+    padding:18px 16px;
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+
+}
+
+.orders-table tr:hover{
+
+    background:#111827;
+
+}
+
+.order-buy{
+
+    color:#22c55e;
+
+    font-weight:700;
+
+}
+
+.order-sell{
+
+    color:#ef4444;
+
+    font-weight:700;
+
+}
+
+.order-status{
+
+    display:inline-block;
+
+    padding:5px 10px;
+
+    border-radius:999px;
+
+    background:#1e293b;
+
+    color:white;
+
+    font-size:12px;
+
+}
+
+/* ===================================
+RECENT ACTIVITY
+=================================== */
+
+.activity-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.06);
+
+}
+
+.activity-item:last-child{
+
+    border-bottom:none;
+
+}
+
+.activity-left strong{
+
+    display:block;
+
+    font-size:15px;
+
+}
+
+.activity-left span{
+
+    display:block;
+
+    margin-top:4px;
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+}
+
+.activity-right{
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+}
+
+/* ===================================
+WORKSPACE NAVIGATION
+=================================== */
+
+.workspace-nav{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin:25px auto;
+
+}
+
+.workspace-link{
+
+    padding:12px 22px;
+
+    background:#111827;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:10px;
+
+    color:white;
+
+    text-decoration:none;
+
+    transition:.25s;
+
+}
+
+.workspace-link:hover{
+
+    border-color:#22c55e;
+
+}
+
+.workspace-link.active{
+
+    background:#22c55e;
+
+    color:#071225;
+
+    font-weight:700;
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="nav">
+  <div class="nav-inner">
+
+    <!-- LEFT -->
+    <div class="nav-left">
+      <a
+          href="index.html"
+          aria-label="EdgeBreak Home"
+      >
+        <img
+          src="images/logo.webp"
+          class="nav-logo"
+          alt="EdgeBreak NASDAQ Market Intelligence"
+          width="40"
+          height="40"
+        >
+      </a>
+      <a href="index.html" class="logo-text">EDGEBREAK</a>
+      <span class="live-badge">LIVE</span>
+    </div>
+
+    <!-- RIGHT SIDE WRAP -->
+    <div class="nav-links-wrap">
+
+      <!-- LINKS -->
+      <div class="nav-links" id="navLinks">
+
+        <a href="index.html" class="nav-link">Home</a>
+
+        <!-- PRODUCTS -->
+        <div class="dropdown">
+          <a href="products.html" class="nav-link">
+            Products ▼
+          </a>
+
+          <div class="dropdown-content">
+
+            <a href="watchlist.html">
+              Edgebreak Trades
+            </a>
+
+            <a href="smart-money-dashboard.html">
+              Smart Money Filter
+            </a>
+
+            <li>
+                <a
+                    href="nasdaq-stock-scanner.html"
+                    class="locked-link"
+                >
+                    NASDAQ Scanner
+
+                    <span class="lock-icon">
+                        🔒
+                    </span>
+                </a>
+            </li>
+            
+          </div>
+        </div>
+
+        <!-- RESOURCES -->
+        <div class="dropdown">
+
+          <a href="#" class="nav-link">
+            Resources ▼
+          </a>
+
+          <div class="dropdown-content">
+
+            <a href="/academy.html">
+              EdgeBreak Training Academy
+            </a>
+
+            <a href="trading-guide.html">
+              EdgeBreak Trading Guide
+            </a>
+
+            <a href="breakout-guide.html">
+              Free Breakout Guide
+            </a>
+
+            <a href="/blog/breakout-trading-strategy.html">
+              Strategy
+            </a>
+
+            <a href="/blog.html">
+              Trading Insights
+            </a>
+
+          </div>
+
+        </div>
+
+        <a href="pricing.html" class="nav-link">
+          Pricing
+        </a>
+
+        <a href="#" class="nav-cta" id="authBtn">
+          Login
+        </a>
+
+      </div>
+
+      <!-- HAMBURGER -->
+      <div class="menu-toggle" id="menuToggle">
+        ☰
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+
+<!-- =========================
+📈 MARKET TICKER TAPE
+========================= -->
+<div class="ticker-wrapper">
+
+    <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+
+        <script
+            type="text/javascript"
+            src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
+            async>
+        {
+          "symbols": [
+            {
+              "proName": "NASDAQ:QQQ",
+              "title": "QQQ"
+            },
+            {
+              "proName": "AMEX:SPY",
+              "title": "SPY"
+            },
+            {
+              "proName": "NASDAQ:NVDA",
+              "title": "NVDA"
+            },
+            {
+              "proName": "NASDAQ:MSFT",
+              "title": "MSFT"
+            },
+            {
+              "proName": "NASDAQ:AAPL",
+              "title": "AAPL"
+            },
+            {
+              "proName": "NASDAQ:AMZN",
+              "title": "AMZN"
+            },
+            {
+              "proName": "NASDAQ:META",
+              "title": "META"
+            },
+            {
+              "proName": "NASDAQ:TSLA",
+              "title": "TSLA"
+            },
+            {
+              "proName": "NASDAQ:PLTR",
+              "title": "PLTR"
+            },
+            {
+              "proName": "NASDAQ:RKLB",
+              "title": "RKLB"
+            }
+          ],
+          "showSymbolLogo": true,
+          "isTransparent": true,
+          "displayMode": "adaptive",
+          "colorTheme": "dark",
+          "locale": "en"
+        }
+        </script>
+    </div>
+
+</div>
+<!-- ===================================
+WORKSPACE NAVIGATION
+=================================== -->
+
+<div class="workspace-nav">
+
+    <a
+        href="my-workspace.html"
+        class="workspace-link">
+
+        My Workspace
+
+    </a>
+
+    <a
+        href="portfolio.html"
+        class="workspace-link">
+
+        Portfolio
+
+    </a>
+
+    <a
+        href="orders.html"
+        class="workspace-link">
+
+        Orders
+
+    </a>
+
+    <a
+        href="broker-centre.html"
+        class="workspace-link active">
+
+        Broker Centre
+
+    </a>
+
+</div>
+<!-- ===================================
+PORTFOLIO HERO
+=================================== -->
+
+<div class="elite-banner">
+
+    <div>
+
+        <h1>
+
+            PORTFOLIO
+
+        </h1>
+
+        <p>
+
+            Monitor your connected brokerage account, review open positions,
+            track portfolio performance and analyse your trading activity
+            from one professional workspace.
+
+            Portfolio information will automatically synchronise from your
+            connected broker while your research and journal remain inside
+            EdgeBreak.
+
+        </p>
+
+    </div>
+
+    <div class="elite-badge">
+
+        Portfolio Dashboard
+
+    </div>
+
+</div>
+
+<div class="elite-featured">
+
+    <div>
+
+        <div class="featured-tag">
+
+            CONNECTED BROKER
+
+        </div>
+
+        <h2>
+
+            Your Complete Trading Workspace
+
+        </h2>
+
+        <p>
+
+            View your portfolio, buying power, cash balance, open positions,
+            recent orders and trading performance in one place. EdgeBreak
+            combines market research with portfolio management while your
+            funds always remain securely with your broker.
+
+        </p>
+
+    </div>
+
+    <div class="elite-feature-icons">
+
+        <!-- Portfolio -->
+
+        <div class="feature-item">
+
+            <div class="feature-icon">
+
+                💼
+
+            </div>
+
+            <div>
+
+                <span>LIVE</span>
+
+                <strong>PORTFOLIO</strong>
+
+            </div>
+
+        </div>
+
+        <!-- Positions -->
+
+        <div class="feature-item">
+
+            <div class="feature-icon">
+
+                📈
+
+            </div>
+
+            <div>
+
+                <span>OPEN</span>
+
+                <strong>POSITIONS</strong>
+
+            </div>
+
+        </div>
+
+        <!-- Orders -->
+
+        <div class="feature-item">
+
+            <div class="feature-icon">
+
+                📋
+
+            </div>
+
+            <div>
+
+                <span>ORDER</span>
+
+                <strong>HISTORY</strong>
+
+            </div>
+
+        </div>
+
+        <!-- Journal -->
+
+        <div class="feature-item">
+
+            <div class="feature-icon">
+
+                📒
+
+            </div>
+
+            <div>
+
+                <span>TRADE</span>
+
+                <strong>JOURNAL</strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="featured-pill">
+
+        Interactive Brokers
+
+    </div>
+
+</div>
+
+<!-- ===================================
+PORTFOLIO OVERVIEW
+=================================== -->
+
+<div class="elite-panel" style="margin-top:20px;">
+
+    <div class="workspace-card-header">
+
+        <div>
+
+            <h2>
+
+                Portfolio Overview
+
+            </h2>
+
+            <p>
+
+                Live account summary from your connected broker.
+
+            </p>
+
+        </div>
+
+        <div class="workspace-live">
+
+            LIVE
+
+        </div>
+
+    </div>
+
+    <div class="portfolio-grid">
+
+        <div class="portfolio-card">
+
+            <span>Portfolio Value</span>
+
+            <strong id="portfolioValue">
+
+                —
+
+            </strong>
+
+        </div>
+
+        <div class="portfolio-card">
+
+            <span>Today's P/L</span>
+
+            <strong
+                id="todayPL"
+                class="positive"
+            >
+
+                —
+
+            </strong>
+
+        </div>
+
+        <div class="portfolio-card">
+
+            <span>Total Return</span>
+
+            <strong
+                id="totalPL"
+                class="positive"
+            >
+
+                —
+
+            </strong>
+
+        </div>
+
+        <div class="portfolio-card">
+
+            <span>Buying Power</span>
+
+            <strong id="buyingPower">
+
+                —
+
+            </strong>
+
+        </div>
+
+        <div class="portfolio-card">
+
+            <span>Cash Available</span>
+
+            <strong id="cashAvailable">
+
+                —
+
+            </strong>
+
+        </div>
+
+        <div class="portfolio-card">
+
+            <span>Open Positions</span>
+
+            <strong id="positionCount">
+
+                —
+
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+OPEN POSITIONS
+=================================== -->
+
+<div class="elite-panel" style="margin-top:20px;">
+
+    <div class="workspace-card-header">
+
+        <div>
+
+            <h2>
+
+                Open Positions
+
+            </h2>
+
+            <p>
+
+                Current holdings synchronised from your connected broker.
+
+            </p>
+
+        </div>
+
+        <div class="workspace-live">
+
+            LIVE
+
+        </div>
+
+    </div>
+
+    <div class="portfolio-table-wrapper">
+
+        <table class="portfolio-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Symbol</th>
+
+                    <th>Company</th>
+
+                    <th>Shares</th>
+
+                    <th>Avg Cost</th>
+
+                    <th>Current</th>
+
+                    <th>Today's P/L</th>
+
+                    <th>Total P/L</th>
+
+                    <th>Value</th>
+
+                    <th></th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="portfolioPositions">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+PORTFOLIO ALLOCATION
+=================================== -->
+
+<div class="elite-panel" style="margin-top:20px;">
+
+    <div class="workspace-card-header">
+
+        <div>
+
+            <h2>
+
+                Portfolio Allocation
+
+            </h2>
+
+            <p>
+
+                Breakdown of your portfolio across sectors and available cash.
+
+            </p>
+
+        </div>
+
+        <div class="workspace-live">
+
+            LIVE
+
+        </div>
+
+    </div>
+
+    <div class="allocation-grid">
+
+        <div class="allocation-card">
+
+            <span>Technology</span>
+
+            <strong id="techAllocation">
+
+                0%
+
+            </strong>
+
+        </div>
+
+        <div class="allocation-card">
+
+            <span>Healthcare</span>
+
+            <strong id="healthAllocation">
+
+                0%
+
+            </strong>
+
+        </div>
+
+        <div class="allocation-card">
+
+            <span>Industrials</span>
+
+            <strong id="industrialAllocation">
+
+                0%
+
+            </strong>
+
+        </div>
+
+        <div class="allocation-card">
+
+            <span>Consumer</span>
+
+            <strong id="consumerAllocation">
+
+                0%
+
+            </strong>
+
+        </div>
+
+        <div class="allocation-card">
+
+            <span>Financials</span>
+
+            <strong id="financialAllocation">
+
+                0%
+
+            </strong>
+
+        </div>
+
+        <div class="allocation-card">
+
+            <span>Cash</span>
+
+            <strong id="cashAllocation">
+
+                100%
+
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+PERFORMANCE STATISTICS
+=================================== -->
+
+<div class="elite-panel" style="margin-top:20px;">
+
+    <div class="workspace-card-header">
+
+        <div>
+
+            <h2>
+
+                Performance Statistics
+
+            </h2>
+
+            <p>
+
+                Summary of your portfolio performance and trading activity.
+
+            </p>
+
+        </div>
+
+        <div class="workspace-live">
+
+            LIVE
+
+        </div>
+
+    </div>
+
+    <div class="performance-grid">
+
+        <div class="performance-card">
+
+            <span>Largest Winner</span>
+
+            <strong id="largestWinner">
+
+                —
+
+            </strong>
+
+        </div>
+
+        <div class="performance-card">
+
+            <span>Largest Loser</span>
+
+            <strong id="largestLoser">
+
+                —
+
+            </strong>
+
+        </div>
+
+        <div class="performance-card">
+
+            <span>Average Return</span>
+
+            <strong id="averageReturn">
+
+                —
+
+            </strong>
+
+        </div>
+
+        <div class="performance-card">
+
+            <span>Winning Trades</span>
+
+            <strong id="winningTrades">
+
+                —
+
+            </strong>
+
+        </div>
+
+        <div class="performance-card">
+
+            <span>Average Hold</span>
+
+            <strong id="averageHold">
+
+                —
+
+            </strong>
+
+        </div>
+
+        <div class="performance-card">
+
+            <span>Portfolio Growth</span>
+
+            <strong id="portfolioGrowth">
+
+                —
+
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+RECENT ORDERS
+=================================== -->
+
+<div class="elite-panel" style="margin-top:20px;">
+
+    <div class="workspace-card-header">
+
+        <div>
+
+            <h2>
+
+                Recent Orders
+
+            </h2>
+
+            <p>
+
+                Pending, filled and cancelled orders from your connected broker.
+
+            </p>
+
+        </div>
+
+        <div class="workspace-live">
+
+            LIVE
+
+        </div>
+
+    </div>
+
+    <div class="orders-table-wrapper">
+
+        <table class="orders-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Date</th>
+
+                    <th>Symbol</th>
+
+                    <th>Side</th>
+
+                    <th>Type</th>
+
+                    <th>Quantity</th>
+
+                    <th>Price</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="recentOrders">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+ACCOUNT INFORMATION
+=================================== -->
+
+<div class="elite-panel" style="margin-top:20px;">
+
+    <div class="workspace-card-header">
+
+        <div>
+
+            <h2>
+
+                Account Information
+
+            </h2>
+
+            <p>
+
+                Details of your connected brokerage account.
+
+            </p>
+
+        </div>
+
+        <div class="workspace-live">
+
+            CONNECTED
+
+        </div>
+
+    </div>
+
+    <div class="portfolio-grid">
+
+        <div class="portfolio-card">
+
+            <span>Broker</span>
+
+            <strong id="brokerName">
+
+                Interactive Brokers
+
+            </strong>
+
+        </div>
+
+        <div class="portfolio-card">
+
+            <span>Account Number</span>
+
+            <strong id="accountNumber">
+
+                —
+
+            </strong>
+
+        </div>
+
+        <div class="portfolio-card">
+
+            <span>Account Type</span>
+
+            <strong id="accountType">
+
+                Individual
+
+            </strong>
+
+        </div>
+
+        <div class="portfolio-card">
+
+            <span>Base Currency</span>
+
+            <strong id="accountCurrency">
+
+                USD
+
+            </strong>
+
+        </div>
+
+        <div class="portfolio-card">
+
+            <span>Connection Status</span>
+
+            <strong
+                id="connectionStatus"
+                class="positive"
+            >
+
+                Connected
+
+            </strong>
+
+        </div>
+
+        <div class="portfolio-card">
+
+            <span>Last Synchronised</span>
+
+            <strong id="lastSync">
+
+                Never
+
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+RECENT ACTIVITY
+=================================== -->
+
+<div class="elite-panel" style="margin-top:20px;">
+
+    <div class="workspace-card-header">
+
+        <div>
+
+            <h2>
+
+                Recent Activity
+
+            </h2>
+
+            <p>
+
+                Recent portfolio activity from your connected brokerage account.
+
+            </p>
+
+        </div>
+
+        <div class="workspace-live">
+
+            LIVE
+
+        </div>
+
+    </div>
+
+    <div id="recentActivity">
+
+    </div>
+
+</div>
+
+<!-- ===================================
+FOOTER
+=================================== -->
+
+<footer class="footer">
+
+
+<div class="footer-inner">
+
+    <!-- BRAND -->
+
+    <div class="footer-col footer-brand">
+
+        <div class="footer-brand-header">
+
+            <img
+                src="images/logo.webp"
+                alt="EdgeBreak"
+                width="50"
+                height="50"
+            >
+
+            <div>
+
+                <h3>EdgeBreak</h3>
+
+                <div class="footer-status">
+
+                    <span class="status-dot"></span>
+                    NASDAQ Data Updated Daily
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <p>
+            EdgeBreak is a NASDAQ stock research platform designed to help investors identify stocks showing accumulation, buying pressure and breakout potential through simplified market research tools.
+        </p>
+
+        <p class="footer-tagline">
+            Research Smarter. Invest With Confidence.
+        </p>
+
+    </div>
+
+    <!-- PLATFORM -->
+
+    <div class="footer-col">
+
+        <h4>
+            <span class="footer-icon"></span>
+            Platform
+        </h4>
+
+        <a href="smart-money-dashboard.html">
+            Smart Money Filter
+        </a>
+
+        <a href="nasdaq-stock-scanner.html">
+            NASDAQ Screener
+        </a>
+
+        <a href="edgebreak-trades.html">
+            EdgeBreak Trades
+        </a>
+
+        <a href="pricing.html">
+            Pricing
+        </a>
+
+    </div>
+
+    <!-- LEARNING -->
+
+    <div class="footer-col">
+
+        <h4>
+            <span class="footer-icon"></span>
+            Learning Centre
+        </h4>
+
+        <a href="/academy.html">
+            EdgeBreak Training Academy
+        </a>
+
+        <a href="trading-guide.html">
+            Trading Guide
+        </a>
+
+        <a href="breakout-guide.html">
+            Breakout Guide
+        </a>
+
+        <a href="strategy.html">
+            Strategy
+        </a>
+
+        <a href="trading-insights.html">
+            Trading Insights
+        </a>
+
+        <a href="faq.html">
+            Frequently asked Questions
+        </a>
+
+    </div>
+
+    <!-- COMPANY -->
+
+    <div class="footer-col">
+
+        <h4>
+            <span class="footer-icon"></span>
+            Company
+        </h4>
+
+        <a href="about.html">
+            About EdgeBreak
+        </a>
+
+        <a href="support.html">
+            Support
+        </a>
+
+        <a href="privacy.html">
+            Privacy Policy
+        </a>
+
+        <a href="terms.html">
+            Terms of Service
+        </a>
+
+        <a href="disclaimer.html">
+            Disclaimer
+        </a>
+
+    </div>
+
+</div>
+
+<!-- FEATURE STRIP -->
+
+<div class="footer-highlight">
+
+    <div>
+
+        <strong>Smart Money Filter</strong>
+
+        <span>
+            Accumulation & Institutional Interest
+        </span>
+
+    </div>
+
+    <div>
+
+        <strong>Breakout Scanner</strong>
+
+        <span>
+            Confirmed Resistance Breakouts
+        </span>
+
+    </div>
+
+    <div>
+
+        <strong>NASDAQ Screener</strong>
+
+        <span>
+            Research Thousands Of Stocks
+        </span>
+
+    </div>
+
+    <div>
+
+        <strong>Transparent Trades</strong>
+
+        <span>
+            Every Winner, Loser And Active Position
+        </span>
+
+    </div>
+
+</div>
+
+<!-- BOTTOM BAR -->
+
+<div class="footer-bottom">
+
+    <div>
+
+        <p>
+            © 2026 EdgeBreak. All rights reserved.
+        </p>
+
+        <p class="footer-disclaimer">
+
+            Educational and research purposes only.
+
+            EdgeBreak does not provide financial advice,
+            investment recommendations or personal financial services.
+
+            Trading and investing involve risk and may result in loss of capital.
+
+        </p>
+
+    </div>
+
+    <div class="footer-parent-block">
+
+        <a href="https://www.craneplatformlabs.com.au"
+           target="_blank"
+           rel="noopener">
+
+            <img
+                src="images/crane-logo.webp"
+                alt="Crane Platform Labs"
+                class="footer-logo"
+            >
+
+        </a>
+
+        <p class="footer-parent">
+
+            Website by
+
+            <a href="https://www.craneplatformlabs.com.au"
+               target="_blank"
+               rel="noopener">
+
+                Crane Platform Labs
+
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+</footer>
+<script>
+
+// =========================
+// 🔄 NAV LOGIN / LOGOUT
+// =========================
+async function setupAuthButton() {
+
+  const btn = document.getElementById("authBtn");
+  if (!btn) return;
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (session) {
+    btn.innerText = "Logout";
+
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    };
+
+  } else {
+    btn.innerText = "Login";
+    btn.href = "login.html";
+  }
+}
+
+// =========================
+// 🔁 AUTH STATE LISTENER
+// =========================
+supabaseClient.auth.onAuthStateChange(() => {
+  setupAuthButton();
+});
+
+</script>
+
+<script>
+window.addEventListener("load", async () => {
+  await setupAuthButton();
+});
+</script>
+
+<script>
+// =========================
+// 📱 MOBILE NAV TOGGLE (FIXED)
+// =========================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const toggle = document.getElementById("menuToggle");
+  const nav = document.getElementById("navLinks");
+
+  if (!toggle || !nav) {
+    console.log("❌ Nav elements missing");
+    return;
+  }
+
+  toggle.addEventListener("click", () => {
+    nav.classList.toggle("active");
+  });
+
+  document.querySelectorAll("#navLinks a").forEach(link => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("active");
+    });
+  });
+
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  // If no session → keep locked state
+  if (!session || !session.user) return;
+
+  // Get profile
+  const { data: profile } = await supabaseClient
+    .from("profiles")
+    .select("is_active")
+    .eq("id", session.user.id)
+    .single();
+
+  // If NOT active → keep locked
+  if (!profile || profile.is_active !== true) return;
+
+  // ✅ USER IS ACTIVE → UNLOCK NAV
+
+  document.querySelectorAll(".locked-link").forEach(link => {
+
+    // remove lock icon
+    const icon = link.querySelector(".lock-icon");
+    if (icon) icon.remove();
+
+    // remove locked behaviour
+    link.classList.remove("locked-link");
+
+  });
+
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  document.querySelectorAll(".locked-link").forEach(link => {
+    link.addEventListener("click", function(e) {
+
+      if (this.classList.contains("locked-link")) {
+        e.preventDefault();
+        window.location.href = "pricing.html";
+      }
+
+    });
+  });
+
+});
+</script>
+<script>
+// ===================================
+// PORTFOLIO PLACEHOLDER
+// ===================================
+
+function loadOpenPortfoliooverview(){
+
+    document.getElementById(
+        "portfolioValue"
+    ).innerText="$0";
+
+    document.getElementById(
+        "todayPL"
+    ).innerText="$0";
+
+    document.getElementById(
+        "totalPL"
+    ).innerText="0%";
+
+    document.getElementById(
+        "buyingPower"
+    ).innerText="$0";
+
+    document.getElementById(
+        "cashAvailable"
+    ).innerText="$0";
+
+    document.getElementById(
+        "positionCount"
+    ).innerText="0";
+
+}
+
+// ===================================
+// OPEN POSITIONS
+// ===================================
+
+function loadOpenPositions(){
+
+    const tbody =
+        document.getElementById(
+            "portfolioPositions"
+        );
+
+    tbody.innerHTML = `
+
+        <tr>
+
+            <td>
+
+                <div class="position-symbol">
+
+                    —
+
+                </div>
+
+            </td>
+
+            <td>
+
+                <div class="position-company">
+
+                    No open positions
+
+                </div>
+
+            </td>
+
+            <td>—</td>
+
+            <td>—</td>
+
+            <td>—</td>
+
+            <td>—</td>
+
+            <td>—</td>
+
+            <td>—</td>
+
+            <td>
+
+                —
+
+            </td>
+
+        </tr>
+
+    `;
+
+}
+
+// ===================================
+// PORTFOLIO ALLOCATION
+// ===================================
+
+function loadPortfolioAllocation(){
+
+    document.getElementById("techAllocation").innerText="0%";
+
+    document.getElementById("healthAllocation").innerText="0%";
+
+    document.getElementById("industrialAllocation").innerText="0%";
+
+    document.getElementById("consumerAllocation").innerText="0%";
+
+    document.getElementById("financialAllocation").innerText="0%";
+
+    document.getElementById("cashAllocation").innerText="100%";
+
+}
+
+// ===================================
+// PERFORMANCE
+// ===================================
+
+function loadPerformanceStats(){
+
+    document.getElementById(
+        "largestWinner"
+    ).innerText="—";
+
+    document.getElementById(
+        "largestLoser"
+    ).innerText="—";
+
+    document.getElementById(
+        "averageReturn"
+    ).innerText="0%";
+
+    document.getElementById(
+        "winningTrades"
+    ).innerText="0";
+
+    document.getElementById(
+        "averageHold"
+    ).innerText="0 Days";
+
+    document.getElementById(
+        "portfolioGrowth"
+    ).innerText="0%";
+
+}
+
+// ===================================
+// RECENT ORDERS
+// ===================================
+
+function loadRecentOrders(){
+
+    const tbody =
+        document.getElementById(
+            "recentOrders"
+        );
+
+    tbody.innerHTML = `
+
+        <tr>
+
+            <td colspan="7"
+                style="
+                    text-align:center;
+                    padding:40px;
+                    color:#94a3b8;
+                ">
+
+                No recent orders.
+
+            </td>
+
+        </tr>
+
+    `;
+
+}
+
+// ===================================
+// ACCOUNT INFORMATION
+// ===================================
+
+function loadAccountInformation(){
+
+    document.getElementById(
+        "brokerName"
+    ).innerText="Interactive Brokers";
+
+    document.getElementById(
+        "accountNumber"
+    ).innerText="—";
+
+    document.getElementById(
+        "accountType"
+    ).innerText="Individual";
+
+    document.getElementById(
+        "accountCurrency"
+    ).innerText="USD";
+
+    document.getElementById(
+        "connectionStatus"
+    ).innerText="Connected";
+
+    document.getElementById(
+        "lastSync"
+    ).innerText="Never";
+
+}
+
+// ===================================
+// RECENT ACTIVITY
+// ===================================
+
+function loadRecentActivity(){
+
+    document.getElementById(
+        "recentActivity"
+    ).innerHTML = `
+
+        <div class="activity-item">
+
+            <div class="activity-left">
+
+                <strong>
+
+                    No recent activity
+
+                </strong>
+
+                <span>
+
+                    Portfolio activity will appear here after connecting your broker.
+
+                </span>
+
+            </div>
+
+            <div class="activity-right">
+
+                —
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        loadPortfolioOverview();
+
+        loadOpenPositions();
+
+        loadPortfolioAllocation();
+
+        loadPerformanceStats();
+
+        loadRecentOrders();
+
+        loadAccountInformation();
+
+        loadRecentActivity();
+
+    }
+);
+</script>
+
+</body>
+</html>
