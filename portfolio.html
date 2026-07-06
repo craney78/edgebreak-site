@@ -251,7 +251,7 @@ SPEAKABLE SCHEMA
   "inLanguage":"en-AU"
 }
 </script>
-
+<script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
@@ -477,37 +477,131 @@ WORKSPACE NAVIGATION
     </a>
 
 </div>
+
 <!-- ===================================
 PORTFOLIO HERO
 =================================== -->
 
-<div class="elite-banner">
+<div class="elite-banner portfolio-hero">
 
-    <div>
+    <div class="portfolio-hero-content">
+
+        <span class="portfolio-label">
+
+            CONNECTED BROKER
+
+        </span>
 
         <h1>
 
-            PORTFOLIO
+            Portfolio
 
         </h1>
 
         <p>
 
             Monitor your connected brokerage account, review open positions,
-            track portfolio performance and analyse your trading activity
-            from one professional workspace.
-
-            Portfolio information will automatically synchronise from your
-            connected broker while your research and journal remain inside
-            EdgeBreak.
+            buying power and portfolio performance from one professional
+            workspace. Your investments remain securely with your broker while
+            EdgeBreak provides a unified research and portfolio management
+            experience.
 
         </p>
 
     </div>
 
-    <div class="elite-badge">
+</div>
 
-        Portfolio Dashboard
+<!-- ===================================
+PORTFOLIO HIGHLIGHTS
+=================================== -->
+
+<div class="portfolio-highlights">
+
+    <!-- Portfolio -->
+
+    <div class="portfolio-highlight">
+
+        <div class="highlight-icon">
+
+            <i data-lucide="pie-chart"></i>
+
+        </div>
+
+        <div>
+
+            <h3>
+
+                Portfolio Dashboard
+
+            </h3>
+
+            <p>
+
+                Monitor portfolio value, buying power, cash balance and open
+                positions.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Broker -->
+
+    <div class="portfolio-highlight">
+
+        <div class="highlight-icon">
+
+            <i data-lucide="shield-check"></i>
+
+        </div>
+
+        <div>
+
+            <h3>
+
+                Connected Broker
+
+            </h3>
+
+            <p>
+
+                Your investments remain securely with your broker. EdgeBreak
+                never stores broker passwords or holds client funds.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Workspace -->
+
+    <div class="portfolio-highlight">
+
+        <div class="highlight-icon">
+
+            <i data-lucide="briefcase-business"></i>
+
+        </div>
+
+        <div>
+
+            <h3>
+
+                Complete Trading Workspace
+
+            </h3>
+
+            <p>
+
+                Research stocks, monitor your portfolio and manage trades from
+                one professional workspace.
+
+            </p>
+
+        </div>
 
     </div>
 
@@ -531,10 +625,11 @@ PORTFOLIO HERO
 
         <p>
 
-            View your portfolio, buying power, cash balance, open positions,
-            recent orders and trading performance in one place. EdgeBreak
-            combines market research with portfolio management while your
-            funds always remain securely with your broker.
+            Monitor your portfolio, buying power, cash balance, open positions,
+            orders and trading performance from one professional workspace.
+            EdgeBreak combines structured market research with portfolio
+            management while your investments remain securely with your
+            connected broker.
 
         </p>
 
@@ -548,7 +643,7 @@ PORTFOLIO HERO
 
             <div class="feature-icon">
 
-                💼
+                <i data-lucide="pie-chart"></i>
 
             </div>
 
@@ -568,7 +663,7 @@ PORTFOLIO HERO
 
             <div class="feature-icon">
 
-                📈
+                <i data-lucide="briefcase-business"></i>
 
             </div>
 
@@ -588,7 +683,7 @@ PORTFOLIO HERO
 
             <div class="feature-icon">
 
-                📋
+                <i data-lucide="clipboard-list"></i>
 
             </div>
 
@@ -596,27 +691,27 @@ PORTFOLIO HERO
 
                 <span>ORDER</span>
 
-                <strong>HISTORY</strong>
+                <strong>MANAGEMENT</strong>
 
             </div>
 
         </div>
 
-        <!-- Journal -->
+        <!-- Broker -->
 
         <div class="feature-item">
 
             <div class="feature-icon">
 
-                📒
+                <i data-lucide="shield-check"></i>
 
             </div>
 
             <div>
 
-                <span>TRADE</span>
+                <span>SECURE</span>
 
-                <strong>JOURNAL</strong>
+                <strong>BROKER LINK</strong>
 
             </div>
 
@@ -636,7 +731,7 @@ PORTFOLIO HERO
 PORTFOLIO OVERVIEW
 =================================== -->
 
-<div class="elite-panel" style="margin-top:20px;">
+<div class="elite-panel workspace-section">
 
     <div class="workspace-card-header">
 
@@ -1889,6 +1984,10 @@ document.addEventListener(
     }
 );
 </script>
+<script>
 
+lucide.createIcons();
+
+</script>
 </body>
 </html>
