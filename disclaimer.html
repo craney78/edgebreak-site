@@ -234,6 +234,439 @@ SPEAKABLE SCHEMA
   "inLanguage":"en-AU"
 }
 </script>
+
+<style>
+.support-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:24px;
+}
+
+.support-card{
+
+    text-align:center;
+    padding:35px 25px;
+
+    transition:.25s;
+
+}
+
+.support-card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.support-icon{
+
+    width:56px;
+    height:56px;
+
+    color:#4ADE80;
+
+    margin-bottom:20px;
+
+}
+
+.support-card h3{
+
+    margin:12px 0;
+
+}
+
+.support-card p{
+
+    color:#94A3B8;
+    font-size:15px;
+    line-height:1.6;
+
+}
+
+.support-icon{
+
+    width:54px;
+    height:54px;
+
+    margin:0 auto 20px;
+
+    display:block;
+
+    fill:none;
+
+    stroke:#4ADE80;
+    stroke-width:1.8;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+
+    transition:.25s;
+
+}
+
+.feature-card:hover .support-icon{
+
+    transform:scale(1.08);
+
+}
+
+/* ===================================
+SUPPORT PAGE MOBILE
+=================================== */
+
+@media (max-width: 768px) {
+
+    .support-grid,
+    .feature-grid{
+
+        grid-template-columns:1fr;
+
+        gap:20px;
+
+    }
+
+    .support-card,
+    .feature-card{
+
+        padding:28px 22px;
+
+    }
+
+    .support-icon{
+
+        width:46px;
+        height:46px;
+
+        margin-bottom:16px;
+
+    }
+
+    .feature-card h3{
+
+        font-size:20px;
+
+    }
+
+    .feature-card p{
+
+        font-size:15px;
+        line-height:1.6;
+
+    }
+
+    .feature-card a{
+
+        display:inline-block;
+
+        margin-top:15px;
+
+    }
+
+    .section-intro{
+
+        max-width:100%;
+
+        padding:0 15px;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+.header{
+
+    padding:70px 20px 45px;
+
+}
+
+.hero-logo{
+
+    width:70px;
+
+}
+
+.header h1{
+
+    font-size:38px;
+
+}
+
+.header-sub{
+
+    font-size:18px;
+
+    max-width:95%;
+
+}
+
+}
+
+@media (max-width:768px){
+
+.section .card{
+
+    padding:35px 25px;
+
+}
+
+}
+
+@media (max-width:768px){
+
+.button-row{
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+.button-row a{
+
+    width:100%;
+
+}
+
+}
+
+/* ===================================
+SUPPORT PAGE
+=================================== */
+
+.support-icon{
+
+    width:52px;
+    height:52px;
+
+    margin:0 auto 20px;
+
+    display:block;
+
+    fill:none;
+
+    stroke:#45e07f;
+    stroke-width:1.8;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+
+    transition:.25s ease;
+
+}
+
+.feature-card{
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    text-align:center;
+
+    padding:35px 30px;
+
+    transition:.25s ease;
+
+}
+
+.feature-card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.feature-card:hover .support-icon{
+
+    transform:scale(1.08);
+
+}
+
+.feature-card h3{
+
+    margin:8px 0 14px;
+
+}
+
+.feature-card p{
+
+    color:#94a3b8;
+
+    line-height:1.7;
+
+    margin:0;
+
+}
+
+/* ===================================
+MOBILE
+=================================== */
+
+@media (max-width:768px){
+
+    .feature-grid{
+
+        grid-template-columns:1fr;
+
+        gap:22px;
+
+    }
+
+    .feature-card{
+
+        padding:28px 22px;
+
+    }
+
+    .support-icon{
+
+        width:44px;
+        height:44px;
+
+        margin-bottom:18px;
+
+    }
+
+    .feature-card h3{
+
+        font-size:22px;
+
+    }
+
+    .feature-card p{
+
+        font-size:15px;
+
+    }
+
+}
+
+.support-grid{
+
+    max-width:1100px;
+
+    margin:40px auto 0;
+
+    gap:30px;
+
+}
+
+/* ===================================
+GLASS BUTTONS
+=================================== */
+
+.button-row{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:18px;
+    flex-wrap:wrap;
+
+    margin-top:35px;
+
+}
+
+.glass-btn{
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    min-width:220px;
+
+    padding:14px 28px;
+
+    border-radius:14px;
+
+    color:#ffffff;
+    text-decoration:none;
+    font-weight:600;
+    font-size:15px;
+
+    background:rgba(255,255,255,.06);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+
+    transition:.25s ease;
+
+}
+
+.glass-btn:hover{
+
+    transform:translateY(-3px);
+
+    background:rgba(74,222,128,.12);
+
+    border-color:#4ADE80;
+
+    box-shadow:0 10px 30px rgba(74,222,128,.18);
+
+    color:#ffffff;
+
+}
+
+.glass-btn:active{
+
+    transform:translateY(0);
+
+}
+
+@media (max-width:768px){
+
+    .button-row{
+
+        flex-direction:column;
+
+        gap:14px;
+
+    }
+
+    .glass-btn{
+
+        width:100%;
+        max-width:320px;
+
+    }
+
+}
+
+/* ===================================
+PRIVACY PAGE FEATURE CARDS
+=================================== */
+
+.feature-grid{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:flex-start;
+
+    margin-top:45px;
+
+}
+
+.feature-card{
+
+    max-width:520px;
+
+    width:100%;
+
+    text-align:center;
+
+}
+
+.feature-card .support-icon{
+
+    display:block;
+
+    margin:0 auto 22px;
+
+}
+</style>
+
 </head>
 
 <body>
@@ -362,109 +795,481 @@ HEADER
     <img
         src="images/logo.webp"
         class="hero-logo"
-        alt="EdgeBreak Disclaimer"
+        alt="EdgeBreak Financial Disclaimer"
     >
 
     <h1>
-        Disclaimer
+        Financial Disclaimer
     </h1>
 
     <p class="header-sub">
 
-        Please read this disclaimer carefully before using EdgeBreak. Our platform provides educational content and structured NASDAQ stock research tools and does not provide financial advice or investment recommendations.
+        Understand the important limitations of the EdgeBreak platform, including our educational purpose, research tools, broker connectivity, market data and your responsibilities when making investment decisions.
 
     </p>
 
-    <div class="hero-features">
+    <div class="button-row">
 
-        <div class="hero-feature">
+        <a href="/terms.html" class="glass-btn">
+            Terms &amp; Conditions
+        </a>
 
-            <span class="footer-icon"></span>
-
-            Educational Use
-
-        </div>
-
-        <div class="hero-feature">
-
-            <span class="footer-icon"></span>
-
-            Investment Risk
-
-        </div>
-
-        <div class="hero-feature">
-
-            <span class="footer-icon"></span>
-
-            Independent Research
-
-        </div>
+        <a href="/privacy.html" class="glass-btn">
+            Privacy Policy
+        </a>
 
     </div>
 
 </div>
 
 <!-- ===================================
-LAST UPDATED
-=================================== -->
-
-<div class="section" style="max-width:900px; margin:auto;">
-
-    <div class="card">
-
-        <p style="margin-bottom:0; color:#94a3b8;">
-
-            <strong>Last Updated:</strong> 28 June 2026
-
-        </p>
-
-    </div>
-
-</div>
-
-
-<!-- ===================================
-DISCLAIMER CONTENT
+DISCLAIMER OVERVIEW
 =================================== -->
 
 <div class="section">
 
-    <div class="card">
+    <div style="max-width:1100px; margin:0 auto; text-align:center;">
 
-        <h2>Educational Purpose</h2>
+        <h2>
+            Understanding This Disclaimer
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            EdgeBreak is a NASDAQ stock research platform providing educational content and structured market research tools. The platform is designed to help users research market structure, price action, volume behaviour and breakout characteristics through transparent analysis.
+            This Financial Disclaimer explains the important limitations of the EdgeBreak platform. It clarifies what EdgeBreak provides, what it does not provide and the responsibilities you accept when using our research tools, educational resources, portfolio management features and supported broker integrations.
 
         </p>
+
+        <div class="feature-grid">
+
+            <!-- Research Platform -->
+
+            <a href="#research-purpose" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="16" rx="2"/>
+                    <path d="M7 8h10"/>
+                    <path d="M7 12h10"/>
+                    <path d="M7 16h6"/>
+                </svg>
+
+                <h3>Research Platform</h3>
+
+                <p>
+
+                    Learn why EdgeBreak is designed as a research and educational platform rather than a provider of financial advice or investment recommendations.
+
+                </p>
+
+            </a>
+
+            <!-- Investment Risk -->
+
+            <a href="#investment-risk" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3l9 16H3L12 3z"/>
+                    <path d="M12 9v4"/>
+                    <path d="M12 16h.01"/>
+                </svg>
+
+                <h3>Investment Risk</h3>
+
+                <p>
+
+                    Understand the risks associated with investing in financial markets and why all investment decisions remain your responsibility.
+
+                </p>
+
+            </a>
+
+            <!-- Market Data -->
+
+            <a href="#market-data" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 20h16"/>
+                    <path d="M7 16V11"/>
+                    <path d="M12 16V6"/>
+                    <path d="M17 16V9"/>
+                </svg>
+
+                <h3>Market Data</h3>
+
+                <p>
+
+                    Learn about the availability, accuracy and limitations of market data, scanner results and other information displayed throughout EdgeBreak.
+
+                </p>
+
+            </a>
+
+            <!-- Broker Connectivity -->
+
+            <a href="#broker-connectivity" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3" y="7" width="18" height="10" rx="2"/>
+                    <path d="M8 12h8"/>
+                    <path d="M12 8v8"/>
+                </svg>
+
+                <h3>Broker Connectivity</h3>
+
+                <p>
+
+                    Understand the relationship between EdgeBreak and supported brokerage providers, including the limitations of broker-connected features.
+
+                </p>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ===================================
+BEFORE YOU USE EDGEBREAK
+=================================== -->
+
+<div class="section">
+
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
+
+        <h2>
+            Before You Invest
+        </h2>
+
+        <p class="section-intro">
+
+            Before relying on any information available through EdgeBreak, we encourage you to understand how the platform works, the limitations of our services and the responsibilities that remain with you when researching or investing in financial markets.
+
+        </p>
+
+        <div class="feature-grid">
+
+            <!-- Trading Guide -->
+
+            <a href="/trading-guide.html" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 4h10a2 2 0 0 1 2 2v14H8a2 2 0 0 0-2 2V4z"/>
+                    <path d="M8 20h10"/>
+                    <path d="M9 8h6"/>
+                    <path d="M9 12h6"/>
+                </svg>
+
+                <h3>Trading Guide</h3>
+
+                <p>
+
+                    Learn how EdgeBreak is designed to support structured market research and understand the methodology behind the platform.
+
+                </p>
+
+            </a>
+
+            <!-- Terms -->
+
+            <a href="/terms.html" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="16" rx="2"/>
+                    <path d="M7 8h10"/>
+                    <path d="M7 12h10"/>
+                    <path d="M7 16h6"/>
+                </svg>
+
+                <h3>Terms &amp; Conditions</h3>
+
+                <p>
+
+                    Review the legal terms governing your use of EdgeBreak, including subscriptions, broker connectivity and your responsibilities as a user.
+
+                </p>
+
+            </a>
+
+            <!-- Privacy -->
+
+            <a href="/privacy.html" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/>
+                    <path d="M9.5 12.5l2 2 3.5-4"/>
+                </svg>
+
+                <h3>Privacy Policy</h3>
+
+                <p>
+
+                    Understand how your personal information, account data and broker connections are protected while using EdgeBreak.
+
+                </p>
+
+            </a>
+
+            <!-- Security -->
+
+            <a href="/security.html" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/>
+                    <path d="M12 8v4"/>
+                    <circle cx="12" cy="16" r="1"/>
+                </svg>
+
+                <h3>Security Centre</h3>
+
+                <p>
+
+                    Learn how EdgeBreak protects your account, secures broker integrations and implements industry-standard security practices.
+
+                </p>
+
+            </a>
+
+        </div>
 
     </div>
 
 </div>
 
 <!-- ===================================
-NOT FINANCIAL ADVICE
+PURPOSE OF THIS DISCLAIMER
 =================================== -->
 
 <div class="section">
 
-    <div class="card">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
 
-        <h2>No Financial Advice</h2>
+        <h2>
+            Purpose of This Disclaimer
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            EdgeBreak does not provide financial advice, investment advice, personal financial services or recommendations to buy, sell or hold any financial product or security.
+            This Financial Disclaimer explains the purpose and limitations of the EdgeBreak platform. It is intended to help you understand what EdgeBreak provides, what it does not provide and the responsibilities that remain with you when researching financial markets or making investment decisions.
+
+        </p>
+
+        <p class="section-intro">
+
+            EdgeBreak is operated by <strong>Crane Platform Labs</strong> as a stock research and educational platform. Our services include market research tools, educational resources, portfolio management features, supported broker connectivity and other tools designed to assist users with conducting their own independent market research.
 
         </p>
 
-        <p>
+        <p class="section-intro">
 
-            All information available on the platform is provided for educational and research purposes only.
+            Nothing available through EdgeBreak should be interpreted as a recommendation to buy, sell or hold any financial product. All information is provided for educational and research purposes only, and you remain solely responsible for your own investment decisions.
 
         </p>
+
+        <div class="feature-grid" style="margin-top:50px;">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M12 3l9 16H3L12 3z"/>
+                    <path d="M12 9v4"/>
+                    <path d="M12 16h.01"/>
+
+                </svg>
+
+                <h3>
+                    Research, Not Recommendations
+                </h3>
+
+                <p>
+
+                    EdgeBreak provides structured research tools, educational content and portfolio management features to support your own market analysis. Every investment decision remains your responsibility and should be based on your own research, judgement and circumstances.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+RESEARCH & EDUCATIONAL PURPOSE
+=================================== -->
+
+<div class="section">
+
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
+
+        <h2>
+            Research &amp; Educational Purpose
+        </h2>
+
+        <p class="section-intro">
+
+            EdgeBreak is designed to assist users with conducting structured market research and improving their understanding of price action, market structure and investment concepts. The platform is intended to support education and independent research and should not be relied upon as a substitute for professional financial advice.
+
+        </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Educational Content</strong> – Articles, tutorials, Academy lessons, examples and other learning resources are provided solely for educational purposes.
+
+            </li>
+
+            <li>
+
+                <strong>Research Tools</strong> – Scanners, watchlists, portfolio management features, journals, charts and other platform tools are designed to assist your own market research and analysis.
+
+            </li>
+
+            <li>
+
+                <strong>Independent Analysis</strong> – EdgeBreak encourages users to perform their own research, verify information independently and consider their individual financial circumstances before making investment decisions.
+
+            </li>
+
+            <li>
+
+                <strong>Personal Responsibility</strong> – You are solely responsible for interpreting information available through EdgeBreak and determining whether it is appropriate for your own investment objectives and risk tolerance.
+
+            </li>
+
+            <li>
+
+                <strong>Professional Advice</strong> – Where appropriate, you should seek advice from a licensed financial adviser, accountant, legal adviser or other qualified professional before making financial decisions.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M6 4h10a2 2 0 0 1 2 2v14H8a2 2 0 0 0-2 2V4z"/>
+                    <path d="M8 20h10"/>
+                    <path d="M9 8h6"/>
+                    <path d="M9 12h6"/>
+
+                </svg>
+
+                <h3>
+                    Built for Independent Research
+                </h3>
+
+                <p>
+
+                    EdgeBreak is designed to help you organise research, understand market behaviour and build your own investment knowledge. The platform supports informed decision-making but does not replace your own judgement or professional advice.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+NO FINANCIAL ADVICE
+=================================== -->
+
+<div class="section">
+
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
+
+        <h2>
+            No Financial Advice
+        </h2>
+
+        <p class="section-intro">
+
+            EdgeBreak is not licensed to provide personal financial advice, investment advice, securities recommendations or portfolio management services. Nothing available through the EdgeBreak platform should be interpreted as financial advice or as a recommendation to buy, sell or hold any financial product or security.
+
+        </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>No Personal Advice</strong> – EdgeBreak does not consider your personal objectives, financial situation or investment needs when providing information or platform features.
+
+            </li>
+
+            <li>
+
+                <strong>No Investment Recommendations</strong> – Scanner results, watchlists, portfolio tools, educational content and market research should never be interpreted as recommendations or endorsements of any investment.
+
+            </li>
+
+            <li>
+
+                <strong>Research Assistance Only</strong> – The platform is designed to assist with researching financial markets by providing structured research tools, educational resources and portfolio management features.
+
+            </li>
+
+            <li>
+
+                <strong>Your Decisions</strong> – Every investment decision, trading decision and portfolio action remains entirely your responsibility.
+
+            </li>
+
+            <li>
+
+                <strong>Independent Advice</strong> – Before making investment decisions, you should conduct your own research and, where appropriate, obtain advice from a suitably qualified and licensed financial adviser.
+
+            </li>
+
+            <li>
+
+                <strong>No Fiduciary Relationship</strong> – Your use of EdgeBreak does not create a financial adviser, fiduciary, agency or similar professional relationship between you and Crane Platform Labs.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 8h.01"/>
+                    <path d="M12 11v5"/>
+
+                </svg>
+
+                <h3>
+                    Every Investment Decision Is Yours
+                </h3>
+
+                <p>
+
+                    EdgeBreak provides research tools, educational resources and portfolio management features to support your own market research. Every investment decision, trade and portfolio action remains your sole responsibility.
+
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
@@ -476,97 +1281,736 @@ INVESTMENT RISK
 
 <div class="section">
 
-    <div class="card">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
 
-        <h2>Investment Risk</h2>
+        <h2>
+            Investment Risk
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            Trading and investing involve risk and may result in the loss of some or all invested capital. Past performance, historical market behaviour and previous research outcomes do not guarantee future performance or investment results.
+            Investing in financial markets involves risk. The value of investments may rise or fall, past performance does not guarantee future results and you may lose some or all of your invested capital. EdgeBreak cannot eliminate or reduce these risks and accepts no responsibility for your investment outcomes.
 
         </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Market Volatility</strong> – Share prices, market conditions and economic events can change rapidly and without warning, affecting the value of investments.
+
+            </li>
+
+            <li>
+
+                <strong>Loss of Capital</strong> – All investments involve risk, including the potential loss of part or all of your invested capital.
+
+            </li>
+
+            <li>
+
+                <strong>No Guaranteed Outcomes</strong> – EdgeBreak does not guarantee investment performance, profitability, market timing or successful trading outcomes.
+
+            </li>
+
+            <li>
+
+                <strong>Your Risk Tolerance</strong> – Every investor has different financial circumstances, objectives and tolerance for risk. You are responsible for determining whether any investment is suitable for your own situation.
+
+            </li>
+
+            <li>
+
+                <strong>Independent Decision Making</strong> – Before investing, you should carefully consider your own financial circumstances and, where appropriate, seek advice from a qualified financial professional.
+
+            </li>
+
+            <li>
+
+                <strong>Acceptance of Risk</strong> – By using EdgeBreak, you acknowledge that all investment decisions involve risk and that you accept full responsibility for those decisions and their outcomes.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M12 3l9 16H3L12 3z"/>
+                    <path d="M12 9v4"/>
+                    <path d="M12 16h.01"/>
+
+                </svg>
+
+                <h3>
+                    Investing Always Carries Risk
+                </h3>
+
+                <p>
+
+                    No research platform, educational resource or market analysis can remove the risks associated with investing. Every investment decision should be made carefully after conducting your own research and considering your individual financial circumstances.
+
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 <!-- ===================================
-USER RESPONSIBILITY
+MARKET DATA, SCANNER RESULTS & PLATFORM INFORMATION
 =================================== -->
 
 <div class="section">
 
-    <div class="card">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
 
-        <h2>Your Responsibility</h2>
+        <h2>
+            Market Data, Scanner Results &amp; Platform Information
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            You are solely responsible for your own financial decisions. Before acting on any information provided by EdgeBreak, you should conduct your own independent research and consider obtaining advice from a suitably qualified financial professional where appropriate.
+            EdgeBreak provides market research tools, scanner results, charts, educational content and other information to support independent market research. While we strive to provide reliable information, we cannot guarantee that all information is complete, accurate, current or free from errors at all times.
 
         </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Market Data</strong> – Market prices, charts and other financial information may be delayed, incomplete or supplied by third-party data providers. Availability and accuracy cannot be guaranteed.
+
+            </li>
+
+            <li>
+
+                <strong>Scanner Results</strong> – Results generated by EdgeBreak scanners are produced using predefined research criteria and should not be interpreted as investment recommendations, trading signals or guarantees of future performance.
+
+            </li>
+
+            <li>
+
+                <strong>Educational Examples</strong> – Examples, case studies, historical charts and educational material are provided solely to illustrate market concepts and should not be relied upon as predictions of future market behaviour.
+
+            </li>
+
+            <li>
+
+                <strong>Platform Information</strong> – Information displayed throughout the platform may change without notice as markets move, research criteria evolve or platform features are updated.
+
+            </li>
+
+            <li>
+
+                <strong>User Verification</strong> – You are responsible for independently verifying information before making financial or investment decisions.
+
+            </li>
+
+            <li>
+
+                <strong>No Warranties</strong> – EdgeBreak makes no representation or warranty that any information, scanner result or research tool will identify profitable investments or produce successful trading outcomes.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M4 20h16"/>
+                    <path d="M7 16V11"/>
+                    <path d="M12 16V6"/>
+                    <path d="M17 16V9"/>
+
+                </svg>
+
+                <h3>
+                    Research Information Only
+                </h3>
+
+                <p>
+
+                    Scanner results, charts, watchlists, portfolio information and educational content are designed to support your own market research. Always verify important information independently before making investment decisions.
+
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 <!-- ===================================
-INFORMATION ACCURACY
+HISTORICAL PERFORMANCE & PAST RESULTS
 =================================== -->
 
 <div class="section">
 
-    <div class="card">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
 
-        <h2>Accuracy of Information</h2>
+        <h2>
+            Historical Performance &amp; Past Results
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            While we aim to provide accurate and up-to-date information, EdgeBreak makes no representation or warranty regarding the completeness, accuracy or reliability of any data, analysis or educational material available on the platform.
+            EdgeBreak may display historical trade performance, scanner statistics, portfolio performance, educational examples and other historical market information. This information is provided to promote transparency and support education and research. Past performance should never be interpreted as an indication or guarantee of future investment results.
 
         </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Past Performance</strong> – Historical returns, win rates, portfolio results and other performance metrics are based on past market conditions and may not be repeated in the future.
+
+            </li>
+
+            <li>
+
+                <strong>Educational Examples</strong> – Historical charts, trade examples and case studies are provided to explain market concepts and research techniques rather than predict future market behaviour.
+
+            </li>
+
+            <li>
+
+                <strong>Changing Market Conditions</strong> – Financial markets continually evolve. Economic events, market sentiment, liquidity and volatility can significantly affect future investment outcomes.
+
+            </li>
+
+            <li>
+
+                <strong>No Performance Guarantee</strong> – EdgeBreak makes no representation or warranty that any historical result, research methodology or scanner outcome will produce similar future performance.
+
+            </li>
+
+            <li>
+
+                <strong>Independent Research</strong> – Historical information should be considered alongside your own research, financial circumstances, objectives and risk tolerance before making investment decisions.
+
+            </li>
+
+            <li>
+
+                <strong>Transparency</strong> – Performance information is presented to support transparency and education and should not be interpreted as advertising future returns or expected investment outcomes.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M4 20h16"/>
+                    <path d="M7 16V11"/>
+                    <path d="M12 16V6"/>
+                    <path d="M17 16V9"/>
+
+                </svg>
+
+                <h3>
+                    Past Performance Is Not Predictive
+                </h3>
+
+                <p>
+
+                    Historical performance provides valuable insight into previous market behaviour and research outcomes, but it should never be relied upon as an indication of future investment performance or expected returns.
+
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 <!-- ===================================
-LIMITATION OF LIABILITY
+THIRD-PARTY SERVICES & BROKER INTEGRATIONS
 =================================== -->
 
 <div class="section">
 
-    <div class="card">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
 
-        <h2>Limitation of Liability</h2>
+        <h2>
+            Third-Party Services &amp; Broker Integrations
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            To the maximum extent permitted by law, EdgeBreak and Crane Platform Labs accept no liability for any direct, indirect or consequential loss arising from the use of this platform, including financial losses resulting from investment or trading decisions.
+            EdgeBreak relies on trusted third-party providers to deliver certain platform features, including secure authentication, payment processing, market data, cloud infrastructure and supported broker connectivity. While we carefully select these providers, EdgeBreak does not control their services, systems or business practices.
 
         </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Brokerage Providers</strong> – Supported brokerage accounts are provided and operated by independent third-party brokers. EdgeBreak is not responsible for brokerage services, order execution, account balances, custody of assets or trading outcomes.
+
+            </li>
+
+            <li>
+
+                <strong>OAuth Authentication</strong> – Broker connections are established using secure OAuth authentication provided by the brokerage. Your brokerage login credentials remain with your broker and are never stored by EdgeBreak.
+
+            </li>
+
+            <li>
+
+                <strong>Market Data</strong> – Financial data, charts, prices and other market information may be supplied by third-party providers and may be delayed, incomplete or unavailable from time to time.
+
+            </li>
+
+            <li>
+
+                <strong>Payment Processing</strong> – Subscription payments are securely processed by trusted third-party payment providers. EdgeBreak does not control the operation or availability of these services.
+
+            </li>
+
+            <li>
+
+                <strong>Service Availability</strong> – EdgeBreak is not responsible for interruptions, delays, errors or failures resulting from third-party systems, networks or services that are outside our reasonable control.
+
+            </li>
+
+            <li>
+
+                <strong>Third-Party Terms</strong> – Your use of third-party services remains subject to the terms, privacy policies and legal agreements of those providers.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/>
+                    <path d="M9.5 12.5l2 2 3.5-4"/>
+
+                </svg>
+
+                <h3>
+                    Independent Service Providers
+                </h3>
+
+                <p>
+
+                    EdgeBreak works with trusted third-party providers to deliver parts of the platform. Each provider operates independently and remains responsible for its own services, security practices and legal obligations.
+
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 <!-- ===================================
-CONTACT
+PLATFORM AVAILABILITY
 =================================== -->
 
 <div class="section">
 
-    <div class="card" style="text-align:center;">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
 
-        <h2>Questions About This Disclaimer?</h2>
+        <h2>
+            Platform Availability
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            If you have questions regarding this disclaimer or the educational nature of the EdgeBreak platform, please contact us.
+            EdgeBreak is designed to provide reliable access to market research tools, educational resources and connected platform services. However, we cannot guarantee that the platform or all features will always be available, uninterrupted, secure or free from errors.
 
         </p>
 
-        <p style="font-size:22px; font-weight:700; margin:30px 0;">
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Service Availability</strong> – While we aim to provide continuous access to EdgeBreak, scheduled maintenance, software updates, infrastructure upgrades and unforeseen technical issues may occasionally affect availability.
+
+            </li>
+
+            <li>
+
+                <strong>Feature Availability</strong> – Certain features, including scanners, charts, broker integrations, portfolio management tools and educational resources, may be modified, temporarily unavailable or discontinued as the platform evolves.
+
+            </li>
+
+            <li>
+
+                <strong>Third-Party Dependencies</strong> – Some EdgeBreak functionality depends on third-party providers, including market data services, cloud infrastructure, authentication providers and supported brokerages. Interruptions to these services may affect platform functionality.
+
+            </li>
+
+            <li>
+
+                <strong>Maintenance & Updates</strong> – We may temporarily suspend access to all or part of the platform to perform maintenance, security improvements, software upgrades or feature enhancements.
+
+            </li>
+
+            <li>
+
+                <strong>No Guarantee of Continuous Access</strong> – EdgeBreak does not warrant that the platform will always operate without interruption, delay, defects or compatibility issues across all devices and browsers.
+
+            </li>
+
+            <li>
+
+                <strong>User Responsibility</strong> – You should not rely exclusively on EdgeBreak for time-sensitive investment decisions and should independently verify important information where appropriate.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <rect x="3" y="5" width="18" height="14" rx="2"/>
+                    <path d="M7 9h10"/>
+                    <path d="M7 13h6"/>
+
+                </svg>
+
+                <h3>
+                    Designed for Reliability
+                </h3>
+
+                <p>
+
+                    We continually improve EdgeBreak to provide a secure and reliable research platform. As with any online service, occasional interruptions, maintenance or third-party issues may temporarily affect platform availability.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+LIMITATION OF RELIANCE
+=================================== -->
+
+<div class="section">
+
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
+
+        <h2>
+            Limitation of Reliance
+        </h2>
+
+        <p class="section-intro">
+
+            EdgeBreak provides research tools, educational resources and market information to support independent market analysis. You should not rely solely on any information available through the platform when making investment or financial decisions. Every investment decision should be based on your own research, judgement and individual circumstances.
+
+        </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Independent Research</strong> – You should independently verify information and conduct your own research before making any investment or trading decision.
+
+            </li>
+
+            <li>
+
+                <strong>Professional Advice</strong> – Where appropriate, you should seek advice from a suitably qualified financial adviser, accountant, legal adviser or other professional before making financial decisions.
+
+            </li>
+
+            <li>
+
+                <strong>No Sole Reliance</strong> – Scanner results, charts, educational content, portfolio tools, watchlists and market information should form only one part of your overall research process.
+
+            </li>
+
+            <li>
+
+                <strong>Changing Market Conditions</strong> – Financial markets can change rapidly. Information that was accurate when published may become outdated as market conditions evolve.
+
+            </li>
+
+            <li>
+
+                <strong>User Responsibility</strong> – You acknowledge that you are solely responsible for assessing the suitability, accuracy and relevance of any information before acting upon it.
+
+            </li>
+
+            <li>
+
+                <strong>Acceptance of Responsibility</strong> – By using EdgeBreak, you accept full responsibility for your investment decisions and acknowledge that you do not rely exclusively on the platform when making those decisions.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 8h.01"/>
+                    <path d="M12 11v5"/>
+
+                </svg>
+
+                <h3>
+                    Use EdgeBreak as One Research Tool
+                </h3>
+
+                <p>
+
+                    EdgeBreak is designed to support your research process—not replace it. Always consider multiple sources of information, conduct independent research and seek professional advice where appropriate before making investment decisions.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+REGULATORY COMPLIANCE
+=================================== -->
+
+<div class="section">
+
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
+
+        <h2>
+            Regulatory Compliance
+        </h2>
+
+        <p class="section-intro">
+
+            EdgeBreak is operated as a stock research and educational platform. Unless expressly stated otherwise, EdgeBreak is not a licensed financial adviser, broker-dealer, investment manager, custodian or financial institution. The platform is designed to assist users with independent market research and does not provide regulated financial services.
+
+        </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Research Platform</strong> – EdgeBreak provides research tools, educational resources and portfolio management features intended to support independent market research.
+
+            </li>
+
+            <li>
+
+                <strong>Not a Brokerage</strong> – EdgeBreak does not hold client funds, execute trades, provide custody services or operate as a securities exchange or brokerage.
+
+            </li>
+
+            <li>
+
+                <strong>Independent Brokerage Providers</strong> – Where broker connectivity is available, all brokerage services, account management, order execution and custody of assets remain the responsibility of the independent brokerage provider.
+
+            </li>
+
+            <li>
+
+                <strong>Applicable Laws</strong> – Users are responsible for ensuring their use of EdgeBreak complies with the laws, regulations and licensing requirements that apply in their own jurisdiction.
+
+            </li>
+
+            <li>
+
+                <strong>Future Services</strong> – If EdgeBreak introduces additional regulated services or partnerships in the future, those services will be governed by their own applicable terms, disclosures and legal requirements where appropriate.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/>
+                    <path d="M9.5 12.5l2 2 3.5-4"/>
+
+                </svg>
+
+                <h3>
+                    Built for Research
+                </h3>
+
+                <p>
+
+                    EdgeBreak exists to help users organise market research and better understand financial markets. Brokerage services, financial advice and regulated investment services remain the responsibility of appropriately licensed third-party providers.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+CHANGES TO THIS DISCLAIMER
+=================================== -->
+
+<div class="section">
+
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
+
+        <h2>
+            Changes to This Disclaimer
+        </h2>
+
+        <p class="section-intro">
+
+            As EdgeBreak continues to evolve, we may update this Financial Disclaimer to reflect changes to our platform, research tools, broker integrations, educational resources, legal obligations or industry best practices.
+
+        </p>
+
+        <p class="section-intro" style="max-width:850px; margin:0 auto 50px;">
+
+            Where material changes are made, we will update the <strong>Last Updated</strong> date shown on this page. Where appropriate, we may also notify registered users through the EdgeBreak platform, by email or by other reasonable means before those changes take effect.
+
+        </p>
+
+        <ul style="max-width:850px; margin:0 auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Platform Development</strong> – Updates may reflect new platform features, educational resources, research tools, broker integrations or other EdgeBreak services.
+
+            </li>
+
+            <li>
+
+                <strong>Legal &amp; Regulatory Changes</strong> – This Disclaimer may be updated where necessary to comply with applicable laws, regulations or recognised industry standards.
+
+            </li>
+
+            <li>
+
+                <strong>Improved Transparency</strong> – We may revise this Disclaimer to provide clearer explanations about how the EdgeBreak platform operates and the limitations of our services.
+
+            </li>
+
+            <li>
+
+                <strong>Continued Use</strong> – Your continued use of EdgeBreak following the publication of an updated Disclaimer constitutes your acknowledgement of the revised version.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 8h.01"/>
+                    <path d="M12 11v5"/>
+
+                </svg>
+
+                <h3>
+                    Staying Informed
+                </h3>
+
+                <p>
+
+                    We encourage you to review this Financial Disclaimer periodically so you remain informed about the purpose of the EdgeBreak platform, its limitations and any updates to our legal disclosures.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+QUESTIONS ABOUT THIS DISCLAIMER?
+=================================== -->
+
+<div class="section">
+
+    <div style="max-width:900px; margin:0 auto; text-align:center;">
+
+        <svg class="support-icon"
+             viewBox="0 0 24 24"
+             aria-hidden="true">
+
+            <path d="M4 5h16v14H4z"/>
+            <path d="M4 7l8 6 8-6"/>
+
+        </svg>
+
+        <h2>
+            Questions About This Disclaimer?
+        </h2>
+
+        <p class="section-intro">
+
+            We are committed to being transparent about the purpose and limitations of the EdgeBreak platform. If you have any questions about this Financial Disclaimer, our research platform or how our services should be used, please contact us.
+
+        </p>
+
+        <p style="font-size:26px; font-weight:700; margin:35px 0;">
 
             <a href="mailto:admin@edgebreak.ai">
 
@@ -576,11 +2020,27 @@ CONTACT
 
         </p>
 
-        <p style="color:#94a3b8;">
+        <p style="color:#94a3b8; max-width:650px; margin:0 auto;">
 
-            We aim to respond to enquiries as promptly as possible.
+            We aim to respond to all disclaimer, legal and general enquiries as promptly as reasonably practicable.
 
         </p>
+
+        <div class="button-row">
+
+            <a href="/terms.html" class="glass-btn">
+
+                Terms &amp; Conditions
+
+            </a>
+
+            <a href="/support.html" class="glass-btn">
+
+                Contact Support
+
+            </a>
+
+        </div>
 
     </div>
 
