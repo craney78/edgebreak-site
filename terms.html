@@ -288,6 +288,439 @@ SPEAKABLE SCHEMA
   "inLanguage":"en-AU"
 }
 </script>
+
+<style>
+.support-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:24px;
+}
+
+.support-card{
+
+    text-align:center;
+    padding:35px 25px;
+
+    transition:.25s;
+
+}
+
+.support-card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.support-icon{
+
+    width:56px;
+    height:56px;
+
+    color:#4ADE80;
+
+    margin-bottom:20px;
+
+}
+
+.support-card h3{
+
+    margin:12px 0;
+
+}
+
+.support-card p{
+
+    color:#94A3B8;
+    font-size:15px;
+    line-height:1.6;
+
+}
+
+.support-icon{
+
+    width:54px;
+    height:54px;
+
+    margin:0 auto 20px;
+
+    display:block;
+
+    fill:none;
+
+    stroke:#4ADE80;
+    stroke-width:1.8;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+
+    transition:.25s;
+
+}
+
+.feature-card:hover .support-icon{
+
+    transform:scale(1.08);
+
+}
+
+/* ===================================
+SUPPORT PAGE MOBILE
+=================================== */
+
+@media (max-width: 768px) {
+
+    .support-grid,
+    .feature-grid{
+
+        grid-template-columns:1fr;
+
+        gap:20px;
+
+    }
+
+    .support-card,
+    .feature-card{
+
+        padding:28px 22px;
+
+    }
+
+    .support-icon{
+
+        width:46px;
+        height:46px;
+
+        margin-bottom:16px;
+
+    }
+
+    .feature-card h3{
+
+        font-size:20px;
+
+    }
+
+    .feature-card p{
+
+        font-size:15px;
+        line-height:1.6;
+
+    }
+
+    .feature-card a{
+
+        display:inline-block;
+
+        margin-top:15px;
+
+    }
+
+    .section-intro{
+
+        max-width:100%;
+
+        padding:0 15px;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+.header{
+
+    padding:70px 20px 45px;
+
+}
+
+.hero-logo{
+
+    width:70px;
+
+}
+
+.header h1{
+
+    font-size:38px;
+
+}
+
+.header-sub{
+
+    font-size:18px;
+
+    max-width:95%;
+
+}
+
+}
+
+@media (max-width:768px){
+
+.section .card{
+
+    padding:35px 25px;
+
+}
+
+}
+
+@media (max-width:768px){
+
+.button-row{
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+.button-row a{
+
+    width:100%;
+
+}
+
+}
+
+/* ===================================
+SUPPORT PAGE
+=================================== */
+
+.support-icon{
+
+    width:52px;
+    height:52px;
+
+    margin:0 auto 20px;
+
+    display:block;
+
+    fill:none;
+
+    stroke:#45e07f;
+    stroke-width:1.8;
+
+    stroke-linecap:round;
+    stroke-linejoin:round;
+
+    transition:.25s ease;
+
+}
+
+.feature-card{
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    text-align:center;
+
+    padding:35px 30px;
+
+    transition:.25s ease;
+
+}
+
+.feature-card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.feature-card:hover .support-icon{
+
+    transform:scale(1.08);
+
+}
+
+.feature-card h3{
+
+    margin:8px 0 14px;
+
+}
+
+.feature-card p{
+
+    color:#94a3b8;
+
+    line-height:1.7;
+
+    margin:0;
+
+}
+
+/* ===================================
+MOBILE
+=================================== */
+
+@media (max-width:768px){
+
+    .feature-grid{
+
+        grid-template-columns:1fr;
+
+        gap:22px;
+
+    }
+
+    .feature-card{
+
+        padding:28px 22px;
+
+    }
+
+    .support-icon{
+
+        width:44px;
+        height:44px;
+
+        margin-bottom:18px;
+
+    }
+
+    .feature-card h3{
+
+        font-size:22px;
+
+    }
+
+    .feature-card p{
+
+        font-size:15px;
+
+    }
+
+}
+
+.support-grid{
+
+    max-width:1100px;
+
+    margin:40px auto 0;
+
+    gap:30px;
+
+}
+
+/* ===================================
+GLASS BUTTONS
+=================================== */
+
+.button-row{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:18px;
+    flex-wrap:wrap;
+
+    margin-top:35px;
+
+}
+
+.glass-btn{
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    min-width:220px;
+
+    padding:14px 28px;
+
+    border-radius:14px;
+
+    color:#ffffff;
+    text-decoration:none;
+    font-weight:600;
+    font-size:15px;
+
+    background:rgba(255,255,255,.06);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+
+    transition:.25s ease;
+
+}
+
+.glass-btn:hover{
+
+    transform:translateY(-3px);
+
+    background:rgba(74,222,128,.12);
+
+    border-color:#4ADE80;
+
+    box-shadow:0 10px 30px rgba(74,222,128,.18);
+
+    color:#ffffff;
+
+}
+
+.glass-btn:active{
+
+    transform:translateY(0);
+
+}
+
+@media (max-width:768px){
+
+    .button-row{
+
+        flex-direction:column;
+
+        gap:14px;
+
+    }
+
+    .glass-btn{
+
+        width:100%;
+        max-width:320px;
+
+    }
+
+}
+
+/* ===================================
+PRIVACY PAGE FEATURE CARDS
+=================================== */
+
+.feature-grid{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:flex-start;
+
+    margin-top:45px;
+
+}
+
+.feature-card{
+
+    max-width:520px;
+
+    width:100%;
+
+    text-align:center;
+
+}
+
+.feature-card .support-icon{
+
+    display:block;
+
+    margin:0 auto 22px;
+
+}
+</style>
+
 </head>
 
 <body>
@@ -416,34 +849,298 @@ HEADER
     <img
         src="images/logo.webp"
         class="hero-logo"
-        alt="EdgeBreak Terms of Service"
+        alt="EdgeBreak Terms & Conditions"
     >
 
     <h1>
-        Terms of Service
+        Terms &amp; Conditions
     </h1>
 
     <p class="header-sub">
 
-        These Terms of Service explain the rules governing your use of the EdgeBreak platform, subscriptions and educational market research tools. By accessing or using EdgeBreak, you agree to these terms.
+        These Terms &amp; Conditions govern your use of the EdgeBreak platform, including your EdgeBreak account, subscriptions, research tools, educational resources, broker connectivity and all related services. By accessing or using EdgeBreak, you agree to these Terms and your responsibilities as a platform user.
 
     </p>
 
-    <div class="hero-features">
+    <div class="button-row">
 
-        <div class="hero-feature">
-            <span class="footer-icon"></span>
-            Terms of Use
+        <a href="/privacy.html" class="glass-btn">
+            Privacy Policy
+        </a>
+
+        <a href="/security.html" class="glass-btn">
+            Security Centre
+        </a>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+TERMS OVERVIEW
+=================================== -->
+
+<div class="section">
+
+    <div style="max-width:1100px; margin:0 auto; text-align:center;">
+
+        <h2>
+            Understanding These Terms
+        </h2>
+
+        <p class="section-intro">
+
+            These Terms &amp; Conditions explain the rules that apply when using EdgeBreak. They outline your rights and responsibilities, how the platform operates, subscription terms, broker connectivity and the legal framework governing your use of our services.
+
+        </p>
+
+        <div class="feature-grid">
+
+            <!-- Platform Use -->
+
+            <a href="#platform-use" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="16" rx="2"/>
+                    <path d="M7 8h10"/>
+                    <path d="M7 12h10"/>
+                    <path d="M7 16h6"/>
+                </svg>
+
+                <h3>Platform Use</h3>
+
+                <p>
+
+                    Learn who may use EdgeBreak, how accounts work and your responsibilities while using the platform.
+
+                </p>
+
+            </a>
+
+            <!-- Membership -->
+
+            <a href="#subscriptions" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3" y="6" width="18" height="12" rx="2"/>
+                    <path d="M3 10h18"/>
+                </svg>
+
+                <h3>Subscriptions</h3>
+
+                <p>
+
+                    Understand memberships, billing, renewals, cancellations and how subscription access is managed.
+
+                </p>
+
+            </a>
+
+            <!-- Broker Connectivity -->
+
+            <a href="#broker-connections" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M7 12h10"/>
+                    <circle cx="7" cy="12" r="2"/>
+                    <circle cx="17" cy="12" r="2"/>
+                </svg>
+
+                <h3>Broker Connectivity</h3>
+
+                <p>
+
+                    Understand how supported brokerage accounts connect securely and your responsibilities when authorising access.
+
+                </p>
+
+            </a>
+
+            <!-- Your Responsibilities -->
+
+            <a href="#responsibilities" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="3"/>
+                    <path d="M6 20c1.5-4 4-6 6-6s4.5 2 6 6"/>
+                </svg>
+
+                <h3>Your Responsibilities</h3>
+
+                <p>
+
+                    Learn about acceptable use, intellectual property, account security and your obligations as an EdgeBreak user.
+
+                </p>
+
+            </a>
+
         </div>
 
-        <div class="hero-feature">
-            <span class="footer-icon"></span>
-            Subscriptions
+    </div>
+
+</div>
+
+
+<!-- ===================================
+BEFORE YOU USE EDGEBREAK
+=================================== -->
+
+<div class="section">
+
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
+
+        <h2>
+            Before You Use EdgeBreak
+        </h2>
+
+        <p class="section-intro">
+
+            These Terms work alongside our other legal policies. Before using EdgeBreak, connecting a brokerage account or purchasing a subscription, we recommend reviewing the resources below to better understand how the platform operates and your responsibilities as a user.
+
+        </p>
+
+        <div class="feature-grid">
+
+            <!-- Privacy Policy -->
+
+            <a href="/privacy.html" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/>
+                    <path d="M9.5 12.5l2 2 3.5-4"/>
+                </svg>
+
+                <h3>Privacy Policy</h3>
+
+                <p>
+
+                    Learn how EdgeBreak collects, uses, protects and manages your personal information while using the platform.
+
+                </p>
+
+            </a>
+
+            <!-- Security Centre -->
+
+            <a href="/security.html" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/>
+                    <path d="M12 8v4"/>
+                    <circle cx="12" cy="16" r="1"/>
+                </svg>
+
+                <h3>Security Centre</h3>
+
+                <p>
+
+                    Understand how EdgeBreak protects your account, secures broker connections and helps safeguard your information.
+
+                </p>
+
+            </a>
+
+            <!-- Pricing -->
+
+            <a href="/pricing.html" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3" y="6" width="18" height="12" rx="2"/>
+                    <path d="M3 10h18"/>
+                </svg>
+
+                <h3>Membership</h3>
+
+                <p>
+
+                    View subscription plans, billing information, free trial details and premium platform features.
+
+                </p>
+
+            </a>
+
+            <!-- Disclaimer -->
+
+            <a href="/disclaimer.html" class="feature-card">
+
+                <svg class="support-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3l9 16H3L12 3z"/>
+                    <path d="M12 9v4"/>
+                    <path d="M12 16h.01"/>
+                </svg>
+
+                <h3>Disclaimer</h3>
+
+                <p>
+
+                    Understand the important limitations of the EdgeBreak platform, including our educational purpose and research-only approach.
+
+                </p>
+
+            </a>
+
         </div>
 
-        <div class="hero-feature">
-            <span class="footer-icon"></span>
-            User Responsibilities
+    </div>
+
+</div>
+
+<!-- ===================================
+ACCEPTANCE OF THESE TERMS
+=================================== -->
+
+<div class="section">
+
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
+
+        <h2>
+            Acceptance of These Terms
+        </h2>
+
+        <p class="section-intro">
+
+            These Terms &amp; Conditions form a legally binding agreement between you and EdgeBreak, operated by <strong>Crane Platform Labs</strong>. By accessing, creating an account or using any part of the EdgeBreak platform, you acknowledge that you have read, understood and agree to be bound by these Terms.
+
+        </p>
+
+        <p class="section-intro">
+
+            These Terms apply to all EdgeBreak services, including research tools, educational resources, subscriptions, watchlists, portfolio management features, broker connectivity, APIs, mobile and web applications, and any future products or services made available through the platform.
+
+        </p>
+
+        <p class="section-intro">
+
+            If you do not agree with these Terms, you must not access or use the EdgeBreak platform. Continued use of EdgeBreak constitutes your ongoing acceptance of the current version of these Terms.
+
+        </p>
+
+        <div class="feature-grid" style="margin-top:50px;">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M7 12l3 3 7-7"/>
+                    <path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
+
+                </svg>
+
+                <h3>
+                    Your Agreement
+                </h3>
+
+                <p>
+
+                    By using EdgeBreak, you agree to comply with these Terms &amp; Conditions, our Privacy Policy, Disclaimer, Security Policy and any additional policies that apply to specific EdgeBreak services.
+
+                </p>
+
+            </div>
+
         </div>
 
     </div>
@@ -451,177 +1148,621 @@ HEADER
 </div>
 
 <!-- ===================================
-LAST UPDATED
-=================================== -->
-
-<div class="section" style="max-width:900px; margin:auto;">
-
-    <div class="card">
-
-        <p style="margin-bottom:0; color:#94a3b8;">
-
-            <strong>Effective Date:</strong> 28 June 2026
-
-        </p>
-
-    </div>
-
-</div>   
-
-
-<!-- ===================================
-TERMS CONTENT
+ELIGIBILITY & YOUR ACCOUNT
 =================================== -->
 
 <div class="section">
 
-    <div class="card">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
 
-        <h2>1. Overview</h2>
+        <h2>
+            Eligibility &amp; Your Account
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            EdgeBreak is operated by <strong>Crane Platform Labs</strong> and provides subscription-based access to educational resources and structured NASDAQ stock research tools. By accessing or using the EdgeBreak platform, you agree to these Terms of Service.
-
-        </p>
-
-    </div>
-
-</div>
-
-<!-- ===================================
-NATURE OF SERVICE
-=================================== -->
-
-<div class="section">
-
-    <div class="card">
-
-        <h2>2. Nature of Service</h2>
-
-        <p>
-
-            EdgeBreak is a NASDAQ stock research platform providing educational content, structured market research tools and transparent market analysis. The platform is designed to assist users in researching market structure, price action and breakout characteristics.
+            To use EdgeBreak, you must be legally capable of entering into a binding agreement in your jurisdiction and comply with all applicable laws. You are responsible for maintaining accurate account information and protecting the security of your EdgeBreak account.
 
         </p>
 
-        <p>
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
 
-            EdgeBreak does not execute trades, manage investment portfolios or provide personalised financial services.
+            <li>
 
-        </p>
+                <strong>Accurate Information</strong> – You agree to provide accurate, current and complete information when creating or updating your EdgeBreak account.
 
-    </div>
+            </li>
 
-</div>
+            <li>
 
-<!-- ===================================
-FINANCIAL DISCLAIMER
-=================================== -->
+                <strong>Account Security</strong> – You are responsible for maintaining the confidentiality of your password, authentication credentials and any devices used to access your account.
 
-<div class="section">
+            </li>
 
-    <div class="card">
+            <li>
 
-        <h2>3. Not Financial Advice</h2>
+                <strong>Authorised Use</strong> – Your account is intended for your personal use only unless otherwise authorised by EdgeBreak in writing.
 
-        <p>
+            </li>
 
-            All information available through EdgeBreak is provided for educational and research purposes only. Nothing on this platform constitutes financial advice, investment advice or a recommendation to buy or sell any financial product.
+            <li>
 
-        </p>
+                <strong>Unauthorised Access</strong> – You must notify EdgeBreak promptly if you believe your account has been accessed without your permission or your security credentials have been compromised.
 
-        <p>
+            </li>
 
-            Users are solely responsible for their own investment decisions and should seek independent professional advice where appropriate.
+            <li>
 
-        </p>
+                <strong>Compliance</strong> – You agree to use EdgeBreak only for lawful purposes and in accordance with these Terms &amp; Conditions.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <circle cx="12" cy="8" r="3"/>
+                    <path d="M6 20c1.5-4 4-6 6-6s4.5 2 6 6"/>
+
+                </svg>
+
+                <h3>
+                    Your Responsibility
+                </h3>
+
+                <p>
+
+                    You are responsible for all activity that occurs under your EdgeBreak account. Choosing a strong password, protecting your login credentials and promptly reporting suspected unauthorised access helps keep your account secure.
+
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 <!-- ===================================
-NO GUARANTEES
+PLATFORM SERVICES
 =================================== -->
 
 <div class="section">
 
-    <div class="card">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
 
-        <h2>4. No Guarantees</h2>
+        <h2>
+            Platform Services
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            EdgeBreak makes no guarantees regarding the accuracy, completeness or future performance of any information provided. Trading and investing involve risk, and past performance does not guarantee future results.
+            EdgeBreak is a NASDAQ stock research platform designed to help users organise market research, analyse price action and manage their own investment research workflow. Platform features may evolve over time and may be added, modified or discontinued at EdgeBreak's discretion.
 
         </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Research Tools</strong> – Access structured market research tools, watchlists, scanners and charting features designed to assist with analysing NASDAQ-listed securities.
+
+            </li>
+
+            <li>
+
+                <strong>Educational Resources</strong> – Access articles, tutorials, the EdgeBreak Academy and other educational content intended to improve market knowledge and research skills.
+
+            </li>
+
+            <li>
+
+                <strong>Personal Workspace</strong> – Save watchlists, organise research, maintain journals, monitor portfolios and manage your personal trading workflow.
+
+            </li>
+
+            <li>
+
+                <strong>Broker Connectivity</strong> – Where available, securely connect supported brokerage accounts using OAuth to access authorised portfolio, account and trading features.
+
+            </li>
+
+            <li>
+
+                <strong>Subscriptions</strong> – Certain platform features may require an active paid subscription and may vary depending on your membership level.
+
+            </li>
+
+            <li>
+
+                <strong>Future Services</strong> – EdgeBreak may introduce additional products, services, integrations or functionality as the platform continues to develop.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <rect x="3" y="4" width="18" height="16" rx="2"/>
+                    <path d="M7 8h10"/>
+                    <path d="M7 12h10"/>
+                    <path d="M7 16h6"/>
+
+                </svg>
+
+                <h3>
+                    A Research Platform
+                </h3>
+
+                <p>
+
+                    EdgeBreak provides research tools, educational resources and portfolio management features designed to support informed market research. It is not intended to replace your own judgement, professional advice or independent investment research.
+
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 <!-- ===================================
-SUBSCRIPTIONS
+SUBSCRIPTIONS & BILLING
 =================================== -->
 
 <div class="section">
 
-    <div class="card">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
 
-        <h2>5. Subscriptions & Billing</h2>
+        <h2>
+            Subscriptions &amp; Billing
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            Access to premium EdgeBreak features is provided through recurring subscription plans. By subscribing, you authorise the applicable subscription charges until your membership is cancelled.
-
-        </p>
-
-        <p>
-
-            Subscription payments are processed securely through Stripe.
+            Some EdgeBreak features require an active subscription. By purchasing a subscription, you agree to the applicable pricing, billing arrangements and subscription terms displayed at the time of purchase.
 
         </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Subscription Plans</strong> – EdgeBreak may offer free and paid membership plans with different levels of platform access and functionality.
+
+            </li>
+
+            <li>
+
+                <strong>Secure Payments</strong> – Subscription payments are processed securely by Stripe. EdgeBreak does not collect or store your complete payment card information.
+
+            </li>
+
+            <li>
+
+                <strong>Automatic Renewals</strong> – Unless cancelled before the renewal date, subscriptions may automatically renew using your selected payment method.
+
+            </li>
+
+            <li>
+
+                <strong>Managing Your Subscription</strong> – You may upgrade, downgrade or cancel your subscription through your EdgeBreak account, subject to the terms applicable to your membership.
+
+            </li>
+
+            <li>
+
+                <strong>Pricing Changes</strong> – EdgeBreak may update subscription pricing, features or membership options. Any changes will apply to future billing periods and will be communicated where required.
+
+            </li>
+
+            <li>
+
+                <strong>Free Trials & Promotions</strong> – Promotional offers and free trials may be available from time to time and are subject to their specific terms and conditions.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <rect x="3" y="6" width="18" height="12" rx="2"/>
+                    <path d="M3 10h18"/>
+                    <path d="M7 15h3"/>
+
+                </svg>
+
+                <h3>
+                    Subscription Management
+                </h3>
+
+                <p>
+
+                    You remain in control of your EdgeBreak membership. Subscription details, renewals and billing preferences can be managed through your account, while payments are securely processed by Stripe.
+
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 <!-- ===================================
-CANCELLATIONS
+BROKER CONNECTIONS & THIRD-PARTY BROKERAGE SERVICES
 =================================== -->
 
 <div class="section">
 
-    <div class="card">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
 
-        <h2>6. Cancellations & Refunds</h2>
+        <h2>
+            Broker Connections &amp; Third-Party Brokerage Services
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            You may cancel your subscription at any time before your next billing cycle. Unless required by applicable law, subscription fees already paid are non-refundable for partial billing periods.
+            EdgeBreak may allow you to securely connect supported third-party brokerage accounts to enhance your research workflow, portfolio management and trading experience. Broker connectivity is optional and is provided solely with your express authorisation.
 
         </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Optional Integration</strong> – Connecting a brokerage account is entirely optional. You may continue using EdgeBreak without connecting a broker.
+
+            </li>
+
+            <li>
+
+                <strong>OAuth Authentication</strong> – Broker connections are established using secure OAuth authentication provided by the brokerage. EdgeBreak never requests, stores or has access to your brokerage username or password.
+
+            </li>
+
+            <li>
+
+                <strong>Authorised Access</strong> – By connecting a brokerage account, you authorise EdgeBreak to access only the information and permissions necessary to provide the features you choose to use.
+
+            </li>
+
+            <li>
+
+                <strong>Broker Responsibility</strong> – Brokerage accounts, trading services, account balances, order execution and custody of assets remain the sole responsibility of your selected brokerage provider.
+
+            </li>
+
+            <li>
+
+                <strong>Third-Party Terms</strong> – Your relationship with your brokerage provider is governed by that provider's own terms, privacy policy and legal agreements in addition to these Terms.
+
+            </li>
+
+            <li>
+
+                <strong>Disconnecting Your Broker</strong> – You may disconnect a supported brokerage account at any time. Disconnecting a broker will prevent future synchronisation, although certain records may be retained where required for operational, security or legal purposes.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/>
+                    <path d="M9.5 12.5l2 2 3.5-4"/>
+
+                </svg>
+
+                <h3>
+                    Your Brokerage Account
+                </h3>
+
+                <p>
+
+                    EdgeBreak is not a broker-dealer, custodian or financial institution. Your brokerage account remains with your chosen provider, and all investment decisions, order execution and account management remain your responsibility.
+
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 <!-- ===================================
-USER RESPONSIBILITIES
+ACCEPTABLE USE
 =================================== -->
 
 <div class="section">
 
-    <div class="card">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
 
-        <h2>7. User Responsibilities</h2>
+        <h2>
+            Acceptable Use
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            Users agree to use EdgeBreak responsibly and in accordance with applicable laws. You must not copy, redistribute, reverse engineer, interfere with or misuse any part of the platform or its services.
+            EdgeBreak is designed to provide secure market research, educational resources and portfolio management tools. By using the platform, you agree to use EdgeBreak responsibly, lawfully and in a manner that does not interfere with the platform, other users or our services.
 
         </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Lawful Use</strong> – You must use EdgeBreak only for lawful purposes and in accordance with these Terms &amp; Conditions.
+
+            </li>
+
+            <li>
+
+                <strong>Account Security</strong> – You must not share your account credentials or allow unauthorised access to your EdgeBreak account.
+
+            </li>
+
+            <li>
+
+                <strong>Platform Integrity</strong> – You must not attempt to interfere with, disrupt, damage or compromise the operation, security or availability of the EdgeBreak platform.
+
+            </li>
+
+            <li>
+
+                <strong>Automated Access</strong> – You must not use bots, crawlers, scrapers, automated scripts or other automated methods to access or extract data from EdgeBreak unless expressly authorised by us.
+
+            </li>
+
+            <li>
+
+                <strong>Reverse Engineering</strong> – You must not copy, reverse engineer, decompile, reproduce or attempt to discover the underlying source code, algorithms or proprietary systems used by EdgeBreak except where permitted by law.
+
+            </li>
+
+            <li>
+
+                <strong>Misuse of Services</strong> – You must not use EdgeBreak to engage in fraudulent, deceptive, abusive, unlawful or harmful activities, or in any manner that may negatively affect other users or the platform.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/>
+                    <path d="M9.5 12.5l2 2 3.5-4"/>
+
+                </svg>
+
+                <h3>
+                    Fair &amp; Responsible Use
+                </h3>
+
+                <p>
+
+                    These requirements help protect the security, reliability and integrity of EdgeBreak for every user while safeguarding our research tools, educational content and platform infrastructure.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+INTELLECTUAL PROPERTY
+=================================== -->
+
+<div class="section">
+
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
+
+        <h2>
+            Intellectual Property
+        </h2>
+
+        <p class="section-intro">
+
+            Unless otherwise stated, all intellectual property rights relating to the EdgeBreak platform remain the exclusive property of Crane Platform Labs or its licensors. Your subscription grants you a limited, non-exclusive and non-transferable licence to access and use EdgeBreak in accordance with these Terms. It does not transfer ownership of any part of the platform.
+
+        </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Platform Ownership</strong> – EdgeBreak, including its software, design, branding, logos, graphics, layout, source code and user interface, is protected by intellectual property laws.
+
+            </li>
+
+            <li>
+
+                <strong>Research Methodology</strong> – EdgeBreak's scanners, proprietary methodologies, ranking systems, market research processes and analytical models remain the intellectual property of Crane Platform Labs.
+
+            </li>
+
+            <li>
+
+                <strong>Educational Content</strong> – Articles, tutorials, videos, Academy lessons, documentation, images and other educational materials may not be copied, reproduced or distributed without prior written permission.
+
+            </li>
+
+            <li>
+
+                <strong>Limited Licence</strong> – Your subscription allows you to use EdgeBreak for your own personal research. It does not permit resale, redistribution, commercial use or public reproduction of EdgeBreak content.
+
+            </li>
+
+            <li>
+
+                <strong>Restrictions</strong> – You must not copy, modify, republish, distribute, create derivative works from or commercially exploit any part of the EdgeBreak platform without our written consent.
+
+            </li>
+
+            <li>
+
+                <strong>Feedback</strong> – If you submit suggestions, ideas or feature requests, you acknowledge that EdgeBreak may use, develop and implement those ideas without restriction or obligation to provide compensation.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/>
+                    <path d="M9.5 12.5l2 2 3.5-4"/>
+
+                </svg>
+
+                <h3>
+                    Protecting EdgeBreak
+                </h3>
+
+                <p>
+
+                    Our research tools, scanner technology, educational content, branding and platform design represent significant intellectual property developed by Crane Platform Labs. These assets are protected by applicable copyright, trademark and intellectual property laws.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+NO FINANCIAL ADVICE
+=================================== -->
+
+<div class="section">
+
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
+
+        <h2>
+            No Financial Advice
+        </h2>
+
+        <p class="section-intro">
+
+            EdgeBreak is a stock research and educational platform. The information, tools and resources provided through the platform are intended to assist users with conducting their own market research and should not be interpreted as financial, investment, legal, taxation or other professional advice.
+
+        </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Research Platform</strong> – EdgeBreak provides research tools, market data, educational content and portfolio management features designed to support independent market analysis.
+
+            </li>
+
+            <li>
+
+                <strong>No Investment Recommendations</strong> – EdgeBreak does not recommend that you buy, sell or hold any financial product, security or investment.
+
+            </li>
+
+            <li>
+
+                <strong>User Responsibility</strong> – All investment decisions remain entirely your responsibility. You should conduct your own research and seek independent professional advice where appropriate.
+
+            </li>
+
+            <li>
+
+                <strong>No Guarantee of Results</strong> – Historical performance, scanner results, educational examples and research outcomes do not guarantee future performance or investment success.
+
+            </li>
+
+            <li>
+
+                <strong>Market Risk</strong> – Investing in financial markets involves risk, including the possible loss of some or all invested capital.
+
+            </li>
+
+            <li>
+
+                <strong>Independent Decision Making</strong> – You acknowledge that any trading or investment decisions made using information obtained through EdgeBreak are made solely at your own discretion and risk.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 8h.01"/>
+                    <path d="M12 11v5"/>
+
+                </svg>
+
+                <h3>
+                    Research, Not Advice
+                </h3>
+
+                <p>
+
+                    EdgeBreak helps you research the market by providing structured tools, educational resources and portfolio management features. Every investment decision remains your responsibility, and nothing on the platform should be interpreted as personal financial or investment advice.
+
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
@@ -633,97 +1774,362 @@ LIMITATION OF LIABILITY
 
 <div class="section">
 
-    <div class="card">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
 
-        <h2>8. Limitation of Liability</h2>
+        <h2>
+            Limitation of Liability
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            To the maximum extent permitted by law, Crane Platform Labs and EdgeBreak are not liable for any direct, indirect or consequential loss arising from the use of the platform, including financial losses resulting from trading or investment decisions.
+            While EdgeBreak aims to provide reliable research tools, educational resources and platform services, we cannot guarantee uninterrupted availability, complete accuracy or suitability for every user's circumstances. To the maximum extent permitted by law, your use of EdgeBreak is at your own risk.
 
         </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Platform Availability</strong> – EdgeBreak does not guarantee uninterrupted access to the platform and may experience maintenance, updates, outages or technical issues.
+
+            </li>
+
+            <li>
+
+                <strong>Market Information</strong> – Market data, charts, scanner results and educational content are provided for research purposes only and may contain delays, inaccuracies or omissions.
+
+            </li>
+
+            <li>
+
+                <strong>Third-Party Services</strong> – EdgeBreak is not responsible for the performance, availability or actions of third-party providers including brokerages, payment processors, market data providers or cloud infrastructure services.
+
+            </li>
+
+            <li>
+
+                <strong>Investment Decisions</strong> – EdgeBreak accepts no responsibility for trading losses, investment outcomes or financial decisions made using information available through the platform.
+
+            </li>
+
+            <li>
+
+                <strong>Technical Issues</strong> – We are not liable for losses arising from internet interruptions, hardware failures, software issues, unauthorised access or circumstances beyond our reasonable control.
+
+            </li>
+
+            <li>
+
+                <strong>Maximum Liability</strong> – To the fullest extent permitted by applicable law, any liability arising from your use of EdgeBreak is limited to the amount you have paid to EdgeBreak for subscriptions during the twelve (12) months immediately preceding the event giving rise to the claim.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M12 3l9 16H3L12 3z"/>
+                    <path d="M12 9v4"/>
+                    <path d="M12 16h.01"/>
+
+                </svg>
+
+                <h3>
+                    Use at Your Own Risk
+                </h3>
+
+                <p>
+
+                    EdgeBreak provides research tools and educational resources to support your own market analysis. You acknowledge that all investment decisions and their outcomes remain solely your responsibility.
+
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 <!-- ===================================
-SERVICE AVAILABILITY
+SUSPENSION & TERMINATION
 =================================== -->
 
 <div class="section">
 
-    <div class="card">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
 
-        <h2>9. Service Availability</h2>
+        <h2>
+            Suspension &amp; Termination
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            We aim to provide a reliable service but cannot guarantee uninterrupted availability. Features, functionality or services may be modified, suspended or discontinued at any time without notice.
+            EdgeBreak reserves the right to suspend, restrict or terminate access to the platform where necessary to protect the security, integrity and lawful operation of our services. Users may also close their EdgeBreak account at any time, subject to any outstanding legal or contractual obligations.
 
         </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>User Cancellation</strong> – You may close your EdgeBreak account or cancel your subscription at any time through your account settings or by contacting our support team.
+
+            </li>
+
+            <li>
+
+                <strong>Suspension</strong> – We may temporarily suspend access where we reasonably believe an account has been compromised, is being used fraudulently or is otherwise creating a security risk.
+
+            </li>
+
+            <li>
+
+                <strong>Termination</strong> – We may terminate your account if you materially breach these Terms &amp; Conditions, misuse the platform or engage in unlawful or prohibited activities.
+
+            </li>
+
+            <li>
+
+                <strong>Broker Connections</strong> – If your EdgeBreak account is suspended or terminated, connected brokerage accounts may be disconnected and access to broker-related features may cease.
+
+            </li>
+
+            <li>
+
+                <strong>Subscription Access</strong> – Termination or cancellation may result in the loss of access to premium features and services associated with your subscription.
+
+            </li>
+
+            <li>
+
+                <strong>Data Retention</strong> – Following account closure or termination, certain information may be retained where required to comply with legal obligations, resolve disputes, enforce these Terms or maintain platform security.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/>
+                    <path d="M9.5 12.5l2 2 3.5-4"/>
+
+                </svg>
+
+                <h3>
+                    Protecting the Platform
+                </h3>
+
+                <p>
+
+                    These provisions allow EdgeBreak to protect users, maintain platform security and ensure our services remain reliable, lawful and available for the broader community.
+
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 <!-- ===================================
-CHANGES TO TERMS
+CHANGES TO THESE TERMS
 =================================== -->
 
 <div class="section">
 
-    <div class="card">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
 
-        <h2>10. Changes to These Terms</h2>
+        <h2>
+            Changes to These Terms
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            These Terms of Service may be updated from time to time. Continued use of EdgeBreak after changes are published constitutes acceptance of the revised Terms.
+            As EdgeBreak continues to develop, we may update these Terms &amp; Conditions to reflect new platform features, broker integrations, subscription services, legal requirements or improvements to our products and services.
 
         </p>
+
+        <p class="section-intro" style="max-width:850px; margin:0 auto 50px;">
+
+            Where we make material changes, we will update the <strong>Last Updated</strong> date on this page. Where appropriate, we may also notify registered users by email, through the EdgeBreak platform or by other reasonable means before the changes take effect.
+
+        </p>
+
+        <ul style="max-width:850px; margin:0 auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Platform Improvements</strong> – Updates may reflect new features, broker integrations, APIs, educational resources or changes to existing services.
+
+            </li>
+
+            <li>
+
+                <strong>Legal &amp; Regulatory Requirements</strong> – We may amend these Terms where necessary to comply with applicable laws, regulations or industry standards.
+
+            </li>
+
+            <li>
+
+                <strong>Continued Use</strong> – Your continued use of EdgeBreak after updated Terms become effective constitutes your acceptance of those revised Terms.
+
+            </li>
+
+            <li>
+
+                <strong>Discontinuing Use</strong> – If you do not agree with any updated Terms, you should stop using the EdgeBreak platform and cancel your account before the changes take effect.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 8h.01"/>
+                    <path d="M12 11v5"/>
+
+                </svg>
+
+                <h3>
+                    Keeping You Informed
+                </h3>
+
+                <p>
+
+                    We encourage you to review these Terms &amp; Conditions periodically so you remain informed about your rights, responsibilities and any updates to the EdgeBreak platform.
+
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 <!-- ===================================
-GOVERNING LAW
+GOVERNING LAW & JURISDICTION
 =================================== -->
 
 <div class="section">
 
-    <div class="card">
+    <div style="max-width:1000px; margin:0 auto; text-align:center;">
 
-        <h2>11. Governing Law</h2>
+        <h2>
+            Governing Law &amp; Jurisdiction
+        </h2>
 
-        <p>
+        <p class="section-intro">
 
-            These Terms are governed by the laws of New South Wales, Australia. Users accessing EdgeBreak from other jurisdictions are responsible for ensuring their use complies with local laws where applicable.
+            These Terms &amp; Conditions are governed by the laws of New South Wales, Australia, unless otherwise required by applicable law. By using EdgeBreak, you agree that any dispute arising from or relating to these Terms or your use of the platform will be subject to the applicable courts and legal processes of New South Wales, Australia.
 
         </p>
+
+        <ul style="max-width:850px; margin:40px auto 50px; text-align:left; line-height:2;">
+
+            <li>
+
+                <strong>Applicable Law</strong> – These Terms are governed by the laws of New South Wales and the Commonwealth of Australia.
+
+            </li>
+
+            <li>
+
+                <strong>Jurisdiction</strong> – Subject to any rights you may have under applicable consumer protection laws, disputes relating to these Terms or the EdgeBreak platform will be resolved through the courts of New South Wales, Australia.
+
+            </li>
+
+            <li>
+
+                <strong>Consumer Rights</strong> – Nothing in these Terms excludes, restricts or modifies any rights or remedies that cannot lawfully be excluded under applicable consumer protection legislation, including the Australian Consumer Law.
+
+            </li>
+
+        </ul>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <svg class="support-icon"
+                     viewBox="0 0 24 24"
+                     aria-hidden="true">
+
+                    <path d="M12 2l7 4v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-4z"/>
+                    <path d="M8 13l2.5 2.5L16 10"/>
+
+                </svg>
+
+                <h3>
+                    Australian Business
+                </h3>
+
+                <p>
+
+                    EdgeBreak is operated by Crane Platform Labs in Australia. These Terms are intended to comply with applicable Australian laws while respecting any consumer rights that cannot be excluded by law.
+
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 <!-- ===================================
-CONTACT
+QUESTIONS ABOUT THESE TERMS?
 =================================== -->
 
 <div class="section">
 
-    <div class="card" style="text-align:center;">
+    <div style="max-width:900px; margin:0 auto; text-align:center;">
 
-        <h2>Questions About These Terms?</h2>
+        <svg class="support-icon"
+             viewBox="0 0 24 24"
+             aria-hidden="true">
 
-        <p>
+            <path d="M4 5h16v14H4z"/>
+            <path d="M4 7l8 6 8-6"/>
 
-            If you have any questions regarding these Terms of Service, please contact us.
+        </svg>
+
+        <h2>
+            Questions About These Terms?
+        </h2>
+
+        <p class="section-intro">
+
+            We are committed to making our Terms &amp; Conditions clear, transparent and easy to understand. If you have any questions about these Terms, your rights or responsibilities when using EdgeBreak, please contact us.
 
         </p>
 
-        <p style="font-size:22px; font-weight:700; margin:30px 0;">
+        <p style="font-size:26px; font-weight:700; margin:35px 0;">
 
             <a href="mailto:admin@edgebreak.ai">
 
@@ -733,17 +2139,31 @@ CONTACT
 
         </p>
 
-        <p style="color:#94a3b8;">
+        <p style="color:#94a3b8; max-width:650px; margin:0 auto;">
 
-            We aim to respond to enquiries as promptly as possible.
+            We aim to respond to legal and general enquiries as promptly as reasonably practicable.
 
         </p>
+
+        <div class="button-row">
+
+            <a href="/privacy.html" class="glass-btn">
+
+                Privacy Policy
+
+            </a>
+
+            <a href="/support.html" class="glass-btn">
+
+                Contact Support
+
+            </a>
+
+        </div>
 
     </div>
 
 </div>
-
-  
 
 <!-- ===================================
 FOOTER
