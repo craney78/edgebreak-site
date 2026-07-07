@@ -1116,6 +1116,82 @@ GLASS BUTTONS
 
 }
 
+/* ===================================
+LEGAL PAGE OVERRIDES
+Place LAST in the stylesheet
+=================================== */
+
+/* Remove any outer container styling */
+
+.section{
+
+    background:transparent !important;
+
+    border:none !important;
+
+    outline:none !important;
+
+    box-shadow:none !important;
+
+    max-width:100% !important;
+
+    margin:0 !important;
+
+    padding:70px 20px 0 !important;
+
+}
+
+.section:last-child{
+
+    padding-bottom:70px !important;
+
+}
+
+/* Remove pseudo-element borders if dashboard uses them */
+
+.section::before,
+.section::after{
+
+    display:none !important;
+
+    content:none !important;
+
+}
+
+/* Only the card should have a border */
+
+.section .card{
+
+    max-width:1000px;
+
+    margin:0 auto;
+
+    background:#071225;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:22px;
+
+    box-shadow:none;
+
+    overflow:hidden;
+
+}
+
+/* Remove any wrapper styling */
+
+.section > div{
+
+    border:none !important;
+
+    outline:none !important;
+
+    box-shadow:none !important;
+
+    background:transparent !important;
+
+}
+
 </style>
 </head>
 <body>
