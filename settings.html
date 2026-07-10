@@ -1076,10 +1076,60 @@ PROFILE
 
                 <select id="timezone">
 
-                    <option>
+                    <!-- Australia -->
 
-                        Australia/Sydney
+                    <option value="Australia/Sydney">
+                        Australia (Sydney, Melbourne, Canberra)
+                    </option>
 
+                    <option value="Australia/Brisbane">
+                        Australia (Brisbane)
+                    </option>
+
+                    <option value="Australia/Adelaide">
+                        Australia (Adelaide)
+                    </option>
+
+                    <option value="Australia/Darwin">
+                        Australia (Darwin)
+                    </option>
+
+                    <option value="Australia/Perth">
+                        Australia (Perth)
+                    </option>
+
+                    <option value="Australia/Hobart">
+                        Australia (Hobart)
+                    </option>
+
+                    <!-- United States -->
+
+                    <option value="America/New_York">
+                        USA Eastern (New York)
+                    </option>
+
+                    <option value="America/Chicago">
+                        USA Central (Chicago)
+                    </option>
+
+                    <option value="America/Denver">
+                        USA Mountain (Denver)
+                    </option>
+
+                    <option value="America/Phoenix">
+                        USA Arizona (Phoenix)
+                    </option>
+
+                    <option value="America/Los_Angeles">
+                        USA Pacific (Los Angeles)
+                    </option>
+
+                    <option value="America/Anchorage">
+                        USA Alaska (Anchorage)
+                    </option>
+
+                    <option value="Pacific/Honolulu">
+                        USA Hawaii (Honolulu)
                     </option>
 
                 </select>
@@ -2237,11 +2287,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (!session || !session.user) return;
 
   // Get profile
-  const { data: profile } = await supabaseClient
-    .from("profiles")
-    .select("is_active")
-    .eq("id", session.user.id)
-    .single();
+  const {
+      data: profile,
+      error
+  } = await supabaseClient
+
+      .from("profiles")
+
+      .select("is_active")
+
+      .eq("id", session.user.id);
+
+  console.log(profile);
+  console.log(error);
 
   // If NOT active → keep locked
   if (!profile || profile.is_active !== true) return;
