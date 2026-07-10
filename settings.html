@@ -8,10 +8,10 @@
 <title>Account Settings | EdgeBreak</title>
 
 <meta name="description"
-      content="Manage your EdgeBreak account, profile, security, subscription, broker connections and notification preferences from your secure workspace.">
+      content="Manage your EdgeBreak account, profile, security, membership and notification preferences from your secure workspace.">
 
 <meta name="keywords"
-      content="EdgeBreak settings, account settings, profile, security, subscription, broker connections, notifications, account management">
+      content="EdgeBreak settings, account settings, profile, security, membership, notifications, account management">
 
 <meta name="robots"
       content="noindex, nofollow">
@@ -71,7 +71,7 @@ OPEN GRAPH
       content="Account Settings | EdgeBreak">
 
 <meta property="og:description"
-      content="Manage your EdgeBreak profile, security, subscription, broker connections and account preferences from your secure workspace.">
+      content="Manage your EdgeBreak profile, security, membership and account preferences from your secure workspace.">
 
 <meta property="og:url"
       content="https://www.edgebreak.ai/settings.html">
@@ -99,7 +99,7 @@ TWITTER CARDS
       content="Account Settings | EdgeBreak">
 
 <meta name="twitter:description"
-      content="Manage your EdgeBreak account, security, subscription and broker connections.">
+      content="Manage your EdgeBreak account, security, membership and account preferences.">
 
 <meta name="twitter:image"
       content="https://www.edgebreak.ai/images/logo.webp">
@@ -112,15 +112,24 @@ CSS
 =================================== -->
 
 <link rel="stylesheet"
-      href="css/dashboard.css">
+      href="/css/dashboard.css">
+
+<!-- ===================================
+SUPABASE
+=================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
+
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+
 );
+
 </script>
 
 <!-- ===================================
@@ -129,17 +138,17 @@ ORGANIZATION SCHEMA
 
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"Organization",
-  "name":"EdgeBreak",
-  "url":"https://www.edgebreak.ai",
-  "logo":{
-    "@type":"ImageObject",
-    "url":"https://www.edgebreak.ai/images/logo.webp"
-  },
-  "description":"EdgeBreak is a NASDAQ stock research platform providing structured market research tools focused on breakout analysis, accumulation characteristics, price action and Smart Money research.",
-  "foundingDate":"2026",
-  "areaServed":"Worldwide"
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"EdgeBreak",
+    "url":"https://www.edgebreak.ai",
+    "logo":{
+        "@type":"ImageObject",
+        "url":"https://www.edgebreak.ai/images/logo.webp"
+    },
+    "description":"EdgeBreak is a NASDAQ market research platform providing structured breakout research, accumulation analysis and educational tools for investors.",
+    "foundingDate":"2026",
+    "areaServed":"Worldwide"
 }
 </script>
 
@@ -149,15 +158,15 @@ WEBSITE SCHEMA
 
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"WebSite",
-  "name":"EdgeBreak",
-  "url":"https://www.edgebreak.ai",
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  },
-  "inLanguage":"en-AU"
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"EdgeBreak",
+    "url":"https://www.edgebreak.ai",
+    "publisher":{
+        "@type":"Organization",
+        "name":"EdgeBreak"
+    },
+    "inLanguage":"en-AU"
 }
 </script>
 
@@ -167,40 +176,40 @@ WEBPAGE SCHEMA
 
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "@id":"https://www.edgebreak.ai/settings.html",
-  "name":"Account Settings",
-  "url":"https://www.edgebreak.ai/settings.html",
-  "description":"Manage your EdgeBreak account, profile, security, subscription, broker connections and notification preferences.",
-  "isPartOf":{
-    "@type":"WebSite",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  },
-  "about":[
-    {
-      "@type":"Thing",
-      "name":"Account Settings"
+    "@context":"https://schema.org",
+    "@type":"WebPage",
+    "@id":"https://www.edgebreak.ai/settings.html",
+    "name":"Account Settings",
+    "url":"https://www.edgebreak.ai/settings.html",
+    "description":"Manage your EdgeBreak account, profile, security, membership and notification preferences.",
+    "isPartOf":{
+        "@type":"WebSite",
+        "name":"EdgeBreak",
+        "url":"https://www.edgebreak.ai"
     },
-    {
-      "@type":"Thing",
-      "name":"Account Security"
+    "about":[
+        {
+            "@type":"Thing",
+            "name":"Account Settings"
+        },
+        {
+            "@type":"Thing",
+            "name":"Account Security"
+        },
+        {
+            "@type":"Thing",
+            "name":"Membership Management"
+        },
+        {
+            "@type":"Thing",
+            "name":"Notification Preferences"
+        }
+    ],
+    "primaryImageOfPage":{
+        "@type":"ImageObject",
+        "url":"https://www.edgebreak.ai/images/logo.webp"
     },
-    {
-      "@type":"Thing",
-      "name":"Broker Connections"
-    },
-    {
-      "@type":"Thing",
-      "name":"Subscription Management"
-    }
-  ],
-  "primaryImageOfPage":{
-    "@type":"ImageObject",
-    "url":"https://www.edgebreak.ai/images/logo.webp"
-  },
-  "inLanguage":"en-AU"
+    "inLanguage":"en-AU"
 }
 </script>
 <style>
@@ -860,14 +869,13 @@ FEATURED
 
         <p>
 
-            Account Settings brings together everything you need to manage your EdgeBreak membership. Update your profile information, strengthen your account security, manage subscriptions, connect supported brokers, control notifications and customise your personal workspace—all from one central location.
+            Manage your EdgeBreak account from one secure location. Update your profile information, strengthen your account security, manage your membership, customise notification preferences and control your personal account settings—all designed to keep your account secure, organised and up to date.
 
         </p>
 
     </div>
 
 </div>
-
 
 <!-- ===================================
 ACCOUNT OVERVIEW
@@ -885,7 +893,7 @@ ACCOUNT OVERVIEW
 
         <p>
 
-            View your account status, membership information and security summary at a glance.
+            A quick summary of your EdgeBreak account.
 
         </p>
 
@@ -913,7 +921,7 @@ ACCOUNT OVERVIEW
 
             <span class="overview-label">
 
-                Account Status
+                Status
 
             </span>
 
@@ -929,7 +937,7 @@ ACCOUNT OVERVIEW
 
             <span class="overview-label">
 
-                Email Verification
+                Email
 
             </span>
 
@@ -941,18 +949,17 @@ ACCOUNT OVERVIEW
 
         </div>
 
-        
         <div class="overview-card">
 
             <span class="overview-label">
 
-                Member Since
+                Time Zone
 
             </span>
 
-            <strong id="memberSince">
+            <strong id="overviewTimezone">
 
-                —
+                Australia/Sydney
 
             </strong>
 
@@ -978,181 +985,6 @@ ACCOUNT OVERVIEW
 
 </div>
 
-<!-- ===================================
-PROFILE
-=================================== -->
-
-<div class="section">
-
-    <div class="section-header">
-
-        <h2>
-
-            Profile
-
-        </h2>
-
-        <p>
-
-            Manage your personal information and keep your EdgeBreak account details up to date.
-
-        </p>
-
-    </div>
-
-    <div class="card">
-
-        <div class="settings-grid">
-
-            <div class="settings-field">
-
-                <label>
-
-                    Full Name
-
-                </label>
-
-                <input
-                    type="text"
-                    id="fullName"
-                    placeholder="Your full name"
-                >
-
-            </div>
-
-            <div class="settings-field">
-
-                
-                <label>
-
-                    Email Address
-
-                </label>
-
-                <input
-                    type="email"
-                    id="email"
-                    disabled>
-
-                <p>
-
-                    Your email address is used to sign in to EdgeBreak.
-
-                </p>
-
-                <button
-                    class="glass-btn"
-                    onclick="changeEmail()">
-
-                    Change Email Address
-
-                </button>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Country
-
-                </label>
-
-                <input
-                    type="text"
-                    id="country"
-                    placeholder="Australia"
-                >
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Time Zone
-
-                </label>
-
-                <select id="timezone">
-
-                    <!-- Australia -->
-
-                    <option value="Australia/Sydney">
-                        Australia (Sydney, Melbourne, Canberra)
-                    </option>
-
-                    <option value="Australia/Brisbane">
-                        Australia (Brisbane)
-                    </option>
-
-                    <option value="Australia/Adelaide">
-                        Australia (Adelaide)
-                    </option>
-
-                    <option value="Australia/Darwin">
-                        Australia (Darwin)
-                    </option>
-
-                    <option value="Australia/Perth">
-                        Australia (Perth)
-                    </option>
-
-                    <option value="Australia/Hobart">
-                        Australia (Hobart)
-                    </option>
-
-                    <!-- United States -->
-
-                    <option value="America/New_York">
-                        USA Eastern (New York)
-                    </option>
-
-                    <option value="America/Chicago">
-                        USA Central (Chicago)
-                    </option>
-
-                    <option value="America/Denver">
-                        USA Mountain (Denver)
-                    </option>
-
-                    <option value="America/Phoenix">
-                        USA Arizona (Phoenix)
-                    </option>
-
-                    <option value="America/Los_Angeles">
-                        USA Pacific (Los Angeles)
-                    </option>
-
-                    <option value="America/Anchorage">
-                        USA Alaska (Anchorage)
-                    </option>
-
-                    <option value="Pacific/Honolulu">
-                        USA Hawaii (Honolulu)
-                    </option>
-
-                </select>
-
-            </div>
-
-        </div>
-
-        <div class="button-row">
-
-            <button
-                class="glass-btn"
-                onclick="saveProfile()">
-
-                Save Changes
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
 
 <!-- ===================================
 SECURITY
@@ -1170,7 +1002,7 @@ SECURITY
 
         <p>
 
-            Protect your EdgeBreak account by managing your password, email verification and account security settings.
+            Manage your password, verify your email address and keep your EdgeBreak account secure.
 
         </p>
 
@@ -1180,14 +1012,20 @@ SECURITY
 
         <div class="settings-grid">
 
+            <!-- CHANGE PASSWORD -->
+
             <div class="settings-field">
 
                 <label>
+
                     Change Password
+
                 </label>
 
                 <p>
-                    Update your EdgeBreak password to help keep your account secure.
+
+                    Update your EdgeBreak password to help protect your account.
+
                 </p>
 
                 <input
@@ -1203,8 +1041,16 @@ SECURITY
                 >
 
                 <small
+                    style="display:block;margin-top:12px;color:#94A3B8;">
+
+                    Minimum 8 characters.
+
+                </small>
+
+                <small
                     id="passwordMessage"
-                    style="display:block;margin:12px 0;color:#94A3B8;">
+                    style="display:block;margin-top:8px;color:#94A3B8;">
+
                 </small>
 
                 <button
@@ -1218,41 +1064,46 @@ SECURITY
 
             </div>
 
+            <!-- EMAIL VERIFICATION -->
+
             <div class="settings-field">
 
-                    <label>
+                <label>
 
-                        Email Verification
+                    Email Verification
 
-                    </label>
+                </label>
 
-                    <p>
+                <p>
 
-                        Status:
-                        <strong id="verificationStatus"
-                                style="color:#4ADE80;">
+                    Status:
+                    <strong
+                        id="verificationStatus"
+                        style="color:#4ADE80;">
 
-                            Checking...
+                        Checking...
 
-                        </strong>
+                    </strong>
 
-                    </p>
+                </p>
 
-                    <p>
+                <p>
 
-                        Verified accounts have full access to all EdgeBreak features and broker integrations.
+                    Verify your email address to help keep your EdgeBreak account secure.
 
-                    </p>
+                </p>
 
-                    <button
-                        class="glass-btn"
-                        onclick="resendVerification()">
+                <button
+                    class="glass-btn"
+                    onclick="resendVerification()">
 
-                        Resend Verification Email
+                    Resend Verification Email
 
-                    </button>
+                </button>
 
-                </div>
+            </div>
+
+            <!-- TWO FACTOR -->
 
             <div class="settings-field">
 
@@ -1264,18 +1115,29 @@ SECURITY
 
                 <p>
 
-                    Add an extra layer of protection to your account.
+                    Add an additional layer of protection to your EdgeBreak account.
 
                 </p>
 
-                <button class="glass-btn">
+                <p>
 
-                    Coming Soon
+                    Status:
+                    <strong style="color:#F59E0B;">
 
-                </button>
+                        Coming Soon
+
+                    </strong>
+
+                </p>
+
+                <p>
+
+                    Two-factor authentication will be available in a future EdgeBreak update.
+
+                </p>
 
             </div>
-            
+
         </div>
 
     </div>
@@ -1298,7 +1160,7 @@ SUBSCRIPTION
 
         <p>
 
-            View your current membership, manage billing, update payment methods and access invoices securely through Stripe.
+            View your current EdgeBreak membership and securely manage your subscription through Stripe.
 
         </p>
 
@@ -1307,11 +1169,12 @@ SUBSCRIPTION
     <div class="card">
 
         <div class="settings-grid">
-           
-           
+
+            <div class="settings-field">
+
                 <label>
 
-                    Membership Status
+                    Membership
 
                 </label>
 
@@ -1321,35 +1184,17 @@ SUBSCRIPTION
                         id="subscriptionStatus"
                         style="color:#4ADE80;">
 
-                        Active
+                        EdgeBreak Pro • Active
 
                     </strong>
 
                 </p>
 
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Billing
-
-                </label>
-
                 <p>
 
-                    Your subscription is securely managed through Stripe.
+                    Your membership is active and managed securely through Stripe.
 
                 </p>
-
-                <button
-                    class="glass-btn"
-                    onclick="openBillingPortal()">
-
-                    Manage Billing
-
-                </button>
 
             </div>
 
@@ -1357,13 +1202,13 @@ SUBSCRIPTION
 
                 <label>
 
-                    Payment Method
+                    Billing Portal
 
                 </label>
 
                 <p>
 
-                    Update your saved payment methods securely through Stripe.
+                    Manage your subscription, payment methods, invoices and billing information securely through Stripe.
 
                 </p>
 
@@ -1371,55 +1216,7 @@ SUBSCRIPTION
                     class="glass-btn"
                     onclick="openBillingPortal()">
 
-                    Update Payment Method
-
-                </button>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Billing History
-
-                </label>
-
-                <p>
-
-                    View invoices and payment history.
-
-                </p>
-
-                <button
-                    class="glass-btn"
-                    onclick="openBillingPortal()">
-
-                    View Invoices
-
-                </button>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Subscription
-
-                </label>
-
-                <p>
-
-                    Upgrade, downgrade or cancel your EdgeBreak Membership.
-
-                </p>
-
-                <button
-                    class="glass-btn"
-                    onclick="openBillingPortal()">
-
-                    Manage Subscription
+                    Open Billing Portal
 
                 </button>
 
@@ -1430,7 +1227,6 @@ SUBSCRIPTION
     </div>
 
 </div>
-
 
 <!-- ===================================
 NOTIFICATIONS
@@ -1448,7 +1244,7 @@ NOTIFICATIONS
 
         <p>
 
-            Choose which emails and platform notifications you would like to receive. Stay informed about important account activity, broker connections and EdgeBreak updates.
+            Choose which emails you would like to receive from EdgeBreak.
 
         </p>
 
@@ -1456,209 +1252,210 @@ NOTIFICATIONS
 
     <div class="card">
 
-    <div class="settings-grid">
+        <div class="settings-grid">
 
-        <div class="settings-field">
+            <!-- SECURITY -->
 
-            <label>
-                Security Notifications
-            </label>
+            <div class="settings-field">
 
-            <p>
-                Receive important emails about password changes, account security and new sign-ins.
-            </p>
+                <label>
 
-            <label class="switch">
-                <input
-                    type="checkbox"
-                    id="securityEmails">
-                <span class="slider"></span>
-            </label>
+                    Security Notifications
+
+                </label>
+
+                <p>
+
+                    Receive important emails about password changes, sign-ins and account security.
+
+                </p>
+
+                <label class="switch">
+
+                    <input
+                        type="checkbox"
+                        id="securityEmails">
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+            <!-- PLATFORM -->
+
+            <div class="settings-field">
+
+                <label>
+
+                    Platform Updates
+
+                </label>
+
+                <p>
+
+                    Receive updates about new EdgeBreak features, improvements and platform announcements.
+
+                </p>
+
+                <label class="switch">
+
+                    <input
+                        type="checkbox"
+                        id="platformUpdates">
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+            <!-- MARKETING -->
+
+            <div class="settings-field">
+
+                <label>
+
+                    Marketing Emails
+
+                </label>
+
+                <p>
+
+                    Receive newsletters, educational content and occasional product announcements.
+
+                </p>
+
+                <label class="switch">
+
+                    <input
+                        type="checkbox"
+                        id="marketingEmails">
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
 
         </div>
 
-        <div class="settings-field">
+        <div class="button-row">
 
-            <label>
-                Platform Updates
-            </label>
+            <button
+                class="glass-btn"
+                id="saveNotificationsBtn"
+                onclick="saveNotifications()">
 
-            <p>
-                Stay informed about new EdgeBreak features, improvements and important platform announcements.
-            </p>
+                Save Preferences
 
-            <label class="switch">
-                <input
-                    type="checkbox"
-                    id="platformUpdates">
-                <span class="slider"></span>
-            </label>
+            </button>
 
         </div>
-
-        <div class="settings-field">
-
-            <label>
-                Marketing Emails
-            </label>
-
-            <p>
-                Receive educational content, newsletters and product announcements from EdgeBreak.
-            </p>
-
-            <label class="switch">
-                <input
-                    type="checkbox"
-                    id="marketingEmails">
-                <span class="slider"></span>
-            </label>
-
-        </div>
-
-    </div>
-
-    <div class="button-row">
-
-        <button
-            class="glass-btn"
-            id="saveNotificationsBtn"
-            onclick="saveNotifications()">
-
-            Save Notification Preferences
-
-        </button>
 
     </div>
 
 </div>
 
 <!-- ===================================
-ACTIVE SESSIONS
+CURRENT SESSION
 =================================== -->
 
-<div class="card">
+<div class="section">
 
-    <h2>
+    <div class="section-header">
 
-        Active Session
+        <h2>
 
-    </h2>
+            Current Session
 
-    <p>
+        </h2>
 
-        View information about your current authenticated EdgeBreak session.
+        <p>
 
-    </p>
+            Review your current EdgeBreak session and sign out when you've finished using the platform.
 
-    <div class="settings-grid">
-
-        <div class="settings-field">
-
-            <label>
-
-                Status
-
-            </label>
-
-            <strong id="sessionStatus">
-
-                Active
-
-            </strong>
-
-        </div>
-
-        <div class="settings-field">
-
-            <label>
-
-                Browser
-
-            </label>
-
-            <strong id="sessionBrowser">
-
-                -
-
-            </strong>
-
-        </div>
-
-        <div class="settings-field">
-
-            <label>
-
-                Operating System
-
-            </label>
-
-            <strong id="sessionOS">
-
-                -
-
-            </strong>
-
-        </div>
-
-        <div class="settings-field">
-
-            <label>
-
-                Current Device
-
-            </label>
-
-            <strong id="sessionDevice">
-
-                -
-
-            </strong>
-
-        </div>
-
-        <div class="settings-field">
-
-            <label>
-
-                Last Sign In
-
-            </label>
-
-            <strong id="sessionLogin">
-
-                -
-
-            </strong>
-
-        </div>
-
-        <div class="settings-field">
-
-            <label>
-
-                Session Expires
-
-            </label>
-
-            <strong id="sessionExpiry">
-
-                -
-
-            </strong>
-
-        </div>
+        </p>
 
     </div>
 
-    <div class="button-row">
+    <div class="card">
 
-        <button
-            class="glass-btn"
-            onclick="logoutCurrentSession()">
+        <div class="settings-grid">
 
-            Sign Out
+            <div class="settings-field">
 
-        </button>
+                <label>
+
+                    Status
+
+                </label>
+
+                <strong
+                    id="sessionStatus"
+                    style="color:#4ADE80;">
+
+                    Active
+
+                </strong>
+
+            </div>
+
+            <div class="settings-field">
+
+                <label>
+
+                    Device
+
+                </label>
+
+                <strong id="sessionDevice">
+
+                    Windows • Google Chrome
+
+                </strong>
+
+            </div>
+
+            <div class="settings-field">
+
+                <label>
+
+                    Last Sign In
+
+                </label>
+
+                <strong id="sessionLogin">
+
+                    -
+
+                </strong>
+
+            </div>
+
+        </div>
+
+        <div style="margin-top:30px;">
+
+            <p style="color:#94A3B8;line-height:1.7;">
+
+                You are currently signed in on this device. If you don't recognise this session, change your password immediately or contact EdgeBreak Support.
+
+            </p>
+
+        </div>
+
+        <div class="button-row">
+
+            <button
+                class="glass-btn"
+                onclick="logoutCurrentSession()">
+
+                Sign Out
+
+            </button>
+
+        </div>
 
     </div>
 
@@ -1674,13 +1471,13 @@ PRIVACY
 
         <h2>
 
-            Privacy
+            Privacy & Legal
 
         </h2>
 
         <p>
 
-            Manage your personal information, control your privacy preferences and access important documents explaining how EdgeBreak collects, uses and protects your data.
+            Access the policies and legal information that explain how EdgeBreak protects your account, manages your data and delivers its services.
 
         </p>
 
@@ -1700,14 +1497,15 @@ PRIVACY
 
                 <p>
 
-                    Learn how EdgeBreak collects, stores, protects and manages your personal information.
+                    Learn how EdgeBreak collects, stores and protects your personal information.
 
                 </p>
 
-                <a href="/privacy.html"
-                   class="glass-btn">
+                <a
+                    href="/privacy.html"
+                    class="glass-btn">
 
-                    View Privacy Policy
+                    Privacy Policy
 
                 </a>
 
@@ -1717,20 +1515,21 @@ PRIVACY
 
                 <label>
 
-                    Terms &amp; Conditions
+                    Terms of Service
 
                 </label>
 
                 <p>
 
-                    Review the terms governing your use of the EdgeBreak platform and services.
+                    Review the terms that govern your use of the EdgeBreak platform.
 
                 </p>
 
-                <a href="/terms.html"
-                   class="glass-btn">
+                <a
+                    href="/terms.html"
+                    class="glass-btn">
 
-                    View Terms
+                    Terms of Service
 
                 </a>
 
@@ -1746,14 +1545,15 @@ PRIVACY
 
                 <p>
 
-                    Understand the educational purpose of EdgeBreak and the important limitations of our market research platform.
+                    Understand the educational purpose of EdgeBreak and the limitations of our platform.
 
                 </p>
 
-                <a href="/disclaimer.html"
-                   class="glass-btn">
+                <a
+                    href="/disclaimer.html"
+                    class="glass-btn">
 
-                    View Disclaimer
+                    Financial Disclaimer
 
                 </a>
 
@@ -1769,12 +1569,13 @@ PRIVACY
 
                 <p>
 
-                    Learn about the measures EdgeBreak uses to protect your account, personal information and broker connections.
+                    Learn how EdgeBreak helps protect your account and personal information.
 
                 </p>
 
-                <a href="/securitycentre.html"
-                   class="glass-btn">
+                <a
+                    href="/securitycentre.html"
+                    class="glass-btn">
 
                     Security Centre
 
@@ -1786,40 +1587,19 @@ PRIVACY
 
                 <label>
 
-                    Download My Data
+                    Contact Support
 
                 </label>
 
                 <p>
 
-                    Request a copy of the personal information associated with your EdgeBreak account.
+                    Need help with your account, privacy or security? Our support team is here to help.
 
                 </p>
 
-                <button class="glass-btn">
-
-                    Coming Soon
-
-                </button>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Privacy Requests
-
-                </label>
-
-                <p>
-
-                    Contact EdgeBreak if you wish to access, update or delete your personal information in accordance with applicable privacy laws.
-
-                </p>
-
-                <a href="/support.html"
-                   class="glass-btn">
+                <a
+                    href="/support.html"
+                    class="glass-btn">
 
                     Contact Support
 
@@ -1834,7 +1614,7 @@ PRIVACY
 </div>
 
 <!-- ===================================
-DANGER ZONE
+ACCOUNT MANAGEMENT
 =================================== -->
 
 <div class="section">
@@ -1843,13 +1623,13 @@ DANGER ZONE
 
         <h2>
 
-            Danger Zone
+            Account Management
 
         </h2>
 
         <p>
 
-            The actions below are permanent and may result in the loss of access to your EdgeBreak account and associated data. Please proceed carefully.
+            Manage permanent actions relating to your EdgeBreak account.
 
         </p>
 
@@ -1857,75 +1637,27 @@ DANGER ZONE
 
     <div class="card danger-card">
 
-        <div class="settings-grid">
+        <div class="settings-field">
 
-            <div class="settings-field">
+            <label>
 
-                <label>
+                Delete Account
 
-                    Delete EdgeBreak Account
+            </label>
 
-                </label>
+            <p>
 
-                <p>
+                Permanently delete your EdgeBreak account and all associated data, including your profile, workspace, watchlists, journal entries, notes and account preferences. This action cannot be undone.
 
-                    Permanently delete your EdgeBreak account, profile, workspace, journal entries, notes, watchlists, alerts and connected broker information. This action cannot be undone.
+            </p>
 
-                </p>
+            <button
+                class="danger-btn"
+                onclick="deleteAccount()">
 
-                <button class="danger-btn">
+                Delete My Account
 
-                    Delete My Account
-
-                </button>
-
-            </div>
-
-            
-            <div class="settings-field">
-
-                <label>
-
-                    Cancel Membership
-
-                </label>
-
-                <p>
-
-                    Cancel your EdgeBreak Membership. Your subscription will remain active until the end of your current billing period unless otherwise stated by your subscription provider.
-
-                </p>
-
-                <button class="glass-btn">
-
-                    Manage Subscription
-
-                </button>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Need Assistance?
-
-                </label>
-
-                <p>
-
-                    If you're experiencing issues with your account or are considering deleting it, our support team may be able to help before permanent action is taken.
-
-                </p>
-
-                <a href="/support.html"
-                   class="glass-btn">
-
-                    Contact Support
-
-                </a>
-
-            </div>
+            </button>
 
         </div>
 
@@ -2184,110 +1916,150 @@ FOOTER
 // =========================
 // 🔄 NAV LOGIN / LOGOUT
 // =========================
+
 async function setupAuthButton() {
 
-  const btn = document.getElementById("authBtn");
-  if (!btn) return;
+    const btn =
+        document.getElementById("authBtn");
 
-  const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!btn) return;
 
-  if (session) {
-    btn.innerText = "Logout";
+    const {
+        data: { session }
+    } = await supabaseClient.auth.getSession();
 
-    btn.onclick = async (e) => {
-      e.preventDefault();
-      await supabaseClient.auth.signOut();
-      window.location.href = "login.html";
-    };
+    if (session) {
 
-  } else {
-    btn.innerText = "Login";
-    btn.href = "login.html";
-  }
+        btn.innerText = "Logout";
+
+        btn.onclick = async (e) => {
+
+            e.preventDefault();
+
+            await supabaseClient.auth.signOut();
+
+            window.location.href =
+                "login.html";
+
+        };
+
+    } else {
+
+        btn.innerText = "Login";
+
+        btn.href = "login.html";
+
+    }
+
 }
 
 // =========================
 // 🔁 AUTH STATE LISTENER
 // =========================
+
 supabaseClient.auth.onAuthStateChange(() => {
-  setupAuthButton();
+
+    void setupAuthButton();
+
 });
 
 </script>
 
 <script>
-window.addEventListener("load", async () => {
-  await setupAuthButton();
-});
-</script>
 
-<script>
 // =========================
-// 📱 MOBILE NAV TOGGLE (FIXED)
+// INITIALISE AUTH BUTTON
+// =========================
+
+window.addEventListener("load", () => {
+
+    void setupAuthButton();
+
+});
+
+</script>
+
+<script>
+
+// =========================
+// 📱 MOBILE NAV TOGGLE
 // =========================
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  const toggle = document.getElementById("menuToggle");
-  const nav = document.getElementById("navLinks");
+    const toggle =
+        document.getElementById("menuToggle");
 
-  if (!toggle || !nav) {
-    console.log("❌ Nav elements missing");
-    return;
-  }
+    const nav =
+        document.getElementById("navLinks");
 
-  toggle.addEventListener("click", () => {
-    nav.classList.toggle("active");
-  });
+    if (!toggle || !nav) return;
 
-  document.querySelectorAll("#navLinks a").forEach(link => {
-    link.addEventListener("click", () => {
-      nav.classList.remove("active");
+    toggle.addEventListener("click", () => {
+
+        nav.classList.toggle("active");
+
     });
-  });
+
+    document.querySelectorAll(
+        "#navLinks a"
+    ).forEach(link => {
+
+        link.addEventListener("click", () => {
+
+            nav.classList.remove("active");
+
+        });
+
+    });
 
 });
+
 </script>
 <script>
+
+// =========================
+// 🔓 UNLOCK MEMBERS PAGES
+// =========================
+
 document.addEventListener("DOMContentLoaded", async () => {
 
-  const { data: { session } } = await supabaseClient.auth.getSession();
+    const {
+        data: { session }
+    } = await supabaseClient.auth.getSession();
 
-  // If no session → keep locked state
-  if (!session || !session.user) return;
+    if (!session) return;
 
-  // Get profile
-  const {
-      data: profile,
-      error
-  } = await supabaseClient
+    const {
+        data: profile,
+        error
+    } = await supabaseClient
 
-      .from("profiles")
+        .from("profiles")
 
-      .select("is_active")
+        .select("is_active")
 
-      .eq("id", session.user.id);
+        .eq("id", session.user.id)
 
-  console.log(profile);
-  console.log(error);
+        .maybeSingle();
 
-  // If NOT active → keep locked
-  if (!profile || profile.is_active !== true) return;
+    if (error || !profile || !profile.is_active) return;
 
-  // ✅ USER IS ACTIVE → UNLOCK NAV
+    // ✅ USER IS ACTIVE → UNLOCK NAV
 
-  document.querySelectorAll(".locked-link").forEach(link => {
+    document.querySelectorAll(".locked-link").forEach(link => {
 
-    // remove lock icon
-    const icon = link.querySelector(".lock-icon");
-    if (icon) icon.remove();
+        // remove lock icon
+        const icon = link.querySelector(".lock-icon");
+        if (icon) icon.remove();
 
-    // remove locked behaviour
-    link.classList.remove("locked-link");
+        // remove locked behaviour
+        link.classList.remove("locked-link");
 
-  });
+    });
 
 });
+
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -2332,7 +2104,7 @@ async function loadProfile(){
 
         email.value = user.email || "";
 
-}
+    }
 
     const {
         data: profile,
@@ -2345,7 +2117,14 @@ async function loadProfile(){
 
         .eq("id", user.id)
 
-        .single();
+        .maybeSingle();
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
 
     if(profile){
 
@@ -2354,6 +2133,16 @@ async function loadProfile(){
 
         document.getElementById("timezone").value =
             profile.timezone || "Australia/Sydney";
+
+        const overviewTimezone =
+            document.getElementById("overviewTimezone");
+
+        if(overviewTimezone){
+
+            overviewTimezone.innerText =
+                profile.timezone || "Australia/Sydney";
+
+        }
 
     }
 
@@ -2416,6 +2205,20 @@ async function saveProfile(){
 
     }
 
+    // Update overview immediately
+
+    const overviewTimezone =
+        document.getElementById(
+            "overviewTimezone"
+        );
+
+    if(overviewTimezone){
+
+        overviewTimezone.innerText =
+            timezone;
+
+    }
+
     alert(
         "Profile updated successfully."
     );
@@ -2438,6 +2241,8 @@ async function loadVerificationStatus(){
         document.getElementById(
             "verificationStatus"
         );
+
+    if(!badge) return;
 
     if(!user){
 
@@ -2464,6 +2269,10 @@ async function loadVerificationStatus(){
     }
 
 }
+
+// =========================
+// RESEND VERIFICATION EMAIL
+// =========================
 
 async function resendVerification(){
 
@@ -2510,6 +2319,10 @@ async function resendVerification(){
 
 async function openBillingPortal(){
 
+    // TODO:
+    // Replace this placeholder once the Stripe
+    // Customer Billing Portal is implemented.
+
     alert(
         "Stripe Billing Portal will be connected here."
     );
@@ -2547,9 +2360,9 @@ async function loadSubscription(){
 
     if(error || !profile) return;
 
-    const plan =
+    const membership =
         document.getElementById(
-            "subscriptionPlan"
+            "membershipPlan"
         );
 
     const status =
@@ -2559,22 +2372,22 @@ async function loadSubscription(){
 
     if(profile.is_active){
 
-        plan.innerText =
+        membership.innerText =
             "EdgeBreak Pro";
 
         status.innerText =
-            "Active";
+            "EdgeBreak Pro • Active";
 
         status.style.color =
             "#4ADE80";
 
     }else{
 
-        plan.innerText =
+        membership.innerText =
             "Free";
 
         status.innerText =
-            "Inactive";
+            "Free • Inactive";
 
         status.style.color =
             "#EF4444";
@@ -2656,60 +2469,37 @@ async function loadActiveSession(){
     const ua =
         navigator.userAgent;
 
-    // Browser
-
     let browser = "Unknown";
 
-    if(ua.includes("Edg"))
+    if (ua.includes("Edg"))
         browser = "Microsoft Edge";
-
-    else if(ua.includes("Chrome"))
+    else if (ua.includes("Chrome"))
         browser = "Google Chrome";
-
-    else if(ua.includes("Firefox"))
+    else if (ua.includes("Firefox"))
         browser = "Mozilla Firefox";
-
-    else if(ua.includes("Safari"))
+    else if (ua.includes("Safari"))
         browser = "Safari";
-
-    document.getElementById(
-        "sessionBrowser"
-    ).innerText = browser;
-
-    // Operating System
 
     let os = "Unknown";
 
-    if(ua.includes("Windows"))
+    if (ua.includes("Windows"))
         os = "Windows";
-
-    else if(ua.includes("Mac"))
+    else if (ua.includes("Mac"))
         os = "macOS";
-
-    else if(ua.includes("Linux"))
+    else if (ua.includes("Linux"))
         os = "Linux";
-
-    else if(ua.includes("Android"))
+    else if (ua.includes("Android"))
         os = "Android";
-
-    else if(
+    else if (
         ua.includes("iPhone") ||
         ua.includes("iPad")
     )
         os = "iOS";
 
     document.getElementById(
-        "sessionOS"
-    ).innerText = os;
-
-    // Device
-
-    document.getElementById(
         "sessionDevice"
     ).innerText =
-        navigator.platform;
-
-    // Last Login
+        `${os} • ${browser}`;
 
     document.getElementById(
         "sessionLogin"
@@ -2718,16 +2508,12 @@ async function loadActiveSession(){
             session.user.last_sign_in_at
         ).toLocaleString();
 
-    // Expiry
+} // <-- THIS WAS MISSING
 
-    document.getElementById(
-        "sessionExpiry"
-    ).innerText =
-        new Date(
-            session.expires_at * 1000
-        ).toLocaleString();
 
-}
+// =========================
+// LOGOUT CURRENT SESSION
+// =========================
 
 async function logoutCurrentSession(){
 
@@ -2737,6 +2523,8 @@ async function logoutCurrentSession(){
         "login.html";
 
 }
+
+   
 
 // =========================
 // SAVE NOTIFICATIONS
@@ -2762,7 +2550,7 @@ async function saveNotifications(){
 
         button.disabled = false;
         button.innerText =
-            "Save Notification Preferences";
+            "Save Preferences";
 
         return;
 
@@ -2810,7 +2598,7 @@ async function saveNotifications(){
             button.disabled = false;
 
             button.innerText =
-            "Save Notification Preferences";
+                "Save Preferences";
 
         },2500);
 
@@ -2826,7 +2614,7 @@ async function saveNotifications(){
         button.disabled = false;
 
         button.innerText =
-            "Save Notification Preferences";
+            "Save Preferences";
 
     },2000);
 
@@ -2979,27 +2767,12 @@ async function changePassword() {
         "confirmPassword"
     ).value = "";
 
+    await loadActiveSession();
+
     button.disabled = false;
     button.innerText = "Update Password";
 
 }
-
-document.addEventListener(
-    "DOMContentLoaded",
-    async () => {
-
-        await loadProfile();
-
-        await loadVerificationStatus();
-
-        await loadSubscription();
-
-        await loadNotifications();
-
-        await loadActiveSession();
-        
-    }
-);
 </script>
 </body>
 </html>
