@@ -1069,6 +1069,234 @@ RESPONSIVE
     }
 
 }
+
+/* ===================================
+SECURITY
+=================================== */
+
+.security-list{
+
+    margin-top:40px;
+
+}
+
+/* =========================
+SECURITY ITEM
+========================= */
+
+.security-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:60px;
+
+    padding:40px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.security-item:last-child{
+
+    border-bottom:none;
+
+    padding-bottom:0;
+
+}
+
+/* =========================
+LEFT SIDE
+========================= */
+
+.security-title{
+
+    display:flex;
+
+    gap:22px;
+
+    flex:1;
+
+}
+
+.security-icon{
+
+    width:58px;
+
+    height:58px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-shrink:0;
+
+    border-radius:16px;
+
+    color:#22C55E;
+
+    background:
+
+        rgba(34,197,94,.08);
+
+    border:
+
+        1px solid
+
+        rgba(34,197,94,.15);
+
+}
+
+.security-icon svg{
+
+    width:24px;
+
+    height:24px;
+
+    stroke:currentColor;
+
+}
+
+.security-title h3{
+
+    margin:0 0 8px;
+
+    color:#ffffff;
+
+    font-size:1.35rem;
+
+    font-weight:700;
+
+}
+
+.security-title p{
+
+    margin:0;
+
+    color:#9FB0CA;
+
+    line-height:1.7;
+
+}
+
+/* =========================
+RIGHT SIDE
+========================= */
+
+.security-content{
+
+    width:430px;
+
+    max-width:100%;
+
+}
+
+.security-content input{
+
+    width:100%;
+
+    margin-bottom:16px;
+
+}
+
+.security-content small{
+
+    display:block;
+
+    margin-bottom:12px;
+
+    color:#8EA3C5;
+
+    line-height:1.5;
+
+}
+
+.security-content p{
+
+    margin:0 0 18px;
+
+    color:#C8D3E6;
+
+    line-height:1.6;
+
+}
+
+.security-content strong{
+
+    color:#ffffff;
+
+}
+
+.security-content .glass-btn{
+
+    margin-top:10px;
+
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media (max-width:900px){
+
+    .security-item{
+
+        flex-direction:column;
+
+        gap:30px;
+
+    }
+
+    .security-content{
+
+        width:100%;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .security-item{
+
+        padding:32px 0;
+
+    }
+
+    .security-title{
+
+        gap:18px;
+
+    }
+
+    .security-icon{
+
+        width:52px;
+
+        height:52px;
+
+    }
+
+    .security-icon svg{
+
+        width:22px;
+
+        height:22px;
+
+    }
+
+    .security-title h3{
+
+        font-size:1.2rem;
+
+    }
+
+}
 </style>
 </head>
 <body>
@@ -1607,48 +1835,76 @@ SECURITY
 
     </div>
 
-    <div class="card">
+    <div class="security-list">
 
-        <div class="settings-grid">
+        <!-- ===================================
+        CHANGE PASSWORD
+        ==================================== -->
 
-            <!-- CHANGE PASSWORD -->
+        <div class="security-item">
 
-            <div class="settings-field">
+            <div class="security-title">
 
-                <label>
+                <div class="security-icon">
 
-                    Change Password
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
 
-                </label>
+                        <path d="M12 3l7 3v5c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-3z"/>
 
-                <p>
+                        <path d="M10 11V9a2 2 0 114 0v2"/>
 
-                    Update your EdgeBreak password to help protect your account.
+                        <rect x="8"
+                              y="11"
+                              width="8"
+                              height="6"
+                              rx="1"/>
 
-                </p>
+                    </svg>
+
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Change Password
+
+                    </h3>
+
+                    <p>
+
+                        Update your EdgeBreak password to help protect your account.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="security-content">
 
                 <input
                     type="password"
                     id="newPassword"
-                    placeholder="New Password"
-                >
+                    placeholder="New Password">
 
                 <input
                     type="password"
                     id="confirmPassword"
-                    placeholder="Confirm New Password"
-                >
+                    placeholder="Confirm New Password">
 
-                <small
-                    style="display:block;margin-top:12px;color:#94A3B8;">
+                <small>
 
                     Minimum 8 characters.
 
                 </small>
 
-                <small
-                    id="passwordMessage"
-                    style="display:block;margin-top:8px;color:#94A3B8;">
+                <small id="passwordMessage">
 
                 </small>
 
@@ -1663,19 +1919,61 @@ SECURITY
 
             </div>
 
-            <!-- EMAIL VERIFICATION -->
+        </div>
 
-            <div class="settings-field">
+        <!-- ===================================
+        EMAIL VERIFICATION
+        ==================================== -->
 
-                <label>
+        <div class="security-item">
 
-                    Email Verification
+            <div class="security-title">
 
-                </label>
+                <div class="security-icon">
+
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+
+                        <rect x="3"
+                              y="5"
+                              width="18"
+                              height="14"
+                              rx="2"/>
+
+                        <path d="M3 7l9 6 9-6"/>
+
+                    </svg>
+
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Email Verification
+
+                    </h3>
+
+                    <p>
+
+                        Verify your email address to help keep your EdgeBreak account secure.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="security-content">
 
                 <p>
 
                     Status:
+
                     <strong
                         id="verificationStatus"
                         style="color:#4ADE80;">
@@ -1683,12 +1981,6 @@ SECURITY
                         Checking...
 
                     </strong>
-
-                </p>
-
-                <p>
-
-                    Verify your email address to help keep your EdgeBreak account secure.
 
                 </p>
 
@@ -1702,25 +1994,57 @@ SECURITY
 
             </div>
 
-            <!-- TWO FACTOR -->
+        </div>
 
-            <div class="settings-field">
+        <!-- ===================================
+        TWO FACTOR
+        ==================================== -->
 
-                <label>
+        <div class="security-item">
 
-                    Two-Factor Authentication
+            <div class="security-title">
 
-                </label>
+                <div class="security-icon">
 
-                <p>
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
 
-                    Add an additional layer of protection to your EdgeBreak account.
+                        <path d="M12 3l7 3v5c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-3z"/>
 
-                </p>
+                        <path d="M9 12l2 2 4-4"/>
+
+                    </svg>
+
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Two-Factor Authentication
+
+                    </h3>
+
+                    <p>
+
+                        Add an additional layer of protection to your EdgeBreak account.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="security-content">
 
                 <p>
 
                     Status:
+
                     <strong style="color:#F59E0B;">
 
                         Coming Soon
