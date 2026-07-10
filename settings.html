@@ -941,22 +941,7 @@ ACCOUNT OVERVIEW
 
         </div>
 
-        <div class="overview-card">
-
-            <span class="overview-label">
-
-                Connected Brokers
-
-            </span>
-
-            <strong id="brokerCount">
-
-                0
-
-            </strong>
-
-        </div>
-
+        
         <div class="overview-card">
 
             <span class="overview-label">
@@ -1148,29 +1133,33 @@ SECURITY
             <div class="settings-field">
 
                 <label>
-
                     Change Password
-
                 </label>
 
                 <p>
-
                     Update your EdgeBreak password to help keep your account secure.
-
                 </p>
 
                 <input
                     type="password"
                     id="newPassword"
-                    placeholder="New Password">
+                    placeholder="New Password"
+                >
 
                 <input
                     type="password"
                     id="confirmPassword"
-                    placeholder="Confirm New Password">
+                    placeholder="Confirm New Password"
+                >
+
+                <small
+                    id="passwordMessage"
+                    style="display:block;margin:12px 0;color:#94A3B8;">
+                </small>
 
                 <button
                     class="glass-btn"
+                    id="changePasswordBtn"
                     onclick="changePassword()">
 
                     Update Password
@@ -1236,29 +1225,7 @@ SECURITY
                 </button>
 
             </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Active Sessions
-
-                </label>
-
-                <p>
-
-                    View and manage devices currently signed in to your EdgeBreak account.
-
-                </p>
-
-                <button class="glass-btn">
-
-                    Manage Sessions
-
-                </button>
-
-            </div>
-
+            
         </div>
 
     </div>
@@ -1290,31 +1257,8 @@ SUBSCRIPTION
     <div class="card">
 
         <div class="settings-grid">
-
-            <div class="settings-field">
-
-                <label>
-
-                    Current Plan
-
-                </label>
-
-                <p>
-
-                    <strong
-                        id="subscriptionStatus"
-                        style="color:#4ADE80;">
-
-                        Loading...
-
-                    </strong>
-
-                </p>
-
-            </div>
-
-            <div class="settings-field">
-
+           
+           
                 <label>
 
                     Membership Status
@@ -1437,147 +1381,6 @@ SUBSCRIPTION
 
 </div>
 
-<!-- ===================================
-BROKER CONNECTIONS
-=================================== -->
-
-<div class="section">
-
-    <div class="section-header">
-
-        <h2>
-
-            Broker Connections
-
-        </h2>
-
-        <p>
-
-            Securely connect your supported brokerage accounts to synchronise portfolios, positions, orders and trade history. EdgeBreak uses secure OAuth authentication and never stores your brokerage username or password.
-
-        </p>
-
-    </div>
-
-    <div class="card">
-
-        <div class="settings-grid">
-
-            <div class="settings-field">
-
-                <label>
-
-                    Interactive Brokers
-
-                </label>
-
-                <p>
-
-                    <strong style="color:#94A3B8;">
-
-                        Not Connected
-
-                    </strong>
-
-                </p>
-
-                <button class="glass-btn">
-
-                    Connect Broker
-
-                </button>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Charles Schwab
-
-                </label>
-
-                <p>
-
-                    <strong style="color:#94A3B8;">
-
-                        Coming Soon
-
-                    </strong>
-
-                </p>
-
-                <button class="glass-btn">
-
-                    Learn More
-
-                </button>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Connected Accounts
-
-                </label>
-
-                <p>
-
-                    No brokerage accounts are currently connected.
-
-                </p>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Portfolio Synchronisation
-
-                </label>
-
-                <p>
-
-                    Connect a supported broker to automatically synchronise your portfolio, positions, orders and trading activity.
-
-                </p>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Broker Security
-
-                </label>
-
-                <p>
-
-                    All supported broker connections use secure OAuth authentication. Your broker login credentials always remain with your brokerage provider.
-
-                </p>
-
-            </div>
-
-            <div class="settings-field">
-
-                <button class="glass-btn">
-
-                    Open Broker Centre
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
 
 <!-- ===================================
 NOTIFICATIONS
@@ -1603,141 +1406,77 @@ NOTIFICATIONS
 
     <div class="card">
 
-        <div class="settings-grid">
-
-            <div class="settings-field">
-
-                <label>
-
-                    Security Notifications
-
-                </label>
-
-                <p>
-
-                    Receive important emails about password changes, account security and new sign-ins.
-
-                </p>
-
-                <button class="glass-btn">
-
-                    Enabled
-
-                </button>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Broker Notifications
-
-                </label>
-
-                <p>
-
-                    Receive updates when brokerage accounts connect, disconnect or complete portfolio synchronisation.
-
-                </p>
-
-                <button class="glass-btn">
-
-                    Enabled
-
-                </button>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Platform Updates
-
-                </label>
-
-                <p>
-
-                    Stay informed about new EdgeBreak features, improvements and important platform announcements.
-
-                </p>
-
-                <button class="glass-btn">
-
-                    Enabled
-
-                </button>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Scanner Alerts
-
-                </label>
-
-                <p>
-
-                    Receive notifications about new scanner features and future alert functionality.
-
-                </p>
-
-                <button class="glass-btn">
-
-                    Coming Soon
-
-                </button>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Marketing Emails
-
-                </label>
-
-                <p>
-
-                    Receive educational content, newsletters and product announcements from EdgeBreak.
-
-                </p>
-
-                <button class="glass-btn">
-
-                    Disabled
-
-                </button>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Email Preferences
-
-                </label>
-
-                <p>
-
-                    Manage how and when EdgeBreak communicates with you via email.
-
-                </p>
-
-                <button class="glass-btn">
-
-                    Manage Preferences
-
-                </button>
-
-            </div>
+    <div class="settings-grid">
+
+        <div class="settings-field">
+
+            <label>
+                Security Notifications
+            </label>
+
+            <p>
+                Receive important emails about password changes, account security and new sign-ins.
+            </p>
+
+            <label class="switch">
+                <input
+                    type="checkbox"
+                    id="securityEmails">
+                <span class="slider"></span>
+            </label>
 
         </div>
+
+        <div class="settings-field">
+
+            <label>
+                Platform Updates
+            </label>
+
+            <p>
+                Stay informed about new EdgeBreak features, improvements and important platform announcements.
+            </p>
+
+            <label class="switch">
+                <input
+                    type="checkbox"
+                    id="platformUpdates">
+                <span class="slider"></span>
+            </label>
+
+        </div>
+
+        <div class="settings-field">
+
+            <label>
+                Marketing Emails
+            </label>
+
+            <p>
+                Receive educational content, newsletters and product announcements from EdgeBreak.
+            </p>
+
+            <label class="switch">
+                <input
+                    type="checkbox"
+                    id="marketingEmails">
+                <span class="slider"></span>
+            </label>
+
+        </div>
+
+    </div>
+
+    <div class="button-row">
+
+        <button
+            class="glass-btn"
+            id="saveNotificationsBtn"
+            onclick="saveNotifications()">
+
+            Save Notification Preferences
+
+        </button>
 
     </div>
 
@@ -2122,28 +1861,7 @@ DANGER ZONE
 
             </div>
 
-            <div class="settings-field">
-
-                <label>
-
-                    Disconnect All Brokers
-
-                </label>
-
-                <p>
-
-                    Remove all connected brokerage accounts from EdgeBreak. This will stop portfolio synchronisation, order management and broker connectivity until a new connection is established.
-
-                </p>
-
-                <button class="glass-btn">
-
-                    Disconnect Brokers
-
-                </button>
-
-            </div>
-
+            
             <div class="settings-field">
 
                 <label>
@@ -2838,6 +2556,152 @@ async function loadSubscription(){
 }
 
 // =========================
+// LOAD NOTIFICATIONS
+// =========================
+
+async function loadNotifications(){
+
+    const {
+
+        data:{ session }
+
+    } = await supabaseClient.auth.getSession();
+
+    if(!session) return;
+
+    const {
+
+        data:profile,
+        error
+
+    } = await supabaseClient
+
+        .from("profiles")
+
+        .select(`
+            security_emails,
+            platform_updates,
+            marketing_emails
+        `)
+
+        .eq("id",session.user.id)
+
+        .single();
+
+    if(error || !profile) return;
+
+    document.getElementById(
+        "securityEmails"
+    ).checked =
+        profile.security_emails ?? true;
+
+    document.getElementById(
+        "platformUpdates"
+    ).checked =
+        profile.platform_updates ?? true;
+
+    document.getElementById(
+        "marketingEmails"
+    ).checked =
+        profile.marketing_emails ?? false;
+
+}
+
+// =========================
+// SAVE NOTIFICATIONS
+// =========================
+
+async function saveNotifications(){
+
+    const button =
+        document.getElementById(
+            "saveNotificationsBtn"
+        );
+
+    button.disabled = true;
+    button.innerText = "Saving...";
+
+    const {
+
+        data:{ session }
+
+    } = await supabaseClient.auth.getSession();
+
+    if(!session){
+
+        button.disabled = false;
+        button.innerText =
+            "Save Notification Preferences";
+
+        return;
+
+    }
+
+    const {
+
+        error
+
+    } = await supabaseClient
+
+        .from("profiles")
+
+        .update({
+
+            security_emails:
+                document.getElementById(
+                    "securityEmails"
+                ).checked,
+
+            platform_updates:
+                document.getElementById(
+                    "platformUpdates"
+                ).checked,
+
+            marketing_emails:
+                document.getElementById(
+                    "marketingEmails"
+                ).checked,
+
+            updated_at:
+                new Date().toISOString()
+
+        })
+
+        .eq("id",session.user.id);
+
+    if(error){
+
+        button.innerText =
+            error.message;
+
+        setTimeout(()=>{
+
+            button.disabled = false;
+
+            button.innerText =
+            "Save Notification Preferences";
+
+        },2500);
+
+        return;
+
+    }
+
+    button.innerText =
+        "Preferences Saved ✓";
+
+    setTimeout(()=>{
+
+        button.disabled = false;
+
+        button.innerText =
+            "Save Notification Preferences";
+
+    },2000);
+
+}
+
+// =========================
 // CHANGE EMAIL
 // =========================
 
@@ -2892,6 +2756,103 @@ async function changeEmail(){
 
 }
 
+// =========================
+// CHANGE PASSWORD
+// =========================
+
+async function changePassword() {
+
+    const button =
+        document.getElementById(
+            "changePasswordBtn"
+        );
+
+    const message =
+        document.getElementById(
+            "passwordMessage"
+        );
+
+    const newPassword =
+        document.getElementById(
+            "newPassword"
+        ).value.trim();
+
+    const confirmPassword =
+        document.getElementById(
+            "confirmPassword"
+        ).value.trim();
+
+    message.innerText = "";
+    message.style.color = "#94A3B8";
+
+    // =========================
+    // VALIDATION
+    // =========================
+
+    if (newPassword.length < 8) {
+
+        message.innerText =
+            "Password must be at least 8 characters.";
+
+        message.style.color = "#EF4444";
+
+        return;
+
+    }
+
+    if (newPassword !== confirmPassword) {
+
+        message.innerText =
+            "Passwords do not match.";
+
+        message.style.color = "#EF4444";
+
+        return;
+
+    }
+
+    button.disabled = true;
+    button.innerText = "Updating...";
+
+    const { error } =
+        await supabaseClient.auth.updateUser({
+
+            password: newPassword
+
+        });
+
+    if (error) {
+
+        message.innerText =
+            error.message;
+
+        message.style.color = "#EF4444";
+
+        button.disabled = false;
+        button.innerText = "Update Password";
+
+        return;
+
+    }
+
+    message.innerText =
+        "Password updated successfully.";
+
+    message.style.color = "#4ADE80";
+
+    document.getElementById(
+        "newPassword"
+    ).value = "";
+
+    document.getElementById(
+        "confirmPassword"
+    ).value = "";
+
+    button.disabled = false;
+    button.innerText = "Update Password";
+
+}
+
 document.addEventListener(
     "DOMContentLoaded",
     async () => {
@@ -2902,10 +2863,8 @@ document.addEventListener(
 
         await loadSubscription();
 
-        await loadBrokerConnections();
-
-        await loadActiveSessions();
-
+        await loadNotifications();
+        
     }
 );
 </script>
