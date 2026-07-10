@@ -1297,6 +1297,352 @@ RESPONSIVE
     }
 
 }
+
+/* ===================================
+SUBSCRIPTION
+=================================== */
+
+.subscription-list{
+
+    margin-top:40px;
+
+}
+
+/* =========================
+SUBSCRIPTION ITEM
+========================= */
+
+.subscription-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:60px;
+
+    padding:40px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.subscription-item:last-child{
+
+    border-bottom:none;
+
+    padding-bottom:0;
+
+}
+
+/* =========================
+LEFT SIDE
+========================= */
+
+.subscription-title{
+
+    display:flex;
+
+    gap:22px;
+
+    flex:1;
+
+}
+
+.subscription-title h3{
+
+    margin:0 0 8px;
+
+    color:#ffffff;
+
+    font-size:1.35rem;
+
+    font-weight:700;
+
+}
+
+.subscription-title p{
+
+    margin:0;
+
+    color:#9FB0CA;
+
+    line-height:1.7;
+
+}
+
+/* =========================
+RIGHT SIDE
+========================= */
+
+.subscription-content{
+
+    width:430px;
+
+    max-width:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+}
+
+.subscription-content strong{
+
+    font-size:1.2rem;
+
+    font-weight:700;
+
+    color:#4ADE80;
+
+    line-height:1.4;
+
+}
+
+.subscription-content .glass-btn{
+
+    align-self:flex-start;
+
+}
+
+/* ===================================
+RESPONSIVE
+=================================== */
+
+@media (max-width:900px){
+
+    .subscription-item{
+
+        flex-direction:column;
+
+        gap:30px;
+
+    }
+
+    .subscription-content{
+
+        width:100%;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .subscription-item{
+
+        padding:32px 0;
+
+    }
+
+    .subscription-title{
+
+        gap:18px;
+
+    }
+
+    .subscription-title h3{
+
+        font-size:1.2rem;
+
+    }
+
+}
+
+/* ===================================
+SETTINGS LIST COMPONENT
+=================================== */
+
+.settings-list{
+
+    margin-top:40px;
+
+}
+
+/* =========================
+ITEM
+========================= */
+
+.settings-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:60px;
+
+    padding:40px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.settings-item:last-child{
+
+    border-bottom:none;
+
+    padding-bottom:0;
+
+}
+
+/* =========================
+LEFT
+========================= */
+
+.settings-title{
+
+    display:flex;
+
+    gap:22px;
+
+    flex:1;
+
+}
+
+.settings-title h3{
+
+    margin:0 0 8px;
+
+    color:#fff;
+
+    font-size:1.35rem;
+
+    font-weight:700;
+
+}
+
+.settings-title p{
+
+    margin:0;
+
+    color:#9FB0CA;
+
+    line-height:1.7;
+
+}
+
+/* =========================
+RIGHT
+========================= */
+
+.settings-content{
+
+    width:430px;
+
+    max-width:100%;
+
+}
+
+.settings-content p{
+
+    margin:0 0 18px;
+
+    color:#C8D3E6;
+
+    line-height:1.7;
+
+}
+
+.settings-content strong{
+
+    color:#fff;
+
+    font-weight:700;
+
+}
+
+.settings-content small{
+
+    display:block;
+
+    margin-top:12px;
+
+    color:#8EA3C5;
+
+    line-height:1.6;
+
+}
+
+.settings-content input{
+
+    width:100%;
+
+    margin-bottom:16px;
+
+}
+
+.settings-content select{
+
+    width:100%;
+
+    margin-bottom:16px;
+
+}
+
+.settings-content textarea{
+
+    width:100%;
+
+    margin-bottom:16px;
+
+    resize:vertical;
+
+}
+
+.settings-content .glass-btn{
+
+    margin-top:12px;
+
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media (max-width:900px){
+
+    .settings-item{
+
+        flex-direction:column;
+
+        gap:30px;
+
+    }
+
+    .settings-content{
+
+        width:100%;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .settings-item{
+
+        padding:32px 0;
+
+    }
+
+    .settings-title{
+
+        gap:18px;
+
+    }
+
+    .settings-title h3{
+
+        font-size:1.2rem;
+
+    }
+
+}
 </style>
 </head>
 <body>
@@ -2099,7 +2445,7 @@ SUBSCRIPTION
 
             <div class="subscription-title">
 
-                <div class="subscription-icon">
+                <div class="overview-icon">
 
                     <svg viewBox="0 0 24 24"
                          fill="none"
@@ -2134,8 +2480,7 @@ SUBSCRIPTION
 
             <div class="subscription-content">
 
-                <strong
-                    id="subscriptionStatus">
+                <strong id="subscriptionStatus">
 
                     EdgeBreak Pro • Active
 
@@ -2153,7 +2498,7 @@ SUBSCRIPTION
 
             <div class="subscription-title">
 
-                <div class="subscription-icon">
+                <div class="overview-icon">
 
                     <svg viewBox="0 0 24 24"
                          fill="none"
@@ -2232,25 +2577,52 @@ NOTIFICATIONS
 
     </div>
 
-    <div class="card">
+    <div class="settings-list">
 
-        <div class="settings-grid">
+        <!-- ===================================
+        SECURITY NOTIFICATIONS
+        ==================================== -->
 
-            <!-- SECURITY -->
+        <div class="settings-item">
 
-            <div class="settings-field">
+            <div class="settings-title">
 
-                <label>
+                <div class="overview-icon">
 
-                    Security Notifications
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
 
-                </label>
+                        <path d="M12 3l7 3v5c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-3z"/>
 
-                <p>
+                        <path d="M9 12l2 2 4-4"/>
 
-                    Receive important emails about password changes, sign-ins and account security.
+                    </svg>
 
-                </p>
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Security Notifications
+
+                    </h3>
+
+                    <p>
+
+                        Receive important emails about password changes, new sign-ins and account security.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="settings-content">
 
                 <label class="switch">
 
@@ -2264,21 +2636,56 @@ NOTIFICATIONS
 
             </div>
 
-            <!-- PLATFORM -->
+        </div>
 
-            <div class="settings-field">
+        <!-- ===================================
+        PLATFORM UPDATES
+        ==================================== -->
 
-                <label>
+        <div class="settings-item">
 
-                    Platform Updates
+            <div class="settings-title">
 
-                </label>
+                <div class="overview-icon">
 
-                <p>
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
 
-                    Receive updates about new EdgeBreak features, improvements and platform announcements.
+                        <path d="M12 2v20"/>
 
-                </p>
+                        <path d="M2 12h20"/>
+
+                        <circle cx="12"
+                                cy="12"
+                                r="9"/>
+
+                    </svg>
+
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Platform Updates
+
+                    </h3>
+
+                    <p>
+
+                        Receive updates about new EdgeBreak features, improvements and platform announcements.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="settings-content">
 
                 <label class="switch">
 
@@ -2292,21 +2699,56 @@ NOTIFICATIONS
 
             </div>
 
-            <!-- MARKETING -->
+        </div>
 
-            <div class="settings-field">
+        <!-- ===================================
+        MARKETING EMAILS
+        ==================================== -->
 
-                <label>
+        <div class="settings-item">
 
-                    Marketing Emails
+            <div class="settings-title">
 
-                </label>
+                <div class="overview-icon">
 
-                <p>
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
 
-                    Receive newsletters, educational content and occasional product announcements.
+                        <rect x="3"
+                              y="5"
+                              width="18"
+                              height="14"
+                              rx="2"/>
 
-                </p>
+                        <path d="M3 7l9 6 9-6"/>
+
+                    </svg>
+
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Marketing Emails
+
+                    </h3>
+
+                    <p>
+
+                        Receive newsletters, educational content and occasional product announcements.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="settings-content">
 
                 <label class="switch">
 
@@ -2322,18 +2764,18 @@ NOTIFICATIONS
 
         </div>
 
-        <div class="button-row">
+    </div>
 
-            <button
-                class="glass-btn"
-                id="saveNotificationsBtn"
-                onclick="saveNotifications()">
+    <div class="button-row">
 
-                Save Preferences
+        <button
+            class="glass-btn"
+            id="saveNotificationsBtn"
+            onclick="saveNotifications()">
 
-            </button>
+            Save Preferences
 
-        </div>
+        </button>
 
     </div>
 
@@ -2361,81 +2803,108 @@ CURRENT SESSION
 
     </div>
 
-    <div class="card">
+    <div class="settings-list">
 
-        <div class="settings-grid">
+        <div class="settings-item">
 
-            <div class="settings-field">
+            <div class="settings-title">
 
-                <label>
+                <div class="overview-icon">
 
-                    Status
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
 
-                </label>
+                        <rect x="3"
+                              y="4"
+                              width="18"
+                              height="12"
+                              rx="2"/>
 
-                <strong
-                    id="sessionStatus"
-                    style="color:#4ADE80;">
+                        <path d="M8 20h8"/>
 
-                    Active
+                        <path d="M12 16v4"/>
 
-                </strong>
+                    </svg>
 
-            </div>
+                </div>
 
-            <div class="settings-field">
+                <div>
 
-                <label>
+                    <h3>
 
-                    Device
+                        Active Session
 
-                </label>
+                    </h3>
 
-                <strong id="sessionDevice">
+                    <p>
 
-                    Windows • Google Chrome
+                        You are currently signed in on this device.
 
-                </strong>
+                    </p>
 
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Last Sign In
-
-                </label>
-
-                <strong id="sessionLogin">
-
-                    -
-
-                </strong>
+                </div>
 
             </div>
 
-        </div>
+            <div class="settings-content">
 
-        <div style="margin-top:30px;">
+                <p>
 
-            <p style="color:#94A3B8;line-height:1.7;">
+                    <strong>Status:</strong>
 
-                You are currently signed in on this device. If you don't recognise this session, change your password immediately or contact EdgeBreak Support.
+                    <span
+                        id="sessionStatus"
+                        style="color:#4ADE80;">
 
-            </p>
+                        Active
 
-        </div>
+                    </span>
 
-        <div class="button-row">
+                </p>
 
-            <button
-                class="glass-btn"
-                onclick="logoutCurrentSession()">
+                <p>
 
-                Sign Out
+                    <strong>Device:</strong>
 
-            </button>
+                    <span id="sessionDevice">
+
+                        Windows • Google Chrome
+
+                    </span>
+
+                </p>
+
+                <p>
+
+                    <strong>Last Sign In:</strong>
+
+                    <span id="sessionLogin">
+
+                        -
+
+                    </span>
+
+                </p>
+
+                <small>
+
+                    If you don't recognise this session, change your password immediately or contact EdgeBreak Support.
+
+                </small>
+
+                <button
+                    class="glass-btn"
+                    onclick="logoutCurrentSession()">
+
+                    Sign Out
+
+                </button>
+
+            </div>
 
         </div>
 
@@ -2444,7 +2913,7 @@ CURRENT SESSION
 </div>
 
 <!-- ===================================
-PRIVACY
+PRIVACY & LEGAL
 =================================== -->
 
 <div class="section">
@@ -2465,125 +2934,296 @@ PRIVACY
 
     </div>
 
-    <div class="card">
+    <div class="settings-list">
 
-        <div class="settings-grid">
+        <!-- ===================================
+        PRIVACY POLICY
+        ==================================== -->
 
-            <div class="settings-field">
+        <div class="settings-item">
 
-                <label>
+            <div class="settings-title">
 
-                    Privacy Policy
+                <div class="overview-icon">
 
-                </label>
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
 
-                <p>
+                        <path d="M12 3l7 3v5c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-3z"/>
 
-                    Learn how EdgeBreak collects, stores and protects your personal information.
+                    </svg>
 
-                </p>
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Privacy Policy
+
+                    </h3>
+
+                    <p>
+
+                        Learn how EdgeBreak collects, stores and protects your personal information.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="settings-content">
 
                 <a
                     href="/privacy.html"
                     class="glass-btn">
 
-                    Privacy Policy
+                    View Policy
 
                 </a>
 
             </div>
 
-            <div class="settings-field">
+        </div>
 
-                <label>
+        <!-- ===================================
+        TERMS OF SERVICE
+        ==================================== -->
 
-                    Terms of Service
+        <div class="settings-item">
 
-                </label>
+            <div class="settings-title">
 
-                <p>
+                <div class="overview-icon">
 
-                    Review the terms that govern your use of the EdgeBreak platform.
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
 
-                </p>
+                        <path d="M8 3h7l4 4v14H8z"/>
+
+                        <path d="M15 3v4h4"/>
+
+                    </svg>
+
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Terms of Service
+
+                    </h3>
+
+                    <p>
+
+                        Review the terms that govern your use of the EdgeBreak platform.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="settings-content">
 
                 <a
                     href="/terms.html"
                     class="glass-btn">
 
-                    Terms of Service
+                    View Terms
 
                 </a>
 
             </div>
 
-            <div class="settings-field">
+        </div>
 
-                <label>
+        <!-- ===================================
+        FINANCIAL DISCLAIMER
+        ==================================== -->
 
-                    Financial Disclaimer
+        <div class="settings-item">
 
-                </label>
+            <div class="settings-title">
 
-                <p>
+                <div class="overview-icon">
 
-                    Understand the educational purpose of EdgeBreak and the limitations of our platform.
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
 
-                </p>
+                        <circle cx="12"
+                                cy="12"
+                                r="9"/>
+
+                        <path d="M12 8v5"/>
+
+                        <circle cx="12"
+                                cy="16"
+                                r="1"/>
+
+                    </svg>
+
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Financial Disclaimer
+
+                    </h3>
+
+                    <p>
+
+                        Understand the educational purpose of EdgeBreak and the limitations of our platform.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="settings-content">
 
                 <a
                     href="/disclaimer.html"
                     class="glass-btn">
 
-                    Financial Disclaimer
+                    View Disclaimer
 
                 </a>
 
             </div>
 
-            <div class="settings-field">
+        </div>
 
-                <label>
+        <!-- ===================================
+        SECURITY CENTRE
+        ==================================== -->
 
-                    Security Centre
+        <div class="settings-item">
 
-                </label>
+            <div class="settings-title">
 
-                <p>
+                <div class="overview-icon">
 
-                    Learn how EdgeBreak helps protect your account and personal information.
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
 
-                </p>
+                        <path d="M12 3l7 3v5c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-3z"/>
+
+                        <path d="M9 12l2 2 4-4"/>
+
+                    </svg>
+
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Security Centre
+
+                    </h3>
+
+                    <p>
+
+                        Learn how EdgeBreak helps protect your account and personal information.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="settings-content">
 
                 <a
                     href="/securitycentre.html"
                     class="glass-btn">
 
-                    Security Centre
+                    Open Security Centre
 
                 </a>
 
             </div>
 
-            <div class="settings-field">
+        </div>
 
-                <label>
+        <!-- ===================================
+        SUPPORT CENTRE
+        ==================================== -->
 
-                    Contact Support
+        <div class="settings-item">
 
-                </label>
+            <div class="settings-title">
 
-                <p>
+                <div class="overview-icon">
 
-                    Need help with your account, privacy or security? Our support team is here to help.
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
 
-                </p>
+                        <circle cx="12"
+                                cy="12"
+                                r="9"/>
+
+                        <path d="M9.5 9a2.5 2.5 0 015 0c0 2-2.5 2-2.5 4"/>
+
+                        <circle cx="12"
+                                cy="17"
+                                r="1"/>
+
+                    </svg>
+
+                </div>
+
+                <div>
+
+                    <h3>
+
+                        Support Centre
+
+                    </h3>
+
+                    <p>
+
+                        Need help with your account, privacy or security? Our support team is here to help.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="settings-content">
 
                 <a
                     href="/support.html"
                     class="glass-btn">
 
-                    Contact Support
+                    Visit Support
 
                 </a>
 
@@ -2617,29 +3257,70 @@ ACCOUNT MANAGEMENT
 
     </div>
 
-    <div class="card danger-card">
+    <div class="settings-list">
 
-        <div class="settings-field">
+        <div class="settings-item danger-item">
 
-            <label>
+            <div class="settings-title">
 
-                Delete Account
+                <div class="overview-icon">
 
-            </label>
+                    <svg viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
 
-            <p>
+                        <circle cx="12"
+                                cy="12"
+                                r="9"/>
 
-                Permanently delete your EdgeBreak account and all associated data, including your profile, workspace, watchlists, journal entries, notes and account preferences. This action cannot be undone.
+                        <path d="M12 8v5"/>
 
-            </p>
+                        <circle cx="12"
+                                cy="17"
+                                r="1"/>
 
-            <button
-                class="danger-btn"
-                onclick="deleteAccount()">
+                    </svg>
 
-                Delete My Account
+                </div>
 
-            </button>
+                <div>
+
+                    <h3>
+
+                        Delete Account
+
+                    </h3>
+
+                    <p>
+
+                        Permanently delete your EdgeBreak account and all associated data, including your profile, workspace, watchlists, journal entries, notes and account preferences.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="settings-content">
+
+                <small>
+
+                    This action cannot be undone.
+
+                </small>
+
+                <button
+                    class="danger-btn"
+                    onclick="deleteAccount()">
+
+                    Delete My Account
+
+                </button>
+
+            </div>
 
         </div>
 
