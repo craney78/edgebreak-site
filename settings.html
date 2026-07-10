@@ -742,49 +742,58 @@ ACCOUNT OVERVIEW
             minmax(260px,1fr)
         );
 
-    gap:28px;
+    gap:24px;
 
-    margin-top:40px;
+    margin-top:35px;
 
 }
+
+/* =========================
+CARD
+========================= */
 
 .overview-card{
 
     position:relative;
 
-    padding:34px;
+    overflow:hidden;
+
+    display:flex;
+
+    flex-direction:column;
+
+    padding:32px;
 
     background:
         linear-gradient(
             180deg,
-            rgba(15,23,42,.96),
-            rgba(8,15,35,.98)
+            rgba(14,23,42,.98) 0%,
+            rgba(8,15,35,.98) 100%
         );
 
     border:1px solid rgba(255,255,255,.08);
 
     border-radius:20px;
 
-    overflow:hidden;
-
     transition:
-        transform .25s,
-        border-color .25s,
-        box-shadow .25s;
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
 
 }
 
 .overview-card:hover{
 
-    transform:translateY(-6px);
+    transform:translateY(-5px);
 
-    border-color:rgba(34,197,94,.35);
+    border-color:rgba(34,197,94,.30);
 
     box-shadow:
-        0 20px 45px
-        rgba(0,0,0,.35);
+        0 18px 40px rgba(0,0,0,.30);
 
 }
+
+/* subtle glow */
 
 .overview-card::after{
 
@@ -792,13 +801,13 @@ ACCOUNT OVERVIEW
 
     position:absolute;
 
-    right:-40px;
+    right:-60px;
 
-    bottom:-40px;
+    bottom:-60px;
 
-    width:140px;
+    width:170px;
 
-    height:140px;
+    height:170px;
 
     border-radius:50%;
 
@@ -816,7 +825,9 @@ ACCOUNT OVERVIEW
 
 }
 
-/* ICON */
+/* =========================
+ICON
+========================= */
 
 .overview-icon{
 
@@ -830,11 +841,9 @@ ACCOUNT OVERVIEW
 
     justify-content:center;
 
-    font-size:1.7rem;
+    margin-bottom:26px;
 
     border-radius:18px;
-
-    margin-bottom:28px;
 
     color:#22c55e;
 
@@ -850,35 +859,53 @@ ACCOUNT OVERVIEW
 
         );
 
-    border:1px solid rgba(34,197,94,.18);
+    border:1px solid rgba(34,197,94,.15);
 
 }
 
-/* LABEL */
+.overview-icon svg{
+
+    width:30px;
+
+    height:30px;
+
+    stroke:currentColor;
+
+}
+
+/* =========================
+LABEL
+========================= */
 
 .overview-label{
 
     display:block;
 
-    text-transform:uppercase;
+    margin-bottom:10px;
 
-    letter-spacing:2px;
+    color:#8fa4c7;
 
     font-size:.78rem;
 
     font-weight:700;
 
-    color:#7d90ae;
+    text-transform:uppercase;
 
-    margin-bottom:12px;
+    letter-spacing:2px;
 
 }
 
-/* VALUE */
+/* =========================
+VALUE
+========================= */
 
 .overview-card strong{
 
     display:block;
+
+    margin-bottom:10px;
+
+    color:#ffffff;
 
     font-size:2rem;
 
@@ -886,21 +913,21 @@ ACCOUNT OVERVIEW
 
     line-height:1.2;
 
-    color:#ffffff;
-
-    margin-bottom:10px;
-
 }
 
-/* DESCRIPTION */
+/* =========================
+DESCRIPTION
+========================= */
 
 .overview-card small{
 
     display:block;
 
+    color:#a8b8d3;
+
     font-size:.95rem;
 
-    color:#9fb1cb;
+    line-height:1.5;
 
 }
 
@@ -916,9 +943,11 @@ SECURITY BANNER
 
     gap:24px;
 
-    margin-top:36px;
+    margin-top:34px;
 
-    padding:26px 30px;
+    padding:28px 32px;
+
+    border-radius:20px;
 
     background:
 
@@ -934,15 +963,15 @@ SECURITY BANNER
 
     border:1px solid rgba(34,197,94,.15);
 
-    border-radius:20px;
-
 }
 
 .security-banner-icon{
 
-    width:60px;
+    flex-shrink:0;
 
-    height:60px;
+    width:62px;
+
+    height:62px;
 
     display:flex;
 
@@ -950,9 +979,7 @@ SECURITY BANNER
 
     justify-content:center;
 
-    border-radius:16px;
-
-    font-size:1.5rem;
+    border-radius:18px;
 
     color:#22c55e;
 
@@ -960,15 +987,29 @@ SECURITY BANNER
 
         rgba(34,197,94,.12);
 
+    border:1px solid rgba(34,197,94,.15);
+
+}
+
+.security-banner-icon svg{
+
+    width:28px;
+
+    height:28px;
+
+    stroke:currentColor;
+
 }
 
 .security-banner h3{
 
-    margin:0 0 6px;
+    margin:0 0 8px;
 
-    color:#fff;
+    color:#ffffff;
 
-    font-size:1.2rem;
+    font-size:1.25rem;
+
+    font-weight:700;
 
 }
 
@@ -976,9 +1017,49 @@ SECURITY BANNER
 
     margin:0;
 
-    color:#b6c3d9;
+    color:#b8c6dc;
 
-    line-height:1.6;
+    line-height:1.7;
+
+}
+
+/* ===================================
+RESPONSIVE
+=================================== */
+
+@media (max-width:900px){
+
+    .overview-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .overview-card{
+
+        padding:28px;
+
+    }
+
+    .overview-card strong{
+
+        font-size:1.7rem;
+
+    }
+
+    .security-banner{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        text-align:left;
+
+    }
 
 }
 </style>
@@ -1190,7 +1271,16 @@ ACCOUNT OVERVIEW
 
             <div class="overview-icon">
 
-                👑
+                <svg viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+
+                    <path d="M5 18L3 7l5 4 4-7 4 7 5-4-2 11H5z"/>
+
+                </svg>
 
             </div>
 
@@ -1208,7 +1298,7 @@ ACCOUNT OVERVIEW
 
             <small>
 
-                Pro Plan
+                Premium Membership
 
             </small>
 
@@ -1220,7 +1310,18 @@ ACCOUNT OVERVIEW
 
             <div class="overview-icon">
 
-                🛡️
+                <svg viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+
+                    <path d="M12 3l7 3v5c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-3z"/>
+
+                    <path d="M9 12l2 2 4-4"/>
+
+                </svg>
 
             </div>
 
@@ -1250,7 +1351,22 @@ ACCOUNT OVERVIEW
 
             <div class="overview-icon">
 
-                ✉️
+                <svg viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+
+                    <rect x="3"
+                          y="5"
+                          width="18"
+                          height="14"
+                          rx="2"/>
+
+                    <path d="M3 7l9 6 9-6"/>
+
+                </svg>
 
             </div>
 
@@ -1280,7 +1396,24 @@ ACCOUNT OVERVIEW
 
             <div class="overview-icon">
 
-                🌎
+                <svg viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+
+                    <circle cx="12"
+                            cy="12"
+                            r="9"/>
+
+                    <path d="M3 12h18"/>
+
+                    <path d="M12 3c3 3 3 15 0 18"/>
+
+                    <path d="M12 3c-3 3-3 15 0 18"/>
+
+                </svg>
 
             </div>
 
@@ -1310,7 +1443,22 @@ ACCOUNT OVERVIEW
 
             <div class="overview-icon">
 
-                🕒
+                <svg viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+
+                    <circle cx="12"
+                            cy="12"
+                            r="9"/>
+
+                    <path d="M12 7v6"/>
+
+                    <path d="M12 13l4 2"/>
+
+                </svg>
 
             </div>
 
@@ -1340,7 +1488,24 @@ ACCOUNT OVERVIEW
 
             <div class="overview-icon">
 
-                💻
+                <svg viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+
+                    <rect x="3"
+                          y="4"
+                          width="18"
+                          height="12"
+                          rx="2"/>
+
+                    <path d="M8 20h8"/>
+
+                    <path d="M12 16v4"/>
+
+                </svg>
 
             </div>
 
@@ -1366,11 +1531,30 @@ ACCOUNT OVERVIEW
 
     </div>
 
+    <!-- Security Banner -->
+
     <div class="security-banner">
 
         <div class="security-banner-icon">
 
-            🔒
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+
+                <path d="M12 3l7 3v5c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-3z"/>
+
+                <path d="M10 11V9a2 2 0 114 0v2"/>
+
+                <rect x="8"
+                      y="11"
+                      width="8"
+                      height="6"
+                      rx="1"/>
+
+            </svg>
 
         </div>
 
@@ -1384,7 +1568,7 @@ ACCOUNT OVERVIEW
 
             <p>
 
-                Keep your password strong and your profile information up to date.
+                Keep your password strong and keep your profile information up to date to help protect your EdgeBreak account.
 
             </p>
 
