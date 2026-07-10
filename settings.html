@@ -1536,159 +1536,129 @@ NOTIFICATIONS
 ACTIVE SESSIONS
 =================================== -->
 
-<div class="section">
+<div class="card">
 
-    <div class="section-header">
+    <h2>
 
-        <h2>
+        Active Session
 
-            Active Sessions
+    </h2>
 
-        </h2>
+    <p>
 
-        <p>
+        View information about your current authenticated EdgeBreak session.
 
-            Review devices currently signed in to your EdgeBreak account and end sessions you no longer recognise. This helps keep your account secure, especially when accessing EdgeBreak from multiple devices.
+    </p>
 
-        </p>
+    <div class="settings-grid">
+
+        <div class="settings-field">
+
+            <label>
+
+                Status
+
+            </label>
+
+            <strong id="sessionStatus">
+
+                Active
+
+            </strong>
+
+        </div>
+
+        <div class="settings-field">
+
+            <label>
+
+                Browser
+
+            </label>
+
+            <strong id="sessionBrowser">
+
+                -
+
+            </strong>
+
+        </div>
+
+        <div class="settings-field">
+
+            <label>
+
+                Operating System
+
+            </label>
+
+            <strong id="sessionOS">
+
+                -
+
+            </strong>
+
+        </div>
+
+        <div class="settings-field">
+
+            <label>
+
+                Current Device
+
+            </label>
+
+            <strong id="sessionDevice">
+
+                -
+
+            </strong>
+
+        </div>
+
+        <div class="settings-field">
+
+            <label>
+
+                Last Sign In
+
+            </label>
+
+            <strong id="sessionLogin">
+
+                -
+
+            </strong>
+
+        </div>
+
+        <div class="settings-field">
+
+            <label>
+
+                Session Expires
+
+            </label>
+
+            <strong id="sessionExpiry">
+
+                -
+
+            </strong>
+
+        </div>
 
     </div>
 
-    <div class="card">
+    <div class="button-row">
 
-        <div class="settings-grid">
+        <button
+            class="glass-btn"
+            onclick="logoutCurrentSession()">
 
-            <div class="settings-field">
+            Sign Out
 
-                <label>
-
-                    Current Device
-
-                </label>
-
-                <p>
-
-                    <strong>
-
-                        Windows • Chrome
-
-                    </strong>
-
-                    <br>
-
-                    Wagga Wagga, NSW
-
-                    <br>
-
-                    Active Now
-
-                </p>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Last Login
-
-                </label>
-
-                <p>
-
-                    Today
-
-                    <br>
-
-                    10:42 AM
-
-                </p>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Recent Sign-ins
-
-                </label>
-
-                <p>
-
-                    View recent devices that have accessed your EdgeBreak account.
-
-                </p>
-
-                <button class="glass-btn">
-
-                    View Login History
-
-                </button>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Sign Out Other Devices
-
-                </label>
-
-                <p>
-
-                    End all other active sessions while keeping this device signed in.
-
-                </p>
-
-                <button class="glass-btn">
-
-                    Sign Out Other Devices
-
-                </button>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Sign Out Everywhere
-
-                </label>
-
-                <p>
-
-                    Immediately sign out of every device connected to your EdgeBreak account.
-
-                </p>
-
-                <button class="glass-btn">
-
-                    Sign Out Everywhere
-
-                </button>
-
-            </div>
-
-            <div class="settings-field">
-
-                <label>
-
-                    Security Tip
-
-                </label>
-
-                <p>
-
-                    If you notice an unfamiliar device or login location, change your password immediately and contact EdgeBreak Support.
-
-                </p>
-
-            </div>
-
-        </div>
+        </button>
 
     </div>
 
@@ -2666,6 +2636,109 @@ async function loadNotifications(){
 }
 
 // =========================
+// ACTIVE SESSION
+// =========================
+
+async function loadActiveSession(){
+
+    const {
+
+        data:{ session }
+
+    } = await supabaseClient.auth.getSession();
+
+    if(!session) return;
+
+    document.getElementById(
+        "sessionStatus"
+    ).innerText = "Active";
+
+    const ua =
+        navigator.userAgent;
+
+    // Browser
+
+    let browser = "Unknown";
+
+    if(ua.includes("Edg"))
+        browser = "Microsoft Edge";
+
+    else if(ua.includes("Chrome"))
+        browser = "Google Chrome";
+
+    else if(ua.includes("Firefox"))
+        browser = "Mozilla Firefox";
+
+    else if(ua.includes("Safari"))
+        browser = "Safari";
+
+    document.getElementById(
+        "sessionBrowser"
+    ).innerText = browser;
+
+    // Operating System
+
+    let os = "Unknown";
+
+    if(ua.includes("Windows"))
+        os = "Windows";
+
+    else if(ua.includes("Mac"))
+        os = "macOS";
+
+    else if(ua.includes("Linux"))
+        os = "Linux";
+
+    else if(ua.includes("Android"))
+        os = "Android";
+
+    else if(
+        ua.includes("iPhone") ||
+        ua.includes("iPad")
+    )
+        os = "iOS";
+
+    document.getElementById(
+        "sessionOS"
+    ).innerText = os;
+
+    // Device
+
+    document.getElementById(
+        "sessionDevice"
+    ).innerText =
+        navigator.platform;
+
+    // Last Login
+
+    document.getElementById(
+        "sessionLogin"
+    ).innerText =
+        new Date(
+            session.user.last_sign_in_at
+        ).toLocaleString();
+
+    // Expiry
+
+    document.getElementById(
+        "sessionExpiry"
+    ).innerText =
+        new Date(
+            session.expires_at * 1000
+        ).toLocaleString();
+
+}
+
+async function logoutCurrentSession(){
+
+    await supabaseClient.auth.signOut();
+
+    window.location.href =
+        "login.html";
+
+}
+
+// =========================
 // SAVE NOTIFICATIONS
 // =========================
 
@@ -2922,6 +2995,8 @@ document.addEventListener(
         await loadSubscription();
 
         await loadNotifications();
+
+        await loadActiveSession();
         
     }
 );
