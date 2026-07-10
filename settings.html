@@ -762,38 +762,43 @@ CARD
 
     flex-direction:column;
 
-    padding:32px;
+    align-items:flex-start;
+
+    justify-content:flex-start;
+
+    padding:28px;
 
     background:
         linear-gradient(
             180deg,
-            rgba(14,23,42,.98) 0%,
-            rgba(8,15,35,.98) 100%
+            #121c33 0%,
+            #0d162b 100%
         );
 
     border:1px solid rgba(255,255,255,.08);
 
-    border-radius:20px;
+    border-radius:18px;
 
     transition:
-        transform .25s ease,
-        border-color .25s ease,
-        box-shadow .25s ease;
+        .25s ease;
 
 }
 
 .overview-card:hover{
 
-    transform:translateY(-5px);
+    transform:translateY(-4px);
 
-    border-color:rgba(34,197,94,.30);
+    border-color:rgba(34,197,94,.25);
 
     box-shadow:
-        0 18px 40px rgba(0,0,0,.30);
+
+        0 18px 36px
+
+        rgba(0,0,0,.28);
 
 }
 
-/* subtle glow */
+/* Soft Glow */
 
 .overview-card::after{
 
@@ -815,7 +820,7 @@ CARD
 
         radial-gradient(
 
-            rgba(34,197,94,.08),
+            rgba(34,197,94,.06),
 
             transparent 70%
 
@@ -831,9 +836,9 @@ ICON
 
 .overview-icon{
 
-    width:64px;
+    width:56px;
 
-    height:64px;
+    height:56px;
 
     display:flex;
 
@@ -841,33 +846,29 @@ ICON
 
     justify-content:center;
 
-    margin-bottom:26px;
+    margin-bottom:22px;
 
-    border-radius:18px;
-
-    color:#22c55e;
+    border-radius:16px;
 
     background:
 
-        linear-gradient(
+        rgba(34,197,94,.08);
 
-            180deg,
+    border:
 
-            rgba(34,197,94,.12),
+        1px solid
 
-            rgba(34,197,94,.04)
+        rgba(34,197,94,.12);
 
-        );
-
-    border:1px solid rgba(34,197,94,.15);
+    color:#22c55e;
 
 }
 
 .overview-icon svg{
 
-    width:30px;
+    width:24px;
 
-    height:30px;
+    height:24px;
 
     stroke:currentColor;
 
@@ -883,15 +884,15 @@ LABEL
 
     margin-bottom:10px;
 
-    color:#8fa4c7;
-
-    font-size:.78rem;
+    font-size:.72rem;
 
     font-weight:700;
 
+    letter-spacing:2.5px;
+
     text-transform:uppercase;
 
-    letter-spacing:2px;
+    color:#7d90ae;
 
 }
 
@@ -903,15 +904,15 @@ VALUE
 
     display:block;
 
-    margin-bottom:10px;
+    margin-bottom:8px;
 
-    color:#ffffff;
-
-    font-size:2rem;
+    font-size:1.45rem;
 
     font-weight:700;
 
-    line-height:1.2;
+    line-height:1.3;
+
+    color:#ffffff;
 
 }
 
@@ -923,9 +924,9 @@ DESCRIPTION
 
     display:block;
 
-    color:#a8b8d3;
+    font-size:.9rem;
 
-    font-size:.95rem;
+    color:#9fb0ca;
 
     line-height:1.5;
 
@@ -941,13 +942,13 @@ SECURITY BANNER
 
     align-items:center;
 
-    gap:24px;
+    gap:22px;
 
     margin-top:34px;
 
-    padding:28px 32px;
+    padding:28px 30px;
 
-    border-radius:20px;
+    border-radius:18px;
 
     background:
 
@@ -961,7 +962,11 @@ SECURITY BANNER
 
         );
 
-    border:1px solid rgba(34,197,94,.15);
+    border:
+
+        1px solid
+
+        rgba(34,197,94,.15);
 
 }
 
@@ -969,9 +974,9 @@ SECURITY BANNER
 
     flex-shrink:0;
 
-    width:62px;
+    width:56px;
 
-    height:62px;
+    height:56px;
 
     display:flex;
 
@@ -979,23 +984,27 @@ SECURITY BANNER
 
     justify-content:center;
 
-    border-radius:18px;
-
-    color:#22c55e;
+    border-radius:16px;
 
     background:
 
-        rgba(34,197,94,.12);
+        rgba(34,197,94,.10);
 
-    border:1px solid rgba(34,197,94,.15);
+    border:
+
+        1px solid
+
+        rgba(34,197,94,.15);
+
+    color:#22c55e;
 
 }
 
 .security-banner-icon svg{
 
-    width:28px;
+    width:24px;
 
-    height:28px;
+    height:24px;
 
     stroke:currentColor;
 
@@ -1007,7 +1016,7 @@ SECURITY BANNER
 
     color:#ffffff;
 
-    font-size:1.25rem;
+    font-size:1.2rem;
 
     font-weight:700;
 
@@ -1041,13 +1050,13 @@ RESPONSIVE
 
     .overview-card{
 
-        padding:28px;
+        padding:24px;
 
     }
 
     .overview-card strong{
 
-        font-size:1.7rem;
+        font-size:1.3rem;
 
     }
 
@@ -1056,8 +1065,6 @@ RESPONSIVE
         flex-direction:column;
 
         align-items:flex-start;
-
-        text-align:left;
 
     }
 
