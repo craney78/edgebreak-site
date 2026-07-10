@@ -213,6 +213,35 @@ WEBPAGE SCHEMA
 }
 </script>
 <style>
+
+@media (max-width:768px){
+
+    .settings-hero{
+
+        padding:70px 0 55px;
+
+    }
+
+    .settings-hero h1{
+
+        font-size:2.3rem;
+
+        margin-bottom:18px;
+
+    }
+
+    .settings-hero p{
+
+        font-size:1rem;
+
+        line-height:1.7;
+
+        max-width:100%;
+
+    }
+
+}
+
 .support-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
@@ -698,6 +727,260 @@ LEGAL PAGES - MOBILE
     }
 
 }
+
+/* ===================================
+ACCOUNT OVERVIEW
+=================================== */
+
+.overview-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(260px,1fr)
+        );
+
+    gap:28px;
+
+    margin-top:40px;
+
+}
+
+.overview-card{
+
+    position:relative;
+
+    padding:34px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(15,23,42,.96),
+            rgba(8,15,35,.98)
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    transition:
+        transform .25s,
+        border-color .25s,
+        box-shadow .25s;
+
+}
+
+.overview-card:hover{
+
+    transform:translateY(-6px);
+
+    border-color:rgba(34,197,94,.35);
+
+    box-shadow:
+        0 20px 45px
+        rgba(0,0,0,.35);
+
+}
+
+.overview-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    right:-40px;
+
+    bottom:-40px;
+
+    width:140px;
+
+    height:140px;
+
+    border-radius:50%;
+
+    background:
+
+        radial-gradient(
+
+            rgba(34,197,94,.08),
+
+            transparent 70%
+
+        );
+
+    pointer-events:none;
+
+}
+
+/* ICON */
+
+.overview-icon{
+
+    width:64px;
+
+    height:64px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:1.7rem;
+
+    border-radius:18px;
+
+    margin-bottom:28px;
+
+    color:#22c55e;
+
+    background:
+
+        linear-gradient(
+
+            180deg,
+
+            rgba(34,197,94,.12),
+
+            rgba(34,197,94,.04)
+
+        );
+
+    border:1px solid rgba(34,197,94,.18);
+
+}
+
+/* LABEL */
+
+.overview-label{
+
+    display:block;
+
+    text-transform:uppercase;
+
+    letter-spacing:2px;
+
+    font-size:.78rem;
+
+    font-weight:700;
+
+    color:#7d90ae;
+
+    margin-bottom:12px;
+
+}
+
+/* VALUE */
+
+.overview-card strong{
+
+    display:block;
+
+    font-size:2rem;
+
+    font-weight:700;
+
+    line-height:1.2;
+
+    color:#ffffff;
+
+    margin-bottom:10px;
+
+}
+
+/* DESCRIPTION */
+
+.overview-card small{
+
+    display:block;
+
+    font-size:.95rem;
+
+    color:#9fb1cb;
+
+}
+
+/* ===================================
+SECURITY BANNER
+=================================== */
+
+.security-banner{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:24px;
+
+    margin-top:36px;
+
+    padding:26px 30px;
+
+    background:
+
+        linear-gradient(
+
+            90deg,
+
+            rgba(34,197,94,.08),
+
+            rgba(255,255,255,.02)
+
+        );
+
+    border:1px solid rgba(34,197,94,.15);
+
+    border-radius:20px;
+
+}
+
+.security-banner-icon{
+
+    width:60px;
+
+    height:60px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:16px;
+
+    font-size:1.5rem;
+
+    color:#22c55e;
+
+    background:
+
+        rgba(34,197,94,.12);
+
+}
+
+.security-banner h3{
+
+    margin:0 0 6px;
+
+    color:#fff;
+
+    font-size:1.2rem;
+
+}
+
+.security-banner p{
+
+    margin:0;
+
+    color:#b6c3d9;
+
+    line-height:1.6;
+
+}
 </style>
 </head>
 <body>
@@ -901,7 +1184,15 @@ ACCOUNT OVERVIEW
 
     <div class="overview-grid">
 
+        <!-- Membership -->
+
         <div class="overview-card">
+
+            <div class="overview-icon">
+
+                👑
+
+            </div>
 
             <span class="overview-label">
 
@@ -915,9 +1206,23 @@ ACCOUNT OVERVIEW
 
             </strong>
 
+            <small>
+
+                Pro Plan
+
+            </small>
+
         </div>
 
+        <!-- Status -->
+
         <div class="overview-card">
+
+            <div class="overview-icon">
+
+                🛡️
+
+            </div>
 
             <span class="overview-label">
 
@@ -931,9 +1236,23 @@ ACCOUNT OVERVIEW
 
             </strong>
 
+            <small>
+
+                Account Healthy
+
+            </small>
+
         </div>
 
+        <!-- Email -->
+
         <div class="overview-card">
+
+            <div class="overview-icon">
+
+                ✉️
+
+            </div>
 
             <span class="overview-label">
 
@@ -947,9 +1266,23 @@ ACCOUNT OVERVIEW
 
             </strong>
 
+            <small>
+
+                Secure Account
+
+            </small>
+
         </div>
 
+        <!-- Time Zone -->
+
         <div class="overview-card">
+
+            <div class="overview-icon">
+
+                🌎
+
+            </div>
 
             <span class="overview-label">
 
@@ -963,9 +1296,23 @@ ACCOUNT OVERVIEW
 
             </strong>
 
+            <small>
+
+                Local Time
+
+            </small>
+
         </div>
 
+        <!-- Last Login -->
+
         <div class="overview-card">
+
+            <div class="overview-icon">
+
+                🕒
+
+            </div>
 
             <span class="overview-label">
 
@@ -979,12 +1326,73 @@ ACCOUNT OVERVIEW
 
             </strong>
 
+            <small>
+
+                Most Recent Access
+
+            </small>
+
+        </div>
+
+        <!-- Device -->
+
+        <div class="overview-card">
+
+            <div class="overview-icon">
+
+                💻
+
+            </div>
+
+            <span class="overview-label">
+
+                Device
+
+            </span>
+
+            <strong id="currentDevice">
+
+                Desktop
+
+            </strong>
+
+            <small>
+
+                Current Session
+
+            </small>
+
+        </div>
+
+    </div>
+
+    <div class="security-banner">
+
+        <div class="security-banner-icon">
+
+            🔒
+
+        </div>
+
+        <div>
+
+            <h3>
+
+                Your account is secure
+
+            </h3>
+
+            <p>
+
+                Keep your password strong and your profile information up to date.
+
+            </p>
+
         </div>
 
     </div>
 
 </div>
-
 
 <!-- ===================================
 SECURITY
