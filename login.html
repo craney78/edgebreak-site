@@ -578,7 +578,7 @@ document.getElementById("forgotPassword").addEventListener("click", async (e) =>
   }
 
   const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-    redirectTo: "https://edgebreak.ai/login.html"
+    redirectTo: "https://www.edgebreak.ai/reset-password.html"
   });
 
   if (error) {
