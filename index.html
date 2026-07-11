@@ -426,6 +426,76 @@ HERO SECONDARY BUTTON
 
 }
 
+/* ===================================
+TRUSTED BRANDS
+=================================== */
+
+.trusted-brands{
+
+    max-width:1100px;
+    margin:0 auto 90px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:70px;
+    flex-wrap:wrap;
+
+}
+
+.trusted-brands a{
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    opacity:.6;
+
+    transition:.25s;
+
+}
+
+.trusted-brands img{
+
+    height:42px;
+    width:auto;
+
+    filter:grayscale(100%);
+
+    transition:.25s;
+
+}
+
+.trusted-brands a:hover{
+
+    opacity:1;
+
+    transform:translateY(-3px);
+
+}
+
+.trusted-brands a:hover img{
+
+    filter:none;
+
+}
+
+@media (max-width:768px){
+
+    .trusted-brands{
+
+        gap:35px;
+
+    }
+
+    .trusted-brands img{
+
+        height:34px;
+
+    }
+
+}
+
 </style>
 </head>
 
@@ -753,7 +823,111 @@ HERO
 
 </div>
 
+<!-- ===================================
+TRUSTED TECHNOLOGY
+=================================== -->
 
+<div style="max-width:1100px; margin:80px auto; text-align:center;">
+
+    <div class="section-icon">
+
+        <svg
+            width="90"
+            height="90"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#22c55e"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+
+            <path d="M12 2v20"/>
+            <path d="M2 12h20"/>
+            <circle cx="12" cy="12" r="9"/>
+
+        </svg>
+
+    </div>
+
+    <h2>
+
+        Built On Industry-Leading Technology
+
+    </h2>
+
+    <p style="
+        max-width:820px;
+        margin:20px auto 50px auto;
+        color:#94a3b8;
+        line-height:1.8;
+    ">
+
+        EdgeBreak combines trusted market data, professional charting,
+        secure payments, AI technology and modern cloud infrastructure to
+        deliver a reliable NASDAQ research platform.
+
+    </p>
+
+</div>
+
+<div class="trusted-brands">
+
+    <a
+        href="https://twelvedata.com/"
+        target="_blank"
+        rel="noopener">
+
+        <img
+            src="images/twelve-data-logo.webp"
+            alt="Twelve Data">
+
+    </a>
+
+    <a
+        href="https://alpaca.markets/"
+        target="_blank"
+        rel="noopener">
+
+        <img
+            src="images/alpaca-logo.webp"
+            alt="Alpaca">
+
+    </a>
+
+    <a
+        href="https://www.tradingview.com/"
+        target="_blank"
+        rel="noopener">
+
+        <img
+            src="images/tradingview-logo.webp"
+            alt="TradingView">
+
+    </a>
+
+    <a
+        href="https://stripe.com/"
+        target="_blank"
+        rel="noopener">
+
+        <img
+            src="images/stripe-logo.webp"
+            alt="Stripe">
+
+    </a>
+
+    <a
+        href="https://openai.com/"
+        target="_blank"
+        rel="noopener">
+
+        <img
+            src="images/openai-logo.webp"
+            alt="OpenAI">
+
+    </a>
+
+</div>
 
 <!-- ===================================
 HOW EDGEBREAK WORKS
