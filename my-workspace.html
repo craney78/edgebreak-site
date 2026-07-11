@@ -1780,6 +1780,192 @@ WATCHLIST BUTTONS
     transform: translateY(-2px);
 
 }
+
+/* ===================================
+BROKER TILE
+=================================== */
+
+.broker-tile{
+
+    background:#121B2B;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    padding:28px;
+
+    transition:.25s;
+
+}
+
+.broker-tile:hover{
+
+    border-color:#22C55E;
+
+    transform:translateY(-3px);
+
+    box-shadow:0 16px 40px rgba(0,0,0,.35);
+
+}
+
+/* ===================================
+BROKER LOGO
+=================================== */
+
+.broker-logo{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    height:70px;
+
+    margin-bottom:18px;
+
+}
+
+.broker-logo img{
+
+    max-width:170px;
+
+    max-height:55px;
+
+    object-fit:contain;
+
+}
+
+/* ===================================
+BROKER NAME
+=================================== */
+
+.broker-tile h3{
+
+    text-align:center;
+
+    font-size:24px;
+
+    margin-bottom:18px;
+
+}
+
+/* ===================================
+STATUS
+=================================== */
+
+.broker-status{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:24px;
+
+    font-weight:700;
+
+}
+
+.dot{
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+}
+
+.disconnected .dot{
+
+    background:#EF4444;
+
+}
+
+.connected .dot{
+
+    background:#22C55E;
+
+}
+
+/* ===================================
+METRICS
+=================================== */
+
+.broker-info{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:16px;
+
+    margin:30px 0;
+
+}
+
+.broker-info .metric{
+
+    background:#0F172A;
+
+    border-radius:12px;
+
+    padding:14px;
+
+    text-align:center;
+
+}
+
+.broker-info span{
+
+    display:block;
+
+    color:#94A3B8;
+
+    font-size:13px;
+
+    margin-bottom:6px;
+
+}
+
+.broker-info strong{
+
+    font-size:18px;
+
+    color:#FFFFFF;
+
+}
+
+/* ===================================
+BUTTONS
+=================================== */
+
+.watchlist-actions{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-bottom:18px;
+
+}
+
+.watchlist-actions .btn{
+
+    flex:1;
+
+}
+
+.trade-btn{
+
+    width:100%;
+
+}
 </style>
 <script>
 window.supabaseClient = supabase.createClient(
@@ -2352,8 +2538,8 @@ MY WATCHLIST
 
             <p>
 
-                Connect your existing broker account to trade directly from EdgeBreak.
-                Authentication is handled securely by your broker using OAuth.
+                Connect your Alpaca brokerage account to trade directly from EdgeBreak.
+                Authentication is handled securely through OAuth and your broker.
                 EdgeBreak never stores your broker username or password.
 
             </p>
@@ -2362,7 +2548,7 @@ MY WATCHLIST
 
         <div class="elite-badge">
 
-            Broker Ready
+            Paper Trading
 
         </div>
 
@@ -2370,33 +2556,33 @@ MY WATCHLIST
 
     <div class="broker-grid">
 
-        <!-- INTERACTIVE BROKERS -->
+        <!-- ALPACA -->
 
         <div class="broker-tile">
 
             <div class="broker-logo">
 
                 <img
-                    src="images/ibkr-logo.webp"
-                    alt="Interactive Brokers"
+                    src="images/alpaca-logo.webp"
+                    alt="Alpaca"
                 >
 
             </div>
 
             <h3>
 
-                Interactive Brokers
+                Alpaca
 
             </h3>
 
             <div
-                id="ibkrStatus"
+                id="alpacaStatus"
                 class="broker-status disconnected"
             >
 
                 <span class="dot"></span>
 
-                <span id="ibkrStatusText">
+                <span id="alpacaStatusText">
 
                     Not Connected
 
@@ -2410,7 +2596,7 @@ MY WATCHLIST
 
                     <span>Account</span>
 
-                    <strong id="ibkrAccount">
+                    <strong id="alpacaAccount">
 
                         —
 
@@ -2422,7 +2608,7 @@ MY WATCHLIST
 
                     <span>Portfolio Value</span>
 
-                    <strong id="ibkrPortfolio">
+                    <strong id="alpacaPortfolio">
 
                         —
 
@@ -2434,7 +2620,7 @@ MY WATCHLIST
 
                     <span>Buying Power</span>
 
-                    <strong id="ibkrBuyingPower">
+                    <strong id="alpacaBuyingPower">
 
                         —
 
@@ -2446,7 +2632,7 @@ MY WATCHLIST
 
                     <span>Last Synced</span>
 
-                    <strong id="ibkrLastSync">
+                    <strong id="alpacaLastSync">
 
                         Never
 
@@ -2460,8 +2646,7 @@ MY WATCHLIST
 
                 <button
                     class="btn"
-                    onclick="openPortfolio()"
-                >
+                    onclick="openPortfolio()">
 
                     Portfolio
 
@@ -2469,8 +2654,7 @@ MY WATCHLIST
 
                 <button
                     class="btn"
-                    onclick="openOrders()"
-                >
+                    onclick="openOrders()">
 
                     Orders
 
@@ -2481,10 +2665,9 @@ MY WATCHLIST
             <button
                 id="connectBrokerBtn"
                 class="trade-btn"
-                onclick="showBrokerModal()"
-            >
+                onclick="showBrokerModal()">
 
-                Connect Interactive Brokers
+                Connect Alpaca
 
             </button>
 
@@ -2513,20 +2696,22 @@ BROKER CONNECT MODAL
         </button>
 
         <span class="trade-tag">
-            Broker Connection
+            Alpaca Broker
         </span>
 
         <div class="trade-header">
 
             <h2>
-                Connect Interactive Brokers
+                Connect Your Alpaca Account
             </h2>
 
             <p>
 
-                Connect your existing Interactive Brokers account to execute trades directly from EdgeBreak.
+                EdgeBreak connects securely to your Alpaca brokerage account using OAuth.
+                If you don't already have an Alpaca account, you can create a free paper trading account in just a few minutes.
 
-                Authentication is handled entirely by Interactive Brokers using secure OAuth. EdgeBreak never stores your broker username or password.
+                Your login credentials always remain with Alpaca.
+                EdgeBreak never stores your broker username or password.
 
             </p>
 
@@ -2540,17 +2725,17 @@ BROKER CONNECT MODAL
 
             <ul>
 
+                <li>✓ Free Alpaca paper trading account</li>
+
                 <li>✓ Secure OAuth authentication</li>
 
-                <li>✓ Place Market & Limit Orders</li>
+                <li>✓ Live portfolio synchronisation</li>
 
-                <li>✓ View live portfolio</li>
+                <li>✓ Place Market &amp; Limit Orders</li>
 
-                <li>✓ Monitor open positions</li>
+                <li>✓ View positions and buying power</li>
 
-                <li>✓ Access order history</li>
-
-                <li>✓ Automatic journal integration</li>
+                <li>✓ Automatic trade journal integration</li>
 
             </ul>
 
@@ -2560,16 +2745,16 @@ BROKER CONNECT MODAL
 
             <button
                 class="btn"
-                onclick="closeBrokerModal()"
+                onclick="window.open('https://alpaca.markets/', '_blank')"
             >
-                Cancel
+                Create Free Account
             </button>
 
             <button
                 class="btn-primary"
                 onclick="connectBroker()"
             >
-                Connect Interactive Brokers
+                Connect Alpaca
             </button>
 
         </div>
