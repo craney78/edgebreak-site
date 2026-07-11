@@ -4146,6 +4146,139 @@ async function loadProfile() {
 
     }
 
+    // ===================================
+    // ACCOUNT OVERVIEW
+    // ===================================
+
+    const membershipPlan =
+        document.getElementById("membershipPlan");
+
+    const membershipDescription =
+        document.getElementById("membershipDescription");
+
+    if (membershipPlan) {
+
+        membershipPlan.textContent =
+            profile?.is_active
+                ? "EdgeBreak Pro"
+                : "Free";
+
+    }
+
+    if (membershipDescription) {
+
+        membershipDescription.textContent =
+            profile?.is_active
+                ? "Premium Membership"
+                : "Free Membership";
+
+    }
+
+    const accountStatus =
+        document.getElementById("accountStatus");
+
+    const accountStatusDescription =
+        document.getElementById("accountStatusDescription");
+
+    if (accountStatus) {
+
+        accountStatus.textContent =
+            "Active";
+
+    }
+
+    if (accountStatusDescription) {
+
+        accountStatusDescription.textContent =
+            "Account Healthy";
+
+    }
+
+    const emailDescription =
+        document.getElementById("emailDescription");
+
+    if (emailDescription) {
+
+        emailDescription.textContent =
+            verified
+                ? "Secure Account"
+                : "Verification Required";
+
+    }
+
+    const overviewTimezone =
+        document.getElementById("overviewTimezone");
+
+    if (overviewTimezone) {
+
+        overviewTimezone.textContent =
+            Intl.DateTimeFormat()
+                .resolvedOptions()
+                .timeZone;
+
+    }
+
+    const currentDevice =
+        document.getElementById("currentDevice");
+
+    if (currentDevice) {
+
+        const ua = navigator.userAgent;
+
+        let browser = "Browser";
+
+        if (ua.includes("Edg"))
+            browser = "Microsoft Edge";
+        else if (ua.includes("Chrome"))
+            browser = "Google Chrome";
+        else if (ua.includes("Firefox"))
+            browser = "Mozilla Firefox";
+        else if (ua.includes("Safari"))
+            browser = "Safari";
+
+        let os = "Device";
+
+        if (ua.includes("Windows"))
+            os = "Windows";
+        else if (ua.includes("Mac"))
+            os = "macOS";
+        else if (ua.includes("Android"))
+            os = "Android";
+        else if (
+            ua.includes("iPhone") ||
+            ua.includes("iPad")
+        )
+            os = "iOS";
+
+        currentDevice.textContent =
+            `${os} • ${browser}`;
+
+    }
+
+    const securityBannerTitle =
+        document.getElementById("securityBannerTitle");
+
+    const securityBannerText =
+        document.getElementById("securityBannerText");
+
+    if (securityBannerTitle) {
+
+        securityBannerTitle.textContent =
+            verified
+                ? "Your account is secure"
+                : "Verify your email";
+
+    }
+
+    if (securityBannerText) {
+
+        securityBannerText.textContent =
+            verified
+                ? "Keep your password strong and your account information up to date."
+                : "Please verify your email address to fully secure your EdgeBreak account.";
+
+    }
+
 }
 
 
@@ -4287,22 +4420,14 @@ async function loadSubscription() {
 
     if (error || !profile) return;
 
-    const membership =
-        document.getElementById(
-            "membershipPlan"
-        );
-
     const status =
         document.getElementById(
             "subscriptionStatus"
         );
 
-    if (!membership || !status) return;
+    if (!status) return;
 
     if (profile.is_active) {
-
-        membership.innerText =
-            "EdgeBreak Pro";
 
         status.innerText =
             "EdgeBreak Pro • Active";
@@ -4311,9 +4436,6 @@ async function loadSubscription() {
             "#4ADE80";
 
     } else {
-
-        membership.innerText =
-            "Free";
 
         status.innerText =
             "Free • Inactive";
@@ -4507,49 +4629,70 @@ async function saveNotifications() {
     }, 2000);
 
 }
-        // =========================
-        // VALIDATE EMAIL
-        // =========================
+        
+// ===================================
+// CHANGE EMAIL
+// ===================================
 
-        const emailRegex =
+async function changeEmail() {
+
+    const newEmail = prompt(
+
+        "Enter your new email address:"
+
+    );
+
+    if (!newEmail) return;
+
+    // =========================
+    // VALIDATE EMAIL
+    // =========================
+
+    const emailRegex =
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if(!emailRegex.test(newEmail)){
-
-            alert(
-                "Please enter a valid email address."
-            );
-
-            return;
-
-        }
-
-        const {
-
-            error
-
-        } = await supabaseClient.auth.updateUser({
-
-            email: newEmail
-
-        });
-
-        if(error){
-
-            alert(error.message);
-
-            return;
-
-        }
+    if (!emailRegex.test(newEmail)) {
 
         alert(
 
-            "A verification email has been sent to your new email address. Your email will be updated after you verify it."
+            "Please enter a valid email address."
 
         );
 
+        return;
+
     }
 
+    // =========================
+    // UPDATE EMAIL
+    // =========================
+
+    const {
+
+        error
+
+    } = await supabaseClient.auth.updateUser({
+
+        email: newEmail
+
+    });
+
+    if (error) {
+
+        alert(error.message);
+
+        return;
+
+    }
+
+    alert(
+
+        "A verification email has been sent to your new email address.\n\nYour email address will not change until you click the verification link."
+
+    );
+
+}
+    
 // ===================================
 // CHANGE PASSWORD
 // ===================================
@@ -4627,6 +4770,22 @@ async function changePassword() {
         return;
 
     }
+
+    
+
+    // -------------------------
+    // Success
+    // -------------------------
+
+    document.getElementById("newPassword").value = "";
+    document.getElementById("confirmPassword").value = "";
+
+    message.textContent =
+        "Password updated successfully.";
+
+    message.style.color = "#22C55E";
+
+}
 
     // ===================================
     // DELETE ACCOUNT
@@ -4715,21 +4874,20 @@ async function changePassword() {
 
     }
 
-    // -------------------------
-    // Success
-    // -------------------------
+// ===================================
+// INITIALISE SETTINGS PAGE
+// ===================================
 
-    document.getElementById("newPassword").value = "";
-    document.getElementById("confirmPassword").value = "";
+document.addEventListener("DOMContentLoaded", async () => {
 
-    message.textContent =
-        "Password updated successfully.";
+    await loadProfile();
 
-    message.style.color = "#22C55E";
+    await loadSubscription();
 
-}
+    await loadActiveSession();
 
-    
+});    
+
 </script>
 </body>
 </html>
