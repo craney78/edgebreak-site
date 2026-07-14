@@ -28,7 +28,10 @@ serve(async (req) => {
 
         );
 
-        const jwt = authHeader.replace("Bearer ", "");
+        const jwt = authHeader.replace(
+            "Bearer ",
+            ""
+        );
 
         const {
 
@@ -41,45 +44,118 @@ serve(async (req) => {
         if (error || !user) {
 
             return new Response(
+
                 JSON.stringify({
+
                     error: "Invalid user"
+
                 }),
+
                 {
+
                     status: 401
+
                 }
+
             );
 
         }
 
-        // Delete profile
+        // ======================================
+        // GET PROFILE
+        // ======================================
 
-        await supabase
+        const {
+
+            data: profile
+
+        } = await supabase
+
             .from("profiles")
-            .delete()
-            .eq("id", user.id);
 
-        // Delete watchlist
+            .select("stripe_customer_id")
+
+            .eq("id", user.id)
+
+            .single();
+
+        // ======================================
+        // SAVE USED TRIAL
+        // ======================================
 
         await supabase
+
+            .from("used_trials")
+
+            .upsert({
+
+                email: user.email,
+
+                stripe_customer_id:
+                    profile?.stripe_customer_id ?? null,
+
+                deleted_at:
+                    new Date().toISOString()
+
+            });
+
+        // ======================================
+        // DELETE WATCHLIST
+        // ======================================
+
+        await supabase
+
             .from("watchlist")
-            .delete()
-            .eq("user_id", user.id);
 
-        // Delete broker connections
+            .delete()
+
+            .eq(
+                "user_id",
+                user.id
+            );
+
+        // ======================================
+        // DELETE BROKER CONNECTIONS
+        // ======================================
 
         await supabase
-            .from("broker_connections")
-            .delete()
-            .eq("user_id", user.id);
 
-        // Delete auth user
+            .from("broker_connections")
+
+            .delete()
+
+            .eq(
+                "user_id",
+                user.id
+            );
+
+        // ======================================
+        // DELETE PROFILE
+        // ======================================
+
+        await supabase
+
+            .from("profiles")
+
+            .delete()
+
+            .eq(
+                "id",
+                user.id
+            );
+
+        // ======================================
+        // DELETE AUTH USER
+        // ======================================
 
         const {
 
             error: deleteError
 
         } = await supabase.auth.admin.deleteUser(
+
             user.id
+
         );
 
         if (deleteError) {
@@ -100,7 +176,8 @@ serve(async (req) => {
 
                 headers: {
 
-                    "Content-Type": "application/json"
+                    "Content-Type":
+                        "application/json"
 
                 }
 
@@ -116,13 +193,23 @@ serve(async (req) => {
 
             JSON.stringify({
 
-                error: err.message
+                error:
+                    err instanceof Error
+                        ? err.message
+                        : "Unknown error"
 
             }),
 
             {
 
-                status: 500
+                status: 500,
+
+                headers: {
+
+                    "Content-Type":
+                        "application/json"
+
+                }
 
             }
 
