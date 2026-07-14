@@ -192,6 +192,18 @@ AUTH LAYOUT
 
 }
 
+.auth-panel{
+
+    display:none;
+
+}
+
+.auth-panel.active{
+
+    display:flex;
+
+}
+
 </style>
 
 </head>
@@ -323,7 +335,7 @@ AUTH LAYOUT
     <div class="container">
 
         <div class="section" style="
-            max-width:520px;
+            max-width:560px;
             margin:0 auto;
             padding:40px;
             border-radius:16px;
@@ -343,18 +355,24 @@ AUTH LAYOUT
 
             <!-- TITLE -->
 
-            <h2 class="login-title">
-
-                Welcome to EdgeBreak
-
-            </h2>
-
             <p style="
                 margin-bottom:25px;
                 text-align:center;
+                line-height:1.6;
+                color:#cbd5e1;
             ">
 
-                Access your trading workspace or create your EdgeBreak account.
+                <strong>New to EdgeBreak?</strong>
+
+                Create your free account first.
+
+                After verifying your email you'll be taken securely to checkout to start your free trial.
+
+                <br><br>
+
+                Already have an account?
+
+                Simply log in below.
 
             </p>
 
@@ -382,7 +400,7 @@ AUTH LAYOUT
 
             <!-- LOGIN -->
 
-            <div id="loginPanel">
+            <div id="loginPanel" class="auth-panel active">
 
                 <input
                     id="email"
@@ -432,9 +450,7 @@ AUTH LAYOUT
 
             <!-- SIGNUP -->
 
-            <div
-                id="signupPanel"
-                style="display:none;">
+            <div id="signupPanel" class="auth-panel">
 
                 <input
                     id="signupName"
