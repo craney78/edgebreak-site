@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | EdgeBreak</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/dashboard.css">
+
+  <!-- SUPABASE -->
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+  <!-- CONFIG -->
+  <script>
+window.supabaseClient = supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+);
+</script>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+
+if (params.get("paid") !== "true") {
+
+    window.location.href = "pricing.html";
+
+}
+
+</script>
+
+<style>
+
+/* ===================================
+GLASS BUTTON
+=================================== */
+
+.glass-btn{
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    width:100%;
+
+    padding:14px 24px;
+
+    background:rgba(255,255,255,0.05);
+
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+
+    border:1px solid rgba(255,255,255,0.12);
+
+    border-radius:12px;
+
+    color:#ffffff;
+    text-decoration:none;
+    font-weight:600;
+    font-size:15px;
+
+    cursor:pointer;
+
+    transition:all .25s ease;
+}
+
+.glass-btn:hover{
+
+    background:rgba(34,197,94,0.10);
+
+    border-color:rgba(34,197,94,0.30);
+
+    color:#22c55e;
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 10px 30px rgba(34,197,94,0.10);
+}
+
+.glass-btn:active{
+
+    transform:translateY(0);
+
+}
+
+
+
+</style>
+
+</head>
+
+<body class="login-page">
+
+<!-- NAVBAR -->
+<div class="nav">
+  <div class="nav-inner">
+
+    <!-- LEFT -->
+    <div class="nav-left">
+      <a
+          href="index.html"
+          aria-label="EdgeBreak Home"
+      >
+        <img
+          src="images/logo.webp"
+          class="nav-logo"
+          alt="EdgeBreak NASDAQ Market Intelligence"
+          width="40"
+          height="40"
+        >
+      </a>
+      <a href="index.html" class="logo-text">EDGEBREAK</a>
+      <span class="live-badge">LIVE</span>
+    </div>
+
+    <!-- RIGHT SIDE WRAP -->
+    <div class="nav-links-wrap">
+
+      <!-- LINKS -->
+      <div class="nav-links" id="navLinks">
+
+        <a href="index.html" class="nav-link">Home</a>
+
+        <!-- PRODUCTS -->
+        <div class="dropdown">
+          <a href="products.html" class="nav-link">
+            Products ▼
+          </a>
+
+          <div class="dropdown-content">
+
+            <a href="watchlist.html">
+              Edgebreak Trades
+            </a>
+
+            <a href="smart-money-dashboard.html">
+              Smart Money Filter
+            </a>
+
+            <a href="/nasdaq-stock-scanner.html">
+              NASDAQ Scanner 🔒
+            </a>
+            
+          </div>
+        </div>
+
+        <!-- RESOURCES -->
+        <div class="dropdown">
+
+          <a href="#" class="nav-link">
+            Resources ▼
+          </a>
+
+          <div class="dropdown-content">
+
+            <a href="/academy.html">
+              EdgeBreak Training Academy
+            </a>
+
+            <a href="trading-guide.html">
+              EdgeBreak Trading Guide
+            </a>
+
+            <a href="breakout-guide.html">
+              Free Breakout Guide
+            </a>
+
+            <a href="/blog/breakout-trading-strategy.html">
+              Strategy
+            </a>
+
+            <a href="/blog.html">
+              Trading Insights
+            </a>
+
+          </div>
+
+        </div>
+
+        <a href="pricing.html" class="nav-link">
+          Pricing
+        </a>
+
+        <a href="#" class="nav-cta" id="authBtn">
+          Login
+        </a>
+
+      </div>
+
+      <!-- HAMBURGER -->
+      <div class="menu-toggle" id="menuToggle">
+        ☰
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- 🔥 CREATE ACCOUNT HERO WRAPPER -->
+<div class="login-hero" style="
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(56,189,248,0.12), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(168,85,247,0.12), transparent 40%),
+    linear-gradient(rgba(2,6,23,0.6), rgba(2,6,23,0.6)),
+    url('images/hero-bg.png');
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+">
+
+    <div class="container">
+
+        <div class="section" style="
+            max-width:520px;
+            margin:0 auto;
+            padding:40px;
+            border-radius:16px;
+            box-shadow:0 20px 50px rgba(0,0,0,.5);
+        ">
+
+            <!-- LOGO -->
+
+            <div class="hero-logo-wrap">
+
+                <img
+                    src="images/logo.webp"
+                    class="hero-logo"
+                    width="90">
+
+            </div>
+
+            <!-- TITLE -->
+
+            <h2 class="login-title">
+
+                Create Your EdgeBreak Account
+
+            </h2>
+
+            <p style="margin-bottom:20px;">
+
+                Your payment has been received. Complete your account below to access EdgeBreak.
+
+            </p>
+
+            <!-- FULL NAME -->
+
+            <input
+                id="fullName"
+                type="text"
+                placeholder="Full Name"
+                class="input-field">
+
+            <!-- EMAIL -->
+
+            <input
+                id="email"
+                type="email"
+                placeholder="Email Address"
+                class="input-field">
+
+            <!-- PASSWORD -->
+
+            <input
+                id="password"
+                type="password"
+                placeholder="Password"
+                class="input-field">
+
+            <!-- CONFIRM PASSWORD -->
+
+            <input
+                id="confirmPassword"
+                type="password"
+                placeholder="Confirm Password"
+                class="input-field">
+
+            <!-- CREATE ACCOUNT -->
+
+            <button
+                id="actionBtn"
+                class="nav-cta full-width">
+
+                Create Account
+
+            </button>
+
+            <div
+                id="error"
+                class="error-text">
+            </div>
+
+            <div style="
+                margin-top:30px;
+                padding-top:25px;
+                border-top:1px solid rgba(255,255,255,.08);
+                text-align:center;
+            ">
+
+                <p style="
+                    color:#94a3b8;
+                    margin-bottom:15px;
+                ">
+
+                    Already have an account?
+
+                </p>
+
+                <button
+                    onclick="window.location.href='login.html'"
+                    class="glass-btn">
+
+                    Login
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================================
+FOOTER
+=================================== -->
+
+<footer class="footer">
+
+
+<div class="footer-inner">
+
+    <!-- BRAND -->
+
+    <div class="footer-col footer-brand">
+
+        <div class="footer-brand-header">
+
+            <img
+                src="images/logo.webp"
+                alt="EdgeBreak"
+                width="50"
+                height="50"
+            >
+
+            <div>
+
+                <h3>EdgeBreak</h3>
+
+                <div class="footer-status">
+
+                    <span class="status-dot"></span>
+                    NASDAQ Data Updated Daily
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <p>
+            EdgeBreak is a NASDAQ stock research platform designed to help investors identify stocks showing accumulation, buying pressure and breakout potential through simplified market research tools.
+        </p>
+
+        <p class="footer-tagline">
+            Research Smarter. Invest With Confidence.
+        </p>
+
+    </div>
+
+    <!-- PLATFORM -->
+
+    <div class="footer-col">
+
+        <h4>
+            <span class="footer-icon"></span>
+            Platform
+        </h4>
+
+        <a href="smart-money-dashboard.html">
+            Smart Money Filter
+        </a>
+
+        <a href="nasdaq-stock-scanner.html">
+            NASDAQ Screener
+        </a>
+
+        <a href="edgebreak-trades.html">
+            EdgeBreak Trades
+        </a>
+
+        <a href="pricing.html">
+            Pricing
+        </a>
+
+    </div>
+
+    <!-- LEARNING -->
+
+    <div class="footer-col">
+
+        <h4>
+            <span class="footer-icon"></span>
+            Learning Centre
+        </h4>
+
+        <a href="/academy.html">
+            EdgeBreak Training Academy
+        </a>
+
+        <a href="trading-guide.html">
+            Trading Guide
+        </a>
+
+        <a href="breakout-guide.html">
+            Breakout Guide
+        </a>
+
+        <a href="strategy.html">
+            Strategy
+        </a>
+
+        <a href="trading-insights.html">
+            Trading Insights
+        </a>
+
+        <a href="faq.html">
+            Frequently asked Questions
+        </a>
+
+    </div>
+
+    <!-- COMPANY -->
+
+    <div class="footer-col">
+
+        <h4>
+            <span class="footer-icon"></span>
+            Company
+        </h4>
+
+        <a href="about.html">
+            About EdgeBreak
+        </a>
+
+        <a href="support.html">
+            Support
+        </a>
+
+        <a href="privacy.html">
+            Privacy Policy
+        </a>
+
+        <a href="terms.html">
+            Terms of Service
+        </a>
+
+        <a href="disclaimer.html">
+            Disclaimer
+        </a>
+
+    </div>
+
+</div>
+
+<!-- FEATURE STRIP -->
+
+<div class="footer-highlight">
+
+    <div>
+
+        <strong>Smart Money Filter</strong>
+
+        <span>
+            Accumulation & Institutional Interest
+        </span>
+
+    </div>
+
+    <div>
+
+        <strong>Breakout Scanner</strong>
+
+        <span>
+            Confirmed Resistance Breakouts
+        </span>
+
+    </div>
+
+    <div>
+
+        <strong>NASDAQ Screener</strong>
+
+        <span>
+            Research Thousands Of Stocks
+        </span>
+
+    </div>
+
+    <div>
+
+        <strong>Transparent Trades</strong>
+
+        <span>
+            Every Winner, Loser And Active Position
+        </span>
+
+    </div>
+
+</div>
+
+<!-- BOTTOM BAR -->
+
+<div class="footer-bottom">
+
+    <div>
+
+        <p>
+            © 2026 EdgeBreak. All rights reserved.
+        </p>
+
+        <p class="footer-disclaimer">
+
+            Educational and research purposes only.
+
+            EdgeBreak does not provide financial advice,
+            investment recommendations or personal financial services.
+
+            Trading and investing involve risk and may result in loss of capital.
+
+        </p>
+
+    </div>
+
+    <div class="footer-parent-block">
+
+        <a href="https://www.craneplatformlabs.com.au"
+           target="_blank"
+           rel="noopener">
+
+            <img
+                src="images/crane-logo.webp"
+                alt="Crane Platform Labs"
+                class="footer-logo"
+            >
+
+        </a>
+
+        <p class="footer-parent">
+
+            Website by
+
+            <a href="https://www.craneplatformlabs.com.au"
+               target="_blank"
+               rel="noopener">
+
+                Crane Platform Labs
+
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+
+</footer>
+
+<script defer>
+
+// =========================
+// CREATE ACCOUNT
+// =========================
+
+const supabaseClient = window.supabaseClient;
+
+async function handleSignup() {
+
+    const fullName =
+        document.getElementById("fullName").value.trim();
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const confirmPassword =
+        document.getElementById("confirmPassword").value;
+
+    const errorBox =
+        document.getElementById("error");
+
+    errorBox.innerText = "";
+
+    if (!fullName || !email || !password || !confirmPassword) {
+
+        errorBox.innerText =
+            "Please complete all fields.";
+
+        return;
+
+    }
+
+    if (password !== confirmPassword) {
+
+        errorBox.innerText =
+            "Passwords do not match.";
+
+        return;
+
+    }
+
+    if (password.length < 8) {
+
+        errorBox.innerText =
+            "Password must be at least 8 characters.";
+
+        return;
+
+    }
+
+    const btn =
+        document.getElementById("actionBtn");
+
+    btn.disabled = true;
+    btn.innerText = "Creating Account...";
+
+    const { data, error } =
+        await supabaseClient.auth.signUp({
+
+            email,
+            password,
+
+            options: {
+
+                data: {
+
+                    full_name: fullName
+
+                },
+
+                emailRedirectTo:
+                    "https://www.edgebreak.ai/login.html"
+
+            }
+
+        });
+
+    if (error) {
+
+        errorBox.innerText = error.message;
+
+        btn.disabled = false;
+
+        btn.innerText = "Create Account";
+
+        return;
+
+    }
+
+    // =========================
+    // ACTIVATE PAID USER
+    // =========================
+
+    await supabaseClient
+
+        .from("profiles")
+
+        .update({
+
+            is_active: true
+
+        })
+
+        .eq("id", data.user.id);
+
+    document.querySelector(".section").innerHTML = `
+
+        <div style="text-align:center;">
+
+            <div style="
+                width:80px;
+                height:80px;
+                margin:0 auto 25px;
+                border-radius:50%;
+                background:#22c55e;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-size:40px;
+                color:#071225;
+                font-weight:bold;
+            ">
+                ✓
+            </div>
+
+            <h2 class="login-title">
+
+                Account Created
+
+            </h2>
+
+            <p style="line-height:1.8; margin:25px 0;">
+
+                We've sent a verification email to
+
+                <br><br>
+
+                <strong>${email}</strong>
+
+                <br><br>
+
+                Please verify your email.
+
+                <br><br>
+
+                Once verified, log in to access EdgeBreak.
+
+            </p>
+
+            <a
+                href="login.html"
+                class="nav-cta"
+                style="display:inline-block;text-decoration:none;">
+
+                Go To Login
+
+            </a>
+
+        </div>
+
+    `;
+
+}
+
+// =========================
+// EVENTS
+// =========================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    document
+
+        .getElementById("actionBtn")
+
+        .addEventListener("click", handleSignup);
+
+    document.addEventListener("keydown", e => {
+
+        if (e.key === "Enter") {
+
+            handleSignup();
+
+        }
+
+    });
+
+});
+
+
+
+
+// =========================
+// 🔄 NAV LOGIN / LOGOUT
+// =========================
+async function setupAuthButton() {
+
+  const btn = document.getElementById("authBtn");
+  if (!btn) return;
+
+  const { data: { user } } = await supabaseClient.auth.getUser();
+
+  if (user) {
+    btn.innerText = "Logout";
+    btn.href = "#";
+
+    btn.onclick = async (e) => {
+      e.preventDefault();
+      await supabaseClient.auth.signOut();
+      window.location.href = "/login.html";
+    };
+
+  } else {
+    btn.innerText = "Login";
+    btn.href = "/login.html";
+    btn.onclick = null;
+  }
+}
+
+// ✅ RUN
+setupAuthButton();
+
+// 🔁 KEEP IN SYNC
+supabaseClient.auth.onAuthStateChange(() => {
+  setupAuthButton();
+});
+
+
+</script>
+<script>
+// =========================
+// 📱 MOBILE NAV TOGGLE (FIXED)
+// =========================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const toggle = document.getElementById("menuToggle");
+  const nav = document.getElementById("navLinks");
+
+  if (!toggle || !nav) {
+    console.log("❌ Nav elements missing");
+    return;
+  }
+
+  toggle.addEventListener("click", () => {
+    nav.classList.toggle("active");
+  });
+
+  document.querySelectorAll("#navLinks a").forEach(link => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("active");
+    });
+  });
+
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  // If no session → keep locked state
+  if (!session || !session.user) return;
+
+  // Get profile
+  const { data: profile } = await supabaseClient
+    .from("profiles")
+    .select("is_active")
+    .eq("id", session.user.id)
+    .single();
+
+  // If NOT active → keep locked
+  if (!profile || profile.is_active !== true) return;
+
+  // ✅ USER IS ACTIVE → UNLOCK NAV
+
+  document.querySelectorAll(".locked-link").forEach(link => {
+
+    // remove lock icon
+    const icon = link.querySelector(".lock-icon");
+    if (icon) icon.remove();
+
+    // remove locked behaviour
+    link.classList.remove("locked-link");
+
+  });
+
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  document.querySelectorAll(".locked-link").forEach(link => {
+    link.addEventListener("click", function(e) {
+
+      if (this.classList.contains("locked-link")) {
+        e.preventDefault();
+        window.location.href = "pricing.html";
+      }
+
+    });
+  });
+
+});
+</script>
+
+
+
+</body>
+</html>
