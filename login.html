@@ -235,7 +235,7 @@ AUTH TABS
   </div>
 </div>
 
-<!-- 🔥 LOGIN HERO WRAPPER (ONLY ADDITION) -->
+<!-- 🔥 LOGIN HERO WRAPPER -->
 <div class="login-hero" style="
   min-height:100vh;
   display:flex;
@@ -246,180 +246,184 @@ AUTH TABS
     radial-gradient(circle at 80% 70%, rgba(168,85,247,0.12), transparent 40%),
     linear-gradient(rgba(2,6,23,0.6), rgba(2,6,23,0.6)),
     url('images/hero-bg.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
 ">
 
-  <!-- FORM -->
-  <div class="container">
+    <div class="container">
 
-    <div class="section" style="
-      max-width:520px;
-      margin: 0 auto;
-      padding:40px;
-      border-radius:16px;
-      box-shadow:0 20px 50px rgba(0,0,0,0.5);
-    ">
+        <div class="section" style="
+            max-width:520px;
+            margin:0 auto;
+            padding:40px;
+            border-radius:16px;
+            box-shadow:0 20px 50px rgba(0,0,0,.5);
+        ">
 
-      <!-- LOGO -->
-      <div class="hero-logo-wrap">
-        <img src="images/logo.png" class="hero-logo" width="90">
-      </div>
+            <!-- LOGO -->
 
-      <!-- HEADLINE -->
-      <h2 class="login-title">
-        EdgeBreak Login
-      </h2>
+            <div class="hero-logo-wrap">
 
-      <!-- SUBTEXT -->
-      <p style="margin-bottom:20px;">
-        Your account is ready. Log in below to access your dashboard.
-      </p>
+                <img
+                    src="images/logo.png"
+                    class="hero-logo"
+                    width="90">
 
-      <!-- INPUTS -->
-      <!-- INPUTS -->
-      <input id="email" type="email" placeholder="Email" class="input-field">
+            </div>
 
-      <input id="password" type="password" placeholder="Password" class="input-field">
+            <!-- TITLE -->
 
-      <!-- BUTTON -->
-      <button id="actionBtn" class="nav-cta full-width">
-        Login
-      </button>
+            <h2 class="login-title">
 
-      <div style="text-align:center; margin-top:15px;">
-        <a href="#" id="forgotPassword" style="font-size:14px; opacity:0.7;">
-          Forgot your password?
-        </a>
-      </div>
+                Welcome to EdgeBreak
 
-      <!-- ===================================
-      AUTH TABS
-      =================================== -->
+            </h2>
 
-      <div class="auth-tabs">
+            <p style="
+                margin-bottom:25px;
+                text-align:center;
+            ">
 
-          <button
-              id="loginTab"
-              class="auth-tab active">
+                Access your trading workspace or create your EdgeBreak account.
 
-              Login
+            </p>
 
-          </button>
+            <!-- AUTH TABS -->
 
-          <button
-              id="signupTab"
-              class="auth-tab">
+            <div class="auth-tabs">
 
-              Create Account
+                <button
+                    id="loginTab"
+                    class="auth-tab active">
 
-          </button>
+                    Login
 
-          <div
-            id="signupError"
-            class="error-text">
+                </button>
+
+                <button
+                    id="signupTab"
+                    class="auth-tab">
+
+                    Create Account
+
+                </button>
+
+            </div>
+
+            <!-- LOGIN -->
+
+            <div id="loginPanel">
+
+                <input
+                    id="email"
+                    type="email"
+                    placeholder="Email"
+                    class="input-field">
+
+                <input
+                    id="password"
+                    type="password"
+                    placeholder="Password"
+                    class="input-field">
+
+                <button
+                    id="actionBtn"
+                    class="nav-cta full-width">
+
+                    Login
+
+                </button>
+
+                <div style="
+                    text-align:center;
+                    margin-top:18px;
+                ">
+
+                    <a
+                        href="#"
+                        id="forgotPassword"
+                        style="
+                        font-size:14px;
+                        opacity:.7;
+                    ">
+
+                        Forgot your password?
+
+                    </a>
+
+                </div>
+
+                <div
+                    id="error"
+                    class="error-text">
+                </div>
+
+            </div>
+
+            <!-- SIGNUP -->
+
+            <div
+                id="signupPanel"
+                style="display:none;">
+
+                <input
+                    id="signupName"
+                    type="text"
+                    placeholder="Full Name"
+                    class="input-field">
+
+                <input
+                    id="signupEmail"
+                    type="email"
+                    placeholder="Email"
+                    class="input-field">
+
+                <input
+                    id="signupPassword"
+                    type="password"
+                    placeholder="Password"
+                    class="input-field">
+
+                <input
+                    id="signupPassword2"
+                    type="password"
+                    placeholder="Confirm Password"
+                    class="input-field">
+
+                <button
+                    id="signupBtn"
+                    class="nav-cta full-width">
+
+                    Create Account
+
+                </button>
+
+                <div
+                    id="signupError"
+                    class="error-text">
+                </div>
+
+                <p style="
+                    margin-top:20px;
+                    font-size:13px;
+                    color:#94a3b8;
+                    text-align:center;
+                    line-height:1.5;
+                ">
+
+                    By creating an account you agree to the
+                    <a href="terms.html">Terms of Service</a>
+                    and
+                    <a href="privacy.html">Privacy Policy</a>.
+
+                </p>
+
+            </div>
+
         </div>
 
-      </div>
-
-      <!-- ===================================
-      LOGIN PANEL
-      =================================== -->
-
-      <div id="loginPanel">
-
-          <input
-              id="email"
-              type="email"
-              placeholder="Email"
-              class="input-field">
-
-          <input
-              id="password"
-              type="password"
-              placeholder="Password"
-              class="input-field">
-
-          <button
-              id="actionBtn"
-              class="nav-cta full-width">
-
-              Login
-
-          </button>
-
-          <div
-              style="
-              text-align:center;
-              margin-top:15px;
-          ">
-
-              <a
-                  href="#"
-                  id="forgotPassword"
-                  style="
-                  font-size:14px;
-                  opacity:0.7;
-              ">
-
-                  Forgot your password?
-
-              </a>
-
-          </div>
-
-      </div>
-
-      <!-- ===================================
-      CREATE ACCOUNT PANEL
-      =================================== -->
-
-      <div
-          id="signupPanel"
-          style="display:none;">
-
-          <input
-              id="signupName"
-              type="text"
-              placeholder="Full Name"
-              class="input-field">
-
-          <input
-              id="signupEmail"
-              type="email"
-              placeholder="Email"
-              class="input-field">
-
-          <input
-              id="signupPassword"
-              type="password"
-              placeholder="Password"
-              class="input-field">
-
-          <input
-              id="signupPassword2"
-              type="password"
-              placeholder="Confirm Password"
-              class="input-field">
-
-          <button
-              id="signupBtn"
-              class="nav-cta full-width">
-
-              Create Account
-
-          </button>
-
-      </div>
-
-
-      <!-- ERROR -->
-      <div id="error" class="error-text"></div>
-
     </div>
-
-  </div>
 
 </div>
 
