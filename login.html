@@ -797,6 +797,8 @@ async function handleAuth() {
   window.location.href = "/nasdaq-stock-scanner.html";
 }
 
+
+
 // =========================
 // CREATE ACCOUNT
 // =========================
@@ -884,13 +886,81 @@ async function handleSignup() {
 
     }
 
-    alert(
+    // ===================================
+    // SUCCESS
+    // ===================================
 
-        "Your account has been created.\n\nPlease check your email to verify your account before continuing."
+    document.getElementById("signupPanel").innerHTML = `
 
-    );
+        <div style="
+            text-align:center;
+            padding:15px 10px;
+        ">
 
-    window.location.reload();
+            <div style="
+                width:72px;
+                height:72px;
+                margin:0 auto 25px;
+                border-radius:50%;
+                background:#22c55e;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-size:36px;
+                color:#071225;
+                font-weight:700;
+            ">
+                ✓
+            </div>
+
+            <h2 style="
+                margin-bottom:18px;
+                color:#ffffff;
+            ">
+                Account Created
+            </h2>
+
+            <p style="
+                color:#cbd5e1;
+                line-height:1.7;
+                margin-bottom:30px;
+            ">
+
+                We've sent a verification email to
+
+                <br><br>
+
+                <strong style="color:#ffffff;">
+                    ${email}
+                </strong>
+
+                <br><br>
+
+                Please verify your email.
+
+                <br><br>
+
+                After verifying your email, simply log in and we'll securely take you to checkout to start your free trial.
+
+            </p>
+
+            <button
+                id="returnLogin"
+                class="nav-cta full-width">
+
+                Return to Login
+
+            </button>
+
+        </div>
+
+    `;
+
+    document.getElementById("returnLogin").addEventListener("click", () => {
+
+        document.getElementById("loginTab").click();
+
+    });
 
 }
 
@@ -940,14 +1010,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const signupBtn = document.getElementById("signupBtn");
 
-if (signupBtn){
+if (signupBtn) {
 
     signupBtn.addEventListener(
-
         "click",
-
         handleSignup
-
     );
 
 }
@@ -1126,8 +1193,8 @@ document.addEventListener("DOMContentLoaded", () => {
         loginTab.classList.add("active");
         signupTab.classList.remove("active");
 
-        loginPanel.style.display = "block";
-        signupPanel.style.display = "none";
+        loginPanel.classList.add("active");
+        signupPanel.classList.remove("active");
 
     });
 
@@ -1136,8 +1203,8 @@ document.addEventListener("DOMContentLoaded", () => {
         signupTab.classList.add("active");
         loginTab.classList.remove("active");
 
-        loginPanel.style.display = "none";
-        signupPanel.style.display = "block";
+        signupPanel.classList.add("active");
+        loginPanel.classList.remove("active");
 
     });
 
