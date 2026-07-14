@@ -577,171 +577,24 @@ FOOTER
 <script defer>
 
 // =========================
-// CREATE ACCOUNT
+// ACTIVATE PAID USER
 // =========================
 
-const supabaseClient = window.supabaseClient;
+// Wait for the profile trigger to finish
+await new Promise(resolve => setTimeout(resolve, 1000));
 
-async function handleSignup() {
+const { error: activateError } = await supabaseClient
+    .from("profiles")
+    .update({
+        is_active: true
+    })
+    .eq("id", data.user.id);
 
-    const fullName =
-        document.getElementById("fullName").value.trim();
+if (activateError) {
 
-    const email =
-        document.getElementById("email").value.trim();
-
-    const password =
-        document.getElementById("password").value;
-
-    const confirmPassword =
-        document.getElementById("confirmPassword").value;
-
-    const errorBox =
-        document.getElementById("error");
-
-    errorBox.innerText = "";
-
-    if (!fullName || !email || !password || !confirmPassword) {
-
-        errorBox.innerText =
-            "Please complete all fields.";
-
-        return;
-
-    }
-
-    if (password !== confirmPassword) {
-
-        errorBox.innerText =
-            "Passwords do not match.";
-
-        return;
-
-    }
-
-    if (password.length < 8) {
-
-        errorBox.innerText =
-            "Password must be at least 8 characters.";
-
-        return;
-
-    }
-
-    const btn =
-        document.getElementById("actionBtn");
-
-    btn.disabled = true;
-    btn.innerText = "Creating Account...";
-
-    const { data, error } =
-        await supabaseClient.auth.signUp({
-
-            email,
-            password,
-
-            options: {
-
-                data: {
-
-                    full_name: fullName
-
-                },
-
-                emailRedirectTo:
-                    "https://www.edgebreak.ai/login.html"
-
-            }
-
-        });
-
-    if (error) {
-
-        errorBox.innerText = error.message;
-
-        btn.disabled = false;
-
-        btn.innerText = "Create Account";
-
-        return;
-
-    }
-
-    // =========================
-    // ACTIVATE PAID USER
-    // =========================
-
-    await supabaseClient
-
-        .from("profiles")
-
-        .update({
-
-            is_active: true
-
-        })
-
-        .eq("id", data.user.id);
-
-    document.querySelector(".section").innerHTML = `
-
-        <div style="text-align:center;">
-
-            <div style="
-                width:80px;
-                height:80px;
-                margin:0 auto 25px;
-                border-radius:50%;
-                background:#22c55e;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                font-size:40px;
-                color:#071225;
-                font-weight:bold;
-            ">
-                ✓
-            </div>
-
-            <h2 class="login-title">
-
-                Account Created
-
-            </h2>
-
-            <p style="line-height:1.8; margin:25px 0;">
-
-                We've sent a verification email to
-
-                <br><br>
-
-                <strong>${email}</strong>
-
-                <br><br>
-
-                Please verify your email.
-
-                <br><br>
-
-                Once verified, log in to access EdgeBreak.
-
-            </p>
-
-            <a
-                href="login.html"
-                class="nav-cta"
-                style="display:inline-block;text-decoration:none;">
-
-                Go To Login
-
-            </a>
-
-        </div>
-
-    `;
+    console.error("Activation failed:", activateError);
 
 }
-
 // =========================
 // EVENTS
 // =========================
