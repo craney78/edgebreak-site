@@ -655,6 +655,13 @@ async function handleSignup() {
 
         });
 
+    // =========================
+    // DEBUG
+    // =========================
+
+    console.log("SIGNUP DATA:", data);
+    console.log("SIGNUP ERROR:", error);
+
     if (error) {
 
         errorBox.innerText = error.message;
@@ -671,21 +678,19 @@ async function handleSignup() {
     // ACTIVATE PAID USER
     // =========================
 
-    // Wait for the profile trigger to create the row
-
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    await supabaseClient
+    const { data: updateData, error: updateError } =
+        await supabaseClient
+            .from("profiles")
+            .update({
+                is_active: true
+            })
+            .eq("id", data.user.id)
+            .select();
 
-        .from("profiles")
-
-        .update({
-
-            is_active: true
-
-        })
-
-        .eq("id", data.user.id);
+    console.log("PROFILE UPDATE:", updateData);
+    console.log("PROFILE UPDATE ERROR:", updateError);
 
     // =========================
     // SUCCESS
