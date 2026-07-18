@@ -674,66 +674,89 @@ async function handleSignup() {
     }
 
     // =========================
+    // AUTOMATIC LOGIN
+    // =========================
+
+    const { error: loginError } =
+        await supabaseClient.auth.signInWithPassword({
+
+            email,
+            password
+
+        });
+
+    if (loginError) {
+
+        errorBox.innerText =
+            loginError.message;
+
+        btn.disabled = false;
+        btn.innerText = "Create Account";
+
+        return;
+
+    }
+
+    // =========================
+    // GET SESSION
+    // =========================
+
+    const {
+        data: { session }
+    } = await supabaseClient.auth.getSession();
+
+    if (!session) {
+
+        errorBox.innerText =
+            "Unable to create session.";
+
+        return;
+
+    }
+
+    // =========================
+    // ACTIVATE ACCOUNT
+    // =========================
+
+    const activateResponse =
+        await fetch(
+            "https://qmonyhukamuuunxxxdlk.supabase.co/functions/v1/activate-account",
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Authorization":
+                        `Bearer ${session.access_token}`,
+
+                    "Content-Type":
+                        "application/json"
+
+                }
+
+            }
+        );
+
+    const activateResult =
+        await activateResponse.json();
+
+    if (!activateResult.success) {
+
+        errorBox.innerText =
+            activateResult.error ||
+            "Unable to activate subscription.";
+
+        return;
+
+    }
+
+    // =========================
     // SUCCESS
     // =========================
 
-    document.querySelector(".section").innerHTML = `
-
-        <div style="text-align:center;">
-
-            <div style="
-                width:80px;
-                height:80px;
-                margin:0 auto 25px;
-                border-radius:50%;
-                background:#22c55e;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                font-size:40px;
-                color:#071225;
-                font-weight:bold;
-            ">
-                ✓
-            </div>
-
-            <h2 class="login-title">
-
-                Account Created
-
-            </h2>
-
-            <p style="line-height:1.8; margin:25px 0;">
-
-                Your EdgeBreak account has been created successfully.
-
-                <br><br>
-
-                <strong>${email}</strong>
-
-                <br><br>
-
-                Click below to log in.
-
-                If your subscription has already been activated by Stripe,
-                you'll be taken straight into EdgeBreak.
-
-            </p>
-
-            <a
-                href="login.html"
-                class="nav-cta"
-                style="display:inline-block;text-decoration:none;">
-
-                Go To Login
-
-            </a>
-
-        </div>
-
-    `;
-
-}
+    window.location.href =
+        "/nasdaq-stock-scanner.html";
 
 // =========================
 // EVENTS

@@ -44,7 +44,7 @@ serve(async (req) => {
         ],
 
         success_url:
-          "https://www.edgebreak.ai/create-account.html",
+          "https://www.edgebreak.ai/create-account.html?paid=true",
 
         cancel_url:
           "https://www.edgebreak.ai/pricing.html"

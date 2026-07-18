@@ -33,8 +33,7 @@ serve(async (req) => {
 
   } catch (err) {
 
-    console.error("❌ WEBHOOK SIGNATURE ERROR");
-    console.error(err);
+    console.error("❌ Signature Error:", err);
 
     return new Response(
       JSON.stringify({
@@ -62,36 +61,31 @@ serve(async (req) => {
         const email = session.customer_details?.email;
         const customerId = session.customer;
 
-        console.log("Checkout Complete:", email, customerId);
-
         if (!email) {
 
-          console.error("Missing customer email.");
+          console.error("No customer email.");
 
           break;
 
         }
 
-        const { data, error } = await supabase
-          .from("profiles")
-          .update({
-            is_active: true,
-            stripe_customer_id: customerId
-          })
-          .eq("email", email)
-          .select();
+        console.log("Saving paid customer:", email);
+
+        const { error } = await supabase
+          .from("paid_customers")
+          .upsert({
+            email,
+            stripe_customer_id: customerId,
+            status: "active"
+          });
 
         if (error) {
 
-          console.error("Profile update failed:", error);
-
-        } else if (!data || data.length === 0) {
-
-          console.error("No profile found for:", email);
+          console.error("Paid customer save failed:", error);
 
         } else {
 
-          console.log("✅ Profile activated:", data);
+          console.log("✅ Payment recorded");
 
         }
 
@@ -172,8 +166,7 @@ serve(async (req) => {
 
   } catch (err) {
 
-    console.error("❌ WEBHOOK PROCESSING ERROR");
-    console.error(err);
+    console.error("Webhook Error:", err);
 
     return new Response(
       JSON.stringify({
