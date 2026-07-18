@@ -16,34 +16,24 @@ const supabase = createClient(
 
 serve(async (req) => {
 
-  const signature =
-    req.headers.get("stripe-signature");
-
-  const body =
-    await req.text();
+  const signature = req.headers.get("stripe-signature");
+  const body = await req.text();
 
   let event;
 
   try {
 
-    event =
-      stripe.webhooks.constructEvent(
-        body,
-        signature!,
-        Deno.env.get("STRIPE_WEBHOOK_SECRET")!
-      );
-
-    console.log(
-      "✅ Stripe Event:",
-      event.type
+    event = await stripe.webhooks.constructEventAsync(
+      body,
+      signature!,
+      Deno.env.get("STRIPE_WEBHOOK_SECRET")!
     );
+
+    console.log("✅ Stripe Event:", event.type);
 
   } catch (err) {
 
-    console.error(
-      "❌ WEBHOOK SIGNATURE ERROR"
-    );
-
+    console.error("❌ WEBHOOK SIGNATURE ERROR");
     console.error(err);
 
     return new Response(
@@ -67,8 +57,7 @@ serve(async (req) => {
 
       case "checkout.session.completed": {
 
-        const session =
-          event.data.object;
+        const session = event.data.object;
 
         const email =
           session.customer_details?.email;
@@ -275,22 +264,14 @@ serve(async (req) => {
     }
 
     return new Response(
-
       JSON.stringify({
         received: true
       }),
-
       {
-
         headers: {
-
-          "Content-Type":
-            "application/json"
-
+          "Content-Type": "application/json"
         }
-
       }
-
     );
 
   } catch (err) {
@@ -302,25 +283,16 @@ serve(async (req) => {
     console.error(err);
 
     return new Response(
-
       JSON.stringify({
         success: false,
         error: String(err)
       }),
-
       {
-
         status: 500,
-
         headers: {
-
-          "Content-Type":
-            "application/json"
-
+          "Content-Type": "application/json"
         }
-
       }
-
     );
 
   }
