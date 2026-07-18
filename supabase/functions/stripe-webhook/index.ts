@@ -17,7 +17,7 @@ const supabase = createClient(
 serve(async (req) => {
 
   const signature =
-    req.headers.get("stripe-signature")!;
+    req.headers.get("stripe-signature");
 
   const body =
     await req.text();
@@ -29,147 +29,300 @@ serve(async (req) => {
     event =
       stripe.webhooks.constructEvent(
         body,
-        signature,
+        signature!,
         Deno.env.get("STRIPE_WEBHOOK_SECRET")!
       );
 
+    console.log(
+      "✅ Stripe Event:",
+      event.type
+    );
+
   } catch (err) {
 
+    console.error(
+      "❌ WEBHOOK SIGNATURE ERROR"
+    );
+
+    console.error(err);
+
     return new Response(
-      `Webhook Error: ${err.message}`,
-      { status: 400 }
+      JSON.stringify({
+        success: false,
+        error: String(err)
+      }),
+      {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
     );
 
   }
 
-  switch (event.type) {
+  try {
 
-    case "checkout.session.completed": {
+    switch (event.type) {
 
-      const session = event.data.object;
+      case "checkout.session.completed": {
 
-      const email =
-        session.customer_details?.email;
+        const session =
+          event.data.object;
 
-      const customerId =
-        session.customer;
+        const email =
+          session.customer_details?.email;
 
-      if (email) {
+        const customerId =
+          session.customer;
 
-        // Look for an existing profile by email
-        const { data: profile } =
+        console.log(
+          "Checkout Complete",
+          email,
+          customerId
+        );
+
+        if (!email) {
+
+          console.error(
+            "No customer email supplied."
+          );
+
+          break;
+
+        }
+
+        const {
+          data: profile,
+          error: lookupError
+        } =
           await supabase
             .from("profiles")
             .select("id")
             .eq("email", email)
             .maybeSingle();
 
+        if (lookupError) {
+
+          console.error(
+            "Lookup Error:",
+            lookupError
+          );
+
+          break;
+
+        }
+
         if (profile) {
 
-          // Existing user
+          console.log(
+            "Updating existing profile..."
+          );
+
           const { error } =
             await supabase
               .from("profiles")
               .update({
-                stripe_customer_id: customerId,
+
+                stripe_customer_id:
+                  customerId,
+
                 is_active: true
+
               })
-              .eq("id", profile.id);
+              .eq(
+                "id",
+                profile.id
+              );
 
           if (error) {
-            console.error(error);
+
+            console.error(
+              "Update Error:",
+              error
+            );
+
+          } else {
+
+            console.log(
+              "✅ Profile Activated"
+            );
+
           }
 
         } else {
 
-          // Payment happened before account creation
+          console.log(
+            "Creating profile..."
+          );
+
           const { error } =
             await supabase
               .from("profiles")
               .insert({
+
                 email,
-                stripe_customer_id: customerId,
+
+                stripe_customer_id:
+                  customerId,
+
                 is_active: true
+
               });
 
           if (error) {
-            console.error(error);
+
+            console.error(
+              "Insert Error:",
+              error
+            );
+
+          } else {
+
+            console.log(
+              "✅ Profile Created"
+            );
+
           }
+
+        }
+
+        break;
+
+      }
+
+      case "customer.subscription.deleted": {
+
+        const subscription =
+          event.data.object;
+
+        const customerId =
+          subscription.customer;
+
+        const { error } =
+          await supabase
+            .from("profiles")
+            .update({
+
+              is_active: false
+
+            })
+            .eq(
+              "stripe_customer_id",
+              customerId
+            );
+
+        if (error) {
+
+          console.error(error);
+
+        } else {
+
+          console.log(
+            "Subscription cancelled."
+          );
+
+        }
+
+        break;
+
+      }
+
+      case "invoice.payment_failed": {
+
+        const invoice =
+          event.data.object;
+
+        const customerId =
+          invoice.customer;
+
+        const { error } =
+          await supabase
+            .from("profiles")
+            .update({
+
+              is_active: false
+
+            })
+            .eq(
+              "stripe_customer_id",
+              customerId
+            );
+
+        if (error) {
+
+          console.error(error);
+
+        } else {
+
+          console.log(
+            "Payment failed."
+          );
+
+        }
+
+        break;
+
+      }
+
+      default:
+
+        console.log(
+          "Unhandled Event:",
+          event.type
+        );
+
+    }
+
+    return new Response(
+
+      JSON.stringify({
+        received: true
+      }),
+
+      {
+
+        headers: {
+
+          "Content-Type":
+            "application/json"
 
         }
 
       }
 
-      break;
+    );
 
-    }
+  } catch (err) {
 
-    case "customer.subscription.deleted": {
+    console.error(
+      "❌ WEBHOOK PROCESSING ERROR"
+    );
 
-      const subscription =
-        event.data.object;
+    console.error(err);
 
-      const customerId =
-        subscription.customer;
+    return new Response(
 
-      const { error } =
-        await supabase
-          .from("profiles")
-          .update({
-            is_active: false
-          })
-          .eq(
-            "stripe_customer_id",
-            customerId
-          );
+      JSON.stringify({
+        success: false,
+        error: String(err)
+      }),
 
-      if (error) {
-        console.error(error);
+      {
+
+        status: 500,
+
+        headers: {
+
+          "Content-Type":
+            "application/json"
+
+        }
+
       }
 
-      break;
-
-    }
-
-    case "invoice.payment_failed": {
-
-      const invoice =
-        event.data.object;
-
-      const customerId =
-        invoice.customer;
-
-      const { error } =
-        await supabase
-          .from("profiles")
-          .update({
-            is_active: false
-          })
-          .eq(
-            "stripe_customer_id",
-            customerId
-          );
-
-      if (error) {
-        console.error(error);
-      }
-
-      break;
-
-    }
+    );
 
   }
-
-  return new Response(
-    JSON.stringify({
-      received: true
-    }),
-    {
-      headers: {
-        "Content-Type":
-          "application/json"
-      }
-    }
-  );
 
 });
