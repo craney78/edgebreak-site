@@ -634,7 +634,7 @@ async function handleSignup() {
     btn.disabled = true;
     btn.innerText = "Creating Account...";
 
-    const { data, error } =
+    const { error } =
         await supabaseClient.auth.signUp({
 
             email,
@@ -654,13 +654,6 @@ async function handleSignup() {
             }
 
         });
-
-    // =========================
-    // DEBUG
-    // =========================
-
-    console.log("SIGNUP DATA:", data);
-    console.log("SIGNUP ERROR:", error);
 
     if (error) {
 
@@ -747,6 +740,9 @@ async function handleSignup() {
             activateResult.error ||
             "Unable to activate subscription.";
 
+        btn.disabled = false;
+        btn.innerText = "Create Account";
+
         return;
 
     }
@@ -758,6 +754,8 @@ async function handleSignup() {
     window.location.href =
         "/nasdaq-stock-scanner.html";
 
+}
+
 // =========================
 // EVENTS
 // =========================
@@ -765,9 +763,7 @@ async function handleSignup() {
 document.addEventListener("DOMContentLoaded", () => {
 
     document
-
         .getElementById("actionBtn")
-
         .addEventListener("click", handleSignup);
 
     document.addEventListener("keydown", e => {
@@ -781,7 +777,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
-
 
 
 
