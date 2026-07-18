@@ -1,12 +1,8 @@
 import { serve } from "https://deno.land/std/http/server.ts";
 import Stripe from "https://esm.sh/stripe@14?target=denonext";
 
-const key = Deno.env.get("STRIPE_SECRET_KEY");
-
-console.log("KEY PREFIX:", key?.substring(0, 8));
-
 const stripe = new Stripe(
-  key!,
+  Deno.env.get("STRIPE_SECRET_KEY")!,
   {
     apiVersion: "2024-06-20"
   }

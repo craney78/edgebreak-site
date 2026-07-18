@@ -667,30 +667,11 @@ async function handleSignup() {
         errorBox.innerText = error.message;
 
         btn.disabled = false;
-
         btn.innerText = "Create Account";
 
         return;
 
     }
-
-    // =========================
-    // ACTIVATE PAID USER
-    // =========================
-
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    const { data: updateData, error: updateError } =
-        await supabaseClient
-            .from("profiles")
-            .update({
-                is_active: true
-            })
-            .eq("id", data.user.id)
-            .select();
-
-    console.log("PROFILE UPDATE:", updateData);
-    console.log("PROFILE UPDATE ERROR:", updateError);
 
     // =========================
     // SUCCESS
@@ -724,7 +705,7 @@ async function handleSignup() {
 
             <p style="line-height:1.8; margin:25px 0;">
 
-                We've sent a verification email to
+                Your EdgeBreak account has been created successfully.
 
                 <br><br>
 
@@ -732,11 +713,10 @@ async function handleSignup() {
 
                 <br><br>
 
-                Please verify your email.
+                Click below to log in.
 
-                <br><br>
-
-                Once verified, log in to access EdgeBreak.
+                If your subscription has already been activated by Stripe,
+                you'll be taken straight into EdgeBreak.
 
             </p>
 
@@ -754,6 +734,7 @@ async function handleSignup() {
     `;
 
 }
+
 // =========================
 // EVENTS
 // =========================
