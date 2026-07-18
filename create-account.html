@@ -599,6 +599,9 @@ async function handleSignup() {
     const errorBox =
         document.getElementById("error");
 
+    const btn =
+        document.getElementById("actionBtn");
+
     errorBox.innerText = "";
 
     if (!fullName || !email || !password || !confirmPassword) {
@@ -628,32 +631,38 @@ async function handleSignup() {
 
     }
 
-    const btn =
-        document.getElementById("actionBtn");
-
     btn.disabled = true;
     btn.innerText = "Creating Account...";
 
-    const { error } =
-        await supabaseClient.auth.signUp({
+    // =========================
+    // CREATE ACCOUNT
+    // =========================
 
-            email,
-            password,
+    const {
 
-            options: {
+        data: signupData,
+        error
 
-                data: {
+    } = await supabaseClient.auth.signUp({
 
-                    full_name: fullName
+        email,
 
-                },
+        password,
 
-                emailRedirectTo:
-                    "https://www.edgebreak.ai/login.html"
+        options: {
+
+            data: {
+
+                full_name: fullName
 
             }
 
-        });
+        }
+
+    });
+
+    console.log("SIGNUP:", signupData);
+    console.log("SIGNUP ERROR:", error);
 
     if (error) {
 
@@ -667,21 +676,33 @@ async function handleSignup() {
     }
 
     // =========================
-    // AUTOMATIC LOGIN
+    // WAIT FOR SESSION
     // =========================
 
-    const { error: loginError } =
-        await supabaseClient.auth.signInWithPassword({
+    let session = null;
 
-            email,
-            password
+    for (let i = 0; i < 10; i++) {
 
-        });
+        const {
 
-    if (loginError) {
+            data
+
+        } = await supabaseClient.auth.getSession();
+
+        session = data.session;
+
+        if (session) break;
+
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+    }
+
+    console.log("SESSION:", session);
+
+    if (!session) {
 
         errorBox.innerText =
-            loginError.message;
+            "Unable to create login session.";
 
         btn.disabled = false;
         btn.innerText = "Create Account";
@@ -691,25 +712,10 @@ async function handleSignup() {
     }
 
     // =========================
-    // GET SESSION
-    // =========================
-
-    const {
-        data: { session }
-    } = await supabaseClient.auth.getSession();
-
-    if (!session) {
-
-        errorBox.innerText =
-            "Unable to create session.";
-
-        return;
-
-    }
-
-    // =========================
     // ACTIVATE ACCOUNT
     // =========================
+
+    console.log("Calling activate-account...");
 
     const activateResponse =
         await fetch(
@@ -733,6 +739,8 @@ async function handleSignup() {
 
     const activateResult =
         await activateResponse.json();
+
+    console.log("ACTIVATE RESULT:", activateResult);
 
     if (!activateResult.success) {
 
