@@ -59,120 +59,39 @@ serve(async (req) => {
 
         const session = event.data.object;
 
-        const email =
-          session.customer_details?.email;
+        const email = session.customer_details?.email;
+        const customerId = session.customer;
 
-        const customerId =
-          session.customer;
-
-        console.log(
-          "Checkout Complete",
-          email,
-          customerId
-        );
+        console.log("Checkout Complete:", email, customerId);
 
         if (!email) {
 
-          console.error(
-            "No customer email supplied."
-          );
+          console.error("Missing customer email.");
 
           break;
 
         }
 
-        const {
-          data: profile,
-          error: lookupError
-        } =
-          await supabase
-            .from("profiles")
-            .select("id")
-            .eq("email", email)
-            .maybeSingle();
+        const { data, error } = await supabase
+          .from("profiles")
+          .update({
+            is_active: true,
+            stripe_customer_id: customerId
+          })
+          .eq("email", email)
+          .select();
 
-        if (lookupError) {
+        if (error) {
 
-          console.error(
-            "Lookup Error:",
-            lookupError
-          );
+          console.error("Profile update failed:", error);
 
-          break;
+        } else if (!data || data.length === 0) {
 
-        }
-
-        if (profile) {
-
-          console.log(
-            "Updating existing profile..."
-          );
-
-          const { error } =
-            await supabase
-              .from("profiles")
-              .update({
-
-                stripe_customer_id:
-                  customerId,
-
-                is_active: true
-
-              })
-              .eq(
-                "id",
-                profile.id
-              );
-
-          if (error) {
-
-            console.error(
-              "Update Error:",
-              error
-            );
-
-          } else {
-
-            console.log(
-              "✅ Profile Activated"
-            );
-
-          }
+          console.error("No profile found for:", email);
 
         } else {
 
-          console.log(
-            "Creating profile..."
-          );
-
-          const { error } =
-            await supabase
-              .from("profiles")
-              .insert({
-
-                email,
-
-                stripe_customer_id:
-                  customerId,
-
-                is_active: true
-
-              });
-
-          if (error) {
-
-            console.error(
-              "Insert Error:",
-              error
-            );
-
-          } else {
-
-            console.log(
-              "✅ Profile Created"
-            );
-
-          }
+          console.log("✅ Profile activated:", data);
 
         }
 
@@ -182,24 +101,16 @@ serve(async (req) => {
 
       case "customer.subscription.deleted": {
 
-        const subscription =
-          event.data.object;
+        const subscription = event.data.object;
 
-        const customerId =
-          subscription.customer;
+        const customerId = subscription.customer;
 
-        const { error } =
-          await supabase
-            .from("profiles")
-            .update({
-
-              is_active: false
-
-            })
-            .eq(
-              "stripe_customer_id",
-              customerId
-            );
+        const { error } = await supabase
+          .from("profiles")
+          .update({
+            is_active: false
+          })
+          .eq("stripe_customer_id", customerId);
 
         if (error) {
 
@@ -207,9 +118,7 @@ serve(async (req) => {
 
         } else {
 
-          console.log(
-            "Subscription cancelled."
-          );
+          console.log("Subscription cancelled.");
 
         }
 
@@ -219,24 +128,16 @@ serve(async (req) => {
 
       case "invoice.payment_failed": {
 
-        const invoice =
-          event.data.object;
+        const invoice = event.data.object;
 
-        const customerId =
-          invoice.customer;
+        const customerId = invoice.customer;
 
-        const { error } =
-          await supabase
-            .from("profiles")
-            .update({
-
-              is_active: false
-
-            })
-            .eq(
-              "stripe_customer_id",
-              customerId
-            );
+        const { error } = await supabase
+          .from("profiles")
+          .update({
+            is_active: false
+          })
+          .eq("stripe_customer_id", customerId);
 
         if (error) {
 
@@ -244,9 +145,7 @@ serve(async (req) => {
 
         } else {
 
-          console.log(
-            "Payment failed."
-          );
+          console.log("Payment failed.");
 
         }
 
@@ -256,10 +155,7 @@ serve(async (req) => {
 
       default:
 
-        console.log(
-          "Unhandled Event:",
-          event.type
-        );
+        console.log("Unhandled Event:", event.type);
 
     }
 
@@ -276,10 +172,7 @@ serve(async (req) => {
 
   } catch (err) {
 
-    console.error(
-      "❌ WEBHOOK PROCESSING ERROR"
-    );
-
+    console.error("❌ WEBHOOK PROCESSING ERROR");
     console.error(err);
 
     return new Response(
