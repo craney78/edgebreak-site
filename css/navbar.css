@@ -411,3 +411,404 @@ DIVIDER & HEADINGS
 
 
 
+/* ========================================
+AUTH AREA
+======================================== */
+
+.eb-navbar-auth{
+
+    display:flex;
+
+    align-items:center;
+
+    flex-shrink:0;
+
+}
+
+.eb-auth-logged-out,
+.eb-auth-logged-in{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.eb-login-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:12px 18px;
+
+    border-radius:10px;
+
+    color:var(--eb-text);
+
+    text-decoration:none;
+
+    font-size:.95rem;
+
+    font-weight:500;
+
+    transition:
+        background .25s ease,
+        color .25s ease;
+
+}
+
+.eb-login-btn:hover{
+
+    background:var(--eb-hover);
+
+}
+
+.eb-trial-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:12px 20px;
+
+    border-radius:10px;
+
+    background:var(--eb-accent);
+
+    color:var(--eb-nav-bg);
+
+    text-decoration:none;
+
+    font-size:.95rem;
+
+    font-weight:700;
+
+    transition:
+        transform .2s ease,
+        opacity .2s ease;
+
+}
+
+.eb-trial-btn:hover{
+
+    transform:translateY(-1px);
+
+    opacity:.92;
+
+}
+
+
+/* ========================================
+MOBILE MENU BUTTON
+======================================== */
+
+.eb-mobile-toggle{
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:48px;
+
+    height:48px;
+
+    padding:0;
+
+    background:transparent;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    transition:background .25s ease;
+
+}
+
+.eb-mobile-toggle:hover{
+
+    background:var(--eb-hover);
+
+}
+
+.eb-mobile-toggle-icon{
+
+    width:24px;
+
+    height:24px;
+
+    flex-shrink:0;
+
+}
+
+
+
+/* ========================================
+MOBILE OVERLAY
+======================================== */
+
+.eb-mobile-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:var(--eb-nav-bg);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    pointer-events:none;
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease;
+
+    z-index:2000;
+
+}
+
+.eb-mobile-overlay.active{
+
+    opacity:1;
+
+    visibility:visible;
+
+    pointer-events:auto;
+
+}
+
+.eb-mobile-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    min-height:80px;
+
+    padding:0 24px;
+
+    border-bottom:1px solid var(--eb-border);
+
+}
+
+.eb-mobile-brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    text-decoration:none;
+
+}
+
+.eb-mobile-logo{
+
+    width:42px;
+
+    height:42px;
+
+    object-fit:contain;
+
+}
+
+.eb-mobile-close{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:48px;
+
+    height:48px;
+
+    padding:0;
+
+    background:transparent;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    transition:background .25s ease;
+
+}
+
+.eb-mobile-close:hover{
+
+    background:var(--eb-hover);
+
+}
+
+.eb-mobile-close-icon{
+
+    width:24px;
+
+    height:24px;
+
+    flex-shrink:0;
+
+}
+
+.eb-mobile-content{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:24px;
+
+}
+
+
+
+/* ========================================
+MOBILE NAVIGATION
+======================================== */
+
+.eb-mobile-content nav,
+.eb-mobile-content .eb-mobile-nav{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+.eb-mobile-content .eb-dropdown-heading{
+
+    margin-top:12px;
+
+}
+
+.eb-mobile-content .eb-dropdown-item,
+.eb-mobile-content .eb-dropdown-sub-item,
+.eb-mobile-content .eb-nav-link{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    width:100%;
+
+    padding:14px 16px;
+
+    border-radius:10px;
+
+    color:var(--eb-text);
+
+    text-decoration:none;
+
+    transition:
+        background .2s ease,
+        color .2s ease;
+
+}
+
+.eb-mobile-content .eb-dropdown-item:hover,
+.eb-mobile-content .eb-dropdown-sub-item:hover,
+.eb-mobile-content .eb-nav-link:hover{
+
+    background:var(--eb-hover);
+
+}
+
+.eb-mobile-content .eb-dropdown-sub-item{
+
+    padding-left:36px;
+
+}
+
+
+
+/* ========================================
+RESPONSIVE
+======================================== */
+
+@media (max-width:1024px){
+
+    .eb-navbar-container{
+
+        padding:0 20px;
+
+    }
+
+    .eb-navbar-desktop,
+    .eb-navbar-auth{
+
+        display:none;
+
+    }
+
+    .eb-mobile-toggle{
+
+        display:flex;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .eb-navbar{
+
+        min-height:72px;
+
+    }
+
+    .eb-navbar-container{
+
+        min-height:72px;
+
+        padding:0 16px;
+
+    }
+
+    .eb-navbar-title{
+
+        font-size:1.15rem;
+
+    }
+
+    .eb-live-badge{
+
+        display:none;
+
+    }
+
+    .eb-mobile-header{
+
+        min-height:72px;
+
+        padding:0 16px;
+
+    }
+
+}
