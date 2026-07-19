@@ -1883,6 +1883,161 @@ RESPONSIVE
     }
 
 }
+
+/* ===================================
+DELETE ACCOUNT MODAL
+=================================== */
+
+.modal-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:rgba(7,18,37,.75);
+
+    backdrop-filter:blur(6px);
+
+    -webkit-backdrop-filter:blur(6px);
+
+    z-index:9999;
+
+}
+
+.modal-card{
+
+    width:90%;
+
+    max-width:520px;
+
+    padding:40px;
+
+    border-radius:18px;
+
+    background:#0d162b;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:0 25px 60px rgba(0,0,0,.45);
+
+    text-align:center;
+
+}
+
+.modal-card h2{
+
+    margin:0 0 20px;
+
+    color:#ffffff;
+
+    font-size:1.8rem;
+
+    font-weight:700;
+
+}
+
+.modal-card p{
+
+    margin:0 0 18px;
+
+    color:#B8C6DC;
+
+    line-height:1.7;
+
+}
+
+.modal-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:16px;
+
+    margin-top:30px;
+
+}
+
+.btn-secondary{
+
+    padding:12px 24px;
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    color:#ffffff;
+
+    background:#334155;
+
+    transition:.25s;
+
+}
+
+.btn-secondary:hover{
+
+    background:#475569;
+
+}
+
+.btn-danger{
+
+    padding:12px 24px;
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    color:#ffffff;
+
+    background:#dc2626;
+
+    transition:.25s;
+
+}
+
+.btn-danger:hover{
+
+    background:#b91c1c;
+
+}
+
+@media (max-width:768px){
+
+    .modal-card{
+
+        padding:30px 24px;
+
+    }
+
+    .modal-buttons{
+
+        flex-direction:column;
+
+    }
+
+    .btn-secondary,
+    .btn-danger{
+
+        width:100%;
+
+    }
+
+}
 </style>
 </head>
 <body>
@@ -3484,7 +3639,7 @@ ACCOUNT MANAGEMENT
                 <button
                     id="deleteAccountBtn"
                     class="danger-btn"
-                    onclick="deleteAccount()">
+                    onclick="openDeleteModal()">
 
                     Delete Account
 
@@ -4728,18 +4883,38 @@ async function changePassword() {
 }
 
     // ===================================
+    // DELETE ACCOUNT MODAL
+    // ===================================
+
+    function openDeleteModal() {
+
+        document
+            .getElementById("deleteAccountModal")
+            .style.display = "flex";
+
+    }
+
+    function closeDeleteModal() {
+
+        document
+            .getElementById("deleteAccountModal")
+            .style.display = "none";
+
+    }
+
+    async function confirmDeleteAccount() {
+
+        closeDeleteModal();
+
+        await deleteAccount();
+
+    }
+
+    // ===================================
     // DELETE ACCOUNT
     // ===================================
 
     async function deleteAccount() {
-
-        const confirmed = confirm(
-
-            "This will permanently delete your EdgeBreak account, profile, watchlist and broker connections.\n\nThis action cannot be undone.\n\nContinue?"
-
-        );
-
-        if (!confirmed) return;
 
         const {
 
@@ -4749,19 +4924,25 @@ async function changePassword() {
 
         if (!session) {
 
-            alert("Please log in again.");
+            alert(
+                "Please log in again."
+            );
 
             return;
 
         }
 
         const button =
-            document.getElementById("deleteAccountBtn");
+            document.getElementById(
+                "deleteAccountBtn"
+            );
 
         if (button) {
 
             button.disabled = true;
-            button.innerText = "Deleting Account...";
+
+            button.innerText =
+                "Deleting Account...";
 
         }
 
@@ -4797,6 +4978,7 @@ async function changePassword() {
                 throw new Error(
 
                     result.error ||
+
                     "Unable to delete account."
 
                 );
@@ -4806,20 +4988,32 @@ async function changePassword() {
             await supabaseClient.auth.signOut();
 
             alert(
+
                 "Your EdgeBreak account has been permanently deleted."
+
             );
 
-            window.location.href = "/";
+            window.location.href =
+                "/index.html";
 
         }
 
         catch (err) {
 
-            alert(err.message);
+            console.error(err);
+
+            alert(
+
+                err.message ||
+
+                "Unable to delete account."
+
+            );
 
             if (button) {
 
                 button.disabled = false;
+
                 button.innerText =
                     "Delete Account";
 
@@ -4844,5 +5038,61 @@ document.addEventListener("DOMContentLoaded", async () => {
 });    
 
 </script>
+
+<!-- ===================================
+DELETE ACCOUNT MODAL
+=================================== -->
+
+<div id="deleteAccountModal"
+     class="modal-overlay"
+     style="display:none;">
+
+    <div class="modal-card">
+
+        <h2>Delete Account</h2>
+
+        <p>
+
+            Are you sure you want to permanently delete your EdgeBreak account?
+
+        </p>
+
+        <p>
+
+            This will permanently remove your account, cancel your subscription,
+            delete your watchlist and remove all associated data.
+
+        </p>
+
+        <p style="font-weight:600;color:#c62828;">
+
+            This action cannot be undone.
+
+        </p>
+
+        <div class="modal-buttons">
+
+            <button
+                class="btn-secondary"
+                onclick="closeDeleteModal()">
+
+                Cancel
+
+            </button>
+
+            <button
+                class="btn-danger"
+                onclick="confirmDeleteAccount()">
+
+                Delete Account
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 </body>
 </html>

@@ -1,7 +1,28 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import Stripe from "https://esm.sh/stripe@17.7.0?target=deno";
+
+const stripe = new Stripe(
+    Deno.env.get("STRIPE_SECRET_KEY")!,
+    {
+        apiVersion: "2025-06-30.basil"
+    }
+);
+
+const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Content-Type": "application/json"
+};
 
 serve(async (req) => {
+
+    if (req.method === "OPTIONS") {
+        return new Response("ok", {
+            headers: corsHeaders
+        });
+    }
 
     try {
 
@@ -14,7 +35,8 @@ serve(async (req) => {
                     error: "Unauthorized"
                 }),
                 {
-                    status: 401
+                    status: 401,
+                    headers: corsHeaders
                 }
             );
 
@@ -53,7 +75,8 @@ serve(async (req) => {
 
                 {
 
-                    status: 401
+                    status: 401,
+                    headers: corsHeaders
 
                 }
 
@@ -67,7 +90,8 @@ serve(async (req) => {
 
         const {
 
-            data: profile
+            data: profile,
+            error: profileError
 
         } = await supabase
 
@@ -79,11 +103,13 @@ serve(async (req) => {
 
             .single();
 
+        if (profileError) throw profileError;
+
         // ======================================
         // SAVE USED TRIAL
         // ======================================
 
-        await supabase
+        const { error: trialError } = await supabase
 
             .from("used_trials")
 
@@ -99,11 +125,41 @@ serve(async (req) => {
 
             });
 
+        if (trialError) throw trialError;
+
+        // ======================================
+        // CANCEL STRIPE SUBSCRIPTION
+        // ======================================
+
+        if (profile?.stripe_customer_id) {
+
+            const subscriptions = await stripe.subscriptions.list({
+
+                customer: profile.stripe_customer_id,
+
+                status: "active",
+
+                limit: 1
+
+            });
+
+            if (subscriptions.data.length > 0) {
+
+                await stripe.subscriptions.cancel(
+
+                    subscriptions.data[0].id
+
+                );
+
+            }
+
+        }
+
         // ======================================
         // DELETE WATCHLIST
         // ======================================
 
-        await supabase
+        const { error: watchlistError } = await supabase
 
             .from("watchlist")
 
@@ -114,11 +170,13 @@ serve(async (req) => {
                 user.id
             );
 
+        if (watchlistError) throw watchlistError;
+
         // ======================================
         // DELETE BROKER CONNECTIONS
         // ======================================
 
-        await supabase
+        const { error: brokerError } = await supabase
 
             .from("broker_connections")
 
@@ -129,11 +187,13 @@ serve(async (req) => {
                 user.id
             );
 
+        if (brokerError) throw brokerError;
+
         // ======================================
         // DELETE PROFILE
         // ======================================
 
-        await supabase
+        const { error: profileDeleteError } = await supabase
 
             .from("profiles")
 
@@ -143,6 +203,8 @@ serve(async (req) => {
                 "id",
                 user.id
             );
+
+        if (profileDeleteError) throw profileDeleteError;
 
         // ======================================
         // DELETE AUTH USER
@@ -174,12 +236,7 @@ serve(async (req) => {
 
             {
 
-                headers: {
-
-                    "Content-Type":
-                        "application/json"
-
-                }
+                headers: corsHeaders
 
             }
 
@@ -188,6 +245,8 @@ serve(async (req) => {
     }
 
     catch (err) {
+
+        console.error(err);
 
         return new Response(
 
@@ -204,12 +263,7 @@ serve(async (req) => {
 
                 status: 500,
 
-                headers: {
-
-                    "Content-Type":
-                        "application/json"
-
-                }
+                headers: corsHeaders
 
             }
 
