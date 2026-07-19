@@ -1,22 +1,48 @@
 /* ========================================
-   EDGEBREAK NAVBAR
+COLOUR VARIABLES
+======================================== */
+
+:root{
+
+    --eb-nav-bg:#071225;
+
+    --eb-dropdown-bg:#0d1930;
+
+    --eb-border:#22385f;
+
+    --eb-text:#ffffff;
+
+    --eb-text-muted:#7f94b8;
+
+    --eb-accent:#22c55e;
+
+    --eb-hover:rgba(255,255,255,.08);
+
+    --eb-shadow:0 20px 40px rgba(0,0,0,.35);
+
+}
+
+
+
+/* ========================================
+EDGEBREAK NAVBAR
 ======================================== */
 
 .eb-navbar{
 
-    width:100%;
-
-    height:80px;
-
-    background:#071225;
-
-    border-bottom:1px solid #1f2d4d;
-
-    position:fixed;
+    position:sticky;
 
     top:0;
 
     left:0;
+
+    width:100%;
+
+    min-height:80px;
+
+    background:var(--eb-nav-bg);
+
+    border-bottom:1px solid var(--eb-border);
 
     z-index:1000;
 
@@ -26,7 +52,7 @@
 
     max-width:1400px;
 
-    height:100%;
+    min-height:80px;
 
     margin:0 auto;
 
@@ -38,24 +64,350 @@
 
     justify-content:space-between;
 
+    gap:32px;
+
+}
+
+
+
+/* ========================================
+BRAND
+======================================== */
+
+.eb-navbar-brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    flex-shrink:0;
+
+    text-decoration:none;
+
 }
 
 .eb-navbar-logo{
 
-    color:#ffffff;
+    width:42px;
 
-    font-size:24px;
+    height:42px;
+
+    object-fit:contain;
+
+}
+
+.eb-navbar-title{
+
+    color:var(--eb-text);
+
+    font-size:1.35rem;
 
     font-weight:700;
 
-    letter-spacing:2px;
+    letter-spacing:1px;
 
 }
 
-.eb-navbar-links{
+.eb-live-badge{
 
-    color:#22c55e;
+    display:flex;
 
-    font-size:16px;
+    align-items:center;
+
+    justify-content:center;
+
+    padding:4px 10px;
+
+    border-radius:999px;
+
+    background:var(--eb-accent);
+
+    color:var(--eb-nav-bg);
+
+    font-size:0.7rem;
+
+    font-weight:700;
+
+    letter-spacing:.5px;
+
+    text-transform:uppercase;
 
 }
+
+
+
+/* ========================================
+DESKTOP NAVIGATION
+======================================== */
+
+.eb-navbar-desktop{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex:1;
+
+    gap:8px;
+
+}
+
+.eb-nav-dropdown{
+
+    position:relative;
+
+}
+
+.eb-nav-button{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:12px 16px;
+
+    background:transparent;
+
+    border:none;
+
+    border-radius:10px;
+
+    color:var(--eb-text);
+
+    font-size:.95rem;
+
+    font-weight:500;
+
+    cursor:pointer;
+
+    transition:
+        background .25s ease,
+        color .25s ease;
+
+}
+
+.eb-nav-button:hover{
+
+    background:var(--eb-hover);
+
+}
+
+.eb-nav-link{
+
+    display:flex;
+
+    align-items:center;
+
+    padding:12px 16px;
+
+    border-radius:10px;
+
+    color:var(--eb-text);
+
+    text-decoration:none;
+
+    font-size:.95rem;
+
+    font-weight:500;
+
+    transition:
+        background .25s ease,
+        color .25s ease;
+
+}
+
+.eb-nav-link:hover{
+
+    background:var(--eb-hover);
+
+}
+
+.eb-chevron{
+
+    width:14px;
+
+    height:14px;
+
+    transition:transform .25s ease;
+
+}
+
+.eb-nav-button.active .eb-chevron{
+
+    transform:rotate(180deg);
+
+}
+
+
+
+/* ========================================
+DROPDOWN MENUS
+======================================== */
+
+.eb-dropdown-menu,
+.eb-workspace-menu{
+
+    position:absolute;
+
+    top:calc(100% + 12px);
+
+    left:0;
+
+    min-width:320px;
+
+    padding:12px;
+
+    background:var(--eb-dropdown-bg);
+
+    border:1px solid var(--eb-border);
+
+    border-radius:16px;
+
+    box-shadow:var(--eb-shadow);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transform:translateY(12px);
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease,
+        visibility .25s ease;
+
+    z-index:1000;
+
+    pointer-events:none;
+
+}
+
+.eb-dropdown-menu.active,
+.eb-workspace-menu.active{
+
+    opacity:1;
+
+    visibility:visible;
+
+    transform:translateY(0);
+
+    pointer-events:auto;
+
+}
+
+
+
+/* ========================================
+DROPDOWN ITEMS
+======================================== */
+
+.eb-dropdown-item,
+.eb-dropdown-sub-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    width:100%;
+
+    padding:12px 14px;
+
+    border-radius:10px;
+
+    color:var(--eb-text);
+
+    text-decoration:none;
+
+    transition:
+        background .2s ease,
+        color .2s ease;
+
+}
+
+.eb-dropdown-item:hover,
+.eb-dropdown-sub-item:hover{
+
+    background:var(--eb-hover);
+
+}
+
+.eb-dropdown-sub-item{
+
+    padding-left:34px;
+
+}
+
+.eb-menu-icon{
+
+    width:20px;
+
+    height:20px;
+
+    flex-shrink:0;
+
+}
+
+.eb-menu-label{
+
+    flex:1;
+
+    font-size:.95rem;
+
+    font-weight:500;
+
+}
+
+.eb-lock-icon{
+
+    width:16px;
+
+    height:16px;
+
+    flex-shrink:0;
+
+    opacity:.65;
+
+}
+
+
+
+/* ========================================
+DIVIDER & HEADINGS
+======================================== */
+
+.eb-dropdown-divider{
+
+    height:1px;
+
+    margin:10px 0;
+
+    background:var(--eb-border);
+
+}
+
+.eb-dropdown-heading{
+
+    padding:8px 14px;
+
+    color:var(--eb-text-muted);
+
+    font-size:.75rem;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+
+}
+
+
+
