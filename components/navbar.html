@@ -2,7 +2,10 @@
 EDGEBREAK NAVBAR
 ======================================== -->
 
-<nav class="eb-navbar">
+<nav
+    class="eb-navbar"
+    aria-label="Primary Navigation"
+>
 
     <div class="eb-navbar-container">
 
@@ -28,7 +31,10 @@ EDGEBREAK NAVBAR
 
             </span>
 
-            <span class="eb-live-badge">
+            <span
+                class="eb-live-badge"
+                aria-label="Platform Live"
+            >
 
                 LIVE
 
@@ -38,25 +44,35 @@ EDGEBREAK NAVBAR
 
         <!-- ========================================
         DESKTOP NAVIGATION
-        ========================================= -->
+        ======================================== -->
 
         <div class="eb-navbar-desktop">
 
-            <!-- Platform -->
+            <!-- ========================================
+            PLATFORM
+            ========================================= -->
 
             <div class="eb-nav-dropdown">
 
                 <button
                     class="eb-nav-button"
                     type="button"
+                    data-menu="platformMenu"
+                    aria-expanded="false"
+                    aria-controls="platformMenu"
                 >
 
-                    Platform
+                    <span class="eb-menu-label">
+
+                        Platform
+
+                    </span>
 
                     <img
                         src="/assets/icons/chevron.svg"
                         class="eb-chevron"
                         alt=""
+                        aria-hidden="true"
                     >
 
                 </button>
@@ -64,22 +80,23 @@ EDGEBREAK NAVBAR
                 <div
                     class="eb-dropdown-menu"
                     id="platformMenu"
+                    hidden
                 >
-
-                    <!-- PLATFORM -->
 
                     <a
                         href="/nasdaq-stock-scanner.html"
                         class="eb-dropdown-item locked-link"
+                        aria-label="NASDAQ Scanner (subscription required)"
                     >
 
                         <img
                             src="/assets/icons/scanner.svg"
                             class="eb-menu-icon"
                             alt=""
+                            aria-hidden="true"
                         >
 
-                        <span>
+                        <span class="eb-menu-label">
 
                             NASDAQ Scanner
 
@@ -88,7 +105,8 @@ EDGEBREAK NAVBAR
                         <img
                             src="/assets/icons/lock.svg"
                             class="eb-lock-icon"
-                            alt="Locked"
+                            alt=""
+                            aria-hidden="true"
                         >
 
                     </a>
@@ -102,9 +120,10 @@ EDGEBREAK NAVBAR
                             src="/assets/icons/smart-money.svg"
                             class="eb-menu-icon"
                             alt=""
+                            aria-hidden="true"
                         >
 
-                        <span>
+                        <span class="eb-menu-label">
 
                             Smart Money Filter
 
@@ -121,9 +140,10 @@ EDGEBREAK NAVBAR
                             src="/assets/icons/journal.svg"
                             class="eb-menu-icon"
                             alt=""
+                            aria-hidden="true"
                         >
 
-                        <span>
+                        <span class="eb-menu-label">
 
                             Trade Journal
 
@@ -142,15 +162,17 @@ EDGEBREAK NAVBAR
                     <a
                         href="/my-workspace.html"
                         class="eb-dropdown-item locked-link"
+                        aria-label="My Workspace (subscription required)"
                     >
 
                         <img
                             src="/assets/icons/workspace.svg"
                             class="eb-menu-icon"
                             alt=""
+                            aria-hidden="true"
                         >
 
-                        <span>
+                        <span class="eb-menu-label">
 
                             My Workspace
 
@@ -159,7 +181,8 @@ EDGEBREAK NAVBAR
                         <img
                             src="/assets/icons/lock.svg"
                             class="eb-lock-icon"
-                            alt="Locked"
+                            alt=""
+                            aria-hidden="true"
                         >
 
                     </a>
@@ -167,15 +190,17 @@ EDGEBREAK NAVBAR
                     <a
                         href="/portfolio.html"
                         class="eb-dropdown-sub-item locked-link"
+                        aria-label="Portfolio (subscription required)"
                     >
 
                         <img
                             src="/assets/icons/portfolio.svg"
                             class="eb-menu-icon"
                             alt=""
+                            aria-hidden="true"
                         >
 
-                        <span>
+                        <span class="eb-menu-label">
 
                             Portfolio
 
@@ -184,7 +209,8 @@ EDGEBREAK NAVBAR
                         <img
                             src="/assets/icons/lock.svg"
                             class="eb-lock-icon"
-                            alt="Locked"
+                            alt=""
+                            aria-hidden="true"
                         >
 
                     </a>
@@ -192,15 +218,17 @@ EDGEBREAK NAVBAR
                     <a
                         href="/orders.html"
                         class="eb-dropdown-sub-item locked-link"
+                        aria-label="Orders (subscription required)"
                     >
 
                         <img
                             src="/assets/icons/orders.svg"
                             class="eb-menu-icon"
                             alt=""
+                            aria-hidden="true"
                         >
 
-                        <span>
+                        <span class="eb-menu-label">
 
                             Orders
 
@@ -209,7 +237,8 @@ EDGEBREAK NAVBAR
                         <img
                             src="/assets/icons/lock.svg"
                             class="eb-lock-icon"
-                            alt="Locked"
+                            alt=""
+                            aria-hidden="true"
                         >
 
                     </a>
@@ -217,15 +246,17 @@ EDGEBREAK NAVBAR
                     <a
                         href="/broker-centre.html"
                         class="eb-dropdown-sub-item locked-link"
+                        aria-label="Broker Centre (subscription required)"
                     >
 
                         <img
                             src="/assets/icons/broker.svg"
                             class="eb-menu-icon"
                             alt=""
+                            aria-hidden="true"
                         >
 
-                        <span>
+                        <span class="eb-menu-label">
 
                             Broker Centre
 
@@ -234,28 +265,41 @@ EDGEBREAK NAVBAR
                         <img
                             src="/assets/icons/lock.svg"
                             class="eb-lock-icon"
-                            alt="Locked"
+                            alt=""
+                            aria-hidden="true"
                         >
 
                     </a>
 
                 </div>
 
-            <!-- Academy -->
+            </div>
+
+            <!-- ========================================
+            ACADEMY
+            ======================================== -->
 
             <div class="eb-nav-dropdown">
 
                 <button
                     class="eb-nav-button"
                     type="button"
+                    data-menu="academyMenu"
+                    aria-expanded="false"
+                    aria-controls="academyMenu"
                 >
 
-                    Academy
+                    <span class="eb-menu-label">
+
+                        Academy
+
+                    </span>
 
                     <img
                         src="/assets/icons/chevron.svg"
                         class="eb-chevron"
                         alt=""
+                        aria-hidden="true"
                     >
 
                 </button>
@@ -274,9 +318,10 @@ EDGEBREAK NAVBAR
                             src="/assets/icons/academy.svg"
                             class="eb-menu-icon"
                             alt=""
+                            aria-hidden="true"
                         >
 
-                        <span>
+                        <span class="eb-menu-label">
 
                             EdgeBreak Academy
 
@@ -293,9 +338,10 @@ EDGEBREAK NAVBAR
                             src="/assets/icons/trading-guide.svg"
                             class="eb-menu-icon"
                             alt=""
+                            aria-hidden="true"
                         >
 
-                        <span>
+                        <span class="eb-menu-label">
 
                             Trading Guide
 
@@ -312,9 +358,10 @@ EDGEBREAK NAVBAR
                             src="/assets/icons/breakout-guide.svg"
                             class="eb-menu-icon"
                             alt=""
+                            aria-hidden="true"
                         >
 
-                        <span>
+                        <span class="eb-menu-label">
 
                             Breakout Guide
 
@@ -326,21 +373,31 @@ EDGEBREAK NAVBAR
 
             </div>
 
-            <!-- Resources -->
+            <!-- ========================================
+            RESOURCES
+            ======================================== -->
 
             <div class="eb-nav-dropdown">
 
                 <button
                     class="eb-nav-button"
                     type="button"
+                    data-menu="resourcesMenu"
+                    aria-expanded="false"
+                    aria-controls="resourcesMenu"
                 >
 
-                    Resources
+                    <span class="eb-menu-label">
+
+                        Resources
+
+                    </span>
 
                     <img
                         src="/assets/icons/chevron.svg"
                         class="eb-chevron"
                         alt=""
+                        aria-hidden="true"
                     >
 
                 </button>
@@ -359,9 +416,10 @@ EDGEBREAK NAVBAR
                             src="/assets/icons/strategy.svg"
                             class="eb-menu-icon"
                             alt=""
+                            aria-hidden="true"
                         >
 
-                        <span>
+                        <span class="eb-menu-label">
 
                             Trading Strategy
 
@@ -378,9 +436,10 @@ EDGEBREAK NAVBAR
                             src="/assets/icons/blog.svg"
                             class="eb-menu-icon"
                             alt=""
+                            aria-hidden="true"
                         >
 
-                        <span>
+                        <span class="eb-menu-label">
 
                             Trading Insights
 
@@ -391,6 +450,10 @@ EDGEBREAK NAVBAR
                 </div>
 
             </div>
+
+            <!-- ========================================
+            DIRECT LINKS
+            ======================================== -->
 
             <a
                 href="/pricing.html"
@@ -410,18 +473,20 @@ EDGEBREAK NAVBAR
 
             </a>
 
-        </div>
+            </div>
 
         <!-- ========================================
         AUTH AREA
-        ========================================= -->
+        ======================================== -->
 
         <div
             class="eb-navbar-auth"
             id="ebNavbarAuth"
         >
 
-            <!-- Logged Out -->
+            <!-- ========================================
+            LOGGED OUT
+            ========================================= -->
 
             <div
                 class="eb-auth-logged-out"
@@ -448,7 +513,9 @@ EDGEBREAK NAVBAR
 
             </div>
 
-            <!-- Logged In -->
+            <!-- ========================================
+            LOGGED IN
+            ========================================= -->
 
             <div
                 class="eb-auth-logged-in"
@@ -456,21 +523,24 @@ EDGEBREAK NAVBAR
                 style="display:none;"
             >
 
-                <div class="eb-workspace-dropdown">
+                <div class="eb-nav-dropdown">
 
                     <button
                         class="eb-workspace-button"
                         id="ebWorkspaceButton"
                         type="button"
+                        aria-expanded="false"
+                        aria-controls="ebWorkspaceMenu"
                     >
 
                         <img
                             src="/assets/icons/workspace.svg"
                             class="eb-menu-icon"
                             alt=""
+                            aria-hidden="true"
                         >
 
-                        <span>
+                        <span class="eb-menu-label">
 
                             My Workspace
 
@@ -480,6 +550,7 @@ EDGEBREAK NAVBAR
                             src="/assets/icons/chevron.svg"
                             class="eb-chevron"
                             alt=""
+                            aria-hidden="true"
                         >
 
                     </button>
@@ -489,44 +560,126 @@ EDGEBREAK NAVBAR
                         id="ebWorkspaceMenu"
                     >
 
-                        <a href="/my-workspace.html">
+                        <a
+                            href="/my-workspace.html"
+                            class="eb-dropdown-item"
+                        >
 
-                            Dashboard
+                            <img
+                                src="/assets/icons/dashboard.svg"
+                                class="eb-menu-icon"
+                                alt=""
+                                aria-hidden="true"
+                            >
+
+                            <span class="eb-menu-label">
+
+                                Dashboard
+
+                            </span>
 
                         </a>
 
-                        <a href="/portfolio.html">
+                        <a
+                            href="/portfolio.html"
+                            class="eb-dropdown-item"
+                        >
 
-                            Portfolio
+                            <img
+                                src="/assets/icons/portfolio.svg"
+                                class="eb-menu-icon"
+                                alt=""
+                                aria-hidden="true"
+                            >
+
+                            <span class="eb-menu-label">
+
+                                Portfolio
+
+                            </span>
 
                         </a>
 
-                        <a href="/orders.html">
+                        <a
+                            href="/orders.html"
+                            class="eb-dropdown-item"
+                        >
 
-                            Orders
+                            <img
+                                src="/assets/icons/orders.svg"
+                                class="eb-menu-icon"
+                                alt=""
+                                aria-hidden="true"
+                            >
+
+                            <span class="eb-menu-label">
+
+                                Orders
+
+                            </span>
 
                         </a>
 
-                        <a href="/broker-centre.html">
+                        <a
+                            href="/broker-centre.html"
+                            class="eb-dropdown-item"
+                        >
 
-                            Broker Centre
+                            <img
+                                src="/assets/icons/broker.svg"
+                                class="eb-menu-icon"
+                                alt=""
+                                aria-hidden="true"
+                            >
+
+                            <span class="eb-menu-label">
+
+                                Broker Centre
+
+                            </span>
 
                         </a>
 
                         <div class="eb-dropdown-divider"></div>
 
-                        <a href="/settings.html">
+                        <a
+                            href="/settings.html"
+                            class="eb-dropdown-item"
+                        >
 
-                            Settings
+                            <img
+                                src="/assets/icons/settings.svg"
+                                class="eb-menu-icon"
+                                alt=""
+                                aria-hidden="true"
+                            >
+
+                            <span class="eb-menu-label">
+
+                                Settings
+
+                            </span>
 
                         </a>
 
                         <a
                             href="#"
                             id="logoutBtn"
+                            class="eb-dropdown-item"
                         >
 
-                            Logout
+                            <img
+                                src="/assets/icons/logout.svg"
+                                class="eb-menu-icon"
+                                alt=""
+                                aria-hidden="true"
+                            >
+
+                            <span class="eb-menu-label">
+
+                                Logout
+
+                            </span>
 
                         </a>
 
@@ -539,30 +692,88 @@ EDGEBREAK NAVBAR
         </div>
 
         <!-- ========================================
-        MOBILE MENU BUTTON
-        ========================================= -->
+    MOBILE MENU BUTTON
+    ======================================== -->
 
-        <button
-            class="eb-mobile-toggle"
-            id="ebMobileToggle"
-            aria-label="Open Menu"
+    <button
+        class="eb-mobile-toggle"
+        id="ebMobileToggle"
+        type="button"
+        aria-label="Open navigation menu"
+        aria-controls="ebMobileOverlay"
+        aria-expanded="false"
+    >
+
+        <img
+            src="/assets/icons/menu.svg"
+            class="eb-mobile-toggle-icon"
+            alt=""
+            aria-hidden="true"
         >
 
-            ☰
+    </button>
 
-        </button>
+        </div>
+
+    </nav>
+
+    <!-- ========================================
+    MOBILE OVERLAY
+    ======================================== -->
+
+    <div
+        class="eb-mobile-overlay"
+        id="ebMobileOverlay"
+        aria-hidden="true"
+    >
+
+        <div class="eb-mobile-header">
+
+            <a
+                href="/index.html"
+                class="eb-mobile-brand"
+                aria-label="EdgeBreak Home"
+            >
+
+                <img
+                    src="/assets/logos/logo-light.svg"
+                    class="eb-mobile-logo"
+                    alt="EdgeBreak"
+                >
+
+                <span class="eb-navbar-title">
+
+                    EDGEBREAK
+
+                </span>
+
+            </a>
+
+            <button
+                id="ebMobileClose"
+                class="eb-mobile-close"
+                type="button"
+                aria-label="Close navigation menu"
+            >
+
+                <img
+                    src="/assets/icons/close.svg"
+                    class="eb-mobile-close-icon"
+                    alt=""
+                    aria-hidden="true"
+                >
+
+            </button>
+
+        </div>
+
+        <div
+            class="eb-mobile-content"
+            id="ebMobileContent"
+        >
+
+            <!-- Mobile navigation injected here -->
+
+        </div>
 
     </div>
-
-</nav>
-
-<!-- ========================================
-MOBILE OVERLAY
-======================================== -->
-
-<div
-    class="eb-mobile-overlay"
-    id="ebMobileOverlay"
->
-
-</div>
