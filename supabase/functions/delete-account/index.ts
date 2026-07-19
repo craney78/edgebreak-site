@@ -133,22 +133,38 @@ serve(async (req) => {
 
         if (profile?.stripe_customer_id) {
 
-            const subscriptions = await stripe.subscriptions.list({
+            const subscriptions =
+                await stripe.subscriptions.list({
 
-                customer: profile.stripe_customer_id,
+                    customer: profile.stripe_customer_id,
 
-                status: "active",
+                    limit: 10
 
-                limit: 1
+                });
 
-            });
+            const subscription =
+                subscriptions.data.find(sub =>
 
-            if (subscriptions.data.length > 0) {
+                    sub.status === "active" ||
+                    sub.status === "trialing"
+
+                );
+
+            if (subscription) {
+
+                console.log(
+                    "Cancelling subscription:",
+                    subscription.id
+                );
 
                 await stripe.subscriptions.cancel(
+                    subscription.id
+                );
 
-                    subscriptions.data[0].id
+            } else {
 
+                console.log(
+                    "No active or trialing subscription found."
                 );
 
             }
