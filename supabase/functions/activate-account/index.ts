@@ -37,8 +37,7 @@ serve(async (req) => {
     // AUTHENTICATE USER
     // =========================
 
-    const authHeader =
-      req.headers.get("Authorization");
+    const authHeader = req.headers.get("Authorization");
 
     if (!authHeader) {
 
@@ -111,8 +110,7 @@ serve(async (req) => {
 
     }
 
-    const email =
-      user.email;
+    const email = user.email;
 
     // =========================
     // CHECK PAYMENT
@@ -191,34 +189,32 @@ serve(async (req) => {
     }
 
     // =========================
-    // ACTIVATE PROFILE
+    // CREATE OR ACTIVATE PROFILE
     // =========================
 
-    const {
-
-      error: updateError
-
-    } =
+    const { error: profileError } =
       await supabaseAdmin
         .from("profiles")
-        .update({
+        .upsert(
+          {
+            id: user.id,
+            email: email,
+            is_active: true,
+            stripe_customer_id: payment.stripe_customer_id
+          },
+          {
+            onConflict: "id"
+          }
+        );
 
-          is_active: true,
-
-          stripe_customer_id:
-            payment.stripe_customer_id
-
-        })
-        .eq("id", user.id);
-
-    if (updateError) {
+    if (profileError) {
 
       return new Response(
 
         JSON.stringify({
 
           success: false,
-          error: updateError.message
+          error: profileError.message
 
         }),
 
@@ -249,6 +245,10 @@ serve(async (req) => {
       .from("paid_customers")
       .delete()
       .eq("email", email);
+
+    // =========================
+    // SUCCESS
+    // =========================
 
     return new Response(
 

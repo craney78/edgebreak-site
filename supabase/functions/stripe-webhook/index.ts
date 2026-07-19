@@ -56,6 +56,7 @@ serve(async (req) => {
 
       case "checkout.session.completed": {
 
+        
         const session = event.data.object;
 
         const email = session.customer_details?.email;
@@ -63,35 +64,74 @@ serve(async (req) => {
 
         if (!email) {
 
-          console.error("No customer email.");
-
-          break;
+            console.error("No customer email.");
+            break;
 
         }
 
         console.log("Saving paid customer:", email);
 
-        const { error } = await supabase
-          .from("paid_customers")
-          .upsert({
+        const { error: paidError } = await supabase
+            .from("paid_customers")
+            .upsert({
             email,
             stripe_customer_id: customerId,
             status: "active"
-          });
+            });
 
-        if (error) {
+        if (paidError) {
 
-          console.error("Paid customer save failed:", error);
+            console.error("Paid customer save failed:", paidError);
+
+        }
+
+        // =========================
+        // ACTIVATE OR CREATE PROFILE
+        // =========================
+
+        const { data: profile } = await supabase
+            .from("profiles")
+            .select("id")
+            .eq("email", email)
+            .maybeSingle();
+
+        if (profile) {
+
+            const { error } = await supabase
+            .from("profiles")
+            .update({
+                is_active: true,
+                stripe_customer_id: customerId
+            })
+            .eq("email", email);
+
+            if (error) {
+            console.error("Profile activation failed:", error);
+            } else {
+            console.log("✅ Existing profile activated");
+            }
 
         } else {
 
-          console.log("✅ Payment recorded");
+            const { error } = await supabase
+            .from("profiles")
+            .insert({
+                email,
+                is_active: true,
+                stripe_customer_id: customerId
+            });
+
+            if (error) {
+            console.error("Profile creation failed:", error);
+            } else {
+            console.log("✅ New profile created");
+            }
 
         }
 
         break;
 
-      }
+        }
 
       case "customer.subscription.deleted": {
 
