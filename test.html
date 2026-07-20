@@ -289,9 +289,12 @@ window.supabaseClient = supabase.createClient(
         <!-- LEFT -->
         <div class="nav-left">
 
-            <a href="index.html" aria-label="EdgeBreak Home">
+            <a
+                href="index.html"
+                aria-label="EdgeBreak Home"
+                class="brand-link">
 
-                <!-- EdgeBreak Icon -->
+                <!-- EdgeBreak Brand Icon -->
                 <svg
                     class="brand-icon"
                     xmlns="http://www.w3.org/2000/svg"
@@ -303,12 +306,16 @@ window.supabaseClient = supabase.createClient(
                     stroke-linejoin="round"
                     aria-hidden="true">
 
-                    <path d="M4 19h16"/>
-                    <path d="M6 16l4-4 3 3 5-7"/>
+                    <!-- Bars -->
+                    <path d="M5 19V13"/>
+                    <path d="M10 19V9"/>
+                    <path d="M15 19V6"/>
+
+                    <!-- Growth Arrow -->
+                    <path d="M4 16l5-5 4 3 7-8"/>
+                    <path d="M17 6h3v3"/>
 
                 </svg>
-
-                
 
                 <img
                     src="images/logo.webp"
@@ -331,13 +338,11 @@ window.supabaseClient = supabase.createClient(
             <div class="nav-links" id="navLinks">
 
                 <!-- HOME -->
-
                 <a href="index.html" class="nav-link">
                     Home
                 </a>
 
                 <!-- PRODUCTS -->
-
                 <div class="dropdown">
 
                     <a href="products.html" class="nav-link">
@@ -348,7 +353,6 @@ window.supabaseClient = supabase.createClient(
 
                         <a href="watchlist.html">
 
-                            <!-- Trades -->
                             <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M3 17l6-6 4 4 8-8"/>
                                 <path d="M14 7h7v7"/>
@@ -360,7 +364,6 @@ window.supabaseClient = supabase.createClient(
 
                         <a href="smart-money-dashboard.html">
 
-                            <!-- Smart Money -->
                             <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="9"/>
                                 <path d="M12 7v10"/>
@@ -373,7 +376,6 @@ window.supabaseClient = supabase.createClient(
 
                         <a href="/nasdaq-stock-scanner.html">
 
-                            <!-- Scanner -->
                             <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="11" cy="11" r="7"/>
                                 <path d="M21 21l-4.3-4.3"/>
@@ -388,7 +390,6 @@ window.supabaseClient = supabase.createClient(
                 </div>
 
                 <!-- RESOURCES -->
-
                 <div class="dropdown">
 
                     <a href="#" class="nav-link">
@@ -459,13 +460,11 @@ window.supabaseClient = supabase.createClient(
                 </div>
 
                 <!-- PRICING -->
-
                 <a href="pricing.html" class="nav-link">
                     Pricing
                 </a>
 
                 <!-- LOGIN -->
-
                 <a href="#" class="nav-cta" id="authBtn">
                     Login
                 </a>
@@ -473,7 +472,6 @@ window.supabaseClient = supabase.createClient(
             </div>
 
             <!-- HAMBURGER -->
-
             <div
                 class="menu-toggle"
                 id="menuToggle"
