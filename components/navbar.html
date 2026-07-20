@@ -712,67 +712,367 @@ EDGEBREAK NAVBAR
 
         </button>
 
-            </div>
+        </div>
 
         </nav>
+        
 
         <!-- ========================================
         MOBILE OVERLAY
         ======================================== -->
 
         <div
-            class="eb-mobile-overlay"
             id="ebMobileOverlay"
+            class="eb-mobile-overlay"
             aria-hidden="true"
         >
 
-            <div class="eb-mobile-header">
+            <nav
+                class="eb-mobile-nav"
+                aria-label="Mobile Navigation"
+            >
 
-                <a
-                    href="/index.html"
-                    class="eb-mobile-brand"
-                    aria-label="EdgeBreak Home"
-                >
+                <!-- ========================================
+                MOBILE HEADER
+                ========================================= -->
 
-                    <img
-                        src="/assets/logos/logo-light.svg"
-                        class="eb-mobile-logo"
-                        alt="EdgeBreak"
+                <div class="eb-mobile-header">
+
+                    <a
+                        href="/index.html"
+                        class="eb-mobile-brand"
+                        aria-label="EdgeBreak Home"
                     >
 
-                    <span class="eb-navbar-title">
+                        <img
+                            src="/assets/logos/logo-light.svg"
+                            class="eb-mobile-logo"
+                            alt="EdgeBreak"
+                        >
 
-                        EDGEBREAK
+                        <span class="eb-navbar-title">
 
-                    </span>
+                            EDGEBREAK
+
+                        </span>
+
+                    </a>
+
+                    <button
+                        id="ebMobileClose"
+                        class="eb-mobile-close"
+                        type="button"
+                        aria-label="Close navigation menu"
+                    >
+
+                        <img
+                            src="/assets/icons/close.svg"
+                            class="eb-mobile-close-icon"
+                            alt=""
+                            aria-hidden="true"
+                        >
+
+                    </button>
+
+                </div>
+
+                <!-- ========================================
+                PLATFORM
+                ========================================= -->
+
+                <div class="eb-mobile-section">
+
+                    <button
+                        class="eb-mobile-dropdown"
+                        type="button"
+                    >
+
+                        <span>Platform</span>
+
+                        <img
+                            src="/assets/icons/chevron.svg"
+                            class="eb-chevron"
+                            alt=""
+                            aria-hidden="true"
+                        >
+
+                    </button>
+
+                    <div class="eb-mobile-submenu">
+
+                        <a
+                            href="/nasdaq-stock-scanner.html"
+                            class="locked-link"
+                        >
+
+                            NASDAQ Scanner
+
+                        </a>
+
+                        <a href="/smart-money-dashboard.html">
+
+                            Smart Money Filter
+
+                        </a>
+
+                        <a href="/watchlist.html">
+
+                            Trade Journal
+
+                        </a>
+
+                        <hr class="eb-mobile-divider">
+
+                        <div class="eb-mobile-heading">
+
+                            Workspace
+
+                        </div>
+
+                        <a
+                            href="/my-workspace.html"
+                            class="locked-link"
+                        >
+
+                            My Workspace
+
+                        </a>
+
+                        <a
+                            href="/portfolio.html"
+                            class="eb-mobile-sub-item locked-link"
+                        >
+
+                            Portfolio
+
+                        </a>
+
+                        <a
+                            href="/orders.html"
+                            class="eb-mobile-sub-item locked-link"
+                        >
+
+                            Orders
+
+                        </a>
+
+                        <a
+                            href="/broker-centre.html"
+                            class="eb-mobile-sub-item locked-link"
+                        >
+
+                            Broker Centre
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <!-- ========================================
+                ACADEMY
+                ========================================= -->
+
+                <div class="eb-mobile-section">
+
+                    <button
+                        class="eb-mobile-dropdown"
+                        type="button"
+                    >
+
+                        <span>Academy</span>
+
+                        <img
+                            src="/assets/icons/chevron.svg"
+                            class="eb-chevron"
+                            alt=""
+                            aria-hidden="true"
+                        >
+
+                    </button>
+
+                    <div class="eb-mobile-submenu">
+
+                        <a href="/academy.html">
+
+                            EdgeBreak Academy
+
+                        </a>
+
+                        <a href="/trading-guide.html">
+
+                            Trading Guide
+
+                        </a>
+
+                        <a href="/breakout-guide.html">
+
+                            Breakout Guide
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <!-- ========================================
+                RESOURCES
+                ========================================= -->
+
+                <div class="eb-mobile-section">
+
+                    <button
+                        class="eb-mobile-dropdown"
+                        type="button"
+                    >
+
+                        <span>Resources</span>
+
+                        <img
+                            src="/assets/icons/chevron.svg"
+                            class="eb-chevron"
+                            alt=""
+                            aria-hidden="true"
+                        >
+
+                    </button>
+
+                    <div class="eb-mobile-submenu">
+
+                        <a href="/blog/breakout-trading-strategy.html">
+
+                            Trading Strategy
+
+                        </a>
+
+                        <a href="/blog.html">
+
+                            Trading Insights
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <!-- ========================================
+                DIRECT LINKS
+                ========================================= -->
+
+                <a
+                    href="/pricing.html"
+                    class="eb-mobile-link"
+                >
+
+                    Pricing
 
                 </a>
 
-                <button
-                    id="ebMobileClose"
-                    class="eb-mobile-close"
-                    type="button"
-                    aria-label="Close navigation menu"
+                <a
+                    href="/support.html"
+                    class="eb-mobile-link"
                 >
 
-                    <img
-                        src="/assets/icons/close.svg"
-                        class="eb-mobile-close-icon"
-                        alt=""
-                        aria-hidden="true"
+                    Support
+
+                </a>
+
+                <hr class="eb-mobile-divider">
+
+                <!-- ========================================
+                LOGGED IN
+                ========================================= -->
+
+                <div
+                    id="ebMobileWorkspace"
+                    hidden
+                >
+
+                    <a
+                        href="/my-workspace.html"
+                        class="eb-mobile-link"
                     >
 
-                </button>
+                        Dashboard
 
-            </div>
+                    </a>
 
-            <div
-                class="eb-mobile-content"
-                id="ebMobileContent"
-            >
+                    <a
+                        href="/portfolio.html"
+                        class="eb-mobile-link"
+                    >
 
-                <!-- Mobile navigation injected here -->
+                        Portfolio
 
-            </div>
+                    </a>
 
-        </div>
+                    <a
+                        href="/orders.html"
+                        class="eb-mobile-link"
+                    >
+
+                        Orders
+
+                    </a>
+
+                    <a
+                        href="/broker-centre.html"
+                        class="eb-mobile-link"
+                    >
+
+                        Broker Centre
+
+                    </a>
+
+                    <hr class="eb-mobile-divider">
+
+                    <a
+                        href="/settings.html"
+                        class="eb-mobile-link"
+                    >
+
+                        Settings
+
+                    </a>
+
+                    <button
+                        id="ebMobileLogout"
+                        class="eb-mobile-link eb-mobile-button"
+                        type="button"
+                    >
+
+                        Logout
+
+                    </button>
+
+                </div>
+
+                <!-- ========================================
+                LOGGED OUT
+                ========================================= -->
+
+                <div id="ebMobileGuest">
+
+                    <a
+                        href="/login.html"
+                        class="eb-mobile-link"
+                    >
+
+                        Login
+
+                    </a>
+
+                    <a
+                        href="/pricing.html"
+                        class="eb-mobile-cta"
+                    >
+
+                        Start Free Trial
+
+                    </a>
+
+                </div>
+
+            </nav>
+
+        </div>              

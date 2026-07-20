@@ -82,83 +82,6 @@ function initDropdowns(root = document){
 
 
 
-// ========================================
-// MOBILE MENU
-// ========================================
-
-function buildMobileMenu(){
-
-    const desktop = document.querySelector(".eb-navbar-desktop");
-    const mobile = document.getElementById("ebMobileContent");
-
-    if(!desktop || !mobile) return;
-
-    mobile.innerHTML = desktop.innerHTML;
-
-    // Initialise dropdowns inside the cloned mobile menu
-    initDropdowns(mobile);
-
-}
-
-function initMobileMenu(){
-
-    const toggle = document.getElementById("ebMobileToggle");
-    const close = document.getElementById("ebMobileClose");
-    const overlay = document.getElementById("ebMobileOverlay");
-
-    if(!toggle || !close || !overlay) return;
-
-    function openMenu(){
-
-        overlay.classList.add("active");
-
-        toggle.setAttribute("aria-expanded","true");
-
-        overlay.setAttribute("aria-hidden","false");
-
-        document.body.style.overflow = "hidden";
-
-    }
-
-    function closeMenu(){
-
-        overlay.classList.remove("active");
-
-        toggle.setAttribute("aria-expanded","false");
-
-        overlay.setAttribute("aria-hidden","true");
-
-        document.body.style.overflow = "";
-
-    }
-
-    toggle.addEventListener("click", openMenu);
-
-    close.addEventListener("click", closeMenu);
-
-    overlay.addEventListener("click", function(e){
-
-        if(e.target === overlay){
-
-            closeMenu();
-
-        }
-
-    });
-
-    document.addEventListener("keydown", function(e){
-
-        if(e.key === "Escape"){
-
-            closeMenu();
-
-        }
-
-    });
-
-}
-
-
 
 // ========================================
 // AUTH
@@ -166,9 +89,11 @@ function initMobileMenu(){
 
 async function initAuth(){
 
-    if(typeof supabase === "undefined"){
+    const client = window.supabaseClient;
 
-        console.warn("Supabase not found.");
+    if(!client){
+
+        console.warn("Supabase client not found.");
 
         return;
 
@@ -182,7 +107,7 @@ async function initAuth(){
 
     const {
         data: { session }
-    } = await supabase.auth.getSession();
+    } = await client.auth.getSession();
 
     if(session){
 
@@ -207,7 +132,7 @@ async function initAuth(){
 
             e.preventDefault();
 
-            await supabase.auth.signOut();
+            await client.auth.signOut();
 
             window.location.href = "/login.html";
 
@@ -217,11 +142,15 @@ async function initAuth(){
 
 }
 
-// Keep navbar in sync with login/logout
+// ========================================
+// KEEP NAVBAR IN SYNC
+// ========================================
 
-if(typeof supabase !== "undefined"){
+const client = window.supabaseClient;
 
-    supabase.auth.onAuthStateChange(() => {
+if(client){
+
+    client.auth.onAuthStateChange(() => {
 
         initAuth();
 
@@ -229,15 +158,155 @@ if(typeof supabase !== "undefined"){
 
 }
 
+
+
+// ========================================
+// ACTIVE PAGE
+// ========================================
+
+function highlightCurrentPage(){
+
+    const currentPath = window.location.pathname;
+
+    document.querySelectorAll("a[href]").forEach(link => {
+
+        const href = link.getAttribute("href");
+
+        if(!href) return;
+
+        if(href === currentPath){
+
+            link.classList.add("active");
+
+        }
+
+    });
+
+}
+
+
+/* ========================================
+MOBILE NAVIGATION
+======================================== */
+
+function initMobileMenu() {
+
+    const overlay = document.getElementById("ebMobileOverlay");
+    const openBtn = document.getElementById("ebMobileToggle");
+    const closeBtn = document.getElementById("ebMobileClose");
+
+    if (!overlay || !openBtn || !closeBtn) {
+        return;
+    }
+
+    function openMenu() {
+
+        overlay.classList.add("active");
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+        openBtn.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+
+        document.body.style.overflow = "hidden";
+
+    }
+
+    function closeMenu() {
+
+        overlay.classList.remove("active");
+
+        overlay.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        openBtn.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        document.body.style.overflow = "";
+
+    }
+
+    openBtn.addEventListener(
+        "click",
+        openMenu
+    );
+
+    closeBtn.addEventListener(
+        "click",
+        closeMenu
+    );
+
+    overlay.addEventListener(
+        "click",
+        (e) => {
+
+            if (e.target === overlay) {
+
+                closeMenu();
+
+            }
+
+        }
+    );
+
+    document.addEventListener(
+        "keydown",
+        (e) => {
+
+            if (
+                e.key === "Escape" &&
+                overlay.classList.contains("active")
+            ) {
+
+                closeMenu();
+
+            }
+
+        }
+    );
+
+    /* ========================================
+    MOBILE DROPDOWNS
+    ======================================== */
+
+    document
+        .querySelectorAll(".eb-mobile-dropdown")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    button.classList.toggle("active");
+
+                    const menu =
+                        button.nextElementSibling;
+
+                    menu.classList.toggle("active");
+
+                }
+            );
+
+        });
+
+}
 // ========================================
 // INITIALISE
 // ========================================
 
 initDropdowns();
 
-buildMobileMenu();
-
 initMobileMenu();
 
-initAuth();
+highlightCurrentPage();
 
+initAuth();
