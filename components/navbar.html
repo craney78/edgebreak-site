@@ -519,6 +519,7 @@ EDGEBREAK NAVBAR
             <div
                 class="eb-auth-logged-in"
                 id="ebLoggedIn"
+                hidden
             >
 
                 <div class="eb-nav-dropdown">
@@ -540,7 +541,7 @@ EDGEBREAK NAVBAR
 
                         <span class="eb-menu-label">
 
-                        Dashboard
+                            My Workspace
 
                         </span>
 
@@ -690,88 +691,88 @@ EDGEBREAK NAVBAR
         </div>
 
         <!-- ========================================
-    MOBILE MENU BUTTON
-    ======================================== -->
+        MOBILE MENU BUTTON
+        ======================================== -->
 
-    <button
-        class="eb-mobile-toggle"
-        id="ebMobileToggle"
-        type="button"
-        aria-label="Open navigation menu"
-        aria-controls="ebMobileOverlay"
-        aria-expanded="false"
-    >
+        <button
+            class="eb-mobile-toggle"
+            id="ebMobileToggle"
+            type="button"
+            aria-label="Open navigation menu"
+            aria-controls="ebMobileOverlay"
+            aria-expanded="false"
+        >
 
-        <img
-            src="/assets/icons/menu.svg"
-            class="eb-mobile-toggle-icon"
-            alt=""
+            <img
+                src="/assets/icons/menu.svg"
+                class="eb-mobile-toggle-icon"
+                alt=""
+                aria-hidden="true"
+            >
+
+        </button>
+
+            </div>
+
+        </nav>
+
+        <!-- ========================================
+        MOBILE OVERLAY
+        ======================================== -->
+
+        <div
+            class="eb-mobile-overlay"
+            id="ebMobileOverlay"
             aria-hidden="true"
         >
 
-    </button>
+            <div class="eb-mobile-header">
 
-        </div>
-
-    </nav>
-
-    <!-- ========================================
-    MOBILE OVERLAY
-    ======================================== -->
-
-    <div
-        class="eb-mobile-overlay"
-        id="ebMobileOverlay"
-        aria-hidden="true"
-    >
-
-        <div class="eb-mobile-header">
-
-            <a
-                href="/index.html"
-                class="eb-mobile-brand"
-                aria-label="EdgeBreak Home"
-            >
-
-                <img
-                    src="/assets/logos/logo-light.svg"
-                    class="eb-mobile-logo"
-                    alt="EdgeBreak"
+                <a
+                    href="/index.html"
+                    class="eb-mobile-brand"
+                    aria-label="EdgeBreak Home"
                 >
 
-                <span class="eb-navbar-title">
+                    <img
+                        src="/assets/logos/logo-light.svg"
+                        class="eb-mobile-logo"
+                        alt="EdgeBreak"
+                    >
 
-                    EDGEBREAK
+                    <span class="eb-navbar-title">
 
-                </span>
+                        EDGEBREAK
 
-            </a>
+                    </span>
 
-            <button
-                id="ebMobileClose"
-                class="eb-mobile-close"
-                type="button"
-                aria-label="Close navigation menu"
-            >
+                </a>
 
-                <img
-                    src="/assets/icons/close.svg"
-                    class="eb-mobile-close-icon"
-                    alt=""
-                    aria-hidden="true"
+                <button
+                    id="ebMobileClose"
+                    class="eb-mobile-close"
+                    type="button"
+                    aria-label="Close navigation menu"
                 >
 
-            </button>
+                    <img
+                        src="/assets/icons/close.svg"
+                        class="eb-mobile-close-icon"
+                        alt=""
+                        aria-hidden="true"
+                    >
+
+                </button>
+
+            </div>
+
+            <div
+                class="eb-mobile-content"
+                id="ebMobileContent"
+            >
+
+                <!-- Mobile navigation injected here -->
+
+            </div>
 
         </div>
-
-        <div
-            class="eb-mobile-content"
-            id="ebMobileContent"
-        >
-
-            <!-- Mobile navigation injected here -->
-
-        </div>
-
-    </div>
