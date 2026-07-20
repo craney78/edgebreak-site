@@ -25,6 +25,185 @@ window.supabaseClient = supabase.createClient(
 
 </head>
 <style>
+/* =========================
+   NAVIGATION
+========================= */
+
+.nav{
+    position:sticky;
+    top:0;
+    z-index:9999;
+
+    background:#020617;
+    border-bottom:1px solid #1e293b;
+
+    backdrop-filter:blur(10px);
+}
+
+.nav-inner{
+    max-width:1800px;
+    margin:auto;
+
+    height:82px;
+    padding:0 30px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.nav-left{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.nav-logo{
+    height:48px;
+    width:auto;
+}
+
+.logo-text{
+    color:white;
+    text-decoration:none;
+    font-size:22px;
+    font-weight:800;
+    letter-spacing:.5px;
+}
+
+.live-badge{
+    background:#22c55e;
+    color:white;
+
+    padding:6px 12px;
+    border-radius:999px;
+
+    font-size:12px;
+    font-weight:700;
+}
+
+.nav-links-wrap{
+    display:flex;
+    align-items:center;
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:28px;
+}
+
+.nav-link{
+    color:#cbd5e1;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:500;
+    transition:.2s;
+}
+
+.nav-link:hover{
+    color:#22c55e;
+}
+
+.nav-cta{
+    background:#22c55e;
+    color:white;
+
+    padding:12px 20px;
+    border-radius:12px;
+
+    text-decoration:none;
+    font-weight:700;
+}
+
+.nav-cta:hover{
+    background:#16a34a;
+}
+
+/* DROPDOWNS */
+
+.dropdown{
+    position:relative;
+}
+
+.dropdown-content{
+    position:absolute;
+    top:100%;
+    left:0;
+
+    min-width:260px;
+
+    background:#0b1220;
+    border:1px solid #1e293b;
+    border-radius:14px;
+
+    display:none;
+
+    overflow:hidden;
+}
+
+.dropdown:hover .dropdown-content{
+    display:block;
+}
+
+.dropdown-content a{
+    display:block;
+
+    padding:14px 18px;
+
+    color:#cbd5e1;
+    text-decoration:none;
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.dropdown-content a:last-child{
+    border-bottom:none;
+}
+
+.dropdown-content a:hover{
+    background:#111827;
+    color:#22c55e;
+}
+
+/* MOBILE */
+
+.menu-toggle{
+    display:none;
+}
+
+@media(max-width:900px){
+
+    .menu-toggle{
+        display:block;
+        color:white;
+        font-size:28px;
+        cursor:pointer;
+    }
+
+    .nav-links{
+        display:none;
+    }
+
+    .nav-links.active{
+        display:flex;
+        flex-direction:column;
+
+        position:absolute;
+        top:82px;
+        left:0;
+        right:0;
+
+        background:#020617;
+
+        padding:25px;
+        gap:18px;
+
+        border-top:1px solid #1e293b;
+    }
+
+}
+
 .dropdown-content a{
 
     display:flex;
