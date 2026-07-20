@@ -103,6 +103,10 @@ async function initAuth(){
     const loggedIn = document.getElementById("ebLoggedIn");
     const logoutBtn = document.getElementById("logoutBtn");
 
+    const mobileGuest = document.getElementById("ebMobileGuest");
+    const mobileWorkspace = document.getElementById("ebMobileWorkspace");
+    const mobileLogoutBtn = document.getElementById("ebMobileLogout");
+
     if(!loggedOut || !loggedIn) return;
 
     const {
@@ -115,6 +119,10 @@ async function initAuth(){
 
         loggedIn.hidden = false;
 
+        if(mobileGuest) mobileGuest.hidden = true;
+
+        if(mobileWorkspace) mobileWorkspace.hidden = false;
+
     }
     else{
 
@@ -122,7 +130,15 @@ async function initAuth(){
 
         loggedIn.hidden = true;
 
+        if(mobileGuest) mobileGuest.hidden = false;
+
+        if(mobileWorkspace) mobileWorkspace.hidden = true;
+
     }
+
+    // ========================================
+    // DESKTOP LOGOUT
+    // ========================================
 
     if(logoutBtn && !logoutBtn.dataset.initialised){
 
@@ -140,7 +156,28 @@ async function initAuth(){
 
     }
 
+    // ========================================
+    // MOBILE LOGOUT
+    // ========================================
+
+    if(mobileLogoutBtn && !mobileLogoutBtn.dataset.initialised){
+
+        mobileLogoutBtn.dataset.initialised = "true";
+
+        mobileLogoutBtn.addEventListener("click", async function(e){
+
+            e.preventDefault();
+
+            await client.auth.signOut();
+
+            window.location.href = "/login.html";
+
+        });
+
+    }
+
 }
+
 
 // ========================================
 // KEEP NAVBAR IN SYNC
@@ -273,6 +310,25 @@ function initMobileMenu() {
 
         }
     );
+
+    /* ========================================
+    CLOSE MENU WHEN LINK IS CLICKED
+    ======================================== */
+
+    document
+        .querySelectorAll("#ebMobileOverlay a")
+        .forEach(link => {
+
+            link.addEventListener(
+                "click",
+                () => {
+
+                    closeMenu();
+
+                }
+            );
+
+        });
 
     /* ========================================
     MOBILE DROPDOWNS
