@@ -25,1311 +25,179 @@ window.supabaseClient = supabase.createClient(
 
 </head>
 <style>
-/* =====================================================
-   EDGEBREAK NAVBAR
-   ===================================================== */
 
-:root{
-
-    --edge-nav-bg:#071225;
-    --edge-nav-surface:#0d1830;
-    --edge-nav-border:rgba(255,255,255,.08);
-
-    --edge-nav-text:#ffffff;
-    --edge-nav-text-muted:#c8d3e3;
-
-    --edge-nav-green:#00d26a;
-    --edge-nav-green-hover:#00b85d;
-
-    --edge-nav-radius:12px;
-
-    --edge-nav-shadow:
-        0 12px 35px rgba(0,0,0,.35);
-
-    --edge-nav-transition:.2s ease;
-
-}
-
-
-/* =====================================================
-   RESET
-   ===================================================== */
-
-.edge-navbar,
-.edge-navbar *{
-
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-
-}
-
-.edge-navbar a{
-
-    text-decoration:none;
-    color:inherit;
-
-}
-
-.edge-navbar button{
-
-    font:inherit;
-    border:none;
-    background:none;
-    cursor:pointer;
-
-}
-
-.edge-navbar svg{
-
-    display:block;
-
-}
-
-
-/* =====================================================
-   MAIN NAVBAR
-   ===================================================== */
-
-.edge-navbar{
-
-    position:sticky;
-    top:0;
-    z-index:9999;
-
-    width:100%;
-    height:80px;
-
-    background:var(--edge-nav-bg);
-
-    border-bottom:1px solid var(--edge-nav-border);
-
-    box-shadow:var(--edge-nav-shadow);
-
-}
-
-.edge-navbar-inner{
-
-    max-width:1400px;
-
-    height:100%;
-
-    margin:auto;
-
-    padding:0 28px;
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-}
-
-
-/* =====================================================
-   LEFT SIDE
-   ===================================================== */
-
-.edge-navbar-left{
-
-    display:flex;
-    align-items:center;
-    gap:14px;
-
-}
-
-.edge-navbar-logo{
-
-    width:42px;
-    height:42px;
-
-    object-fit:contain;
-
-    transition:transform var(--edge-nav-transition);
-
-}
-
-.edge-navbar-logo:hover{
-
-    transform:scale(1.05);
-
-}
-
-.edge-navbar-logo-text{
-
-    font-size:1.55rem;
-    font-weight:800;
-
-    letter-spacing:1px;
-
-    color:var(--edge-nav-text);
-
-    transition:color var(--edge-nav-transition);
-
-}
-
-.edge-navbar-logo-text:hover{
-
-    color:var(--edge-nav-green);
-
-}
-
-
-/* =====================================================
-   LIVE BADGE
-   ===================================================== */
-
-.edge-navbar-live{
-
-    padding:5px 12px;
-
-    border-radius:999px;
-
-    background:var(--edge-nav-green);
-
-    color:#fff;
-
-    font-size:.72rem;
-
-    font-weight:700;
-
-    letter-spacing:.08em;
-
-    text-transform:uppercase;
-
-}
-
-/* =====================================================
-   NAVIGATION
-   ===================================================== */
-
-.edge-navbar-links-wrap{
-
-    display:flex;
-    align-items:center;
-    gap:24px;
-
-    height:100%;
-
-}
-
-.edge-navbar-links{
-
-    display:flex;
-    align-items:center;
-    gap:8px;
-
-    height:100%;
-
-}
-
-
-/* =====================================================
-   LINKS
-   ===================================================== */
-
-.edge-navbar-link,
-.edge-navbar-cta{
-
-    display:flex;
-    align-items:center;
-    gap:10px;
-
-    height:80px;
-
-    padding:0 18px;
-
-    color:var(--edge-nav-text);
-
-    font-size:.95rem;
-    font-weight:600;
-
-    transition:all var(--edge-nav-transition);
-
-    position:relative;
-
-    white-space:nowrap;
-
-}
-
-
-/* Underline Animation */
-
-.edge-navbar-link::after{
-
-    content:"";
-
-    position:absolute;
-
-    left:18px;
-    right:18px;
-    bottom:18px;
-
-    height:2px;
-
-    background:var(--edge-nav-green);
-
-    transform:scaleX(0);
-
-    transform-origin:center;
-
-    transition:transform var(--edge-nav-transition);
-
-}
-
-.edge-navbar-link:hover{
-
-    color:var(--edge-nav-green);
-
-}
-
-.edge-navbar-link:hover::after{
-
-    transform:scaleX(1);
-
-}
-
-
-/* =====================================================
-   SVG ICONS
-   ===================================================== */
-
-.edge-navbar-icon{
-
-    width:18px;
-    height:18px;
-
-    flex-shrink:0;
-
-    stroke:currentColor;
-
-    transition:all var(--edge-nav-transition);
-
-}
-
-.edge-navbar-link:hover .edge-navbar-icon{
-
-    transform:translateY(-1px);
-
-}
-
-
-/* =====================================================
-   DROPDOWN CHEVRON
-   ===================================================== */
-
-.edge-navbar-chevron{
-
-    width:16px;
-    height:16px;
-
-    margin-left:2px;
-
-    stroke:currentColor;
-
-    transition:transform var(--edge-nav-transition);
-
-}
-
-.edge-navbar-dropdown:hover .edge-navbar-chevron{
-
-    transform:rotate(180deg);
-
-}
-
-
-/* =====================================================
-   LOGIN BUTTON
-   ===================================================== */
-
-.edge-navbar-cta{
-
-    height:48px;
-
-    margin-left:12px;
-
-    padding:0 24px;
-
-    border-radius:999px;
-
-    background:var(--edge-nav-green);
-
-    color:#ffffff;
-
-}
-
-.edge-navbar-cta:hover{
-
-    background:var(--edge-nav-green-hover);
-
-    color:#ffffff;
-
-    transform:translateY(-2px);
-
-    box-shadow:
-        0 10px 24px rgba(0,210,106,.28);
-
-}
-
-.edge-navbar-cta::after{
-
-    display:none;
-
-}
-
-
-/* =====================================================
-   LOCK ICON
-   ===================================================== */
-
-.edge-navbar-lock-icon{
-
-    width:15px;
-    height:15px;
-
-    margin-left:auto;
-
-    stroke:var(--edge-nav-green);
-
-}
-
-/* =====================================================
-   DROPDOWNS
-===================================================== */
-
-.edge-navbar-dropdown{
-
-    position:relative;
-
-    height:100%;
-
-    display:flex;
-    align-items:center;
-
-}
-
-
-/* ==========================================
-   DROPDOWN PANEL
-========================================== */
-
-.edge-navbar-dropdown-content{
-
-    position:absolute;
-
-    top:100%;
-    left:0;
-
-    min-width:300px;
-
-    padding:12px;
-
-    background:rgba(13,24,48,.98);
-
-    border:1px solid var(--edge-nav-border);
-
-    border-radius:16px;
-
-    backdrop-filter:blur(18px);
-
-    box-shadow:
-        0 18px 45px rgba(0,0,0,.45);
-
-    opacity:0;
-    visibility:hidden;
-
-    transform:translateY(15px);
-
-    transition:
-        opacity .22s ease,
-        transform .22s ease,
-        visibility .22s ease;
-
-    z-index:1000;
-
-}
-
-
-/* ==========================================
-   SHOW MENU
-========================================== */
-
-.edge-navbar-dropdown:hover
-.edge-navbar-dropdown-content{
-
-    opacity:1;
-
-    visibility:visible;
-
-    transform:translateY(8px);
-
-}
-
-
-/* ==========================================
-   DROPDOWN LINKS
-========================================== */
-
-.edge-navbar-dropdown-content a{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    padding:14px 16px;
-
-    border-radius:12px;
-
-    color:var(--edge-nav-text-muted);
-
-    font-size:.92rem;
-
-    font-weight:500;
-
-    transition:all .18s ease;
-
-}
-
-
-/* ==========================================
-   LINK HOVER
-========================================== */
-
-.edge-navbar-dropdown-content a:hover{
-
-    background:rgba(0,210,106,.12);
-
-    color:#fff;
-
-    transform:translateX(5px);
-
-}
-
-
-/* ==========================================
-   ICONS
-========================================== */
-
-.edge-navbar-dropdown-content
-.edge-navbar-icon{
-
-    width:18px;
-    height:18px;
-
-    flex-shrink:0;
-
-    stroke:currentColor;
-
-}
-
-
-/* ==========================================
-   LOCKED LINK
-========================================== */
-
-.edge-navbar-locked-link{
-
-    justify-content:flex-start;
-
-}
-
-
-/* ==========================================
-   LOCK ICON
-========================================== */
-
-.edge-navbar-lock-icon{
-
-    width:15px;
-    height:15px;
-
-    margin-left:auto;
-
-    stroke:var(--edge-nav-green);
-
-}
-
-
-/* ==========================================
-   DROPDOWN SEPARATORS
-========================================== */
-
-.edge-navbar-dropdown-content a+a{
-
-    margin-top:4px;
-
-}
-
-/* =====================================================
-   HAMBURGER
-===================================================== */
-
-.edge-navbar-toggle{
-
-    display:none;
-
-    width:48px;
-    height:48px;
-
-    align-items:center;
-    justify-content:center;
-
-    color:var(--edge-nav-text);
-
-    border-radius:12px;
-
-    transition:all .2s ease;
-
-}
-
-.edge-navbar-toggle:hover{
-
-    background:rgba(255,255,255,.08);
-
-    color:var(--edge-nav-green);
-
-}
-
-.edge-navbar-menu-icon{
-
-    width:24px;
-    height:24px;
-
-    stroke:currentColor;
-
-}
-
-
-/* =====================================================
-   TABLET
-===================================================== */
-
-@media (max-width:1100px){
-
-.edge-navbar-inner{
-
-    padding:0 20px;
-
-}
-
-.edge-navbar-link{
-
-    padding:0 14px;
-
-    font-size:.9rem;
-
-}
-
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media (max-width:900px){
-
-.edge-navbar{
-
-    height:72px;
-
-}
-
-.edge-navbar-inner{
-
-    height:72px;
-
-}
-
-.edge-navbar-toggle{
-
-    display:flex;
-
-}
-
-.edge-navbar-links{
-
-    position:absolute;
-
-    top:72px;
-    left:0;
-    right:0;
-
-    display:none;
-    flex-direction:column;
-    align-items:stretch;
-
-    gap:0;
-
-    padding:18px;
-
-    background:var(--edge-nav-bg);
-
-    border-top:1px solid var(--edge-nav-border);
-
-    box-shadow:0 20px 40px rgba(0,0,0,.35);
-
-}
-
-.edge-navbar-links.active{
-
-    display:flex;
-
-}
-
-
-/* ==========================================
-   MOBILE LINKS
-========================================== */
-
-.edge-navbar-link,
-.edge-navbar-cta{
-
-    width:100%;
-
-    height:auto;
-
-    padding:16px 18px;
-
-    border-radius:12px;
-
-}
-
-.edge-navbar-link::after{
-
-    display:none;
-
-}
-
-
-/* ==========================================
-   MOBILE CTA
-========================================== */
-
-.edge-navbar-cta{
-
-    justify-content:center;
-
-    margin:16px 0 0;
-
-}
-
-
-/* ==========================================
-   MOBILE DROPDOWNS
-========================================== */
-
-.edge-navbar-dropdown{
-
-    display:block;
-
-    width:100%;
-
-}
-
-.edge-navbar-dropdown-content{
-
-    position:static;
-
-    min-width:100%;
-
-    margin-top:8px;
-
-    padding:8px;
-
-    background:rgba(255,255,255,.03);
-
-    border:none;
-
-    border-radius:12px;
-
-    box-shadow:none;
-
-    opacity:1;
-
-    visibility:visible;
-
-    transform:none;
-
-    display:none;
-
-}
-
-.edge-navbar-dropdown.open
-.edge-navbar-dropdown-content{
-
-    display:block;
-
-}
-
-.edge-navbar-dropdown-content a{
-
-    padding:14px;
-
-}
-
-}
-
-
-/* =====================================================
-   SMALL PHONES
-===================================================== */
-
-@media (max-width:500px){
-
-.edge-navbar-inner{
-
-    padding:0 16px;
-
-}
-
-.edge-navbar-logo{
-
-    width:36px;
-    height:36px;
-
-}
-
-.edge-navbar-logo-text{
-
-    font-size:1.3rem;
-
-}
-
-.edge-navbar-live{
-
-    display:none;
-
-}
-
-}
-
-/* =====================================================
-   ACTIVE PAGE
-===================================================== */
-
-.edge-navbar-link.active{
-
-    color:var(--edge-nav-green);
-
-}
-
-.edge-navbar-link.active::after{
-
-    transform:scaleX(1);
-
-}
-
-.edge-navbar-link.active .edge-navbar-icon{
-
-    color:var(--edge-nav-green);
-
-}
-
-
-/* =====================================================
-   KEYBOARD ACCESSIBILITY
-===================================================== */
-
-.edge-navbar a:focus-visible,
-.edge-navbar button:focus-visible{
-
-    outline:2px solid var(--edge-nav-green);
-
-    outline-offset:4px;
-
-    border-radius:10px;
-
-}
-
-
-/* =====================================================
-   SCROLL EFFECT
-   Add .scrolled with JavaScript
-===================================================== */
-
-.edge-navbar.scrolled{
-
-    height:70px;
-
-    background:rgba(7,18,37,.96);
-
-    backdrop-filter:blur(16px);
-
-    border-bottom:1px solid rgba(255,255,255,.06);
-
-    box-shadow:
-        0 14px 36px rgba(0,0,0,.45);
-
-}
-
-.edge-navbar.scrolled
-.edge-navbar-link{
-
-    height:70px;
-
-}
-
-.edge-navbar.scrolled
-.edge-navbar-inner{
-
-    height:70px;
-
-}
-
-.edge-navbar.scrolled
-.edge-navbar-logo{
-
-    width:38px;
-    height:38px;
-
-}
-
-
-/* =====================================================
-   SVG REFINEMENTS
-===================================================== */
-
-.edge-navbar-icon,
-.edge-navbar-chevron,
-.edge-navbar-lock-icon,
-.edge-navbar-menu-icon{
-
-    stroke-linecap:round;
-    stroke-linejoin:round;
-
-}
-
-
-/* =====================================================
-   IMAGE QUALITY
-===================================================== */
-
-.edge-navbar-logo{
-
-    user-select:none;
-
-    -webkit-user-drag:none;
-
-}
-
-
-/* =====================================================
-   TEXT
-===================================================== */
-
-.edge-navbar span{
-
-    user-select:none;
-
-}
-
-
-/* =====================================================
-   HOVER IMPROVEMENTS
-===================================================== */
-
-.edge-navbar-link:hover{
-
-    text-decoration:none;
-
-}
-
-.edge-navbar-dropdown-content a:hover
-.edge-navbar-icon{
-
-    color:var(--edge-nav-green);
-
-}
-
-.edge-navbar-dropdown-content
-.edge-navbar-chevron{
-
-    transition:.2s ease;
-
-}
-
-
-/* =====================================================
-   BUTTON POLISH
-===================================================== */
-
-.edge-navbar-cta{
-
-    font-weight:700;
-
-    letter-spacing:.02em;
-
-}
-
-.edge-navbar-cta:active{
-
-    transform:translateY(0);
-
-}
-
-
-/* =====================================================
-   PERFORMANCE
-===================================================== */
-
-.edge-navbar,
-.edge-navbar-link,
-.edge-navbar-dropdown-content,
-.edge-navbar-cta{
-
-    will-change:transform;
-
-}
-
-
-/* =====================================================
-   REDUCED MOTION
-===================================================== */
-
-@media (prefers-reduced-motion: reduce){
-
-.edge-navbar *,
-.edge-navbar *::before,
-.edge-navbar *::after{
-
-    animation:none !important;
-
-    transition:none !important;
-
-    scroll-behavior:auto !important;
-
-}
-
-}
-
-
-/* =====================================================
-   SELECTION
-===================================================== */
-
-.edge-navbar ::selection{
-
-    background:var(--edge-nav-green);
-
-    color:#fff;
-
-}
-
-
-/* =====================================================
-   END OF NAVBAR
-===================================================== */
 </style>
 <body>
 
 <!-- NAVBAR -->
-<div class="edge-navbar">
-    <div class="edge-navbar-inner">
-
-        <!-- LEFT -->
-        <div class="edge-navbar-left">
-
-            <a href="index.html" aria-label="EdgeBreak Home">
-
-                <img
-                    src="images/logo.webp"
-                    class="edge-navbar-logo"
-                    alt="EdgeBreak NASDAQ Market Intelligence"
-                    width="40"
-                    height="40"
-                >
-
-            </a>
-
-            <a href="index.html" class="edge-navbar-logo-text">
-
-                EDGEBREAK
-
-            </a>
-
-            <span class="edge-navbar-live">
-
-                LIVE
-
-            </span>
-
-        </div>
-
-        <!-- RIGHT -->
-        <div class="edge-navbar-links-wrap">
-
-            <div class="edge-navbar-links" id="edgeNavbarLinks">
-
-                <!-- HOME -->
-                <a href="index.html" class="edge-navbar-link">
-
-                    <!-- Home SVG -->
-                    <svg class="edge-navbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 11.5L12 4l9 7.5"/>
-                        <path d="M5 10v10h14V10"/>
-                    </svg>
-
-                    <span>Home</span>
-
-                </a>
-
-                <div class="edge-navbar-dropdown">
-
-                    <button
-                        class="edge-navbar-link edge-navbar-dropdown-toggle"
-                        type="button"
-                        aria-expanded="false"
-                    >
-
-                        <!-- Grid SVG -->
-                        <svg class="edge-navbar-icon"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2">
-
-                            <rect x="3" y="3" width="7" height="7"/>
-                            <rect x="14" y="3" width="7" height="7"/>
-                            <rect x="3" y="14" width="7" height="7"/>
-                            <rect x="14" y="14" width="7" height="7"/>
-
-                        </svg>
-
-                        <span>Products</span>
-
-                        <svg class="edge-navbar-chevron"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2">
-
-                            <polyline points="6 9 12 15 18 9"/>
-
-                        </svg>
-
-                    </button>
-
-                    <div class="edge-navbar-dropdown-content">
-
-                        <a href="products.html" class="edge-navbar-dropdown-heading">
-
-                            View All Products →
-
-                        </a>
-
-                        <!-- Product links here -->
-
-                    </div>
-
-                </div>
-
-                        <!-- Chevron -->
-                        <svg class="edge-navbar-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="6 9 12 15 18 9"/>
-                        </svg>
-
-                    </a>
-
-                    <div class="edge-navbar-dropdown-content">
-
-                        <a href="watchlist.html">
-
-                            <!-- Trending Up -->
-                            <svg class="edge-navbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="3 17 9 11 13 15 21 7"/>
-                                <polyline points="15 7 21 7 21 13"/>
-                            </svg>
-
-                            <span>EdgeBreak Trades</span>
-
-                        </a>
-
-                        <a href="smart-money-dashboard.html">
-
-                            <!-- Funnel -->
-                            <svg class="edge-navbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M3 4h18l-7 8v6l-4 2v-8z"/>
-                            </svg>
-
-                            <span>Smart Money Filter</span>
-
-                        </a>
-
-                        <a
-                            href="nasdaq-stock-scanner.html"
-                            class="edge-navbar-locked-link"
-                        >
-
-                            <!-- Search -->
-                            <svg class="edge-navbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="11" cy="11" r="7"/>
-                                <line x1="20" y1="20" x2="16.5" y2="16.5"/>
-                            </svg>
-
-                            <span>NASDAQ Scanner</span>
-
-                            <!-- Lock -->
-                            <svg class="edge-navbar-lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="5" y="11" width="14" height="10" rx="2"/>
-                                <path d="M8 11V8a4 4 0 118 0v3"/>
-                            </svg>
-
-                        </a>
-
-                    </div>
-
-                </div>            
-                <!-- RESOURCES -->
-                <div class="edge-navbar-dropdown">
-
-                    <a href="#" class="edge-navbar-link">
-
-                        <!-- Book -->
-                        <svg class="edge-navbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 5a2 2 0 0 1 2-2h13v17H6a2 2 0 0 0-2 2z"/>
-                            <path d="M6 3v17"/>
-                        </svg>
-
-                        <span>Resources</span>
-
-                        <!-- Chevron -->
-                        <svg class="edge-navbar-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="6 9 12 15 18 9"/>
-                        </svg>
-
-                    </a>
-
-                    <div class="edge-navbar-dropdown-content">
-
-                        <a href="/academy.html">
-
-                            <!-- Graduation Cap -->
-                            <svg class="edge-navbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M2 9l10-5 10 5-10 5-10-5z"/>
-                                <path d="M6 11v4c0 2 3 4 6 4s6-2 6-4v-4"/>
-                            </svg>
-
-                            <span>EdgeBreak Training Academy</span>
-
-                        </a>
-
-                        <a href="trading-guide.html">
-
-                            <!-- Open Book -->
-                            <svg class="edge-navbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M2 5h8a3 3 0 0 1 3 3v11a3 3 0 0 0-3-3H2z"/>
-                                <path d="M22 5h-8a3 3 0 0 0-3 3v11a3 3 0 0 1 3-3h8z"/>
-                            </svg>
-
-                            <span>EdgeBreak Trading Guide</span>
-
-                        </a>
-
-                        <a href="breakout-guide.html">
-
-                            <!-- Gift -->
-                            <svg class="edge-navbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="8" width="18" height="13"/>
-                                <path d="M12 8v13"/>
-                                <path d="M3 12h18"/>
-                                <path d="M12 8c-2 0-4-1-4-3a2 2 0 0 1 4 0"/>
-                                <path d="M12 8c2 0 4-1 4-3a2 2 0 0 0-4 0"/>
-                            </svg>
-
-                            <span>Free Breakout Guide</span>
-
-                        </a>
-
-                        <a href="/blog/breakout-trading-strategy.html">
-
-                            <!-- Target -->
-                            <svg class="edge-navbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="8"/>
-                                <circle cx="12" cy="12" r="4"/>
-                                <circle cx="12" cy="12" r="1"/>
-                            </svg>
-
-                            <span>Strategy</span>
-
-                        </a>
-
-                        <a href="/blog.html">
-
-                            <!-- Newspaper -->
-                            <svg class="edge-navbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="4" y="3" width="16" height="18"/>
-                                <line x1="8" y1="7" x2="16" y2="7"/>
-                                <line x1="8" y1="11" x2="16" y2="11"/>
-                                <line x1="8" y1="15" x2="16" y2="15"/>
-                                <rect x="6" y="6" width="2" height="4"/>
-                            </svg>
-
-                            <span>Trading Insights</span>
-
-                        </a>
-
-                    </div>
-
-                </div>
-
-                <!-- PRICING -->
-                <a href="pricing.html" class="edge-navbar-link">
-
-                    <!-- Tag -->
-                    <svg class="edge-navbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 12l-8 8-9-9V4h7z"/>
-                        <circle cx="7.5" cy="7.5" r="1.5"/>
-                    </svg>
-
-                    <span>Pricing</span>
-
-                </a>
-
-                <!-- LOGIN -->
-                <a href="#" class="edge-navbar-cta" id="authBtn">
-
-                    <!-- User -->
-                    <svg class="edge-navbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="8" r="4"/>
-                        <path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"/>
-                    </svg>
-
-                    <span>Login</span>
-
-                </a>
-
-            </div>
-
-            <!-- HAMBURGER -->
-            <button
-                class="edge-navbar-toggle"
-                id="edgeNavbarToggle"
-                aria-label="Open Navigation"
-                type="button"
-            >
-
-                <svg
-                    class="edge-navbar-menu-icon"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                >
-                    <line x1="3" y1="6" x2="21" y2="6"/>
-                    <line x1="3" y1="12" x2="21" y2="12"/>
-                    <line x1="3" y1="18" x2="21" y2="18"/>
-                </svg>
-
-            </button>
-
-        </div>
-
+<div class="nav">
+  <div class="nav-inner">
+
+    <!-- LEFT -->
+    <div class="nav-left">
+      <a
+          href="index.html"
+          aria-label="EdgeBreak Home"
+      >
+        <img
+          src="images/logo.webp"
+          class="nav-logo"
+          alt="EdgeBreak NASDAQ Market Intelligence"
+          width="40"
+          height="40"
+        >
+      </a>
+      <a href="index.html" class="logo-text">EDGEBREAK</a>
+      <span class="live-badge">LIVE</span>
     </div>
 
-</div>                                         
+    <!-- RIGHT SIDE WRAP -->
+    <div class="nav-links-wrap">
+
+      <!-- LINKS -->
+      <div class="nav-links" id="navLinks">
+
+        <a href="index.html" class="nav-link">Home</a>
+
+        <!-- PRODUCTS -->
+        <div class="dropdown-content">
+
+            <a href="watchlist.html">
+
+                <!-- Trades -->
+                <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 17l6-6 4 4 8-8"/>
+                    <path d="M14 7h7v7"/>
+                </svg>
+
+                EdgeBreak Trades
+
+            </a>
+
+            <a href="smart-money-dashboard.html">
+
+                <!-- Smart Money -->
+                <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 7v10"/>
+                    <path d="M9 10c0-1.5 1.3-2.5 3-2.5s3 1 3 2.5-1.3 2.5-3 2.5-3 1-3 2.5S10.3 17.5 12 17.5s3-1 3-2.5"/>
+                </svg>
+
+                Smart Money Filter
+
+            </a>
+
+            <a href="/nasdaq-stock-scanner.html">
+
+                <!-- Scanner -->
+                <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="7"/>
+                    <path d="M21 21l-4.3-4.3"/>
+                </svg>
+
+                NASDAQ Scanner 🔒
+
+            </a>
+
+        </div>
+
+        <div class="dropdown-content">
+
+            <a href="/academy.html">
+
+                <!-- Academy -->
+                <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 10L12 5 2 10l10 5 10-5z"/>
+                    <path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/>
+                </svg>
+
+                EdgeBreak Training Academy
+
+            </a>
+
+            <a href="trading-guide.html">
+
+                <!-- Guide -->
+                <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 0 4 19.5V4.5A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+
+                EdgeBreak Trading Guide
+
+            </a>
+
+            <a href="breakout-guide.html">
+
+                <!-- Download -->
+                <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <path d="M7 10l5 5 5-5"/>
+                    <path d="M12 15V3"/>
+                </svg>
+
+                Free Breakout Guide
+
+            </a>
+
+            <a href="/blog/breakout-trading-strategy.html">
+
+                <!-- Strategy -->
+                <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 17l6-6 4 4 8-8"/>
+                    <path d="M14 7h7v7"/>
+                </svg>
+
+                Strategy
+
+            </a>
+
+            <a href="/blog.html">
+
+                <!-- Blog -->
+                <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <path d="M17 21V13H7v8"/>
+                    <path d="M7 3v5h8"/>
+                </svg>
+
+                Trading Insights
+
+            </a>
+
+        </div>
+
+      <!-- HAMBURGER -->
+<div
+    class="menu-toggle"
+    id="menuToggle"
+    aria-label="Open navigation"
+    role="button"
+    tabindex="0"
+>
+
+    <svg
+        class="menu-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        width="24"
+        height="24"
+    >
+
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+
+    </svg>
+
+</div>   
+
+
     <main style="padding:120px 40px;min-height:1200px;">
 
         <h1>Layout Test</h1>
