@@ -505,44 +505,9 @@ AUTH AREA
 }
 
 
-/* ========================================
-MOBILE MENU BUTTON
-======================================== */
-
-.eb-mobile-toggle{
-
-    display:none;
-
-    align-items:center;
-
-    justify-content:center;
-
-    width:48px;
-
-    height:48px;
-
-    padding:0;
-
-    border:none;
-
-    background:transparent;
-
-    cursor:pointer;
-
-}
-
-.eb-mobile-toggle-icon{
-
-    width:28px;
-
-    height:28px;
-
-}
-
-
-/* ========================================
-FULL SCREEN OVERLAY
-======================================== */
+/* ==========================================
+MOBILE OVERLAY
+========================================== */
 
 .eb-mobile-overlay{
 
@@ -550,47 +515,62 @@ FULL SCREEN OVERLAY
 
     inset:0;
 
+    width:100%;
+
+    height:100dvh;
+
+    background:#071225;
+
     display:none;
 
-    background:var(--eb-nav-bg);
+    flex-direction:column;
 
-    z-index:5000;
+    overflow-y:auto;
 
-    overflow:hidden;
+    overscroll-behavior:contain;
+
+    z-index:9999;
+
+    -webkit-overflow-scrolling:touch;
 
 }
 
 .eb-mobile-overlay.active{
 
-    display:block;
+    display:flex;
+
+    animation:ebMobileFade .25s ease;
 
 }
-
-
-/* ========================================
-FULL SCREEN PANEL
-======================================== */
 
 .eb-mobile-nav{
 
     width:100%;
 
-    height:100vh;
+    min-height:100dvh;
 
     display:flex;
 
     flex-direction:column;
 
-    background:var(--eb-nav-bg);
+    background:#071225;
 
-    overflow-y:auto;
+}
+
+/* Prevent background scrolling */
+
+body.eb-mobile-open{
+
+    overflow:hidden;
+
+    touch-action:none;
 
 }
 
 
-/* ========================================
-HEADER
-======================================== */
+/* ==========================================
+MOBILE HEADER
+========================================== */
 
 .eb-mobile-header{
 
@@ -600,35 +580,28 @@ HEADER
 
     justify-content:space-between;
 
-    min-height:80px;
+    gap:16px;
 
-    padding:0 24px;
+    height:74px;
 
-    border-bottom:1px solid var(--eb-border);
+    padding:0 20px;
 
-}
+    background:#071225;
 
-.eb-mobile-brand{
+    border-bottom:1px solid rgba(255,255,255,.08);
 
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    text-decoration:none;
+    flex-shrink:0;
 
 }
 
-.eb-mobile-logo{
+/* Left menu button */
 
-    width:42px;
-
-    height:42px;
-
-}
-
+.eb-mobile-toggle,
 .eb-mobile-close{
+
+    width:44px;
+
+    height:44px;
 
     display:flex;
 
@@ -636,45 +609,124 @@ HEADER
 
     justify-content:center;
 
-    width:48px;
-
-    height:48px;
+    background:none;
 
     border:none;
 
-    background:transparent;
+    border-radius:10px;
 
     cursor:pointer;
 
+    transition:.2s;
+
 }
 
-.eb-mobile-close-icon{
+.eb-mobile-toggle:hover,
+.eb-mobile-close:hover{
+
+    background:rgba(255,255,255,.06);
+
+}
+
+.eb-mobile-toggle img,
+.eb-mobile-close img{
 
     width:24px;
 
     height:24px;
 
-}
-
-
-/* ========================================
-SECTIONS
-======================================== */
-
-.eb-mobile-section{
-
-    border-bottom:1px solid var(--eb-border);
+    display:block;
 
 }
 
+/* Centre branding */
 
-/* ========================================
-DROPDOWNS
-======================================== */
+.eb-mobile-brand{
 
+    flex:1;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    min-width:0;
+
+}
+
+/* Uses the SAME styling as desktop */
+
+.eb-mobile-brand .eb-logo{
+
+    height:28px;
+
+    width:auto;
+
+    display:block;
+
+}
+
+/* LIVE badge */
+
+.eb-mobile-live{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:4px 10px;
+
+    border-radius:999px;
+
+    background:rgba(34,197,94,.15);
+
+    color:#22C55E;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:.12em;
+
+    text-transform:uppercase;
+
+    white-space:nowrap;
+
+}
+
+/* Mobile icon buttons */
+
+.eb-mobile-toggle:active,
+.eb-mobile-close:active{
+
+    transform:scale(.96);
+
+}
+
+
+/* ==========================================
+NAVIGATION ROWS
+========================================== */
+
+.eb-mobile-menu{
+
+    display:flex;
+
+    flex-direction:column;
+
+    padding:8px 0;
+
+}
+
+/* Main navigation links */
+
+.eb-mobile-link,
 .eb-mobile-dropdown{
-
-    width:100%;
 
     display:flex;
 
@@ -682,113 +734,205 @@ DROPDOWNS
 
     justify-content:space-between;
 
-    padding:20px 24px;
+    width:100%;
+
+    min-height:60px;
+
+    padding:0 20px;
+
+    background:none;
 
     border:none;
 
-    background:transparent;
-
-    color:var(--eb-text);
-
-    font-size:1rem;
-
-    font-weight:600;
-
-    cursor:pointer;
-
-}
-
-.eb-mobile-dropdown:hover{
-
-    background:var(--eb-hover);
-
-}
-
-.eb-mobile-dropdown.active .eb-chevron{
-
-    transform:rotate(180deg);
-
-}
-
-.eb-mobile-dropdown .eb-chevron{
-
-    width:16px;
-
-    height:16px;
-
-    transition:.25s;
-
-}
-
-
-/* ========================================
-SUB MENUS
-======================================== */
-
-.eb-mobile-submenu{
-
-    display:none;
-
-}
-
-.eb-mobile-submenu.active{
-
-    display:block;
-
-}
-
-.eb-mobile-submenu a{
-
-    display:block;
-
-    padding:16px 24px;
-
-    color:var(--eb-text-muted);
+    color:#FFFFFF;
 
     text-decoration:none;
 
-    transition:.2s;
+    cursor:pointer;
+
+    transition:background .2s ease,
+               color .2s ease;
 
 }
 
-.eb-mobile-submenu a:hover{
+/* Left side (Icon + Text) */
 
-    background:var(--eb-hover);
+.eb-mobile-link-left,
+.eb-mobile-dropdown-left{
 
-    color:var(--eb-text);
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    flex:1;
+
+    min-width:0;
 
 }
+
+/* Menu text */
+
+.eb-mobile-link-text,
+.eb-mobile-dropdown-text{
+
+    font-size:18px;
+
+    font-weight:600;
+
+    line-height:1;
+
+    white-space:nowrap;
+
+}
+
+/* SVG icons */
+
+.eb-mobile-icon{
+
+    width:24px;
+
+    height:24px;
+
+    flex-shrink:0;
+
+    object-fit:contain;
+
+}
+
+/* Chevron */
+
+.eb-mobile-chevron{
+
+    width:18px;
+
+    height:18px;
+
+    flex-shrink:0;
+
+    transition:transform .25s ease;
+
+}
+
+/* Hover */
+
+.eb-mobile-link:hover,
+.eb-mobile-dropdown:hover{
+
+    background:rgba(255,255,255,.05);
+
+}
+
+/* Pressed */
+
+.eb-mobile-link:active,
+.eb-mobile-dropdown:active{
+
+    background:rgba(255,255,255,.08);
+
+}
+
+/* Open accordion */
+
+.eb-mobile-dropdown.active{
+
+    color:#22C55E;
+
+}
+
+.eb-mobile-dropdown.active .eb-mobile-chevron{
+
+    transform:rotate(90deg);
+
+}
+
+
+/* ==========================================
+ACCORDIONS
+========================================== */
+
+/* Hidden by default */
+
+.eb-mobile-submenu{
+
+    display:grid;
+
+    grid-template-rows:0fr;
+
+    overflow:hidden;
+
+    background:#0D1830;
+
+    transition:grid-template-rows .28s ease;
+
+}
+
+/* Open */
+
+.eb-mobile-submenu.active{
+
+    grid-template-rows:1fr;
+
+}
+
+/* Animation wrapper */
+
+.eb-mobile-submenu-inner{
+
+    min-height:0;
+
+    overflow:hidden;
+
+}
+
+/* Small divider between menu title and submenu */
+
+.eb-mobile-submenu{
+
+    border-top:1px solid rgba(255,255,255,.05);
+
+}
+
+/* Rotate chevron when open */
+
+.eb-mobile-dropdown.active .eb-mobile-chevron{
+
+    transform:rotate(90deg);
+
+}
+
+/* Slight background on active accordion */
+
+.eb-mobile-dropdown.active{
+
+    background:rgba(255,255,255,.05);
+
+}
+
+/* Keep submenu attached to parent */
+
+.eb-mobile-dropdown.active
++ .eb-mobile-submenu{
+
+    margin-top:0;
+
+}
+
+/* Nice spacing below submenu */
+
+.eb-mobile-submenu.active{
+
+    margin-bottom:4px;
+
+}
+
+
+/* ==========================================
+SECTION HEADINGS
+========================================== */
 
 .eb-mobile-heading{
-
-    padding:18px 24px 10px;
-
-    color:var(--eb-text-muted);
-
-    font-size:.75rem;
-
-    font-weight:700;
-
-    text-transform:uppercase;
-
-    letter-spacing:1px;
-
-}
-
-.eb-mobile-sub-item{
-
-    padding-left:48px !important;
-
-}
-
-
-/* ========================================
-STANDARD LINKS
-======================================== */
-
-.eb-mobile-link,
-
-.eb-mobile-button{
 
     display:flex;
 
@@ -796,51 +940,319 @@ STANDARD LINKS
 
     width:100%;
 
-    padding:20px 24px;
+    padding:20px 20px 10px 60px;
 
-    border:none;
+    margin-top:8px;
+
+    color:rgba(255,255,255,.55);
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:.18em;
+
+    text-transform:uppercase;
+
+    user-select:none;
+
+}
+
+/* First heading in a submenu */
+
+.eb-mobile-heading:first-child{
+
+    margin-top:0;
+
+}
+
+/* Optional divider above heading */
+
+.eb-mobile-heading::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:60px;
+
+    right:20px;
+
+    margin-top:-20px;
+
+    border-top:1px solid rgba(255,255,255,.06);
+
+}
+
+
+/* ==========================================
+SUBMENU ITEMS
+========================================== */
+
+.eb-mobile-sub-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    width:100%;
+
+    min-height:54px;
+
+    padding:0 20px 0 60px;
 
     background:none;
 
-    color:var(--eb-text);
+    color:#E5E7EB;
 
     text-decoration:none;
 
-    font-size:1rem;
+    font-size:17px;
 
-    cursor:pointer;
+    font-weight:500;
 
-}
+    line-height:1;
 
-.eb-mobile-link:hover,
-
-.eb-mobile-button:hover{
-
-    background:var(--eb-hover);
+    transition:
+        background .2s ease,
+        color .2s ease;
 
 }
 
+/* SVG icon */
 
-/* ========================================
-DIVIDER
-======================================== */
+.eb-mobile-sub-item .eb-mobile-icon{
+
+    width:22px;
+
+    height:22px;
+
+    flex-shrink:0;
+
+    object-fit:contain;
+
+}
+
+/* Text */
+
+.eb-mobile-sub-item span{
+
+    flex:1;
+
+}
+
+/* Hover */
+
+.eb-mobile-sub-item:hover{
+
+    background:rgba(255,255,255,.05);
+
+    color:#FFFFFF;
+
+}
+
+/* Active */
+
+.eb-mobile-sub-item.active{
+
+    background:rgba(34,197,94,.12);
+
+    color:#22C55E;
+
+    font-weight:600;
+
+}
+
+/* Pressed */
+
+.eb-mobile-sub-item:active{
+
+    background:rgba(255,255,255,.08);
+
+}
+
+/* Keyboard focus */
+
+.eb-mobile-sub-item:focus-visible{
+
+    outline:2px solid #22C55E;
+
+    outline-offset:-2px;
+
+}
+
+
+/* ==========================================
+DIVIDERS
+========================================== */
+
+/* Standard divider */
 
 .eb-mobile-divider{
 
-    margin:12px 24px;
+    width:100%;
+
+    height:1px;
+
+    margin:8px 0;
+
+    background:rgba(255,255,255,.08);
 
     border:none;
 
-    border-top:1px solid var(--eb-border);
+    flex-shrink:0;
+
+}
+
+/* Divider inside submenus */
+
+.eb-mobile-submenu .eb-mobile-divider{
+
+    width:auto;
+
+    margin:10px 20px 10px 60px;
+
+    background:rgba(255,255,255,.06);
+
+}
+
+/* Divider between account sections */
+
+.eb-mobile-account .eb-mobile-divider{
+
+    margin:12px 20px;
+
+}
+
+/* Optional spacing after divider */
+
+.eb-mobile-divider + .eb-mobile-heading{
+
+    margin-top:0;
 
 }
 
 
-/* ========================================
-CTA
-======================================== */
+/* ==========================================
+ACCOUNT
+========================================== */
+
+.eb-mobile-account{
+
+    display:flex;
+
+    flex-direction:column;
+
+    padding:8px 0;
+
+}
+
+/* Account links */
+
+.eb-mobile-account a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    width:100%;
+
+    min-height:60px;
+
+    padding:0 20px;
+
+    color:#FFFFFF;
+
+    text-decoration:none;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    transition:
+        background .2s ease,
+        color .2s ease;
+
+}
+
+/* Icon */
+
+.eb-mobile-account .eb-mobile-icon{
+
+    width:24px;
+
+    height:24px;
+
+    flex-shrink:0;
+
+    object-fit:contain;
+
+}
+
+/* Text */
+
+.eb-mobile-account span{
+
+    flex:1;
+
+}
+
+/* Hover */
+
+.eb-mobile-account a:hover{
+
+    background:rgba(255,255,255,.05);
+
+}
+
+/* Pressed */
+
+.eb-mobile-account a:active{
+
+    background:rgba(255,255,255,.08);
+
+}
+
+/* Current page */
+
+.eb-mobile-account a.active{
+
+    color:#22C55E;
+
+    background:rgba(34,197,94,.12);
+
+    font-weight:600;
+
+}
+
+/* Keyboard accessibility */
+
+.eb-mobile-account a:focus-visible{
+
+    outline:2px solid #22C55E;
+
+    outline-offset:-2px;
+
+}
+
+
+/* ==========================================
+CTA BUTTON
+========================================== */
 
 .eb-mobile-cta{
+
+    padding:20px;
+
+    margin-top:auto;
+
+}
+
+.eb-mobile-cta a{
 
     display:flex;
 
@@ -848,83 +1260,235 @@ CTA
 
     justify-content:center;
 
-    margin:24px;
+    gap:12px;
 
-    padding:18px;
+    width:100%;
 
-    border-radius:10px;
+    height:56px;
 
-    background:var(--eb-accent);
+    border-radius:14px;
+
+    background:#22C55E;
 
     color:#071225;
 
     text-decoration:none;
 
+    font-size:17px;
+
     font-weight:700;
 
-}
-
-.eb-mobile-cta:hover{
-
-    opacity:.92;
-
-}
-
-
-/* ========================================
-RESPONSIVE
-======================================== */
-
-@media (max-width:1024px){
-
-    .eb-navbar-desktop,
-
-    .eb-navbar-auth{
-
-        display:none;
-
-    }
-
-    .eb-mobile-toggle{
-
-        display:flex;
-
-    }
+    transition:
+        background .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
 
 }
 
-@media (min-width:1025px){
+.eb-mobile-cta a:hover{
 
-    .eb-mobile-overlay{
+    background:#2DD963;
 
-        display:none !important;
+    box-shadow:0 8px 24px rgba(34,197,94,.25);
 
-    }
+}
+
+.eb-mobile-cta a:active{
+
+    transform:scale(.98);
+
+}
+
+.eb-mobile-cta .eb-mobile-icon{
+
+    width:22px;
+
+    height:22px;
 
 }
 
 
-/* ========================================
-ACTIVE LINKS
-======================================== */
+/* ==========================================
+ACTIVE STATES
+========================================== */
 
-.eb-nav-link.active,
-.eb-dropdown-item.active,
-.eb-dropdown-sub-item.active,
 .eb-mobile-link.active,
-.eb-mobile-submenu a.active{
+.eb-mobile-dropdown.active,
+.eb-mobile-sub-item.active,
+.eb-mobile-account a.active{
 
-    color:var(--eb-accent);
-
-    font-weight:600;
+    color:#22C55E;
 
 }
 
-.eb-dropdown-item.active,
-.eb-dropdown-sub-item.active,
 .eb-mobile-link.active,
-.eb-mobile-submenu a.active{
+.eb-mobile-sub-item.active,
+.eb-mobile-account a.active{
 
-    background:rgba(34,197,94,.08);
+    background:rgba(34,197,94,.12);
+
+}
+
+.eb-mobile-dropdown.active{
+
+    background:rgba(255,255,255,.05);
+
+}
+
+.eb-mobile-link:hover,
+.eb-mobile-dropdown:hover,
+.eb-mobile-sub-item:hover,
+.eb-mobile-account a:hover{
+
+    background:rgba(255,255,255,.05);
+
+}
+
+.eb-mobile-link:active,
+.eb-mobile-dropdown:active,
+.eb-mobile-sub-item:active,
+.eb-mobile-account a:active{
+
+    background:rgba(255,255,255,.08);
+
+}
+
+
+/* ==========================================
+ICONS
+========================================== */
+
+.eb-mobile-icon{
+
+    width:24px;
+
+    height:24px;
+
+    display:block;
+
+    flex-shrink:0;
+
+    object-fit:contain;
+
+    user-select:none;
+
+    pointer-events:none;
+
+}
+
+.eb-mobile-sub-item .eb-mobile-icon{
+
+    width:22px;
+
+    height:22px;
+
+}
+
+.eb-mobile-chevron{
+
+    width:18px;
+
+    height:18px;
+
+    flex-shrink:0;
+
+    transition:transform .25s ease;
+
+}
+
+.eb-mobile-dropdown.active
+.eb-mobile-chevron{
+
+    transform:rotate(90deg);
+
+}
+
+
+/* ==========================================
+ANIMATIONS
+========================================== */
+
+@keyframes ebMobileFade{
+
+    from{
+
+        opacity:0;
+
+    }
+
+    to{
+
+        opacity:1;
+
+    }
+
+}
+
+@keyframes ebMobileSlide{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(-8px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+.eb-mobile-link,
+.eb-mobile-dropdown,
+.eb-mobile-sub-item,
+.eb-mobile-account a{
+
+    animation:ebMobileSlide .25s ease;
+
+}
+
+.eb-mobile-submenu{
+
+    transition:
+        grid-template-rows .28s ease,
+        opacity .25s ease;
+
+}
+
+.eb-mobile-dropdown.active
+.eb-mobile-chevron{
+
+    transition:transform .25s ease;
+
+}
+
+.eb-mobile-toggle,
+.eb-mobile-close{
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+
+}
+
+.eb-mobile-toggle:active,
+.eb-mobile-close:active{
+
+    transform:scale(.95);
+
+}
+
+.eb-mobile-cta a{
+
+    transition:
+        background .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
 
 }
