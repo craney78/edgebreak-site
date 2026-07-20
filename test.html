@@ -137,13 +137,26 @@ window.supabaseClient = supabase.createClient(
     border:1px solid #1e293b;
     border-radius:14px;
 
-    display:none;
+    opacity:0;
+    visibility:hidden;
+
+    transform:translateY(8px);
+
+    transition:
+        opacity .18s ease,
+        transform .18s ease,
+        visibility .18s ease;
 
     overflow:hidden;
 }
 
 .dropdown:hover .dropdown-content{
-    display:block;
+
+    opacity:1;
+    visibility:visible;
+
+    transform:translateY(0);
+
 }
 
 .dropdown-content a{
@@ -169,7 +182,33 @@ window.supabaseClient = supabase.createClient(
 /* MOBILE */
 
 .menu-toggle{
-    display:none;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    width:42px;
+    height:42px;
+
+    color:#fff;
+
+    cursor:pointer;
+
+}
+
+.menu-icon{
+
+    width:24px;
+    height:24px;
+
+    transition:color .2s ease;
+
+}
+
+.menu-toggle:hover{
+
+    color:#22c55e;
+
 }
 
 @media(max-width:900px){
