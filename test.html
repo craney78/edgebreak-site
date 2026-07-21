@@ -181,14 +181,17 @@ window.supabaseClient = supabase.createClient(
 
 /* MOBILE */
 
+/* HAMBURGER */
+
 .menu-toggle{
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display:none;
 
     width:42px;
     height:42px;
+
+    align-items:center;
+    justify-content:center;
 
     color:#fff;
 
@@ -210,6 +213,8 @@ window.supabaseClient = supabase.createClient(
     color:#22c55e;
 
 }
+
+
 
 @media(max-width:900px){
 
@@ -322,22 +327,7 @@ window.supabaseClient = supabase.createClient(
     font-weight:700;
 }
 
-@media (max-width:900px){
 
-    .menu-toggle{
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        cursor:pointer;
-    }
-
-}
-
-.nav-links{
-    display:flex;
-    align-items:center;
-    gap:28px;
-}
 </style>
 <body>
 
@@ -440,7 +430,8 @@ window.supabaseClient = supabase.createClient(
                                 <path d="M21 21l-4.3-4.3"/>
                             </svg>
 
-                            NASDAQ Scanner 🔒
+                            NASDAQ Scanner
+                            <span id="scannerLock">🔒</span>
 
                         </a>
 
@@ -574,47 +565,53 @@ window.supabaseClient = supabase.createClient(
 
     
 <script>
+// =========================
+// 🔐 NAV LOGIN / LOGOUT
+// =========================
 
-// =========================
-// 🔄 NAV LOGIN / LOGOUT
-// =========================
 async function setupAuthButton() {
 
-  const btn = document.getElementById("authBtn");
+  const btn =
+    document.getElementById("authBtn");
+
   if (!btn) return;
 
-  const { data: { session } } = await supabaseClient.auth.getSession();
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
 
   if (session) {
+
     btn.innerText = "Logout";
+    btn.href = "#";
 
     btn.onclick = async (e) => {
+
       e.preventDefault();
+
       await supabaseClient.auth.signOut();
-      window.location.href = "login.html";
+
+      window.location.href =
+        "login.html";
     };
 
   } else {
+
     btn.innerText = "Login";
     btn.href = "login.html";
+
   }
 }
 
-// =========================
-// 🔁 AUTH STATE LISTENER
-// =========================
-supabaseClient.auth.onAuthStateChange(() => {
-  setupAuthButton();
-});
+window.addEventListener(
+  "load",
+  setupAuthButton
+);
 
+supabaseClient.auth.onAuthStateChange(
+  setupAuthButton
+);
 </script>
-
-<script>
-window.addEventListener("load", async () => {
-  await setupAuthButton();
-});
-</script>
-
 <script>
 // =========================
 // 📱 MOBILE NAV TOGGLE (FIXED)
