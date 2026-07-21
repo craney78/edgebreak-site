@@ -926,6 +926,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggle = document.getElementById("menuToggle");
   const nav = document.getElementById("navLinks");
 
+  const productsMenu = document.getElementById("productsMenu");
+  const resourcesMenu = document.getElementById("resourcesMenu");
+
+  const productsLink = productsMenu.querySelector(".nav-link");
+  const resourcesLink = resourcesMenu.querySelector(".nav-link");
+
+  const productsDropdown = productsMenu.querySelector(".dropdown-content");
+  const resourcesDropdown = resourcesMenu.querySelector(".dropdown-content");
+ 
+
   if (!toggle || !nav) {
     console.log("❌ Nav elements missing");
     return;
@@ -936,10 +946,29 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.querySelectorAll("#navLinks a").forEach(link => {
-    link.addEventListener("click", () => {
-      nav.classList.remove("active");
+
+    link.addEventListener("click", (e) => {
+
+        // Desktop behaves normally
+        if (window.innerWidth > 768) return;
+
+        // Products opens submenu instead of navigating
+        if (link === productsLink) {
+
+        e.preventDefault();
+
+        nav.classList.add("products-open");
+
+        return;
+
+        }
+
+        // Close menu for normal links
+        nav.classList.remove("active");
+
     });
-  });
+
+    });
 
 });
 </script>
