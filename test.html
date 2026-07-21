@@ -1564,6 +1564,22 @@ window.supabaseClient = supabase.createClient(
         gap:20px;
 
     }
+
+    .footer-v2-links{
+
+        display:none;
+
+        padding-top:16px;
+
+    }
+
+    .footer-v2-links a{
+
+        display:block;
+
+        padding:10px 0;
+
+    }
 }
 
 
@@ -2590,6 +2606,56 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+</script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Desktop does nothing
+    if (window.innerWidth > 768) return;
+
+    const sections = document.querySelectorAll(".footer-v2-column");
+
+    sections.forEach(section => {
+
+        const title = section.querySelector(".footer-v2-column-title");
+        const links = section.querySelector(".footer-v2-links");
+
+        if (!title || !links) return;
+
+        title.addEventListener("click", () => {
+
+            const isOpen = section.classList.contains("open");
+
+            // Close every section
+            sections.forEach(item => {
+
+                item.classList.remove("open");
+
+                const list = item.querySelector(".footer-v2-links");
+
+                if (list) {
+                    list.style.display = "none";
+                }
+
+            });
+
+            // Open the clicked section
+            if (!isOpen) {
+
+                section.classList.add("open");
+
+                links.style.display = "block";
+
+            }
+
+        });
+
+    });
+
+});
+
 </script>
 </body>
 
