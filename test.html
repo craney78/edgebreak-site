@@ -22,7 +22,7 @@ window.supabaseClient = supabase.createClient(
   "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>    
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <style>
 /* =========================
@@ -297,9 +297,6 @@ window.supabaseClient = supabase.createClient(
     border-bottom:1px solid rgba(255,255,255,.05);
 
 }
-
-
-
 /* ===================================
    MOBILE NAVIGATION
 =================================== */
@@ -311,14 +308,13 @@ window.supabaseClient = supabase.createClient(
 @media (max-width:900px){
 
     /* ==========================
-       NAVBAR LAYOUT
+       NAVBAR
     ========================== */
 
     .nav-inner{
 
         height:76px;
-
-        padding:0 20px;
+        padding:0 18px;
 
     }
 
@@ -375,9 +371,13 @@ window.supabaseClient = supabase.createClient(
         width:44px;
         height:44px;
 
+        color:#ffffff;
+
         cursor:pointer;
 
-        color:#ffffff;
+        flex-shrink:0;
+
+        z-index:100001;
 
     }
 
@@ -388,194 +388,152 @@ window.supabaseClient = supabase.createClient(
 
     }
 
-}
+    /* ==========================
+       FULL SCREEN MENU
+    ========================== */
 
-/* ==========================
-FULL SCREEN MENU
-========================== */
+    .nav-links.active{
 
-.nav-links.active{
+        display:flex;
 
-    display:flex;
+        flex-direction:column;
 
-    flex-direction:column;
+        align-items:flex-start;
+        justify-content:flex-start;
 
-    align-items:flex-start;
-    justify-content:flex-start;
+        position:fixed;
 
-    position:fixed;
+        inset:0;
 
-    top:0;
-    left:0;
+        background:#071225;
 
-    width:100vw;
-    height:100vh;
+        padding:95px 32px 40px;
 
-    padding:110px 32px 40px;
+        overflow-y:auto;
 
-    background:#071225;
+        z-index:100000;
 
-    overflow-y:auto;
+    }
 
-    z-index:99999;
+    /* ==========================
+       MENU ITEMS
+    ========================== */
 
-}
+    .nav-links.active > .nav-link,
+    .nav-links.active > .dropdown{
 
-.nav-links.active .dropdown{
+        width:100%;
 
-    width:100%;
+        border-bottom:1px solid rgba(255,255,255,.08);
 
-}
+    }
 
-.nav-links.active .nav-link{
+    .nav-links.active > .nav-link{
 
-    width:100%;
+        display:flex;
 
-    display:block;
+        align-items:center;
 
-}
+        min-height:72px;
 
-.nav-links.active .nav-cta{
+        font-size:24px;
 
-    width:100%;
+        font-weight:600;
 
-}
+        color:#ffffff;
 
-    
+        text-decoration:none;
 
-/* ==========================
-MENU STYLING
-========================== */
+    }
 
-.nav-links.active{
+    .nav-links.active > .dropdown > .nav-link{
 
-    gap:0;
+        display:flex;
 
-}
+        justify-content:space-between;
 
-.nav-links.active > .nav-link,
-.nav-links.active > .dropdown{
+        align-items:center;
 
-    width:100%;
+        min-height:72px;
 
-    border-bottom:1px solid rgba(255,255,255,.08);
+        font-size:24px;
 
-}
+        font-weight:600;
 
-.nav-links.active > .nav-link{
+        color:#ffffff;
 
-    display:flex;
-    align-items:center;
-    min-height:68px;
+        text-decoration:none;
 
-    font-size:24px;
-    font-weight:600;
+    }
 
-    color:#ffffff;
+    .nav-links.active .nav-link:hover{
 
-    text-decoration:none;
+        color:#22c55e;
 
-}
+    }
 
-.nav-links.active > .dropdown > .nav-link{
+    /* ==========================
+       HIDE DESKTOP DROPDOWNS
+    ========================== */
 
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+    .nav-links.active .dropdown{
 
-    min-height:68px;
+        position:static;
 
-    font-size:24px;
-    font-weight:600;
+        width:100%;
 
-    color:#ffffff;
+    }
 
-    text-decoration:none;
+    .nav-links.active .dropdown-content{
 
-}
+        display:none !important;
 
-.nav-links.active .nav-link:hover{
+    }
 
-    color:#22c55e;
+    /* ==========================
+       LOGIN BUTTON
+    ========================== */
 
-}
+    .nav-links.active .nav-cta{
 
-/* Hide desktop dropdown menus */
+        display:flex;
 
-.nav-links.active .dropdown-content{
+        align-items:center;
 
-    display:none;
+        justify-content:center;
 
-}
+        width:100%;
 
+        margin-top:36px;
 
+        padding:18px;
 
-/* ==========================
-   LOGIN BUTTON
-========================== */
+        background:#22c55e;
 
-.nav-links.active .nav-cta{
+        color:#ffffff;
 
-    display:flex;
+        border-radius:14px;
 
-    justify-content:center;
-    align-items:center;
+        text-decoration:none;
 
-    width:100%;
+        font-size:18px;
 
-    margin-top:40px;
+        font-weight:700;
 
-    padding:18px 24px;
+        box-shadow:0 12px 30px rgba(34,197,94,.25);
 
-    background:#22c55e;
+    }
 
-    color:#ffffff;
+    .nav-links.active .nav-cta:hover{
 
-    font-size:18px;
-    font-weight:700;
+        background:#16a34a;
 
-    text-decoration:none;
-
-    border-radius:14px;
-
-    box-shadow:
-        0 10px 30px rgba(34,197,94,.28);
-
-    transition:
-        background .2s ease,
-        transform .2s ease;
+    }
 
 }
 
-.nav-links.active .nav-cta:hover{
 
-    background:#16a34a;
 
-    transform:translateY(-2px);
-
-}
-
-/* ==========================
-   REMOVE DESKTOP EFFECTS
-========================== */
-
-.nav-links.active .dropdown{
-
-    position:static;
-
-}
-
-.nav-links.active .dropdown-content{
-
-    display:none !important;
-
-}
-
-.nav-links.active .dropdown:hover .dropdown-content{
-
-    display:none !important;
-
-}
 
 </style> 
 
