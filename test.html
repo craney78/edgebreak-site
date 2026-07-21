@@ -201,74 +201,7 @@ window.supabaseClient = supabase.createClient(
     color:#22c55e;
 }
 
-/* MOBILE */
 
-/* HAMBURGER */
-
-.menu-toggle{
-
-    display:none;
-
-    width:42px;
-    height:42px;
-
-    align-items:center;
-    justify-content:center;
-
-    color:#fff;
-
-    cursor:pointer;
-
-}
-
-.menu-icon{
-
-    width:24px;
-    height:24px;
-
-    transition:color .2s ease;
-
-}
-
-.menu-toggle:hover{
-
-    color:#22c55e;
-
-}
-
-
-
-@media(max-width:900px){
-
-    .menu-toggle{
-        display:block;
-        color:white;
-        font-size:28px;
-        cursor:pointer;
-    }
-
-    .nav-links{
-        display:none;
-    }
-
-    .nav-links.active{
-        display:flex;
-        flex-direction:column;
-
-        position:absolute;
-        top:82px;
-        left:0;
-        right:0;
-
-        background:#020617;
-
-        padding:25px;
-        gap:18px;
-
-        border-top:1px solid #1e293b;
-    }
-
-}
 
 .dropdown-content a{
 
@@ -362,6 +295,136 @@ window.supabaseClient = supabase.createClient(
 .nav{
 
     border-bottom:1px solid rgba(255,255,255,.05);
+
+}
+
+
+
+/* ===================================
+   MOBILE NAVIGATION
+=================================== */
+
+@media (max-width:900px){
+
+    /* Hide desktop navigation */
+    .nav-links{
+        display:none;
+    }
+
+    /* Show hamburger */
+    .menu-toggle{
+
+        display:flex;
+
+        width:46px;
+        height:46px;
+
+        align-items:center;
+        justify-content:center;
+
+        color:#ffffff;
+
+        cursor:pointer;
+
+        z-index:10002;
+
+    }
+
+    .menu-icon{
+
+        width:28px;
+        height:28px;
+
+        transition:color .2s ease;
+
+    }
+
+    .menu-toggle:hover{
+
+        color:#22c55e;
+
+    }
+
+    /* Fullscreen navigation */
+
+    .nav-links.active{
+
+        display:flex;
+        flex-direction:column;
+        align-items:flex-start;
+
+        position:fixed;
+
+        top:0;
+        left:0;
+
+        width:100%;
+        height:100vh;
+
+        padding:120px 32px 40px;
+
+        background:#020617;
+
+        gap:28px;
+
+        overflow-y:auto;
+
+        z-index:10001;
+
+        animation:mobileMenuFade .22s ease;
+
+    }
+
+    /* Navigation links */
+
+    .nav-link{
+
+        width:100%;
+
+        font-size:22px;
+        font-weight:600;
+
+        color:#ffffff;
+
+    }
+
+    .nav-cta{
+
+        width:100%;
+
+        margin-top:20px;
+
+        text-align:center;
+
+    }
+
+    /* Hide desktop dropdowns for now */
+
+    .dropdown-content{
+
+        display:none;
+
+    }
+
+}
+
+/* Animation */
+
+@keyframes mobileMenuFade{
+
+    from{
+
+        opacity:0;
+        transform:scale(.98);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:scale(1);
+
+    }
 
 }
 </style>
