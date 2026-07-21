@@ -427,6 +427,97 @@ window.supabaseClient = supabase.createClient(
     }
 
 }
+
+/* ===================================
+   MOBILE OVERLAY HEADER
+=================================== */
+
+.nav-links.active{
+
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:flex-start;
+
+    position:fixed;
+
+    inset:0;
+
+    background:#020617;
+
+    padding:120px 40px 40px;
+
+    gap:30px;
+
+    z-index:10000;
+
+    animation:mobileMenuFade .22s ease;
+
+}
+
+/* Close button */
+
+.nav-links.active::before{
+
+    content:"✕";
+
+    position:absolute;
+
+    top:30px;
+    right:30px;
+
+    font-size:34px;
+    font-weight:300;
+
+    color:#ffffff;
+
+    cursor:pointer;
+
+}
+
+/* Brand */
+
+.nav-links.active::after{
+
+    content:"EDGEBREAK";
+
+    position:absolute;
+
+    top:42px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    color:#ffffff;
+
+    font-size:24px;
+    font-weight:800;
+
+    letter-spacing:1px;
+
+}
+
+.nav-links.active > .nav-link,
+.nav-links.active > .dropdown{
+
+    width:100%;
+
+}
+
+.nav-links.active .nav-link{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    width:100%;
+
+    font-size:24px;
+    font-weight:600;
+
+    color:#fff;
+
+}
 </style>
 <body>
 
