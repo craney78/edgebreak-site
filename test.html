@@ -732,60 +732,6 @@ window.supabaseClient = supabase.createClient(
 
 
 /* ===================================
-   FOOTER
-=================================== */
-
-@media (min-width: 901px){
-
-    .footer{
-
-        width:100%;
-
-    }
-
-    .footer-inner{
-
-        max-width:1800px;
-
-        margin:0 auto;
-
-        padding:70px 40px;
-
-        display:flex;
-
-        justify-content:space-between;
-
-        align-items:flex-start;
-
-        gap:60px;
-
-    }
-
-    /* ==========================
-       BRAND
-    ========================== */
-
-    .footer-brand{
-
-        flex:0 0 34%;
-
-    }
-
-    /* ==========================
-       LINK COLUMNS
-    ========================== */
-
-    .footer-col{
-
-        flex:1;
-
-        min-width:170px;
-
-    }
-
-}
-
-/* ===================================
    BRAND
 =================================== */
 
@@ -973,6 +919,12 @@ window.supabaseClient = supabase.createClient(
 
 }
 
+.footer-heading-text{
+
+    display:block;
+
+}
+
 .footer-col a{
 
     display:flex;
@@ -1049,7 +1001,7 @@ window.supabaseClient = supabase.createClient(
 
 }
 
-.footer-highlight-item strong{
+.footer-highlight-title{
 
     font-size:16px;
 
@@ -1059,7 +1011,7 @@ window.supabaseClient = supabase.createClient(
 
 }
 
-.footer-highlight-item span{
+.footer-highlight-text{
 
     font-size:14px;
 
@@ -1153,7 +1105,7 @@ window.supabaseClient = supabase.createClient(
 
 }
 
-.footer-parent a{
+.footer-parent-link{
 
     text-decoration:none;
 
@@ -1175,7 +1127,7 @@ window.supabaseClient = supabase.createClient(
 
 .footer-brand-title,
 .footer-heading,
-.footer-highlight-item strong,
+.footer-highlight-title,
 .footer-copyright-text{
 
     color:#ffffff;
@@ -1186,14 +1138,14 @@ window.supabaseClient = supabase.createClient(
 .footer-disclaimer,
 .footer-parent,
 .footer-status,
-.footer-highlight-item span{
+.footer-highlight-text{
 
     color:#94a3b8;
 
 }
 
 .footer-col a,
-.footer-parent a{
+.footer-parent-link{
 
     color:#cbd5e1;
 
@@ -1358,9 +1310,11 @@ window.supabaseClient = supabase.createClient(
     position:absolute;
 
     left:-12px;
+
     top:50%;
 
     width:0;
+
     height:2px;
 
     border-radius:20px;
@@ -1429,7 +1383,7 @@ window.supabaseClient = supabase.createClient(
    CRANE LINK
 ========================== */
 
-.footer-parent a:hover{
+.footer-parent-link:hover{
 
     color:#ffffff;
 
@@ -1482,9 +1436,11 @@ window.supabaseClient = supabase.createClient(
     position:absolute;
 
     top:0;
+
     right:-35px;
 
     width:1px;
+
     height:100%;
 
     background:linear-gradient(
@@ -1512,9 +1468,11 @@ window.supabaseClient = supabase.createClient(
     position:absolute;
 
     left:0;
+
     bottom:0;
 
     width:42px;
+
     height:2px;
 
     border-radius:20px;
