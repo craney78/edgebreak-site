@@ -163,8 +163,20 @@ window.supabaseClient = supabase.createClient(
 
     padding:8px;
 
+    /* ADD THESE */
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(12px);
+    pointer-events:none;
+
+    transition:
+        opacity .22s ease,
+        transform .22s ease,
+        visibility .22s ease;
+
     overflow:hidden;
 
+    
 }
 
 .dropdown:hover .dropdown-content{
