@@ -597,33 +597,123 @@ window.supabaseClient = supabase.createClient(
 
 }
 
-.nav-links.active .dropdown{
+/* ===================================
+   MOBILE SUBMENUS
+=================================== */
 
-    width:100%;
+/* Hide all main menu items except active submenu */
 
-}
-
-.nav-links.active .dropdown > .nav-link{
-
-    width:100%;
-
-}
-
-.mobile-hidden{
-
-    display:none !important;
-
-}
-
-.mobile-arrow{
+.nav-links.products-open > .mobile-main-item:not(#productsMenu),
+.nav-links.resources-open > .mobile-main-item:not(#resourcesMenu){
 
     display:none;
 
 }
 
-.desktop-arrow{
+/* Active submenu */
 
-    display:inline;
+.nav-links.products-open #productsMenu,
+.nav-links.resources-open #resourcesMenu{
+
+    width:100%;
+
+}
+
+/* Hide Products / Resources heading */
+
+.nav-links.products-open #productsMenu > .nav-link,
+.nav-links.resources-open #resourcesMenu > .nav-link{
+
+    display:none;
+
+}
+
+/* Show existing dropdown */
+
+.nav-links.products-open #productsMenu > .dropdown-content,
+.nav-links.resources-open #resourcesMenu > .dropdown-content{
+
+    display:flex !important;
+
+    flex-direction:column;
+
+    position:static;
+
+    background:none;
+
+    border:none;
+
+    box-shadow:none;
+
+    width:100%;
+
+    min-width:100%;
+
+    padding:0;
+
+    margin:0;
+
+}
+
+/* Dropdown links */
+
+.nav-links.products-open .dropdown-content a,
+.nav-links.resources-open .dropdown-content a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    min-height:48px;
+
+    padding:8px 0;
+
+    color:#ffffff;
+
+    text-decoration:none;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+/* Icons */
+
+.nav-links.products-open .dropdown-icon,
+.nav-links.resources-open .dropdown-icon{
+
+    width:20px;
+
+    height:20px;
+
+    flex-shrink:0;
+
+}
+
+/* Back button */
+
+.mobile-back{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    min-height:48px;
+
+    padding:8px 0;
+
+    color:#22c55e;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    text-decoration:none;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
 
 }
 
@@ -918,55 +1008,114 @@ supabaseClient.auth.onAuthStateChange(
 </script>
 <script>
 // =========================
-// 📱 MOBILE NAV TOGGLE (FIXED)
+// 📱 MOBILE NAV TOGGLE
 // =========================
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  const toggle = document.getElementById("menuToggle");
-  const nav = document.getElementById("navLinks");
+    const toggle = document.getElementById("menuToggle");
+    const nav = document.getElementById("navLinks");
 
-  const productsMenu = document.getElementById("productsMenu");
-  const resourcesMenu = document.getElementById("resourcesMenu");
-
-  const productsLink = productsMenu.querySelector(".nav-link");
-  const resourcesLink = resourcesMenu.querySelector(".nav-link");
-
-  const productsDropdown = productsMenu.querySelector(".dropdown-content");
-  const resourcesDropdown = resourcesMenu.querySelector(".dropdown-content");
- 
-
-  if (!toggle || !nav) {
-    console.log("❌ Nav elements missing");
-    return;
-  }
-
-  toggle.addEventListener("click", () => {
-    nav.classList.toggle("active");
-  });
-
-  document.querySelectorAll("#navLinks a").forEach(link => {
-
-    link.addEventListener("click", (e) => {
-
-        // Desktop behaves normally
-        if (window.innerWidth > 768) return;
-
-        // Products opens submenu instead of navigating
-        if (link === productsLink) {
-
-        e.preventDefault();
-
-        nav.classList.add("products-open");
-
+    if (!toggle || !nav) {
+        console.log("❌ Nav elements missing");
         return;
+    }
 
+    const productsMenu = document.getElementById("productsMenu");
+    const resourcesMenu = document.getElementById("resourcesMenu");
+
+    const productsLink = productsMenu.querySelector(".nav-link");
+    const resourcesLink = resourcesMenu.querySelector(".nav-link");
+
+    const productsDropdown = productsMenu.querySelector(".dropdown-content");
+    const resourcesDropdown = resourcesMenu.querySelector(".dropdown-content");
+
+    // =========================
+    // OPEN / CLOSE MENU
+    // =========================
+
+    toggle.addEventListener("click", () => {
+
+        nav.classList.toggle("active");
+
+        if (!nav.classList.contains("active")) {
+            nav.classList.remove("products-open");
+            nav.classList.remove("resources-open");
         }
 
-        // Close menu for normal links
-        nav.classList.remove("active");
-
     });
+
+    // =========================
+    // MOBILE BACK BUTTON
+    // =========================
+
+    function createBackButton(type) {
+
+        const back = document.createElement("a");
+
+        back.href = "#";
+        back.className = "mobile-back";
+        back.innerHTML = "← Back";
+
+        back.addEventListener("click", (e) => {
+
+            e.preventDefault();
+
+            nav.classList.remove(type);
+
+        });
+
+        return back;
+
+    }
+
+    productsDropdown.prepend(
+        createBackButton("products-open")
+    );
+
+    resourcesDropdown.prepend(
+        createBackButton("resources-open")
+    );
+
+    // =========================
+    // MOBILE LINK HANDLING
+    // =========================
+
+    document.querySelectorAll("#navLinks a").forEach(link => {
+
+        link.addEventListener("click", (e) => {
+
+            // Desktop
+            if (window.innerWidth > 768) return;
+
+            // Products
+            if (link === productsLink) {
+
+                e.preventDefault();
+
+                nav.classList.add("products-open");
+
+                return;
+
+            }
+
+            // Resources
+            if (link === resourcesLink) {
+
+                e.preventDefault();
+
+                nav.classList.add("resources-open");
+
+                return;
+
+            }
+
+            // Normal links
+            nav.classList.remove("active");
+            nav.classList.remove("products-open");
+            nav.classList.remove("resources-open");
+
+        });
 
     });
 
