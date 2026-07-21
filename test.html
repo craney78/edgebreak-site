@@ -97,7 +97,7 @@ window.supabaseClient = supabase.createClient(
     color:#cbd5e1;
     text-decoration:none;
     font-size:14px;
-    font-weight:600;
+    font-weight:500;
     transition:.2s;
 }
 
@@ -127,27 +127,24 @@ window.supabaseClient = supabase.createClient(
 }
 
 .dropdown-content{
+
     position:absolute;
     top:100%;
     left:0;
 
-    min-width:260px;
+    min-width:270px;
 
     background:#0b1220;
-    border:1px solid #1e293b;
-    border-radius:14px;
 
-    opacity:0;
-    visibility:hidden;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:16px;
 
-    transform:translateY(8px);
-
-    transition:
-        opacity .18s ease,
-        transform .18s ease,
-        visibility .18s ease;
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.45),
+        0 0 0 1px rgba(255,255,255,.02);
 
     overflow:hidden;
+
 }
 
 .dropdown:hover .dropdown-content{
