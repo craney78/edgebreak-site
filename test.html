@@ -1447,9 +1447,23 @@ window.supabaseClient = supabase.createClient(
 
     }
 
-    .footer-v2-column a{
+    .footer-v2-links{
 
         display:none;
+
+    }
+
+    .footer-v2-column.open .footer-v2-column-title::after{
+
+        content:"−";
+
+    }
+
+    .footer-v2-column-title{
+
+        user-select:none;
+
+        -webkit-tap-highlight-color:transparent;
 
     }
 }
