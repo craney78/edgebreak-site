@@ -406,7 +406,10 @@ window.supabaseClient = supabase.createClient(
         top:0;
         left:0;
 
-        width:100vw;
+        left:0;
+        right:0;
+        top:0;
+        bottom:0;
         height:100dvh;
 
         background:#071225;
@@ -619,15 +622,15 @@ window.supabaseClient = supabase.createClient(
             <div class="nav-links" id="navLinks">
 
                 <!-- HOME -->
-                <a href="index.html" class="nav-link">
+                <a href="index.html" class="nav-link mobile-main-item">
                     Home
                 </a>
 
                 <!-- PRODUCTS -->
-                <div class="dropdown">
+                <div class="dropdown mobile-main-item" id="productsMenu">
 
                     <a href="products.html" class="nav-link">
-                        Products ▼
+                        Products <span class="mobile-arrow">›</span><span class="desktop-arrow">▼</span>
                     </a>
 
                     <div class="dropdown-content">
@@ -676,11 +679,12 @@ window.supabaseClient = supabase.createClient(
 
                 </div>
 
+                
                 <!-- RESOURCES -->
-                <div class="dropdown">
+                <div class="dropdown mobile-main-item" id="resourcesMenu">
 
                     <a href="#" class="nav-link">
-                        Resources ▼
+                        Resources <span class="mobile-arrow">›</span><span class="desktop-arrow">▼</span>
                     </a>
 
                     <div class="dropdown-content">
@@ -747,49 +751,49 @@ window.supabaseClient = supabase.createClient(
                 </div>
 
                 <!-- PRICING -->
-                <a href="pricing.html" class="nav-link">
+                <a href="pricing.html" class="nav-link mobile-main-item">
                     Pricing
                 </a>
 
                 <!-- LOGIN -->
-                <a href="#" class="nav-cta" id="authBtn">
+                <a href="#" class="nav-cta mobile-main-item" id="authBtn">
                     Login
                 </a>
 
-            </div>
+                </div>
 
-            <!-- HAMBURGER -->
-            <div
-                class="menu-toggle"
-                id="menuToggle"
-                aria-label="Open navigation"
-                role="button"
-                tabindex="0">
+                <!-- HAMBURGER -->
+                <div
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Open navigation"
+                    role="button"
+                    tabindex="0">
 
-                <svg
-                    class="menu-icon"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    width="24"
-                    height="24">
+                    <svg
+                        class="menu-icon"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        width="24"
+                        height="24">
 
-                    <line x1="3" y1="6" x2="21" y2="6"/>
-                    <line x1="3" y1="12" x2="21" y2="12"/>
-                    <line x1="3" y1="18" x2="21" y2="18"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
 
-                </svg>
+                    </svg>
+
+                </div>
 
             </div>
 
         </div>
-
     </div>
-</div>
 
 
     <main style="padding:120px 40px;min-height:1200px;">
