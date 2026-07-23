@@ -66,9 +66,10 @@ TWITTER
 <!-- ===================================
 CSS
 =================================== -->
-
-<link rel="stylesheet"
-      href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="/css/footer.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <link rel="stylesheet"
       href="/css/academy-lessons.css">
@@ -77,7 +78,6 @@ CSS
 SUPABASE
 =================================== -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
 window.supabaseClient = supabase.createClient(
@@ -170,119 +170,8 @@ WEBPAGE
 <body>
 
 <!-- NAVBAR -->
-<div class="nav">
-  <div class="nav-inner">
 
-    <!-- LEFT -->
-    <div class="nav-left">
-      <a
-          href="/index.html"
-          aria-label="EdgeBreak Home"
-      >
-        <img
-          src="/images/logo.webp"
-          class="nav-logo"
-          alt="EdgeBreak NASDAQ Market Intelligence"
-          width="40"
-          height="40"
-        >
-      </a>
-      <a href="/index.html" class="logo-text">EDGEBREAK</a>
-      <span class="live-badge">LIVE</span>
-    </div>
-
-    <!-- RIGHT SIDE WRAP -->
-    <div class="nav-links-wrap">
-
-      <!-- LINKS -->
-      <div class="nav-links" id="navLinks">
-
-        <a href="/index.html" class="nav-link">Home</a>
-
-        <!-- PRODUCTS -->
-        <div class="dropdown">
-          <a href="/products.html" class="nav-link">
-            Products ▼
-          </a>
-
-          <div class="dropdown-content">
-
-            <a href="/watchlist.html">
-              Edgebreak Trades
-            </a>
-
-            <a href="/smart-money-dashboard.html">
-              Smart Money Filter
-            </a>
-
-          
-              <a
-                href="/nasdaq-stock-scanner.html"
-                class="locked-link"
-              >
-                  NASDAQ Scanner
-
-                  <span class="lock-icon">
-                      🔒
-                  </span>
-              </a>
-          
-            
-          </div>
-        </div>
-
-        <!-- RESOURCES -->
-        <div class="dropdown">
-
-          <a href="#" class="nav-link">
-            Resources ▼
-          </a>
-
-          <div class="dropdown-content">
-
-            <a href="/academy.html">
-              EdgeBreak Academy
-            </a>
-                        
-            <a href="/trading-guide.html">
-              EdgeBreak Trading Guide
-            </a>
-
-            <a href="/breakout-guide.html">
-              Free Breakout Guide
-            </a>
-
-            <a href="/blog/breakout-trading-strategy.html">
-              Strategy
-            </a>
-
-            <a href="/blog.html">
-              Trading Insights
-            </a>
-
-          </div>
-
-        </div>
-
-        <a href="/pricing.html" class="nav-link">
-          Pricing
-        </a>
-
-        <a href="#" class="nav-cta" id="authBtn">
-          Login
-        </a>
-
-      </div>
-
-      <!-- HAMBURGER -->
-      <div class="menu-toggle" id="menuToggle">
-        ☰
-      </div>
-
-    </div>
-
-  </div>
-</div>
+<div id="navbar"></div>
 
 <main>
 <!-- ==========================
