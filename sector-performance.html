@@ -438,7 +438,7 @@ checkAccess();
         Monitor which sectors are leading and lagging the market. Strong sector momentum can help identify where institutional money may be flowing before individual stocks begin to break out.
     </p>
 
-    <div class="tool-card">
+        <div class="tool-card">
 
         <div class="sector-table">
 
@@ -449,7 +449,7 @@ checkAccess();
 
             </div>
 
-            <div class="sector-row positive">
+            <button class="sector-row positive active" data-symbol="XLK" data-name="Technology">
 
                 <span class="sector-name">
 
@@ -467,9 +467,9 @@ checkAccess();
 
                 <strong>+2.31%</strong>
 
-            </div>
+            </button>
 
-            <div class="sector-row positive">
+            <button class="sector-row positive" data-symbol="AIQ" data-name="Artificial Intelligence">
 
                 <span class="sector-name">
 
@@ -487,9 +487,9 @@ checkAccess();
 
                 <strong>+2.08%</strong>
 
-            </div>
+            </button>
 
-            <div class="sector-row positive">
+            <button class="sector-row positive" data-symbol="SMH" data-name="Semiconductors">
 
                 <span class="sector-name">
 
@@ -507,9 +507,9 @@ checkAccess();
 
                 <strong>+1.84%</strong>
 
-            </div>
+            </button>
 
-            <div class="sector-row positive">
+            <button class="sector-row positive" data-symbol="CLOU" data-name="Cloud Computing">
 
                 <span class="sector-name">
 
@@ -527,9 +527,9 @@ checkAccess();
 
                 <strong>+1.42%</strong>
 
-            </div>
+            </button>
 
-            <div class="sector-row positive">
+            <button class="sector-row positive" data-symbol="HACK" data-name="Cybersecurity">
 
                 <span class="sector-name">
 
@@ -547,9 +547,9 @@ checkAccess();
 
                 <strong>+1.17%</strong>
 
-            </div>
+            </button>
 
-            <div class="sector-row neutral">
+            <button class="sector-row neutral" data-symbol="XLF" data-name="Financials">
 
                 <span class="sector-name">
 
@@ -567,9 +567,9 @@ checkAccess();
 
                 <strong>+0.28%</strong>
 
-            </div>
+            </button>
 
-            <div class="sector-row negative">
+            <button class="sector-row negative" data-symbol="XLE" data-name="Energy">
 
                 <span class="sector-name">
 
@@ -587,9 +587,9 @@ checkAccess();
 
                 <strong>-0.64%</strong>
 
-            </div>
+            </button>
 
-            <div class="sector-row negative">
+            <button class="sector-row negative" data-symbol="XLRE" data-name="Real Estate">
 
                 <span class="sector-name">
 
@@ -607,9 +607,9 @@ checkAccess();
 
                 <strong>-0.93%</strong>
 
-            </div>
+            </button>
 
-            <div class="sector-row negative">
+            <button class="sector-row negative" data-symbol="XLP" data-name="Consumer Staples">
 
                 <span class="sector-name">
 
@@ -627,9 +627,9 @@ checkAccess();
 
                 <strong>-1.11%</strong>
 
-            </div>
+            </button>
 
-            <div class="sector-row negative">
+            <button class="sector-row negative" data-symbol="XLU" data-name="Utilities">
 
                 <span class="sector-name">
 
@@ -647,11 +647,19 @@ checkAccess();
 
                 <strong>-1.48%</strong>
 
-            </div>
+            </button>
 
         </div>
 
     </div>
+
+    <section id="sectorChart" class="tool-card">
+
+        <h2>Live Sector Chart</h2>
+
+        <div id="tvChart"></div>
+
+    </section>
 
     <div class="elite-panel" style="margin-top:40px;">
 
@@ -694,62 +702,93 @@ checkAccess();
 
 </div>
 
-
+<script
+    src="https://s3.tradingview.com/tv.js">
+</script>
 
 <script>
-function calculateMargin(){
+// =====================================
+// SECTOR PERFORMANCE
+// =====================================
 
-    const purchase =
-        parseFloat(document.getElementById("purchase").value) || 0;
+const sectorRows = document.querySelectorAll(".sector-row");
 
-    const deposit =
-        parseFloat(document.getElementById("deposit").value) || 0;
+const chartTitle = document.getElementById("chartTitle");
 
-    // Basic validation
-    if(purchase <= 0){
+sectorRows.forEach(row => {
 
-        alert("Please enter the total share purchase value.");
+    row.addEventListener("click", () => {
 
-        return;
-    }
-
-    if(deposit < 0){
-
-        alert("Please enter a valid deposit.");
-
-        return;
-    }
-
-    if(deposit > purchase){
-
-        alert("Your deposit cannot be greater than the purchase value.");
-
-        return;
-    }
-
-    const loan = purchase - deposit;
-
-    const lvr =
-        purchase > 0
-            ? (loan / purchase) * 100
-            : 0;
-
-    document.getElementById("loan").innerText =
-        "$" + loan.toLocaleString(undefined,{
-            minimumFractionDigits:2,
-            maximumFractionDigits:2
+        // Remove previous active state
+        sectorRows.forEach(item => {
+            item.classList.remove("active");
         });
 
-    document.getElementById("lvr").innerText =
-        lvr.toFixed(1) + "%";
+        // Highlight selected sector
+        row.classList.add("active");
 
-    document.getElementById("equity").innerText =
-        "$" + deposit.toLocaleString(undefined,{
-            minimumFractionDigits:2,
-            maximumFractionDigits:2
-        });
+        // Read sector information
+        const symbol = row.dataset.symbol;
+        const name = row.dataset.name;
+
+        // Update heading
+        chartTitle.textContent = `${name} (${symbol})`;
+
+        // Load TradingView chart
+        loadTradingViewChart(symbol);
+
+        // Scroll to chart
+        document
+            .getElementById("sectorChart")
+            .scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+    });
+
+});
+</script>
+<script>
+function loadTradingViewChart(symbol) {
+
+    const chart = document.getElementById("tvChart");
+
+    chart.innerHTML = "";
+
+    new TradingView.widget({
+
+        autosize: true,
+
+        symbol: symbol,
+
+        interval: "D",
+
+        timezone: "Australia/Sydney",
+
+        theme: "dark",
+
+        style: "1",
+
+        locale: "en",
+
+        toolbar_bg: "#0f172a",
+
+        enable_publishing: false,
+
+        hide_top_toolbar: false,
+
+        hide_side_toolbar: false,
+
+        allow_symbol_change: false,
+
+        container_id: "tvChart"
+
+    });
 
 }
+
+loadTradingViewChart("XLK");
 </script>
 
 </body>
