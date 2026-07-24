@@ -386,94 +386,71 @@ checkAccess();
 
 <div class="tool-page">
 
-    <h1>Margin Loan Calculator</h1>
+    <h1>Sector Performance</h1>
 
     <p class="intro">
-        Estimate your borrowing amount, equity contribution and Loan-to-Value Ratio (LVR) before purchasing shares using a margin loan.
+        Monitor which sectors are leading and lagging the market. Strong sector momentum can help identify where institutional money may be flowing before individual stocks begin to break out.
     </p>
 
     <div class="tool-card">
 
-        <div class="margin-form">
+        <div class="sector-table">
 
-            <div class="field">
+            <div class="sector-header">
 
-                <label for="purchase">
-                    Total Share Purchase Value ($)
-                </label>
-
-                <input
-                    type="number"
-                    id="purchase"
-                    placeholder="10000"
-                    min="0"
-                >
+                <span>Sector</span>
+                <span>Today's Change</span>
 
             </div>
 
-            <div class="field">
-
-                <label for="deposit">
-                    Your Deposit ($)
-                </label>
-
-                <input
-                    type="number"
-                    id="deposit"
-                    placeholder="3000"
-                    min="0"
-                >
-
+            <div class="sector-row positive">
+                <span>💻 Technology</span>
+                <strong>+2.31%</strong>
             </div>
 
-            <button
-                class="return-btn"
-                onclick="calculateMargin()"
-            >
-                Calculate Margin Loan
-            </button>
+            <div class="sector-row positive">
+                <span>🤖 Artificial Intelligence</span>
+                <strong>+2.08%</strong>
+            </div>
 
-            <div
-                id="results"
-                class="margin-results"
-            >
+            <div class="sector-row positive">
+                <span>🖥 Semiconductors</span>
+                <strong>+1.84%</strong>
+            </div>
 
-                <div>
+            <div class="sector-row positive">
+                <span>☁ Cloud Computing</span>
+                <strong>+1.42%</strong>
+            </div>
 
-                    <span>
-                        Margin Loan Required
-                    </span>
+            <div class="sector-row positive">
+                <span>🔐 Cybersecurity</span>
+                <strong>+1.17%</strong>
+            </div>
 
-                    <strong id="loan">
-                        $0.00
-                    </strong>
+            <div class="sector-row neutral">
+                <span>🏦 Financials</span>
+                <strong>+0.28%</strong>
+            </div>
 
-                </div>
+            <div class="sector-row negative">
+                <span>⚡ Energy</span>
+                <strong>-0.64%</strong>
+            </div>
 
-                <div>
+            <div class="sector-row negative">
+                <span>🏠 Real Estate</span>
+                <strong>-0.93%</strong>
+            </div>
 
-                    <span>
-                        Loan-to-Value Ratio (LVR)
-                    </span>
+            <div class="sector-row negative">
+                <span>🥫 Consumer Staples</span>
+                <strong>-1.11%</strong>
+            </div>
 
-                    <strong id="lvr">
-                        0.0%
-                    </strong>
-
-                </div>
-
-                <div>
-
-                    <span>
-                        Your Equity
-                    </span>
-
-                    <strong id="equity">
-                        $0.00
-                    </strong>
-
-                </div>
-
+            <div class="sector-row negative">
+                <span>💧 Utilities</span>
+                <strong>-1.48%</strong>
             </div>
 
         </div>
@@ -483,26 +460,19 @@ checkAccess();
     <div class="elite-panel" style="margin-top:40px;">
 
         <h2>
-            Understanding Margin Loans
+            Why Sector Performance Matters
         </h2>
 
         <p>
-            A margin loan allows investors to borrow money to purchase shares.
-            Your own contribution is known as your equity, while the remaining
-            amount is borrowed from the lender.
+            Strong stocks are often found within strong sectors. Monitoring sector performance can help identify areas of the market attracting buying interest before individual breakout opportunities become widely recognised.
         </p>
 
         <p>
-            The Loan-to-Value Ratio (LVR) measures the percentage of your
-            investment funded by the loan. Lower LVRs generally provide a
-            greater buffer against market movements, while higher LVRs increase
-            borrowing risk.
+            Sector strength should be considered alongside trend analysis, price structure, volume and overall market conditions. No single indicator should be used in isolation when researching investment opportunities.
         </p>
 
         <p>
-            This calculator is provided as a simple educational tool to assist
-            with understanding margin lending concepts. It should not be
-            considered financial advice.
+            EdgeBreak uses sector analysis as one component of a broader research process designed to help organise and prioritise potential opportunities.
         </p>
 
     </div>
@@ -514,8 +484,7 @@ checkAccess();
         </h2>
 
         <p>
-            Finished using the Margin Loan Calculator? Return to the NASDAQ
-            Scanner and continue researching breakout opportunities.
+            Return to the NASDAQ Scanner to discover companies within the strongest market sectors.
         </p>
 
         <a
@@ -528,6 +497,8 @@ checkAccess();
     </div>
 
 </div>
+
+
 
 <script>
 function calculateMargin(){
