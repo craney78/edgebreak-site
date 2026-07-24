@@ -324,49 +324,119 @@ RESPONSIVE
 }   
 
 .sector-row{
+
+    width:100%;
+
     display:flex;
     justify-content:space-between;
     align-items:center;
 
     padding:18px 22px;
 
+    background:none;
+    border:none;
     border-bottom:1px solid #1e293b;
+
+    cursor:pointer;
+
+    transition:.25s;
+
 }
 
-.sector-name{
+.sector-row:hover{
+
+    background:#071225;
+
+}
+
+.sector-row.active{
+
+    background:#0f1f35;
+
+    border-left:4px solid #38bdf8;
+
+}
+
+.sector-header{
+
     display:flex;
-    align-items:center;
-    gap:14px;
+    justify-content:space-between;
 
-    color:#f8fafc;
-    font-size:17px;
-    font-weight:600;
-    letter-spacing:.2px;
-}
+    padding:18px 22px;
 
-.sector-icon{
-    width:22px;
-    height:22px;
+    background:#071225;
 
-    color:#38bdf8;
-    flex-shrink:0;
-}
+    color:#ffffff;
 
-.sector-row strong{
-    font-size:18px;
     font-weight:700;
+
+    border-bottom:1px solid #1e293b;
+
 }
 
-.sector-row.positive strong{
-    color:#22c55e;
+/* ==========================================
+SECTOR LAYOUT
+========================================== */
+
+.sector-layout{
+
+    display:grid;
+    grid-template-columns:380px 1fr;
+    gap:30px;
+
+    align-items:start;
+
+    margin-top:40px;
+
 }
 
-.sector-row.neutral strong{
-    color:#facc15;
+.sector-list{
+
+    padding:0;
+    overflow:hidden;
+
 }
 
-.sector-row.negative strong{
-    color:#ef4444;
+.sector-chart{
+
+    padding:25px;
+
+}
+
+.sector-chart h2{
+
+    margin:0 0 20px;
+
+    color:#ffffff;
+    font-size:24px;
+    text-align:left;
+
+}
+
+#tvChart{
+
+    width:100%;
+    height:650px;
+
+    border-radius:12px;
+    overflow:hidden;
+
+}
+
+@media(max-width:900px){
+
+    .sector-layout{
+
+        grid-template-columns:1fr;
+
+    }
+
+    #tvChart{
+
+        height:500px;
+
+    }
+
 }
 </style>
 <!-- ===================================
@@ -438,220 +508,245 @@ checkAccess();
         Monitor which sectors are leading and lagging the market. Strong sector momentum can help identify where institutional money may be flowing before individual stocks begin to break out.
     </p>
 
-        <div class="tool-card">
+        <div class="sector-layout">
 
-        <div class="sector-table">
+            <!-- =========================
+                SECTOR LIST
+            ========================== -->
 
-            <div class="sector-header">
+            <div class="tool-card sector-list">
 
-                <span>Sector</span>
-                <span>Today's Change</span>
+                <div class="sector-table">
+
+                    <div class="sector-header">
+
+                        <span>Sector</span>
+                        <span>Today's Change</span>
+
+                    </div>
+
+                    <button class="sector-row positive active" data-symbol="XLK" data-name="Technology">
+
+                        <span class="sector-name">
+
+                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 19V13"/>
+                                <path d="M10 19V9"/>
+                                <path d="M15 19V6"/>
+                                <path d="M4 16l5-5 4 3 7-8"/>
+                                <path d="M17 6h3v3"/>
+                            </svg>
+
+                            Technology
+
+                        </span>
+
+                        <strong>+2.31%</strong>
+
+                    </button>
+
+                    <button class="sector-row positive" data-symbol="AIQ" data-name="Artificial Intelligence">
+
+                        <span class="sector-name">
+
+                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 19V13"/>
+                                <path d="M10 19V9"/>
+                                <path d="M15 19V6"/>
+                                <path d="M4 16l5-5 4 3 7-8"/>
+                                <path d="M17 6h3v3"/>
+                            </svg>
+
+                            Artificial Intelligence
+
+                        </span>
+
+                        <strong>+2.08%</strong>
+
+                    </button>
+
+                    <button class="sector-row positive" data-symbol="SMH" data-name="Semiconductors">
+
+                        <span class="sector-name">
+
+                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 19V13"/>
+                                <path d="M10 19V9"/>
+                                <path d="M15 19V6"/>
+                                <path d="M4 16l5-5 4 3 7-8"/>
+                                <path d="M17 6h3v3"/>
+                            </svg>
+
+                            Semiconductors
+
+                        </span>
+
+                        <strong>+1.84%</strong>
+
+                    </button>
+
+                    <button class="sector-row positive" data-symbol="CLOU" data-name="Cloud Computing">
+
+                        <span class="sector-name">
+
+                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 19V13"/>
+                                <path d="M10 19V9"/>
+                                <path d="M15 19V6"/>
+                                <path d="M4 16l5-5 4 3 7-8"/>
+                                <path d="M17 6h3v3"/>
+                            </svg>
+
+                            Cloud Computing
+
+                        </span>
+
+                        <strong>+1.42%</strong>
+
+                    </button>
+
+                    <button class="sector-row positive" data-symbol="HACK" data-name="Cybersecurity">
+
+                        <span class="sector-name">
+
+                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 19V13"/>
+                                <path d="M10 19V9"/>
+                                <path d="M15 19V6"/>
+                                <path d="M4 16l5-5 4 3 7-8"/>
+                                <path d="M17 6h3v3"/>
+                            </svg>
+
+                            Cybersecurity
+
+                        </span>
+
+                        <strong>+1.17%</strong>
+
+                    </button>
+
+                    <button class="sector-row neutral" data-symbol="XLF" data-name="Financials">
+
+                        <span class="sector-name">
+
+                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 19V13"/>
+                                <path d="M10 19V9"/>
+                                <path d="M15 19V6"/>
+                                <path d="M4 16l5-5 4 3 7-8"/>
+                                <path d="M17 6h3v3"/>
+                            </svg>
+
+                            Financials
+
+                        </span>
+
+                        <strong>+0.28%</strong>
+
+                    </button>
+
+                    <button class="sector-row negative" data-symbol="XLE" data-name="Energy">
+
+                        <span class="sector-name">
+
+                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 19V13"/>
+                                <path d="M10 19V9"/>
+                                <path d="M15 19V6"/>
+                                <path d="M4 16l5-5 4 3 7-8"/>
+                                <path d="M17 6h3v3"/>
+                            </svg>
+
+                            Energy
+
+                        </span>
+
+                        <strong>-0.64%</strong>
+
+                    </button>
+
+                    <button class="sector-row negative" data-symbol="XLRE" data-name="Real Estate">
+
+                        <span class="sector-name">
+
+                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 19V13"/>
+                                <path d="M10 19V9"/>
+                                <path d="M15 19V6"/>
+                                <path d="M4 16l5-5 4 3 7-8"/>
+                                <path d="M17 6h3v3"/>
+                            </svg>
+
+                            Real Estate
+
+                        </span>
+
+                        <strong>-0.93%</strong>
+
+                    </button>
+
+                    <button class="sector-row negative" data-symbol="XLP" data-name="Consumer Staples">
+
+                        <span class="sector-name">
+
+                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 19V13"/>
+                                <path d="M10 19V9"/>
+                                <path d="M15 19V6"/>
+                                <path d="M4 16l5-5 4 3 7-8"/>
+                                <path d="M17 6h3v3"/>
+                            </svg>
+
+                            Consumer Staples
+
+                        </span>
+
+                        <strong>-1.11%</strong>
+
+                    </button>
+
+                    <button class="sector-row negative" data-symbol="XLU" data-name="Utilities">
+
+                        <span class="sector-name">
+
+                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 19V13"/>
+                                <path d="M10 19V9"/>
+                                <path d="M15 19V6"/>
+                                <path d="M4 16l5-5 4 3 7-8"/>
+                                <path d="M17 6h3v3"/>
+                            </svg>
+
+                            Utilities
+
+                        </span>
+
+                        <strong>-1.48%</strong>
+
+                    </button>
+
+                </div>
 
             </div>
 
-            <button class="sector-row positive active" data-symbol="XLK" data-name="Technology">
+            <!-- =========================
+                LIVE CHART
+            ========================== -->
 
-                <span class="sector-name">
+            <div
+                id="sectorChart"
+                class="tool-card sector-chart">
 
-                    <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 19V13"/>
-                        <path d="M10 19V9"/>
-                        <path d="M15 19V6"/>
-                        <path d="M4 16l5-5 4 3 7-8"/>
-                        <path d="M17 6h3v3"/>
-                    </svg>
+                <h2 id="chartTitle">
+                    Technology (XLK)
+                </h2>
 
-                    Technology
+                <div id="tvChart"></div>
 
-                </span>
-
-                <strong>+2.31%</strong>
-
-            </button>
-
-            <button class="sector-row positive" data-symbol="AIQ" data-name="Artificial Intelligence">
-
-                <span class="sector-name">
-
-                    <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 19V13"/>
-                        <path d="M10 19V9"/>
-                        <path d="M15 19V6"/>
-                        <path d="M4 16l5-5 4 3 7-8"/>
-                        <path d="M17 6h3v3"/>
-                    </svg>
-
-                    Artificial Intelligence
-
-                </span>
-
-                <strong>+2.08%</strong>
-
-            </button>
-
-            <button class="sector-row positive" data-symbol="SMH" data-name="Semiconductors">
-
-                <span class="sector-name">
-
-                    <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 19V13"/>
-                        <path d="M10 19V9"/>
-                        <path d="M15 19V6"/>
-                        <path d="M4 16l5-5 4 3 7-8"/>
-                        <path d="M17 6h3v3"/>
-                    </svg>
-
-                    Semiconductors
-
-                </span>
-
-                <strong>+1.84%</strong>
-
-            </button>
-
-            <button class="sector-row positive" data-symbol="CLOU" data-name="Cloud Computing">
-
-                <span class="sector-name">
-
-                    <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 19V13"/>
-                        <path d="M10 19V9"/>
-                        <path d="M15 19V6"/>
-                        <path d="M4 16l5-5 4 3 7-8"/>
-                        <path d="M17 6h3v3"/>
-                    </svg>
-
-                    Cloud Computing
-
-                </span>
-
-                <strong>+1.42%</strong>
-
-            </button>
-
-            <button class="sector-row positive" data-symbol="HACK" data-name="Cybersecurity">
-
-                <span class="sector-name">
-
-                    <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 19V13"/>
-                        <path d="M10 19V9"/>
-                        <path d="M15 19V6"/>
-                        <path d="M4 16l5-5 4 3 7-8"/>
-                        <path d="M17 6h3v3"/>
-                    </svg>
-
-                    Cybersecurity
-
-                </span>
-
-                <strong>+1.17%</strong>
-
-            </button>
-
-            <button class="sector-row neutral" data-symbol="XLF" data-name="Financials">
-
-                <span class="sector-name">
-
-                    <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 19V13"/>
-                        <path d="M10 19V9"/>
-                        <path d="M15 19V6"/>
-                        <path d="M4 16l5-5 4 3 7-8"/>
-                        <path d="M17 6h3v3"/>
-                    </svg>
-
-                    Financials
-
-                </span>
-
-                <strong>+0.28%</strong>
-
-            </button>
-
-            <button class="sector-row negative" data-symbol="XLE" data-name="Energy">
-
-                <span class="sector-name">
-
-                    <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 19V13"/>
-                        <path d="M10 19V9"/>
-                        <path d="M15 19V6"/>
-                        <path d="M4 16l5-5 4 3 7-8"/>
-                        <path d="M17 6h3v3"/>
-                    </svg>
-
-                    Energy
-
-                </span>
-
-                <strong>-0.64%</strong>
-
-            </button>
-
-            <button class="sector-row negative" data-symbol="XLRE" data-name="Real Estate">
-
-                <span class="sector-name">
-
-                    <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 19V13"/>
-                        <path d="M10 19V9"/>
-                        <path d="M15 19V6"/>
-                        <path d="M4 16l5-5 4 3 7-8"/>
-                        <path d="M17 6h3v3"/>
-                    </svg>
-
-                    Real Estate
-
-                </span>
-
-                <strong>-0.93%</strong>
-
-            </button>
-
-            <button class="sector-row negative" data-symbol="XLP" data-name="Consumer Staples">
-
-                <span class="sector-name">
-
-                    <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 19V13"/>
-                        <path d="M10 19V9"/>
-                        <path d="M15 19V6"/>
-                        <path d="M4 16l5-5 4 3 7-8"/>
-                        <path d="M17 6h3v3"/>
-                    </svg>
-
-                    Consumer Staples
-
-                </span>
-
-                <strong>-1.11%</strong>
-
-            </button>
-
-            <button class="sector-row negative" data-symbol="XLU" data-name="Utilities">
-
-                <span class="sector-name">
-
-                    <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 19V13"/>
-                        <path d="M10 19V9"/>
-                        <path d="M15 19V6"/>
-                        <path d="M4 16l5-5 4 3 7-8"/>
-                        <path d="M17 6h3v3"/>
-                    </svg>
-
-                    Utilities
-
-                </span>
-
-                <strong>-1.48%</strong>
-
-            </button>
+            </div>
 
         </div>
 
-    </div>
 
     <section id="sectorChart" class="tool-card">
 
@@ -660,6 +755,7 @@ checkAccess();
         <div id="tvChart"></div>
 
     </section>
+
 
     <div class="elite-panel" style="margin-top:40px;">
 
