@@ -455,6 +455,49 @@ RESPONSIVE
     height:650px;
 
 }
+
+/* ==========================
+   SECTOR INFO
+========================== */
+
+.sector-info{
+
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+
+}
+
+.sector-info h3{
+
+    margin:0 0 6px;
+
+    font-size:18px;
+    font-weight:700;
+
+    color:#ffffff;
+
+}
+
+.sector-info p{
+
+    margin:0;
+
+    font-size:14px;
+    color:#94a3b8;
+
+}
+
+.sector-row strong{
+
+    min-width:90px;
+
+    text-align:right;
+
+    font-size:22px;
+    font-weight:700;
+
+}
 </style>
 <!-- ===================================
 SUPABASE
@@ -527,10 +570,6 @@ checkAccess();
 
         <div class="sector-layout">
 
-            <!-- ===================================
-            SECTOR PERFORMANCE
-            =================================== -->
-
             <div class="tool-card">
 
                 <div class="sector-table">
@@ -542,144 +581,184 @@ checkAccess();
 
                     </div>
 
-                    <button class="sector-row positive active" data-symbol="XLK" data-name="Technology">
-                        <span class="sector-name">
-                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 19V13"/>
-                                <path d="M10 19V9"/>
-                                <path d="M15 19V6"/>
-                                <path d="M4 16l5-5 4 3 7-8"/>
-                                <path d="M17 6h3v3"/>
-                            </svg>
-                            Technology
-                        </span>
+                    <button class="sector-row positive active"
+                            data-symbol="XLK"
+                            data-name="Technology">
+
+                        <div class="sector-info">
+
+                            <h3>Technology</h3>
+
+                            <p>
+                                Apple • Microsoft • Oracle • Adobe
+                            </p>
+
+                        </div>
+
                         <strong>+2.31%</strong>
+
                     </button>
 
-                    <button class="sector-row positive" data-symbol="AIQ" data-name="Artificial Intelligence">
-                        <span class="sector-name">
-                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 19V13"/>
-                                <path d="M10 19V9"/>
-                                <path d="M15 19V6"/>
-                                <path d="M4 16l5-5 4 3 7-8"/>
-                                <path d="M17 6h3v3"/>
-                            </svg>
-                            Artificial Intelligence
-                        </span>
+                    <button class="sector-row positive"
+                            data-symbol="AIQ"
+                            data-name="Artificial Intelligence">
+
+                        <div class="sector-info">
+
+                            <h3>Artificial Intelligence</h3>
+
+                            <p>
+                                NVIDIA • Palantir • C3.ai • SoundHound
+                            </p>
+
+                        </div>
+
                         <strong>+2.08%</strong>
+
                     </button>
 
-                    <button class="sector-row positive" data-symbol="SMH" data-name="Semiconductors">
-                        <span class="sector-name">
-                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 19V13"/>
-                                <path d="M10 19V9"/>
-                                <path d="M15 19V6"/>
-                                <path d="M4 16l5-5 4 3 7-8"/>
-                                <path d="M17 6h3v3"/>
-                            </svg>
-                            Semiconductors
-                        </span>
+                    <button class="sector-row positive"
+                            data-symbol="SMH"
+                            data-name="Semiconductors">
+
+                        <div class="sector-info">
+
+                            <h3>Semiconductors</h3>
+
+                            <p>
+                                NVIDIA • AMD • Broadcom • TSMC
+                            </p>
+
+                        </div>
+
                         <strong>+1.84%</strong>
+
                     </button>
 
-                    <button class="sector-row positive" data-symbol="CLOU" data-name="Cloud Computing">
-                        <span class="sector-name">
-                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 19V13"/>
-                                <path d="M10 19V9"/>
-                                <path d="M15 19V6"/>
-                                <path d="M4 16l5-5 4 3 7-8"/>
-                                <path d="M17 6h3v3"/>
-                            </svg>
-                            Cloud Computing
-                        </span>
+                    <button class="sector-row positive"
+                            data-symbol="CLOU"
+                            data-name="Cloud Computing">
+
+                        <div class="sector-info">
+
+                            <h3>Cloud Computing</h3>
+
+                            <p>
+                                Amazon • Microsoft • Snowflake • Cloudflare
+                            </p>
+
+                        </div>
+
                         <strong>+1.42%</strong>
+
                     </button>
 
-                    <button class="sector-row positive" data-symbol="HACK" data-name="Cybersecurity">
-                        <span class="sector-name">
-                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 19V13"/>
-                                <path d="M10 19V9"/>
-                                <path d="M15 19V6"/>
-                                <path d="M4 16l5-5 4 3 7-8"/>
-                                <path d="M17 6h3v3"/>
-                            </svg>
-                            Cybersecurity
-                        </span>
+                    <button class="sector-row positive"
+                            data-symbol="HACK"
+                            data-name="Cybersecurity">
+
+                        <div class="sector-info">
+
+                            <h3>Cybersecurity</h3>
+
+                            <p>
+                                CrowdStrike • Palo Alto • Fortinet • Zscaler
+                            </p>
+
+                        </div>
+
                         <strong>+1.17%</strong>
+
                     </button>
 
-                    <button class="sector-row neutral" data-symbol="XLF" data-name="Financials">
-                        <span class="sector-name">
-                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 19V13"/>
-                                <path d="M10 19V9"/>
-                                <path d="M15 19V6"/>
-                                <path d="M4 16l5-5 4 3 7-8"/>
-                                <path d="M17 6h3v3"/>
-                            </svg>
-                            Financials
-                        </span>
+                    <button class="sector-row neutral"
+                            data-symbol="XLF"
+                            data-name="Financials">
+
+                        <div class="sector-info">
+
+                            <h3>Financials</h3>
+
+                            <p>
+                                JPMorgan • Visa • Mastercard • Goldman Sachs
+                            </p>
+
+                        </div>
+
                         <strong>+0.28%</strong>
+
                     </button>
 
-                    <button class="sector-row negative" data-symbol="XLE" data-name="Energy">
-                        <span class="sector-name">
-                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 19V13"/>
-                                <path d="M10 19V9"/>
-                                <path d="M15 19V6"/>
-                                <path d="M4 16l5-5 4 3 7-8"/>
-                                <path d="M17 6h3v3"/>
-                            </svg>
-                            Energy
-                        </span>
+                    <button class="sector-row negative"
+                            data-symbol="XLE"
+                            data-name="Energy">
+
+                        <div class="sector-info">
+
+                            <h3>Energy</h3>
+
+                            <p>
+                                ExxonMobil • Chevron • ConocoPhillips • Schlumberger
+                            </p>
+
+                        </div>
+
                         <strong>-0.64%</strong>
+
                     </button>
 
-                    <button class="sector-row negative" data-symbol="XLRE" data-name="Real Estate">
-                        <span class="sector-name">
-                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 19V13"/>
-                                <path d="M10 19V9"/>
-                                <path d="M15 19V6"/>
-                                <path d="M4 16l5-5 4 3 7-8"/>
-                                <path d="M17 6h3v3"/>
-                            </svg>
-                            Real Estate
-                        </span>
+                    <button class="sector-row negative"
+                            data-symbol="XLRE"
+                            data-name="Real Estate">
+
+                        <div class="sector-info">
+
+                            <h3>Real Estate</h3>
+
+                            <p>
+                                Prologis • Realty Income • Simon Property
+                            </p>
+
+                        </div>
+
                         <strong>-0.93%</strong>
+
                     </button>
 
-                    <button class="sector-row negative" data-symbol="XLP" data-name="Consumer Staples">
-                        <span class="sector-name">
-                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 19V13"/>
-                                <path d="M10 19V9"/>
-                                <path d="M15 19V6"/>
-                                <path d="M4 16l5-5 4 3 7-8"/>
-                                <path d="M17 6h3v3"/>
-                            </svg>
-                            Consumer Staples
-                        </span>
+                    <button class="sector-row negative"
+                            data-symbol="XLP"
+                            data-name="Consumer Staples">
+
+                        <div class="sector-info">
+
+                            <h3>Consumer Staples</h3>
+
+                            <p>
+                                Coca-Cola • Costco • Procter & Gamble • Walmart
+                            </p>
+
+                        </div>
+
                         <strong>-1.11%</strong>
+
                     </button>
 
-                    <button class="sector-row negative" data-symbol="XLU" data-name="Utilities">
-                        <span class="sector-name">
-                            <svg class="sector-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 19V13"/>
-                                <path d="M10 19V9"/>
-                                <path d="M15 19V6"/>
-                                <path d="M4 16l5-5 4 3 7-8"/>
-                                <path d="M17 6h3v3"/>
-                            </svg>
-                            Utilities
-                        </span>
+                    <button class="sector-row negative"
+                            data-symbol="XLU"
+                            data-name="Utilities">
+
+                        <div class="sector-info">
+
+                            <h3>Utilities</h3>
+
+                            <p>
+                                NextEra • Duke Energy • Southern Company
+                            </p>
+
+                        </div>
+
                         <strong>-1.48%</strong>
+
                     </button>
 
                 </div>
@@ -692,7 +771,9 @@ checkAccess();
                 style="margin-top:40px;">
 
                 <h2 id="chartTitle">
+
                     Technology (XLK)
+
                 </h2>
 
                 <div id="tvChart"></div>
