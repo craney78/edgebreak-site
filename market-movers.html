@@ -95,6 +95,50 @@ window.supabaseClient = supabase.createClient(
   "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
+
+<script>
+// =========================
+// 🔒 HARD PAGE LOCK
+// =========================
+document.documentElement.style.visibility = "hidden";
+
+const supabaseClient = window.supabaseClient;
+
+// =========================
+// 🔐 ACCESS CONTROL
+// =========================
+async function checkAccess() {
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+      window.location.replace("/login.html");
+      return;
+    }
+
+    const { data: profile, error } = await supabaseClient
+      .from("profiles")
+      .select("is_active")
+      .eq("id", user.id)
+      .single();
+
+    if (error || !profile || !profile.is_active) {
+      window.location.replace("/pricing.html");
+      return;
+    }
+
+    document.documentElement.style.visibility = "visible";
+
+  } catch (err) {
+    console.error(err);
+    window.location.replace("/login.html");
+  }
+}
+
+// 🚀 RUN
+checkAccess();
+
+</script>
 <style>
 /* ==========================================
 TRADINGVIEW WIDGETS
