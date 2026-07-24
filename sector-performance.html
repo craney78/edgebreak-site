@@ -117,10 +117,17 @@ CARD
 .tool-card{
 
     background:#0b1628;
+
     border:1px solid rgba(255,255,255,.05);
+
     border-radius:18px;
-    padding:40px;
-    text-align:center;
+
+    padding:0;
+
+    overflow:hidden;
+
+    margin-bottom:40px;
+
     box-shadow:0 15px 40px rgba(0,0,0,.35);
 
 }
@@ -360,58 +367,20 @@ RESPONSIVE
 .sector-header{
 
     display:flex;
+
     justify-content:space-between;
 
-    padding:18px 22px;
+    padding:20px 28px;
 
     background:#071225;
 
-    color:#ffffff;
+    color:white;
 
     font-weight:700;
 
-    border-bottom:1px solid #1e293b;
-
 }
 
-/* ==========================================
-SECTOR LAYOUT
-========================================== */
 
-.sector-layout{
-
-    display:grid;
-    grid-template-columns:380px 1fr;
-    gap:30px;
-
-    align-items:start;
-
-    margin-top:40px;
-
-}
-
-.sector-list{
-
-    padding:0;
-    overflow:hidden;
-
-}
-
-.sector-chart{
-
-    padding:25px;
-
-}
-
-.sector-chart h2{
-
-    margin:0 0 20px;
-
-    color:#ffffff;
-    font-size:24px;
-    text-align:left;
-
-}
 
 #tvChart{
 
@@ -436,6 +405,54 @@ SECTOR LAYOUT
         height:500px;
 
     }
+
+}
+
+.sector-row{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:20px 28px;
+
+    background:none;
+
+    border:none;
+
+    border-bottom:1px solid #1e293b;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+#sectorChart{
+
+    padding:30px;
+
+}
+
+#chartTitle{
+
+    margin-bottom:25px;
+
+    color:white;
+
+    text-align:left;
+
+}
+
+#tvChart{
+
+    width:100%;
+
+    height:650px;
 
 }
 </style>
