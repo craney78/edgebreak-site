@@ -4350,10 +4350,54 @@ async function changePassword() {
 
     }
 
+    if (!password) {
+
+    message.textContent =
+        "Please enter a new password.";
+
+    message.style.color = "#EF4444";
+
+    return;
+
+    }
+
     if (password.length < 8) {
 
         message.textContent =
-            "Password must be at least 8 characters.";
+            "Password must be at least 8 characters long.";
+
+        message.style.color = "#EF4444";
+
+        return;
+
+    }
+
+    if (!/[A-Z]/.test(password)) {
+
+        message.textContent =
+            "Password must contain at least one uppercase letter.";
+
+        message.style.color = "#EF4444";
+
+        return;
+
+    }
+
+    if (!/[a-z]/.test(password)) {
+
+        message.textContent =
+            "Password must contain at least one lowercase letter.";
+
+        message.style.color = "#EF4444";
+
+        return;
+
+    }
+
+    if (!/[0-9]/.test(password)) {
+
+        message.textContent =
+            "Password must contain at least one number.";
 
         message.style.color = "#EF4444";
 

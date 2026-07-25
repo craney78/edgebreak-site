@@ -232,7 +232,44 @@ height:auto;
 
 <!-- PASSWORD -->
 
-<input id="password" type="password" placeholder="Password" class="input-field">
+<input
+    id="password"
+    type="password"
+    placeholder="Password"
+    class="input-field">
+
+<small
+    id="passwordRules"
+    style="
+        display:block;
+        margin-top:8px;
+        margin-bottom:12px;
+        color:#94a3b8;
+        font-size:13px;
+        line-height:1.7;
+    ">
+
+    <strong style="color:#ffffff;">
+        Password Requirements
+    </strong>
+
+    <br>
+
+    • Minimum 8 characters
+
+    <br>
+
+    • One uppercase letter (A–Z)
+
+    <br>
+
+    • One lowercase letter (a–z)
+
+    <br>
+
+    • One number (0–9)
+
+</small>
 
 <!-- 📱 PHONE ROW -->
 
@@ -311,8 +348,80 @@ document.addEventListener("DOMContentLoaded", () => {
     signupBtn.disabled = true;
 
     const email = document.getElementById("email").value.trim();
+
     const password = document.getElementById("password").value.trim();
+
     const errorBox = document.getElementById("error");
+
+    errorBox.innerText = "";
+
+    // ====================================
+    // EMAIL VALIDATION
+    // ====================================
+
+    if (!email) {
+
+        errorBox.innerText =
+            "Please enter your email address.";
+
+        signupBtn.disabled = false;
+        return;
+
+    }
+
+    // ====================================
+    // PASSWORD VALIDATION
+    // ====================================
+
+    if (!password) {
+
+        errorBox.innerText =
+            "Please enter a password.";
+
+        signupBtn.disabled = false;
+        return;
+
+    }
+
+    if (password.length < 8) {
+
+        errorBox.innerText =
+            "Password must be at least 8 characters long.";
+
+        signupBtn.disabled = false;
+        return;
+
+    }
+
+    if (!/[A-Z]/.test(password)) {
+
+        errorBox.innerText =
+            "Password must contain at least one uppercase letter.";
+
+        signupBtn.disabled = false;
+        return;
+
+    }
+
+    if (!/[a-z]/.test(password)) {
+
+        errorBox.innerText =
+            "Password must contain at least one lowercase letter.";
+
+        signupBtn.disabled = false;
+        return;
+
+    }
+
+    if (!/[0-9]/.test(password)) {
+
+        errorBox.innerText =
+            "Password must contain at least one number.";
+
+        signupBtn.disabled = false;
+        return;
+
+    }
 
     // 📱 PHONE
     const code = document.getElementById("countryCode").value;
