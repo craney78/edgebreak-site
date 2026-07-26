@@ -171,6 +171,36 @@ GLASS BUTTON
                 placeholder="Password"
                 class="input-field">
 
+            <small style="
+                display:block;
+                margin:-8px 0 18px;
+                color:#94a3b8;
+                font-size:13px;
+                line-height:1.6;
+            ">
+
+                <strong style="color:#ffffff;">
+                    Password Requirements
+                </strong>
+
+                <br>
+
+                • Minimum 8 characters
+
+                <br>
+
+                • At least 1 uppercase letter
+
+                <br>
+
+                • At least 1 lowercase letter
+
+                <br>
+
+                • At least 1 number
+
+            </small>
+
             <!-- CONFIRM PASSWORD -->
 
             <input
@@ -269,19 +299,50 @@ async function handleSignup() {
 
     }
 
-    if (password !== confirmPassword) {
+    // =========================
+    // PASSWORD VALIDATION
+    // =========================
+
+    if (password.length < 8) {
 
         errorBox.innerText =
-            "Passwords do not match.";
+            "Password must be at least 8 characters long.";
 
         return;
 
     }
 
-    if (password.length < 8) {
+    if (!/[A-Z]/.test(password)) {
 
         errorBox.innerText =
-            "Password must be at least 8 characters.";
+            "Password must contain at least one uppercase letter.";
+
+        return;
+
+    }
+
+    if (!/[a-z]/.test(password)) {
+
+        errorBox.innerText =
+            "Password must contain at least one lowercase letter.";
+
+        return;
+
+    }
+
+    if (!/[0-9]/.test(password)) {
+
+        errorBox.innerText =
+            "Password must contain at least one number.";
+
+        return;
+
+    }
+
+    if (password !== confirmPassword) {
+
+        errorBox.innerText =
+            "Passwords do not match.";
 
         return;
 
