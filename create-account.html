@@ -509,6 +509,32 @@ async function initialisePage(){
 
 }
 
+// =========================
+// CHECK EMAIL VERIFICATION
+// =========================
+
+async function checkVerification(){
+
+    const {
+
+        data:{session}
+
+    } = await supabaseClient.auth.getSession();
+
+    if(!session){
+
+        alert(
+            "Your email has not been verified yet. Please click the verification link in your email first."
+        );
+
+        return;
+
+    }
+
+    await activateAccount(session);
+
+}
+
 async function handleSignup() {
 
     const fullName =
@@ -660,9 +686,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         .getElementById("actionBtn")
         .addEventListener("click", handleSignup);
 
+    document
+        .getElementById("continueBtn")
+        .addEventListener("click", checkVerification);
+
     document.addEventListener("keydown", e => {
 
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && !signupPanel.hidden) {
 
             handleSignup();
 
