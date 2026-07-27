@@ -412,6 +412,103 @@ function showSuccess(){
 
 }
 
+// =========================
+// ACTIVATE ACCOUNT
+// =========================
+
+async function activateAccount(session){
+
+    const errorBox =
+        document.getElementById("error");
+
+    showActivating();
+
+    console.log("Calling activate-account...");
+
+    const activateResponse =
+        await fetch(
+            "https://qmonyhukamuuunxxxdlk.supabase.co/functions/v1/activate-account",
+            {
+
+                method: "POST",
+
+                headers:{
+
+                    Authorization:
+                        `Bearer ${session.access_token}`,
+
+                    "Content-Type":
+                        "application/json"
+
+                }
+
+            }
+        );
+
+    const activateResult =
+        await activateResponse.json();
+
+    console.log("ACTIVATE RESULT:", activateResult);
+
+    if(!activateResult.success){
+
+        showSignup();
+
+        errorBox.innerText =
+            activateResult.error ||
+            "Unable to activate account.";
+
+        return false;
+
+    }
+
+    showSuccess();
+
+    setTimeout(()=>{
+
+        window.location.href =
+            "/nasdaq-stock-scanner.html";
+
+    },1500);
+
+    return true;
+
+}
+
+// =========================
+// INITIALISE PAGE
+// =========================
+
+async function initialisePage(){
+
+    const params =
+        new URLSearchParams(window.location.search);
+
+    if(params.get("paid")==="true"){
+
+        showSignup();
+        return;
+
+    }
+
+    const {
+
+        data:{session}
+
+    } = await supabaseClient.auth.getSession();
+
+    if(session){
+
+        await activateAccount(session);
+        return;
+
+    }
+
+    window.location.href =
+        "pricing.html";
+
+}
+
 async function handleSignup() {
 
     const fullName =
@@ -555,7 +652,9 @@ async function handleSignup() {
 // EVENTS
 // =========================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+
+    await initialisePage();
 
     document
         .getElementById("actionBtn")
