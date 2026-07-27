@@ -278,14 +278,7 @@ GLASS BUTTON
 
                 </button>
 
-                <button
-                    id="continueBtn"
-                    class="nav-cta full-width">
-
-                    I've Verified My Email
-
-                </button>
-
+                
             </div>
 
             <!-- ===================================
@@ -484,12 +477,16 @@ async function initialisePage(){
     const params =
         new URLSearchParams(window.location.search);
 
+    // Normal signup after Stripe
+
     if(params.get("paid")==="true"){
 
         showSignup();
         return;
 
     }
+
+    // Returning from email verification
 
     const {
 
@@ -504,36 +501,31 @@ async function initialisePage(){
 
     }
 
-    window.location.href =
-        "pricing.html";
+    // Wait a moment because Supabase sometimes
+    // restores the session after the page loads.
+
+    setTimeout(async()=>{
+
+        const {
+
+            data:{session}
+
+        } = await supabaseClient.auth.getSession();
+
+        if(session){
+
+            await activateAccount(session);
+
+            return;
+
+        }
+
+        window.location.href="pricing.html";
+
+    },1000);
 
 }
 
-// =========================
-// CHECK EMAIL VERIFICATION
-// =========================
-
-async function checkVerification(){
-
-    const {
-
-        data:{session}
-
-    } = await supabaseClient.auth.getSession();
-
-    if(!session){
-
-        alert(
-            "Your email has not been verified yet. Please click the verification link in your email first."
-        );
-
-        return;
-
-    }
-
-    await activateAccount(session);
-
-}
 
 async function handleSignup() {
 
@@ -685,11 +677,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document
         .getElementById("actionBtn")
         .addEventListener("click", handleSignup);
-
-    document
-        .getElementById("continueBtn")
-        .addEventListener("click", checkVerification);
-
+    
     document.addEventListener("keydown", e => {
 
         if (e.key === "Enter" && !signupPanel.hidden) {
