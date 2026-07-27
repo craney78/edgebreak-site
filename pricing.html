@@ -1197,44 +1197,44 @@ FREE TRIAL ELIGIBILITY POPUP
 
 <script>
 
-const trialModal = document.getElementById("trialModal");
+const trialEmail =
+    document.getElementById("trialEmail");
 
-const closeTrialModal = document.getElementById("closeTrialModal");
+const trialMessage =
+    document.getElementById("trialMessage");
 
-const startTrialButtons =
-    document.querySelectorAll(".start-trial-btn");
+const trialContinue =
+    document.getElementById("trialContinue");
 
-// Open popup
+trialContinue.addEventListener("click", function () {
 
-startTrialButtons.forEach(button => {
+    const email = trialEmail.value.trim();
 
-    button.addEventListener("click", function(e){
+    trialMessage.textContent = "";
 
-        e.preventDefault();
+    if (email === "") {
 
-        trialModal.classList.add("show");
+        trialMessage.textContent =
+            "Please enter your email address.";
 
-    });
-
-});
-
-// Close with X
-
-closeTrialModal.addEventListener("click", function(){
-
-    trialModal.classList.remove("show");
-
-});
-
-// Close by clicking outside
-
-window.addEventListener("click", function(e){
-
-    if(e.target === trialModal){
-
-        trialModal.classList.remove("show");
+        return;
 
     }
+
+    const emailPattern =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+
+        trialMessage.textContent =
+            "Please enter a valid email address.";
+
+        return;
+
+    }
+
+    // TEMPORARY
+    alert("Email looks good:\n\n" + email);
 
 });
 
