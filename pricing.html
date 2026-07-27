@@ -1197,6 +1197,14 @@ FREE TRIAL ELIGIBILITY POPUP
 
 <script>
 
+
+
+const trialModal = document.getElementById("trialModal");
+const closeTrialModal = document.getElementById("closeTrialModal");
+
+const startTrialButtons =
+    document.querySelectorAll(".start-trial-btn");
+
 const trialEmail =
     document.getElementById("trialEmail");
 
@@ -1206,13 +1214,65 @@ const trialMessage =
 const trialContinue =
     document.getElementById("trialContinue");
 
-trialContinue.addEventListener("click", function () {
+
+// =========================
+// OPEN POPUP
+// =========================
+
+startTrialButtons.forEach(button => {
+
+    button.addEventListener("click", function(e){
+
+        e.preventDefault();
+
+        trialModal.classList.add("show");
+
+        trialMessage.textContent = "";
+
+        trialEmail.focus();
+
+    });
+
+});
+
+
+// =========================
+// CLOSE BUTTON
+// =========================
+
+closeTrialModal.addEventListener("click", function(){
+
+    trialModal.classList.remove("show");
+
+});
+
+
+// =========================
+// CLICK OUTSIDE
+// =========================
+
+window.addEventListener("click", function(e){
+
+    if(e.target === trialModal){
+
+        trialModal.classList.remove("show");
+
+    }
+
+});
+
+
+// =========================
+// CONTINUE BUTTON
+// =========================
+
+trialContinue.addEventListener("click", function(){
 
     const email = trialEmail.value.trim();
 
     trialMessage.textContent = "";
 
-    if (email === "") {
+    if(email === ""){
 
         trialMessage.textContent =
             "Please enter your email address.";
@@ -1224,7 +1284,7 @@ trialContinue.addEventListener("click", function () {
     const emailPattern =
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!emailPattern.test(email)) {
+    if(!emailPattern.test(email)){
 
         trialMessage.textContent =
             "Please enter a valid email address.";
@@ -1233,12 +1293,14 @@ trialContinue.addEventListener("click", function () {
 
     }
 
-    // TEMPORARY
-    alert("Email looks good:\n\n" + email);
+    // Temporary
+    alert(email);
 
 });
 
 </script>
+
+
 <!-- COMPONENTS -->
 
 <script src="/js/components.js"></script>
