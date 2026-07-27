@@ -110,7 +110,39 @@ serve(async (req) => {
 
     }
 
-    const email = user.email;
+    const email = user.email?.trim().toLowerCase();
+
+    console.log("================================");
+    console.log("AUTH USER ID:", user.id);
+    console.log("AUTH EMAIL:", email);
+    console.log("================================");
+
+    // =========================
+    // CHECK PAYMENT
+    // =========================
+
+    const {
+
+      data: payment,
+      error: paymentError
+
+    } =
+      await supabaseAdmin
+        .from("paid_customers")
+        .select("*")
+        .eq("email", email)
+        .maybeSingle();
+
+    console.log("PAYMENT:", payment);
+    console.log("PAYMENT ERROR:", paymentError);
+
+    const { data: allPayments } =
+      await supabaseAdmin
+        .from("paid_customers")
+        .select("*");
+
+    console.log("ALL PAID CUSTOMERS:", allPayments);
+    console.log("================================");
 
     // =========================
     // CHECK PAYMENT
