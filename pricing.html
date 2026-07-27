@@ -379,6 +379,236 @@ FAQ SCHEMA
     }
 
 }
+
+/* ===================================
+   FREE TRIAL MODAL
+=================================== */
+
+.modal{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:10000;
+
+    background:rgba(2,6,23,.75);
+
+    backdrop-filter:blur(8px);
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:20px;
+
+}
+
+.modal-content{
+
+    width:100%;
+
+    max-width:480px;
+
+    background:#0f172a;
+
+    border:1px solid #1e293b;
+
+    border-radius:20px;
+
+    padding:40px 35px;
+
+    position:relative;
+
+    box-shadow:0 30px 60px rgba(0,0,0,.45);
+
+    text-align:center;
+
+}
+
+.modal-logo{
+
+    width:70px;
+
+    margin:0 auto 20px;
+
+    display:block;
+
+}
+
+.modal-content h2{
+
+    color:#ffffff;
+
+    margin-bottom:15px;
+
+    font-size:30px;
+
+}
+
+.modal-text{
+
+    color:#94a3b8;
+
+    line-height:1.7;
+
+    margin-bottom:30px;
+
+}
+
+.modal-input{
+
+    width:100%;
+
+    padding:15px 18px;
+
+    background:#020617;
+
+    border:1px solid #334155;
+
+    border-radius:12px;
+
+    color:#ffffff;
+
+    font-size:16px;
+
+    outline:none;
+
+    transition:.25s;
+
+    margin-bottom:18px;
+
+    box-sizing:border-box;
+
+}
+
+.modal-input:focus{
+
+    border-color:#22c55e;
+
+    box-shadow:0 0 0 3px rgba(34,197,94,.15);
+
+}
+
+.modal-button{
+
+    width:100%;
+
+    padding:16px;
+
+    background:#22c55e;
+
+    color:#020617;
+
+    border:none;
+
+    border-radius:12px;
+
+    font-size:17px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.modal-button:hover{
+
+    background:#16a34a;
+
+}
+
+.modal-small{
+
+    margin-top:20px;
+
+    color:#64748b;
+
+    font-size:13px;
+
+    line-height:1.6;
+
+}
+
+.modal-message{
+
+    min-height:22px;
+
+    margin-bottom:15px;
+
+    color:#ef4444;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.modal-close{
+
+    position:absolute;
+
+    top:18px;
+
+    right:18px;
+
+    width:40px;
+
+    height:40px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#1e293b;
+
+    color:#ffffff;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.modal-close:hover{
+
+    background:#334155;
+
+}
+
+.modal.show{
+
+    display:flex;
+
+}
+
+@media (max-width:768px){
+
+    .modal-content{
+
+        padding:30px 24px;
+
+    }
+
+    .modal-content h2{
+
+        font-size:24px;
+
+    }
+
+    .modal-logo{
+
+        width:60px;
+
+    }
+
+}
 </style>
 </head>
 
@@ -530,17 +760,18 @@ FAQ SCHEMA
 
     <div class="cta-wrap">
 
-      <a href="https://buy.stripe.com/dRmaEWaxr6pD1Ly7k9ds402"
+      <a href="#"
+        class="start-trial-btn"
         style="
-          display:inline-block;
-          padding:14px 28px;
-          font-size:16px;
-          border-radius:10px;
-          background:#22c55e;
-          color:#020617;
-          font-weight:600;
-          text-align:center;
-          min-width:220px;
+            display:inline-block;
+            padding:14px 28px;
+            font-size:16px;
+            border-radius:10px;
+            background:#22c55e;
+            color:#020617;
+            font-weight:600;
+            text-align:center;
+            min-width:220px;
         ">
         Start Free Trial
       </a>
@@ -856,8 +1087,8 @@ FAQ SCHEMA
     1 Month Free Trial • Then $9.99 USD/Month • Cancel Anytime
   </p>
 
-  <a href="https://buy.stripe.com/dRmaEWaxr6pD1Ly7k9ds402"
-   class="final-cta-btn">
+  <a href="#"
+   class="final-cta-btn start-trial-btn">
 
     Start Free Trial
 
@@ -902,6 +1133,111 @@ if (navBtn) {
     navBtn.href = "login.html";
   }
 }
+</script>
+
+<!-- ===================================
+FREE TRIAL ELIGIBILITY POPUP
+=================================== -->
+
+<div id="trialModal" class="modal">
+
+    <div class="modal-content">
+
+        <button
+            class="modal-close"
+            id="closeTrialModal"
+            aria-label="Close"
+        >
+            ×
+        </button>
+
+        <img
+            src="images/logo.webp"
+            alt="EdgeBreak"
+            class="modal-logo"
+        >
+
+        <h2>
+            Start Your Free Trial
+        </h2>
+
+        <p class="modal-text">
+            Enter your email address to check your eligibility for a free
+            EdgeBreak trial.
+        </p>
+
+        <input
+            type="email"
+            id="trialEmail"
+            class="modal-input"
+            placeholder="Email Address"
+            autocomplete="email"
+        >
+
+        <div
+            id="trialMessage"
+            class="modal-message"
+        ></div>
+
+        <button
+            id="trialContinue"
+            class="modal-button"
+        >
+            Continue
+        </button>
+
+        <p class="modal-small">
+            New members receive a free 1 month trial.
+            Existing members will be taken to the standard subscription.
+        </p>
+
+    </div>
+
+</div>
+
+<script>
+
+const trialModal = document.getElementById("trialModal");
+
+const closeTrialModal = document.getElementById("closeTrialModal");
+
+const startTrialButtons =
+    document.querySelectorAll(".start-trial-btn");
+
+// Open popup
+
+startTrialButtons.forEach(button => {
+
+    button.addEventListener("click", function(e){
+
+        e.preventDefault();
+
+        trialModal.classList.add("show");
+
+    });
+
+});
+
+// Close with X
+
+closeTrialModal.addEventListener("click", function(){
+
+    trialModal.classList.remove("show");
+
+});
+
+// Close by clicking outside
+
+window.addEventListener("click", function(e){
+
+    if(e.target === trialModal){
+
+        trialModal.classList.remove("show");
+
+    }
+
+});
+
 </script>
 <!-- COMPONENTS -->
 
