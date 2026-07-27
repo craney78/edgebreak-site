@@ -3605,6 +3605,49 @@ async function loadUserWatchlist(){
         `).join("");
 
 }
+
+// =========================================
+// LOAD ACCOUNT DETAILS
+// =========================================
+
+async function loadAccountDetails() {
+
+    const {
+        data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    if (!user) return;
+
+    const {
+        data: profile,
+        error
+    } = await supabaseClient
+        .from("profiles")
+        .select("email, created_at")
+        .eq("id", user.id)
+        .single();
+
+    if (error) {
+
+        console.error(error);
+        return;
+
+    }
+
+    document.getElementById("accountEmail").innerText =
+        profile.email;
+
+    document.getElementById("memberSince").innerText =
+        new Date(profile.created_at).toLocaleDateString(
+            "en-AU",
+            {
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+            }
+        );
+
+}
 </script>
 <script>
 // =========================================
@@ -3617,9 +3660,12 @@ document.addEventListener(
 
         await loadUserWatchlist();
         await loadBrokerStatus();
+        await loadAccountDetails();
 
     }
 );
+
+
 </script>
 <!-- ===================================
 TRADE MODAL
