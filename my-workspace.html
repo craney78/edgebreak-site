@@ -3433,6 +3433,11 @@ async function connectBroker(){
 
 async function loadBrokerStatus(){
 
+    // Broker UI not present on this page
+    if(!document.getElementById("ibkrStatus")){
+        return;
+    }
+
     const {
         data:{user}
     } = await supabaseClient.auth.getUser();
@@ -3458,28 +3463,27 @@ async function loadBrokerStatus(){
 
     if(!data){
 
-        document.getElementById("ibkrStatus")
-            .className="broker-status disconnected";
+        document.getElementById("ibkrStatus").className =
+            "broker-status disconnected";
 
-        document.getElementById("ibkrStatusText")
-            .innerText="Not Connected";
+        document.getElementById("ibkrStatusText").innerText =
+            "Not Connected";
 
         return;
 
     }
 
-    document.getElementById("ibkrStatus")
-        .className="broker-status connected";
+    document.getElementById("ibkrStatus").className =
+        "broker-status connected";
 
-    document.getElementById("ibkrStatusText")
-        .innerText="Connected";
+    document.getElementById("ibkrStatusText").innerText =
+        "Connected";
 
-    document.getElementById("ibkrAccount")
-        .innerText=
-            data.broker_account_id || "Connected";
+    document.getElementById("ibkrAccount").innerText =
+        data.broker_account_id || "Connected";
 
-    document.getElementById("connectBrokerBtn")
-        .innerText="Manage Connection";
+    document.getElementById("connectBrokerBtn").innerText =
+        "Manage Connection";
 
 }
 
