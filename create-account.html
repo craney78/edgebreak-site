@@ -133,120 +133,222 @@ GLASS BUTTON
 
             </div>
 
-            <!-- TITLE -->
+            <!-- ===================================
+            SIGN UP PANEL
+            =================================== -->
 
-            <h2 class="login-title">
+            <div id="signupPanel">
 
-                Create Your EdgeBreak Account
+                <h2 class="login-title">
+                    Create Your EdgeBreak Account
+                </h2>
 
-            </h2>
+                <p style="margin-bottom:20px;">
+                    Your payment has been received. Complete your account below to access EdgeBreak.
+                </p>
 
-            <p style="margin-bottom:20px;">
+                <input
+                    id="fullName"
+                    type="text"
+                    placeholder="Full Name"
+                    class="input-field">
 
-                Your payment has been received. Complete your account below to access EdgeBreak.
+                <input
+                    id="email"
+                    type="email"
+                    placeholder="Email Address"
+                    class="input-field">
 
-            </p>
+                <input
+                    id="password"
+                    type="password"
+                    placeholder="Password"
+                    class="input-field">
 
-            <!-- FULL NAME -->
+                <small style="
+                    display:block;
+                    margin:-8px 0 18px;
+                    color:#94a3b8;
+                    font-size:13px;
+                    line-height:1.6;
+                ">
 
-            <input
-                id="fullName"
-                type="text"
-                placeholder="Full Name"
-                class="input-field">
+                    <strong style="color:#ffffff;">
+                        Password Requirements
+                    </strong>
 
-            <!-- EMAIL -->
+                    <br>• Minimum 8 characters
+                    <br>• At least 1 uppercase letter
+                    <br>• At least 1 lowercase letter
+                    <br>• At least 1 number
 
-            <input
-                id="email"
-                type="email"
-                placeholder="Email Address"
-                class="input-field">
+                </small>
 
-            <!-- PASSWORD -->
+                <input
+                    id="confirmPassword"
+                    type="password"
+                    placeholder="Confirm Password"
+                    class="input-field">
 
-            <input
-                id="password"
-                type="password"
-                placeholder="Password"
-                class="input-field">
+                <button
+                    id="actionBtn"
+                    class="nav-cta full-width">
 
-            <small style="
-                display:block;
-                margin:-8px 0 18px;
-                color:#94a3b8;
-                font-size:13px;
-                line-height:1.6;
-            ">
+                    Create Account
 
-                <strong style="color:#ffffff;">
-                    Password Requirements
-                </strong>
+                </button>
 
-                <br>
+                <div
+                    id="error"
+                    class="error-text">
+                </div>
 
-                • Minimum 8 characters
+                <div style="
+                    margin-top:30px;
+                    padding-top:25px;
+                    border-top:1px solid rgba(255,255,255,.08);
+                    text-align:center;
+                ">
 
-                <br>
+                    <p style="
+                        color:#94a3b8;
+                        margin-bottom:15px;
+                    ">
+                        Already have an account?
+                    </p>
 
-                • At least 1 uppercase letter
+                    <button
+                        onclick="window.location.href='login.html'"
+                        class="glass-btn">
 
-                <br>
+                        Login
 
-                • At least 1 lowercase letter
+                    </button>
 
-                <br>
+                </div>
 
-                • At least 1 number
-
-            </small>
-
-            <!-- CONFIRM PASSWORD -->
-
-            <input
-                id="confirmPassword"
-                type="password"
-                placeholder="Confirm Password"
-                class="input-field">
-
-            <!-- CREATE ACCOUNT -->
-
-            <button
-                id="actionBtn"
-                class="nav-cta full-width">
-
-                Create Account
-
-            </button>
-
-            <div
-                id="error"
-                class="error-text">
             </div>
 
-            <div style="
-                margin-top:30px;
-                padding-top:25px;
-                border-top:1px solid rgba(255,255,255,.08);
-                text-align:center;
-            ">
+            <!-- ===================================
+            VERIFY EMAIL PANEL
+            =================================== -->
+
+            <div
+                id="verifyPanel"
+                hidden
+                style="text-align:center;">
+
+                <h2 class="login-title">
+                    Verify Your Email
+                </h2>
+
+                <p style="margin-bottom:25px;">
+
+                    We've sent a verification email to:
+
+                </p>
+
+                <p
+                    id="verifyEmailAddress"
+                    style="
+                        font-size:18px;
+                        font-weight:700;
+                        color:#22c55e;
+                        margin-bottom:25px;
+                    ">
+
+                </p>
 
                 <p style="
                     color:#94a3b8;
-                    margin-bottom:15px;
+                    line-height:1.8;
+                    margin-bottom:30px;
                 ">
 
-                    Already have an account?
+                    Click the verification link in your email to activate your EdgeBreak account.
 
                 </p>
 
                 <button
-                    onclick="window.location.href='login.html'"
-                    class="glass-btn">
+                    id="resendBtn"
+                    class="glass-btn"
+                    style="margin-bottom:15px;">
 
-                    Login
+                    Resend Verification Email
 
                 </button>
+
+                <button
+                    id="continueBtn"
+                    class="nav-cta full-width">
+
+                    I've Verified My Email
+
+                </button>
+
+            </div>
+
+            <!-- ===================================
+            ACTIVATING PANEL
+            =================================== -->
+
+            <div
+                id="activatingPanel"
+                hidden
+                style="text-align:center;">
+
+                <h2 class="login-title">
+
+                    Activating Your Account
+
+                </h2>
+
+                <p style="
+                    color:#94a3b8;
+                    margin-top:25px;
+                    line-height:1.8;
+                ">
+
+                    Please wait while we activate your EdgeBreak membership...
+
+                </p>
+
+            </div>
+
+            <!-- ===================================
+            SUCCESS PANEL
+            =================================== -->
+
+            <div
+                id="successPanel"
+                hidden
+                style="text-align:center;">
+
+                <h2 class="login-title">
+
+                    Welcome to EdgeBreak
+
+                </h2>
+
+                <p style="
+                    color:#22c55e;
+                    font-size:18px;
+                    font-weight:600;
+                    margin-top:25px;
+                ">
+
+                    ✓ Your account has been activated.
+
+                </p>
+
+                <p style="
+                    color:#94a3b8;
+                    margin-top:20px;
+                ">
+
+                    Redirecting to your dashboard...
+
+                </p>
 
             </div>
 
@@ -267,6 +369,48 @@ GLASS BUTTON
 // =========================
 
 const supabaseClient = window.supabaseClient;
+
+// =========================
+// PANEL CONTROLS
+// =========================
+
+function showSignup(){
+
+    signupPanel.hidden = false;
+    verifyPanel.hidden = true;
+    activatingPanel.hidden = true;
+    successPanel.hidden = true;
+
+}
+
+function showVerify(email){
+
+    signupPanel.hidden = true;
+    verifyPanel.hidden = false;
+    activatingPanel.hidden = true;
+    successPanel.hidden = true;
+
+    document.getElementById("verifyEmailAddress").innerText = email;
+
+}
+
+function showActivating(){
+
+    signupPanel.hidden = true;
+    verifyPanel.hidden = true;
+    activatingPanel.hidden = false;
+    successPanel.hidden = true;
+
+}
+
+function showSuccess(){
+
+    signupPanel.hidden = true;
+    verifyPanel.hidden = true;
+    activatingPanel.hidden = true;
+    successPanel.hidden = false;
+
+}
 
 async function handleSignup() {
 
@@ -368,6 +512,9 @@ async function handleSignup() {
 
         options: {
 
+            emailRedirectTo:
+                window.location.origin + "/create-account.html",       
+        
             data: {
 
                 full_name: fullName
@@ -393,94 +540,17 @@ async function handleSignup() {
     }
 
     // =========================
-    // WAIT FOR SESSION
+    // EMAIL VERIFICATION
     // =========================
 
-    let session = null;
+    showVerify(email);
 
-    for (let i = 0; i < 10; i++) {
+    btn.disabled = false;
+    btn.innerText = "Create Account";
 
-        const {
+}    
 
-            data
-
-        } = await supabaseClient.auth.getSession();
-
-        session = data.session;
-
-        if (session) break;
-
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-    }
-
-    console.log("SESSION:", session);
-
-    if (!session) {
-
-        errorBox.innerText =
-            "Unable to create login session.";
-
-        btn.disabled = false;
-        btn.innerText = "Create Account";
-
-        return;
-
-    }
-
-    // =========================
-    // ACTIVATE ACCOUNT
-    // =========================
-
-    console.log("Calling activate-account...");
-
-    const activateResponse =
-        await fetch(
-            "https://qmonyhukamuuunxxxdlk.supabase.co/functions/v1/activate-account",
-            {
-
-                method: "POST",
-
-                headers: {
-
-                    "Authorization":
-                        `Bearer ${session.access_token}`,
-
-                    "Content-Type":
-                        "application/json"
-
-                }
-
-            }
-        );
-
-    const activateResult =
-        await activateResponse.json();
-
-    console.log("ACTIVATE RESULT:", activateResult);
-
-    if (!activateResult.success) {
-
-        errorBox.innerText =
-            activateResult.error ||
-            "Unable to activate subscription.";
-
-        btn.disabled = false;
-        btn.innerText = "Create Account";
-
-        return;
-
-    }
-
-    // =========================
-    // SUCCESS
-    // =========================
-
-    window.location.href =
-        "/nasdaq-stock-scanner.html";
-
-}
-
+    
 // =========================
 // EVENTS
 // =========================
