@@ -421,7 +421,7 @@ def run_scanner():
         )
 
         print(
-            f"\n🧠 Smart Money Stocks: {record_count}"
+            f"\n✅ Saved {record_count} Smart Money stocks from {len(all_results)} historical signals."
         )
 
     except Exception as e:
