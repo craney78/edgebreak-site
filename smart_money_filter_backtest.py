@@ -429,3 +429,10 @@ def run_scanner():
         print(
             f"❌ Save failed: {e}"
         )
+
+# =========================
+# ▶ START SCANNER
+# =========================
+
+if __name__ == "__main__":
+    run_scanner()        
