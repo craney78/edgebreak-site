@@ -19,7 +19,7 @@ SCAN_LIMIT = 3200
 
 MIN_LOOKBACK = 60
 BACKTEST_DAYS = 180
-OUTPUT_SIZE = 300
+OUTPUT_SIZE = 250
 
 # =========================
 # ⏪ BACKTEST SETTINGS
@@ -27,9 +27,13 @@ OUTPUT_SIZE = 300
 
 MIN_LOOKBACK = 60      # Minimum candles required before scanning
 BACKTEST_DAYS = 180    # Trading days to replay
-OUTPUT_SIZE = 300      # Candles to download from TwelveData
+OUTPUT_SIZE = 250      # Candles to download from TwelveData
 
+# =========================
+# ▶ SCAN SETTINGS
+# =========================
 
+START_BATCH = 119      # Resume from this batch
 
 # =========================
 # 📊 BUILD NASDAQ UNIVERSE
@@ -361,7 +365,9 @@ def run_scanner():
 
     all_results = []
 
-    for i in range(0, len(symbols), BATCH_SIZE):
+    start_index = (START_BATCH - 1) * BATCH_SIZE
+
+    for i in range(start_index, len(symbols), BATCH_SIZE):
 
         batch = symbols[i:i + BATCH_SIZE]
 
@@ -391,8 +397,7 @@ def run_scanner():
                 len(values) - BACKTEST_DAYS
 )
 
-            start_index = len(values) - BACKTEST_DAYS
-
+            
             for end_index in range(start_index, len(values)):
 
                 scan_date = values[end_index]["datetime"]
@@ -421,7 +426,7 @@ def run_scanner():
         )
 
         print(
-            f"\n✅ Saved {record_count} Smart Money stocks from {len(all_results)} historical signals."
+            f"🧠 RUNNING SMART MONEY BACKTEST (Starting at Batch {START_BATCH})\n"
         )
 
     except Exception as e:
