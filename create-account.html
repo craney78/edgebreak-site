@@ -445,7 +445,11 @@ async function activateAccount(session){
 
     }
 
+    
     showSuccess();
+
+    // No longer needed after a successful activation
+    sessionStorage.removeItem("checkoutEmail");
 
     setTimeout(()=>{
 
@@ -467,11 +471,29 @@ async function initialisePage(){
     const params =
         new URLSearchParams(window.location.search);
 
+    
     // Normal signup after Stripe
 
     if(params.get("paid")==="true"){
 
         showSignup();
+
+        const checkoutEmail =
+            sessionStorage.getItem("checkoutEmail");
+
+        if(checkoutEmail){
+
+            const emailInput =
+                document.getElementById("email");
+
+            emailInput.value = checkoutEmail;
+            emailInput.readOnly = true;
+            emailInput.style.backgroundColor = "#1e293b";
+            emailInput.style.cursor = "not-allowed";
+            emailInput.title = "This email was used during checkout.";
+
+        }
+
         return;
 
     }
