@@ -1,5 +1,5 @@
 # =========================
-# 🧠 SMART MONEY SCANNER (BACKTEST READY)
+# 🧠 SMART MONEY DAILY SCANNER
 # =========================
 
 import requests
@@ -11,17 +11,19 @@ from datetime import datetime, timedelta
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
+API_KEY = "YOUR_API_KEY"
 
 BATCH_SIZE = 10
 SLEEP_TIME = 2
 SCAN_LIMIT = 3200
 
 # =========================
-# ⏪ BACKTEST SETTINGS (MULTI-WEEK)
+# ⚙️ SCANNER SETTINGS
 # =========================
 
-MIN_LOOKBACK = 60   # data needed for smart money detection
+MIN_LOOKBACK = 60      # Minimum candles required
+BACKTEST_DAYS = 180    # Days of Smart Money history to retain
+OUTPUT_SIZE = 250      # Daily candles downloaded per stock
 
 
 
@@ -44,16 +46,27 @@ def build_nasdaq_universe():
             (df["Test Issue"] == "N")
         ]
 
-        clean = clean[~clean["Symbol"].str.contains(r"\.|W$|R$|P$|Q$", regex=True)]
-        clean = clean[clean["Symbol"].str.len() <= 5]
+        clean = clean[
+            ~clean["Symbol"].str.contains(
+                r"\.|W$|R$|P$|Q$",
+                regex=True
+            )
+        ]
+
+        clean = clean[
+            clean["Symbol"].str.len() <= 5
+        ]
 
         symbols = clean["Symbol"].dropna().tolist()
 
         print(f"✅ Loaded {len(symbols)} symbols")
+
         return symbols[:SCAN_LIMIT]
 
     except Exception as e:
+
         print(f"❌ Universe load failed: {e}")
+
         return []
 
 
@@ -66,33 +79,66 @@ def fetch_batch(symbols):
         f"https://api.twelvedata.com/time_series"
         f"?symbol={','.join(symbols)}"
         f"&interval=1day"
-        f"&outputsize=500"
+        f"&outputsize={OUTPUT_SIZE}"
         f"&apikey={API_KEY}"
     )
 
     try:
-        headers = {"User-Agent": "Mozilla/5.0"}
-        response = requests.get(url, headers=headers, timeout=20)
 
-        if response.status_code != 200:
-            return {}
+        headers = {
+            "User-Agent": "Mozilla/5.0"
+        }
+
+        response = requests.get(
+            url,
+            headers=headers,
+            timeout=20
+        )
+
+        response.raise_for_status()
 
         data = response.json()
 
-        if "code" in data:
-            print(f"⚠️ API error: {data.get('message')}")
+        if not isinstance(data, dict):
             return {}
 
-        return data if isinstance(data, dict) else {}
+        if "code" in data:
+
+            print(
+                f"⚠️ API error: "
+                f"{data.get('message')}"
+            )
+
+            return {}
+
+        return data
+
+    except requests.exceptions.RequestException as e:
+
+        print(f"❌ Request failed: {e}")
+
+        return {}
+
+    except ValueError:
+
+        print("❌ Invalid JSON returned from API")
+
+        return {}
 
     except Exception as e:
-        print(f"Fetch error: {e}")
+
+        print(f"❌ Fetch error: {e}")
+
         return {}
 
 # =========================
 # 🧠 SMART MONEY LOGIC (STRICT V5)
 # =========================
-def detect_smart_money(symbol, values):
+def detect_smart_money(
+    symbol,
+    values,
+    scan_date=None
+):
 
     if len(values) < 60:
         return None
@@ -104,6 +150,12 @@ def detect_smart_money(symbol, values):
         highs = [float(v["high"]) for v in values]
 
         current_price = closes[-1]
+
+        # =========================
+        # 📅 SCAN DATE
+        # =========================
+        if scan_date is None:
+            scan_date = datetime.now().strftime("%Y-%m-%d")
 
         # =========================
         # 🚫 HARD FILTERS
@@ -244,8 +296,7 @@ def detect_smart_money(symbol, values):
     return None
 
 # =========================
-# 💾 SAVE HISTORY
-# KEEPS 4 WEEKS OF DATA
+# 💾 SAVE SMART MONEY HISTORY
 # =========================
 def save_history(filename, new_records):
 
@@ -259,50 +310,104 @@ def save_history(filename, new_records):
 
         existing = []
 
-    # =====================
-    # ADD NEW RECORDS
-    # =====================
+    # =========================
+    # BUILD LOOKUP
+    # =========================
 
-    existing.extend(new_records)
+    history = {}
 
-    # =====================
-    # REMOVE OLD RECORDS
-    # =====================
+    for record in existing:
 
-    cutoff_date = (
+        symbol = record.get("symbol")
+
+        if not symbol:
+            continue
+
+        history[symbol] = set(
+            record.get("appearances", [])
+        )
+
+    # =========================
+    # ADD TODAY'S RESULTS
+    # =========================
+
+    for record in new_records:
+
+        symbol = record["symbol"]
+        scan_date = record["scan_date"]
+
+        if symbol not in history:
+
+            history[symbol] = set()
+
+        history[symbol].add(scan_date)
+
+    # =========================
+    # REMOVE OLD APPEARANCES
+    # =========================
+
+    cutoff = (
         datetime.now() -
-        timedelta(days=28)
+        timedelta(days=BACKTEST_DAYS)
     ).strftime("%Y-%m-%d")
 
-    existing = [
+    final = []
 
-        record
+    for symbol, dates in history.items():
 
-        for record in existing
+        valid_dates = sorted(
 
-        if record.get(
-            "scan_date",
-            "1900-01-01"
-        ) >= cutoff_date
+            d
 
-    ]
+            for d in dates
 
-    # =====================
+            if d >= cutoff
+
+        )
+
+        if not valid_dates:
+            continue
+
+        final.append({
+
+            "symbol": symbol,
+            "count": len(valid_dates),
+            "last_seen": valid_dates[-1],
+            "appearances": valid_dates
+
+        })
+
+    # =========================
+    # SORT BY COUNT
+    # =========================
+
+    final.sort(
+
+        key=lambda x: (
+            x["count"],
+            x["last_seen"]
+        ),
+
+        reverse=True
+
+    )
+
+    # =========================
     # SAVE FILE
-    # =====================
+    # =========================
 
     with open(filename, "w") as f:
 
         json.dump(
-            existing,
+            final,
             f,
             indent=2
         )
 
-    return len(existing)    
+    return len(final)    
 
 # =========================
-# 🚀 MAIN SCAN LOOP (BACKTEST VERSION)
+# 🚀 MAIN SCAN LOOP
 # =========================
 def run_scanner():
 
@@ -338,15 +443,12 @@ def run_scanner():
             if len(values) < MIN_LOOKBACK:
                 continue
 
-            historical_values = values
-
             setup = detect_smart_money(
                 symbol,
-                historical_values
+                values
             )
 
             if setup:
-
                 all_results.append(setup)
 
         time.sleep(SLEEP_TIME)
@@ -354,74 +456,46 @@ def run_scanner():
     # =========================
     # 🧠 SORT RESULTS
     # =========================
+
     results = sorted(
+
         all_results,
+
         key=lambda x: (
             x["score"],
             -x["distance_to_high"],
             x["volume_ratio"]
         ),
+
         reverse=True
+
     )
 
     # =========================
-    # 🎯 ADD RANK + GRADE
-    # =========================
-    for i, r in enumerate(results):
-
-        r["rank"] = i + 1
-
-        if r["score"] >= 7:
-            r["grade"] = "A"
-        elif r["score"] == 6:
-            r["grade"] = "B+"
-        elif r["score"] == 5:
-            r["grade"] = "B"
-        else:
-            r["grade"] = "C"
-
-    # =========================
-    # 📂 SPLIT RESULTS
+    # 🎯 ADD RANK
     # =========================
 
-    free_watchlist = []
-    elite_watchlist = []
+    for i, record in enumerate(results):
 
-    for r in results:
+        record["rank"] = i + 1
 
-        grade = r.get("grade", "")
-
-        # FREE WATCHLIST
-        if grade == "A":
-            free_watchlist.append(r)
-
-        # ELITE WATCHLIST
-        elif grade == "B+":
-            elite_watchlist.append(r)
-                
     # =========================
-    # 💾 SAVE FILES
+    # 💾 SAVE SMART MONEY HISTORY
     # =========================
+
     try:
 
-        free_count = save_history(
-            "free_breakout_watchlist.json",
-            free_watchlist
-        )
+        smart_money_count = save_history(
 
-        elite_count = save_history(
-            "elite_watchlist.json",
-            elite_watchlist
-        )
+            "smart_money_filter.json",
 
-        print(
-            f"\n🧠 Free Watchlist Records: "
-            f"{free_count}"
+            results
+
         )
 
         print(
-            f"🚀 Elite Watchlist Records: "
-            f"{elite_count}"
+            f"\n🧠 Smart Money Records: "
+            f"{smart_money_count}"
         )
 
     except Exception as e:
@@ -433,7 +507,7 @@ def run_scanner():
      
 
 # =========================
-# ▶ RUN (MULTI-WEEK MODE)
+# ▶ RUN DAILY SCANNER
 # =========================
 if __name__ == "__main__":
 
@@ -444,16 +518,23 @@ if __name__ == "__main__":
     print("===================================\n")
 
     try:
+
         run_scanner()
 
     except KeyboardInterrupt:
-        print("\n⚠️ Stopped manually")
+
+        print("\n⚠️ Scan stopped manually")
 
     except Exception as e:
+
         print(f"\n❌ Fatal error: {e}")
 
     end_time = time.time()
-    runtime = round(end_time - start_time, 2)
+
+    runtime = round(
+        end_time - start_time,
+        2
+    )
 
     print("\n===================================")
     print(f"⏱ Runtime: {runtime} seconds")
