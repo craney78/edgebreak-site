@@ -4410,7 +4410,12 @@ function applyScannerSmartMoney(){
             const record =
                 window.smartMoneyLookup[stock.symbol];
 
-    
+            console.log({
+                symbol: stock.symbol,
+                record,
+                count: record ? getSmartMoneyCount(record, period) : "NO RECORD"
+            });
+
                 if(!record)
                     return false;
 
