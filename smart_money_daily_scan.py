@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-API_KEY = "YOUR_API_KEY"
+API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
 
 BATCH_SIZE = 10
 SLEEP_TIME = 2

@@ -4047,6 +4047,25 @@ window.smartMoneyData = [];
 
 window.smartMoneyLookup = {};
 
+function getSmartMoneyCount(record, periodDays){
+
+    if(!record || !record.appearances)
+        return 0;
+
+    const cutoff = new Date();
+
+    cutoff.setDate(
+        cutoff.getDate() - periodDays
+    );
+
+    return record.appearances.filter(date => {
+
+        return new Date(date) >= cutoff;
+
+    }).length;
+
+}
+
 // Stores the latest scanner search
 window.currentScannerResults = [];
 
@@ -4397,26 +4416,11 @@ function applyScannerSmartMoney(){
 
                 let count = 0;
 
-                if(period === 30){
-
-                    count =
-                        record.smart_money_30 || 0;
-
-                }
-
-            else if(period === 60){
-
                 count =
-                    record.smart_money_60 || 0;
-
-            }
-
-            else{
-
-                count =
-                    record.smart_money_90 || 0;
-
-            }
+                    getSmartMoneyCount(
+                        record,
+                        period
+                    );
 
             return count >= minimum;
 
@@ -4776,26 +4780,11 @@ function applyBreakoutSmartMoney(){
 
             let count = 0;
 
-            if(period === 30){
-
-                count =
-                    record.smart_money_30 || 0;
-
-            }
-
-            else if(period === 60){
-
-                count =
-                    record.smart_money_60 || 0;
-
-            }
-
-            else{
-
-                count =
-                    record.smart_money_90 || 0;
-
-            }
+            count =
+                getSmartMoneyCount(
+                    record,
+                    period
+                );
 
             return count >= minimum;
 
