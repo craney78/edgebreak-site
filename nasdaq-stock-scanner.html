@@ -3416,7 +3416,7 @@ TRADINGVIEW CHART
 
                 <tr>
 
-                    <td colspan="6">
+                    <td colspan="7">
                         Select filters and click Search.
                     </td>
 
@@ -3626,7 +3626,7 @@ TRADINGVIEW CHART
 
                 <tr>
 
-                    <td colspan="4">
+                    <td colspan="6">
                         Select filters and click Search.
                     </td>
 
@@ -4760,6 +4760,13 @@ function renderBreakoutResults(results){
             "breakoutResults"
         );
 
+    const smartMoneyPeriod =
+        parseInt(
+            document.getElementById(
+                "breakoutSmartMoneyPeriod"
+            ).value
+        );    
+
     if(!tbody) return;
 
     if(results.length === 0){
@@ -4776,7 +4783,20 @@ function renderBreakoutResults(results){
     }
 
     tbody.innerHTML =
-        results.map(stock => `
+        results.map(stock => {
+
+            const record =
+                window.smartMoneyLookup[stock.symbol];
+
+            const smartMoneyCount =
+                record
+                    ? getSmartMoneyCount(
+                        record,
+                        smartMoneyPeriod
+                    )
+                    : 0;
+
+            return `
 
             <tr onclick="selectBreakout('${stock.symbol}')">
 
@@ -4797,6 +4817,10 @@ function renderBreakoutResults(results){
                 </td>
 
                 <td>
+                    ${smartMoneyCount}
+                </td>
+
+                <td>
 
                     <button
                         class="watchlist-btn"
@@ -4812,7 +4836,9 @@ function renderBreakoutResults(results){
 
             </tr>
 
-        `).join("");
+        `;
+
+        }).join("");
     
     // 📱 Scroll to Breakout Scanner results on mobile
     if (window.innerWidth <= 768) {
