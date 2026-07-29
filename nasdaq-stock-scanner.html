@@ -4209,13 +4209,7 @@ function runScanner(){
 
     const lookback =
         document.getElementById("lookback").value;
-
-    const smartMoneyPeriod =
-        parseInt(
-            document.getElementById(
-                "scannerSmartMoneyPeriod"
-            ).value
-        );    
+       
 
     const touches =
         parseInt(
@@ -4284,6 +4278,13 @@ function renderResults(results){
         document.getElementById(
             "lookback"
         ).value;
+
+    const smartMoneyPeriod =
+        parseInt(
+            document.getElementById(
+                "scannerSmartMoneyPeriod"
+            ).value
+        );    
 
     if(results.length === 0){
 
