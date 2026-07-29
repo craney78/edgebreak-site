@@ -4210,6 +4210,13 @@ function runScanner(){
     const lookback =
         document.getElementById("lookback").value;
 
+    const smartMoneyPeriod =
+        parseInt(
+            document.getElementById(
+                "scannerSmartMoneyPeriod"
+            ).value
+        );    
+
     const touches =
         parseInt(
             document.getElementById("touches").value || 0
@@ -4292,7 +4299,25 @@ function renderResults(results){
     }
 
     tbody.innerHTML =
-        results.slice(0,100).map(stock => `
+        results.slice(0,100).map(stock => {
+
+            const record =
+                window.smartMoneyLookup[stock.symbol];
+
+            const smartMoneyCount =
+                record
+                    ? getSmartMoneyCount(
+                        record,
+                        smartMoneyPeriod
+                    )
+                    : 0;
+
+            const smartMoneyBadge =
+                smartMoneyCount > 0
+                    ? `<span class="smart-money-badge">🧠 ${smartMoneyCount}</span>`
+                    : `<span class="smart-money-none">—</span>`;
+
+            return `
 
             <tr onclick="selectStock('${stock.symbol}')">
 
@@ -4324,6 +4349,12 @@ function renderResults(results){
 
                 <td>
 
+                    ${smartMoneyBadge}
+
+                </td>
+
+                <td>
+
                     <button
                         onclick="
                             event.stopPropagation();
@@ -4338,7 +4369,9 @@ function renderResults(results){
 
             </tr>
 
-        `).join("");
+        `;
+
+        }).join("");
          
     
     // 📱 Scroll to results on mobile
