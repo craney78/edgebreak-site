@@ -4313,10 +4313,13 @@ function renderResults(results){
                     )
                     : 0;
 
-            const smartMoneyBadge =
-                smartMoneyCount > 0
-                    ? `<span class="smart-money-badge">🧠 ${smartMoneyCount}</span>`
-                    : `<span class="smart-money-none">—</span>`;
+            const smartMoneyCount =
+                record
+                    ? getSmartMoneyCount(
+                        record,
+                        smartMoneyPeriod
+                    )
+                    : 0;
 
             return `
 
@@ -4348,11 +4351,7 @@ function renderResults(results){
                     }
                 </td>
 
-                <td>
-
-                    ${smartMoneyBadge}
-
-                </td>
+                <td>${smartMoneyCount}</td>
 
                 <td>
 
