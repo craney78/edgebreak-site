@@ -4290,7 +4290,7 @@ function renderResults(results){
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="5">
+                <td colspan="6">
                     No matches found
                 </td>
             </tr>
@@ -4304,15 +4304,7 @@ function renderResults(results){
 
             const record =
                 window.smartMoneyLookup[stock.symbol];
-
-            const smartMoneyCount =
-                record
-                    ? getSmartMoneyCount(
-                        record,
-                        smartMoneyPeriod
-                    )
-                    : 0;
-
+            
             const smartMoneyCount =
                 record
                     ? getSmartMoneyCount(
