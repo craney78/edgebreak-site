@@ -3377,7 +3377,6 @@ TRADINGVIEW CHART
 
         <select id="breakoutSmartMoneyAppearances">
 
-            <option value="">Any</option>
             <option value="1">1+</option>
             <option value="2">2+</option>
             <option value="3">3+</option>
@@ -3394,9 +3393,12 @@ TRADINGVIEW CHART
 
         <select id="breakoutSmartMoneyPeriod">
 
-            <option value="30">Past Month</option>
-            <option value="60">Past 2 Months</option>
-            <option value="90" selected>Past 3 Months</option>
+            <option value="30">Past 30 Days</option>
+            <option value="60">Past 60 Days</option>
+            <option value="90" selected>Past 90 Days</option>
+            <option value="120">Past 120 Days</option>
+            <option value="150">Past 150 Days</option>
+            <option value="180">Past 180 Days</option>
 
         </select>
 
@@ -3584,7 +3586,6 @@ TRADINGVIEW CHART
 
             <select id="scannerSmartMoneyAppearances">
 
-                <option value="">Any</option>
                 <option value="1">1+</option>
                 <option value="2">2+</option>
                 <option value="3">3+</option>
@@ -3599,14 +3600,18 @@ TRADINGVIEW CHART
 
         <label>Time Period</label>
 
-        <select id="scannerSmartMoneyPeriod">
+        
+            <select id="scannerSmartMoneyPeriod">
 
-            <option value="30">Past Month</option>
-            <option value="60">Past 2 Months</option>
-            <option value="90" selected>Past 3 Months</option>
+                <option value="30">Past 30 Days</option>
+                <option value="60">Past 60 Days</option>
+                <option value="90" selected>Past 90 Days</option>
+                <option value="120">Past 120 Days</option>
+                <option value="150">Past 150 Days</option>
+                <option value="180">Past 180 Days</option>
 
-        </select>
-
+            </select>
+            
     </div>
 
     <button
@@ -4378,8 +4383,7 @@ function selectStock(symbol){
 
 function applyScannerSmartMoney(){
 
-    console.log("Breakout Smart Money button clicked");
-
+    
     const minimum =
         parseInt(
             document.getElementById(
