@@ -2969,6 +2969,62 @@ TRADINGVIEW CHART
     margin-top:auto;
 
 }
+
+.return-scanner-btn{
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    margin-top:28px;
+    padding:14px 28px;
+
+    background:#2563eb;
+    color:#fff;
+
+    border:none;
+    border-radius:10px;
+
+    font-size:15px;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:
+        background .2s ease,
+        transform .15s ease,
+        box-shadow .2s ease;
+
+    box-shadow:
+        0 8px 20px rgba(37,99,235,.25);
+
+}
+
+.return-scanner-btn:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 12px 28px rgba(37,99,235,.35);
+
+}
+
+.return-scanner-btn:active{
+
+    transform:translateY(0);
+
+}
+
+.return-scanner-btn:focus{
+
+    outline:none;
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,.35);
+
+}
 </style>  
 </head>
 <body style="background:#020617;">
@@ -4508,11 +4564,9 @@ function applyScannerSmartMoney(){
                         </p>
 
                         <button
-                            class="glass-btn"
+                            class="return-scanner-btn"
                             onclick="renderResults(window.currentScannerResults)">
-
-                            Return to Scanner Results
-
+                            ← Return to Scanner Results
                         </button>
 
                     </div>
