@@ -4431,9 +4431,96 @@ function applyScannerSmartMoney(){
 
         });
 
+    if(filtered.length === 0){
+
+        renderSmartMoneyEmptyState();
+
+        return;
+
+    }
+
     renderResults(filtered);
 
-}
+    }
+
+    function renderSmartMoneyEmptyState(){
+
+        const tbody =
+            document.getElementById(
+                "scannerResults"
+            );
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td colspan="100%">
+
+                    <div class="smart-money-empty">
+
+                        <div class="smart-money-icon">
+                            🧠
+                        </div>
+
+                        <h2>
+                            NO SMART MONEY MATCHES
+                        </h2>
+
+                        <p>
+
+                            None of the stocks from your current scanner search
+                            were found on the EdgeBreak Smart Money list for the
+                            selected time period.
+
+                        </p>
+
+                        <p>
+
+                            A stock does not need to appear on the Smart Money
+                            list to be a quality trading candidate. Smart Money
+                            is simply another research tool that may indicate
+                            additional institutional interest worth investigating.
+
+                        </p>
+
+                        <h3>Suggestions</h3>
+
+                        <ul>
+
+                            <li>Reduce the required appearances.</li>
+
+                            <li>Increase the selected time period.</li>
+
+                            <li>Broaden your scanner filters.</li>
+
+                        </ul>
+
+                        <p class="smart-money-total">
+
+                            ${window.smartMoneyData.length}
+                            NASDAQ stocks currently qualify for the
+                            Smart Money list.
+
+                        </p>
+
+                        <button
+                            class="glass-btn"
+                            onclick="renderResults(window.currentScannerResults)">
+
+                            Return to Scanner Results
+
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
 </script>
 
 
