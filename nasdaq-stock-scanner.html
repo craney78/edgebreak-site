@@ -4993,8 +4993,63 @@ function applyBreakoutSmartMoney(){
 
         });
 
+    if(filtered.length === 0){
+
+        renderBreakoutEmptyState();
+
+        return;
+
+    }
+
     renderBreakoutResults(filtered);
 
+}
+
+function renderBreakoutEmptyState(){
+
+    const tbody =
+        document.getElementById("breakoutResults");
+
+    tbody.innerHTML = `
+
+        <tr>
+
+            <td colspan="7">
+
+                <div class="smart-money-empty">
+
+                    <h2>
+                        NO BREAKOUT MATCHES
+                    </h2>
+
+                    <p>
+                        None of the breakout stocks matched your Smart Money filter.
+                    </p>
+
+                    <p>
+                        Try reducing the required appearances or increasing the selected time period.
+                    </p>
+
+                    <p class="smart-money-total">
+
+                        ${window.currentBreakoutResults.length}
+                        breakout stocks are available before applying the Smart Money filter.
+
+                    </p>
+
+                    <button
+                        class="return-scanner-btn"
+                        onclick="renderBreakoutResults(window.currentBreakoutResults)">
+                        ← Return to Breakout Results
+                    </button>
+
+                </div>
+
+            </td>
+
+        </tr>
+
+    `;
 }
 
 </script>
