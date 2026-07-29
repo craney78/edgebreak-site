@@ -52,7 +52,7 @@ from datetime import datetime
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-API_KEY = "YOUR_API_KEY"
+API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
 
 # =========================
 # SETTINGS
@@ -514,9 +514,23 @@ def process_data(data):
                     window
                 )
 
+                print(
+                    symbol,
+                    window,
+                    "Pivot Lows:",
+                    len(get_pivot_lows(history, window))
+                )
+
                 resistance_low, resistance_high = find_resistance_zone(
                     history,
                     window
+                )
+
+                print(
+                    symbol,
+                    window,
+                    support_low,
+                    resistance_low
                 )
 
                 if support_low == 0 or resistance_low == 0:
@@ -528,10 +542,22 @@ def process_data(data):
                     support_high
                 )
 
+                print(
+                    "Support:",
+                    support_tests,
+                    support_groups
+                )
+
                 resistance_tests, resistance_groups = count_resistance_tests(
                     history[:window],
                     resistance_low,
                     resistance_high
+                )
+
+                print(
+                    "Resistance:",
+                    resistance_tests,
+                    resistance_groups
                 )
 
                 if support_tests < 2:
