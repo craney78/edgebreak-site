@@ -72,7 +72,7 @@ SCAN_WINDOWS = [63, 84, 105, 126]
 # =========================
 
 ZONE_TOLERANCE = 0.05          # ±5% = 10% total zone
-MAX_OUTSIDE_CLOSES = 5
+MAX_OUTSIDE_CLOSES = 0.10
 
 DATABASE_FILE = "launchpad_database.json"
 
@@ -512,7 +512,31 @@ def validate_resistance_groups(group_prices):
 
     return True
     
-            
+# =========================
+# CANDLE CONTAINMENT
+# =========================
+
+def validate_candle_containment(
+    history,
+    support_low,
+    resistance_high
+):
+
+    outside = 0
+
+    for bar in history:
+
+        close = safe_float(bar["close"])
+
+        if close > resistance_high:
+            outside += 1
+
+        elif close < support_low:
+            outside += 1
+
+    outside_percent = outside / len(history)
+
+    return outside_percent <= MAX_OUTSIDE_PERCENT            
 
 # =========================
 # RANGE PERCENT
@@ -649,6 +673,13 @@ def process_data(data):
 
                 if not validate_resistance_groups(resistance_prices):
                     continue    
+
+                if not validate_candle_containment(
+                    history[:window],
+                    support_low,
+                    resistance_high
+                ):
+                    continue
 
                 range_percent = calculate_range_percent(
                     support_low,
