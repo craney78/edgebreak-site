@@ -235,7 +235,7 @@ def find_support_zone(history, window):
 
             for p in pivots
 
-            if abs(p - level) / level <= 0.015
+            if abs(p - level) / level <= 0.01
 
         )
 
@@ -665,10 +665,10 @@ def process_data(data):
                     resistance_groups
                 )
 
-                if support_tests < 2:
+                if support_tests < 3:
                     continue
 
-                if resistance_tests < 2:
+                if resistance_tests < 3:
                     continue
 
                 if not validate_support_groups(support_prices):
@@ -677,17 +677,20 @@ def process_data(data):
                 if not validate_resistance_groups(resistance_prices):
                     continue    
 
-                if not validate_candle_containment(
-                    history[:window],
-                    support_low,
-                    resistance_high
-                ):
-                    continue
+                #if not validate_candle_containment(
+                    #history[:window],
+                    #support_low,
+                    #resistance_high
+                #):
+                    #continue
 
                 range_percent = calculate_range_percent(
                     support_low,
                     resistance_high
                 )
+
+                if range_percent > 25:
+                    continue
 
                 if (
                     best_record is None
