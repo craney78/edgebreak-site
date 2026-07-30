@@ -3702,6 +3702,168 @@ TRADINGVIEW CHART
 
 
 <!-- =========================================
+🚀 LAUNCH PAD SCANNER
+========================================= -->
+
+<div class="scanner-layout">
+
+    <!-- =========================================
+    FILTERS
+    ========================================= -->
+    <div class="scanner-panel">
+
+        <h3>Launch Pad Filters</h3>
+
+        <div class="filter-group">
+
+            <label>Base Length</label>
+
+            <select id="launchPadBaseLength">
+
+                <option value="90">3 Month Base</option>
+                <option value="120">4 Month Base</option>
+                <option value="150">5 Month Base</option>
+                <option value="180" selected>6 Month Base</option>
+
+            </select>
+
+        </div>
+
+        <div class="filter-group">
+
+            <label>Price Group</label>
+
+            <select id="launchPadPriceGroup">
+
+                <option value="">Any</option>
+                <option value="SMALL">Small</option>
+                <option value="MID">Mid</option>
+                <option value="LARGE">Large</option>
+
+            </select>
+
+        </div>
+
+        <button
+            id="launchPadSearchBtn"
+            class="scanner-btn"
+        >
+            Search Launch Pad
+        </button>
+
+    </div>
+
+    <!-- =========================================
+    RESULTS
+    ========================================= -->
+
+    <div
+        class="scanner-panel scanner-results"
+        id="launchPadResultsSection"
+    >
+
+        <h3>Launch Pad Results</h3>
+
+        <table id="launchPadTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>Ticker</th>
+                    <th>Price</th>
+                    <th>Base Length</th>
+                    <th>Smart Money</th>
+                    <th>Add To Watchlist</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="launchPadResults">
+
+                <tr>
+
+                    <td colspan="5">
+                        Select filters and click Search.
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        <!-- =========================================
+        SMART MONEY FILTER
+        ========================================= -->
+
+        <div style="margin-top:25px;">
+
+            <div class="filter-group">
+
+                <label>Smart Money Appearances</label>
+
+                <select id="launchPadSmartMoneyAppearances">
+
+                    <option value="1">1+</option>
+                    <option value="2">2+</option>
+                    <option value="3">3+</option>
+                    <option value="4">4+</option>
+                    <option value="5">5+</option>
+
+                </select>
+
+            </div>
+
+            <div class="filter-group">
+
+                <label>Time Period</label>
+
+                <select id="launchPadSmartMoneyPeriod">
+
+                    <option value="30">Past 30 Days</option>
+                    <option value="60">Past 60 Days</option>
+                    <option value="90" selected>Past 90 Days</option>
+                    <option value="120">Past 120 Days</option>
+                    <option value="150">Past 150 Days</option>
+                    <option value="180">Past 180 Days</option>
+
+                </select>
+
+            </div>
+
+            <button
+                id="applyLaunchPadSmartMoney"
+                class="scanner-btn"
+            >
+                Apply Smart Money Filter
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- =========================================
+    LAUNCH PAD DETAILS
+    ========================================= -->
+
+    <div class="scanner-panel">
+
+        <h3>Launch Pad Details</h3>
+
+        <div id="launchPadMetrics">
+
+            <p>Select a stock to view Launch Pad details.</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
 ⭐ MY WATCHLIST
 ========================================= -->
 
@@ -5053,6 +5215,555 @@ function renderBreakoutEmptyState(){
 }
 
 </script>
+
+<script>
+
+/* ============================================
+   LAUNCH PAD SCANNER
+============================================ */
+
+window.launchPadData = [];
+window.currentLaunchPadResults = [];
+
+/* ============================================
+   EVENT LISTENERS
+============================================ */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Search Launch Pad
+    document
+        .getElementById("launchPadSearchBtn")
+        ?.addEventListener(
+            "click",
+            runLaunchPadScanner
+        );
+
+    // Smart Money Filter
+    document
+        .getElementById("applyLaunchPadSmartMoney")
+        ?.addEventListener(
+            "click",
+            applyLaunchPadSmartMoney
+        );
+
+    // Load Launch Pad Database
+    fetch("/launchpad_scanner.json?v=" + Date.now())
+
+        .then(res => res.json())
+
+        .then(data => {
+
+            window.launchPadData = data;
+
+            console.log(
+                "Launch Pad Loaded:",
+                data.length,
+                "stocks"
+            );
+
+        })
+
+        .catch(err => {
+
+            console.error(
+                "Launch Pad load failed",
+                err
+            );
+
+        });
+
+});
+
+
+/* ============================================
+   RUN LAUNCH PAD SCANNER
+============================================ */
+
+function runLaunchPadScanner(){
+
+    const baseLength =
+        parseInt(
+            document.getElementById(
+                "launchPadBaseLength"
+            ).value
+        );
+
+    const priceGroup =
+        document.getElementById(
+            "launchPadPriceGroup"
+        ).value;
+
+    const results =
+        window.launchPadData.filter(stock => {
+
+            // Minimum Base Length
+            if(stock.launchpad_days < baseLength)
+                return false;
+
+            // Price Group
+            if(
+                priceGroup &&
+                stock.price_group !== priceGroup
+            )
+                return false;
+
+            return true;
+
+        });
+
+    window.currentLaunchPadResults = results;
+
+    renderLaunchPadResults(results);
+
+}
+
+
+
+/* ============================================
+   RENDER LAUNCH PAD RESULTS
+============================================ */
+
+function renderLaunchPadResults(results){
+
+    const tbody =
+        document.getElementById(
+            "launchPadResults"
+        );
+
+    const smartMoneyPeriod =
+        parseInt(
+            document.getElementById(
+                "launchPadSmartMoneyPeriod"
+            ).value
+        );
+
+    if(results.length === 0){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5">
+                    No Launch Pad stocks found
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+    tbody.innerHTML =
+        results.slice(0,100).map(stock => {
+
+            const record =
+                window.smartMoneyLookup[
+                    stock.symbol
+                ];
+
+            const smartMoneyCount =
+                record
+                    ? getSmartMoneyCount(
+                        record,
+                        smartMoneyPeriod
+                    )
+                    : 0;
+
+            return `
+
+            <tr onclick="selectLaunchPad('${stock.symbol}')">
+
+                <td>
+
+                    ${stock.symbol}
+
+                </td>
+
+                <td>
+
+                    $${Number(
+                        stock.current_price || 0
+                    ).toFixed(2)}
+
+                </td>
+
+                <td>
+
+                    ${stock.launchpad_days} Days
+
+                </td>
+
+                <td>
+
+                    ${smartMoneyCount}
+
+                </td>
+
+                <td>
+
+                    <button
+                        onclick="
+                            event.stopPropagation();
+                            addToWatchlist('${stock.symbol}');
+                        "
+                        class="watchlist-btn"
+                    >
+                        Add
+                    </button>
+
+                </td>
+
+            </tr>
+
+            `;
+
+        }).join("");
+
+
+
+    // Mobile scroll
+
+    if(window.innerWidth <= 768){
+
+        const resultsSection =
+            document.getElementById(
+                "launchPadResultsSection"
+            );
+
+        if(resultsSection){
+
+            setTimeout(() => {
+
+                window.scrollTo({
+
+                    top:
+                        resultsSection.offsetTop - 15,
+
+                    behavior:"smooth"
+
+                });
+
+            },100);
+
+        }
+
+    }
+
+}
+
+
+/* ============================================
+   SELECT LAUNCH PAD STOCK
+============================================ */
+
+function selectLaunchPad(symbol){
+
+    const stock =
+        window.launchPadData.find(
+
+            s => s.symbol === symbol
+
+        );
+
+    if(!stock) return;
+
+    loadChart(symbol);
+
+    setTimeout(() => {
+
+        document
+            .getElementById("chartSection")
+            ?.scrollIntoView({
+
+                behavior:"smooth",
+
+                block:"start"
+
+            });
+
+    },200);
+
+
+    document.getElementById(
+        "launchPadMetrics"
+    ).innerHTML = `
+
+        <div class="metric">
+
+            <span>Symbol</span>
+
+            <strong>
+
+                ${stock.symbol}
+
+            </strong>
+
+        </div>
+
+        <div class="metric">
+
+            <span>Current Price</span>
+
+            <strong>
+
+                $${Number(
+                    stock.current_price
+                ).toFixed(2)}
+
+            </strong>
+
+        </div>
+
+        <div class="metric">
+
+            <span>Base Length</span>
+
+            <strong>
+
+                ${stock.launchpad_days} Days
+
+            </strong>
+
+        </div>
+
+        <div class="metric">
+
+            <span>Price Group</span>
+
+            <strong>
+
+                ${stock.price_group}
+
+            </strong>
+
+        </div>
+
+        <div class="metric">
+
+            <span>Support Zone</span>
+
+            <strong>
+
+                $${stock.support_zone_low}
+                -
+                $${stock.support_zone_high}
+
+            </strong>
+
+        </div>
+
+        <div class="metric">
+
+            <span>Resistance Zone</span>
+
+            <strong>
+
+                $${stock.resistance_zone_low}
+                -
+                $${stock.resistance_zone_high}
+
+            </strong>
+
+        </div>
+
+        <div class="metric">
+
+            <span>Range</span>
+
+            <strong>
+
+                ${stock.range_percent}%
+
+            </strong>
+
+        </div>
+
+        <div class="metric">
+
+            <span>Updated</span>
+
+            <strong>
+
+                ${stock.last_updated}
+
+            </strong>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* ============================================
+   APPLY SMART MONEY FILTER
+============================================ */
+
+function applyLaunchPadSmartMoney(){
+
+    const minimum =
+        parseInt(
+            document.getElementById(
+                "launchPadSmartMoneyAppearances"
+            ).value || 0
+        );
+
+    const period =
+        parseInt(
+            document.getElementById(
+                "launchPadSmartMoneyPeriod"
+            ).value
+        );
+
+    if(minimum === 0){
+
+        renderLaunchPadResults(
+            window.currentLaunchPadResults
+        );
+
+        return;
+
+    }
+
+    const filtered =
+        window.currentLaunchPadResults.filter(stock => {
+
+            const record =
+                window.smartMoneyLookup[
+                    stock.symbol
+                ];
+
+            if(!record)
+                return false;
+
+            const count =
+                getSmartMoneyCount(
+                    record,
+                    period
+                );
+
+            return count >= minimum;
+
+        });
+
+    if(filtered.length === 0){
+
+        renderLaunchPadSmartMoneyEmptyState();
+
+        return;
+
+    }
+
+    renderLaunchPadResults(filtered);
+
+}
+
+
+/* ============================================
+   SMART MONEY EMPTY STATE
+============================================ */
+
+function renderLaunchPadSmartMoneyEmptyState(){
+
+    const tbody =
+        document.getElementById(
+            "launchPadResults"
+        );
+
+    tbody.innerHTML = `
+
+        <tr>
+
+            <td colspan="100%">
+
+                <div class="smart-money-empty">
+
+                    <div class="smart-money-icon"></div>
+
+                    <h2>
+
+                        NO SMART MONEY MATCHES
+
+                    </h2>
+
+                    <p>
+
+                        None of the Launch Pad stocks from your
+                        current search were found on the
+                        EdgeBreak Smart Money list for the
+                        selected time period.
+
+                    </p>
+
+                    <p>
+
+                        Smart Money is an additional research
+                        tool and should be used alongside
+                        technical analysis and your own
+                        investment research.
+
+                    </p>
+
+                    <h3>
+
+                        Suggestions
+
+                    </h3>
+
+                    <ul>
+
+                        <li>
+                            Reduce the required appearances.
+                        </li>
+
+                        <li>
+                            Increase the selected time period.
+                        </li>
+
+                        <li>
+                            Select a shorter base length.
+                        </li>
+
+                        <li>
+                            Broaden your price group filter.
+                        </li>
+
+                    </ul>
+
+                    <p class="smart-money-total">
+
+                        ${window.smartMoneyData.length}
+                        NASDAQ stocks currently qualify for the
+                        Smart Money list.
+
+                    </p>
+
+                    <button
+                        class="return-scanner-btn"
+                        onclick="
+                            renderLaunchPadResults(
+                                window.currentLaunchPadResults
+                            );
+                        "
+                    >
+
+                        ← Return to Launch Pad Results
+
+                    </button>
+
+                </div>
+
+            </td>
+
+        </tr>
+
+    `;
+
+}
+
+</script>
+
+
 <script>
 // =========================================
 // WATCHLIST (SUPABASE)
