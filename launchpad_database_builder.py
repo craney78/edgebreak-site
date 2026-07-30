@@ -67,6 +67,13 @@ MIN_BARS = 126
 # Launch Pad Scan Windows
 SCAN_WINDOWS = [63, 84, 105, 126]
 
+# =========================
+# LAUNCH PAD SETTINGS
+# =========================
+
+ZONE_TOLERANCE = 0.05          # ±5% = 10% total zone
+MAX_OUTSIDE_CLOSES = 5
+
 DATABASE_FILE = "launchpad_database.json"
 
 # =========================
@@ -330,25 +337,23 @@ def count_support_tests(
 
     tests = 0
     group_sizes = []
+    group_prices = []
 
     touches = 0
+    touch_sum = 0
+
     days_since_touch = grouping_days + 1
 
-    bars = history[:]
-
-    for bar in bars:
+    for bar in history:
 
         low = safe_float(bar["low"])
-
-        # =========================
-        # TOUCH
-        # =========================
 
         if support_low <= low <= support_high:
 
             if days_since_touch <= grouping_days:
 
                 touches += 1
+                touch_sum += low
 
             else:
 
@@ -356,8 +361,12 @@ def count_support_tests(
 
                     tests += 1
                     group_sizes.append(touches)
+                    group_prices.append(
+                        round(touch_sum / touches, 2)
+                    )
 
                 touches = 1
+                touch_sum = low
 
             days_since_touch = 0
 
@@ -365,16 +374,21 @@ def count_support_tests(
 
             days_since_touch += 1
 
-    # =========================
-    # FINAL GROUP
-    # =========================
-
     if touches >= min_touches:
 
         tests += 1
         group_sizes.append(touches)
+        group_prices.append(
+            round(touch_sum / touches, 2)
+        )
 
-    return tests, group_sizes
+    return (
+        tests,
+        group_sizes,
+        group_prices
+    )
+
+        
 
 # =========================
 # RESISTANCE TESTS
@@ -390,25 +404,23 @@ def count_resistance_tests(
 
     tests = 0
     group_sizes = []
+    group_prices = []
 
     touches = 0
+    touch_sum = 0
+
     days_since_touch = grouping_days + 1
 
-    bars = history[:]
-
-    for bar in bars:
+    for bar in history:
 
         high = safe_float(bar["high"])
-
-        # =========================
-        # TOUCH
-        # =========================
 
         if resistance_low <= high <= resistance_high:
 
             if days_since_touch <= grouping_days:
 
                 touches += 1
+                touch_sum += high
 
             else:
 
@@ -416,8 +428,12 @@ def count_resistance_tests(
 
                     tests += 1
                     group_sizes.append(touches)
+                    group_prices.append(
+                        round(touch_sum / touches, 2)
+                    )
 
                 touches = 1
+                touch_sum = high
 
             days_since_touch = 0
 
@@ -425,16 +441,78 @@ def count_resistance_tests(
 
             days_since_touch += 1
 
-    # =========================
-    # FINAL GROUP
-    # =========================
-
     if touches >= min_touches:
 
         tests += 1
         group_sizes.append(touches)
+        group_prices.append(
+            round(touch_sum / touches, 2)
+        )
 
-    return tests, group_sizes
+    return (
+        tests,
+        group_sizes,
+        group_prices
+    )
+
+# =========================
+# SUPPORT VALIDATION
+# =========================
+
+def validate_support_groups(group_prices):
+
+    if len(group_prices) < 2:
+        return False
+
+    centre = group_prices[0]
+
+    zone_low = centre * (1 - ZONE_TOLERANCE)
+    zone_high = centre * (1 + ZONE_TOLERANCE)
+
+    previous = group_prices[0]
+
+    for price in group_prices:
+
+        if not (zone_low <= price <= zone_high):
+            return False
+
+        if price < previous:
+            return False
+
+        previous = price
+
+    return True    
+
+
+# =========================
+# RESISTANCE VALIDATION
+# =========================
+
+def validate_resistance_groups(group_prices):
+
+    if len(group_prices) < 2:
+        return False
+
+    centre = group_prices[0]
+
+    zone_low = centre * (1 - ZONE_TOLERANCE)
+    zone_high = centre * (1 + ZONE_TOLERANCE)
+
+    previous = group_prices[0]
+
+    for price in group_prices:
+
+        if not (zone_low <= price <= zone_high):
+            return False
+
+        if price > previous:
+            return False
+
+        previous = price
+
+    return True
+    
+            
 
 # =========================
 # RANGE PERCENT
@@ -536,7 +614,7 @@ def process_data(data):
                 if support_low == 0 or resistance_low == 0:
                     continue
 
-                support_tests, support_groups = count_support_tests(
+                support_tests, support_groups, support_prices = count_support_tests(
                     history[:window],
                     support_low,
                     support_high
@@ -548,7 +626,7 @@ def process_data(data):
                     support_groups
                 )
 
-                resistance_tests, resistance_groups = count_resistance_tests(
+                resistance_tests, resistance_groups, resistance_prices = count_resistance_tests(
                     history[:window],
                     resistance_low,
                     resistance_high
@@ -565,6 +643,12 @@ def process_data(data):
 
                 if resistance_tests < 2:
                     continue
+
+                if not validate_support_groups(support_prices):
+                    continue
+
+                if not validate_resistance_groups(resistance_prices):
+                    continue    
 
                 range_percent = calculate_range_percent(
                     support_low,
