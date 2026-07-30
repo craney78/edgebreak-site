@@ -3720,10 +3720,10 @@ TRADINGVIEW CHART
 
             <select id="launchPadBaseLength">
 
-                <option value="90">3 Month Base</option>
-                <option value="120">4 Month Base</option>
-                <option value="150">5 Month Base</option>
-                <option value="180" selected>6 Month Base</option>
+                <option value="90">Up to 3 Months</option>
+                <option value="120">Up to 4 Months</option>
+                <option value="150">Up to 5 Months</option>
+                <option value="180" selected>Up to 6 Months</option>
 
             </select>
 
@@ -5297,8 +5297,8 @@ function runLaunchPadScanner(){
     const results =
         window.launchPadData.filter(stock => {
 
-            // Minimum Base Length
-            if(stock.launchpad_days < baseLength)
+            // Maximum Base Length
+            if(stock.launchpad_days > baseLength)
                 return false;
 
             // Price Group
