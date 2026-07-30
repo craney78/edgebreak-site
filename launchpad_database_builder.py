@@ -524,19 +524,22 @@ def validate_candle_containment(
 
     outside = 0
 
+    support_buffer = support_low * 0.01
+    resistance_buffer = resistance_high * 0.01
+
     for bar in history:
 
         close = safe_float(bar["close"])
 
-        if close > resistance_high:
+        if close > resistance_high + resistance_buffer:
             outside += 1
 
-        elif close < support_low:
+        elif close < support_low - support_buffer:
             outside += 1
 
     outside_percent = outside / len(history)
 
-    return outside_percent <= MAX_OUTSIDE_PERCENT            
+    return outside_percent <= MAX_OUTSIDE_PERCENT        
 
 # =========================
 # RANGE PERCENT
