@@ -1162,14 +1162,16 @@ TRADINGVIEW CHART
 ====================================================== */
 
 #breakoutTable thead,
-#scannerTable thead{
+#scannerTable thead,
+#launchPadTable thead{
 
     background:#111827;
 
 }
 
 #breakoutTable th,
-#scannerTable th{
+#scannerTable th,
+#launchPadTable thead{
 
     padding:16px 18px;
 
@@ -1194,8 +1196,8 @@ TRADINGVIEW CHART
 ====================================================== */
 
 #breakoutTable tbody tr,
-#scannerTable tbody tr{
-
+#scannerTable tbody tr,
+#launchPadTable tbody tr{
     transition:.18s ease;
 
     border-bottom:1px solid rgba(255,255,255,.05);
@@ -1203,7 +1205,8 @@ TRADINGVIEW CHART
 }
 
 #breakoutTable tbody tr:hover,
-#scannerTable tbody tr:hover{
+#scannerTable tbody tr:hover,
+#launchPadTable tbody tr:hover{
 
     background:rgba(34,197,94,.05);
 
@@ -1216,7 +1219,8 @@ TRADINGVIEW CHART
 ====================================================== */
 
 #breakoutTable td,
-#scannerTable td{
+#scannerTable td,
+#launchPadTable thead{
 
     padding:16px 18px;
 
@@ -1232,15 +1236,15 @@ TRADINGVIEW CHART
    TICKER COLUMN
 ====================================================== */
 
+/* TICKER COLUMN */
+
 #breakoutTable td:nth-child(2),
-#scannerTable td:first-child{
+#scannerTable td:first-child,
+#launchPadTable td:first-child{
 
     font-weight:700;
-
     color:#22c55e;
-
     font-size:16px;
-
     letter-spacing:.02em;
 
 }
@@ -1249,15 +1253,15 @@ TRADINGVIEW CHART
    EMPTY RESULTS
 ====================================================== */
 
+/* EMPTY RESULTS */
+
 #breakoutTable tbody td[colspan],
-#scannerTable tbody td[colspan]{
+#scannerTable tbody td[colspan],
+#launchPadTable tbody td[colspan]{
 
     padding:45px 20px;
-
     text-align:center;
-
     color:#64748b;
-
     font-style:italic;
 
 }
@@ -1674,15 +1678,19 @@ TRADINGVIEW CHART
    TABLE ROW ANIMATION
 ====================================================== */
 
+/* ROW ANIMATION */
+
 #breakoutTable tbody tr,
-#scannerTable tbody tr{
+#scannerTable tbody tr,
+#launchPadTable tbody tr{
 
     transform:translateY(0);
 
 }
 
 #breakoutTable tbody tr:hover,
-#scannerTable tbody tr:hover{
+#scannerTable tbody tr:hover,
+#launchPadTable tbody tr:hover{
 
     transform:translateY(-1px);
 
@@ -1738,8 +1746,11 @@ TRADINGVIEW CHART
    TABLE NUMBERS
 ====================================================== */
 
+/* NUMBERS */
+
 #breakoutTable td,
-#scannerTable td{
+#scannerTable td,
+#launchPadTable td{
 
     font-variant-numeric:tabular-nums;
 
