@@ -4428,6 +4428,11 @@ function runScanner(){
     const priceGroup =
         document.getElementById("priceGroup").value;
 
+    const liquidity =
+        Number(
+            document.getElementById("liquidity").value
+        ) || 0;
+
     const activeHigherLows =
         document.getElementById(
             "activeHigherLows"
@@ -4449,6 +4454,11 @@ function runScanner(){
             if (
                 priceGroup &&
                 stock.price_group !== priceGroup
+            ) return false;
+
+            if (
+                liquidity &&
+                stock.average_dollar_volume_20 < liquidity
             ) return false;
 
             if (
@@ -4884,7 +4894,7 @@ function runBreakoutScanner(){
     const priceGroup =
         document.getElementById(
             "breakoutPriceGroup"
-        ).value;
+        ).value;     
 
     const touches =
         parseInt(
