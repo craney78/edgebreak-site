@@ -4338,12 +4338,7 @@ function isCommonStock(symbol) {
 
 <script>
 
-const results =
-    window.scannerData.filter(stock => {
-
-        if (!isCommonStock(stock.symbol)) {
-            return false;
-        }    
+  
 
 window.scannerData = [];
 
@@ -4835,7 +4830,7 @@ function applyScannerSmartMoney(){
 
     }
    
-});
+
 </script>
 
 
@@ -4846,12 +4841,6 @@ function applyScannerSmartMoney(){
 // 🥇 BREAKOUT SCANNER
 // =========================================
 
-const results =
-    window.scannerData.filter(stock => {
-
-        if (!isCommonStock(stock.symbol)) {
-            return false;
-        }
 
 window.breakoutData = [];
 
@@ -5288,16 +5277,11 @@ function renderBreakoutEmptyState(){
 
     `;
 }
-});
+
 </script>
 
 <script>
-const results =
-    window.scannerData.filter(stock => {
 
-        if (!isCommonStock(stock.symbol)) {
-            return false;
-        }
 /* ============================================
    LAUNCH PAD SCANNER
 ============================================ */
@@ -5391,6 +5375,8 @@ function runLaunchPadScanner(){
             return true;
 
         });
+
+       
 
     window.currentLaunchPadResults = results;
 
@@ -5840,7 +5826,7 @@ function renderLaunchPadSmartMoneyEmptyState(){
     `;
 
 }
-});
+
 </script>
 
 
