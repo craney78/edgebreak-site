@@ -630,12 +630,12 @@ def process_data(data):
             # Oldest → Newest
                 history = list(reversed(values))
 
-                # Only analyse the last 6 months
-                history = history[-SEARCH_PERIOD:]
+            # Only analyse the last 6 months
+            history = history[-SEARCH_PERIOD:]
 
-                current_price = safe_float(
-                    history[-1]["close"]
-                )
+            current_price = safe_float(
+                history[-1]["close"]
+            )
 
             # =========================
             # FIND PIVOTS
