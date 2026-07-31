@@ -4411,9 +4411,7 @@ console.log(
 
 function runScanner(){
 
-    const lookback =
-        document.getElementById("lookback").value;
-       
+          
 
     const touches =
         parseInt(
@@ -4443,12 +4441,12 @@ function runScanner(){
 
             if (
                 touches &&
-                stock[`resistance_touches_${lookback}`] < touches
+                stock.resistance_touches < touches
             ) return false;
 
             if (
                 higherLows &&
-                stock[`higher_lows_${lookback}`] < higherLows
+                stock.higher_lows < higherLows
             ) return false;
 
             if (
@@ -4542,19 +4540,11 @@ function renderResults(results){
                 </td>
 
                 <td>
-                    ${
-                        stock[
-                            `resistance_touches_${lookback}`
-                        ] || 0
-                    }
+                    ${stock.resistance_touches || 0}
                 </td>
 
                 <td>
-                    ${
-                        stock[
-                            `higher_lows_${lookback}`
-                        ] || 0
-                    }
+                    ${stock.higher_lows || 0}
                 </td>
 
                 <td>${smartMoneyCount}</td>
@@ -4645,33 +4635,21 @@ function selectStock(symbol){
         <div class="metric">
             <span>Resistance</span>
             <strong>
-                ${
-                    stock[
-                        `resistance_${lookback}`
-                    ] || "-"
-                }
+                ${stock.resistance_price || "-"}
             </strong>
         </div>
 
         <div class="metric">
             <span>Touches</span>
             <strong>
-                ${
-                    stock[
-                        `resistance_touches_${lookback}`
-                    ] || 0
-                }
+                ${stock.resistance_touches || 0}
             </strong>
         </div>
 
         <div class="metric">
             <span>Higher Lows</span>
             <strong>
-                ${
-                    stock[
-                        `higher_lows_${lookback}`
-                    ] || 0
-                }
+                ${stock.higher_lows || 0}
             </strong>
         </div>
 
