@@ -390,7 +390,7 @@ def get_active_resistance(pivot_highs):
     if len(pivot_highs) < MIN_RESISTANCE_TOUCHES:
         return None
 
-    # Pivot highs are already sorted newest → oldest
+    # Pivot highs are sorted newest → oldest
 
     for pivot in pivot_highs:
 
@@ -408,16 +408,22 @@ def get_active_resistance(pivot_highs):
         if len(group) < MIN_RESISTANCE_TOUCHES:
             continue
 
-        # Average resistance price
+        prices = [
+            p["price"]
+            for p in group
+        ]
+
+        # Use the same resistance validation as Launch Pad
+
+        if not validate_resistance_groups(prices):
+            continue
 
         resistance_price = round(
 
             sum(
                 p["price"]
                 for p in group
-            )
-
-            / len(group),
+            ) / len(group),
 
             2
 
@@ -432,35 +438,6 @@ def get_active_resistance(pivot_highs):
             group,
             key=lambda x: x["index"]
         )
-
-        # Validate resistance behaves like resistance
-
-        prices = [
-            p["price"]
-            for p in group
-        ]
-
-        previous = prices[0]
-
-        valid = True
-
-        zone_low = previous * (1 - ZONE_TOLERANCE)
-        zone_high = previous * (1 + ZONE_TOLERANCE)
-
-        for price in prices:
-
-            if not (zone_low <= price <= zone_high):
-                valid = False
-                break
-
-            if price > previous:
-                valid = False
-                break
-
-            previous = price
-
-        if not valid:
-            continue
 
         return {
 
