@@ -287,7 +287,9 @@ def find_pivot_highs(data):
 
         for i in range(2, len(bars) - 2):
 
-            high = safe_float(bars[i]["high"])
+            high = safe_float(
+                bars[i]["high"]
+            )
 
             if (
 
@@ -310,7 +312,9 @@ def find_pivot_highs(data):
                 pivots.append({
 
                     "index": i,
+
                     "date": bars[i]["datetime"],
+
                     "price": high
 
                 })
@@ -319,7 +323,8 @@ def find_pivot_highs(data):
 
         pass
 
-    return pivots
+    # Return newest pivots first
+    return list(reversed(pivots))
 
 
 def find_pivot_lows(data):
@@ -332,7 +337,9 @@ def find_pivot_lows(data):
 
         for i in range(2, len(bars) - 2):
 
-            low = safe_float(bars[i]["low"])
+            low = safe_float(
+                bars[i]["low"]
+            )
 
             if (
 
@@ -355,7 +362,9 @@ def find_pivot_lows(data):
                 pivots.append({
 
                     "index": i,
+
                     "date": bars[i]["datetime"],
+
                     "price": low
 
                 })
@@ -364,150 +373,156 @@ def find_pivot_lows(data):
 
         pass
 
-    return pivots
-
-
-# =========================
-# RESISTANCE GROUPS
-# =========================
-
-RESISTANCE_TOLERANCE = 0.015      # 1.5%
-
-
-def find_resistance_groups(pivot_highs):
-
-    groups = []
-
-    current_group = []
-
-    for pivot in pivot_highs:
-
-        if not current_group:
-
-            current_group.append(pivot)
-            continue
-
-        centre = current_group[0]["price"]
-
-        if abs(pivot["price"] - centre) / centre <= RESISTANCE_TOLERANCE:
-
-            current_group.append(pivot)
-
-        else:
-
-            if len(current_group) >= 2:
-
-                groups.append(current_group)
-
-            current_group = [pivot]
-
-    if len(current_group) >= 2:
-
-        groups.append(current_group)
-
-    return groups
+    # Return newest pivots first
+    return list(reversed(pivots))
 
 
 # =========================
 # ACTIVE RESISTANCE
 # =========================
 
+RESISTANCE_TOLERANCE = 0.015      # 1.5%
+
+
 def get_active_resistance(pivot_highs):
 
-    groups = find_resistance_groups(pivot_highs)
-
-    if len(groups) == 0:
+    if len(pivot_highs) < 2:
 
         return None
 
-    active = groups[-1]
+    active = []
 
-    resistance = sum(
-        p["price"]
-        for p in active
-    ) / len(active)
+    resistance = pivot_highs[0]["price"]
+
+    for pivot in pivot_highs:
+
+        if (
+
+            abs(
+                pivot["price"] - resistance
+            ) / resistance
+
+            <=
+
+            RESISTANCE_TOLERANCE
+
+        ):
+
+            active.append(pivot)
+
+        else:
+
+            # Sequence broken
+            break
+
+    if len(active) < 2:
+
+        return None
+
+    resistance_price = (
+
+        sum(
+
+            p["price"]
+
+            for p in active
+
+        )
+
+        /
+
+        len(active)
+
+    )
 
     return {
 
-        "price": round(resistance, 2),
-        "touches": len(active),
-        "start_index": active[0]["index"],
-        "end_index": active[-1]["index"],
-        "start_date": active[0]["date"],
-        "end_date": active[-1]["date"]
+        "price":
+            round(resistance_price, 2),
+
+        "touches":
+            len(active),
+
+        "start_index":
+            active[-1]["index"],
+
+        "end_index":
+            active[0]["index"],
+
+        "start_date":
+            active[-1]["date"],
+
+        "end_date":
+            active[0]["date"]
 
     }
 
 
 
 # =========================
-# HIGHER LOW GROUPS
+# ACTIVE HIGHER LOWS
 # =========================
 
 HIGHER_LOW_TOLERANCE = 0.02      # 2%
 
 
-def find_higher_low_groups(pivot_lows):
-
-    groups = []
-
-    current_group = []
-
-    for pivot in pivot_lows:
-
-        if not current_group:
-
-            current_group.append(pivot)
-            continue
-
-        previous = current_group[-1]["price"]
-
-        # Must be a higher low (allowing small tolerance)
-        if pivot["price"] >= previous * (1 - HIGHER_LOW_TOLERANCE):
-
-            current_group.append(pivot)
-
-        else:
-
-            if len(current_group) >= 2:
-
-                groups.append(current_group)
-
-            current_group = [pivot]
-
-    if len(current_group) >= 2:
-
-        groups.append(current_group)
-
-    return groups
-
-
-# =========================
-# ACTIVE HIGHER LOWS
-# =========================
-
 def get_active_higher_lows(pivot_lows):
 
-    groups = find_higher_low_groups(pivot_lows)
-
-    if len(groups) == 0:
+    if len(pivot_lows) < 2:
 
         return None
 
-    active = groups[-1]
+    active = []
+
+    previous = pivot_lows[0]["price"]
+
+    active.append(pivot_lows[0])
+
+    for pivot in pivot_lows[1:]:
+
+        # Older lows must be lower (allow small tolerance)
+
+        if pivot["price"] <= previous * (1 + HIGHER_LOW_TOLERANCE):
+
+            active.append(pivot)
+
+            previous = pivot["price"]
+
+        else:
+
+            # Sequence broken
+
+            break
+
+    if len(active) < 2:
+
+        return None
 
     return {
 
-        "count": len(active),
-        "start_index": active[0]["index"],
-        "end_index": active[-1]["index"],
-        "start_date": active[0]["date"],
-        "end_date": active[-1]["date"],
-        "lowest_price": min(
-            p["price"]
-            for p in active
-        ),
-        "latest_price": active[-1]["price"]
+        "count":
+            len(active),
+
+        "start_index":
+            active[-1]["index"],
+
+        "end_index":
+            active[0]["index"],
+
+        "start_date":
+            active[-1]["date"],
+
+        "end_date":
+            active[0]["date"],
+
+        "lowest_price":
+            min(
+                p["price"]
+                for p in active
+            ),
+
+        "latest_price":
+            active[0]["price"]
 
     }
 
@@ -562,7 +577,7 @@ def process_data(data):
                 continue
 
             # =========================
-            # FIND ACTIVE STRUCTURES
+            # ACTIVE STRUCTURE
             # =========================
 
             resistance = get_active_resistance(
@@ -583,89 +598,32 @@ def process_data(data):
             # VALIDATE STRUCTURE
             # =========================
 
-            if resistance["touches"] < 2:
-                continue
+            structure = validate_structure(
 
-            if higher_lows["count"] < 2:
-                continue
+                resistance,
 
-            # Price must remain above
-            # latest higher low
+                higher_lows,
 
-            if current_price < higher_lows["latest_price"] * 0.98:
-                continue
+                current_price
 
-            # Distance to breakout
+            )
 
-            breakout_distance = (
-                (resistance["price"] - current_price)
-                / resistance["price"]
-            ) * 100
-
-            if breakout_distance < 0:
-                continue
-
-            # Only save stocks that are
-            # reasonably close to breakout
-
-            if breakout_distance > 10:
+            if structure is None:
                 continue
 
             # =========================
-            # SAVE RECORD
+            # BUILD RECORD
             # =========================
 
-            record = {
+            record = build_record(
 
-                "symbol": symbol,
+                symbol,
 
-                "current_price": round(
-                    current_price,
-                    2
-                ),
+                current_price,
 
-                "price_group": get_price_group(
-                    current_price
-                ),
+                structure
 
-                "scan_date": datetime.now().strftime("%Y-%m-%d"),
-
-                "last_updated": datetime.now().strftime("%Y-%m-%d"),
-
-                # =====================
-                # Launch Pad
-                # =====================
-
-                "launch_pad_active": True,
-
-                "resistance_price":
-                    resistance["price"],
-
-                "resistance_touches":
-                    resistance["touches"],
-
-                "higher_lows":
-                    higher_lows["count"],
-
-                "breakout_distance":
-                    round(
-                        breakout_distance,
-                        2
-                    ),
-
-                "launch_pad_start":
-                    max(
-                        resistance["start_date"],
-                        higher_lows["start_date"]
-                    ),
-
-                "launch_pad_end":
-                    min(
-                        resistance["end_date"],
-                        higher_lows["end_date"]
-                    )
-
-            }
+            )
 
             database.append(record)
 
@@ -683,17 +641,24 @@ def process_data(data):
 # STRUCTURE VALIDATION
 # =========================
 
-MIN_RESISTANCE_TOUCHES = 2
-MIN_HIGHER_LOWS = 2
+MIN_RESISTANCE_TOUCHES = 3
+MIN_HIGHER_LOWS = 3
 
-MAX_BREAKOUT_DISTANCE = 10.0      # %
-PRICE_BUFFER = 0.02               # 2%
+MAX_BREAKOUT_DISTANCE = 5.0      # %
+PRICE_BUFFER = 0.02              # 2%
+
 
 def validate_structure(
+
     resistance,
     higher_lows,
     current_price
+
 ):
+
+    # =========================
+    # VALID STRUCTURES
+    # =========================
 
     if resistance is None:
         return None
@@ -702,15 +667,13 @@ def validate_structure(
         return None
 
     # =========================
-    # MINIMUM STRUCTURE
+    # MINIMUM TOUCHES
     # =========================
 
     if resistance["touches"] < MIN_RESISTANCE_TOUCHES:
-
         return None
 
     if higher_lows["count"] < MIN_HIGHER_LOWS:
-
         return None
 
     # =========================
@@ -718,33 +681,37 @@ def validate_structure(
     # =========================
 
     if higher_lows["end_index"] < resistance["start_index"]:
-
         return None
 
     if resistance["end_index"] < higher_lows["start_index"]:
-
         return None
 
     # =========================
-    # PRICE MUST REMAIN ABOVE
-    # LATEST HIGHER LOW
+    # PRICE ABOVE LATEST
+    # HIGHER LOW
     # =========================
 
-    if current_price < higher_lows["latest_price"] * (1 - PRICE_BUFFER):
+    minimum_price = (
 
+        higher_lows["latest_price"]
+
+        * (1 - PRICE_BUFFER)
+
+    )
+
+    if current_price < minimum_price:
         return None
 
     # =========================
-    # PRICE MUST BE BELOW
-    # RESISTANCE
+    # PRICE MUST STILL BE
+    # BELOW RESISTANCE
     # =========================
 
     if current_price >= resistance["price"]:
-
         return None
 
     # =========================
-    # DISTANCE TO RESISTANCE
+    # DISTANCE TO BREAKOUT
     # =========================
 
     distance = (
@@ -755,8 +722,10 @@ def validate_structure(
 
     ) * 100
 
-    if distance > MAX_BREAKOUT_DISTANCE:
+    if distance < 0:
+        return None
 
+    if distance > MAX_BREAKOUT_DISTANCE:
         return None
 
     # =========================
@@ -768,7 +737,10 @@ def validate_structure(
         "structure_active": True,
 
         "resistance_price":
-            resistance["price"],
+            round(
+                resistance["price"],
+                2
+            ),
 
         "resistance_touches":
             resistance["touches"],
@@ -794,7 +766,7 @@ def validate_structure(
                 higher_lows["end_date"]
             )
 
-    }            
+    }     
 # ===================================
 # MAIN
 # ===================================
@@ -832,9 +804,13 @@ def main():
 
     for i in range(0, total, BATCH_SIZE):
 
-        batch = symbols[i:i + BATCH_SIZE]
+        batch = symbols[
+            i:i + BATCH_SIZE
+        ]
 
-        batch_number = (i // BATCH_SIZE) + 1
+        batch_number = (
+            i // BATCH_SIZE
+        ) + 1
 
         print(
             f"\n📦 Batch {batch_number}/{total_batches}"
@@ -866,13 +842,13 @@ def main():
 
         key=lambda x: (
 
-            x["resistance_touches"],
-            x["higher_lows"],
-            -x["distance_to_resistance"]
+            -x["resistance_touches"],
 
-        ),
+            -x["higher_lows"],
 
-        reverse=True
+            x["distance_to_resistance"]
+
+        )
 
     )
 
@@ -902,17 +878,15 @@ def main():
     average_touches = 0
     average_higher_lows = 0
     average_distance = 0
+    acceptance_rate = 0
 
     if len(database) > 0:
 
         average_touches = round(
 
             sum(
-
                 r["resistance_touches"]
-
                 for r in database
-
             ) / len(database),
 
             2
@@ -922,11 +896,8 @@ def main():
         average_higher_lows = round(
 
             sum(
-
                 r["higher_lows"]
-
                 for r in database
-
             ) / len(database),
 
             2
@@ -936,12 +907,19 @@ def main():
         average_distance = round(
 
             sum(
-
                 r["distance_to_resistance"]
-
                 for r in database
-
             ) / len(database),
+
+            2
+
+        )
+
+    if processed > 0:
+
+        acceptance_rate = round(
+
+            (saved / processed) * 100,
 
             2
 
@@ -952,10 +930,25 @@ def main():
     print("SCAN COMPLETE")
     print("===================================")
 
-    print(f"Processed Stocks : {processed}")
-    print(f"Qualified Stocks : {saved}")
-    print(f"Rejected Stocks  : {processed - saved}")
-    print(f"Failed           : {failed}")
+    print(
+        f"Processed Stocks : {processed}"
+    )
+
+    print(
+        f"Qualified Stocks : {saved}"
+    )
+
+    print(
+        f"Rejected Stocks  : {processed - saved}"
+    )
+
+    print(
+        f"Failed           : {failed}"
+    )
+
+    print(
+        f"Acceptance Rate  : {acceptance_rate}%"
+    )
 
     print()
 
@@ -983,7 +976,9 @@ def main():
 
     print()
 
-    print(f"✅ Saved to {DATABASE_FILE}")
+    print(
+        f"✅ Saved to {DATABASE_FILE}"
+    )
 
 
 if __name__ == "__main__":
