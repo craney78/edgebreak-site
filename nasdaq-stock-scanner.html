@@ -4461,12 +4461,12 @@ function runScanner(){
 
             if (
                 activeHigherLows === "active" &&
-                stock.active_higher_lows !== true
+                stock.structure_active !== true
             ) return false;
 
             if (
                 activeHigherLows === "failed" &&
-                stock.active_higher_lows === true
+                stock.structure_active === true
             ) return false;
 
             return true;
