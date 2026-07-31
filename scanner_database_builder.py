@@ -628,7 +628,7 @@ def process_data(data):
                 continue
 
             # Oldest → Newest
-                history = list(reversed(values))
+            history = list(reversed(values))
 
             # Only analyse the last 6 months
             history = history[-SEARCH_PERIOD:]
