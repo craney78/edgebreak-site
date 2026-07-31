@@ -578,9 +578,19 @@ def get_active_higher_lows(
 # =========================
 
 def build_record(
+
     symbol,
+
     current_price,
+
+    average_volume_20,
+
+    average_dollar_volume_20,
+
+    liquidity_group,
+
     structure
+
 ):
 
     today = datetime.now().strftime("%Y-%m-%d")
@@ -593,9 +603,30 @@ def build_record(
 
         "price_group": get_price_group(current_price),
 
+        # =========================
+        # LIQUIDITY
+        # =========================
+
+        "average_volume_20":
+            average_volume_20,
+
+        "average_dollar_volume_20":
+            average_dollar_volume_20,
+
+        "liquidity_group":
+            liquidity_group,
+
+        # =========================
+        # META
+        # =========================
+
         "scan_date": today,
 
         "last_updated": today,
+
+        # =========================
+        # STRUCTURE
+        # =========================
 
         "structure_active": True,
 
@@ -618,7 +649,6 @@ def build_record(
             structure["structure_end"]
 
     }
-
 
 # ===================================
 # PROCESS
@@ -657,6 +687,63 @@ def process_data(data):
             current_price = safe_float(
                 history[-1]["close"]
             )
+
+            # =========================
+            # LIQUIDITY
+            # =========================
+
+            last_20 = history[-20:]
+
+            average_volume_20 = round(
+
+                sum(
+                    safe_float(bar["volume"])
+                    for bar in last_20
+                ) / len(last_20)
+
+            )
+
+            average_dollar_volume_20 = round(
+
+                sum(
+
+                    safe_float(bar["close"]) *
+
+                    safe_float(bar["volume"])
+
+                    for bar in last_20
+
+                ) / len(last_20)
+
+            )
+
+            if average_dollar_volume_20 < 500000:
+
+                liquidity_group = "<500K"
+
+            elif average_dollar_volume_20 < 1000000:
+
+                liquidity_group = "500K-1M"
+
+            elif average_dollar_volume_20 < 2000000:
+
+                liquidity_group = "1M-2M"
+
+            elif average_dollar_volume_20 < 5000000:
+
+                liquidity_group = "2M-5M"
+
+            elif average_dollar_volume_20 < 10000000:
+
+                liquidity_group = "5M-10M"
+
+            elif average_dollar_volume_20 < 20000000:
+
+                liquidity_group = "10M-20M"
+
+            else:
+
+                liquidity_group = "20M+"
 
             # =========================
             # FIND PIVOTS
@@ -725,6 +812,12 @@ def process_data(data):
                 symbol,
 
                 current_price,
+
+                average_volume_20,
+
+                average_dollar_volume_20,
+
+                liquidity_group,
 
                 structure
 
