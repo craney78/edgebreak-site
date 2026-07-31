@@ -4307,34 +4307,7 @@ function loadChart(symbol) {
 
 </script>
 
-<script>
 
-// =========================
-// COMMON STOCK FILTER
-// =========================
-
-function isCommonStock(symbol) {
-
-    symbol = symbol.toUpperCase();
-
-    const invalidSuffixes = [
-        "W",
-        "R",
-        "U",
-        "P",
-        "Q",
-        "Z",
-        "N",
-        "M"
-    ];
-
-    return !invalidSuffixes.some(
-        suffix => symbol.endsWith(suffix)
-    );
-
-}
-
-</script>
 
 <script>
 
