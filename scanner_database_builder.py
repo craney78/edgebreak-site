@@ -527,7 +527,52 @@ def get_active_higher_lows(pivot_lows):
     }
 
 
-    
+# =========================
+# BUILD RECORD
+# =========================
+
+def build_record(
+    symbol,
+    current_price,
+    structure
+):
+
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    return {
+
+        "symbol": symbol,
+
+        "current_price": round(current_price, 2),
+
+        "price_group": get_price_group(current_price),
+
+        "scan_date": today,
+
+        "last_updated": today,
+
+        "structure_active": True,
+
+        "resistance_price":
+            structure["resistance_price"],
+
+        "resistance_touches":
+            structure["resistance_touches"],
+
+        "higher_lows":
+            structure["higher_lows"],
+
+        "distance_to_resistance":
+            structure["distance_to_resistance"],
+
+        "structure_start":
+            structure["structure_start"],
+
+        "structure_end":
+            structure["structure_end"]
+
+    }
+        
 # ===================================
 # PROCESS
 # ===================================
