@@ -376,6 +376,37 @@ def find_pivot_lows(data):
     # Return newest pivots first
     return list(reversed(pivots))
 
+# =========================
+# RESISTANCE VALIDATION
+# =========================
+
+ZONE_TOLERANCE = 0.05      # ±5%
+
+
+def validate_resistance_groups(group_prices):
+
+    if len(group_prices) < 2:
+        return False
+
+    centre = group_prices[0]
+
+    zone_low = centre * (1 - ZONE_TOLERANCE)
+    zone_high = centre * (1 + ZONE_TOLERANCE)
+
+    previous = group_prices[0]
+
+    for price in group_prices:
+
+        if not (zone_low <= price <= zone_high):
+            return False
+
+        # Resistance should be flat or gently falling
+        if price > previous:
+            return False
+
+        previous = price
+
+    return True
 
 # =========================
 # ACTIVE RESISTANCE
