@@ -3030,52 +3030,172 @@ TRADINGVIEW CHART
 
 }
 
-.scanner-selector-header{
+.scanner-dropdown{
+
+    position:relative;
+
+}
+
+.scanner-selected{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    background:#08111f;
+
+    border:2px solid #22c55e;
+
+    border-radius:18px;
+
+    padding:20px 24px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.scanner-selected:hover{
+
+    box-shadow:0 0 25px rgba(34,197,94,.15);
+
+}
+
+.scanner-selected-left{
 
     display:flex;
     align-items:center;
+
+    gap:16px;
+
+}
+
+.scanner-selected span{
+
+    color:white;
+
+    font-size:28px;
+
+    font-weight:700;
+
+}
+
+.scanner-arrow{
+
+    color:#d1d5db;
+
+    transition:.3s;
+
+}
+
+.scanner-dropdown.open .scanner-arrow{
+
+    transform:rotate(180deg);
+
+}
+
+.scanner-options{
+
+    position:absolute;
+
+    left:0;
+    right:0;
+
+    top:calc(100% + 12px);
+
+    background:#0c1626;
+
+    border:1px solid #1e293b;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    display:none;
+
+    z-index:999;
+
+    box-shadow:0 25px 60px rgba(0,0,0,.45);
+
+}
+
+.scanner-dropdown.open .scanner-options{
+
+    display:block;
+
+}
+
+.scanner-option{
+
+    display:flex;
+
+    align-items:center;
+
     gap:18px;
-    margin-bottom:24px;
+
+    padding:22px;
+
+    cursor:pointer;
+
+    transition:.2s;
 
 }
 
-.scanner-selector-icon{
+.scanner-option:hover{
 
-    width:60px;
-    height:60px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:14px;
-
-    background:rgba(34,197,94,.08);
-
-    border:1px solid rgba(34,197,94,.20);
+    background:#11263d;
 
 }
 
-.scanner-selector-icon svg{
+.scanner-option.active{
 
-    width:30px;
-    height:30px;
-    stroke:#22c55e;
+    background:rgba(34,197,94,.12);
 
 }
 
-.scanner-selector-header h3{
+.scanner-option strong{
 
-    margin:0;
-    font-size:26px;
+    display:block;
+
+    color:white;
+
+    font-size:20px;
 
 }
 
-.scanner-selector-header p{
+.scanner-option small{
 
-    margin-top:6px;
     color:#94a3b8;
-    line-height:1.6;
+
+    font-size:15px;
+
+}
+
+.scanner-circle{
+
+    width:18px;
+    height:18px;
+
+    border-radius:50%;
+
+}
+
+.breakout{
+
+    background:#22c55e;
+
+}
+
+.pre{
+
+    background:#38bdf8;
+
+}
+
+.launch{
+
+    background:#a855f7;
 
 }
 </style>  
@@ -3337,15 +3457,17 @@ TRADINGVIEW CHART
 
 </div>
 <!-- =========================================
-scanner selector
+SCANNER SELECTOR
 ========================================= -->
+
 <div class="scanner-panel scanner-selector-panel">
 
     <div class="scanner-selector-header">
 
         <div class="scanner-selector-icon">
 
-            <svg viewBox="0 0 24 24" fill="none"
+            <svg viewBox="0 0 24 24"
+                 fill="none"
                  stroke="currentColor"
                  stroke-width="2">
 
@@ -3368,25 +3490,119 @@ scanner selector
 
     </div>
 
-    <div class="filter-group">
+    <label class="scanner-label">
 
-        <label>Scanner</label>
+        Scanner Type
 
-        <select id="scannerSelector">
+    </label>
 
-            <option value="breakout">
-                Breakout Scanner
-            </option>
+    <div
+        class="scanner-dropdown"
+        id="scannerDropdown"
+    >
 
-            <option value="pre">
-                Pre-Breakout Scanner
-            </option>
+        <div
+            class="scanner-selected"
+            id="scannerSelected"
+        >
 
-            <option value="launchpad">
-                Launch Pad Scanner
-            </option>
+            <div class="scanner-selected-left">
 
-        </select>
+                <div class="scanner-circle breakout"></div>
+
+                <span>
+                    Breakout Scanner
+                </span>
+
+            </div>
+
+            <svg
+                class="scanner-arrow"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+            >
+
+                <polyline
+                    points="6 9 12 15 18 9"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                />
+
+            </svg>
+
+        </div>
+
+        <div
+            class="scanner-options"
+            id="scannerOptions"
+        >
+
+            <div
+                class="scanner-option active"
+                data-value="breakout"
+            >
+
+                <div class="scanner-circle breakout"></div>
+
+                <div>
+
+                    <strong>
+                        Breakout Scanner
+                    </strong>
+
+                    <small>
+                        Stocks breaking resistance
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div
+                class="scanner-option"
+                data-value="pre"
+            >
+
+                <div class="scanner-circle pre"></div>
+
+                <div>
+
+                    <strong>
+                        Pre-Breakout Scanner
+                    </strong>
+
+                    <small>
+                        Building pressure beneath resistance
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div
+                class="scanner-option"
+                data-value="launchpad"
+            >
+
+                <div class="scanner-circle launch"></div>
+
+                <div>
+
+                    <strong>
+                        Launch Pad Scanner
+                    </strong>
+
+                    <small>
+                        Institutional accumulation bases
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
@@ -6166,31 +6382,59 @@ removeFromWatchlist(${stock.id});
 
 <script>
 
-const selector = document.getElementById("scannerSelector");
+const dropdown =
+document.getElementById("scannerDropdown");
 
-const breakout = document.getElementById("breakoutScanner");
-const pre = document.getElementById("preBreakoutScanner");
-const launch = document.getElementById("launchPadScanner");
+const selected =
+document.getElementById("scannerSelected");
 
-selector.addEventListener("change", function () {
+const options =
+document.querySelectorAll(".scanner-option");
 
-    breakout.style.display = "none";
-    pre.style.display = "none";
-    launch.style.display = "none";
+selected.onclick = () => {
 
-    if (this.value === "breakout") {
+    dropdown.classList.toggle("open");
 
-        breakout.style.display = "block";
+};
 
-    } else if (this.value === "pre") {
+options.forEach(option=>{
 
-        pre.style.display = "block";
+    option.onclick=()=>{
 
-    } else {
+        options.forEach(o=>o.classList.remove("active"));
 
-        launch.style.display = "block";
+        option.classList.add("active");
 
-    }
+        document.querySelector("#scannerSelected span").textContent =
+        option.querySelector("strong").textContent;
+
+        dropdown.classList.remove("open");
+
+        const value =
+        option.dataset.value;
+
+        breakout.style.display="none";
+        pre.style.display="none";
+        launch.style.display="none";
+
+        if(value==="breakout")
+            breakout.style.display="block";
+
+        if(value==="pre")
+            pre.style.display="block";
+
+        if(value==="launchpad")
+            launch.style.display="block";
+
+    };
+
+});
+
+document.addEventListener("click",(e)=>{
+
+    if(!dropdown.contains(e.target))
+
+        dropdown.classList.remove("open");
 
 });
 
