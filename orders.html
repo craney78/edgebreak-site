@@ -439,6 +439,98 @@ SPEAKABLE SCHEMA
 
 }
 
+#comingSoonOverlay{
+
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.65);
+
+    backdrop-filter:blur(4px);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    z-index:999999;
+}
+
+.comingSoonModal{
+
+    width:500px;
+    max-width:90%;
+
+    background:#071120;
+
+    border:1px solid #22324b;
+
+    border-radius:20px;
+
+    padding:45px;
+
+    text-align:center;
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.45);
+}
+
+.comingIcon{
+
+    font-size:70px;
+
+    margin-bottom:25px;
+}
+
+.comingSoonModal h2{
+
+    color:white;
+
+    font-size:42px;
+
+    margin-bottom:8px;
+}
+
+.comingSoonModal h3{
+
+    color:#60a5fa;
+
+    margin-bottom:25px;
+}
+
+.comingSoonModal p{
+
+    color:#cbd5e1;
+
+    line-height:1.7;
+
+    margin-bottom:18px;
+}
+
+#returnBtn{
+
+    margin-top:18px;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:14px 28px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    transition:.2s;
+}
+
+#returnBtn:hover{
+
+    background:#1d4ed8;
+}
 </style>
 </head>
 
@@ -1309,5 +1401,50 @@ document.addEventListener(
 <!-- COMPONENTS -->
 
 <script src="/js/components.js"></script>
+</script>
+<!-- COMPONENTS -->
+
+<script src="/js/components.js"></script>
+
+<div id="comingSoonOverlay">
+
+    <div class="comingSoonModal">
+
+        <div class="comingIcon">
+            🚧
+        </div>
+
+        <h2>Coming Soon</h2>
+
+        <h3>Broker Integration</h3>
+
+        <p>
+            We're currently building secure broker integration
+            for EdgeBreak.
+        </p>
+
+        <p>
+            This feature will be available in a future update.
+        </p>
+
+        <button id="returnBtn">
+            ← Return to Previous Page
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+document.body.style.overflow = "hidden";
+
+document.getElementById("returnBtn").addEventListener("click", function () {
+
+    window.location.href = "https://www.edgebreak.ai/my-workspace.html";
+
+});
+
+</script>
 </body>
 </html>
