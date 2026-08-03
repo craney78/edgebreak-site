@@ -6663,14 +6663,14 @@ function renderWatchlist(){
             // ROW HIGHLIGHT
             // =====================================
 
-            const rowStyle =
+            const rowClass =
                 indicators >= 3
-                    ? 'style="font-weight:700;background:rgba(255,255,255,.04);"'
+                    ? 'class="watchlist-highlight"'
                     : "";
 
             return `
 
-<tr ${rowStyle}>
+<tr ${rowClass}>
 
 <td>
 
@@ -6694,7 +6694,7 @@ ${stock.symbol}
 
 </td>
 
-<td>
+<td class="watchlist-found">
 
 ${foundBy.join(" • ") || "-"}
 
