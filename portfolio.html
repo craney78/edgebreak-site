@@ -1824,21 +1824,14 @@ lucide.createIcons();
 
 <script src="/js/components.js"></script>
 <script>
+
 document.body.style.overflow = "hidden";
 
-document.getElementById("returnBtn").onclick = () => {
+document.getElementById("returnBtn").addEventListener("click", function () {
 
-    if(history.length > 1){
+    window.location.href = "https://www.edgebreak.ai/my-workspace.html";
 
-        history.back();
-
-    }else{
-
-        window.location.href = "/dashboard.html";
-
-    }
-
-};
+});
 
 </script>
 <div id="comingSoonOverlay">
