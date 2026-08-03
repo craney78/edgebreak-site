@@ -6649,59 +6649,68 @@ removeFromWatchlist(${stock.id});
 
 <script>
 
-const dropdown =
-document.getElementById("scannerDropdown");
+const dropdown = document.getElementById("scannerDropdown");
+const selected = document.getElementById("scannerSelected");
+const options = document.querySelectorAll(".scanner-option");
 
-const selected =
-document.getElementById("scannerSelected");
+const breakoutScanner = document.getElementById("breakoutScanner");
+const preBreakoutScanner = document.getElementById("preBreakoutScanner");
+const launchPadScanner = document.getElementById("launchPadScanner");
 
-const options =
-document.querySelectorAll(".scanner-option");
+selected.addEventListener("click", function (e) {
 
-selected.onclick = () => {
+    e.stopPropagation();
 
     dropdown.classList.toggle("open");
 
-};
+});
 
-options.forEach(option=>{
+options.forEach(option => {
 
-    option.onclick=()=>{
+    option.addEventListener("click", function () {
 
-        options.forEach(o=>o.classList.remove("active"));
+        options.forEach(o => o.classList.remove("active"));
 
         option.classList.add("active");
 
         document.querySelector("#scannerSelected span").textContent =
-        option.querySelector("strong").textContent;
+            option.querySelector("strong").textContent;
 
         dropdown.classList.remove("open");
 
-        const value =
-        option.dataset.value;
+        breakoutScanner.style.display = "none";
+        preBreakoutScanner.style.display = "none";
+        launchPadScanner.style.display = "none";
 
-        breakout.style.display="none";
-        pre.style.display="none";
-        launch.style.display="none";
+        if (option.dataset.value === "breakout") {
 
-        if(value==="breakout")
-            breakout.style.display="block";
+            breakoutScanner.style.display = "block";
 
-        if(value==="pre")
-            pre.style.display="block";
+        }
 
-        if(value==="launchpad")
-            launch.style.display="block";
+        if (option.dataset.value === "pre") {
 
-    };
+            preBreakoutScanner.style.display = "block";
+
+        }
+
+        if (option.dataset.value === "launchpad") {
+
+            launchPadScanner.style.display = "block";
+
+        }
+
+    });
 
 });
 
-document.addEventListener("click",(e)=>{
+document.addEventListener("click", function (e) {
 
-    if(!dropdown.contains(e.target))
+    if (!dropdown.contains(e.target)) {
 
         dropdown.classList.remove("open");
+
+    }
 
 });
 
