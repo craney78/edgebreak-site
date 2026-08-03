@@ -3464,7 +3464,36 @@ CUSTOM DROPDOWN
 
 }
 
+/* =========================================
+WATCHLIST NEW COLUMNS
+========================================= */
 
+#watchlistTable th,
+#watchlistTable td{
+
+    white-space:nowrap;
+
+}
+
+/* Multi-scanner rows */
+
+.watchlist-highlight{
+
+    font-weight:700;
+
+    background:rgba(255,255,255,.04);
+
+}
+
+/* Found By column */
+
+.watchlist-found{
+
+    color:#cbd5e1;
+
+    font-size:14px;
+
+}
 </style>  
 
 
@@ -4534,9 +4563,7 @@ SCANNER SELECTOR
             class="watchlist-count"
             id="watchlistCount"
         >
-
             0 Stocks Saved
-
         </span>
 
     </div>
@@ -4549,7 +4576,15 @@ SCANNER SELECTOR
 
                 <th>Ticker</th>
 
-                <th>Added</th>
+                <th>Found By</th>
+
+                <th>Price Group</th>
+
+                <th>Grade</th>
+
+                <th>Smart Money</th>
+
+                <th>Indicators</th>
 
                 <th class="center">
                     Open Chart
@@ -4567,7 +4602,7 @@ SCANNER SELECTOR
 
             <tr class="watchlist-empty">
 
-                <td colspan="4">
+                <td colspan="8">
 
                     No watchlist stocks added yet.
 
@@ -6518,7 +6553,7 @@ function renderWatchlist(){
         tbody.innerHTML=`
             <tr class="watchlist-empty">
 
-                <td colspan="4">
+                <td colspan="8">
 
                     No watchlist stocks added.
 
@@ -6534,38 +6569,108 @@ function renderWatchlist(){
     tbody.innerHTML =
         window.watchlist.map(stock=>{
 
-            const added =
-                new Date(stock.created_at);
+            // =====================================
+            // FIND STOCK IN EACH EDGEBREAK SCANNER
+            // =====================================
 
-            const today =
-                new Date();
-
-            const diff =
-                Math.floor(
-                    (today-added)/(1000*60*60*24)
+            const breakout =
+                window.breakoutData.find(
+                    s => s.symbol === stock.symbol
                 );
 
-            let label="Today";
-
-            if(diff===1)
-                label="Yesterday";
-
-            if(diff>1)
-                label=`${diff} days ago`;
-
-            const dateText =
-                added.toLocaleDateString(
-                    "en-AU",
-                    {
-                        day:"2-digit",
-                        month:"short",
-                        year:"numeric"
-                    }
+            const pre =
+                window.scannerData.find(
+                    s => s.symbol === stock.symbol
                 );
+
+            const launch =
+                window.launchPadData.find(
+                    s => s.symbol === stock.symbol
+                );
+
+            const smart =
+                window.smartMoneyLookup[
+                    stock.symbol
+                ];
+
+            // =====================================
+            // FOUND BY
+            // =====================================
+
+            const foundBy = [];
+
+            if(breakout)
+                foundBy.push("Breakout");
+
+            if(pre)
+                foundBy.push("Pre-Breakout");
+
+            if(launch)
+                foundBy.push("Launch Pad");
+
+            // =====================================
+            // PRICE GROUP
+            // =====================================
+
+            let priceGroup = "-";
+
+            if(breakout)
+                priceGroup = breakout.price_group;
+
+            else if(pre)
+                priceGroup = pre.price_group;
+
+            else if(launch)
+                priceGroup = launch.price_group;
+
+            // =====================================
+            // GRADE
+            // =====================================
+
+            let grade = "-";
+
+            if(breakout)
+                grade = breakout.rank;
+
+            // =====================================
+            // SMART MONEY
+            // =====================================
+
+            const smartMoney =
+                smart
+                    ? smart.count
+                    : 0;
+
+            // =====================================
+            // INDICATORS
+            // =====================================
+
+            let indicators = 0;
+
+            if(breakout)
+                indicators++;
+
+            if(pre)
+                indicators++;
+
+            if(launch)
+                indicators++;
+
+            if(smart)
+                indicators++;
+
+            // =====================================
+            // ROW HIGHLIGHT
+            // =====================================
+
+            const rowStyle =
+                indicators >= 3
+                    ? 'style="font-weight:700;background:rgba(255,255,255,.04);"'
+                    : "";
 
             return `
 
-<tr>
+<tr ${rowStyle}>
 
 <td>
 
@@ -6591,13 +6696,31 @@ ${stock.symbol}
 
 <td>
 
-<div class="watchlist-added">
+${foundBy.join(" • ") || "-"}
 
-<strong>${label}</strong>
+</td>
 
-<span>${dateText}</span>
+<td>
 
-</div>
+${priceGroup}
+
+</td>
+
+<td>
+
+${grade}
+
+</td>
+
+<td>
+
+${smartMoney}
+
+</td>
+
+<td>
+
+${indicators}
 
 </td>
 
