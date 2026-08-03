@@ -3285,10 +3285,38 @@ TRADINGVIEW CHART
     <div id="tv_chart"></div>
 
 </div>
+
+<div class="scanner-panel" style="margin-bottom:25px;">
+
+    <h3>Select Scanner</h3>
+
+    <div class="filter-group">
+
+        <label>Scanner Type</label>
+
+        <select id="scannerSelector">
+
+            <option value="breakout">
+                Breakout Scanner
+            </option>
+
+            <option value="pre">
+                Pre-Breakout Scanner
+            </option>
+
+            <option value="launchpad">
+                Launch Pad Scanner
+            </option>
+
+        </select>
+
+    </div>
+
+</div>
 <!-- =========================================
 🥇 BREAKOUT SCANNER
 ========================================= -->
-
+<div id="breakoutScanner">
 <div class="scanner-layout">
 
     <!-- =========================================
@@ -3493,11 +3521,11 @@ TRADINGVIEW CHART
     </div>
 
 </div>
-
+</div>
 <!-- =========================================
 📊 NASDAQ STOCK SCANNER pre breakout scanner
 ========================================= -->
-
+<div id="preBreakoutScanner" style="display:none;">
 <div class="scanner-layout">
 
     <!-- =========================================
@@ -3741,12 +3769,13 @@ TRADINGVIEW CHART
     </div>
 
 </div>
+</div>
 
 
 <!-- =========================================
 🚀 LAUNCH PAD SCANNER
 ========================================= -->
-
+<div id="launchPadScanner" style="display:none;">
 <div class="scanner-layout">
 
     <!-- =========================================
@@ -3903,7 +3932,7 @@ TRADINGVIEW CHART
     </div>
 
 </div>
-
+</div>
 
 <!-- =========================================
 ⭐ MY WATCHLIST
@@ -6055,6 +6084,38 @@ removeFromWatchlist(${stock.id});
         }).join("");
 
 }
+</script>
+
+<script>
+
+const selector = document.getElementById("scannerSelector");
+
+const breakout = document.getElementById("breakoutScanner");
+const pre = document.getElementById("preBreakoutScanner");
+const launch = document.getElementById("launchPadScanner");
+
+selector.addEventListener("change", function () {
+
+    breakout.style.display = "none";
+    pre.style.display = "none";
+    launch.style.display = "none";
+
+    if (this.value === "breakout") {
+
+        breakout.style.display = "block";
+
+    } else if (this.value === "pre") {
+
+        pre.style.display = "block";
+
+    } else {
+
+        launch.style.display = "block";
+
+    }
+
+});
+
 </script>
 <!-- COMPONENTS -->
 
