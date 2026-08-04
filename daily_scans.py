@@ -1,5 +1,6 @@
 import subprocess
 import time
+import sys
 
 SCANNERS = [
 
@@ -31,6 +32,10 @@ print("=" * 60)
 
 start = time.time()
 
+# =====================================
+# RUN ALL SCANNERS
+# =====================================
+
 for name, script in SCANNERS:
 
     print(f"\n▶ Running {name}...")
@@ -46,15 +51,51 @@ for name, script in SCANNERS:
 
     except subprocess.CalledProcessError:
 
-        print(f"❌ {name} FAILED")
+        print(f"\n❌ {name} FAILED")
+        print("Daily scans cancelled.")
+        sys.exit(1)
 
-        print("\nDaily scans stopped.")
+# =====================================
+# GIT ADD / COMMIT / PUSH
+# =====================================
 
-        exit()
+print("\n" + "=" * 60)
+print("Updating Git Repository")
+print("=" * 60)
+
+try:
+
+    subprocess.run(
+        ["git", "add", "."],
+        check=True
+    )
+
+    subprocess.run(
+        [
+            "git",
+            "commit",
+            "-m",
+            "Daily Scan"
+        ],
+        check=True
+    )
+
+    subprocess.run(
+        ["git", "push"],
+        check=True
+    )
+
+    print("✅ Git repository updated successfully.")
+
+except subprocess.CalledProcessError:
+
+    print("❌ Git update failed.")
+    sys.exit(1)
 
 finish = time.time()
 
 print("\n" + "=" * 60)
-print("✅ ALL SCANNERS COMPLETED SUCCESSFULLY")
+print("✅ EDGEBREAK DAILY UPDATE COMPLETE")
+print("=" * 60)
 print(f"Finished in {(finish-start)/60:.1f} minutes")
 print("=" * 60)
