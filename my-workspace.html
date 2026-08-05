@@ -2065,6 +2065,392 @@ BROKER COMING SOON
     user-select:none;
 
 }
+
+/* ======================================================
+   MY WATCHLIST
+====================================================== */
+
+#watchlistTable{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:24px;
+
+}
+
+/* ======================================================
+   HEADER
+====================================================== */
+
+#watchlistTable thead th{
+
+    padding:0 18px 16px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+    color:#64748b;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:.12em;
+
+    text-transform:uppercase;
+
+    text-align:left;
+
+}
+
+#watchlistTable thead th.center{
+
+    text-align:center;
+
+}
+
+#watchlistTable thead th:last-child{
+
+    text-align:center;
+
+}
+
+/* ======================================================
+   ROWS
+====================================================== */
+
+#watchlistTable tbody tr{
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+
+    transition:.18s ease;
+
+}
+
+#watchlistTable tbody tr:hover{
+
+    background:rgba(255,255,255,.02);
+
+}
+
+/* ======================================================
+   CELLS
+====================================================== */
+
+#watchlistTable tbody td{
+
+    padding:18px 18px 18px 0;
+
+    color:#e5e7eb;
+
+    vertical-align:middle;
+
+    font-size:15px;
+
+}
+
+#watchlistTable tbody td.center{
+
+    text-align:center;
+
+}
+
+/* ======================================================
+   TICKER
+====================================================== */
+
+.watchlist-symbol{
+
+    color:#22c55e;
+
+    font-size:20px;
+
+    font-weight:800;
+
+    text-decoration:none;
+
+    transition:.2s;
+
+}
+
+.watchlist-symbol:hover{
+
+    color:#4ade80;
+
+}
+
+/* ======================================================
+   ADDED
+====================================================== */
+
+.watchlist-added{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:3px;
+
+}
+
+.watchlist-added strong{
+
+    color:#ffffff;
+
+    font-size:17px;
+
+    font-weight:700;
+
+}
+
+.watchlist-added span{
+
+    color:#94a3b8;
+
+    font-size:13px;
+
+}
+
+/* ======================================================
+   SOURCE BADGES
+====================================================== */
+
+.source-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:8px 16px;
+
+    border-radius:999px;
+
+    font-size:13px;
+
+    font-weight:700;
+
+}
+
+.source-breakout{
+
+    background:rgba(245,158,11,.14);
+
+    color:#fbbf24;
+
+    border:1px solid rgba(245,158,11,.25);
+
+}
+
+.source-smart{
+
+    background:rgba(168,85,247,.12);
+
+    color:#c084fc;
+
+    border:1px solid rgba(168,85,247,.25);
+
+}
+
+.source-scanner{
+
+    background:rgba(59,130,246,.12);
+
+    color:#60a5fa;
+
+    border:1px solid rgba(59,130,246,.25);
+
+}
+
+.source-manual{
+
+    background:rgba(71,85,105,.25);
+
+    color:#cbd5e1;
+
+    border:1px solid rgba(71,85,105,.35);
+
+}
+
+/* ======================================================
+   OPEN BUTTON
+====================================================== */
+
+.watchlist-open{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    padding:11px 22px;
+
+    border-radius:12px;
+
+    background:transparent;
+
+    border:1px solid #22c55e;
+
+    color:#22c55e;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    transition:.18s;
+
+    cursor:pointer;
+
+}
+
+.watchlist-open:hover{
+
+    background:#22c55e;
+
+    color:#ffffff;
+
+}
+
+/* ======================================================
+   REMOVE BUTTON
+====================================================== */
+
+.watchlist-remove{
+
+    width:42px;
+
+    height:42px;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:#151f2f;
+
+    border:1px solid #273549;
+
+    color:#ef4444;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.18s;
+
+}
+
+.watchlist-remove:hover{
+
+    background:#ef4444;
+
+    color:#ffffff;
+
+    border-color:#ef4444;
+
+}
+
+/* ======================================================
+   EMPTY
+====================================================== */
+
+#watchlistTable td[colspan]{
+
+    padding:60px 20px;
+
+    text-align:center;
+
+    color:#64748b;
+
+    font-size:15px;
+
+}
+
+/* =========================================
+   WATCHLIST TITLE
+========================================= */
+
+.watchlist-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+
+/* =========================================
+   WATCHLIST TITLE ICON
+========================================= */
+
+.watchlist-title svg{
+
+    width:28px;
+
+    height:28px;
+
+    flex-shrink:0;
+
+    color:#22c55e;
+
+    stroke:#22c55e;
+
+    stroke-width:2;
+
+}
+
+/* =========================================
+   WATCHLIST COUNT
+========================================= */
+
+.watchlist-count{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:8px 16px;
+
+    border-radius:999px;
+
+    background:rgba(34,197,94,.08);
+
+    border:1px solid rgba(34,197,94,.18);
+
+    color:#22c55e;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    white-space:nowrap;
+
+}
+
+@media (max-width:768px){
+
+    #watchlistTable{
+
+        width:100%;
+        min-width:100%;
+        table-layout:auto;
+
+    }
+
+}
 </style>
 
 <link rel="stylesheet" href="/css/navbar.css">
@@ -2492,35 +2878,92 @@ WORKSPACE NAVIGATION
 
 </div>
 
-<!-- ===================================
-MY WATCHLIST
-=================================== -->
+<!-- =========================================
+⭐ MY WATCHLIST
+========================================= -->
 
-<div class="elite-panel">
+<div class="scanner-panel">
 
-    <div class="workspace-card-header">
+    <div class="scanner-header">
 
         <div>
 
             <h2>My Watchlist</h2>
 
             <p>
-                Stocks saved from the NASDAQ Scanner for future research and monitoring.
+                Your saved stocks for research and tracking.
             </p>
 
         </div>
 
-        <div class="elite-badge">
-            Personal
+        <div class="scanner-stats">
+
+            <span
+                id="watchlistCount"
+                class="results-count"
+            >
+                0 Stocks Saved
+            </span>
+
         </div>
 
     </div>
 
-    <div
-        id="userWatchlist"
-        class="trade-grid"
-    >
-        No stocks saved yet.
+    <div class="scanner-table-wrap">
+
+        <table
+            id="watchlistTable"
+            class="scanner-table"
+        >
+
+            <thead>
+
+                <tr>
+
+                    <th>Ticker</th>
+
+                    <th>Found By</th>
+
+                    <th>Price Group</th>
+
+                    <th>Grade</th>
+
+                    <th>Smart Money</th>
+
+                    <th>Indicators</th>
+
+                    <th class="center">
+
+                        Open Chart
+
+                    </th>
+
+                    <th class="center">
+
+                        Remove
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="watchlistResults">
+
+                <tr class="watchlist-empty">
+
+                    <td colspan="8">
+
+                        No watchlist stocks added yet.
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
     </div>
 
 </div>
@@ -3738,19 +4181,314 @@ async function loadAccountDetails() {
 </script>
 <script>
 // =========================================
-// LOAD WATCHLIST + broker StatusON PAGE LOAD
+// WATCHLIST (SUPABASE)
 // =========================================
+
+window.watchlist = [];
 
 document.addEventListener(
     "DOMContentLoaded",
     async () => {
 
-        await loadUserWatchlist();
-        await loadBrokerStatus();
-        await loadAccountDetails();
+        await loadWatchlist();
 
     }
 );
+
+async function loadWatchlist(){
+
+    const {
+        data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    if(!user) return;
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("watchlist")
+        .select("*")
+        .eq(
+            "user_id",
+            user.id
+        )
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    window.watchlist = data || [];
+
+    renderWatchlist();
+
+}
+
+async function addToWatchlist(symbol){
+
+    const {
+        data:{ user }
+    } = await supabaseClient.auth.getUser();
+
+    if(!user) return;
+
+    const exists =
+        window.watchlist.find(
+            x => x.symbol === symbol
+        );
+
+    if(exists) return;
+
+    const { error } =
+        await supabaseClient
+            .from("watchlist")
+            .insert([
+                {
+                    user_id:user.id,
+                    symbol:symbol
+                }
+            ]);
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    await loadWatchlist();
+
+}
+
+async function removeFromWatchlist(id){
+
+    const { error } =
+        await supabaseClient
+            .from("watchlist")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+    if(error){
+
+        console.error(error);
+        return;
+
+    }
+
+    await loadWatchlist();
+
+}
+
+function renderWatchlist(){
+
+    const tbody =
+        document.getElementById("watchlistResults");
+
+    const count =
+        document.getElementById("watchlistCount");
+
+    if(!tbody) return;
+
+    if(count){
+
+        count.textContent =
+            `${window.watchlist.length} Stock${window.watchlist.length === 1 ? "" : "s"} Saved`;
+
+    }
+
+    if(window.watchlist.length === 0){
+
+        tbody.innerHTML = `
+            <tr class="watchlist-empty">
+                <td colspan="8">
+                    No watchlist stocks added yet.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+    tbody.innerHTML =
+        window.watchlist.map(stock => {
+
+            const breakout =
+                window.breakoutData.find(
+                    s => s.symbol === stock.symbol
+                );
+
+            const pre =
+                window.scannerData.find(
+                    s => s.symbol === stock.symbol
+                );
+
+            const launch =
+                window.launchPadData.find(
+                    s => s.symbol === stock.symbol
+                );
+
+            const smart =
+                window.smartMoneyLookup[
+                    stock.symbol
+                ];
+
+            const foundBy = [];
+
+            if(breakout)
+                foundBy.push("Breakout");
+
+            if(pre)
+                foundBy.push("Pre-Breakout");
+
+            if(launch)
+                foundBy.push("Launch Pad");
+
+            let priceGroup = "-";
+
+            if(breakout)
+                priceGroup = breakout.price_group;
+
+            else if(pre)
+                priceGroup = pre.price_group;
+
+            else if(launch)
+                priceGroup = launch.price_group;
+
+            let grade = "-";
+
+            if(breakout)
+                grade = breakout.rank;
+
+            const smartMoney =
+                smart
+                    ? smart.count
+                    : 0;
+
+            let indicators = 0;
+
+            if(breakout) indicators++;
+            if(pre) indicators++;
+            if(launch) indicators++;
+            if(smart) indicators++;
+
+            const rowClass =
+                indicators >= 3
+                    ? 'class="watchlist-highlight"'
+                    : "";
+
+            return `
+
+<tr ${rowClass}>
+
+<td>
+
+<a
+href="#"
+class="watchlist-symbol"
+onclick="
+event.preventDefault();
+
+loadChart('${stock.symbol}');
+
+document.getElementById('tv_chart').scrollIntoView({
+    behavior:'smooth',
+    block:'start'
+});
+">
+
+${stock.symbol}
+
+</a>
+
+</td>
+
+<td class="watchlist-found">
+
+${foundBy.join(" • ") || "-"}
+
+</td>
+
+<td>
+
+${priceGroup}
+
+</td>
+
+<td>
+
+${grade}
+
+</td>
+
+<td>
+
+${smartMoney}
+
+</td>
+
+<td>
+
+${indicators}
+
+</td>
+
+<td class="center">
+
+<button
+type="button"
+class="watchlist-open"
+onclick="
+loadChart('${stock.symbol}');
+
+document.getElementById('tv_chart').scrollIntoView({
+    behavior:'smooth',
+    block:'start'
+});
+"
+>
+
+Open Chart
+
+</button>
+
+</td>
+
+<td class="center">
+
+<button
+type="button"
+class="watchlist-remove"
+onclick="
+removeFromWatchlist(${stock.id});
+"
+>
+
+×
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+        }).join("");
+
+}
 
 
 </script>
