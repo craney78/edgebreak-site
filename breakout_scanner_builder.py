@@ -120,7 +120,7 @@ def process_data(data):
             # =========================
             i = len(values) - 1
 
-            window = list(reversed(values[i-100:i]))
+            window = list(reversed(values[-100:]))
 
             # 🔥 ADD THIS RIGHT HERE
             if len(window) < 100:

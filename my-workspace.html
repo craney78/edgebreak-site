@@ -2013,7 +2013,97 @@ SMALL ACTION BUTTONS
 
 }
 
+/* ===================================
+COMING SOON
+=================================== */
 
+#comingSoonOverlay{
+
+    position:fixed;
+    inset:0;
+
+    background:rgba(2,6,23,.92);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    z-index:99999;
+
+}
+
+.comingSoonModal{
+
+    width:min(90%,500px);
+
+    background:#0f172a;
+
+    border:1px solid #1e293b;
+    border-radius:20px;
+
+    padding:50px 40px;
+
+    text-align:center;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.45);
+
+}
+
+.comingIcon{
+
+    font-size:56px;
+    margin-bottom:20px;
+
+}
+
+.comingSoonModal h2{
+
+    color:#ffffff;
+    margin-bottom:8px;
+
+}
+
+.comingSoonModal h3{
+
+    color:#38bdf8;
+    margin-bottom:20px;
+
+}
+
+.comingSoonModal p{
+
+    color:#cbd5e1;
+    line-height:1.7;
+    margin-bottom:16px;
+
+}
+
+#returnBtn{
+
+    margin-top:20px;
+
+    padding:14px 28px;
+
+    background:#2563eb;
+    color:#fff;
+
+    border:none;
+    border-radius:10px;
+
+    font-size:16px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+#returnBtn:hover{
+
+    background:#1d4ed8;
+
+}
 </style>
 
 <link rel="stylesheet" href="/css/navbar.css">
@@ -2628,84 +2718,112 @@ MY WATCHLIST
 </div>
 
 <!-- ===================================
-BROKER CONNECT MODAL
+COMING SOON WRAPPER
 =================================== -->
 
-<div
-    id="brokerModal"
-    class="trade-modal"
->
+<div class="coming-soon-wrapper">
 
-    <div class="trade-window">
+    <div class="coming-soon-overlay">
 
-        <button
-            class="trade-close"
-            onclick="closeBrokerModal()"
-        >
-            ✕
-        </button>
+        <div class="coming-soon-card">
 
-        <span class="trade-tag">
-            Alpaca Broker
-        </span>
-
-        <div class="trade-header">
+            <div class="coming-soon-badge">
+                COMING SOON
+            </div>
 
             <h2>
-                Connect Your Alpaca Account
+                Broker Integration
             </h2>
 
             <p>
-
-                EdgeBreak connects securely to your Alpaca brokerage account using OAuth.
-                If you don't already have an Alpaca account, you can create a free paper trading account in just a few minutes.
-
-                Your login credentials always remain with Alpaca.
-                EdgeBreak never stores your broker username or password.
-
+                Secure Alpaca account integration is currently in development and will be available in a future EdgeBreak update.
             </p>
 
         </div>
 
-        <div class="trade-summary">
+    </div>
 
-            <h3>
-                What You'll Get
-            </h3>
+    <!-- ===================================
+    BROKER CONNECT MODAL
+    ==================================== -->
 
-            <ul>
+    <div
+        id="brokerModal"
+        class="trade-modal"
+    >
 
-                <li>✓ Free Alpaca paper trading account</li>
-
-                <li>✓ Secure OAuth authentication</li>
-
-                <li>✓ Live portfolio synchronisation</li>
-
-                <li>✓ Place Market &amp; Limit Orders</li>
-
-                <li>✓ View positions and buying power</li>
-
-                <li>✓ Automatic trade journal integration</li>
-
-            </ul>
-
-        </div>
-
-        <div class="trade-buttons">
+        <div class="trade-window">
 
             <button
-                class="btn"
-                onclick="window.open('https://alpaca.markets/', '_blank')"
+                class="trade-close"
+                onclick="closeBrokerModal()"
             >
-                Create Free Account
+                ✕
             </button>
 
-            <button
-                class="btn-primary"
-                onclick="connectBroker()"
-            >
-                Connect Alpaca
-            </button>
+            <span class="trade-tag">
+                Alpaca Broker
+            </span>
+
+            <div class="trade-header">
+
+                <h2>
+                    Connect Your Alpaca Account
+                </h2>
+
+                <p>
+
+                    EdgeBreak connects securely to your Alpaca brokerage account using OAuth.
+                    If you don't already have an Alpaca account, you can create a free paper trading account in just a few minutes.
+
+                    Your login credentials always remain with Alpaca.
+                    EdgeBreak never stores your broker username or password.
+
+                </p>
+
+            </div>
+
+            <div class="trade-summary">
+
+                <h3>
+                    What You'll Get
+                </h3>
+
+                <ul>
+
+                    <li>✓ Free Alpaca paper trading account</li>
+
+                    <li>✓ Secure OAuth authentication</li>
+
+                    <li>✓ Live portfolio synchronisation</li>
+
+                    <li>✓ Place Market &amp; Limit Orders</li>
+
+                    <li>✓ View positions and buying power</li>
+
+                    <li>✓ Automatic trade journal integration</li>
+
+                </ul>
+
+            </div>
+
+            <div class="trade-buttons">
+
+                <button
+                    class="btn"
+                    onclick="window.open('https://alpaca.markets/', '_blank')"
+                >
+                    Create Free Account
+                </button>
+
+                <button
+                    class="btn-primary"
+                    onclick="connectBroker()"
+                >
+                    Connect Alpaca
+                </button>
+
+            </div>
 
         </div>
 
@@ -3831,7 +3949,48 @@ TRADE MODAL
     </div>
 
 </div>
+<div id="comingSoonOverlay">
 
+    <div class="comingSoonModal">
+
+        <div class="comingIcon">
+            🚧
+        </div>
+
+        <h2>Coming Soon</h2>
+
+        <h3>Broker Integration</h3>
+
+        <p>
+            We're currently building secure broker integration
+            for EdgeBreak.
+        </p>
+
+        <p>
+            This feature will be available in a future update.
+        </p>
+
+        <button id="returnBtn">
+            ← Return to My Workspace
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+document.body.style.overflow = "hidden";
+
+document.getElementById("returnBtn").addEventListener("click", function () {
+
+    document.getElementById("comingSoonOverlay").style.display = "none";
+
+    document.body.style.overflow = "";
+
+});
+
+</script>
 <!-- COMPONENTS -->
 
 <script src="/js/components.js"></script>
