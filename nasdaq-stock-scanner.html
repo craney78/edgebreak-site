@@ -3635,6 +3635,67 @@ WATCHLIST PANEL
     padding:22px 24px;
 
 }
+
+/* ===================================
+MATCH SMART MONEY HERO
+=================================== */
+
+.elite-banner{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:80px;
+
+}
+
+.elite-banner > div{
+
+    flex:1;
+
+}
+
+.elite-banner h1{
+
+    font-size:36px !important;
+    font-weight:700 !important;
+
+    margin:0 0 10px;
+    line-height:1.2;
+
+    color:#f1f5f9;
+    text-shadow:0 0 20px rgba(255,255,255,.08);
+
+}
+
+.elite-banner > svg{
+
+    flex-shrink:0;
+
+    width:260px;
+    height:260px;
+
+    color:#ffffff;
+
+    opacity:.10;
+
+}
+
+@media (max-width:768px){
+
+    .elite-banner{
+
+        display:block;
+
+    }
+
+    .elite-banner > svg{
+
+        display:none;
+
+    }
+
+}
 </style>  
 
 
@@ -3728,9 +3789,37 @@ WATCHLIST PANEL
 
     </div>
 
-    <div class="elite-badge">
-        Updated Daily
-    </div>
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+
+        <!-- Resistance -->
+
+        <line
+            x1="3"
+            y1="9"
+            x2="17"
+            y2="9"
+        />
+
+        <!-- Breakout -->
+
+        <polyline
+            points="3,18 8,13 13,16 21,6"
+        />
+
+        <!-- Arrow -->
+
+        <polyline
+            points="17,6 21,6 21,10"
+        />
+
+    </svg>
 
 </div>
 
