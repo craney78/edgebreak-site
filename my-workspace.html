@@ -4033,15 +4033,49 @@ function openOrders(){
 </script>
 
 <script>
+
 // =========================================
 // WATCHLIST (SUPABASE)
 // =========================================
 
 window.watchlist = [];
 
+window.breakoutData = [];
+window.scannerData = [];
+window.launchPadData = [];
+window.smartMoneyLookup = {};
+
 document.addEventListener(
     "DOMContentLoaded",
     async () => {
+
+        // Breakout Scanner
+        window.breakoutData =
+            await fetch("breakout_scanner.json?v=" + Date.now())
+                .then(r => r.json());
+
+        // Pre-Breakout Scanner
+        window.scannerData =
+            await fetch("scanner_database.json?v=" + Date.now())
+                .then(r => r.json());
+
+        // Launch Pad Scanner
+        window.launchPadData =
+            await fetch("launchpad_database.json?v=" + Date.now())
+                .then(r => r.json());
+
+        // Smart Money
+        const smartMoney =
+            await fetch("smart_money_filter.json?v=" + Date.now())
+                .then(r => r.json());
+
+        window.smartMoneyLookup = {};
+
+        smartMoney.forEach(stock => {
+
+            window.smartMoneyLookup[stock.symbol] = stock;
+
+        });
 
         await loadWatchlist();
 
@@ -4507,7 +4541,7 @@ TRADE MODAL
 </div>
 
 
-</script>
+
 <!-- COMPONENTS -->
 
 <script src="/js/components.js"></script>
