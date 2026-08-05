@@ -2493,6 +2493,109 @@ MOBILE WATCHLIST
     }
 
 }
+
+/* =========================================
+WATCHLIST PANEL
+========================================= */
+
+.scanner-panel{
+
+    background:#111827;
+
+    border:1px solid #1f2937;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    margin:40px 0;
+
+}
+
+.scanner-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    padding:30px;
+
+    border-bottom:1px solid #1f2937;
+
+}
+
+.scanner-header h2{
+
+    margin:0;
+
+    color:#fff;
+
+    font-size:36px;
+
+}
+
+.scanner-header p{
+
+    margin-top:10px;
+
+    color:#94a3b8;
+
+}
+
+.results-count{
+
+    padding:10px 18px;
+
+    border-radius:999px;
+
+    border:1px solid #22c55e;
+
+    color:#22c55e;
+
+    font-weight:600;
+
+}
+
+.scanner-table-wrap{
+
+    overflow-x:auto;
+
+}
+
+.scanner-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.scanner-table thead{
+
+    border-bottom:1px solid #1f2937;
+
+}
+
+.scanner-table tbody tr{
+
+    border-bottom:1px solid #1f2937;
+
+}
+
+.scanner-table tbody tr:last-child{
+
+    border-bottom:none;
+
+}
+
+.scanner-table th,
+.scanner-table td{
+
+    padding:22px 24px;
+
+}
 </style>
 
 <link rel="stylesheet" href="/css/navbar.css">
@@ -2951,60 +3054,62 @@ WORKSPACE NAVIGATION
 
     </div>
 
-    <div class="scanner-table-wrap">
+    <!-- TABLE PANEL -->
 
-        <table
-            id="watchlistTable"
-            class="scanner-table"
-        >
+    <div class="scanner-results-panel">
 
-            <thead>
+        <div class="scanner-table-wrap">
 
-                <tr>
+            <table
+                id="watchlistTable"
+                class="scanner-table"
+            >
 
-                    <th>Ticker</th>
+                <thead>
 
-                    <th>Found By</th>
+                    <tr>
 
-                    <th>Price Group</th>
+                        <th>Ticker</th>
 
-                    <th>Grade</th>
+                        <th>Found By</th>
 
-                    <th>Smart Money</th>
+                        <th>Price Group</th>
 
-                    <th>Indicators</th>
+                        <th>Grade</th>
 
-                    <th class="center">
+                        <th>Smart Money</th>
 
-                        Open Chart
+                        <th>Indicators</th>
 
-                    </th>
+                        <th class="center">
+                            Open Chart
+                        </th>
 
-                    <th class="center">
+                        <th class="center">
+                            Remove
+                        </th>
 
-                        Remove
+                    </tr>
 
-                    </th>
+                </thead>
 
-                </tr>
+                <tbody id="watchlistResults">
 
-            </thead>
+                    <tr class="watchlist-empty">
 
-            <tbody id="watchlistResults">
+                        <td colspan="8">
 
-                <tr class="watchlist-empty">
+                            No watchlist stocks added yet.
 
-                    <td colspan="8">
+                        </td>
 
-                        No watchlist stocks added yet.
+                    </tr>
 
-                    </td>
+                </tbody>
 
-                </tr>
+            </table>
 
-            </tbody>
-
-        </table>
+        </div>
 
     </div>
 
