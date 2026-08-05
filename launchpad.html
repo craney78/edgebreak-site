@@ -1730,6 +1730,71 @@ MATCH WATCHLIST HERO
     text-shadow:0 0 20px rgba(34,197,94,.15);
 
 }
+
+/* ===================================
+MATCH WATCHLIST HERO
+=================================== */
+
+.elite-banner h1{
+
+    font-size:36px !important;
+    font-weight:700 !important;
+
+    margin:0 0 10px;
+    line-height:1.2;
+
+    color:#f1f5f9;
+    text-shadow:0 0 20px rgba(255,255,255,.08);
+
+}
+
+.hero-content{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:80px;
+
+}
+
+.hero-text{
+
+    flex:1;
+
+}
+
+.hero-icon{
+
+    flex-shrink:0;
+
+    color:#ffffff;
+
+    opacity:.90;
+
+}
+
+.hero-icon svg{
+
+    width:260px;
+    height:260px;
+
+}
+
+@media (max-width:768px){
+
+    .hero-content{
+
+        display:block;
+
+    }
+
+    .hero-icon{
+
+        display:none;
+
+    }
+
+}
 </style>  
 
 </head>
@@ -1811,21 +1876,50 @@ MATCH WATCHLIST HERO
 
 <!-- HERO -->
 
+<!-- HERO -->
+
 <div class="elite-banner">
 
     <div class="hero-content">
 
-        <h1>
-            Launch Pad
-        </h1>
+        <div class="hero-text">
 
-        <p>
-            The EdgeBreak Launch Pad Scanner searches more than 3,000 NASDAQ-listed stocks each trading day, identifying companies trading within established ranges and forming strong technical bases that may be preparing for a potential breakout.
-        </p>
+            <h1>
+                Launch Pad
+            </h1>
 
-        <a href="nasdaq-stock-scanner.html" class="btn">
-            Explore NASDAQ Scanner
-        </a>
+            <p>
+                The EdgeBreak Launch Pad Scanner searches more than 3,000 NASDAQ-listed stocks each trading day, identifying companies trading within established ranges and forming strong technical bases that may be preparing for a potential breakout.
+            </p>
+
+            <a href="nasdaq-stock-scanner.html" class="btn">
+                Explore NASDAQ Scanner
+            </a>
+
+        </div>
+
+        <div class="hero-icon">
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+
+                <path d="M12 3C16 4 19 8 20 12C18 13 15 16 12 20C9 16 6 13 4 12C5 8 8 4 12 3Z"></path>
+
+                <circle cx="12" cy="10" r="1.5"></circle>
+
+                <path d="M9 18L7 21"></path>
+
+                <path d="M15 18L17 21"></path>
+
+            </svg>
+
+        </div>
 
     </div>
 
