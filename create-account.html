@@ -695,11 +695,7 @@ async function activateAccount(session){
     
     showSuccess();
 
-    // Google Ads Conversion
-    gtag('event', 'conversion', {
-        'send_to': 'AW-18373865179/UGV0CKqF_9wcENvdq71E'
-    });
-
+    
     // No longer needed after a successful activation
     sessionStorage.removeItem("checkoutEmail");
 
@@ -729,6 +725,10 @@ async function initialisePage(){
     if(params.get("paid")==="true"){
 
         showSignup();
+
+        gtag('event', 'conversion', {
+            'send_to': 'AW-18373865179/UGV0CKqF_9wcENvdq71E'
+        });
 
         const checkoutEmail =
             sessionStorage.getItem("checkoutEmail");
