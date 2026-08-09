@@ -695,6 +695,11 @@ async function activateAccount(session){
     
     showSuccess();
 
+    // Google Ads Conversion
+    gtag('event', 'conversion', {
+        'send_to': 'AW-18373865179/UGV0CKqF_9wcENvdq71E'
+    });
+
     // No longer needed after a successful activation
     sessionStorage.removeItem("checkoutEmail");
 
@@ -913,10 +918,7 @@ async function handleSignup() {
 
     }
 
-    // Google Ads Conversion
-    gtag('event', 'conversion', {
-        'send_to': 'AW-18373865179/UGV0CKqF_9wcENvdq71E'
-    });
+    
 
     // =========================
     // EMAIL VERIFICATION
@@ -964,3 +966,5 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 </body>
 </html>
+
+
