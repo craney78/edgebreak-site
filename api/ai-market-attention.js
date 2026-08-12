@@ -51,10 +51,9 @@ export default async function handler(req, res) {
             .toUpperCase();
 
 
-    /*
-    Remove URLs or citations accidentally
-    passed from another AI response.
-    */
+    /* =========================================
+       CLEAN COMPANY NAME
+    ========================================= */
 
     const cleanCompanyName =
         String(companyName || "")
@@ -68,7 +67,10 @@ export default async function handler(req, res) {
     try {
 
         /* =====================================
-           MARKET ATTENTION RESEARCH
+           MARKET ATTENTION + NEWS RESEARCH
+
+           ONE OPENAI REQUEST
+           ONE WEB SEARCH ENABLED RESPONSE
         ===================================== */
 
         const response = await fetch(
@@ -102,8 +104,9 @@ export default async function handler(req, res) {
                     input: `
 You are EdgeBreak AI Research.
 
-Research CURRENT MARKET ATTENTION for the
-NASDAQ-listed company represented by ticker:
+Research CURRENT MARKET ATTENTION AND RECENT
+COMPANY NEWS for the NASDAQ-listed company
+represented by ticker:
 
 ${cleanSymbol}
 
@@ -111,33 +114,45 @@ Known company name:
 
 ${cleanCompanyName || "Not supplied"}
 
-Your job is to determine whether this company
-is currently receiving unusual or notable
-attention across publicly accessible sources.
+FIRST:
 
-Research recent information, prioritising:
+Verify that the current company being researched
+is associated with ticker ${cleanSymbol}.
 
-1. Current financial news
-2. Recent company announcements
-3. Investor relations releases
-4. SEC filings
-5. Publicly accessible Reddit discussions
-6. Publicly accessible social media references
-7. Other credible financial media
+Then perform ONE combined research task covering:
 
-Focus especially on activity from:
+1. Current Market Attention
+2. Recent Company News
+
+Use current web search.
+
+Prioritise authoritative and credible sources:
+
+1. Official company website
+2. Official investor relations website
+3. SEC filings
+4. NASDAQ or exchange information
+5. Established financial news organisations
+6. Publicly accessible Reddit discussions
+7. Publicly accessible social media references
+8. Other credible financial media
+
+Focus primarily on information from:
 
 - the past 24 hours
 - the past several days
 - the past 7 days
 
-Compare recent activity with the company's
-normal level of public attention where this
-can reasonably be established.
+Older information may be used only when necessary
+to explain a current development.
+
 
 =========================================
-ATTENTION LEVEL
+PART 1 — MARKET ATTENTION
 =========================================
+
+
+ATTENTION LEVEL
 
 Classify current market attention as exactly
 one of:
@@ -152,12 +167,12 @@ NOT VERIFIED
 Use HIGH only where there is strong evidence
 of unusually intense current attention.
 
-Use ELEVATED where attention is clearly above
-the company's normal level.
+Use ELEVATED where attention appears clearly
+above the company's normal level.
 
 Use MODERATE where there is meaningful current
-discussion but no strong evidence of unusual
-attention.
+discussion but no strong evidence of unusually
+high attention.
 
 Use LOW or LIMITED where current public
 attention appears small.
@@ -170,8 +185,7 @@ evidence to classify attention reliably.
 WHERE
 =========================================
 
-Identify where the current attention is
-appearing.
+Identify where current attention is appearing.
 
 Examples:
 
@@ -198,8 +212,6 @@ Look for evidence that mentions or discussion
 have increased or decreased compared with
 recent normal levels.
 
-IMPORTANT:
-
 Return an exact percentage such as:
 
 +184% vs 7-day average
@@ -207,11 +219,11 @@ Return an exact percentage such as:
 ONLY if a reliable source provides enough
 information to verify that percentage.
 
-NEVER calculate or invent a percentage from
+Never calculate or invent a percentage from
 vague search results.
 
 If an exact comparison cannot be verified,
-return:
+return exactly:
 
 Not verified
 
@@ -241,14 +253,13 @@ as:
 
 2.3x normal
 
-ONLY if a reliable current source provides
-sufficient trading-volume information to
-verify it.
+ONLY if reliable current information provides
+sufficient trading-volume data to verify it.
 
 Do not estimate trading volume from news,
 social discussion or price movement.
 
-If it cannot be verified, return:
+If it cannot be verified, return exactly:
 
 Not verified
 
@@ -258,7 +269,7 @@ ATTENTION BEGAN
 =========================================
 
 Identify approximately when the current
-increase in attention began ONLY when the
+increase in attention began only when the
 timing can reasonably be established.
 
 Examples:
@@ -270,7 +281,7 @@ Following earnings on August 11, 2026
 
 Do not invent an exact starting time.
 
-If it cannot be established, return:
+If it cannot be established, return exactly:
 
 Not verified
 
@@ -299,7 +310,7 @@ Do not pad the list with generic topics.
 
 
 =========================================
-SUMMARY
+MARKET ATTENTION SUMMARY
 =========================================
 
 Provide a short factual explanation of why
@@ -313,6 +324,137 @@ Explain the current catalyst or discussion.
 Do not provide an opinion on whether the
 attention is positive or negative for the
 stock.
+
+
+=========================================
+PART 2 — RECENT COMPANY NEWS
+=========================================
+
+
+NEWS LEVEL
+
+Classify the amount of meaningful recent
+company news as exactly one of:
+
+HIGH
+ELEVATED
+NORMAL
+LIMITED
+NOT VERIFIED
+
+HIGH means multiple significant and very
+recent company developments are receiving
+substantial coverage.
+
+ELEVATED means there is clearly more meaningful
+company-specific news than usual.
+
+NORMAL means there is current company news
+but no clear evidence of unusually high
+activity.
+
+LIMITED means little meaningful recent
+company-specific news was identified.
+
+NOT VERIFIED means recent news activity
+cannot be reliably established.
+
+
+=========================================
+RECENT DEVELOPMENTS
+=========================================
+
+Identify up to 4 meaningful recent company
+developments.
+
+Prioritise material developments such as:
+
+- earnings results
+- revenue or guidance updates
+- major contracts
+- acquisitions
+- regulatory developments
+- FDA decisions
+- product announcements
+- major partnerships
+- management changes
+- material SEC filings
+- financing activity
+- significant operational developments
+
+Do not include generic stock-price articles
+unless they contain a meaningful company
+development.
+
+Do not repeat substantially identical news
+stories from multiple publications.
+
+For each development return:
+
+DATE
+
+Use a concise date where reliably established.
+
+Example:
+
+August 11, 2026
+
+If the date cannot be reliably verified:
+
+Not verified
+
+
+CATEGORY
+
+Use a concise category such as:
+
+Earnings
+Guidance
+Contract
+Acquisition
+Regulatory
+Product
+Partnership
+Management
+SEC Filing
+Financing
+Operations
+Other
+
+
+HEADLINE
+
+Write a concise factual headline describing
+the development.
+
+Do not copy a publisher's headline verbatim.
+Summarise it in your own words.
+
+
+SUMMARY
+
+Provide a concise factual explanation of the
+development.
+
+Maximum 2 sentences.
+
+Do not provide investment interpretation.
+
+
+=========================================
+RECENT NEWS SUMMARY
+=========================================
+
+Provide a concise factual overview of the
+most important recent company developments.
+
+Maximum 3 sentences.
+
+Do not describe developments as good or bad
+for investors.
+
+Do not predict their effect on the share
+price.
 
 
 =========================================
@@ -344,6 +486,8 @@ Do not invent percentages.
 
 Do not invent volume figures.
 
+Do not invent news events.
+
 Do not include URLs inside returned fields.
 
 Do not include citations inside returned
@@ -361,6 +505,10 @@ return exactly:
 Not verified
 `,
 
+                    /* =================================
+                       STRUCTURED OUTPUT
+                    ================================= */
+
                     text: {
 
                         format: {
@@ -368,7 +516,7 @@ Not verified
                             type: "json_schema",
 
                             name:
-                                "edgebreak_market_attention",
+                                "edgebreak_market_attention_news",
 
                             strict: true,
 
@@ -378,71 +526,185 @@ Not verified
 
                                 properties: {
 
-                                    attentionLevel: {
-                                        type: "string",
-                                        enum: [
-                                            "HIGH",
-                                            "ELEVATED",
-                                            "MODERATE",
-                                            "LOW",
-                                            "LIMITED",
-                                            "NOT VERIFIED"
-                                        ]
-                                    },
+                                    /* =================
+                                       MARKET ATTENTION
+                                    ================= */
 
-                                    where: {
-                                        type: "string"
-                                    },
+                                    marketAttention: {
 
-                                    discussionChange: {
-                                        type: "string"
-                                    },
+                                        type: "object",
 
-                                    newsActivity: {
-                                        type: "string",
-                                        enum: [
-                                            "Elevated",
-                                            "Normal",
-                                            "Limited",
-                                            "Not verified"
-                                        ]
-                                    },
+                                        properties: {
 
-                                    relativeVolume: {
-                                        type: "string"
-                                    },
+                                            attentionLevel: {
 
-                                    attentionBegan: {
-                                        type: "string"
-                                    },
+                                                type: "string",
 
-                                    mainTopics: {
+                                                enum: [
+                                                    "HIGH",
+                                                    "ELEVATED",
+                                                    "MODERATE",
+                                                    "LOW",
+                                                    "LIMITED",
+                                                    "NOT VERIFIED"
+                                                ]
 
-                                        type: "array",
+                                            },
 
-                                        items: {
-                                            type: "string"
+                                            where: {
+                                                type: "string"
+                                            },
+
+                                            discussionChange: {
+                                                type: "string"
+                                            },
+
+                                            newsActivity: {
+
+                                                type: "string",
+
+                                                enum: [
+                                                    "Elevated",
+                                                    "Normal",
+                                                    "Limited",
+                                                    "Not verified"
+                                                ]
+
+                                            },
+
+                                            relativeVolume: {
+                                                type: "string"
+                                            },
+
+                                            attentionBegan: {
+                                                type: "string"
+                                            },
+
+                                            mainTopics: {
+
+                                                type: "array",
+
+                                                items: {
+                                                    type: "string"
+                                                },
+
+                                                maxItems: 4
+
+                                            },
+
+                                            summary: {
+                                                type: "string"
+                                            }
+
                                         },
 
-                                        maxItems: 4
+                                        required: [
+                                            "attentionLevel",
+                                            "where",
+                                            "discussionChange",
+                                            "newsActivity",
+                                            "relativeVolume",
+                                            "attentionBegan",
+                                            "mainTopics",
+                                            "summary"
+                                        ],
+
+                                        additionalProperties:
+                                            false
 
                                     },
 
-                                    summary: {
-                                        type: "string"
+
+                                    /* =================
+                                       RECENT NEWS
+                                    ================= */
+
+                                    recentNews: {
+
+                                        type: "object",
+
+                                        properties: {
+
+                                            newsLevel: {
+
+                                                type: "string",
+
+                                                enum: [
+                                                    "HIGH",
+                                                    "ELEVATED",
+                                                    "NORMAL",
+                                                    "LIMITED",
+                                                    "NOT VERIFIED"
+                                                ]
+
+                                            },
+
+                                            summary: {
+                                                type: "string"
+                                            },
+
+                                            items: {
+
+                                                type: "array",
+
+                                                maxItems: 4,
+
+                                                items: {
+
+                                                    type: "object",
+
+                                                    properties: {
+
+                                                        date: {
+                                                            type: "string"
+                                                        },
+
+                                                        category: {
+                                                            type: "string"
+                                                        },
+
+                                                        headline: {
+                                                            type: "string"
+                                                        },
+
+                                                        summary: {
+                                                            type: "string"
+                                                        }
+
+                                                    },
+
+                                                    required: [
+                                                        "date",
+                                                        "category",
+                                                        "headline",
+                                                        "summary"
+                                                    ],
+
+                                                    additionalProperties:
+                                                        false
+
+                                                }
+
+                                            }
+
+                                        },
+
+                                        required: [
+                                            "newsLevel",
+                                            "summary",
+                                            "items"
+                                        ],
+
+                                        additionalProperties:
+                                            false
+
                                     }
 
                                 },
 
                                 required: [
-                                    "attentionLevel",
-                                    "where",
-                                    "discussionChange",
-                                    "newsActivity",
-                                    "relativeVolume",
-                                    "attentionBegan",
-                                    "mainTopics",
-                                    "summary"
+                                    "marketAttention",
+                                    "recentNews"
                                 ],
 
                                 additionalProperties:
@@ -471,9 +733,10 @@ Not verified
         if (!response.ok) {
 
             console.error(
-                "Market Attention API Error:",
+                "Market Attention + News API Error:",
                 JSON.stringify(data)
             );
+
 
             return res
                 .status(response.status)
@@ -481,7 +744,7 @@ Not verified
 
                     error:
                         data?.error?.message ||
-                        "Market attention request failed"
+                        "Market research request failed"
 
                 });
 
@@ -501,7 +764,9 @@ Not verified
 
                 /*
                 Ignore web-search objects.
-                Only accept final assistant message.
+
+                Only accept the final assistant
+                message containing structured output.
                 */
 
                 if (item.type !== "message") {
@@ -536,13 +801,16 @@ Not verified
         if (!outputText) {
 
             console.error(
-                "No Market Attention output:",
+                "No Market Attention + News output:",
                 JSON.stringify(data)
             );
 
+
             return res.status(500).json({
+
                 error:
-                    "No market attention research was returned"
+                    "No market research was returned"
+
             });
 
         }
@@ -552,25 +820,28 @@ Not verified
            PARSE STRUCTURED JSON
         ===================================== */
 
-        let attention;
+        let research;
 
 
         try {
 
-            attention =
+            research =
                 JSON.parse(outputText);
 
         }
         catch (error) {
 
             console.error(
-                "Market Attention JSON Parse Error:",
+                "Market Attention + News JSON Parse Error:",
                 outputText
             );
 
+
             return res.status(500).json({
+
                 error:
-                    "Unable to process market attention research"
+                    "Unable to process market research"
+
             });
 
         }
@@ -586,11 +857,13 @@ Not verified
                 value === null ||
                 value === undefined
             ) {
+
                 return "Not verified";
+
             }
 
 
-            let cleaned =
+            const cleaned =
                 String(value)
 
                     .replace(
@@ -622,7 +895,9 @@ Not verified
 
 
             if (!cleaned) {
+
                 return "Not verified";
+
             }
 
 
@@ -632,25 +907,33 @@ Not verified
 
 
         /* =====================================
-           CLEAN TOPICS
+           CLEAN MARKET TOPICS
         ===================================== */
+
+        const attention =
+            research.marketAttention || {};
+
 
         const cleanTopics =
             Array.isArray(attention.mainTopics)
 
                 ? attention.mainTopics
+
                     .slice(0, 4)
+
                     .map(cleanField)
+
                     .filter(
                         topic =>
-                            topic !== "Not verified"
+                            topic !==
+                            "Not verified"
                     )
 
                 : [];
 
 
         /* =====================================
-           FINAL SAFE OBJECT
+           CLEAN MARKET ATTENTION
         ===================================== */
 
         const cleanAttention = {
@@ -697,7 +980,67 @@ Not verified
 
 
         /* =====================================
-           RETURN CLEAN DATA
+           CLEAN RECENT NEWS
+        ===================================== */
+
+        const news =
+            research.recentNews || {};
+
+
+        const cleanNewsItems =
+            Array.isArray(news.items)
+
+                ? news.items
+
+                    .slice(0, 4)
+
+                    .map(item => ({
+
+                        date:
+                            cleanField(
+                                item?.date
+                            ),
+
+                        category:
+                            cleanField(
+                                item?.category
+                            ),
+
+                        headline:
+                            cleanField(
+                                item?.headline
+                            ),
+
+                        summary:
+                            cleanField(
+                                item?.summary
+                            )
+
+                    }))
+
+                : [];
+
+
+        const cleanRecentNews = {
+
+            newsLevel:
+                cleanField(
+                    news.newsLevel
+                ),
+
+            summary:
+                cleanField(
+                    news.summary
+                ),
+
+            items:
+                cleanNewsItems
+
+        };
+
+
+        /* =====================================
+           RETURN BOTH FROM ONE REQUEST
         ===================================== */
 
         return res.status(200).json({
@@ -708,7 +1051,10 @@ Not verified
                 cleanSymbol,
 
             marketAttention:
-                cleanAttention
+                cleanAttention,
+
+            recentNews:
+                cleanRecentNews
 
         });
 
@@ -716,7 +1062,7 @@ Not verified
     catch (error) {
 
         console.error(
-            "EdgeBreak Market Attention Error:",
+            "EdgeBreak Market Attention + News Error:",
             error
         );
 
@@ -724,7 +1070,7 @@ Not verified
         return res.status(500).json({
 
             error:
-                "Unable to complete market attention research"
+                "Unable to complete market research"
 
         });
 
