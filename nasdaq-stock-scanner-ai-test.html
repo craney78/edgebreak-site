@@ -6047,7 +6047,10 @@ PANEL 1  watchlist seo
 
             </div>
 
-            <div class="edge-ai-placeholder">
+            <div
+                id="edgeAISummary"
+                class="edge-ai-placeholder"
+            >
 
                 Company research will appear here when
                 EdgeBreak AI is connected.
@@ -9311,8 +9314,8 @@ async function loadEdgeBreakAIResearch(symbol){
         );
 
     const summaryBox =
-        document.querySelector(
-            ".edge-ai-summary .edge-ai-placeholder"
+        document.getElementById(
+            "edgeAISummary"
         );
 
 
