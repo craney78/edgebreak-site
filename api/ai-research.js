@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
 
     /* =========================================
-       ONLY ALLOW POST REQUESTS
+       ONLY ALLOW POST
     ========================================= */
 
     if (req.method !== "POST") {
@@ -14,7 +14,7 @@ export default async function handler(req, res) {
 
 
     /* =========================================
-       CHECK API KEY
+       CHECK OPENAI KEY
     ========================================= */
 
     if (!process.env.OPENAI_API_KEY) {
@@ -31,11 +31,22 @@ export default async function handler(req, res) {
 
 
     /* =========================================
-       GET SYMBOL
+       GET EDGEBREAK DATA
     ========================================= */
 
     const {
-        symbol
+        symbol,
+        companyName,
+        scannerType,
+        rank,
+        price,
+        resistance,
+        resistanceTouches,
+        higherLows,
+        volumeRatio,
+        smartMoney,
+        launchPad,
+        rangePercent
     } = req.body || {};
 
 
@@ -55,10 +66,32 @@ export default async function handler(req, res) {
 
 
     /* =========================================
-       OPENAI REQUEST
+       BUILD EDGEBREAK CONTEXT
     ========================================= */
 
+    const edgeBreakContext = `
+
+Ticker: ${cleanSymbol}
+Known company name: ${companyName || "Not supplied"}
+Scanner: ${scannerType || "Not supplied"}
+Rank: ${rank || "Not supplied"}
+Current price: ${price || "Not supplied"}
+Resistance: ${resistance || "Not supplied"}
+Resistance touches: ${resistanceTouches || "Not supplied"}
+Higher lows: ${higherLows || "Not supplied"}
+Volume ratio: ${volumeRatio || "Not supplied"}
+Smart Money appearances: ${smartMoney || "Not supplied"}
+Launch Pad status: ${launchPad || "Not supplied"}
+Range percent: ${rangePercent || "Not supplied"}
+
+    `.trim();
+
+
     try {
+
+        /* =====================================
+           OPENAI + LIVE WEB SEARCH
+        ===================================== */
 
         const response = await fetch(
             "https://api.openai.com/v1/responses",
@@ -80,29 +113,91 @@ export default async function handler(req, res) {
 
                     model: "gpt-5-mini",
 
+                    tools: [
+                        {
+                            type: "web_search"
+                        }
+                    ],
+
+                    tool_choice: "auto",
+
                     input: `
 
 You are EdgeBreak AI Research.
 
-The user is researching the NASDAQ-listed
-company with ticker symbol:
+EdgeBreak is a NASDAQ market intelligence,
+stock discovery, research and education platform.
 
-${cleanSymbol}
+You are NOT a financial adviser.
 
-For this initial connection test only,
-return a short factual response containing:
+Your job is to research the company represented
+by the supplied ticker using current publicly
+available web information.
 
-1. The company name.
-2. What the company primarily does.
-3. One sentence explaining that EdgeBreak AI
-   Research is connected successfully.
+IMPORTANT:
 
-Do not provide investment advice.
-Do not provide buy, sell or hold recommendations.
-Do not provide price targets.
-Do not make stock-price predictions.
+Use web search to verify the ticker and company
+identity before writing the response.
 
-Keep the response under 120 words.
+Do not guess the company from memory.
+
+Prefer authoritative sources where available,
+including:
+
+- official company websites
+- investor relations pages
+- SEC information
+- exchange information
+- reputable financial and business media
+
+The EdgeBreak scanner has supplied:
+
+${edgeBreakContext}
+
+
+RESEARCH RULES
+
+Return factual research only.
+
+Do NOT:
+
+- recommend buying
+- recommend selling
+- recommend holding
+- provide investment ratings
+- provide price targets
+- predict future stock prices
+- call the stock bullish
+- call the stock bearish
+- score the stock
+- tell the user whether the company is a
+  good or bad investment
+
+Clearly distinguish verified company facts from
+EdgeBreak's proprietary scanner observations.
+
+If information cannot be reliably verified,
+say that it could not be verified.
+
+For this stage of development, produce ONLY an
+AI Research Summary.
+
+Research the current company represented by
+ticker ${cleanSymbol}.
+
+The summary should contain:
+
+1. Verified company name.
+2. What the company does.
+3. Its primary industry/business area.
+4. Important recent company developments if
+   they are relevant and verifiable.
+5. A concise factual overview useful for
+   further company research.
+
+Keep the summary approximately 120-200 words.
+
+Do not include a buy/sell conclusion.
 
                     `
 
@@ -113,7 +208,7 @@ Keep the response under 120 words.
 
 
         /* =====================================
-           READ OPENAI RESPONSE
+           READ RESPONSE
         ===================================== */
 
         const data =
@@ -124,7 +219,7 @@ Keep the response under 120 words.
 
             console.error(
                 "OpenAI API error:",
-                data
+                JSON.stringify(data)
             );
 
             return res.status(
@@ -133,7 +228,7 @@ Keep the response under 120 words.
 
                 error:
                     data?.error?.message ||
-                    "OpenAI request failed"
+                    "OpenAI research request failed"
 
             });
 
@@ -141,33 +236,22 @@ Keep the response under 120 words.
 
 
         /* =====================================
-           EXTRACT TEXT
+           EXTRACT OUTPUT TEXT
         ===================================== */
 
         let researchText = "";
 
 
-        if (
-            Array.isArray(data.output)
-        ) {
+        if (Array.isArray(data.output)) {
 
-            for (
-                const item of data.output
-            ) {
+            for (const item of data.output) {
 
-                if (
-                    !Array.isArray(
-                        item.content
-                    )
-                ) {
+                if (!Array.isArray(item.content)) {
                     continue;
                 }
 
 
-                for (
-                    const content
-                    of item.content
-                ) {
+                for (const content of item.content) {
 
                     if (
                         content.type ===
@@ -187,19 +271,18 @@ Keep the response under 120 words.
 
 
         /* =====================================
-           SEND BACK TO EDGEBREAK
+           RETURN TO EDGEBREAK
         ===================================== */
 
         return res.status(200).json({
 
             success: true,
 
-            symbol:
-                cleanSymbol,
+            symbol: cleanSymbol,
 
             research:
                 researchText ||
-                "EdgeBreak AI connected successfully."
+                "No verified research was returned."
 
         });
 
@@ -208,7 +291,7 @@ Keep the response under 120 words.
     catch (error) {
 
         console.error(
-            "EdgeBreak AI error:",
+            "EdgeBreak AI Research Error:",
             error
         );
 
@@ -216,7 +299,7 @@ Keep the response under 120 words.
         return res.status(500).json({
 
             error:
-                "Unable to complete AI research"
+                "Unable to complete EdgeBreak AI research"
 
         });
 
