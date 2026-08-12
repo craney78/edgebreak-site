@@ -10338,6 +10338,15 @@ async function loadEdgeBreakAIResearch(symbol){
             data.companyName || ""
         );
 
+        /* =================================
+        INSTITUTIONAL ACTIVITY
+        ================================= */
+
+        loadEdgeBreakAIInstitutional(
+            symbol,
+            data.companyName || ""
+        );
+
     }
     catch(error){
 
@@ -11405,6 +11414,473 @@ async function loadEdgeBreakAIRecentNews(
             newsItems.innerHTML = `
                 <div class="edge-ai-news-loading">
                     Recent news unavailable.
+                </div>
+            `;
+
+        }
+
+    }
+
+}
+
+/* =========================================
+EDGEBREAK AI — INSTITUTIONAL ACTIVITY
+========================================= */
+
+async function loadEdgeBreakAIInstitutional(
+    symbol,
+    companyName = ""
+) {
+
+    const ownership =
+        document.getElementById(
+            "edgeAIInstitutionalOwnership"
+        );
+
+    const period =
+        document.getElementById(
+            "edgeAIInstitutionalPeriod"
+        );
+
+    const holders =
+        document.getElementById(
+            "edgeAIMajorHolders"
+        );
+
+    const activity =
+        document.getElementById(
+            "edgeAIInstitutionalActivity"
+        );
+
+    const concentration =
+        document.getElementById(
+            "edgeAIOwnershipConcentration"
+        );
+
+    const summary =
+        document.getElementById(
+            "edgeAIInstitutionalSummary"
+        );
+
+
+    /* =================================
+       RESET
+    ================================= */
+
+    if (ownership) {
+        ownership.textContent =
+            "Researching...";
+    }
+
+    if (period) {
+        period.textContent =
+            "Researching...";
+    }
+
+    if (concentration) {
+        concentration.textContent =
+            "Researching ownership concentration...";
+    }
+
+    if (summary) {
+        summary.textContent =
+            "Researching institutional ownership...";
+    }
+
+    if (holders) {
+
+        holders.innerHTML = `
+            <div class="edge-ai-institutional-loading">
+                Researching major institutional holders...
+            </div>
+        `;
+
+    }
+
+    if (activity) {
+
+        activity.innerHTML = `
+            <div class="edge-ai-institutional-loading">
+                Researching recent disclosed activity...
+            </div>
+        `;
+
+    }
+
+
+    try {
+
+        /* =================================
+           CALL EDGEBREAK API
+        ================================= */
+
+        const response = await fetch(
+            "/api/ai-institutional",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    symbol,
+                    companyName
+                })
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Institutional research failed"
+            );
+
+        }
+
+
+        const institutional =
+            data.institutionalActivity;
+
+
+        if (!institutional) {
+
+            throw new Error(
+                "No institutional research returned"
+            );
+
+        }
+
+
+        /* =================================
+           OWNERSHIP
+        ================================= */
+
+        if (ownership) {
+
+            ownership.textContent =
+                institutional
+                    .institutionalOwnership ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           REPORTING PERIOD
+        ================================= */
+
+        if (period) {
+
+            period.textContent =
+                institutional.reportingPeriod ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           OWNERSHIP CONTEXT
+        ================================= */
+
+        if (concentration) {
+
+            concentration.textContent =
+                institutional
+                    .ownershipConcentration ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           SUMMARY
+        ================================= */
+
+        if (summary) {
+
+            summary.textContent =
+                institutional
+                    .institutionalSummary ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           MAJOR HOLDERS
+        ================================= */
+
+        if (holders) {
+
+            holders.innerHTML = "";
+
+
+            if (
+                Array.isArray(
+                    institutional.majorHolders
+                ) &&
+                institutional.majorHolders.length
+            ) {
+
+                institutional.majorHolders
+                    .forEach(holder => {
+
+                        const row =
+                            document.createElement(
+                                "div"
+                            );
+
+                        row.className =
+                            "edge-ai-holder-item";
+
+
+                        const name =
+                            document.createElement(
+                                "div"
+                            );
+
+                        name.className =
+                            "edge-ai-holder-name";
+
+                        name.textContent =
+                            holder.name ||
+                            "Not verified";
+
+
+                        const details =
+                            document.createElement(
+                                "div"
+                            );
+
+                        details.className =
+                            "edge-ai-holder-details";
+
+
+                        const detailParts = [];
+
+
+                        if (
+                            holder.ownershipPercent &&
+                            holder.ownershipPercent !==
+                                "Not verified"
+                        ) {
+
+                            detailParts.push(
+                                holder.ownershipPercent
+                            );
+
+                        }
+
+
+                        if (
+                            holder.shares &&
+                            holder.shares !==
+                                "Not verified"
+                        ) {
+
+                            detailParts.push(
+                                holder.shares
+                            );
+
+                        }
+
+
+                        if (
+                            holder.reportingPeriod &&
+                            holder.reportingPeriod !==
+                                "Not verified"
+                        ) {
+
+                            detailParts.push(
+                                holder.reportingPeriod
+                            );
+
+                        }
+
+
+                        details.textContent =
+                            detailParts.length
+                                ? detailParts.join(" · ")
+                                : "Details not verified";
+
+
+                        row.appendChild(name);
+                        row.appendChild(details);
+
+                        holders.appendChild(row);
+
+                    });
+
+            }
+            else {
+
+                holders.innerHTML = `
+                    <div class="edge-ai-institutional-loading">
+                        No major holder data verified.
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =================================
+           RECENT DISCLOSED ACTIVITY
+        ================================= */
+
+        if (activity) {
+
+            activity.innerHTML = "";
+
+
+            if (
+                Array.isArray(
+                    institutional.recentActivity
+                ) &&
+                institutional.recentActivity.length
+            ) {
+
+                institutional.recentActivity
+                    .forEach(item => {
+
+                        const row =
+                            document.createElement(
+                                "div"
+                            );
+
+                        row.className =
+                            "edge-ai-institutional-activity-item";
+
+
+                        const institution =
+                            document.createElement(
+                                "strong"
+                            );
+
+                        institution.textContent =
+                            item.institution ||
+                            "Institution not verified";
+
+
+                        const description =
+                            document.createElement(
+                                "p"
+                            );
+
+
+                        const parts = [];
+
+
+                        if (
+                            item.change &&
+                            item.change !==
+                                "Not verified"
+                        ) {
+
+                            parts.push(
+                                item.change
+                            );
+
+                        }
+
+
+                        if (
+                            item.reportingPeriod &&
+                            item.reportingPeriod !==
+                                "Not verified"
+                        ) {
+
+                            parts.push(
+                                item.reportingPeriod
+                            );
+
+                        }
+
+
+                        description.textContent =
+                            parts.length
+                                ? parts.join(" · ")
+                                : "Details not verified";
+
+
+                        row.appendChild(
+                            institution
+                        );
+
+                        row.appendChild(
+                            description
+                        );
+
+                        activity.appendChild(row);
+
+                    });
+
+            }
+            else {
+
+                activity.innerHTML = `
+                    <div class="edge-ai-institutional-loading">
+                        No recent institutional changes verified.
+                    </div>
+                `;
+
+            }
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "EdgeBreak Institutional:",
+            error
+        );
+
+
+        if (ownership) {
+            ownership.textContent =
+                "Research unavailable";
+        }
+
+        if (period) {
+            period.textContent =
+                "Not verified";
+        }
+
+        if (concentration) {
+            concentration.textContent =
+                "Institutional ownership research is currently unavailable.";
+        }
+
+        if (summary) {
+            summary.textContent =
+                "Institutional research is currently unavailable.";
+        }
+
+        if (holders) {
+
+            holders.innerHTML = `
+                <div class="edge-ai-institutional-loading">
+                    Institutional holder data unavailable.
+                </div>
+            `;
+
+        }
+
+        if (activity) {
+
+            activity.innerHTML = `
+                <div class="edge-ai-institutional-loading">
+                    Institutional activity unavailable.
                 </div>
             `;
 
