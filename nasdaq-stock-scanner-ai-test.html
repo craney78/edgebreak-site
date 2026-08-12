@@ -9765,6 +9765,15 @@ async function loadEdgeBreakAIResearch(symbol){
             data.companyName || ""
         );
 
+        /* =================================
+        FINANCIAL HIGHLIGHTS
+        ================================= */
+
+        loadEdgeBreakAIFinancials(
+            symbol,
+            data.companyName || ""
+        );
+
     }
     catch(error){
 
@@ -10275,6 +10284,263 @@ async function loadEdgeBreakAIMarketAttention(
                 "<li>Research unavailable</li>";
 
         }
+
+    }
+
+}
+
+async function loadEdgeBreakAIFinancials(
+    symbol,
+    companyName = ""
+) {
+
+    /* =================================
+       FINANCIAL ELEMENTS
+    ================================= */
+
+    const revenue =
+        document.getElementById(
+            "edgeAIRevenue"
+        );
+
+    const revenueGrowth =
+        document.getElementById(
+            "edgeAIRevenueGrowth"
+        );
+
+    const eps =
+        document.getElementById(
+            "edgeAIEPS"
+        );
+
+    const grossMargin =
+        document.getElementById(
+            "edgeAIGrossMargin"
+        );
+
+    const cash =
+        document.getElementById(
+            "edgeAICash"
+        );
+
+    const debt =
+        document.getElementById(
+            "edgeAIDebt"
+        );
+
+    const freeCashFlow =
+        document.getElementById(
+            "edgeAIFreeCashFlow"
+        );
+
+    const latestQuarter =
+        document.getElementById(
+            "edgeAILatestQuarter"
+        );
+
+
+    /* =================================
+       RESET
+    ================================= */
+
+    if (revenue) {
+        revenue.textContent =
+            "Researching...";
+    }
+
+    if (revenueGrowth) {
+        revenueGrowth.textContent =
+            "Researching...";
+    }
+
+    if (eps) {
+        eps.textContent =
+            "Researching...";
+    }
+
+    if (grossMargin) {
+        grossMargin.textContent =
+            "Researching...";
+    }
+
+    if (cash) {
+        cash.textContent =
+            "Researching...";
+    }
+
+    if (debt) {
+        debt.textContent =
+            "Researching...";
+    }
+
+    if (freeCashFlow) {
+        freeCashFlow.textContent =
+            "Researching...";
+    }
+
+    if (latestQuarter) {
+        latestQuarter.textContent =
+            "Researching latest reported financial results...";
+    }
+
+
+    try {
+
+        /* =================================
+           CALL EDGEBREAK API
+        ================================= */
+
+        const response = await fetch(
+            "/api/ai-financials",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    symbol,
+                    companyName
+                })
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Financial research failed"
+            );
+
+        }
+
+
+        const financials =
+            data.financialHighlights;
+
+
+        if (!financials) {
+
+            throw new Error(
+                "No financial highlights returned"
+            );
+
+        }
+
+
+        /* =================================
+           DISPLAY RESULTS
+        ================================= */
+
+        if (revenue) {
+
+            revenue.textContent =
+                financials.revenue ||
+                "Not verified";
+
+        }
+
+
+        if (revenueGrowth) {
+
+            revenueGrowth.textContent =
+                financials.revenueGrowth ||
+                "Not verified";
+
+        }
+
+
+        if (eps) {
+
+            eps.textContent =
+                financials.eps ||
+                "Not verified";
+
+        }
+
+
+        if (grossMargin) {
+
+            grossMargin.textContent =
+                financials.grossMargin ||
+                "Not verified";
+
+        }
+
+
+        if (cash) {
+
+            cash.textContent =
+                financials.cash ||
+                "Not verified";
+
+        }
+
+
+        if (debt) {
+
+            debt.textContent =
+                financials.debt ||
+                "Not verified";
+
+        }
+
+
+        if (freeCashFlow) {
+
+            freeCashFlow.textContent =
+                financials.freeCashFlow ||
+                "Not verified";
+
+        }
+
+
+        if (latestQuarter) {
+
+            latestQuarter.textContent =
+                financials.latestQuarter ||
+                "Not verified";
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "EdgeBreak Financial Highlights:",
+            error
+        );
+
+
+        const fields = [
+            revenue,
+            revenueGrowth,
+            eps,
+            grossMargin,
+            cash,
+            debt,
+            freeCashFlow,
+            latestQuarter
+        ];
+
+
+        fields.forEach(field => {
+
+            if (field) {
+
+                field.textContent =
+                    "Research unavailable";
+
+            }
+
+        });
 
     }
 
