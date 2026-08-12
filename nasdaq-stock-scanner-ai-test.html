@@ -10814,50 +10814,59 @@ async function loadEdgeBreakAIResearch(symbol){
 
         }
 
-        loadEdgeBreakAICompanyOverview(
-            symbol,
-            data.companyName || ""
-        );
-
-        loadEdgeBreakAIMarketAttention(
-            symbol,
-            data.companyName || ""
-        );
-
         /* =================================
-        FINANCIAL HIGHLIGHTS
+        EDGEBREAK AI RESEARCH QUEUE
         ================================= */
 
-        loadEdgeBreakAIFinancials(
-            symbol,
-            data.companyName || ""
+        const verifiedCompanyName =
+            data.companyName || "";
+
+
+        /* COMPANY OVERVIEW */
+
+        await loadEdgeBreakAICompanyOverview(
+            cleanSymbol,
+            verifiedCompanyName
         );
 
-        /* =================================
-        RECENT NEWS
-        ================================= */
 
-        loadEdgeBreakAIRecentNews(
-            symbol,
-            data.companyName || ""
+        /* MARKET ATTENTION */
+
+        await loadEdgeBreakAIMarketAttention(
+            cleanSymbol,
+            verifiedCompanyName
         );
 
-        /* =================================
-        INSTITUTIONAL ACTIVITY
-        ================================= */
 
-        loadEdgeBreakAIInstitutional(
-            symbol,
-            data.companyName || ""
+        /* FINANCIAL HIGHLIGHTS */
+
+        await loadEdgeBreakAIFinancials(
+            cleanSymbol,
+            verifiedCompanyName
         );
 
-        /* =================================
-        SEC FILINGS
-        ================================= */
 
-        loadEdgeBreakAISecFilings(
-            symbol,
-            data.companyName || ""
+        /* RECENT NEWS */
+
+        await loadEdgeBreakAIRecentNews(
+            cleanSymbol,
+            verifiedCompanyName
+        );
+
+
+        /* INSTITUTIONAL ACTIVITY */
+
+        await loadEdgeBreakAIInstitutional(
+            cleanSymbol,
+            verifiedCompanyName
+        );
+
+
+        /* SEC FILINGS */
+
+        await loadEdgeBreakAISecFilings(
+            cleanSymbol,
+            verifiedCompanyName
         );
 
     }
