@@ -1,67 +1,75 @@
 export default async function handler(req, res) {
 
+    /* =========================================
+       POST ONLY
+    ========================================= */
+
     if (req.method !== "POST") {
+
         return res.status(405).json({
             error: "Method not allowed"
         });
+
     }
 
+
+    /* =========================================
+       CHECK API KEY
+    ========================================= */
+
     if (!process.env.OPENAI_API_KEY) {
+
         return res.status(500).json({
             error: "AI service is not configured"
         });
+
     }
 
+
+    /* =========================================
+       GET SYMBOL
+    ========================================= */
+
     const {
-        symbol,
-        companyName,
-        scannerType,
-        rank,
-        price,
-        resistance,
-        resistanceTouches,
-        higherLows,
-        volumeRatio,
-        smartMoney,
-        launchPad,
-        rangePercent
+        symbol
     } = req.body || {};
 
+
     if (!symbol) {
+
         return res.status(400).json({
             error: "Stock symbol is required"
         });
+
     }
 
-    const cleanSymbol =
-        String(symbol).trim().toUpperCase();
 
-    const edgeBreakContext = `
-Ticker: ${cleanSymbol}
-Known company name: ${companyName || "Not supplied"}
-Scanner: ${scannerType || "Not supplied"}
-Rank: ${rank || "Not supplied"}
-Current price: ${price || "Not supplied"}
-Resistance: ${resistance || "Not supplied"}
-Resistance touches: ${resistanceTouches || "Not supplied"}
-Higher lows: ${higherLows || "Not supplied"}
-Volume ratio: ${volumeRatio || "Not supplied"}
-Smart Money appearances: ${smartMoney || "Not supplied"}
-Launch Pad status: ${launchPad || "Not supplied"}
-Range percent: ${rangePercent || "Not supplied"}
-    `.trim();
+    const cleanSymbol =
+        String(symbol)
+            .trim()
+            .toUpperCase();
+
 
     try {
+
+        /* =====================================
+           FAST COMPANY RESEARCH
+        ===================================== */
 
         const response = await fetch(
             "https://api.openai.com/v1/responses",
             {
+
                 method: "POST",
 
                 headers: {
-                    "Content-Type": "application/json",
+
+                    "Content-Type":
+                        "application/json",
+
                     "Authorization":
                         `Bearer ${process.env.OPENAI_API_KEY}`
+
                 },
 
                 body: JSON.stringify({
@@ -77,56 +85,57 @@ Range percent: ${rangePercent || "Not supplied"}
                     tool_choice: "auto",
 
                     input: `
+
 You are EdgeBreak AI Research.
 
-EdgeBreak is a NASDAQ market intelligence,
-research and education platform.
+Research NASDAQ ticker ${cleanSymbol}.
 
-Research the NASDAQ-listed company represented
-by ticker ${cleanSymbol}.
+FIRST:
+Use web search to verify the current company
+associated with ticker ${cleanSymbol}.
 
-Use current web search to VERIFY the company
-identity before producing the report.
+Prefer:
 
-Prefer authoritative sources including:
+1. SEC
+2. Official company website
+3. Official investor relations website
+4. NASDAQ or exchange information
 
-- SEC filings
-- official company websites
-- investor relations pages
-- NASDAQ/exchange information
-- reputable financial media
+This is a FAST company identification request.
 
-EDGEBREAK SCANNER DATA:
+Do NOT research:
 
-${edgeBreakContext}
-
-IMPORTANT RULES:
-
-Return factual research only.
-
-Do NOT provide:
-
-- buy recommendations
-- sell recommendations
-- hold recommendations
-- investment ratings
+- financial statements
+- detailed earnings
+- institutional ownership
+- social media
+- market attention
+- technical analysis
+- SEC filing history
+- analyst ratings
 - price targets
-- stock-price predictions
-- bullish/bearish classifications
-- investment advice
 
-Do not put URLs, citations, markdown links,
-source names or footnotes inside any of the
-text fields.
+Return only:
 
-Do not invent information.
+1. Current verified company name.
+2. Primary industry/business area.
+3. A concise factual 80-120 word summary
+   explaining what the company does.
 
-If information cannot be verified, use
-"Not verified".
+Do not provide investment advice.
 
-Keep the language concise and professional.
+Do not provide buy, sell or hold recommendations.
 
-Return ONLY the structured JSON requested.
+Do not predict the stock price.
+
+Do not describe the stock as bullish or bearish.
+
+Do not include URLs, citations, markdown links,
+footnotes or source names in the summary.
+
+If the ticker cannot be reliably verified,
+state this rather than guessing.
+
                     `,
 
                     text: {
@@ -135,7 +144,8 @@ Return ONLY the structured JSON requested.
 
                             type: "json_schema",
 
-                            name: "edgebreak_company_research",
+                            name:
+                                "edgebreak_quick_research",
 
                             strict: true,
 
@@ -149,198 +159,24 @@ Return ONLY the structured JSON requested.
                                         type: "string"
                                     },
 
-                                    symbol: {
+                                    industry: {
                                         type: "string"
                                     },
 
                                     summary: {
                                         type: "string"
-                                    },
-
-                                    companyOverview: {
-
-                                        type: "object",
-
-                                        properties: {
-
-                                            industry: {
-                                                type: "string"
-                                            },
-
-                                            headquarters: {
-                                                type: "string"
-                                            },
-
-                                            ceo: {
-                                                type: "string"
-                                            },
-
-                                            employees: {
-                                                type: "string"
-                                            },
-
-                                            mainProducts: {
-                                                type: "string"
-                                            },
-
-                                            geographicMarkets: {
-                                                type: "string"
-                                            }
-
-                                        },
-
-                                        required: [
-                                            "industry",
-                                            "headquarters",
-                                            "ceo",
-                                            "employees",
-                                            "mainProducts",
-                                            "geographicMarkets"
-                                        ],
-
-                                        additionalProperties: false
-
-                                    },
-
-                                    businessModel: {
-
-                                        type: "object",
-
-                                        properties: {
-
-                                            howItMakesMoney: {
-                                                type: "string"
-                                            },
-
-                                            revenueSources: {
-                                                type: "string"
-                                            },
-
-                                            customerBase: {
-                                                type: "string"
-                                            },
-
-                                            recurringRevenue: {
-                                                type: "string"
-                                            }
-
-                                        },
-
-                                        required: [
-                                            "howItMakesMoney",
-                                            "revenueSources",
-                                            "customerBase",
-                                            "recurringRevenue"
-                                        ],
-
-                                        additionalProperties: false
-
-                                    },
-
-                                    financialHighlights: {
-
-                                        type: "object",
-
-                                        properties: {
-
-                                            revenue: {
-                                                type: "string"
-                                            },
-
-                                            revenueGrowth: {
-                                                type: "string"
-                                            },
-
-                                            eps: {
-                                                type: "string"
-                                            },
-
-                                            cash: {
-                                                type: "string"
-                                            },
-
-                                            debt: {
-                                                type: "string"
-                                            },
-
-                                            margins: {
-                                                type: "string"
-                                            },
-
-                                            freeCashFlow: {
-                                                type: "string"
-                                            },
-
-                                            latestQuarter: {
-                                                type: "string"
-                                            }
-
-                                        },
-
-                                        required: [
-                                            "revenue",
-                                            "revenueGrowth",
-                                            "eps",
-                                            "cash",
-                                            "debt",
-                                            "margins",
-                                            "freeCashFlow",
-                                            "latestQuarter"
-                                        ],
-
-                                        additionalProperties: false
-
-                                    },
-
-                                    recentNews: {
-
-                                        type: "array",
-
-                                        items: {
-
-                                            type: "object",
-
-                                            properties: {
-
-                                                headline: {
-                                                    type: "string"
-                                                },
-
-                                                date: {
-                                                    type: "string"
-                                                },
-
-                                                summary: {
-                                                    type: "string"
-                                                }
-
-                                            },
-
-                                            required: [
-                                                "headline",
-                                                "date",
-                                                "summary"
-                                            ],
-
-                                            additionalProperties: false
-
-                                        }
-
                                     }
 
                                 },
 
                                 required: [
                                     "companyName",
-                                    "symbol",
-                                    "summary",
-                                    "companyOverview",
-                                    "businessModel",
-                                    "financialHighlights",
-                                    "recentNews"
+                                    "industry",
+                                    "summary"
                                 ],
 
-                                additionalProperties: false
+                                additionalProperties:
+                                    false
 
                             }
 
@@ -353,29 +189,41 @@ Return ONLY the structured JSON requested.
             }
         );
 
-        const data = await response.json();
+
+        /* =====================================
+           OPENAI RESPONSE
+        ===================================== */
+
+        const data =
+            await response.json();
+
 
         if (!response.ok) {
 
             console.error(
-                "OpenAI API error:",
+                "OpenAI API Error:",
                 JSON.stringify(data)
             );
 
-            return res.status(response.status).json({
-                error:
-                    data?.error?.message ||
-                    "OpenAI research request failed"
-            });
+            return res
+                .status(response.status)
+                .json({
+
+                    error:
+                        data?.error?.message ||
+                        "AI research request failed"
+
+                });
 
         }
 
 
         /* =====================================
-           EXTRACT STRUCTURED JSON
+           EXTRACT OUTPUT
         ===================================== */
 
         let outputText = "";
+
 
         if (Array.isArray(data.output)) {
 
@@ -385,10 +233,17 @@ Return ONLY the structured JSON requested.
                     continue;
                 }
 
+
                 for (const content of item.content) {
 
-                    if (content.type === "output_text") {
-                        outputText += content.text || "";
+                    if (
+                        content.type ===
+                        "output_text"
+                    ) {
+
+                        outputText +=
+                            content.text || "";
+
                     }
 
                 }
@@ -397,21 +252,25 @@ Return ONLY the structured JSON requested.
 
         }
 
+
         if (!outputText) {
 
             return res.status(500).json({
+
                 error:
-                    "No research data was returned"
+                    "No AI research was returned"
+
             });
 
         }
 
 
         /* =====================================
-           PARSE JSON
+           PARSE STRUCTURED DATA
         ===================================== */
 
         let research;
+
 
         try {
 
@@ -419,23 +278,25 @@ Return ONLY the structured JSON requested.
                 JSON.parse(outputText);
 
         }
-        catch (parseError) {
+        catch (error) {
 
             console.error(
-                "Research JSON parse error:",
+                "AI JSON Parse Error:",
                 outputText
             );
 
             return res.status(500).json({
+
                 error:
                     "Unable to process AI research"
+
             });
 
         }
 
 
         /* =====================================
-           RETURN CLEAN DATA
+           RETURN TO EDGEBREAK
         ===================================== */
 
         return res.status(200).json({
@@ -448,20 +309,11 @@ Return ONLY the structured JSON requested.
             companyName:
                 research.companyName,
 
+            industry:
+                research.industry,
+
             research:
-                research.summary,
-
-            companyOverview:
-                research.companyOverview,
-
-            businessModel:
-                research.businessModel,
-
-            financialHighlights:
-                research.financialHighlights,
-
-            recentNews:
-                research.recentNews
+                research.summary
 
         });
 
@@ -469,13 +321,16 @@ Return ONLY the structured JSON requested.
     catch (error) {
 
         console.error(
-            "EdgeBreak AI Research Error:",
+            "EdgeBreak AI Error:",
             error
         );
 
+
         return res.status(500).json({
+
             error:
                 "Unable to complete EdgeBreak AI research"
+
         });
 
     }
