@@ -25,6 +25,21 @@ export default async function handler(req, res) {
 
     }
 
+    /* =========================================
+    CHECK CACHE CONFIGURATION
+    ========================================= */
+
+    if (
+        !process.env.SUPABASE_URL ||
+        !process.env.SUPABASE_SERVICE_KEY
+    ) {
+
+        return res.status(500).json({
+            error: "Research cache is not configured"
+        });
+
+    }
+
 
     /* =========================================
        GET COMPANY DATA
@@ -60,7 +75,122 @@ export default async function handler(req, res) {
             .trim();
 
 
+    /* =========================================
+    CACHE SETTINGS
+    ========================================= */
+
+    const researchType =
+        "sec_filings";
+
+    const cacheHours =
+        6;
+
+
     try {
+
+        /* =====================================
+        CHECK SUPABASE CACHE
+        ===================================== */
+
+        const now =
+            new Date().toISOString();
+
+
+        const cacheUrl =
+            `${process.env.SUPABASE_URL}` +
+            `/rest/v1/ai_research_cache` +
+            `?symbol=eq.${encodeURIComponent(cleanSymbol)}` +
+            `&research_type=eq.${researchType}` +
+            `&expires_at=gt.${encodeURIComponent(now)}` +
+            `&select=data,created_at,expires_at` +
+            `&limit=1`;
+
+
+        const cacheResponse =
+            await fetch(
+                cacheUrl,
+                {
+
+                    method: "GET",
+
+                    headers: {
+
+                        "apikey":
+                            process.env.SUPABASE_SERVICE_KEY,
+
+                        "Authorization":
+                            `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+
+                        "Content-Type":
+                            "application/json"
+
+                    }
+
+                }
+            );
+
+
+        if (cacheResponse.ok) {
+
+            const cachedRows =
+                await cacheResponse.json();
+
+
+            if (
+                Array.isArray(cachedRows) &&
+                cachedRows.length > 0 &&
+                cachedRows[0].data
+            ) {
+
+                const cachedData =
+                    cachedRows[0].data;
+
+
+                console.log(
+                    `EdgeBreak AI CACHE HIT: ${cleanSymbol} sec_filings`
+                );
+
+
+                return res.status(200).json({
+
+                    success: true,
+
+                    cached: true,
+
+                    symbol:
+                        cleanSymbol,
+
+                    secFilings:
+                        cachedData.secFilings,
+
+                    cacheCreatedAt:
+                        cachedRows[0].created_at,
+
+                    cacheExpiresAt:
+                        cachedRows[0].expires_at
+
+                });
+
+            }
+
+        }
+        else {
+
+            const cacheError =
+                await cacheResponse.text();
+
+
+            console.error(
+                "SEC Filings Cache Read Error:",
+                cacheError
+            );
+
+        }
+
+
+        console.log(
+            `EdgeBreak AI CACHE MISS: ${cleanSymbol} sec_filings`
+        );
 
         /* =====================================
            SEC FILINGS RESEARCH
@@ -792,32 +922,144 @@ Not verified
 
 
         /* =====================================
-           RETURN CLEAN DATA
+        BUILD CLEAN SEC OBJECT
+        ===================================== */
+
+        const cleanSecFilings = {
+
+            latestAnnual,
+
+            latestQuarterly,
+
+            recentFilings,
+
+            insiderFilings,
+
+            filingSummary:
+                cleanField(
+                    filings.filingSummary
+                )
+
+        };
+
+
+        /* =====================================
+        BUILD CACHE DATA
+        ===================================== */
+
+        const cacheData = {
+
+            secFilings:
+                cleanSecFilings
+
+        };
+
+
+        const expiresAt =
+            new Date(
+                Date.now() +
+                cacheHours *
+                60 *
+                60 *
+                1000
+            ).toISOString();
+
+
+        /* =====================================
+        SAVE / UPDATE CACHE
+        ===================================== */
+
+        const saveUrl =
+            `${process.env.SUPABASE_URL}` +
+            `/rest/v1/ai_research_cache` +
+            `?on_conflict=symbol,research_type`;
+
+
+        const saveResponse =
+            await fetch(
+                saveUrl,
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "apikey":
+                            process.env.SUPABASE_SERVICE_KEY,
+
+                        "Authorization":
+                            `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Prefer":
+                            "resolution=merge-duplicates,return=minimal"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        symbol:
+                            cleanSymbol,
+
+                        research_type:
+                            researchType,
+
+                        data:
+                            cacheData,
+
+                        created_at:
+                            new Date().toISOString(),
+
+                        expires_at:
+                            expiresAt
+
+                    })
+
+                }
+            );
+
+
+        if (!saveResponse.ok) {
+
+            const saveError =
+                await saveResponse.text();
+
+
+            console.error(
+                "SEC Filings Cache Save Error:",
+                saveError
+            );
+
+        }
+        else {
+
+            console.log(
+                `EdgeBreak AI CACHE SAVED: ${cleanSymbol} sec_filings`
+            );
+
+        }
+
+
+        /* =====================================
+        RETURN CLEAN DATA
         ===================================== */
 
         return res.status(200).json({
 
             success: true,
 
+            cached: false,
+
             symbol:
                 cleanSymbol,
 
-            secFilings: {
+            secFilings:
+                cleanSecFilings,
 
-                latestAnnual,
-
-                latestQuarterly,
-
-                recentFilings,
-
-                insiderFilings,
-
-                filingSummary:
-                    cleanField(
-                        filings.filingSummary
-                    )
-
-            }
+            cacheExpiresAt:
+                expiresAt
 
         });
 
