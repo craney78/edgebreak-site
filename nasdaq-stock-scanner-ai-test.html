@@ -5492,6 +5492,7 @@ SCANNER SELECTOR
                     <th>Base Length</th>
                     <th>Smart Money</th>
                     <th>Add To Watchlist</th>
+                    <th>AI Research</th>
 
                 </tr>
 
@@ -5501,7 +5502,7 @@ SCANNER SELECTOR
 
                 <tr>
 
-                    <td colspan="5">
+                    <td colspan="6">
                         Select filters and click Search.
                     </td>
 
@@ -7559,7 +7560,7 @@ function renderLaunchPadResults(results){
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="5">
+                <td colspan="6">
                     No Launch Pad stocks found
                 </td>
             </tr>
@@ -7629,7 +7630,25 @@ function renderLaunchPadResults(results){
 
                 </td>
 
-            </tr>
+
+                <td>
+
+                    <button
+                        type="button"
+                        class="edge-ai-research-btn"
+                        onclick="
+                            event.stopPropagation();
+                            openLaunchPadAIResearch('${stock.symbol}');
+                        "
+                    >
+                        <span>✨</span>
+                        AI Research
+                    </button>
+
+                </td>
+
+
+                </tr>
 
             `;
 
@@ -8969,6 +8988,276 @@ function openPreBreakoutAIResearch(symbol){
 
                     <strong>
                         ${lookback} Days
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =====================================
+       OPEN PANEL
+    ===================================== */
+
+    openEdgeBreakAI();
+
+}
+
+/* =========================================
+   OPEN LAUNCH PAD AI RESEARCH
+========================================= */
+
+function openLaunchPadAIResearch(symbol){
+
+    const stock =
+        window.launchPadData.find(
+            item => item.symbol === symbol
+        );
+
+    if(!stock){
+
+        console.error(
+            "EdgeBreak AI: Launch Pad stock not found",
+            symbol
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================
+       SMART MONEY
+    ===================================== */
+
+    const smartRecord =
+        window.smartMoneyLookup[
+            stock.symbol
+        ];
+
+    const smartMoneyPeriod =
+        parseInt(
+            document.getElementById(
+                "launchPadSmartMoneyPeriod"
+            )?.value || 90
+        );
+
+    const smartMoneyCount =
+        smartRecord
+            ? getSmartMoneyCount(
+                smartRecord,
+                smartMoneyPeriod
+            )
+            : 0;
+
+
+    /* =====================================
+       COMPANY HEADER
+    ===================================== */
+
+    const ticker =
+        document.querySelector(
+            ".edge-ai-ticker"
+        );
+
+    const companyName =
+        document.querySelector(
+            ".edge-ai-company h3"
+        );
+
+
+    if(ticker){
+
+        ticker.textContent =
+            stock.symbol;
+
+    }
+
+
+    if(companyName){
+
+        companyName.textContent =
+            "NASDAQ Listed Company";
+
+    }
+
+
+    /* =====================================
+       EDGEBREAK TECHNICAL CONTEXT
+    ===================================== */
+
+    const contextSection =
+        document.querySelector(
+            ".edge-ai-context .edge-ai-placeholder"
+        );
+
+
+    if(contextSection){
+
+        contextSection.innerHTML = `
+
+            <div class="edge-ai-context-grid">
+
+
+                <div>
+
+                    <span>
+                        Scanner
+                    </span>
+
+                    <strong>
+                        Launch Pad Scanner
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Current Price
+                    </span>
+
+                    <strong>
+                        $${Number(
+                            stock.current_price || 0
+                        ).toFixed(2)}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Base Length
+                    </span>
+
+                    <strong>
+                        ${stock.launchpad_days || 0} Days
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Price Group
+                    </span>
+
+                    <strong>
+                        ${stock.price_group || "—"}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Support Zone
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.support_zone_low != null
+                                ? "$" +
+                                  Number(
+                                      stock.support_zone_low
+                                  ).toFixed(2)
+                                : "—"
+                        }
+                        —
+                        ${
+                            stock.support_zone_high != null
+                                ? "$" +
+                                  Number(
+                                      stock.support_zone_high
+                                  ).toFixed(2)
+                                : "—"
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Resistance Zone
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.resistance_zone_low != null
+                                ? "$" +
+                                  Number(
+                                      stock.resistance_zone_low
+                                  ).toFixed(2)
+                                : "—"
+                        }
+                        —
+                        ${
+                            stock.resistance_zone_high != null
+                                ? "$" +
+                                  Number(
+                                      stock.resistance_zone_high
+                                  ).toFixed(2)
+                                : "—"
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Range
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.range_percent != null
+                                ? Number(
+                                    stock.range_percent
+                                  ).toFixed(2) + "%"
+                                : "—"
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Smart Money
+                    </span>
+
+                    <strong>
+                        ${smartMoneyCount}
+                        /
+                        ${smartMoneyPeriod} Days
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Last Updated
+                    </span>
+
+                    <strong>
+                        ${stock.last_updated || "—"}
                     </strong>
 
                 </div>
