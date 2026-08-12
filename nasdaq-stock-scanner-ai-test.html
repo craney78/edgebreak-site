@@ -4585,6 +4585,28 @@ EDGEBREAK AI — COMPANY OVERVIEW
     }
 
 }
+
+.edge-ai-attention-topics {
+    margin: 7px 0 0;
+    padding-left: 17px;
+    color: #ffffff;
+}
+
+.edge-ai-attention-topics li {
+    margin: 4px 0;
+    line-height: 1.45;
+}
+
+.edge-ai-attention-summary {
+    margin-top: 14px;
+    padding: 15px 17px;
+    background: #091426;
+    border: 1px solid #1c2a40;
+    border-radius: 10px;
+    color: #c3cede;
+    font-size: 14px;
+    line-height: 1.65;
+}
 </style>  
 
 
@@ -6221,13 +6243,16 @@ PANEL 1  watchlist seo
                         MARKET ATTENTION
                     </span>
 
-                    <strong>
+                    <strong id="edgeAIAttentionLevel">
                         Researching...
                     </strong>
 
                 </div>
 
-                <div class="edge-ai-attention-badge">
+                <div
+                    id="edgeAIAttentionBadge"
+                    class="edge-ai-attention-badge"
+                >
                     —
                 </div>
 
@@ -6237,69 +6262,97 @@ PANEL 1  watchlist seo
             <div class="edge-ai-attention-grid">
 
                 <div>
-                    <span>Where</span>
-                    <strong>—</strong>
+
+                    <span>
+                        Where
+                    </span>
+
+                    <strong id="edgeAIWhere">
+                        Researching...
+                    </strong>
+
                 </div>
+
 
                 <div>
-                    <span>Discussion Change</span>
-                    <strong>—</strong>
+
+                    <span>
+                        Discussion Change
+                    </span>
+
+                    <strong id="edgeAIDiscussionChange">
+                        Researching...
+                    </strong>
+
                 </div>
+
 
                 <div>
-                    <span>News Activity</span>
-                    <strong>—</strong>
+
+                    <span>
+                        News Activity
+                    </span>
+
+                    <strong id="edgeAINewsActivity">
+                        Researching...
+                    </strong>
+
                 </div>
+
 
                 <div>
-                    <span>Relative Volume</span>
-                    <strong>—</strong>
+
+                    <span>
+                        Relative Volume
+                    </span>
+
+                    <strong id="edgeAIRelativeVolume">
+                        Researching...
+                    </strong>
+
                 </div>
+
 
                 <div>
-                    <span>Attention Began</span>
-                    <strong>—</strong>
+
+                    <span>
+                        Attention Began
+                    </span>
+
+                    <strong id="edgeAIAttentionBegan">
+                        Researching...
+                    </strong>
+
                 </div>
+
 
                 <div>
-                    <span>Main Topics</span>
-                    <strong>—</strong>
+
+                    <span>
+                        Main Topics
+                    </span>
+
+                    <ul
+                        id="edgeAIMainTopics"
+                        class="edge-ai-attention-topics"
+                    >
+                        <li>Researching...</li>
+                    </ul>
+
                 </div>
 
+            </div>
+
+
+            <div
+                id="edgeAIAttentionSummary"
+                class="edge-ai-attention-summary"
+            >
+                Researching current market attention...
             </div>
 
         </section>
-
-
-        <!-- COMPANY OVERVIEW -->
-
-        <section class="edge-ai-section">
-
-            <div class="edge-ai-section-heading">
-
-                <span class="edge-ai-section-icon">
-                    🏢
-                </span>
-
-                <div>
-
-                    <span>COMPANY</span>
-
-                    <h3>
-                        Company Overview
-                    </h3>
-
-                </div>
-
-            </div>
-
-            <div class="edge-ai-placeholder">
-                Business description, industry, headquarters,
-                management, employees and major products.
-            </div>
-
-        </section>
-
+                
 
         <!-- BUSINESS MODEL -->
 
@@ -9546,6 +9599,11 @@ async function loadEdgeBreakAIResearch(symbol){
             data.companyName || ""
         );
 
+        loadEdgeBreakAIMarketAttention(
+            symbol,
+            data.companyName || ""
+        );
+
     }
     catch(error){
 
@@ -9735,6 +9793,327 @@ async function loadEdgeBreakAICompanyOverview(
             }
 
         });
+
+    }
+
+}
+
+async function loadEdgeBreakAIMarketAttention(
+    symbol,
+    companyName = ""
+) {
+
+    /* =================================
+       MARKET ATTENTION ELEMENTS
+    ================================= */
+
+    const attentionLevel =
+        document.getElementById(
+            "edgeAIAttentionLevel"
+        );
+
+    const attentionBadge =
+        document.getElementById(
+            "edgeAIAttentionBadge"
+        );    
+
+    const where =
+        document.getElementById(
+            "edgeAIWhere"
+        );
+
+    const discussionChange =
+        document.getElementById(
+            "edgeAIDiscussionChange"
+        );
+
+    const newsActivity =
+        document.getElementById(
+            "edgeAINewsActivity"
+        );
+
+    const relativeVolume =
+        document.getElementById(
+            "edgeAIRelativeVolume"
+        );
+
+    const attentionBegan =
+        document.getElementById(
+            "edgeAIAttentionBegan"
+        );
+
+    const topics =
+        document.getElementById(
+            "edgeAIMainTopics"
+        );
+
+    const summary =
+        document.getElementById(
+            "edgeAIAttentionSummary"
+        );
+
+
+    /* =================================
+       RESET
+    ================================= */
+
+    if (attentionLevel) {
+        attentionLevel.textContent =
+            "Researching...";
+    }
+
+    if (where) {
+        where.textContent =
+            "Researching...";
+    }
+
+    if (discussionChange) {
+        discussionChange.textContent =
+            "Researching...";
+    }
+
+    if (newsActivity) {
+        newsActivity.textContent =
+            "Researching...";
+    }
+
+    if (relativeVolume) {
+        relativeVolume.textContent =
+            "Researching...";
+    }
+
+    if (attentionBegan) {
+        attentionBegan.textContent =
+            "Researching...";
+    }
+
+    if (topics) {
+        topics.innerHTML =
+            "<li>Researching...</li>";
+    }
+
+    if (summary) {
+        summary.textContent =
+            "Researching current market attention...";
+    }
+
+
+    try {
+
+        /* =================================
+           CALL EDGEBREAK API
+        ================================= */
+
+        const response = await fetch(
+            "/api/ai-market-attention",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    symbol,
+                    companyName
+                })
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Market attention research failed"
+            );
+
+        }
+
+
+        const attention =
+            data.marketAttention;
+
+
+        if (!attention) {
+
+            throw new Error(
+                "No market attention returned"
+            );
+
+        }
+
+
+        /* =================================
+           DISPLAY RESULTS
+        ================================= */
+
+        if (attentionLevel) {
+
+            attentionLevel.textContent =
+                attention.attentionLevel ||
+                "Not verified";
+
+        }
+
+        if (attentionBadge) {
+
+            attentionBadge.textContent =
+                attention.attentionLevel ||
+                "—";
+
+        }
+
+
+        if (where) {
+
+            where.textContent =
+                attention.where ||
+                "Not verified";
+
+        }
+
+
+        if (discussionChange) {
+
+            discussionChange.textContent =
+                attention.discussionChange ||
+                "Not verified";
+
+        }
+
+
+        if (newsActivity) {
+
+            newsActivity.textContent =
+                attention.newsActivity ||
+                "Not verified";
+
+        }
+
+
+        if (relativeVolume) {
+
+            relativeVolume.textContent =
+                attention.relativeVolume ||
+                "Not verified";
+
+        }
+
+
+        if (attentionBegan) {
+
+            attentionBegan.textContent =
+                attention.attentionBegan ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           MAIN TOPICS
+        ================================= */
+
+        if (topics) {
+
+            topics.innerHTML = "";
+
+
+            if (
+                Array.isArray(
+                    attention.mainTopics
+                ) &&
+                attention.mainTopics.length
+            ) {
+
+                attention.mainTopics
+                    .forEach(topic => {
+
+                        const li =
+                            document.createElement(
+                                "li"
+                            );
+
+                        li.textContent =
+                            topic;
+
+                        topics.appendChild(li);
+
+                    });
+
+            }
+            else {
+
+                const li =
+                    document.createElement(
+                        "li"
+                    );
+
+                li.textContent =
+                    "Not verified";
+
+                topics.appendChild(li);
+
+            }
+
+        }
+
+
+        /* =================================
+           ATTENTION SUMMARY
+        ================================= */
+
+        if (summary) {
+
+            summary.textContent =
+                attention.summary ||
+                "Not verified";
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "EdgeBreak Market Attention:",
+            error
+        );
+
+
+        const fields = [
+            attentionLevel,
+            where,
+            discussionChange,
+            newsActivity,
+            relativeVolume,
+            attentionBegan,
+            summary
+        ];
+
+
+        fields.forEach(field => {
+
+            if (field) {
+
+                field.textContent =
+                    "Research unavailable";
+
+            }
+
+        });
+
+
+        if (topics) {
+
+            topics.innerHTML =
+                "<li>Research unavailable</li>";
+
+        }
 
     }
 
