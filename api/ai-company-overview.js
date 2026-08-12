@@ -14,13 +14,25 @@ export default async function handler(req, res) {
 
 
     /* =========================================
-       CHECK API KEY
+       CHECK ENVIRONMENT VARIABLES
     ========================================= */
 
     if (!process.env.OPENAI_API_KEY) {
 
         return res.status(500).json({
             error: "AI service is not configured"
+        });
+
+    }
+
+
+    if (
+        !process.env.SUPABASE_URL ||
+        !process.env.SUPABASE_SERVICE_KEY
+    ) {
+
+        return res.status(500).json({
+            error: "Research cache is not configured"
         });
 
     }
@@ -51,11 +63,6 @@ export default async function handler(req, res) {
             .toUpperCase();
 
 
-    /*
-    Remove anything accidentally attached to the
-    company name, such as citations or URLs.
-    */
-
     const cleanCompanyName =
         String(companyName || "")
             .replace(/\(\[.*?\]\(.*?\)\)/g, "")
@@ -65,7 +72,134 @@ export default async function handler(req, res) {
             .trim();
 
 
+    /* =========================================
+       CACHE SETTINGS
+    ========================================= */
+
+    const researchType =
+        "company_overview";
+
+
+    const cacheDays =
+        7;
+
+
     try {
+
+        /* =====================================
+           CHECK SUPABASE CACHE FIRST
+        ===================================== */
+
+        const now =
+            new Date().toISOString();
+
+
+        const cacheUrl =
+            `${process.env.SUPABASE_URL}` +
+            `/rest/v1/ai_research_cache` +
+            `?symbol=eq.${encodeURIComponent(cleanSymbol)}` +
+            `&research_type=eq.${researchType}` +
+            `&expires_at=gt.${encodeURIComponent(now)}` +
+            `&select=data,created_at,expires_at` +
+            `&limit=1`;
+
+
+        const cacheResponse =
+            await fetch(
+                cacheUrl,
+                {
+
+                    method: "GET",
+
+                    headers: {
+
+                        "apikey":
+                            process.env.SUPABASE_SERVICE_KEY,
+
+                        "Authorization":
+                            `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+
+                        "Content-Type":
+                            "application/json"
+
+                    }
+
+                }
+            );
+
+
+        if (cacheResponse.ok) {
+
+            const cachedRows =
+                await cacheResponse.json();
+
+
+            if (
+                Array.isArray(cachedRows) &&
+                cachedRows.length > 0 &&
+                cachedRows[0].data
+            ) {
+
+                const cachedData =
+                    cachedRows[0].data;
+
+
+                console.log(
+                    `EdgeBreak AI CACHE HIT: ${cleanSymbol} company_overview`
+                );
+
+
+                return res.status(200).json({
+
+                    success: true,
+
+                    cached: true,
+
+                    symbol:
+                        cleanSymbol,
+
+                    companyName:
+                        cachedData.companyName,
+
+                    companyOverview:
+                        cachedData.companyOverview,
+
+                    cacheCreatedAt:
+                        cachedRows[0].created_at,
+
+                    cacheExpiresAt:
+                        cachedRows[0].expires_at
+
+                });
+
+            }
+
+        }
+        else {
+
+            /*
+            Cache failure should NOT stop research.
+
+            If Supabase temporarily fails, EdgeBreak
+            can still perform the OpenAI request.
+            */
+
+            const cacheError =
+                await cacheResponse.text();
+
+
+            console.error(
+                "Company Overview Cache Read Error:",
+                cacheError
+            );
+
+        }
+
+
+        console.log(
+            `EdgeBreak AI CACHE MISS: ${cleanSymbol} company_overview`
+        );
+
 
         /* =====================================
            COMPANY OVERVIEW RESEARCH
@@ -74,6 +208,7 @@ export default async function handler(req, res) {
         const response = await fetch(
             "https://api.openai.com/v1/responses",
             {
+
                 method: "POST",
 
                 headers: {
@@ -267,6 +402,7 @@ Maximum two concise sentences.
                 JSON.stringify(data)
             );
 
+
             return res
                 .status(response.status)
                 .json({
@@ -281,7 +417,7 @@ Maximum two concise sentences.
 
 
         /* =====================================
-           EXTRACT ONLY FINAL OUTPUT TEXT
+           EXTRACT FINAL OUTPUT
         ===================================== */
 
         let outputText = "";
@@ -290,14 +426,6 @@ Maximum two concise sentences.
         if (Array.isArray(data.output)) {
 
             for (const item of data.output) {
-
-                /*
-                IMPORTANT:
-                Only read assistant message output.
-
-                Ignore web search calls and all other
-                response objects.
-                */
 
                 if (item.type !== "message") {
                     continue;
@@ -335,9 +463,12 @@ Maximum two concise sentences.
                 JSON.stringify(data)
             );
 
+
             return res.status(500).json({
+
                 error:
                     "No company overview was returned"
+
             });
 
         }
@@ -363,16 +494,19 @@ Maximum two concise sentences.
                 outputText
             );
 
+
             return res.status(500).json({
+
                 error:
                     "Unable to process company overview"
+
             });
 
         }
 
 
         /* =====================================
-           CLEAN FIELD FUNCTION
+           CLEAN FIELD
         ===================================== */
 
         function cleanField(value) {
@@ -381,37 +515,47 @@ Maximum two concise sentences.
                 value === null ||
                 value === undefined
             ) {
+
                 return "Not verified";
+
             }
 
 
-            let cleaned =
+            const cleaned =
                 String(value)
+
                     .replace(
                         /https?:\/\/[^\s)]+/gi,
                         ""
                     )
+
                     .replace(
                         /\[[^\]]+\]\([^)]+\)/g,
                         ""
                     )
+
                     .replace(
                         /\[[^\]]+\]/g,
                         ""
                     )
+
                     .replace(
                         /\(\s*\)/g,
                         ""
                     )
+
                     .replace(
                         /\s+/g,
                         " "
                     )
+
                     .trim();
 
 
             if (!cleaned) {
+
                 return "Not verified";
+
             }
 
 
@@ -421,7 +565,7 @@ Maximum two concise sentences.
 
 
         /* =====================================
-           BUILD FINAL SAFE OBJECT
+           BUILD SAFE OBJECT
         ===================================== */
 
         const cleanOverview = {
@@ -430,7 +574,7 @@ Maximum two concise sentences.
                 cleanField(
                     overview.companyName
                 ),
-            
+
             industry:
                 cleanField(
                     overview.industry
@@ -465,12 +609,122 @@ Maximum two concise sentences.
 
 
         /* =====================================
-        RETURN CLEAN DATA
+           BUILD CACHE DATA
+        ===================================== */
+
+        const cacheData = {
+
+            companyName:
+                cleanOverview.companyName,
+
+            companyOverview:
+                cleanOverview
+
+        };
+
+
+        const expiresAt =
+            new Date(
+                Date.now() +
+                cacheDays *
+                24 *
+                60 *
+                60 *
+                1000
+            ).toISOString();
+
+
+        /* =====================================
+           SAVE / UPDATE SUPABASE CACHE
+        ===================================== */
+
+        const saveUrl =
+            `${process.env.SUPABASE_URL}` +
+            `/rest/v1/ai_research_cache` +
+            `?on_conflict=symbol,research_type`;
+
+
+        const saveResponse =
+            await fetch(
+                saveUrl,
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "apikey":
+                            process.env.SUPABASE_SERVICE_KEY,
+
+                        "Authorization":
+                            `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Prefer":
+                            "resolution=merge-duplicates,return=minimal"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        symbol:
+                            cleanSymbol,
+
+                        research_type:
+                            researchType,
+
+                        data:
+                            cacheData,
+
+                        created_at:
+                            new Date().toISOString(),
+
+                        expires_at:
+                            expiresAt
+
+                    })
+
+                }
+            );
+
+
+        if (!saveResponse.ok) {
+
+            /*
+            Do not fail the user's research just
+            because caching failed.
+            */
+
+            const saveError =
+                await saveResponse.text();
+
+
+            console.error(
+                "Company Overview Cache Save Error:",
+                saveError
+            );
+
+        }
+        else {
+
+            console.log(
+                `EdgeBreak AI CACHE SAVED: ${cleanSymbol} company_overview`
+            );
+
+        }
+
+
+        /* =====================================
+           RETURN CLEAN DATA
         ===================================== */
 
         return res.status(200).json({
 
             success: true,
+
+            cached: false,
 
             symbol:
                 cleanSymbol,
@@ -479,7 +733,10 @@ Maximum two concise sentences.
                 cleanOverview.companyName,
 
             companyOverview:
-                cleanOverview
+                cleanOverview,
+
+            cacheExpiresAt:
+                expiresAt
 
         });
 
