@@ -4875,6 +4875,215 @@ EDGEBREAK AI — RECENT NEWS
     }
 
 }
+
+/* =========================================
+EDGEBREAK AI — INSTITUTIONAL ACTIVITY
+========================================= */
+
+.edge-ai-institutional-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.edge-ai-institutional-item {
+    background: #091426;
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+    padding: 16px 18px;
+    min-height: 82px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.edge-ai-institutional-item > span,
+.edge-ai-institutional-block > span,
+.edge-ai-institutional-context > span,
+.edge-ai-institutional-summary > span {
+    display: block;
+
+    color: #7486a3;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.edge-ai-institutional-item strong {
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    line-height: 1.45;
+}
+
+
+/* HOLDERS + ACTIVITY */
+
+.edge-ai-institutional-block {
+    margin-top: 12px;
+
+    background: #091426;
+
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+
+    padding: 16px 18px;
+}
+
+.edge-ai-holder-list,
+.edge-ai-institutional-activity-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-top: 11px;
+}
+
+
+/* HOLDER ROW */
+
+.edge-ai-holder-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 11px 0;
+
+    border-bottom: 1px solid #17243a;
+}
+
+.edge-ai-holder-item:last-child {
+    border-bottom: none;
+}
+
+.edge-ai-holder-name {
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.edge-ai-holder-details {
+    color: #91a2bb;
+
+    font-size: 12px;
+
+    text-align: right;
+}
+
+
+/* ACTIVITY ROW */
+
+.edge-ai-institutional-activity-item {
+    padding: 11px 0;
+
+    border-bottom: 1px solid #17243a;
+}
+
+.edge-ai-institutional-activity-item:last-child {
+    border-bottom: none;
+}
+
+.edge-ai-institutional-activity-item strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 13px;
+}
+
+.edge-ai-institutional-activity-item p {
+    margin: 5px 0 0;
+
+    color: #aebbd0;
+
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* CONTEXT + SUMMARY */
+
+.edge-ai-institutional-context,
+.edge-ai-institutional-summary {
+    margin-top: 12px;
+
+    background: #091426;
+
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+
+    padding: 16px 18px;
+}
+
+.edge-ai-institutional-context p,
+.edge-ai-institutional-summary p {
+    margin: 9px 0 0;
+
+    color: #c3cede;
+
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+
+/* NOTICE */
+
+.edge-ai-institutional-notice {
+    margin-top: 12px;
+
+    padding: 12px 15px;
+
+    border: 1px solid #263852;
+    border-radius: 10px;
+
+    color: #7486a3;
+
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+
+/* LOADING */
+
+.edge-ai-institutional-loading {
+    color: #7486a3;
+
+    font-size: 13px;
+
+    padding: 7px 0;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .edge-ai-institutional-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .edge-ai-holder-item {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .edge-ai-holder-details {
+        text-align: left;
+    }
+
+}
 </style>  
 
 
@@ -6840,14 +7049,14 @@ PANEL 1  watchlist seo
         </section>
 
 
-        <!-- INSTITUTIONAL -->
+        <!-- INSTITUTIONAL ACTIVITY -->
 
         <section class="edge-ai-section">
 
             <div class="edge-ai-section-heading">
 
                 <span class="edge-ai-section-icon">
-                    ◉
+                    🏛
                 </span>
 
                 <div>
@@ -6862,9 +7071,120 @@ PANEL 1  watchlist seo
 
             </div>
 
-            <div class="edge-ai-placeholder">
-                Major institutional holders and recently
-                disclosed institutional activity.
+
+            <!-- OWNERSHIP OVERVIEW -->
+
+            <div class="edge-ai-institutional-grid">
+
+                <div class="edge-ai-institutional-item">
+
+                    <span>
+                        REPORTED INSTITUTIONAL OWNERSHIP
+                    </span>
+
+                    <strong id="edgeAIInstitutionalOwnership">
+                        Researching...
+                    </strong>
+
+                </div>
+
+
+                <div class="edge-ai-institutional-item">
+
+                    <span>
+                        DATA PERIOD
+                    </span>
+
+                    <strong id="edgeAIInstitutionalPeriod">
+                        Researching...
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- MAJOR HOLDERS -->
+
+            <div class="edge-ai-institutional-block">
+
+                <span>
+                    MAJOR REPORTED HOLDERS
+                </span>
+
+                <div
+                    id="edgeAIMajorHolders"
+                    class="edge-ai-holder-list"
+                >
+
+                    <div class="edge-ai-institutional-loading">
+                        Researching major institutional holders...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RECENT ACTIVITY -->
+
+            <div class="edge-ai-institutional-block">
+
+                <span>
+                    RECENT DISCLOSED ACTIVITY
+                </span>
+
+                <div
+                    id="edgeAIInstitutionalActivity"
+                    class="edge-ai-institutional-activity-list"
+                >
+
+                    <div class="edge-ai-institutional-loading">
+                        Researching recent disclosed activity...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- OWNERSHIP CONTEXT -->
+
+            <div class="edge-ai-institutional-context">
+
+                <span>
+                    OWNERSHIP CONTEXT
+                </span>
+
+                <p id="edgeAIOwnershipConcentration">
+                    Researching ownership concentration...
+                </p>
+
+            </div>
+
+
+            <!-- SUMMARY -->
+
+            <div class="edge-ai-institutional-summary">
+
+                <span>
+                    INSTITUTIONAL SUMMARY
+                </span>
+
+                <p id="edgeAIInstitutionalSummary">
+                    Researching institutional ownership...
+                </p>
+
+            </div>
+
+
+            <!-- DATA NOTICE -->
+
+            <div class="edge-ai-institutional-notice">
+
+                Institutional ownership reflects reported
+                regulatory filings and may lag current positions.
+
             </div>
 
         </section>
