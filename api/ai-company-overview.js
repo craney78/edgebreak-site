@@ -51,6 +51,20 @@ export default async function handler(req, res) {
             .toUpperCase();
 
 
+    /*
+    Remove anything accidentally attached to the
+    company name, such as citations or URLs.
+    */
+
+    const cleanCompanyName =
+        String(companyName || "")
+            .replace(/\(\[.*?\]\(.*?\)\)/g, "")
+            .replace(/https?:\/\/\S+/gi, "")
+            .replace(/\[[^\]]+\]/g, "")
+            .replace(/\s+/g, " ")
+            .trim();
+
+
     try {
 
         /* =====================================
@@ -60,7 +74,6 @@ export default async function handler(req, res) {
         const response = await fetch(
             "https://api.openai.com/v1/responses",
             {
-
                 method: "POST",
 
                 headers: {
@@ -86,29 +99,26 @@ export default async function handler(req, res) {
                     tool_choice: "auto",
 
                     input: `
-
 You are EdgeBreak AI Research.
 
 Research the company currently represented by
 NASDAQ ticker ${cleanSymbol}.
 
 Known company name:
-${companyName || "Not supplied"}
+${cleanCompanyName || "Not supplied"}
 
-Use current web search to verify company facts.
+Use current web search to verify the company.
 
-Prefer authoritative sources:
+Prefer authoritative sources in this order:
 
 1. Official company website
-2. Investor relations website
+2. Official investor relations website
 3. SEC filings
 4. NASDAQ or exchange information
 
-Return factual company information only.
-
 Research ONLY the Company Overview.
 
-Find:
+Return:
 
 - Industry
 - Headquarters
@@ -117,7 +127,9 @@ Find:
 - Main products or services
 - Main geographic markets
 
-IMPORTANT:
+IMPORTANT RULES:
+
+Return factual company information only.
 
 Do not provide investment advice.
 
@@ -129,15 +141,39 @@ Do not predict stock performance.
 
 Do not describe the stock as bullish or bearish.
 
-Do not include URLs, citations, markdown links,
-footnotes or source names inside the returned fields.
+Do not include citations in any field.
+
+Do not include URLs in any field.
+
+Do not include markdown links in any field.
+
+Do not include source names in any field.
+
+Do not include explanatory notes.
+
+Do not include commentary before or after the data.
 
 If a fact cannot be reliably verified,
-return "Not verified".
+return exactly "Not verified".
 
-Keep each answer concise.
+Industry:
+Use a short industry description.
 
-                    `,
+Headquarters:
+Return city and state/country only.
+
+CEO:
+Return the person's name only.
+
+Employees:
+Return the approximate number only where possible.
+
+Main products or services:
+Maximum two concise sentences.
+
+Geographic markets:
+Maximum two concise sentences.
+`,
 
                     text: {
 
@@ -210,6 +246,10 @@ Keep each answer concise.
             await response.json();
 
 
+        /* =====================================
+           OPENAI ERROR
+        ===================================== */
+
         if (!response.ok) {
 
             console.error(
@@ -231,7 +271,7 @@ Keep each answer concise.
 
 
         /* =====================================
-           EXTRACT OUTPUT
+           EXTRACT ONLY FINAL OUTPUT TEXT
         ===================================== */
 
         let outputText = "";
@@ -241,19 +281,33 @@ Keep each answer concise.
 
             for (const item of data.output) {
 
+                /*
+                IMPORTANT:
+                Only read assistant message output.
+
+                Ignore web search calls and all other
+                response objects.
+                */
+
+                if (item.type !== "message") {
+                    continue;
+                }
+
+
                 if (!Array.isArray(item.content)) {
                     continue;
                 }
 
+
                 for (const content of item.content) {
 
                     if (
-                        content.type ===
-                        "output_text"
+                        content.type === "output_text" &&
+                        typeof content.text === "string"
                     ) {
 
-                        outputText +=
-                            content.text || "";
+                        outputText =
+                            content.text.trim();
 
                     }
 
@@ -266,6 +320,11 @@ Keep each answer concise.
 
         if (!outputText) {
 
+            console.error(
+                "No final company overview output:",
+                JSON.stringify(data)
+            );
+
             return res.status(500).json({
                 error:
                     "No company overview was returned"
@@ -275,7 +334,7 @@ Keep each answer concise.
 
 
         /* =====================================
-           PARSE JSON
+           PARSE STRUCTURED JSON
         ===================================== */
 
         let overview;
@@ -290,7 +349,7 @@ Keep each answer concise.
         catch (error) {
 
             console.error(
-                "Company Overview JSON Error:",
+                "Company Overview JSON Parse Error:",
                 outputText
             );
 
@@ -300,6 +359,94 @@ Keep each answer concise.
             });
 
         }
+
+
+        /* =====================================
+           CLEAN FIELD FUNCTION
+        ===================================== */
+
+        function cleanField(value) {
+
+            if (
+                value === null ||
+                value === undefined
+            ) {
+                return "Not verified";
+            }
+
+
+            let cleaned =
+                String(value)
+                    .replace(
+                        /https?:\/\/[^\s)]+/gi,
+                        ""
+                    )
+                    .replace(
+                        /\[[^\]]+\]\([^)]+\)/g,
+                        ""
+                    )
+                    .replace(
+                        /\[[^\]]+\]/g,
+                        ""
+                    )
+                    .replace(
+                        /\(\s*\)/g,
+                        ""
+                    )
+                    .replace(
+                        /\s+/g,
+                        " "
+                    )
+                    .trim();
+
+
+            if (!cleaned) {
+                return "Not verified";
+            }
+
+
+            return cleaned;
+
+        }
+
+
+        /* =====================================
+           BUILD FINAL SAFE OBJECT
+        ===================================== */
+
+        const cleanOverview = {
+
+            industry:
+                cleanField(
+                    overview.industry
+                ),
+
+            headquarters:
+                cleanField(
+                    overview.headquarters
+                ),
+
+            ceo:
+                cleanField(
+                    overview.ceo
+                ),
+
+            employees:
+                cleanField(
+                    overview.employees
+                ),
+
+            mainProducts:
+                cleanField(
+                    overview.mainProducts
+                ),
+
+            geographicMarkets:
+                cleanField(
+                    overview.geographicMarkets
+                )
+
+        };
 
 
         /* =====================================
@@ -314,7 +461,7 @@ Keep each answer concise.
                 cleanSymbol,
 
             companyOverview:
-                overview
+                cleanOverview
 
         });
 
