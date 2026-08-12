@@ -10691,13 +10691,21 @@ function openLaunchPadAIResearch(symbol){
 }
 
 /* =========================================
-   EDGEBREAK AI COMPANY RESEARCH
+   EDGEBREAK AI — OPEN RESEARCH PANEL
+   NO AUTOMATIC API CALLS
 ========================================= */
 
 async function loadEdgeBreakAIResearch(symbol){
 
-    console.count("loadEdgeBreakAIResearch called");
-    console.log("Research symbol:", symbol);
+    console.count(
+        "loadEdgeBreakAIResearch called"
+    );
+
+    console.log(
+        "Research symbol:",
+        symbol
+    );
+
 
     const cleanSymbol =
         String(symbol || "")
@@ -10711,7 +10719,7 @@ async function loadEdgeBreakAIResearch(symbol){
 
 
     /* =====================================
-       ELEMENTS
+       COMPANY HEADER
     ===================================== */
 
     const companyName =
@@ -10719,181 +10727,32 @@ async function loadEdgeBreakAIResearch(symbol){
             ".edge-ai-company h3"
         );
 
+
+    if(companyName){
+
+        companyName.textContent =
+            cleanSymbol;
+
+    }
+
+
+    /* =====================================
+       MAIN SUMMARY
+    ===================================== */
+
     const summaryBox =
         document.getElementById(
             "edgeAISummary"
         );
 
 
-    /* =====================================
-       LOADING STATE
-    ===================================== */
-
-    if(companyName){
-
-        companyName.textContent =
-            "Researching company...";
-
-    }
-
-
     if(summaryBox){
 
-        summaryBox.innerHTML = `
-            <div class="edge-ai-loading">
-                EdgeBreak AI is researching
-                ${cleanSymbol}...
-            </div>
-        `;
+        summaryBox.textContent =
+            "Choose a research section below to begin EdgeBreak AI research.";
 
     }
 
-
-    /* =====================================
-       CALL EDGEBREAK API
-    ===================================== */
-
-    try{
-
-        const response =
-            await fetch(
-                "/api/ai-research",
-                {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        symbol: cleanSymbol
-                    })
-
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if(!response.ok){
-
-            throw new Error(
-                data.error ||
-                "AI research request failed"
-            );
-
-        }
-
-
-        /* =================================
-           COMPANY NAME
-        ================================= */
-
-        if(companyName){
-
-            companyName.textContent =
-                data.companyName ||
-                cleanSymbol;
-
-        }
-
-
-        /* =================================
-           AI SUMMARY
-        ================================= */
-
-        if(summaryBox){
-
-            summaryBox.textContent =
-                data.research ||
-                "Research unavailable.";
-
-        }
-
-        /* =================================
-        EDGEBREAK AI RESEARCH QUEUE
-        ================================= */
-
-        const verifiedCompanyName =
-            data.companyName || "";
-
-
-        /* COMPANY OVERVIEW */
-
-        await loadEdgeBreakAICompanyOverview(
-            cleanSymbol,
-            verifiedCompanyName
-        );
-
-
-        /* MARKET ATTENTION */
-
-        await loadEdgeBreakAIMarketAttention(
-            cleanSymbol,
-            verifiedCompanyName
-        );
-
-
-        /* FINANCIAL HIGHLIGHTS */
-
-        await loadEdgeBreakAIFinancials(
-            cleanSymbol,
-            verifiedCompanyName
-        );
-
-
-        /* RECENT NEWS */
-
-        await loadEdgeBreakAIRecentNews(
-            cleanSymbol,
-            verifiedCompanyName
-        );
-
-
-        /* INSTITUTIONAL ACTIVITY */
-
-        await loadEdgeBreakAIInstitutional(
-            cleanSymbol,
-            verifiedCompanyName
-        );
-
-
-        /* SEC FILINGS */
-
-        await loadEdgeBreakAISecFilings(
-            cleanSymbol,
-            verifiedCompanyName
-        );
-
-    }
-    catch(error){
-
-        console.error(
-            "EdgeBreak AI Research Error:",
-            error
-        );
-
-
-        if(companyName){
-
-            companyName.textContent =
-                cleanSymbol;
-
-        }
-
-
-        if(summaryBox){
-
-            summaryBox.textContent =
-                "EdgeBreak AI research is temporarily unavailable.";
-
-        }
-
-    }
 
 }
 
