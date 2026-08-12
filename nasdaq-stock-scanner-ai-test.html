@@ -10009,6 +10009,15 @@ async function loadEdgeBreakAIResearch(symbol){
             data.companyName || ""
         );
 
+        /* =================================
+        RECENT NEWS
+        ================================= */
+
+        loadEdgeBreakAIRecentNews(
+            symbol,
+            data.companyName || ""
+        );
+
     }
     catch(error){
 
@@ -10776,6 +10785,310 @@ async function loadEdgeBreakAIFinancials(
             }
 
         });
+
+    }
+
+}
+
+async function loadEdgeBreakAIRecentNews(
+    symbol,
+    companyName = ""
+) {
+
+    /* =================================
+       NEWS ELEMENTS
+    ================================= */
+
+    const newsLevel =
+        document.getElementById(
+            "edgeAINewsLevel"
+        );
+
+    const newsBadge =
+        document.getElementById(
+            "edgeAINewsBadge"
+        );
+
+    const newsSummary =
+        document.getElementById(
+            "edgeAINewsSummary"
+        );
+
+    const newsItems =
+        document.getElementById(
+            "edgeAINewsItems"
+        );
+
+
+    /* =================================
+       RESET
+    ================================= */
+
+    if (newsLevel) {
+        newsLevel.textContent =
+            "Researching...";
+    }
+
+    if (newsBadge) {
+        newsBadge.textContent =
+            "—";
+    }
+
+    if (newsSummary) {
+        newsSummary.textContent =
+            "Researching recent company developments...";
+    }
+
+    if (newsItems) {
+
+        newsItems.innerHTML = `
+            <div class="edge-ai-news-loading">
+                Researching recent news...
+            </div>
+        `;
+
+    }
+
+
+    try {
+
+        /* =================================
+           CALL EDGEBREAK API
+        ================================= */
+
+        const response = await fetch(
+            "/api/ai-recent-news",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    symbol,
+                    companyName
+                })
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Recent news research failed"
+            );
+
+        }
+
+
+        const news =
+            data.recentNews;
+
+
+        if (!news) {
+
+            throw new Error(
+                "No recent news returned"
+            );
+
+        }
+
+
+        /* =================================
+           NEWS ACTIVITY
+        ================================= */
+
+        if (newsLevel) {
+
+            newsLevel.textContent =
+                news.newsActivity ||
+                "Not verified";
+
+        }
+
+
+        if (newsBadge) {
+
+            newsBadge.textContent =
+                news.newsActivity ||
+                "—";
+
+        }
+
+
+        /* =================================
+           NEWS SUMMARY
+        ================================= */
+
+        if (newsSummary) {
+
+            newsSummary.textContent =
+                news.newsSummary ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           NEWS ITEMS
+        ================================= */
+
+        if (newsItems) {
+
+            newsItems.innerHTML = "";
+
+
+            if (
+                Array.isArray(news.newsItems) &&
+                news.newsItems.length
+            ) {
+
+                news.newsItems.forEach(item => {
+
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
+
+                    card.className =
+                        "edge-ai-news-item";
+
+
+                    /* META */
+
+                    const meta =
+                        document.createElement(
+                            "div"
+                        );
+
+                    meta.className =
+                        "edge-ai-news-meta";
+
+
+                    const date =
+                        document.createElement(
+                            "span"
+                        );
+
+                    date.className =
+                        "edge-ai-news-date";
+
+                    date.textContent =
+                        item.date ||
+                        "Date not verified";
+
+
+                    const category =
+                        document.createElement(
+                            "span"
+                        );
+
+                    category.className =
+                        "edge-ai-news-category";
+
+                    category.textContent =
+                        item.category ||
+                        "Other";
+
+
+                    meta.appendChild(date);
+                    meta.appendChild(category);
+
+
+                    /* HEADLINE */
+
+                    const headline =
+                        document.createElement(
+                            "h4"
+                        );
+
+                    headline.textContent =
+                        item.headline ||
+                        "Company development";
+
+
+                    /* SUMMARY */
+
+                    const summary =
+                        document.createElement(
+                            "p"
+                        );
+
+                    summary.textContent =
+                        item.summary ||
+                        "Details not verified.";
+
+
+                    /* BUILD CARD */
+
+                    card.appendChild(meta);
+                    card.appendChild(headline);
+                    card.appendChild(summary);
+
+                    newsItems.appendChild(card);
+
+                });
+
+            }
+            else {
+
+                const empty =
+                    document.createElement(
+                        "div"
+                    );
+
+                empty.className =
+                    "edge-ai-news-loading";
+
+                empty.textContent =
+                    "No material recent developments identified.";
+
+                newsItems.appendChild(empty);
+
+            }
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "EdgeBreak Recent News:",
+            error
+        );
+
+
+        if (newsLevel) {
+            newsLevel.textContent =
+                "Research unavailable";
+        }
+
+        if (newsBadge) {
+            newsBadge.textContent =
+                "—";
+        }
+
+        if (newsSummary) {
+            newsSummary.textContent =
+                "Recent news research is currently unavailable.";
+        }
+
+        if (newsItems) {
+
+            newsItems.innerHTML = `
+                <div class="edge-ai-news-loading">
+                    Recent news unavailable.
+                </div>
+            `;
+
+        }
 
     }
 
