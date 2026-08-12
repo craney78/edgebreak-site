@@ -8728,6 +8728,8 @@ function openBreakoutAIResearch(symbol){
 
     openEdgeBreakAI();
 
+    loadEdgeBreakAIResearch(symbol);
+
 }
 
 /* =========================================
@@ -9006,6 +9008,8 @@ function openPreBreakoutAIResearch(symbol){
 
     openEdgeBreakAI();
 
+    loadEdgeBreakAIResearch(symbol);
+
 }
 
 /* =========================================
@@ -9275,6 +9279,157 @@ function openLaunchPadAIResearch(symbol){
     ===================================== */
 
     openEdgeBreakAI();
+
+    loadEdgeBreakAIResearch(symbol);
+
+}
+
+/* =========================================
+   EDGEBREAK AI COMPANY RESEARCH
+========================================= */
+
+async function loadEdgeBreakAIResearch(symbol){
+
+    const cleanSymbol =
+        String(symbol || "")
+            .trim()
+            .toUpperCase();
+
+
+    if(!cleanSymbol){
+        return;
+    }
+
+
+    /* =====================================
+       ELEMENTS
+    ===================================== */
+
+    const companyName =
+        document.querySelector(
+            ".edge-ai-company h3"
+        );
+
+    const summaryBox =
+        document.querySelector(
+            ".edge-ai-summary .edge-ai-placeholder"
+        );
+
+
+    /* =====================================
+       LOADING STATE
+    ===================================== */
+
+    if(companyName){
+
+        companyName.textContent =
+            "Researching company...";
+
+    }
+
+
+    if(summaryBox){
+
+        summaryBox.innerHTML = `
+            <div class="edge-ai-loading">
+                EdgeBreak AI is researching
+                ${cleanSymbol}...
+            </div>
+        `;
+
+    }
+
+
+    /* =====================================
+       CALL EDGEBREAK API
+    ===================================== */
+
+    try{
+
+        const response =
+            await fetch(
+                "/api/ai-research",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        symbol: cleanSymbol
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.error ||
+                "AI research request failed"
+            );
+
+        }
+
+
+        /* =================================
+           COMPANY NAME
+        ================================= */
+
+        if(companyName){
+
+            companyName.textContent =
+                data.companyName ||
+                cleanSymbol;
+
+        }
+
+
+        /* =================================
+           AI SUMMARY
+        ================================= */
+
+        if(summaryBox){
+
+            summaryBox.textContent =
+                data.research ||
+                "Research unavailable.";
+
+        }
+
+    }
+    catch(error){
+
+        console.error(
+            "EdgeBreak AI Research Error:",
+            error
+        );
+
+
+        if(companyName){
+
+            companyName.textContent =
+                cleanSymbol;
+
+        }
+
+
+        if(summaryBox){
+
+            summaryBox.textContent =
+                "EdgeBreak AI research is temporarily unavailable.";
+
+        }
+
+    }
 
 }
 
