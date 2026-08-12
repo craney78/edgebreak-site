@@ -54,6 +54,16 @@ export default async function handler(req, res) {
 
         /* =====================================
            FAST COMPANY RESEARCH
+
+           IMPORTANT:
+           No web search is used here.
+
+           This endpoint is intentionally kept
+           lightweight so the AI panel can open
+           quickly.
+
+           Current web research is handled by
+           the dedicated EdgeBreak AI endpoints.
         ===================================== */
 
         const response = await fetch(
@@ -76,34 +86,24 @@ export default async function handler(req, res) {
 
                     model: "gpt-5-mini",
 
-                    tools: [
-                        {
-                            type: "web_search"
-                        }
-                    ],
 
-                    tool_choice: "auto",
+                    /* =================================
+                       PROMPT
+                    ================================= */
 
                     input: `
 
 You are EdgeBreak AI Research.
 
-Research NASDAQ ticker ${cleanSymbol}.
-
-FIRST:
-Use web search to verify the current company
-associated with ticker ${cleanSymbol}.
-
-Prefer:
-
-1. SEC
-2. Official company website
-3. Official investor relations website
-4. NASDAQ or exchange information
+Identify the publicly listed company associated
+with NASDAQ ticker ${cleanSymbol} using your
+existing knowledge.
 
 This is a FAST company identification request.
 
-Do NOT research:
+Do not perform detailed company research.
+
+Do NOT research or discuss:
 
 - financial statements
 - detailed earnings
@@ -117,26 +117,58 @@ Do NOT research:
 
 Return only:
 
-1. Current verified company name.
-2. Primary industry/business area.
-3. A concise factual 80-120 word summary
-   explaining what the company does.
+1. Company name.
+2. Primary industry or business area.
+3. A concise factual summary explaining what
+   the company primarily does.
+
+The summary should be approximately 60-100 words.
+
+IMPORTANT:
+
+This initial response is for quick identification
+and orientation only.
+
+Dedicated EdgeBreak AI research modules separately
+perform current web research for company information,
+financial information, news, market attention,
+institutional activity and SEC filings.
+
+Do not claim that information is current or
+web-verified in this response.
+
+If you are not sufficiently confident that the
+ticker can be identified, return "Not verified"
+rather than guessing.
 
 Do not provide investment advice.
 
 Do not provide buy, sell or hold recommendations.
 
-Do not predict the stock price.
+Do not provide price targets.
+
+Do not predict stock performance.
 
 Do not describe the stock as bullish or bearish.
 
-Do not include URLs, citations, markdown links,
-footnotes or source names in the summary.
+Do not include URLs.
 
-If the ticker cannot be reliably verified,
-state this rather than guessing.
+Do not include citations.
+
+Do not include markdown links.
+
+Do not include footnotes.
+
+Do not include source names.
+
+Keep the response factual and concise.
 
                     `,
+
+
+                    /* =================================
+                       STRUCTURED OUTPUT
+                    ================================= */
 
                     text: {
 
@@ -205,6 +237,7 @@ state this rather than guessing.
                 JSON.stringify(data)
             );
 
+
             return res
                 .status(response.status)
                 .json({
@@ -253,7 +286,17 @@ state this rather than guessing.
         }
 
 
+        /* =====================================
+           CHECK OUTPUT
+        ===================================== */
+
         if (!outputText) {
+
+            console.error(
+                "EdgeBreak AI returned no output:",
+                JSON.stringify(data)
+            );
+
 
             return res.status(500).json({
 
@@ -285,6 +328,7 @@ state this rather than guessing.
                 outputText
             );
 
+
             return res.status(500).json({
 
                 error:
@@ -296,7 +340,33 @@ state this rather than guessing.
 
 
         /* =====================================
+           VALIDATE RESULT
+        ===================================== */
+
+        const companyName =
+            research?.companyName ||
+            "Not verified";
+
+
+        const industry =
+            research?.industry ||
+            "Not verified";
+
+
+        const summary =
+            research?.summary ||
+            "Company information could not be verified.";
+
+
+        /* =====================================
            RETURN TO EDGEBREAK
+
+           Keep these property names unchanged
+           because the existing frontend uses:
+           
+           data.companyName
+           data.industry
+           data.research
         ===================================== */
 
         return res.status(200).json({
@@ -307,18 +377,22 @@ state this rather than guessing.
                 cleanSymbol,
 
             companyName:
-                research.companyName,
+                companyName,
 
             industry:
-                research.industry,
+                industry,
 
             research:
-                research.summary
+                summary
 
         });
 
     }
     catch (error) {
+
+        /* =====================================
+           SERVER ERROR
+        ===================================== */
 
         console.error(
             "EdgeBreak AI Error:",
