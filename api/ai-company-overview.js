@@ -120,6 +120,7 @@ Research ONLY the Company Overview.
 
 Return:
 
+- Verified company name
 - Industry
 - Headquarters
 - Chief Executive Officer
@@ -155,6 +156,10 @@ Do not include commentary before or after the data.
 
 If a fact cannot be reliably verified,
 return exactly "Not verified".
+
+Company name:
+Return the current official company name associated
+with ticker ${cleanSymbol}.
 
 Industry:
 Use a short industry description.
@@ -192,6 +197,10 @@ Maximum two concise sentences.
 
                                 properties: {
 
+                                    companyName: {
+                                        type: "string"
+                                    },
+
                                     industry: {
                                         type: "string"
                                     },
@@ -219,6 +228,7 @@ Maximum two concise sentences.
                                 },
 
                                 required: [
+                                    "companyName",
                                     "industry",
                                     "headquarters",
                                     "ceo",
@@ -416,6 +426,11 @@ Maximum two concise sentences.
 
         const cleanOverview = {
 
+            companyName:
+                cleanField(
+                    overview.companyName
+                ),
+            
             industry:
                 cleanField(
                     overview.industry
@@ -450,7 +465,7 @@ Maximum two concise sentences.
 
 
         /* =====================================
-           RETURN CLEAN DATA
+        RETURN CLEAN DATA
         ===================================== */
 
         return res.status(200).json({
@@ -459,6 +474,9 @@ Maximum two concise sentences.
 
             symbol:
                 cleanSymbol,
+
+            companyName:
+                cleanOverview.companyName,
 
             companyOverview:
                 cleanOverview
