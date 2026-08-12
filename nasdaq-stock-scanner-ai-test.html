@@ -4609,64 +4609,86 @@ EDGEBREAK AI — COMPANY OVERVIEW
 }
 
 /* =========================================
-EDGEBREAK AI — BUSINESS MODEL
+EDGEBREAK AI — FINANCIAL HIGHLIGHTS
 ========================================= */
 
-.edge-ai-business-grid {
+.edge-ai-financial-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
     margin-top: 18px;
 }
 
-.edge-ai-business-item {
+.edge-ai-financial-item {
     background: #091426;
     border: 1px solid #1c2a40;
     border-radius: 12px;
     padding: 16px 18px;
+    min-height: 82px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.edge-ai-business-item > span,
-.edge-ai-business-drivers > span {
+.edge-ai-financial-item > span,
+.edge-ai-financial-quarter > span {
     display: block;
+
     color: #7486a3;
+
     font-size: 11px;
     font-weight: 800;
+
     letter-spacing: 1px;
+
     text-transform: uppercase;
 }
 
-.edge-ai-business-item p {
+.edge-ai-financial-item strong {
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    line-height: 1.45;
+}
+
+.edge-ai-financial-wide {
+    grid-column: 1 / -1;
+}
+
+.edge-ai-financial-quarter {
+    margin-top: 12px;
+
+    background: #091426;
+
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+
+    padding: 16px 18px;
+}
+
+.edge-ai-financial-quarter p {
     margin: 9px 0 0;
+
     color: #c3cede;
+
     font-size: 14px;
     line-height: 1.65;
 }
 
-.edge-ai-business-drivers {
-    margin-top: 12px;
-    background: #091426;
-    border: 1px solid #1c2a40;
-    border-radius: 12px;
-    padding: 16px 18px;
-}
 
-.edge-ai-business-drivers ul {
-    margin: 10px 0 0;
-    padding-left: 18px;
-    color: #c3cede;
-}
-
-.edge-ai-business-drivers li {
-    margin: 5px 0;
-    line-height: 1.5;
-}
-
+/* MOBILE */
 
 @media (max-width: 600px) {
 
-    .edge-ai-business-grid {
+    .edge-ai-financial-grid {
         grid-template-columns: 1fr;
+    }
+
+    .edge-ai-financial-wide {
+        grid-column: auto;
     }
 
 }
@@ -6415,107 +6437,10 @@ PANEL 1  watchlist seo
             </div>
 
         </section>
-                
+             
+        
 
-        <!-- BUSINESS MODEL -->
-
-        <section class="edge-ai-section">
-
-            <div class="edge-ai-section-heading">
-
-                <span class="edge-ai-section-icon">
-                    ⚙
-                </span>
-
-                <div>
-
-                    <span>OPERATIONS</span>
-
-                    <h3>
-                        Business Model
-                    </h3>
-
-                </div>
-
-            </div>
-
-
-            <div class="edge-ai-business-grid">
-
-                <div class="edge-ai-business-item">
-
-                    <span>
-                        HOW IT MAKES MONEY
-                    </span>
-
-                    <p id="edgeAIHowMakesMoney">
-                        Researching...
-                    </p>
-
-                </div>
-
-
-                <div class="edge-ai-business-item">
-
-                    <span>
-                        REVENUE SOURCES
-                    </span>
-
-                    <p id="edgeAIRevenueSources">
-                        Researching...
-                    </p>
-
-                </div>
-
-
-                <div class="edge-ai-business-item">
-
-                    <span>
-                        CUSTOMER BASE
-                    </span>
-
-                    <p id="edgeAICustomerBase">
-                        Researching...
-                    </p>
-
-                </div>
-
-
-                <div class="edge-ai-business-item">
-
-                    <span>
-                        RECURRING REVENUE
-                    </span>
-
-                    <p id="edgeAIRecurringRevenue">
-                        Researching...
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="edge-ai-business-drivers">
-
-                <span>
-                    KEY BUSINESS DRIVERS
-                </span>
-
-                <ul id="edgeAIBusinessDrivers">
-
-                    <li>
-                        Researching...
-                    </li>
-
-                </ul>
-
-            </div>
-
-        </section>
-
-
-        <!-- FINANCIALS -->
+        <!-- FINANCIAL HIGHLIGHTS -->
 
         <section class="edge-ai-section">
 
@@ -6537,9 +6462,114 @@ PANEL 1  watchlist seo
 
             </div>
 
-            <div class="edge-ai-placeholder">
-                Revenue, growth, EPS, margins, cash, debt,
-                free cash flow and latest quarterly results.
+
+            <div class="edge-ai-financial-grid">
+
+
+                <div class="edge-ai-financial-item">
+
+                    <span>
+                        LATEST REVENUE
+                    </span>
+
+                    <strong id="edgeAIRevenue">
+                        Researching...
+                    </strong>
+
+                </div>
+
+
+                <div class="edge-ai-financial-item">
+
+                    <span>
+                        REVENUE GROWTH
+                    </span>
+
+                    <strong id="edgeAIRevenueGrowth">
+                        Researching...
+                    </strong>
+
+                </div>
+
+
+                <div class="edge-ai-financial-item">
+
+                    <span>
+                        EPS
+                    </span>
+
+                    <strong id="edgeAIEPS">
+                        Researching...
+                    </strong>
+
+                </div>
+
+
+                <div class="edge-ai-financial-item">
+
+                    <span>
+                        GROSS MARGIN
+                    </span>
+
+                    <strong id="edgeAIGrossMargin">
+                        Researching...
+                    </strong>
+
+                </div>
+
+
+                <div class="edge-ai-financial-item">
+
+                    <span>
+                        CASH
+                    </span>
+
+                    <strong id="edgeAICash">
+                        Researching...
+                    </strong>
+
+                </div>
+
+
+                <div class="edge-ai-financial-item">
+
+                    <span>
+                        DEBT
+                    </span>
+
+                    <strong id="edgeAIDebt">
+                        Researching...
+                    </strong>
+
+                </div>
+
+
+                <div class="edge-ai-financial-item edge-ai-financial-wide">
+
+                    <span>
+                        FREE CASH FLOW
+                    </span>
+
+                    <strong id="edgeAIFreeCashFlow">
+                        Researching...
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="edge-ai-financial-quarter">
+
+                <span>
+                    LATEST QUARTER
+                </span>
+
+                <p id="edgeAILatestQuarter">
+                    Researching latest reported financial results...
+                </p>
+
             </div>
 
         </section>

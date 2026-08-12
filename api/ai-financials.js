@@ -1,19 +1,10 @@
 export default async function handler(req, res) {
 
-    /* =========================================
-       POST ONLY
-    ========================================= */
-
     if (req.method !== "POST") {
         return res.status(405).json({
             error: "Method not allowed"
         });
     }
-
-
-    /* =========================================
-       CHECK API KEY
-    ========================================= */
 
     if (!process.env.OPENAI_API_KEY) {
         return res.status(500).json({
@@ -21,10 +12,6 @@ export default async function handler(req, res) {
         });
     }
 
-
-    /* =========================================
-       GET COMPANY DATA
-    ========================================= */
 
     const {
         symbol,
@@ -56,10 +43,6 @@ export default async function handler(req, res) {
 
     try {
 
-        /* =====================================
-           BUSINESS MODEL RESEARCH
-        ===================================== */
-
         const response = await fetch(
             "https://api.openai.com/v1/responses",
             {
@@ -88,166 +71,114 @@ export default async function handler(req, res) {
                     input: `
 You are EdgeBreak AI Research.
 
-Research the current business model of the
-NASDAQ-listed company represented by ticker:
+Research the CURRENT financial information
+for the NASDAQ-listed company represented by:
 
-${cleanSymbol}
+Ticker: ${cleanSymbol}
 
 Known company name:
-
 ${cleanCompanyName || "Not supplied"}
 
-Use current web research to verify the company
-and its business model.
+Verify the company before researching its
+financial information.
 
-Prefer authoritative sources:
+Prefer authoritative sources in this order:
 
-1. Official company website
-2. Investor relations website
-3. Latest 10-K
-4. Latest 10-Q
+1. Latest company earnings release
+2. Official investor relations website
+3. Latest 10-Q
+4. Latest 10-K
 5. SEC filings
 
-Research ONLY the company's business model.
+Research ONLY Financial Highlights.
 
-=========================================
-HOW IT MAKES MONEY
-=========================================
+Return the following:
 
-Explain concisely how the company generates
-revenue.
+LATEST REVENUE
+Use the latest reported quarterly revenue.
+Include the reporting period.
 
-Focus on the actual economic activity of the
-business.
+Example:
+$184.2 million — Q2 2026
 
-Maximum 2 concise sentences.
+REVENUE GROWTH
+Use year-over-year revenue growth for the
+same latest quarter where available.
 
+Example:
++12.4% YoY
 
-=========================================
-REVENUE SOURCES
-=========================================
+EPS
+Use the latest reported diluted EPS.
+Clearly identify GAAP EPS where possible.
 
-Identify the company's important revenue
-sources, business segments, product categories
-or service categories.
+Example:
+-$0.18 diluted EPS
 
-Maximum 3 concise sentences.
+CASH
+Use the latest reported cash and cash
+equivalents figure.
 
+DEBT
+Use the latest clearly reported debt figure.
+Do not confuse total liabilities with debt.
 
-=========================================
-CUSTOMER BASE
-=========================================
+GROSS MARGIN
+Use the latest reported GAAP gross margin
+where available.
 
-Identify the main types of customers the
-company serves.
+FREE CASH FLOW
+Use the latest reported free cash flow where
+the company explicitly reports it or where it
+can be reliably verified.
 
-Examples may include:
+Do not invent free cash flow.
 
-Consumers
-Businesses
-Government agencies
-Hospitals
-Pharmaceutical companies
-Financial institutions
-Manufacturers
-Enterprise customers
+LATEST QUARTER
+Provide a maximum 3-sentence factual summary
+of the latest reported quarter.
 
-Do not invent specific customers unless they
-are publicly verified.
+Include important reported developments such
+as revenue movement, profitability or loss,
+guidance changes, or other material financial
+information where relevant.
 
-Maximum 2 concise sentences.
+IMPORTANT:
 
+All figures must include useful context.
 
-=========================================
-RECURRING REVENUE
-=========================================
+Prefer quarterly figures for consistency.
 
-Explain whether the company has identifiable
-recurring revenue.
+Do not mix annual revenue with quarterly EPS
+without clearly identifying the periods.
 
-Examples include:
+Do not invent figures.
 
-Subscriptions
-Software licences
-Service contracts
-Consumables
-Maintenance
-Recurring financing income
-Long-term contracts
+Do not estimate missing figures.
 
-If recurring revenue exists, explain its
-general source.
-
-Do NOT invent a percentage of recurring
-revenue.
-
-If recurring revenue cannot be reliably
-established, return:
+If a value cannot be reliably verified,
+return exactly:
 
 Not verified
 
+Do not include URLs in returned fields.
 
-=========================================
-KEY BUSINESS DRIVERS
-=========================================
+Do not include citations in returned fields.
 
-Identify up to 4 factual factors that are
-important to how the business generates
-revenue.
+Do not include markdown links in returned
+fields.
 
-Examples:
-
-Product sales
-Subscription growth
-Customer adoption
-Contract wins
-Loan portfolio growth
-Manufacturing volumes
-Installed customer base
-Consumables
-Service revenue
-
-These are business drivers, NOT predictions.
-
-
-=========================================
-IMPORTANT EDGEBREAK RULES
-=========================================
-
-Return factual company research only.
+Do not include source names in returned fields.
 
 Do not provide investment advice.
 
-Do not recommend buying, selling or holding
-the stock.
+Do not recommend buying, selling or holding.
 
 Do not provide price targets.
 
 Do not predict future stock performance.
 
-Do not describe the stock as bullish or
-bearish.
-
-Do not judge whether the business model is
-good or bad.
-
-Do not include URLs inside returned fields.
-
-Do not include citations inside returned
-fields.
-
-Do not include markdown links inside returned
-fields.
-
-Do not include source names inside returned
-fields.
-
-Do not invent facts.
-
-If information cannot be reliably verified,
-return exactly:
-
-Not verified
+Do not describe the stock as bullish or bearish.
 `,
 
                     text: {
@@ -257,7 +188,7 @@ Not verified
                             type: "json_schema",
 
                             name:
-                                "edgebreak_business_model",
+                                "edgebreak_financial_highlights",
 
                             strict: true,
 
@@ -267,53 +198,57 @@ Not verified
 
                                 properties: {
 
-                                    howItMakesMoney: {
+                                    revenue: {
                                         type: "string"
                                     },
 
-                                    revenueSources: {
+                                    revenueGrowth: {
                                         type: "string"
                                     },
 
-                                    customerBase: {
+                                    eps: {
                                         type: "string"
                                     },
 
-                                    recurringRevenue: {
+                                    cash: {
                                         type: "string"
                                     },
 
-                                    keyBusinessDrivers: {
-                                        type: "array",
+                                    debt: {
+                                        type: "string"
+                                    },
 
-                                        items: {
-                                            type: "string"
-                                        },
+                                    grossMargin: {
+                                        type: "string"
+                                    },
 
-                                        maxItems: 4
+                                    freeCashFlow: {
+                                        type: "string"
+                                    },
+
+                                    latestQuarter: {
+                                        type: "string"
                                     }
 
                                 },
 
                                 required: [
-                                    "howItMakesMoney",
-                                    "revenueSources",
-                                    "customerBase",
-                                    "recurringRevenue",
-                                    "keyBusinessDrivers"
+                                    "revenue",
+                                    "revenueGrowth",
+                                    "eps",
+                                    "cash",
+                                    "debt",
+                                    "grossMargin",
+                                    "freeCashFlow",
+                                    "latestQuarter"
                                 ],
 
                                 additionalProperties:
                                     false
-
                             }
-
                         }
-
                     }
-
                 })
-
             }
         );
 
@@ -322,27 +257,20 @@ Not verified
             await response.json();
 
 
-        /* =====================================
-           OPENAI ERROR
-        ===================================== */
-
         if (!response.ok) {
 
             console.error(
-                "Business Model API Error:",
+                "Financial Highlights API Error:",
                 JSON.stringify(data)
             );
 
             return res
                 .status(response.status)
                 .json({
-
                     error:
                         data?.error?.message ||
-                        "Business model request failed"
-
+                        "Financial research request failed"
                 });
-
         }
 
 
@@ -361,11 +289,9 @@ Not verified
                     continue;
                 }
 
-
                 if (!Array.isArray(item.content)) {
                     continue;
                 }
-
 
                 for (const content of item.content) {
 
@@ -378,26 +304,17 @@ Not verified
                             content.text.trim();
 
                     }
-
                 }
-
             }
-
         }
 
 
         if (!outputText) {
 
-            console.error(
-                "No Business Model output:",
-                JSON.stringify(data)
-            );
-
             return res.status(500).json({
                 error:
-                    "No business model research was returned"
+                    "No financial research was returned"
             });
-
         }
 
 
@@ -405,27 +322,26 @@ Not verified
            PARSE JSON
         ===================================== */
 
-        let businessModel;
+        let financials;
 
 
         try {
 
-            businessModel =
+            financials =
                 JSON.parse(outputText);
 
         }
         catch (error) {
 
             console.error(
-                "Business Model JSON Error:",
+                "Financial JSON Parse Error:",
                 outputText
             );
 
             return res.status(500).json({
                 error:
-                    "Unable to process business model research"
+                    "Unable to process financial research"
             });
-
         }
 
 
@@ -476,62 +392,44 @@ Not verified
 
             return cleaned ||
                 "Not verified";
-
         }
 
 
-        const drivers =
-            Array.isArray(
-                businessModel.keyBusinessDrivers
-            )
+        const cleanFinancials = {
 
-                ? businessModel
-                    .keyBusinessDrivers
-                    .slice(0, 4)
-                    .map(cleanField)
-                    .filter(
-                        item =>
-                            item !== "Not verified"
-                    )
+            revenue:
+                cleanField(financials.revenue),
 
-                : [];
-
-
-        /* =====================================
-           FINAL SAFE OBJECT
-        ===================================== */
-
-        const cleanBusinessModel = {
-
-            howItMakesMoney:
+            revenueGrowth:
                 cleanField(
-                    businessModel.howItMakesMoney
+                    financials.revenueGrowth
                 ),
 
-            revenueSources:
+            eps:
+                cleanField(financials.eps),
+
+            cash:
+                cleanField(financials.cash),
+
+            debt:
+                cleanField(financials.debt),
+
+            grossMargin:
                 cleanField(
-                    businessModel.revenueSources
+                    financials.grossMargin
                 ),
 
-            customerBase:
+            freeCashFlow:
                 cleanField(
-                    businessModel.customerBase
+                    financials.freeCashFlow
                 ),
 
-            recurringRevenue:
+            latestQuarter:
                 cleanField(
-                    businessModel.recurringRevenue
-                ),
-
-            keyBusinessDrivers:
-                drivers
-
+                    financials.latestQuarter
+                )
         };
 
-
-        /* =====================================
-           RETURN
-        ===================================== */
 
         return res.status(200).json({
 
@@ -540,27 +438,21 @@ Not verified
             symbol:
                 cleanSymbol,
 
-            businessModel:
-                cleanBusinessModel
-
+            financialHighlights:
+                cleanFinancials
         });
 
     }
     catch (error) {
 
         console.error(
-            "EdgeBreak Business Model Error:",
+            "EdgeBreak Financial Highlights Error:",
             error
         );
 
-
         return res.status(500).json({
-
             error:
-                "Unable to complete business model research"
-
+                "Unable to complete financial research"
         });
-
     }
-
 }
