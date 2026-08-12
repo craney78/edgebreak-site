@@ -4692,6 +4692,189 @@ EDGEBREAK AI — FINANCIAL HIGHLIGHTS
     }
 
 }
+
+/* =========================================
+EDGEBREAK AI — RECENT NEWS
+========================================= */
+
+.edge-ai-news-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    margin-top: 18px;
+    padding: 15px 17px;
+
+    background: #091426;
+
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+}
+
+.edge-ai-news-header strong {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.edge-ai-news-badge {
+    padding: 6px 11px;
+
+    border: 1px solid #263852;
+    border-radius: 999px;
+
+    color: #9fb0c8;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: .7px;
+}
+
+.edge-ai-news-summary {
+    margin-top: 12px;
+    padding: 16px 18px;
+
+    background: #091426;
+
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+}
+
+.edge-ai-news-summary > span {
+    display: block;
+
+    color: #7486a3;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+.edge-ai-news-summary p {
+    margin: 9px 0 0;
+
+    color: #c3cede;
+
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+
+/* NEWS LIST */
+
+.edge-ai-news-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 12px;
+}
+
+
+/* INDIVIDUAL NEWS ITEM */
+
+.edge-ai-news-item {
+    padding: 16px 18px;
+
+    background: #091426;
+
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+}
+
+.edge-ai-news-meta {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 8px;
+}
+
+.edge-ai-news-date {
+    color: #7486a3;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.edge-ai-news-category {
+    padding: 3px 7px;
+
+    border: 1px solid #263852;
+    border-radius: 999px;
+
+    color: #9fb0c8;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: .6px;
+
+    text-transform: uppercase;
+}
+
+.edge-ai-news-item h4 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 750;
+
+    line-height: 1.45;
+}
+
+.edge-ai-news-item p {
+    margin: 7px 0 0;
+
+    color: #aebbd0;
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* LOADING */
+
+.edge-ai-news-loading {
+    padding: 16px 18px;
+
+    background: #091426;
+
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+
+    color: #7486a3;
+
+    font-size: 13px;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .edge-ai-news-header {
+        align-items: flex-start;
+    }
+
+    .edge-ai-news-meta {
+        flex-wrap: wrap;
+    }
+
+}
 </style>  
 
 
@@ -6575,7 +6758,7 @@ PANEL 1  watchlist seo
         </section>
 
 
-        <!-- NEWS -->
+        <!-- RECENT NEWS -->
 
         <section class="edge-ai-section">
 
@@ -6587,7 +6770,7 @@ PANEL 1  watchlist seo
 
                 <div>
 
-                    <span>LATEST DEVELOPMENTS</span>
+                    <span>RECENT DEVELOPMENTS</span>
 
                     <h3>
                         Recent News
@@ -6597,9 +6780,61 @@ PANEL 1  watchlist seo
 
             </div>
 
-            <div class="edge-ai-placeholder">
-                Recent company announcements, earnings,
-                partnerships, products and material developments.
+
+            <!-- NEWS ACTIVITY -->
+
+            <div class="edge-ai-news-header">
+
+                <div>
+
+                    <span class="edge-ai-small-label">
+                        NEWS ACTIVITY
+                    </span>
+
+                    <strong id="edgeAINewsLevel">
+                        Researching...
+                    </strong>
+
+                </div>
+
+                <div
+                    id="edgeAINewsBadge"
+                    class="edge-ai-news-badge"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <!-- NEWS SUMMARY -->
+
+            <div class="edge-ai-news-summary">
+
+                <span>
+                    CURRENT DEVELOPMENTS
+                </span>
+
+                <p id="edgeAINewsSummary">
+                    Researching recent company developments...
+                </p>
+
+            </div>
+
+
+            <!-- NEWS ITEMS -->
+
+            <div
+                id="edgeAINewsItems"
+                class="edge-ai-news-list"
+            >
+
+                <div class="edge-ai-news-loading">
+
+                    Researching recent news...
+
+                </div>
+
             </div>
 
         </section>
