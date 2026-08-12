@@ -1,17 +1,46 @@
 export default async function handler(req, res) {
 
+    /* =========================================
+       POST ONLY
+    ========================================= */
+
     if (req.method !== "POST") {
+
         return res.status(405).json({
             error: "Method not allowed"
         });
+
     }
 
+
+    /* =========================================
+       CHECK ENVIRONMENT VARIABLES
+    ========================================= */
+
     if (!process.env.OPENAI_API_KEY) {
+
         return res.status(500).json({
             error: "AI service is not configured"
         });
+
     }
 
+
+    if (
+        !process.env.SUPABASE_URL ||
+        !process.env.SUPABASE_SERVICE_KEY
+    ) {
+
+        return res.status(500).json({
+            error: "Research cache is not configured"
+        });
+
+    }
+
+
+    /* =========================================
+       GET COMPANY DATA
+    ========================================= */
 
     const {
         symbol,
@@ -20,9 +49,11 @@ export default async function handler(req, res) {
 
 
     if (!symbol) {
+
         return res.status(400).json({
             error: "Stock symbol is required"
         });
+
     }
 
 
@@ -41,19 +72,143 @@ export default async function handler(req, res) {
             .trim();
 
 
+    /* =========================================
+       CACHE SETTINGS
+    ========================================= */
+
+    const researchType =
+        "financials";
+
+
+    const cacheHours =
+        24;
+
+
     try {
+
+        /* =====================================
+           CHECK SUPABASE CACHE
+        ===================================== */
+
+        const now =
+            new Date().toISOString();
+
+
+        const cacheUrl =
+            `${process.env.SUPABASE_URL}` +
+            `/rest/v1/ai_research_cache` +
+            `?symbol=eq.${encodeURIComponent(cleanSymbol)}` +
+            `&research_type=eq.${researchType}` +
+            `&expires_at=gt.${encodeURIComponent(now)}` +
+            `&select=data,created_at,expires_at` +
+            `&limit=1`;
+
+
+        const cacheResponse =
+            await fetch(
+                cacheUrl,
+                {
+
+                    method: "GET",
+
+                    headers: {
+
+                        "apikey":
+                            process.env.SUPABASE_SERVICE_KEY,
+
+                        "Authorization":
+                            `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+
+                        "Content-Type":
+                            "application/json"
+
+                    }
+
+                }
+            );
+
+
+        if (cacheResponse.ok) {
+
+            const cachedRows =
+                await cacheResponse.json();
+
+
+            if (
+                Array.isArray(cachedRows) &&
+                cachedRows.length > 0 &&
+                cachedRows[0].data
+            ) {
+
+                const cachedData =
+                    cachedRows[0].data;
+
+
+                console.log(
+                    `EdgeBreak AI CACHE HIT: ${cleanSymbol} financials`
+                );
+
+
+                return res.status(200).json({
+
+                    success: true,
+
+                    cached: true,
+
+                    symbol:
+                        cleanSymbol,
+
+                    financialHighlights:
+                        cachedData.financialHighlights,
+
+                    cacheCreatedAt:
+                        cachedRows[0].created_at,
+
+                    cacheExpiresAt:
+                        cachedRows[0].expires_at
+
+                });
+
+            }
+
+        }
+        else {
+
+            const cacheError =
+                await cacheResponse.text();
+
+
+            console.error(
+                "Financial Cache Read Error:",
+                cacheError
+            );
+
+        }
+
+
+        console.log(
+            `EdgeBreak AI CACHE MISS: ${cleanSymbol} financials`
+        );
+
+
+        /* =====================================
+           OPENAI FINANCIAL RESEARCH
+        ===================================== */
 
         const response = await fetch(
             "https://api.openai.com/v1/responses",
             {
+
                 method: "POST",
 
                 headers: {
+
                     "Content-Type":
                         "application/json",
 
                     "Authorization":
                         `Bearer ${process.env.OPENAI_API_KEY}`
+
                 },
 
                 body: JSON.stringify({
@@ -245,10 +400,15 @@ Do not describe the stock as bullish or bearish.
 
                                 additionalProperties:
                                     false
+
                             }
+
                         }
+
                     }
+
                 })
+
             }
         );
 
@@ -257,6 +417,10 @@ Do not describe the stock as bullish or bearish.
             await response.json();
 
 
+        /* =====================================
+           OPENAI ERROR
+        ===================================== */
+
         if (!response.ok) {
 
             console.error(
@@ -264,18 +428,22 @@ Do not describe the stock as bullish or bearish.
                 JSON.stringify(data)
             );
 
+
             return res
                 .status(response.status)
                 .json({
+
                     error:
                         data?.error?.message ||
                         "Financial research request failed"
+
                 });
+
         }
 
 
         /* =====================================
-           EXTRACT FINAL MESSAGE ONLY
+           EXTRACT FINAL MESSAGE
         ===================================== */
 
         let outputText = "";
@@ -289,9 +457,11 @@ Do not describe the stock as bullish or bearish.
                     continue;
                 }
 
+
                 if (!Array.isArray(item.content)) {
                     continue;
                 }
+
 
                 for (const content of item.content) {
 
@@ -304,17 +474,23 @@ Do not describe the stock as bullish or bearish.
                             content.text.trim();
 
                     }
+
                 }
+
             }
+
         }
 
 
         if (!outputText) {
 
             return res.status(500).json({
+
                 error:
                     "No financial research was returned"
+
             });
+
         }
 
 
@@ -338,10 +514,14 @@ Do not describe the stock as bullish or bearish.
                 outputText
             );
 
+
             return res.status(500).json({
+
                 error:
                     "Unable to process financial research"
+
             });
+
         }
 
 
@@ -355,7 +535,9 @@ Do not describe the stock as bullish or bearish.
                 value === null ||
                 value === undefined
             ) {
+
                 return "Not verified";
+
             }
 
 
@@ -392,13 +574,20 @@ Do not describe the stock as bullish or bearish.
 
             return cleaned ||
                 "Not verified";
+
         }
 
+
+        /* =====================================
+           BUILD SAFE OBJECT
+        ===================================== */
 
         const cleanFinancials = {
 
             revenue:
-                cleanField(financials.revenue),
+                cleanField(
+                    financials.revenue
+                ),
 
             revenueGrowth:
                 cleanField(
@@ -406,13 +595,19 @@ Do not describe the stock as bullish or bearish.
                 ),
 
             eps:
-                cleanField(financials.eps),
+                cleanField(
+                    financials.eps
+                ),
 
             cash:
-                cleanField(financials.cash),
+                cleanField(
+                    financials.cash
+                ),
 
             debt:
-                cleanField(financials.debt),
+                cleanField(
+                    financials.debt
+                ),
 
             grossMargin:
                 cleanField(
@@ -428,18 +623,128 @@ Do not describe the stock as bullish or bearish.
                 cleanField(
                     financials.latestQuarter
                 )
+
         };
 
+
+        /* =====================================
+           BUILD CACHE DATA
+        ===================================== */
+
+        const cacheData = {
+
+            financialHighlights:
+                cleanFinancials
+
+        };
+
+
+        const expiresAt =
+            new Date(
+                Date.now() +
+                cacheHours *
+                60 *
+                60 *
+                1000
+            ).toISOString();
+
+
+        /* =====================================
+           SAVE / UPDATE CACHE
+        ===================================== */
+
+        const saveUrl =
+            `${process.env.SUPABASE_URL}` +
+            `/rest/v1/ai_research_cache` +
+            `?on_conflict=symbol,research_type`;
+
+
+        const saveResponse =
+            await fetch(
+                saveUrl,
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "apikey":
+                            process.env.SUPABASE_SERVICE_KEY,
+
+                        "Authorization":
+                            `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Prefer":
+                            "resolution=merge-duplicates,return=minimal"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        symbol:
+                            cleanSymbol,
+
+                        research_type:
+                            researchType,
+
+                        data:
+                            cacheData,
+
+                        created_at:
+                            new Date().toISOString(),
+
+                        expires_at:
+                            expiresAt
+
+                    })
+
+                }
+            );
+
+
+        if (!saveResponse.ok) {
+
+            const saveError =
+                await saveResponse.text();
+
+
+            console.error(
+                "Financial Cache Save Error:",
+                saveError
+            );
+
+        }
+        else {
+
+            console.log(
+                `EdgeBreak AI CACHE SAVED: ${cleanSymbol} financials`
+            );
+
+        }
+
+
+        /* =====================================
+           RETURN CLEAN DATA
+        ===================================== */
 
         return res.status(200).json({
 
             success: true,
 
+            cached: false,
+
             symbol:
                 cleanSymbol,
 
             financialHighlights:
-                cleanFinancials
+                cleanFinancials,
+
+            cacheExpiresAt:
+                expiresAt
+
         });
 
     }
@@ -450,9 +755,14 @@ Do not describe the stock as bullish or bearish.
             error
         );
 
+
         return res.status(500).json({
+
             error:
                 "Unable to complete financial research"
+
         });
+
     }
+
 }
