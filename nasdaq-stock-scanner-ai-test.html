@@ -9566,6 +9566,172 @@ async function loadEdgeBreakAIResearch(symbol){
 
 }
 
+async function loadEdgeBreakAICompanyOverview(
+    symbol,
+    companyName = ""
+) {
+
+    const industry =
+        document.getElementById("edgeAIIndustry");
+
+    const headquarters =
+        document.getElementById("edgeAIHeadquarters");
+
+    const ceo =
+        document.getElementById("edgeAICEO");
+
+    const employees =
+        document.getElementById("edgeAIEmployees");
+
+    const products =
+        document.getElementById("edgeAIProducts");
+
+    const markets =
+        document.getElementById("edgeAIMarkets");
+
+
+    /* RESET */
+
+    if (industry) {
+        industry.textContent = "Researching...";
+    }
+
+    if (headquarters) {
+        headquarters.textContent = "Researching...";
+    }
+
+    if (ceo) {
+        ceo.textContent = "Researching...";
+    }
+
+    if (employees) {
+        employees.textContent = "Researching...";
+    }
+
+    if (products) {
+        products.textContent = "Researching...";
+    }
+
+    if (markets) {
+        markets.textContent = "Researching...";
+    }
+
+
+    try {
+
+        const response = await fetch(
+            "/api/ai-company-overview",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    symbol,
+                    companyName
+                })
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Company overview failed"
+            );
+
+        }
+
+
+        const overview =
+            data.companyOverview;
+
+
+        if (!overview) {
+
+            throw new Error(
+                "No company overview returned"
+            );
+
+        }
+
+
+        if (industry) {
+            industry.textContent =
+                overview.industry ||
+                "Not verified";
+        }
+
+        if (headquarters) {
+            headquarters.textContent =
+                overview.headquarters ||
+                "Not verified";
+        }
+
+        if (ceo) {
+            ceo.textContent =
+                overview.ceo ||
+                "Not verified";
+        }
+
+        if (employees) {
+            employees.textContent =
+                overview.employees ||
+                "Not verified";
+        }
+
+        if (products) {
+            products.textContent =
+                overview.mainProducts ||
+                "Not verified";
+        }
+
+        if (markets) {
+            markets.textContent =
+                overview.geographicMarkets ||
+                "Not verified";
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "EdgeBreak Company Overview:",
+            error
+        );
+
+
+        const fields = [
+            industry,
+            headquarters,
+            ceo,
+            employees,
+            products,
+            markets
+        ];
+
+
+        fields.forEach(field => {
+
+            if (field) {
+                field.textContent =
+                    "Research unavailable";
+            }
+
+        });
+
+    }
+
+}
+
 </script>
 
 <!-- COMPONENTS -->
