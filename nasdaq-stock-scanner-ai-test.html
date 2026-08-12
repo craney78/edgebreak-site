@@ -5472,6 +5472,272 @@ EDGEBREAK AI — INSTITUTIONAL ACTIVITY
     }
 
 }
+
+/* =========================================
+   EDGEBREAK AI — ON-DEMAND RESEARCH
+========================================= */
+
+
+/* =========================================
+   SECTION HEADER WITH ACTION BUTTON
+========================================= */
+
+.edge-ai-heading-with-action,
+.edge-ai-section-title-action {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+}
+
+
+/* =========================================
+   LEFT SIDE OF SECTION HEADER
+========================================= */
+
+.edge-ai-heading-left,
+.edge-ai-section-title-left {
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    min-width: 0;
+
+}
+
+
+/* =========================================
+   RESEARCH BUTTON
+========================================= */
+
+.edge-ai-research-btn {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    min-height: 38px;
+
+    padding: 9px 15px;
+
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    border-radius: 9px;
+
+    background: rgba(34, 197, 94, 0.08);
+
+    color: #22c55e;
+
+    font-family: inherit;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    line-height: 1;
+
+    letter-spacing: 0.2px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+
+/* =========================================
+   RESEARCH BUTTON HOVER
+========================================= */
+
+.edge-ai-research-btn:hover {
+
+    background: rgba(34, 197, 94, 0.15);
+
+    border-color: rgba(34, 197, 94, 0.65);
+
+    color: #4ade80;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* =========================================
+   RESEARCH BUTTON ACTIVE
+========================================= */
+
+.edge-ai-research-btn:active {
+
+    transform: translateY(0);
+
+}
+
+
+/* =========================================
+   RESEARCH BUTTON FOCUS
+========================================= */
+
+.edge-ai-research-btn:focus-visible {
+
+    outline: 2px solid rgba(34, 197, 94, 0.65);
+
+    outline-offset: 3px;
+
+}
+
+
+/* =========================================
+   RESEARCHING / DISABLED STATE
+========================================= */
+
+.edge-ai-research-btn:disabled {
+
+    opacity: 0.65;
+
+    cursor: wait;
+
+    transform: none;
+
+}
+
+
+/* =========================================
+   COMPLETED RESEARCH BUTTON
+
+   JS CAN ADD:
+   .edge-ai-research-complete
+========================================= */
+
+.edge-ai-research-btn.edge-ai-research-complete {
+
+    background: rgba(34, 197, 94, 0.12);
+
+    border-color: rgba(34, 197, 94, 0.4);
+
+    color: #4ade80;
+
+}
+
+
+/* =========================================
+   READY TO RESEARCH TEXT
+========================================= */
+
+.edge-ai-overview-item strong,
+.edge-ai-financial-item strong,
+.edge-ai-institutional-item strong {
+
+    transition:
+        color 0.2s ease,
+        opacity 0.2s ease;
+
+}
+
+
+/* =========================================
+   AI DISCLAIMER
+========================================= */
+
+.edge-ai-disclaimer {
+
+    margin-top: 18px;
+
+    padding: 18px 20px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px solid rgba(148, 163, 184, 0.14);
+
+    border-radius: 14px;
+
+}
+
+
+.edge-ai-disclaimer strong {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #dbe7f5;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+.edge-ai-disclaimer p {
+
+    margin: 0;
+
+    color: #8295b3;
+
+    font-size: 11px;
+    line-height: 1.65;
+
+}
+
+
+.edge-ai-disclaimer p + p {
+
+    margin-top: 9px;
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .edge-ai-heading-with-action,
+    .edge-ai-section-title-action {
+
+        align-items: stretch;
+        flex-direction: column;
+
+        gap: 14px;
+
+    }
+
+
+    .edge-ai-heading-left,
+    .edge-ai-section-title-left {
+
+        align-items: center;
+
+    }
+
+
+    .edge-ai-research-btn {
+
+        width: 100%;
+
+        min-height: 42px;
+
+    }
+
+
+    .edge-ai-disclaimer {
+
+        padding: 16px;
+
+    }
+
+}
 </style>  
 
 
