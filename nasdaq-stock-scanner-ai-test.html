@@ -5328,10 +5328,11 @@ SCANNER SELECTOR
 
                     <th>Ticker</th>
                     <th>Price</th>
-                    <th>Touches</th>
+                    <th>Resistance</th>
                     <th>Higher Lows</th>
                     <th>Smart Money</th>
                     <th>Add To Watchlist</th>
+                    <th>AI Research</th>
 
                 </tr>
 
@@ -5341,7 +5342,7 @@ SCANNER SELECTOR
 
                 <tr>
 
-                    <td colspan="6">
+                    <td colspan="7">
                         Select filters and click Search.
                     </td>
 
@@ -6652,7 +6653,7 @@ function renderResults(results){
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="6">
+                <td colspan="7">
                     No matches found
                 </td>
             </tr>
@@ -6720,7 +6721,7 @@ function renderResults(results){
                         class="edge-ai-research-btn"
                         onclick="
                             event.stopPropagation();
-                            openBreakoutAIResearch('${stock.symbol}');
+                            openPreBreakoutAIResearch('${stock.symbol}');
                         "
                     >
                         <span>✨</span>
@@ -8694,6 +8695,284 @@ function openBreakoutAIResearch(symbol){
                     </strong>
 
                 </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =====================================
+       OPEN PANEL
+    ===================================== */
+
+    openEdgeBreakAI();
+
+}
+
+/* =========================================
+   OPEN PRE-BREAKOUT AI RESEARCH
+========================================= */
+
+function openPreBreakoutAIResearch(symbol){
+
+    const stock =
+        window.scannerData.find(
+            item => item.symbol === symbol
+        );
+
+    if(!stock){
+
+        console.error(
+            "EdgeBreak AI: Pre-Breakout stock not found",
+            symbol
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================
+       SMART MONEY
+    ===================================== */
+
+    const smartRecord =
+        window.smartMoneyLookup[
+            stock.symbol
+        ];
+
+    const smartMoneyPeriod =
+        parseInt(
+            document.getElementById(
+                "scannerSmartMoneyPeriod"
+            )?.value || 90
+        );
+
+    const smartMoneyCount =
+        smartRecord
+            ? getSmartMoneyCount(
+                smartRecord,
+                smartMoneyPeriod
+            )
+            : 0;
+
+
+    /* =====================================
+       SELECTED LOOKBACK
+    ===================================== */
+
+    const lookback =
+        document.getElementById(
+            "lookback"
+        )?.value || "—";
+
+
+    /* =====================================
+       COMPANY HEADER
+    ===================================== */
+
+    const ticker =
+        document.querySelector(
+            ".edge-ai-ticker"
+        );
+
+    const companyName =
+        document.querySelector(
+            ".edge-ai-company h3"
+        );
+
+
+    if(ticker){
+
+        ticker.textContent =
+            stock.symbol;
+
+    }
+
+
+    if(companyName){
+
+        companyName.textContent =
+            "NASDAQ Listed Company";
+
+    }
+
+
+    /* =====================================
+       EDGEBREAK TECHNICAL CONTEXT
+    ===================================== */
+
+    const contextSection =
+        document.querySelector(
+            ".edge-ai-context .edge-ai-placeholder"
+        );
+
+
+    if(contextSection){
+
+        contextSection.innerHTML = `
+
+            <div class="edge-ai-context-grid">
+
+
+                <div>
+
+                    <span>
+                        Scanner
+                    </span>
+
+                    <strong>
+                        Pre-Breakout Scanner
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Current Price
+                    </span>
+
+                    <strong>
+                        $${Number(
+                            stock.current_price || 0
+                        ).toFixed(2)}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Resistance
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.resistance_price
+                            ?? "—"
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Resistance Touches
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.resistance_touches
+                            ?? 0
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Higher Lows
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.higher_lows
+                            ?? 0
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Price Group
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.price_group
+                            || "—"
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Structure Status
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.structure_active === true
+                                ? "Active"
+                                : "Not Active"
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Average Dollar Volume
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.average_dollar_volume_20
+                                ? "$" +
+                                  Number(
+                                      stock.average_dollar_volume_20
+                                  ).toLocaleString()
+                                : "—"
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Smart Money
+                    </span>
+
+                    <strong>
+                        ${smartMoneyCount}
+                        /
+                        ${smartMoneyPeriod} Days
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Research Period
+                    </span>
+
+                    <strong>
+                        ${lookback} Days
+                    </strong>
+
+                </div>
+
 
             </div>
 
