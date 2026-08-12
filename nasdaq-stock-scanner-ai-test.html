@@ -10851,6 +10851,15 @@ async function loadEdgeBreakAIResearch(symbol){
             data.companyName || ""
         );
 
+        /* =================================
+        SEC FILINGS
+        ================================= */
+
+        loadEdgeBreakAISecFilings(
+            symbol,
+            data.companyName || ""
+        );
+
     }
     catch(error){
 
@@ -12387,6 +12396,657 @@ async function loadEdgeBreakAIInstitutional(
                     Institutional activity unavailable.
                 </div>
             `;
+
+        }
+
+    }
+
+}
+
+/* =========================================
+EDGEBREAK AI — SEC FILINGS
+========================================= */
+
+async function loadEdgeBreakAISecFilings(
+    symbol,
+    companyName = ""
+) {
+
+    /* =================================
+       ELEMENTS
+    ================================= */
+
+    const annualForm =
+        document.getElementById(
+            "edgeAISecAnnualForm"
+        );
+
+    const annualDate =
+        document.getElementById(
+            "edgeAISecAnnualDate"
+        );
+
+    const annualSummary =
+        document.getElementById(
+            "edgeAISecAnnualSummary"
+        );
+
+    const quarterlyForm =
+        document.getElementById(
+            "edgeAISecQuarterlyForm"
+        );
+
+    const quarterlyDate =
+        document.getElementById(
+            "edgeAISecQuarterlyDate"
+        );
+
+    const quarterlySummary =
+        document.getElementById(
+            "edgeAISecQuarterlySummary"
+        );
+
+    const recentFilings =
+        document.getElementById(
+            "edgeAISecRecentFilings"
+        );
+
+    const insiderFilings =
+        document.getElementById(
+            "edgeAISecInsiderFilings"
+        );
+
+    const filingSummary =
+        document.getElementById(
+            "edgeAISecSummary"
+        );
+
+
+    /* =================================
+       RESET
+    ================================= */
+
+    if (annualForm) {
+        annualForm.textContent =
+            "Researching...";
+    }
+
+    if (annualDate) {
+        annualDate.textContent =
+            "Researching filing date...";
+    }
+
+    if (annualSummary) {
+        annualSummary.textContent =
+            "Researching latest annual filing...";
+    }
+
+
+    if (quarterlyForm) {
+        quarterlyForm.textContent =
+            "Researching...";
+    }
+
+    if (quarterlyDate) {
+        quarterlyDate.textContent =
+            "Researching filing date...";
+    }
+
+    if (quarterlySummary) {
+        quarterlySummary.textContent =
+            "Researching latest quarterly filing...";
+    }
+
+
+    if (recentFilings) {
+
+        recentFilings.innerHTML = `
+            <div class="edge-ai-sec-loading">
+                Researching recent SEC filings...
+            </div>
+        `;
+
+    }
+
+
+    if (insiderFilings) {
+
+        insiderFilings.innerHTML = `
+            <div class="edge-ai-sec-loading">
+                Researching recent Form 4 disclosures...
+            </div>
+        `;
+
+    }
+
+
+    if (filingSummary) {
+
+        filingSummary.textContent =
+            "Researching recent regulatory filings...";
+
+    }
+
+
+    try {
+
+        /* =================================
+           CALL EDGEBREAK API
+        ================================= */
+
+        const response = await fetch(
+            "/api/ai-sec-filings",
+            {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    symbol,
+                    companyName
+                })
+
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "SEC filings research failed"
+            );
+
+        }
+
+
+        const filings =
+            data.secFilings;
+
+
+        if (!filings) {
+
+            throw new Error(
+                "No SEC filings returned"
+            );
+
+        }
+
+
+        /* =================================
+           LATEST ANNUAL REPORT
+        ================================= */
+
+        const annual =
+            filings.latestAnnual || {};
+
+
+        if (annualForm) {
+
+            annualForm.textContent =
+                annual.form ||
+                "Not verified";
+
+        }
+
+
+        if (annualDate) {
+
+            const parts = [];
+
+
+            if (
+                annual.filingDate &&
+                annual.filingDate !==
+                    "Not verified"
+            ) {
+
+                parts.push(
+                    annual.filingDate
+                );
+
+            }
+
+
+            if (
+                annual.fiscalPeriod &&
+                annual.fiscalPeriod !==
+                    "Not verified"
+            ) {
+
+                parts.push(
+                    annual.fiscalPeriod
+                );
+
+            }
+
+
+            annualDate.textContent =
+                parts.length
+                    ? parts.join(" · ")
+                    : "Not verified";
+
+        }
+
+
+        if (annualSummary) {
+
+            annualSummary.textContent =
+                annual.summary ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           LATEST QUARTERLY REPORT
+        ================================= */
+
+        const quarterly =
+            filings.latestQuarterly || {};
+
+
+        if (quarterlyForm) {
+
+            quarterlyForm.textContent =
+                quarterly.form ||
+                "Not verified";
+
+        }
+
+
+        if (quarterlyDate) {
+
+            const parts = [];
+
+
+            if (
+                quarterly.filingDate &&
+                quarterly.filingDate !==
+                    "Not verified"
+            ) {
+
+                parts.push(
+                    quarterly.filingDate
+                );
+
+            }
+
+
+            if (
+                quarterly.fiscalPeriod &&
+                quarterly.fiscalPeriod !==
+                    "Not verified"
+            ) {
+
+                parts.push(
+                    quarterly.fiscalPeriod
+                );
+
+            }
+
+
+            quarterlyDate.textContent =
+                parts.length
+                    ? parts.join(" · ")
+                    : "Not verified";
+
+        }
+
+
+        if (quarterlySummary) {
+
+            quarterlySummary.textContent =
+                quarterly.summary ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           RECENT MATERIAL FILINGS
+        ================================= */
+
+        if (recentFilings) {
+
+            recentFilings.innerHTML = "";
+
+
+            if (
+                Array.isArray(
+                    filings.recentFilings
+                ) &&
+                filings.recentFilings.length
+            ) {
+
+                filings.recentFilings
+                    .forEach(item => {
+
+                        const card =
+                            document.createElement(
+                                "div"
+                            );
+
+                        card.className =
+                            "edge-ai-sec-item";
+
+
+                        /* HEADER */
+
+                        const header =
+                            document.createElement(
+                                "div"
+                            );
+
+                        header.className =
+                            "edge-ai-sec-item-header";
+
+
+                        const form =
+                            document.createElement(
+                                "span"
+                            );
+
+                        form.className =
+                            "edge-ai-sec-form";
+
+                        form.textContent =
+                            item.form ||
+                            "SEC";
+
+
+                        const date =
+                            document.createElement(
+                                "span"
+                            );
+
+                        date.className =
+                            "edge-ai-sec-date";
+
+                        date.textContent =
+                            item.date ||
+                            "Date not verified";
+
+
+                        header.appendChild(form);
+                        header.appendChild(date);
+
+
+                        /* TITLE */
+
+                        const title =
+                            document.createElement(
+                                "strong"
+                            );
+
+                        title.textContent =
+                            item.title ||
+                            "SEC filing";
+
+
+                        /* SUMMARY */
+
+                        const summary =
+                            document.createElement(
+                                "p"
+                            );
+
+                        summary.textContent =
+                            item.summary ||
+                            "Details not verified.";
+
+
+                        card.appendChild(header);
+                        card.appendChild(title);
+                        card.appendChild(summary);
+
+                        recentFilings.appendChild(
+                            card
+                        );
+
+                    });
+
+            }
+            else {
+
+                recentFilings.innerHTML = `
+                    <div class="edge-ai-sec-loading">
+                        No recent material filings verified.
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =================================
+           INSIDER / FORM 4 FILINGS
+        ================================= */
+
+        if (insiderFilings) {
+
+            insiderFilings.innerHTML = "";
+
+
+            if (
+                Array.isArray(
+                    filings.insiderFilings
+                ) &&
+                filings.insiderFilings.length
+            ) {
+
+                filings.insiderFilings
+                    .forEach(item => {
+
+                        const card =
+                            document.createElement(
+                                "div"
+                            );
+
+                        card.className =
+                            "edge-ai-sec-insider";
+
+
+                        /* HEADER */
+
+                        const header =
+                            document.createElement(
+                                "div"
+                            );
+
+                        header.className =
+                            "edge-ai-sec-insider-header";
+
+
+                        const personWrap =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        const person =
+                            document.createElement(
+                                "strong"
+                            );
+
+                        person.textContent =
+                            item.insider ||
+                            "Not verified";
+
+
+                        const role =
+                            document.createElement(
+                                "span"
+                            );
+
+                        role.className =
+                            "edge-ai-sec-insider-role";
+
+                        role.textContent =
+                            item.role ||
+                            "Role not verified";
+
+
+                        personWrap.appendChild(
+                            person
+                        );
+
+                        personWrap.appendChild(
+                            role
+                        );
+
+
+                        const date =
+                            document.createElement(
+                                "span"
+                            );
+
+                        date.className =
+                            "edge-ai-sec-date";
+
+                        date.textContent =
+                            item.date ||
+                            "Date not verified";
+
+
+                        header.appendChild(
+                            personWrap
+                        );
+
+                        header.appendChild(
+                            date
+                        );
+
+
+                        /* TRANSACTION */
+
+                        const transaction =
+                            document.createElement(
+                                "p"
+                            );
+
+                        transaction.textContent =
+                            item.transaction ||
+                            "Transaction details not verified.";
+
+
+                        card.appendChild(
+                            header
+                        );
+
+                        card.appendChild(
+                            transaction
+                        );
+
+
+                        insiderFilings.appendChild(
+                            card
+                        );
+
+                    });
+
+            }
+            else {
+
+                insiderFilings.innerHTML = `
+                    <div class="edge-ai-sec-loading">
+                        No recent Form 4 disclosures verified.
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =================================
+           FILING SUMMARY
+        ================================= */
+
+        if (filingSummary) {
+
+            filingSummary.textContent =
+                filings.filingSummary ||
+                "Not verified";
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "EdgeBreak SEC Filings:",
+            error
+        );
+
+
+        if (annualForm) {
+            annualForm.textContent =
+                "Research unavailable";
+        }
+
+        if (annualDate) {
+            annualDate.textContent =
+                "Not verified";
+        }
+
+        if (annualSummary) {
+            annualSummary.textContent =
+                "SEC filing research is currently unavailable.";
+        }
+
+
+        if (quarterlyForm) {
+            quarterlyForm.textContent =
+                "Research unavailable";
+        }
+
+        if (quarterlyDate) {
+            quarterlyDate.textContent =
+                "Not verified";
+        }
+
+        if (quarterlySummary) {
+            quarterlySummary.textContent =
+                "SEC filing research is currently unavailable.";
+        }
+
+
+        if (recentFilings) {
+
+            recentFilings.innerHTML = `
+                <div class="edge-ai-sec-loading">
+                    Recent SEC filings unavailable.
+                </div>
+            `;
+
+        }
+
+
+        if (insiderFilings) {
+
+            insiderFilings.innerHTML = `
+                <div class="edge-ai-sec-loading">
+                    Insider filing data unavailable.
+                </div>
+            `;
+
+        }
+
+
+        if (filingSummary) {
+
+            filingSummary.textContent =
+                "SEC filing research is currently unavailable.";
 
         }
 
