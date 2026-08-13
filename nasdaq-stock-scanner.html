@@ -3692,6 +3692,2173 @@ MATCH SMART MONEY HERO
     }
 
 }
+
+/* ======================================================
+   EDGEBREAK AI RESEARCH
+====================================================== */
+
+body.edge-ai-open{
+    overflow:hidden;
+}
+
+
+/* OVERLAY */
+
+.edge-ai-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(2,6,23,.72);
+
+    backdrop-filter:blur(3px);
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:
+        opacity .3s ease,
+        visibility .3s ease;
+
+    z-index:9998;
+
+}
+
+.edge-ai-overlay.active{
+
+    opacity:1;
+    visibility:visible;
+
+}
+
+
+/* PANEL */
+
+.edge-ai-panel{
+
+    position:fixed;
+
+    top:0;
+    right:0;
+
+    width:min(760px,94vw);
+    height:100vh;
+
+    background:#07101d;
+
+    border-left:1px solid #1e293b;
+
+    box-shadow:
+        -30px 0 80px rgba(0,0,0,.55);
+
+    transform:translateX(105%);
+
+    transition:transform .35s ease;
+
+    z-index:9999;
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+.edge-ai-panel.open{
+
+    transform:translateX(0);
+
+}
+
+
+/* HEADER */
+
+.edge-ai-header{
+
+    min-height:94px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    gap:20px;
+
+    padding:22px 28px;
+
+    border-bottom:1px solid #1e293b;
+
+    background:
+        linear-gradient(
+            135deg,
+            #08111f,
+            #0f172a
+        );
+
+}
+
+.edge-ai-brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+
+.edge-ai-icon{
+
+    width:52px;
+    height:52px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:14px;
+
+    background:rgba(34,197,94,.10);
+
+    border:1px solid rgba(34,197,94,.30);
+
+    font-size:23px;
+
+}
+
+.edge-ai-label{
+
+    display:block;
+
+    margin-bottom:4px;
+
+    color:#22c55e;
+
+    font-size:10px;
+
+    font-weight:800;
+
+    letter-spacing:.16em;
+
+}
+
+.edge-ai-header h2{
+
+    margin:0;
+
+    color:#ffffff;
+
+    font-size:23px;
+
+    font-weight:800;
+
+}
+
+
+/* CLOSE */
+
+.edge-ai-close{
+
+    width:44px;
+    height:44px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    border:1px solid #334155;
+
+    background:#111827;
+
+    color:#cbd5e1;
+
+    font-size:28px;
+
+    line-height:1;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+
+}
+
+.edge-ai-close:hover{
+
+    border-color:#ef4444;
+
+    background:rgba(239,68,68,.12);
+
+    color:#f87171;
+
+}
+
+
+/* COMPANY */
+
+.edge-ai-company{
+
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:20px;
+
+    padding:24px 28px;
+
+    border-bottom:1px solid #1e293b;
+
+    background:#0b1220;
+
+}
+
+.edge-ai-ticker{
+
+    display:block;
+
+    margin-bottom:4px;
+
+    color:#22c55e;
+
+    font-size:27px;
+
+    font-weight:900;
+
+    letter-spacing:.03em;
+
+}
+
+.edge-ai-company h3{
+
+    margin:0;
+
+    color:#ffffff;
+
+    font-size:17px;
+
+    font-weight:700;
+
+}
+
+.edge-ai-status{
+
+    padding:8px 13px;
+
+    border-radius:999px;
+
+    background:rgba(34,197,94,.08);
+
+    border:1px solid rgba(34,197,94,.25);
+
+    color:#4ade80;
+
+    font-size:10px;
+
+    font-weight:800;
+
+    letter-spacing:.08em;
+
+    white-space:nowrap;
+
+}
+
+
+/* CONTENT */
+
+.edge-ai-content{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:26px;
+
+}
+
+.edge-ai-content::-webkit-scrollbar{
+
+    width:9px;
+
+}
+
+.edge-ai-content::-webkit-scrollbar-track{
+
+    background:#07101d;
+
+}
+
+.edge-ai-content::-webkit-scrollbar-thumb{
+
+    background:#263548;
+
+    border-radius:999px;
+
+}
+
+.edge-ai-content::-webkit-scrollbar-thumb:hover{
+
+    background:#22c55e;
+
+}
+
+
+/* SECTION */
+
+.edge-ai-section{
+
+    margin-bottom:20px;
+
+    padding:22px;
+
+    border-radius:16px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #101828,
+            #0b1220
+        );
+
+    border:1px solid #1f2c3d;
+
+}
+
+.edge-ai-section-heading{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:13px;
+
+    margin-bottom:18px;
+
+}
+
+.edge-ai-section-icon{
+
+    width:38px;
+    height:38px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
+
+    background:rgba(34,197,94,.08);
+
+    border:1px solid rgba(34,197,94,.18);
+
+    color:#22c55e;
+
+    font-size:16px;
+
+    font-weight:800;
+
+}
+
+.edge-ai-section-heading span:not(.edge-ai-section-icon){
+
+    display:block;
+
+    margin-bottom:3px;
+
+    color:#64748b;
+
+    font-size:9px;
+
+    font-weight:800;
+
+    letter-spacing:.14em;
+
+}
+
+.edge-ai-section-heading h3{
+
+    margin:0;
+
+    color:#ffffff;
+
+    font-size:18px;
+
+    font-weight:800;
+
+}
+
+
+/* PLACEHOLDER */
+
+.edge-ai-placeholder{
+
+    padding:16px 18px;
+
+    border-radius:11px;
+
+    background:#08111f;
+
+    border:1px solid rgba(255,255,255,.05);
+
+    color:#94a3b8;
+
+    font-size:14px;
+
+    line-height:1.7;
+
+}
+
+
+/* MARKET ATTENTION */
+
+.edge-ai-attention{
+
+    border-color:rgba(34,197,94,.25);
+
+}
+
+.edge-ai-attention-header{
+
+    display:flex;
+
+    justify-content:space-between;
+    align-items:center;
+
+    gap:20px;
+
+    margin-bottom:18px;
+
+    padding:16px 18px;
+
+    border-radius:12px;
+
+    background:rgba(34,197,94,.05);
+
+    border:1px solid rgba(34,197,94,.12);
+
+}
+
+.edge-ai-small-label{
+
+    display:block;
+
+    margin-bottom:5px;
+
+    color:#64748b;
+
+    font-size:9px;
+
+    font-weight:800;
+
+    letter-spacing:.13em;
+
+}
+
+.edge-ai-attention-header strong{
+
+    color:#ffffff;
+
+    font-size:18px;
+
+}
+
+.edge-ai-attention-badge{
+
+    min-width:56px;
+
+    padding:8px 12px;
+
+    text-align:center;
+
+    border-radius:999px;
+
+    background:#172033;
+
+    border:1px solid #334155;
+
+    color:#94a3b8;
+
+    font-size:12px;
+
+    font-weight:800;
+
+}
+
+
+/* ATTENTION GRID */
+
+.edge-ai-attention-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:10px;
+
+}
+
+.edge-ai-attention-grid > div{
+
+    padding:14px;
+
+    border-radius:10px;
+
+    background:#08111f;
+
+    border:1px solid rgba(255,255,255,.05);
+
+}
+
+.edge-ai-attention-grid span{
+
+    display:block;
+
+    margin-bottom:6px;
+
+    color:#64748b;
+
+    font-size:10px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+    letter-spacing:.06em;
+
+}
+
+.edge-ai-attention-grid strong{
+
+    color:#e2e8f0;
+
+    font-size:13px;
+
+}
+
+
+/* EDGEBREAK CONTEXT */
+
+.edge-ai-context{
+
+    border-color:rgba(56,189,248,.22);
+
+}
+
+.edge-ai-context .edge-ai-section-icon{
+
+    color:#38bdf8;
+
+    background:rgba(56,189,248,.08);
+
+    border-color:rgba(56,189,248,.20);
+
+}
+
+
+/* RESEARCH LIST */
+
+.edge-ai-research-list{
+
+    margin:0;
+
+    padding:0;
+
+    list-style:none;
+
+    display:grid;
+
+    gap:9px;
+
+}
+
+.edge-ai-research-list li{
+
+    position:relative;
+
+    padding:12px 14px 12px 36px;
+
+    border-radius:10px;
+
+    background:#08111f;
+
+    border:1px solid rgba(255,255,255,.05);
+
+    color:#cbd5e1;
+
+    font-size:13px;
+
+}
+
+.edge-ai-research-list li:before{
+
+    content:"✓";
+
+    position:absolute;
+
+    left:14px;
+
+    color:#22c55e;
+
+    font-weight:800;
+
+}
+
+
+/* DISCLAIMER */
+
+.edge-ai-disclaimer{
+
+    margin-top:6px;
+
+    padding:18px;
+
+    border-radius:12px;
+
+    background:#08111f;
+
+    border:1px solid #1e293b;
+
+}
+
+.edge-ai-disclaimer strong{
+
+    display:block;
+
+    margin-bottom:6px;
+
+    color:#94a3b8;
+
+    font-size:12px;
+
+}
+
+.edge-ai-disclaimer p{
+
+    margin:0;
+
+    color:#64748b;
+
+    font-size:11px;
+
+    line-height:1.6;
+
+}
+
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .edge-ai-panel{
+
+        width:100%;
+
+    }
+
+    .edge-ai-header{
+
+        padding:18px;
+
+    }
+
+    .edge-ai-company{
+
+        padding:18px;
+
+    }
+
+    .edge-ai-content{
+
+        padding:16px;
+
+    }
+
+    .edge-ai-attention-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+/* ======================================================
+   EDGEBREAK AI RESEARCH BUTTON
+====================================================== */
+
+.edge-ai-research-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:7px;
+
+    min-width:118px;
+
+    padding:9px 13px;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(34,197,94,.12),
+            rgba(34,197,94,.06)
+        );
+
+    border:1px solid rgba(34,197,94,.35);
+
+    color:#4ade80;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    letter-spacing:.03em;
+
+    white-space:nowrap;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+
+}
+
+.edge-ai-research-btn:hover{
+
+    background:#22c55e;
+
+    border-color:#22c55e;
+
+    color:#ffffff;
+
+    transform:translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(34,197,94,.20);
+
+}
+
+.edge-ai-research-btn span{
+
+    font-size:13px;
+
+}
+
+/* ======================================================
+   EDGEBREAK AI TECHNICAL DATA
+====================================================== */
+
+.edge-ai-context-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:10px;
+
+}
+
+.edge-ai-context-grid > div{
+
+    padding:14px;
+
+    border-radius:10px;
+
+    background:#08111f;
+
+    border:1px solid rgba(56,189,248,.10);
+
+}
+
+.edge-ai-context-grid span{
+
+    display:block;
+
+    margin-bottom:6px;
+
+    color:#64748b;
+
+    font-size:9px;
+
+    font-weight:800;
+
+    letter-spacing:.07em;
+
+    text-transform:uppercase;
+
+}
+
+.edge-ai-context-grid strong{
+
+    display:block;
+
+    color:#e2e8f0;
+
+    font-size:13px;
+
+    font-weight:700;
+
+}
+
+@media(max-width:768px){
+
+    .edge-ai-context-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+/* =========================================
+EDGEBREAK AI — COMPANY OVERVIEW
+========================================= */
+
+.edge-ai-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.edge-ai-overview-item {
+    background: #091426;
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+    padding: 16px 18px;
+    min-height: 82px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.edge-ai-overview-item span,
+.edge-ai-overview-wide > span {
+    display: block;
+    color: #7486a3;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.edge-ai-overview-item strong {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.edge-ai-overview-wide {
+    margin-top: 12px;
+    background: #091426;
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+    padding: 16px 18px;
+}
+
+.edge-ai-overview-wide p {
+    margin: 9px 0 0;
+    color: #c3cede;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .edge-ai-overview-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+.edge-ai-attention-topics {
+    margin: 7px 0 0;
+    padding-left: 17px;
+    color: #ffffff;
+}
+
+.edge-ai-attention-topics li {
+    margin: 4px 0;
+    line-height: 1.45;
+}
+
+.edge-ai-attention-summary {
+    margin-top: 14px;
+    padding: 15px 17px;
+    background: #091426;
+    border: 1px solid #1c2a40;
+    border-radius: 10px;
+    color: #c3cede;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+/* =========================================
+EDGEBREAK AI — FINANCIAL HIGHLIGHTS
+========================================= */
+
+.edge-ai-financial-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.edge-ai-financial-item {
+    background: #091426;
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+    padding: 16px 18px;
+    min-height: 82px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.edge-ai-financial-item > span,
+.edge-ai-financial-quarter > span {
+    display: block;
+
+    color: #7486a3;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+.edge-ai-financial-item strong {
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    line-height: 1.45;
+}
+
+.edge-ai-financial-wide {
+    grid-column: 1 / -1;
+}
+
+.edge-ai-financial-quarter {
+    margin-top: 12px;
+
+    background: #091426;
+
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+
+    padding: 16px 18px;
+}
+
+.edge-ai-financial-quarter p {
+    margin: 9px 0 0;
+
+    color: #c3cede;
+
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .edge-ai-financial-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .edge-ai-financial-wide {
+        grid-column: auto;
+    }
+
+}
+
+/* =========================================
+EDGEBREAK AI — RECENT NEWS
+========================================= */
+
+.edge-ai-news-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    margin-top: 18px;
+    padding: 15px 17px;
+
+    background: #091426;
+
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+}
+
+.edge-ai-news-header strong {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.edge-ai-news-badge {
+    padding: 6px 11px;
+
+    border: 1px solid #263852;
+    border-radius: 999px;
+
+    color: #9fb0c8;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: .7px;
+}
+
+.edge-ai-news-summary {
+    margin-top: 12px;
+    padding: 16px 18px;
+
+    background: #091426;
+
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+}
+
+.edge-ai-news-summary > span {
+    display: block;
+
+    color: #7486a3;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+.edge-ai-news-summary p {
+    margin: 9px 0 0;
+
+    color: #c3cede;
+
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+
+/* NEWS LIST */
+
+.edge-ai-news-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 12px;
+}
+
+
+/* INDIVIDUAL NEWS ITEM */
+
+.edge-ai-news-item {
+    padding: 16px 18px;
+
+    background: #091426;
+
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+}
+
+.edge-ai-news-meta {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 8px;
+}
+
+.edge-ai-news-date {
+    color: #7486a3;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.edge-ai-news-category {
+    padding: 3px 7px;
+
+    border: 1px solid #263852;
+    border-radius: 999px;
+
+    color: #9fb0c8;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: .6px;
+
+    text-transform: uppercase;
+}
+
+.edge-ai-news-item h4 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 750;
+
+    line-height: 1.45;
+}
+
+.edge-ai-news-item p {
+    margin: 7px 0 0;
+
+    color: #aebbd0;
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* LOADING */
+
+.edge-ai-news-loading {
+    padding: 16px 18px;
+
+    background: #091426;
+
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+
+    color: #7486a3;
+
+    font-size: 13px;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .edge-ai-news-header {
+        align-items: flex-start;
+    }
+
+    .edge-ai-news-meta {
+        flex-wrap: wrap;
+    }
+
+}
+
+/* =========================================
+EDGEBREAK AI — INSTITUTIONAL ACTIVITY
+========================================= */
+
+.edge-ai-institutional-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.edge-ai-institutional-item {
+    background: #091426;
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+    padding: 16px 18px;
+    min-height: 82px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.edge-ai-institutional-item > span,
+.edge-ai-institutional-block > span,
+.edge-ai-institutional-context > span,
+.edge-ai-institutional-summary > span {
+    display: block;
+
+    color: #7486a3;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.edge-ai-institutional-item strong {
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    line-height: 1.45;
+}
+
+
+/* HOLDERS + ACTIVITY */
+
+.edge-ai-institutional-block {
+    margin-top: 12px;
+
+    background: #091426;
+
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+
+    padding: 16px 18px;
+}
+
+.edge-ai-holder-list,
+.edge-ai-institutional-activity-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-top: 11px;
+}
+
+
+/* HOLDER ROW */
+
+.edge-ai-holder-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 11px 0;
+
+    border-bottom: 1px solid #17243a;
+}
+
+.edge-ai-holder-item:last-child {
+    border-bottom: none;
+}
+
+.edge-ai-holder-name {
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.edge-ai-holder-details {
+    color: #91a2bb;
+
+    font-size: 12px;
+
+    text-align: right;
+}
+
+
+/* ACTIVITY ROW */
+
+.edge-ai-institutional-activity-item {
+    padding: 11px 0;
+
+    border-bottom: 1px solid #17243a;
+}
+
+.edge-ai-institutional-activity-item:last-child {
+    border-bottom: none;
+}
+
+.edge-ai-institutional-activity-item strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 13px;
+}
+
+.edge-ai-institutional-activity-item p {
+    margin: 5px 0 0;
+
+    color: #aebbd0;
+
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* CONTEXT + SUMMARY */
+
+.edge-ai-institutional-context,
+.edge-ai-institutional-summary {
+    margin-top: 12px;
+
+    background: #091426;
+
+    border: 1px solid #1c2a40;
+    border-radius: 12px;
+
+    padding: 16px 18px;
+}
+
+.edge-ai-institutional-context p,
+.edge-ai-institutional-summary p {
+    margin: 9px 0 0;
+
+    color: #c3cede;
+
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+
+/* NOTICE */
+
+.edge-ai-institutional-notice {
+    margin-top: 12px;
+
+    padding: 12px 15px;
+
+    border: 1px solid #263852;
+    border-radius: 10px;
+
+    color: #7486a3;
+
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+
+/* LOADING */
+
+.edge-ai-institutional-loading {
+    color: #7486a3;
+
+    font-size: 13px;
+
+    padding: 7px 0;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .edge-ai-institutional-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .edge-ai-holder-item {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .edge-ai-holder-details {
+        text-align: left;
+    }
+
+}
+
+/* =========================================
+   EDGEBREAK AI — SEC FILINGS
+========================================= */
+
+
+/* =========================================
+   LATEST FILING CARDS
+========================================= */
+
+.edge-ai-sec-grid {
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 20px;
+
+}
+
+
+.edge-ai-sec-card {
+
+    background: #071426;
+    border: 1px solid #1c3049;
+    border-radius: 15px;
+    padding: 20px;
+
+}
+
+
+.edge-ai-sec-card > span {
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+
+    color: #8295b3;
+
+}
+
+
+.edge-ai-sec-card strong {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 18px;
+    font-weight: 800;
+
+    color: #ffffff;
+
+}
+
+
+.edge-ai-sec-card p {
+
+    margin: 5px 0 0;
+
+    font-size: 14px;
+    line-height: 1.6;
+
+    color: #aab8cc;
+
+}
+
+
+/* =========================================
+   FILING BLOCK
+========================================= */
+
+.edge-ai-sec-block {
+
+    margin-top: 14px;
+
+    background: #071426;
+
+    border: 1px solid #1c3049;
+    border-radius: 15px;
+
+    padding: 20px;
+
+}
+
+
+.edge-ai-sec-block > span {
+
+    display: block;
+
+    margin-bottom: 15px;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+
+    color: #8295b3;
+
+}
+
+
+/* =========================================
+   RECENT FILING LIST
+========================================= */
+
+.edge-ai-sec-list {
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+}
+
+
+.edge-ai-sec-item {
+
+    padding: 15px 16px;
+
+    background: #09192d;
+
+    border: 1px solid #172b43;
+    border-radius: 11px;
+
+}
+
+
+.edge-ai-sec-item-header {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 7px;
+
+}
+
+
+.edge-ai-sec-form {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 54px;
+
+    padding: 5px 10px;
+
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 7px;
+
+    background: rgba(34, 197, 94, 0.08);
+
+    color: #22c55e;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+.edge-ai-sec-date {
+
+    color: #8295b3;
+
+    font-size: 12px;
+    font-weight: 700;
+
+}
+
+
+.edge-ai-sec-item strong {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    line-height: 1.45;
+
+}
+
+
+.edge-ai-sec-item p {
+
+    margin: 0;
+
+    color: #aab8cc;
+
+    font-size: 13px;
+    line-height: 1.6;
+
+}
+
+
+/* =========================================
+   INSIDER FILING
+========================================= */
+
+.edge-ai-sec-insider {
+
+    padding: 15px 16px;
+
+    background: #09192d;
+
+    border: 1px solid #172b43;
+    border-radius: 11px;
+
+}
+
+
+.edge-ai-sec-insider-header {
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 6px;
+
+}
+
+
+.edge-ai-sec-insider strong {
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+}
+
+
+.edge-ai-sec-insider-role {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #8295b3;
+
+    font-size: 12px;
+
+}
+
+
+.edge-ai-sec-insider p {
+
+    margin: 8px 0 0;
+
+    color: #aab8cc;
+
+    font-size: 13px;
+    line-height: 1.6;
+
+}
+
+
+/* =========================================
+   SEC SUMMARY
+========================================= */
+
+.edge-ai-sec-summary {
+
+    margin-top: 14px;
+
+    padding: 20px;
+
+    background: rgba(34, 197, 94, 0.035);
+
+    border: 1px solid rgba(34, 197, 94, 0.18);
+    border-radius: 15px;
+
+}
+
+
+.edge-ai-sec-summary > span {
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #8295b3;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+
+}
+
+
+.edge-ai-sec-summary p {
+
+    margin: 0;
+
+    color: #b8c5d8;
+
+    font-size: 14px;
+    line-height: 1.65;
+
+}
+
+
+/* =========================================
+   SEC DATA NOTICE
+========================================= */
+
+.edge-ai-sec-notice {
+
+    margin-top: 12px;
+
+    padding: 13px 15px;
+
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    color: #7487a3;
+
+    font-size: 11px;
+    line-height: 1.55;
+
+}
+
+
+/* =========================================
+   LOADING STATE
+========================================= */
+
+.edge-ai-sec-loading {
+
+    padding: 10px 0;
+
+    color: #8295b3;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .edge-ai-sec-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .edge-ai-sec-card,
+    .edge-ai-sec-block,
+    .edge-ai-sec-summary {
+
+        padding: 16px;
+
+    }
+
+
+    .edge-ai-sec-item-header,
+    .edge-ai-sec-insider-header {
+
+        align-items: flex-start;
+        flex-direction: column;
+
+        gap: 6px;
+
+    }
+
+}
+
+/* =========================================
+   EDGEBREAK AI — ON-DEMAND RESEARCH
+========================================= */
+
+
+/* =========================================
+   SECTION HEADER WITH ACTION BUTTON
+========================================= */
+
+.edge-ai-heading-with-action,
+.edge-ai-section-title-action {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+}
+
+
+/* =========================================
+   LEFT SIDE OF SECTION HEADER
+========================================= */
+
+.edge-ai-heading-left,
+.edge-ai-section-title-left {
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    min-width: 0;
+
+}
+
+
+/* =========================================
+   RESEARCH BUTTON
+========================================= */
+
+.edge-ai-research-btn {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    min-height: 38px;
+
+    padding: 9px 15px;
+
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    border-radius: 9px;
+
+    background: rgba(34, 197, 94, 0.08);
+
+    color: #22c55e;
+
+    font-family: inherit;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    line-height: 1;
+
+    letter-spacing: 0.2px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+
+}
+
+
+/* =========================================
+   RESEARCH BUTTON HOVER
+========================================= */
+
+.edge-ai-research-btn:hover {
+
+    background: rgba(34, 197, 94, 0.15);
+
+    border-color: rgba(34, 197, 94, 0.65);
+
+    color: #4ade80;
+
+    transform: translateY(-1px);
+
+}
+
+
+/* =========================================
+   RESEARCH BUTTON ACTIVE
+========================================= */
+
+.edge-ai-research-btn:active {
+
+    transform: translateY(0);
+
+}
+
+
+/* =========================================
+   RESEARCH BUTTON FOCUS
+========================================= */
+
+.edge-ai-research-btn:focus-visible {
+
+    outline: 2px solid rgba(34, 197, 94, 0.65);
+
+    outline-offset: 3px;
+
+}
+
+
+/* =========================================
+   RESEARCHING / DISABLED STATE
+========================================= */
+
+.edge-ai-research-btn:disabled {
+
+    opacity: 0.65;
+
+    cursor: wait;
+
+    transform: none;
+
+}
+
+
+/* =========================================
+   COMPLETED RESEARCH BUTTON
+
+   JS CAN ADD:
+   .edge-ai-research-complete
+========================================= */
+
+.edge-ai-research-btn.edge-ai-research-complete {
+
+    background: rgba(34, 197, 94, 0.12);
+
+    border-color: rgba(34, 197, 94, 0.4);
+
+    color: #4ade80;
+
+}
+
+
+/* =========================================
+   READY TO RESEARCH TEXT
+========================================= */
+
+.edge-ai-overview-item strong,
+.edge-ai-financial-item strong,
+.edge-ai-institutional-item strong {
+
+    transition:
+        color 0.2s ease,
+        opacity 0.2s ease;
+
+}
+
+
+/* =========================================
+   AI DISCLAIMER
+========================================= */
+
+.edge-ai-disclaimer {
+
+    margin-top: 18px;
+
+    padding: 18px 20px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px solid rgba(148, 163, 184, 0.14);
+
+    border-radius: 14px;
+
+}
+
+
+.edge-ai-disclaimer strong {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #dbe7f5;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+.edge-ai-disclaimer p {
+
+    margin: 0;
+
+    color: #8295b3;
+
+    font-size: 11px;
+    line-height: 1.65;
+
+}
+
+
+.edge-ai-disclaimer p + p {
+
+    margin-top: 9px;
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .edge-ai-heading-with-action,
+    .edge-ai-section-title-action {
+
+        align-items: stretch;
+        flex-direction: column;
+
+        gap: 14px;
+
+    }
+
+
+    .edge-ai-heading-left,
+    .edge-ai-section-title-left {
+
+        align-items: center;
+
+    }
+
+
+    .edge-ai-research-btn {
+
+        width: 100%;
+
+        min-height: 42px;
+
+    }
+
+
+    .edge-ai-disclaimer {
+
+        padding: 16px;
+
+    }
+
+}
+
+/* =========================================
+   EDGEBREAK AI
+   MARKET ATTENTION + RECENT NEWS
+========================================= */
+
+
+/* =========================================
+   RECENT NEWS AREA
+========================================= */
+
+.edge-ai-news-section {
+
+    margin-top: 18px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #1c3049;
+
+}
+
+
+/* =========================================
+   NEWS SECTION HEADING
+========================================= */
+
+.edge-ai-news-section-heading {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    margin-bottom: 14px;
+
+}
+
+
+.edge-ai-news-section-heading h4 {
+
+    margin: 4px 0 0;
+
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: 800;
+
+}
+
+
+/* =========================================
+   NEWS ACTIVITY
+========================================= */
+
+.edge-ai-news-section .edge-ai-news-header {
+
+    margin-top: 0;
+
+}
+
+
+/* =========================================
+   NEWS SUMMARY
+========================================= */
+
+.edge-ai-news-section .edge-ai-news-summary {
+
+    margin-top: 12px;
+
+}
+
+
+/* =========================================
+   NEWS LIST
+========================================= */
+
+.edge-ai-news-section .edge-ai-news-list {
+
+    margin-top: 12px;
+
+}
+
+
+/* =========================================
+   MARKET + NEWS NOTICE
+========================================= */
+
+.edge-ai-market-notice {
+
+    margin-top: 16px;
+
+    padding: 13px 15px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px solid rgba(148, 163, 184, 0.12);
+
+    border-radius: 10px;
+
+    color: #7487a3;
+
+    font-size: 11px;
+    line-height: 1.6;
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .edge-ai-news-section-heading {
+
+        align-items: flex-start;
+
+    }
+
+}
 </style>  
 
 
@@ -4255,6 +6422,7 @@ SCANNER SELECTOR
                     <th>Volume</th>
                     <th>Smart Money</th>
                     <th>Add To Watchlist</th>
+                    <th>AI Research</th>
 
                 </tr>
 
@@ -4264,7 +6432,7 @@ SCANNER SELECTOR
 
                 <tr>
 
-                    <td colspan="7">
+                    <td colspan="8">
                         Select filters and click Search.
                     </td>
 
@@ -4499,10 +6667,11 @@ SCANNER SELECTOR
 
                     <th>Ticker</th>
                     <th>Price</th>
-                    <th>Touches</th>
+                    <th>Resistance</th>
                     <th>Higher Lows</th>
                     <th>Smart Money</th>
                     <th>Add To Watchlist</th>
+                    <th>AI Research</th>
 
                 </tr>
 
@@ -4512,7 +6681,7 @@ SCANNER SELECTOR
 
                 <tr>
 
-                    <td colspan="6">
+                    <td colspan="7">
                         Select filters and click Search.
                     </td>
 
@@ -4662,6 +6831,7 @@ SCANNER SELECTOR
                     <th>Base Length</th>
                     <th>Smart Money</th>
                     <th>Add To Watchlist</th>
+                    <th>AI Research</th>
 
                 </tr>
 
@@ -4671,7 +6841,7 @@ SCANNER SELECTOR
 
                 <tr>
 
-                    <td colspan="5">
+                    <td colspan="6">
                         Select filters and click Search.
                     </td>
 
@@ -5115,6 +7285,1324 @@ PANEL 1  watchlist seo
 
 <div id="footer"></div>
 
+<!-- =========================================
+✨ EDGEBREAK AI RESEARCH
+========================================= -->
+
+
+<div
+    id="edgeBreakAIOverlay"
+    class="edge-ai-overlay"
+></div>
+
+
+<aside
+    id="edgeBreakAIPanel"
+    class="edge-ai-panel"
+    aria-hidden="true"
+>
+
+
+    <!-- ===================================
+    HEADER
+    =================================== -->
+
+    <div class="edge-ai-header">
+
+
+        <div class="edge-ai-brand">
+
+
+            <div class="edge-ai-icon">
+                ✨
+            </div>
+
+
+            <div>
+
+                <span class="edge-ai-label">
+                    AI POWERED RESEARCH
+                </span>
+
+                <h2>
+                    EdgeBreak AI Research
+                </h2>
+
+            </div>
+
+
+        </div>
+
+
+        <button
+            type="button"
+            id="edgeBreakAIClose"
+            class="edge-ai-close"
+            aria-label="Close EdgeBreak AI Research"
+        >
+            ×
+        </button>
+
+
+    </div>
+
+
+    <!-- ===================================
+    SELECTED COMPANY
+    =================================== -->
+
+    <div class="edge-ai-company">
+
+
+        <div>
+
+            <span
+                id="edgeAITicker"
+                class="edge-ai-ticker"
+            >
+                —
+            </span>
+
+            <h3>
+                Select a company
+            </h3>
+
+        </div>
+
+
+        <span class="edge-ai-status">
+            AI RESEARCH
+        </span>
+
+
+    </div>
+
+
+    <!-- ===================================
+    CONTENT
+    =================================== -->
+
+    <div class="edge-ai-content">
+
+
+        <!-- ===================================
+        AI RESEARCH INTRODUCTION
+        =================================== -->
+
+        <section class="edge-ai-section">
+
+
+            <div class="edge-ai-section-heading">
+
+
+                <span class="edge-ai-section-icon">
+                    ✨
+                </span>
+
+
+                <div>
+
+                    <span>EDGEBREAK AI</span>
+
+                    <h3>
+                        AI Research
+                    </h3>
+
+                </div>
+
+
+            </div>
+
+
+            <div
+                id="edgeAISummary"
+                class="edge-ai-placeholder"
+            >
+
+                Choose a research section below to begin
+                EdgeBreak AI research.
+
+            </div>
+
+
+        </section>
+
+        <!-- ===================================
+        EDGEBREAK AI — COMPANY OVERVIEW
+        =================================== -->
+
+
+        <section class="edge-ai-section">
+
+
+            <!-- SECTION HEADER -->
+
+
+            <div class="edge-ai-section-title edge-ai-section-title-action">
+
+
+                <div class="edge-ai-section-title-left">
+
+
+                    <div class="edge-ai-section-icon">
+                        🏢
+                    </div>
+
+
+                    <div>
+
+                        <span>COMPANY</span>
+
+                        <h3>
+                            Company Overview
+                        </h3>
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="edgeAICompanyResearchBtn"
+                    class="edge-ai-research-btn"
+                >
+                    ✦ Research Company
+                </button>
+
+
+            </div>
+
+
+            <!-- COMPANY DETAILS -->
+
+
+            <div class="edge-ai-overview-grid">
+
+
+                <div class="edge-ai-overview-item">
+
+                    <span>
+                        INDUSTRY
+                    </span>
+
+                    <strong id="edgeAIIndustry">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+                <div class="edge-ai-overview-item">
+
+                    <span>
+                        HEADQUARTERS
+                    </span>
+
+                    <strong id="edgeAIHeadquarters">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+                <div class="edge-ai-overview-item">
+
+                    <span>
+                        CEO
+                    </span>
+
+                    <strong id="edgeAICEO">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+                <div class="edge-ai-overview-item">
+
+                    <span>
+                        EMPLOYEES
+                    </span>
+
+                    <strong id="edgeAIEmployees">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- PRODUCTS & SERVICES -->
+
+
+            <div class="edge-ai-overview-wide">
+
+
+                <span>
+                    MAIN PRODUCTS & SERVICES
+                </span>
+
+
+                <p id="edgeAIProducts">
+                    Select Research Company to load current company information.
+                </p>
+
+
+            </div>
+
+
+            <!-- GEOGRAPHIC MARKETS -->
+
+
+            <div class="edge-ai-overview-wide">
+
+
+                <span>
+                    GEOGRAPHIC MARKETS
+                </span>
+
+
+                <p id="edgeAIMarkets">
+                    Select Research Company to load current market information.
+                </p>
+
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ===================================
+        EDGEBREAK AI — MARKET ATTENTION & RECENT NEWS
+        =================================== -->
+
+
+        <section class="edge-ai-section edge-ai-attention">
+
+
+            <!-- SECTION HEADER -->
+
+
+            <div class="edge-ai-section-heading edge-ai-heading-with-action">
+
+
+                <div class="edge-ai-heading-left">
+
+
+                    <span class="edge-ai-section-icon">
+                        🔥
+                    </span>
+
+
+                    <div>
+
+                        <span>
+                            LIVE MARKET INTELLIGENCE
+                        </span>
+
+                        <h3>
+                            Market Attention & Recent News
+                        </h3>
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="edgeAIMarketAttentionResearchBtn"
+                    class="edge-ai-research-btn"
+                >
+                    ✦ Research Market
+                </button>
+
+
+            </div>
+
+
+
+            <!-- ===================================
+            MARKET ATTENTION
+            =================================== -->
+
+
+            <div class="edge-ai-attention-header">
+
+
+                <div>
+
+
+                    <span class="edge-ai-small-label">
+                        MARKET ATTENTION
+                    </span>
+
+
+                    <strong id="edgeAIAttentionLevel">
+                        Ready to research
+                    </strong>
+
+
+                </div>
+
+
+                <div
+                    id="edgeAIAttentionBadge"
+                    class="edge-ai-attention-badge"
+                >
+                    —
+                </div>
+
+
+            </div>
+
+
+
+            <!-- MARKET ATTENTION DETAILS -->
+
+
+            <div class="edge-ai-attention-grid">
+
+
+                <div>
+
+                    <span>
+                        Where
+                    </span>
+
+                    <strong id="edgeAIWhere">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Discussion Change
+                    </span>
+
+                    <strong id="edgeAIDiscussionChange">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        News Activity
+                    </span>
+
+                    <strong id="edgeAINewsActivity">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Relative Volume
+                    </span>
+
+                    <strong id="edgeAIRelativeVolume">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Attention Began
+                    </span>
+
+                    <strong id="edgeAIAttentionBegan">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Main Topics
+                    </span>
+
+                    <ul
+                        id="edgeAIMainTopics"
+                        class="edge-ai-attention-topics"
+                    >
+                        <li>
+                            Select Research Market to begin.
+                        </li>
+                    </ul>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ===================================
+            MARKET ATTENTION SUMMARY
+            =================================== -->
+
+
+            <div
+                id="edgeAIAttentionSummary"
+                class="edge-ai-attention-summary"
+            >
+
+                Select Research Market to analyse current
+                market discussion, news activity and attention
+                surrounding this company.
+
+            </div>
+
+
+
+            <!-- ===================================
+            RECENT NEWS
+            =================================== -->
+
+
+            <div class="edge-ai-news-section">
+
+
+                <div class="edge-ai-news-section-heading">
+
+
+                    <div>
+
+                        <span class="edge-ai-small-label">
+                            RECENT DEVELOPMENTS
+                        </span>
+
+                        <h4>
+                            Recent News
+                        </h4>
+
+                    </div>
+
+
+                    <div
+                        id="edgeAINewsBadge"
+                        class="edge-ai-news-badge"
+                    >
+                        —
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- NEWS ACTIVITY -->
+
+
+                <div class="edge-ai-news-header">
+
+
+                    <div>
+
+
+                        <span class="edge-ai-small-label">
+                            NEWS ACTIVITY
+                        </span>
+
+
+                        <strong id="edgeAINewsLevel">
+                            Ready to research
+                        </strong>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- CURRENT DEVELOPMENTS -->
+
+
+                <div class="edge-ai-news-summary">
+
+
+                    <span>
+                        CURRENT DEVELOPMENTS
+                    </span>
+
+
+                    <p id="edgeAINewsSummary">
+
+                        Select Research Market to load recent
+                        company developments and news activity.
+
+                    </p>
+
+
+                </div>
+
+
+
+                <!-- NEWS ITEMS -->
+
+
+                <div
+                    id="edgeAINewsItems"
+                    class="edge-ai-news-list"
+                >
+
+
+                    <div class="edge-ai-news-loading">
+
+                        Select Research Market to load
+                        recent company news.
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ===================================
+            DATA NOTICE
+            =================================== -->
+
+
+            <div class="edge-ai-market-notice">
+
+                Market attention and recent news are based on
+                publicly available information identified during
+                the research request. Information may be incomplete,
+                delayed or subsequently updated.
+
+            </div>
+
+
+        </section>
+             
+        
+
+        <!-- ===================================
+        EDGEBREAK AI — FINANCIAL HIGHLIGHTS
+        =================================== -->
+
+
+        <section class="edge-ai-section">
+
+
+            <!-- SECTION HEADER -->
+
+
+            <div class="edge-ai-section-heading edge-ai-heading-with-action">
+
+
+                <div class="edge-ai-heading-left">
+
+
+                    <span class="edge-ai-section-icon">
+                        $
+                    </span>
+
+
+                    <div>
+
+                        <span>
+                            FINANCIAL DATA
+                        </span>
+
+                        <h3>
+                            Financial Highlights
+                        </h3>
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="edgeAIFinancialsResearchBtn"
+                    class="edge-ai-research-btn"
+                >
+                    ✦ Research Financials
+                </button>
+
+
+            </div>
+
+
+
+            <!-- FINANCIAL DATA -->
+
+
+            <div class="edge-ai-financial-grid">
+
+
+                <div class="edge-ai-financial-item">
+
+                    <span>
+                        LATEST REVENUE
+                    </span>
+
+                    <strong id="edgeAIRevenue">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+
+                <div class="edge-ai-financial-item">
+
+                    <span>
+                        REVENUE GROWTH
+                    </span>
+
+                    <strong id="edgeAIRevenueGrowth">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+
+                <div class="edge-ai-financial-item">
+
+                    <span>
+                        EPS
+                    </span>
+
+                    <strong id="edgeAIEPS">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+
+                <div class="edge-ai-financial-item">
+
+                    <span>
+                        GROSS MARGIN
+                    </span>
+
+                    <strong id="edgeAIGrossMargin">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+
+                <div class="edge-ai-financial-item">
+
+                    <span>
+                        CASH
+                    </span>
+
+                    <strong id="edgeAICash">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+
+                <div class="edge-ai-financial-item">
+
+                    <span>
+                        DEBT
+                    </span>
+
+                    <strong id="edgeAIDebt">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+
+                <div
+                    class="edge-ai-financial-item
+                        edge-ai-financial-wide"
+                >
+
+                    <span>
+                        FREE CASH FLOW
+                    </span>
+
+                    <strong id="edgeAIFreeCashFlow">
+                        Ready to research
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- LATEST QUARTER -->
+
+
+            <div class="edge-ai-financial-quarter">
+
+
+                <span>
+                    LATEST QUARTER
+                </span>
+
+
+                <p id="edgeAILatestQuarter">
+                    Select Research Financials to load the
+                    latest reported financial information.
+                </p>
+
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ===================================
+        EDGEBREAK AI — INSTITUTIONAL ACTIVITY
+        =================================== -->
+
+
+        <section class="edge-ai-section">
+
+
+            <!-- SECTION HEADER -->
+
+
+            <div class="edge-ai-section-heading edge-ai-heading-with-action">
+
+
+                <div class="edge-ai-heading-left">
+
+
+                    <span class="edge-ai-section-icon">
+                        🏛
+                    </span>
+
+
+                    <div>
+
+                        <span>
+                            OWNERSHIP
+                        </span>
+
+                        <h3>
+                            Institutional Activity
+                        </h3>
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="edgeAIInstitutionalResearchBtn"
+                    class="edge-ai-research-btn"
+                >
+                    ✦ Research Ownership
+                </button>
+
+
+            </div>
+
+
+
+            <!-- OWNERSHIP OVERVIEW -->
+
+
+            <div class="edge-ai-institutional-grid">
+
+
+                <div class="edge-ai-institutional-item">
+
+
+                    <span>
+                        REPORTED INSTITUTIONAL OWNERSHIP
+                    </span>
+
+
+                    <strong id="edgeAIInstitutionalOwnership">
+                        Ready to research
+                    </strong>
+
+
+                </div>
+
+
+
+                <div class="edge-ai-institutional-item">
+
+
+                    <span>
+                        DATA PERIOD
+                    </span>
+
+
+                    <strong id="edgeAIInstitutionalPeriod">
+                        Ready to research
+                    </strong>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- MAJOR HOLDERS -->
+
+
+            <div class="edge-ai-institutional-block">
+
+
+                <span>
+                    MAJOR REPORTED HOLDERS
+                </span>
+
+
+                <div
+                    id="edgeAIMajorHolders"
+                    class="edge-ai-holder-list"
+                >
+
+
+                    <div class="edge-ai-institutional-loading">
+                        Select Research Ownership to load
+                        major reported institutional holders.
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- RECENT ACTIVITY -->
+
+
+            <div class="edge-ai-institutional-block">
+
+
+                <span>
+                    RECENT DISCLOSED ACTIVITY
+                </span>
+
+
+                <div
+                    id="edgeAIInstitutionalActivity"
+                    class="edge-ai-institutional-activity-list"
+                >
+
+
+                    <div class="edge-ai-institutional-loading">
+                        Select Research Ownership to load
+                        recent disclosed institutional activity.
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- OWNERSHIP CONTEXT -->
+
+
+            <div class="edge-ai-institutional-context">
+
+
+                <span>
+                    OWNERSHIP CONTEXT
+                </span>
+
+
+                <p id="edgeAIOwnershipConcentration">
+                    Select Research Ownership to analyse
+                    reported ownership concentration.
+                </p>
+
+
+            </div>
+
+
+
+            <!-- SUMMARY -->
+
+
+            <div class="edge-ai-institutional-summary">
+
+
+                <span>
+                    INSTITUTIONAL SUMMARY
+                </span>
+
+
+                <p id="edgeAIInstitutionalSummary">
+                    Select Research Ownership to begin
+                    institutional ownership research.
+                </p>
+
+
+            </div>
+
+
+
+            <!-- DATA NOTICE -->
+
+
+            <div class="edge-ai-institutional-notice">
+
+                Institutional ownership reflects reported
+                regulatory filings and may lag current positions.
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ===================================
+        EDGEBREAK AI — SEC FILINGS
+        =================================== -->
+
+
+        <section class="edge-ai-section">
+
+
+            <!-- SECTION HEADER -->
+
+
+            <div class="edge-ai-section-heading edge-ai-heading-with-action">
+
+
+                <div class="edge-ai-heading-left">
+
+
+                    <span class="edge-ai-section-icon">
+                        📄
+                    </span>
+
+
+                    <div>
+
+                        <span>
+                            REGULATORY FILINGS
+                        </span>
+
+                        <h3>
+                            SEC Filings
+                        </h3>
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="edgeAISecResearchBtn"
+                    class="edge-ai-research-btn"
+                >
+                    ✦ Research SEC Filings
+                </button>
+
+
+            </div>
+
+
+
+            <!-- LATEST REPORTS -->
+
+
+            <div class="edge-ai-sec-grid">
+
+
+                <!-- LATEST ANNUAL REPORT -->
+
+
+                <div class="edge-ai-sec-card">
+
+
+                    <span>
+                        LATEST ANNUAL REPORT
+                    </span>
+
+
+                    <strong id="edgeAISecAnnualForm">
+                        Ready to research
+                    </strong>
+
+
+                    <p id="edgeAISecAnnualDate">
+                        Filing information not loaded.
+                    </p>
+
+
+                    <p id="edgeAISecAnnualSummary">
+                        Select Research SEC Filings to load
+                        the latest annual filing.
+                    </p>
+
+
+                </div>
+
+
+
+                <!-- LATEST QUARTERLY REPORT -->
+
+
+                <div class="edge-ai-sec-card">
+
+
+                    <span>
+                        LATEST QUARTERLY REPORT
+                    </span>
+
+
+                    <strong id="edgeAISecQuarterlyForm">
+                        Ready to research
+                    </strong>
+
+
+                    <p id="edgeAISecQuarterlyDate">
+                        Filing information not loaded.
+                    </p>
+
+
+                    <p id="edgeAISecQuarterlySummary">
+                        Select Research SEC Filings to load
+                        the latest quarterly filing.
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- RECENT MATERIAL FILINGS -->
+
+
+            <div class="edge-ai-sec-block">
+
+
+                <span>
+                    RECENT MATERIAL FILINGS
+                </span>
+
+
+                <div
+                    id="edgeAISecRecentFilings"
+                    class="edge-ai-sec-list"
+                >
+
+
+                    <div class="edge-ai-sec-loading">
+                        Select Research SEC Filings to load
+                        recent material regulatory filings.
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- RECENT INSIDER FILINGS -->
+
+
+            <div class="edge-ai-sec-block">
+
+
+                <span>
+                    RECENT INSIDER FILINGS
+                </span>
+
+
+                <div
+                    id="edgeAISecInsiderFilings"
+                    class="edge-ai-sec-list"
+                >
+
+
+                    <div class="edge-ai-sec-loading">
+                        Select Research SEC Filings to load
+                        recent Form 4 disclosures.
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- FILING SUMMARY -->
+
+
+            <div class="edge-ai-sec-summary">
+
+
+                <span>
+                    FILING SUMMARY
+                </span>
+
+
+                <p id="edgeAISecSummary">
+                    Select Research SEC Filings to analyse
+                    recent regulatory filing activity.
+                </p>
+
+
+            </div>
+
+
+
+            <!-- DATA NOTICE -->
+
+
+            <div class="edge-ai-sec-notice">
+
+                SEC filing information is based on publicly
+                available regulatory disclosures. Filing dates
+                and reported information may not reflect
+                subsequent company developments.
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ===================================
+        EDGEBREAK CONTEXT
+        =================================== -->
+
+
+        <section class="edge-ai-section edge-ai-context">
+
+
+            <div class="edge-ai-section-heading">
+
+
+                <span class="edge-ai-section-icon">
+                    ◎
+                </span>
+
+
+                <div>
+
+                    <span>EDGEBREAK DATA</span>
+
+                    <h3>
+                        Technical Context
+                    </h3>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="edge-ai-placeholder">
+
+                Scanner type, resistance structure, higher lows,
+                Smart Money appearances, volume and other
+                EdgeBreak observations will appear here.
+
+            </div>
+
+
+        </section>
+
+                
+        <!-- ===================================
+        AI RESEARCH NOTICE
+        =================================== -->
+
+
+        <div class="edge-ai-disclaimer">
+
+
+            <strong>
+                EdgeBreak AI Research
+            </strong>
+
+
+            <p>
+
+                EdgeBreak AI provides factual market research
+                and educational information only. It does not
+                provide investment advice, recommendations,
+                ratings, price targets or predictions.
+
+            </p>
+
+
+            <p>
+
+                AI-generated research may contain errors,
+                omissions or outdated information. Important
+                information should be independently verified
+                using primary sources such as company
+                disclosures, investor relations materials
+                and SEC filings before being relied upon.
+
+            </p>
+
+
+        </div>
+
+
+
+        <!-- END AI CONTENT -->
+
+
+</div>
+
+</aside>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://s3.tradingview.com/tv.js"></script>
 
@@ -5363,7 +8851,7 @@ function renderResults(results){
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="6">
+                <td colspan="7">
                     No matches found
                 </td>
             </tr>
@@ -5413,18 +8901,34 @@ function renderResults(results){
                 <td>
 
                     <button
+                        class="watchlist-btn"
                         onclick="
                             event.stopPropagation();
                             addToWatchlist('${stock.symbol}');
                         "
-                        class="watchlist-btn"
                     >
                         Add
                     </button>
 
                 </td>
 
-            </tr>
+                <td>
+
+                    <button
+                        type="button"
+                        class="edge-ai-research-btn"
+                        onclick="
+                            event.stopPropagation();
+                            openPreBreakoutAIResearch('${stock.symbol}');
+                        "
+                    >
+                        <span>✨</span>
+                        AI Research
+                    </button>
+
+                </td>
+
+                </tr>
 
         `;
 
@@ -5889,7 +9393,23 @@ function renderBreakoutResults(results){
 
                 </td>
 
-            </tr>
+                <td>
+
+                    <button
+                        type="button"
+                        class="edge-ai-research-btn"
+                        onclick="
+                            event.stopPropagation();
+                            openBreakoutAIResearch('${stock.symbol}');
+                        "
+                    >
+                        <span>✨</span>
+                        AI Research
+                    </button>
+
+                </td>
+
+                </tr>
 
         `;
 
@@ -6237,7 +9757,7 @@ function renderLaunchPadResults(results){
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="5">
+                <td colspan="6">
                     No Launch Pad stocks found
                 </td>
             </tr>
@@ -6307,7 +9827,25 @@ function renderLaunchPadResults(results){
 
                 </td>
 
-            </tr>
+
+                <td>
+
+                    <button
+                        type="button"
+                        class="edge-ai-research-btn"
+                        onclick="
+                            event.stopPropagation();
+                            openLaunchPadAIResearch('${stock.symbol}');
+                        "
+                    >
+                        <span>✨</span>
+                        AI Research
+                    </button>
+
+                </td>
+
+
+                </tr>
 
             `;
 
@@ -7070,6 +10608,3907 @@ document.addEventListener("click", function (e) {
 });
 
 </script>
+
+<script>
+
+/* =========================================
+   EDGEBREAK AI RESEARCH PANEL
+========================================= */
+
+const edgeBreakAIPanel =
+    document.getElementById("edgeBreakAIPanel");
+
+const edgeBreakAIOverlay =
+    document.getElementById("edgeBreakAIOverlay");
+
+const edgeBreakAIClose =
+    document.getElementById("edgeBreakAIClose");
+
+
+function openEdgeBreakAI(){
+
+    edgeBreakAIPanel.classList.add("open");
+
+    edgeBreakAIOverlay.classList.add("active");
+
+    document.body.classList.add("edge-ai-open");
+
+    edgeBreakAIPanel.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+}
+
+
+function closeEdgeBreakAI(){
+
+    edgeBreakAIPanel.classList.remove("open");
+
+    edgeBreakAIOverlay.classList.remove("active");
+
+    document.body.classList.remove("edge-ai-open");
+
+    edgeBreakAIPanel.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+}
+
+
+edgeBreakAIClose.addEventListener(
+    "click",
+    closeEdgeBreakAI
+);
+
+
+edgeBreakAIOverlay.addEventListener(
+    "click",
+    closeEdgeBreakAI
+);
+
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Escape"){
+
+            closeEdgeBreakAI();
+
+        }
+
+    }
+);
+
+/* =========================================
+   OPEN BREAKOUT AI RESEARCH
+========================================= */
+
+function openBreakoutAIResearch(symbol){
+
+    const stock =
+        window.breakoutData.find(
+            item => item.symbol === symbol
+        );
+
+    if(!stock){
+
+        console.error(
+            "EdgeBreak AI: breakout stock not found",
+            symbol
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================
+       SMART MONEY
+    ===================================== */
+
+    const smartRecord =
+        window.smartMoneyLookup[
+            stock.symbol
+        ];
+
+    const smartMoneyPeriod =
+        parseInt(
+            document.getElementById(
+                "breakoutSmartMoneyPeriod"
+            )?.value || 90
+        );
+
+    const smartMoneyCount =
+        smartRecord
+            ? getSmartMoneyCount(
+                smartRecord,
+                smartMoneyPeriod
+            )
+            : 0;
+
+
+    /* =====================================
+       COMPANY HEADER
+    ===================================== */
+
+    const ticker =
+        document.querySelector(
+            ".edge-ai-ticker"
+        );
+
+    const companyName =
+        document.querySelector(
+            ".edge-ai-company h3"
+        );
+
+
+    if(ticker){
+
+        ticker.textContent =
+            stock.symbol;
+
+    }
+
+
+    if(companyName){
+
+        companyName.textContent =
+            "NASDAQ Listed Company";
+
+    }
+
+
+    /* =====================================
+       EDGEBREAK TECHNICAL CONTEXT
+    ===================================== */
+
+    const contextSection =
+        document.querySelector(
+            ".edge-ai-context .edge-ai-placeholder"
+        );
+
+
+    if(contextSection){
+
+        contextSection.innerHTML = `
+
+            <div class="edge-ai-context-grid">
+
+                <div>
+
+                    <span>
+                        Scanner
+                    </span>
+
+                    <strong>
+                        Breakout Scanner
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Classification
+                    </span>
+
+                    <strong>
+                        ${stock.rank || "—"}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Current Price
+                    </span>
+
+                    <strong>
+                        $${Number(
+                            stock.price || 0
+                        ).toFixed(2)}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Resistance
+                    </span>
+
+                    <strong>
+                        ${stock.resistance || "—"}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Resistance Touches
+                    </span>
+
+                    <strong>
+                        ${stock.touches || 0}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Higher Lows
+                    </span>
+
+                    <strong>
+                        ${stock.higher_lows || 0}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Volume Ratio
+                    </span>
+
+                    <strong>
+                        ${Number(
+                            stock.volume_ratio || 0
+                        ).toFixed(2)}x
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Breakout Strength
+                    </span>
+
+                    <strong>
+                        ${stock.breakout_strength || 0}%
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Smart Money
+                    </span>
+
+                    <strong>
+                        ${smartMoneyCount}
+                        /
+                        ${smartMoneyPeriod} Days
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Setup Type
+                    </span>
+
+                    <strong>
+                        ${stock.setup_type || "—"}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =====================================
+       OPEN PANEL
+    ===================================== */
+
+    openEdgeBreakAI();
+
+    loadEdgeBreakAIResearch(symbol);
+
+}
+
+/* =========================================
+   OPEN PRE-BREAKOUT AI RESEARCH
+========================================= */
+
+function openPreBreakoutAIResearch(symbol){
+
+    const stock =
+        window.scannerData.find(
+            item => item.symbol === symbol
+        );
+
+    if(!stock){
+
+        console.error(
+            "EdgeBreak AI: Pre-Breakout stock not found",
+            symbol
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================
+       SMART MONEY
+    ===================================== */
+
+    const smartRecord =
+        window.smartMoneyLookup[
+            stock.symbol
+        ];
+
+    const smartMoneyPeriod =
+        parseInt(
+            document.getElementById(
+                "scannerSmartMoneyPeriod"
+            )?.value || 90
+        );
+
+    const smartMoneyCount =
+        smartRecord
+            ? getSmartMoneyCount(
+                smartRecord,
+                smartMoneyPeriod
+            )
+            : 0;
+
+
+    /* =====================================
+       SELECTED LOOKBACK
+    ===================================== */
+
+    const lookback =
+        document.getElementById(
+            "lookback"
+        )?.value || "—";
+
+
+    /* =====================================
+       COMPANY HEADER
+    ===================================== */
+
+    const ticker =
+        document.querySelector(
+            ".edge-ai-ticker"
+        );
+
+    const companyName =
+        document.querySelector(
+            ".edge-ai-company h3"
+        );
+
+
+    if(ticker){
+
+        ticker.textContent =
+            stock.symbol;
+
+    }
+
+
+    if(companyName){
+
+        companyName.textContent =
+            "NASDAQ Listed Company";
+
+    }
+
+
+    /* =====================================
+       EDGEBREAK TECHNICAL CONTEXT
+    ===================================== */
+
+    const contextSection =
+        document.querySelector(
+            ".edge-ai-context .edge-ai-placeholder"
+        );
+
+
+    if(contextSection){
+
+        contextSection.innerHTML = `
+
+            <div class="edge-ai-context-grid">
+
+
+                <div>
+
+                    <span>
+                        Scanner
+                    </span>
+
+                    <strong>
+                        Pre-Breakout Scanner
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Current Price
+                    </span>
+
+                    <strong>
+                        $${Number(
+                            stock.current_price || 0
+                        ).toFixed(2)}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Resistance
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.resistance_price
+                            ?? "—"
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Resistance Touches
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.resistance_touches
+                            ?? 0
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Higher Lows
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.higher_lows
+                            ?? 0
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Price Group
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.price_group
+                            || "—"
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Structure Status
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.structure_active === true
+                                ? "Active"
+                                : "Not Active"
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Average Dollar Volume
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.average_dollar_volume_20
+                                ? "$" +
+                                  Number(
+                                      stock.average_dollar_volume_20
+                                  ).toLocaleString()
+                                : "—"
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Smart Money
+                    </span>
+
+                    <strong>
+                        ${smartMoneyCount}
+                        /
+                        ${smartMoneyPeriod} Days
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Research Period
+                    </span>
+
+                    <strong>
+                        ${lookback} Days
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =====================================
+       OPEN PANEL
+    ===================================== */
+
+    openEdgeBreakAI();
+
+    loadEdgeBreakAIResearch(symbol);
+
+}
+
+/* =========================================
+   OPEN LAUNCH PAD AI RESEARCH
+========================================= */
+
+function openLaunchPadAIResearch(symbol){
+
+    const stock =
+        window.launchPadData.find(
+            item => item.symbol === symbol
+        );
+
+    if(!stock){
+
+        console.error(
+            "EdgeBreak AI: Launch Pad stock not found",
+            symbol
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================
+       SMART MONEY
+    ===================================== */
+
+    const smartRecord =
+        window.smartMoneyLookup[
+            stock.symbol
+        ];
+
+    const smartMoneyPeriod =
+        parseInt(
+            document.getElementById(
+                "launchPadSmartMoneyPeriod"
+            )?.value || 90
+        );
+
+    const smartMoneyCount =
+        smartRecord
+            ? getSmartMoneyCount(
+                smartRecord,
+                smartMoneyPeriod
+            )
+            : 0;
+
+
+    /* =====================================
+       COMPANY HEADER
+    ===================================== */
+
+    const ticker =
+        document.querySelector(
+            ".edge-ai-ticker"
+        );
+
+    const companyName =
+        document.querySelector(
+            ".edge-ai-company h3"
+        );
+
+
+    if(ticker){
+
+        ticker.textContent =
+            stock.symbol;
+
+    }
+
+
+    if(companyName){
+
+        companyName.textContent =
+            "NASDAQ Listed Company";
+
+    }
+
+
+    /* =====================================
+       EDGEBREAK TECHNICAL CONTEXT
+    ===================================== */
+
+    const contextSection =
+        document.querySelector(
+            ".edge-ai-context .edge-ai-placeholder"
+        );
+
+
+    if(contextSection){
+
+        contextSection.innerHTML = `
+
+            <div class="edge-ai-context-grid">
+
+
+                <div>
+
+                    <span>
+                        Scanner
+                    </span>
+
+                    <strong>
+                        Launch Pad Scanner
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Current Price
+                    </span>
+
+                    <strong>
+                        $${Number(
+                            stock.current_price || 0
+                        ).toFixed(2)}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Base Length
+                    </span>
+
+                    <strong>
+                        ${stock.launchpad_days || 0} Days
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Price Group
+                    </span>
+
+                    <strong>
+                        ${stock.price_group || "—"}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Support Zone
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.support_zone_low != null
+                                ? "$" +
+                                  Number(
+                                      stock.support_zone_low
+                                  ).toFixed(2)
+                                : "—"
+                        }
+                        —
+                        ${
+                            stock.support_zone_high != null
+                                ? "$" +
+                                  Number(
+                                      stock.support_zone_high
+                                  ).toFixed(2)
+                                : "—"
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Resistance Zone
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.resistance_zone_low != null
+                                ? "$" +
+                                  Number(
+                                      stock.resistance_zone_low
+                                  ).toFixed(2)
+                                : "—"
+                        }
+                        —
+                        ${
+                            stock.resistance_zone_high != null
+                                ? "$" +
+                                  Number(
+                                      stock.resistance_zone_high
+                                  ).toFixed(2)
+                                : "—"
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Range
+                    </span>
+
+                    <strong>
+                        ${
+                            stock.range_percent != null
+                                ? Number(
+                                    stock.range_percent
+                                  ).toFixed(2) + "%"
+                                : "—"
+                        }
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Smart Money
+                    </span>
+
+                    <strong>
+                        ${smartMoneyCount}
+                        /
+                        ${smartMoneyPeriod} Days
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Last Updated
+                    </span>
+
+                    <strong>
+                        ${stock.last_updated || "—"}
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        `;
+
+    }
+
+
+/* =====================================
+   OPEN PANEL
+===================================== */
+
+openEdgeBreakAI();
+
+loadEdgeBreakAIResearch(symbol);
+
+}
+
+
+/* =========================================
+   EDGEBREAK AI — OPEN RESEARCH PANEL
+   NO AUTOMATIC API CALLS
+========================================= */
+
+function loadEdgeBreakAIResearch(symbol){
+
+    console.count(
+        "loadEdgeBreakAIResearch called"
+    );
+
+
+    const cleanSymbol =
+        String(symbol || "")
+            .trim()
+            .toUpperCase();
+
+
+    if(!cleanSymbol){
+        return;
+    }
+
+
+    console.log(
+        "Research symbol:",
+        cleanSymbol
+    );
+
+
+    /* =====================================
+       STORE ACTIVE SYMBOL
+    ===================================== */
+
+    window.edgeBreakAIActiveSymbol =
+        cleanSymbol;
+
+
+    /* =====================================
+       TICKER HEADER
+    ===================================== */
+
+    const ticker =
+        document.getElementById(
+            "edgeAITicker"
+        );
+
+
+    if(ticker){
+
+        ticker.textContent =
+            cleanSymbol;
+
+    }
+
+
+    /* =====================================
+       COMPANY NAME
+
+       We do not know the verified company
+       name until Company Overview research
+       has been requested.
+
+       For now show the ticker.
+    ===================================== */
+
+    const companyName =
+        document.querySelector(
+            ".edge-ai-company h3"
+        );
+
+
+    if(companyName){
+
+        companyName.textContent =
+            cleanSymbol;
+
+    }
+
+
+    /* =====================================
+       MAIN AI MESSAGE
+    ===================================== */
+
+    const summaryBox =
+        document.getElementById(
+            "edgeAISummary"
+        );
+
+
+    if(summaryBox){
+
+        summaryBox.textContent =
+            "Choose a research section below to begin EdgeBreak AI research.";
+
+    }
+
+
+    /* =====================================
+       IMPORTANT
+
+       NO OPENAI API REQUEST IS MADE HERE.
+
+       Opening EdgeBreak AI Research now
+       costs nothing.
+
+       Each research module will only call
+       its API when the user selects that
+       section's Research button.
+    ===================================== */
+
+}    
+
+/* =========================================
+   EDGEBREAK AI — COMPANY OVERVIEW
+   ON-DEMAND RESEARCH
+========================================= */
+
+async function loadEdgeBreakAICompanyOverview(
+    symbol,
+    companyName = ""
+) {
+
+    const button =
+        document.getElementById(
+            "edgeAICompanyResearchBtn"
+        );
+
+
+    const industry =
+        document.getElementById(
+            "edgeAIIndustry"
+        );
+
+    const headquarters =
+        document.getElementById(
+            "edgeAIHeadquarters"
+        );
+
+    const ceo =
+        document.getElementById(
+            "edgeAICEO"
+        );
+
+    const employees =
+        document.getElementById(
+            "edgeAIEmployees"
+        );
+
+    const products =
+        document.getElementById(
+            "edgeAIProducts"
+        );
+
+    const markets =
+        document.getElementById(
+            "edgeAIMarkets"
+        );
+
+
+    /* =====================================
+       BUTTON — RESEARCHING
+    ===================================== */
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "✦ Researching...";
+
+        button.classList.remove(
+            "edge-ai-research-complete"
+        );
+
+    }
+
+
+    /* =====================================
+       RESEARCHING STATE
+    ===================================== */
+
+    if (industry) {
+        industry.textContent =
+            "Researching...";
+    }
+
+    if (headquarters) {
+        headquarters.textContent =
+            "Researching...";
+    }
+
+    if (ceo) {
+        ceo.textContent =
+            "Researching...";
+    }
+
+    if (employees) {
+        employees.textContent =
+            "Researching...";
+    }
+
+    if (products) {
+        products.textContent =
+            "Researching...";
+    }
+
+    if (markets) {
+        markets.textContent =
+            "Researching...";
+    }
+
+
+    try {
+
+        /* =================================
+           API REQUEST
+        ================================= */
+
+        const response =
+            await fetch(
+                "/api/ai-company-overview",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        symbol:
+                            symbol,
+
+                        companyName:
+                            companyName
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Company overview failed"
+            );
+
+        }
+
+
+        /* =================================
+           COMPANY OVERVIEW
+        ================================= */
+
+        const overview =
+            data.companyOverview;
+
+
+        if (!overview) {
+
+            throw new Error(
+                "No company overview returned"
+            );
+
+        }
+
+
+        /* =================================
+           DISPLAY RESULTS
+        ================================= */
+
+        if (industry) {
+
+            industry.textContent =
+                overview.industry ||
+                "Not verified";
+
+        }
+
+
+        if (headquarters) {
+
+            headquarters.textContent =
+                overview.headquarters ||
+                "Not verified";
+
+        }
+
+
+        if (ceo) {
+
+            ceo.textContent =
+                overview.ceo ||
+                "Not verified";
+
+        }
+
+
+        if (employees) {
+
+            employees.textContent =
+                overview.employees ||
+                "Not verified";
+
+        }
+
+
+        if (products) {
+
+            products.textContent =
+                overview.mainProducts ||
+                "Not verified";
+
+        }
+
+
+        if (markets) {
+
+            markets.textContent =
+                overview.geographicMarkets ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           COMPANY NAME
+        ================================= */
+
+        const panelCompanyName =
+            document.querySelector(
+                ".edge-ai-company h3"
+            );
+
+
+        if (
+            panelCompanyName &&
+            data.companyName
+        ) {
+
+            panelCompanyName.textContent =
+                data.companyName;
+
+        }
+
+
+        /* =================================
+           BUTTON — COMPLETE
+        ================================= */
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "✓ Research Complete";
+
+            button.classList.add(
+                "edge-ai-research-complete"
+            );
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "EdgeBreak Company Overview:",
+            error
+        );
+
+
+        /* =================================
+           ERROR STATE
+        ================================= */
+
+        const fields = [
+            industry,
+            headquarters,
+            ceo,
+            employees,
+            products,
+            markets
+        ];
+
+
+        fields.forEach(field => {
+
+            if (field) {
+
+                field.textContent =
+                    "Research unavailable";
+
+            }
+
+        });
+
+
+        /* =================================
+           BUTTON — TRY AGAIN
+        ================================= */
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "✦ Try Again";
+
+            button.classList.remove(
+                "edge-ai-research-complete"
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================
+   COMPANY OVERVIEW RESEARCH BUTTON
+========================================= */
+
+const edgeAICompanyResearchBtn =
+    document.getElementById(
+        "edgeAICompanyResearchBtn"
+    );
+
+
+if (edgeAICompanyResearchBtn) {
+
+    edgeAICompanyResearchBtn.addEventListener(
+        "click",
+        function() {
+
+            const symbol =
+                window.edgeBreakAIActiveSymbol;
+
+
+            if (!symbol) {
+
+                console.warn(
+                    "EdgeBreak AI: No active symbol."
+                );
+
+                return;
+
+            }
+
+
+            loadEdgeBreakAICompanyOverview(
+                symbol
+            );
+
+        }
+    );
+
+}
+
+/* =========================================
+   EDGEBREAK AI
+   MARKET ATTENTION + RECENT NEWS
+   ON-DEMAND RESEARCH
+========================================= */
+
+async function loadEdgeBreakAIMarketAttention(
+    symbol,
+    companyName = ""
+) {
+
+    /* =====================================
+       RESEARCH BUTTON
+    ===================================== */
+
+    const button =
+        document.getElementById(
+            "edgeAIMarketAttentionResearchBtn"
+        );
+
+
+    /* =====================================
+       MARKET ATTENTION ELEMENTS
+    ===================================== */
+
+    const attentionLevel =
+        document.getElementById(
+            "edgeAIAttentionLevel"
+        );
+
+    const attentionBadge =
+        document.getElementById(
+            "edgeAIAttentionBadge"
+        );
+
+    const where =
+        document.getElementById(
+            "edgeAIWhere"
+        );
+
+    const discussionChange =
+        document.getElementById(
+            "edgeAIDiscussionChange"
+        );
+
+    const newsActivity =
+        document.getElementById(
+            "edgeAINewsActivity"
+        );
+
+    const relativeVolume =
+        document.getElementById(
+            "edgeAIRelativeVolume"
+        );
+
+    const attentionBegan =
+        document.getElementById(
+            "edgeAIAttentionBegan"
+        );
+
+    const topics =
+        document.getElementById(
+            "edgeAIMainTopics"
+        );
+
+    const attentionSummary =
+        document.getElementById(
+            "edgeAIAttentionSummary"
+        );
+
+
+    /* =====================================
+       RECENT NEWS ELEMENTS
+    ===================================== */
+
+    const newsLevel =
+        document.getElementById(
+            "edgeAINewsLevel"
+        );
+
+    const newsBadge =
+        document.getElementById(
+            "edgeAINewsBadge"
+        );
+
+    const newsSummary =
+        document.getElementById(
+            "edgeAINewsSummary"
+        );
+
+    const newsItems =
+        document.getElementById(
+            "edgeAINewsItems"
+        );
+
+
+    /* =====================================
+       BUTTON — RESEARCHING
+    ===================================== */
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "✦ Researching...";
+
+        button.classList.remove(
+            "edge-ai-research-complete"
+        );
+
+    }
+
+
+    /* =====================================
+       MARKET ATTENTION — LOADING
+    ===================================== */
+
+    if (attentionLevel) {
+        attentionLevel.textContent =
+            "Researching...";
+    }
+
+    if (attentionBadge) {
+        attentionBadge.textContent =
+            "…";
+    }
+
+    if (where) {
+        where.textContent =
+            "Researching...";
+    }
+
+    if (discussionChange) {
+        discussionChange.textContent =
+            "Researching...";
+    }
+
+    if (newsActivity) {
+        newsActivity.textContent =
+            "Researching...";
+    }
+
+    if (relativeVolume) {
+        relativeVolume.textContent =
+            "Researching...";
+    }
+
+    if (attentionBegan) {
+        attentionBegan.textContent =
+            "Researching...";
+    }
+
+    if (topics) {
+
+        topics.innerHTML =
+            "<li>Researching...</li>";
+
+    }
+
+    if (attentionSummary) {
+
+        attentionSummary.textContent =
+            "Researching current market attention...";
+
+    }
+
+
+    /* =====================================
+       RECENT NEWS — LOADING
+    ===================================== */
+
+    if (newsLevel) {
+
+        newsLevel.textContent =
+            "Researching...";
+
+    }
+
+    if (newsBadge) {
+
+        newsBadge.textContent =
+            "…";
+
+    }
+
+    if (newsSummary) {
+
+        newsSummary.textContent =
+            "Researching recent company developments...";
+
+    }
+
+    if (newsItems) {
+
+        newsItems.innerHTML = `
+            <div class="edge-ai-news-loading">
+                Researching recent company news...
+            </div>
+        `;
+
+    }
+
+
+    try {
+
+        /* =================================
+           ONE COMBINED API REQUEST
+        ================================= */
+
+        const response =
+            await fetch(
+                "/api/ai-market-attention",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        symbol:
+                            symbol,
+
+                        companyName:
+                            companyName
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Market research failed"
+            );
+
+        }
+
+
+        const attention =
+            data.marketAttention;
+
+
+        const recentNews =
+            data.recentNews;
+
+
+        if (!attention) {
+
+            throw new Error(
+                "No market attention returned"
+            );
+
+        }
+
+
+        /* =================================
+           DISPLAY MARKET ATTENTION
+        ================================= */
+
+        if (attentionLevel) {
+
+            attentionLevel.textContent =
+                attention.attentionLevel ||
+                "Not verified";
+
+        }
+
+
+        if (attentionBadge) {
+
+            attentionBadge.textContent =
+                attention.attentionLevel ||
+                "—";
+
+        }
+
+
+        if (where) {
+
+            where.textContent =
+                attention.where ||
+                "Not verified";
+
+        }
+
+
+        if (discussionChange) {
+
+            discussionChange.textContent =
+                attention.discussionChange ||
+                "Not verified";
+
+        }
+
+
+        if (newsActivity) {
+
+            newsActivity.textContent =
+                attention.newsActivity ||
+                "Not verified";
+
+        }
+
+
+        if (relativeVolume) {
+
+            relativeVolume.textContent =
+                attention.relativeVolume ||
+                "Not verified";
+
+        }
+
+
+        if (attentionBegan) {
+
+            attentionBegan.textContent =
+                attention.attentionBegan ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           MAIN TOPICS
+        ================================= */
+
+        if (topics) {
+
+            topics.innerHTML = "";
+
+
+            if (
+                Array.isArray(
+                    attention.mainTopics
+                ) &&
+                attention.mainTopics.length
+            ) {
+
+                attention.mainTopics
+                    .forEach(topic => {
+
+                        const li =
+                            document.createElement(
+                                "li"
+                            );
+
+                        li.textContent =
+                            topic;
+
+                        topics.appendChild(li);
+
+                    });
+
+            }
+            else {
+
+                const li =
+                    document.createElement(
+                        "li"
+                    );
+
+                li.textContent =
+                    "Not verified";
+
+                topics.appendChild(li);
+
+            }
+
+        }
+
+
+        /* =================================
+           MARKET ATTENTION SUMMARY
+        ================================= */
+
+        if (attentionSummary) {
+
+            attentionSummary.textContent =
+                attention.summary ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           DISPLAY RECENT NEWS
+        ================================= */
+
+        if (recentNews) {
+
+
+            if (newsLevel) {
+
+                newsLevel.textContent =
+                    recentNews.newsLevel ||
+                    "Not verified";
+
+            }
+
+
+            if (newsBadge) {
+
+                newsBadge.textContent =
+                    recentNews.newsLevel ||
+                    "—";
+
+            }
+
+
+            if (newsSummary) {
+
+                newsSummary.textContent =
+                    recentNews.summary ||
+                    "Not verified";
+
+            }
+
+
+            /* =============================
+               NEWS ITEMS
+            ============================= */
+
+            if (newsItems) {
+
+                newsItems.innerHTML = "";
+
+
+                if (
+                    Array.isArray(
+                        recentNews.items
+                    ) &&
+                    recentNews.items.length
+                ) {
+
+                    recentNews.items
+                        .forEach(item => {
+
+                            const newsItem =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            newsItem.className =
+                                "edge-ai-news-item";
+
+
+                            const headline =
+                                document.createElement(
+                                    "strong"
+                                );
+
+
+                            headline.textContent =
+                                item.headline ||
+                                "Recent development";
+
+
+                            const meta =
+                                document.createElement(
+                                    "span"
+                                );
+
+
+                            meta.className =
+                                "edge-ai-news-meta";
+
+
+                            meta.textContent =
+                                [
+                                    item.date,
+                                    item.category
+                                ]
+                                .filter(Boolean)
+                                .join(" • ");
+
+
+                            const description =
+                                document.createElement(
+                                    "p"
+                                );
+
+
+                            description.textContent =
+                                item.summary ||
+                                "";
+
+
+                            newsItem.appendChild(
+                                headline
+                            );
+
+
+                            if (
+                                meta.textContent
+                            ) {
+
+                                newsItem.appendChild(
+                                    meta
+                                );
+
+                            }
+
+
+                            if (
+                                description.textContent
+                            ) {
+
+                                newsItem.appendChild(
+                                    description
+                                );
+
+                            }
+
+
+                            newsItems.appendChild(
+                                newsItem
+                            );
+
+                        });
+
+                }
+                else {
+
+                    newsItems.innerHTML = `
+                        <div class="edge-ai-news-loading">
+                            No recent developments verified.
+                        </div>
+                    `;
+
+                }
+
+            }
+
+        }
+        else {
+
+            /* =============================
+               NEWS NOT RETURNED
+            ============================= */
+
+            if (newsLevel) {
+
+                newsLevel.textContent =
+                    "Not verified";
+
+            }
+
+            if (newsBadge) {
+
+                newsBadge.textContent =
+                    "—";
+
+            }
+
+            if (newsSummary) {
+
+                newsSummary.textContent =
+                    "Recent news could not be verified.";
+
+            }
+
+            if (newsItems) {
+
+                newsItems.innerHTML = `
+                    <div class="edge-ai-news-loading">
+                        No recent developments verified.
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =================================
+           BUTTON — COMPLETE
+        ================================= */
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "✓ Research Complete";
+
+            button.classList.add(
+                "edge-ai-research-complete"
+            );
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "EdgeBreak Market Attention & News:",
+            error
+        );
+
+
+        /* =================================
+           MARKET ERROR STATE
+        ================================= */
+
+        const fields = [
+
+            attentionLevel,
+            where,
+            discussionChange,
+            newsActivity,
+            relativeVolume,
+            attentionBegan,
+            attentionSummary,
+            newsLevel,
+            newsSummary
+
+        ];
+
+
+        fields.forEach(field => {
+
+            if (field) {
+
+                field.textContent =
+                    "Research unavailable";
+
+            }
+
+        });
+
+
+        if (attentionBadge) {
+
+            attentionBadge.textContent =
+                "—";
+
+        }
+
+
+        if (newsBadge) {
+
+            newsBadge.textContent =
+                "—";
+
+        }
+
+
+        if (topics) {
+
+            topics.innerHTML =
+                "<li>Research unavailable</li>";
+
+        }
+
+
+        if (newsItems) {
+
+            newsItems.innerHTML = `
+                <div class="edge-ai-news-loading">
+                    Recent news unavailable.
+                </div>
+            `;
+
+        }
+
+
+        /* =================================
+           BUTTON — TRY AGAIN
+        ================================= */
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "✦ Try Again";
+
+            button.classList.remove(
+                "edge-ai-research-complete"
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================
+   MARKET ATTENTION + NEWS BUTTON
+========================================= */
+
+const edgeAIMarketAttentionResearchBtn =
+    document.getElementById(
+        "edgeAIMarketAttentionResearchBtn"
+    );
+
+
+if (edgeAIMarketAttentionResearchBtn) {
+
+    edgeAIMarketAttentionResearchBtn
+        .addEventListener(
+            "click",
+            function() {
+
+                const symbol =
+                    window.edgeBreakAIActiveSymbol;
+
+
+                if (!symbol) {
+
+                    console.warn(
+                        "EdgeBreak AI: No active symbol."
+                    );
+
+                    return;
+
+                }
+
+
+                loadEdgeBreakAIMarketAttention(
+                    symbol
+                );
+
+            }
+        );
+
+}
+
+/* =========================================
+   EDGEBREAK AI — FINANCIAL HIGHLIGHTS
+   ON-DEMAND RESEARCH
+========================================= */
+
+async function loadEdgeBreakAIFinancials(
+    symbol,
+    companyName = ""
+) {
+
+    /* =====================================
+       RESEARCH BUTTON
+    ===================================== */
+
+    const button =
+        document.getElementById(
+            "edgeAIFinancialsResearchBtn"
+        );
+
+
+    /* =====================================
+       FINANCIAL ELEMENTS
+    ===================================== */
+
+    const revenue =
+        document.getElementById(
+            "edgeAIRevenue"
+        );
+
+    const revenueGrowth =
+        document.getElementById(
+            "edgeAIRevenueGrowth"
+        );
+
+    const eps =
+        document.getElementById(
+            "edgeAIEPS"
+        );
+
+    const grossMargin =
+        document.getElementById(
+            "edgeAIGrossMargin"
+        );
+
+    const cash =
+        document.getElementById(
+            "edgeAICash"
+        );
+
+    const debt =
+        document.getElementById(
+            "edgeAIDebt"
+        );
+
+    const freeCashFlow =
+        document.getElementById(
+            "edgeAIFreeCashFlow"
+        );
+
+    const latestQuarter =
+        document.getElementById(
+            "edgeAILatestQuarter"
+        );
+
+
+    /* =====================================
+       BUTTON — RESEARCHING
+    ===================================== */
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "✦ Researching...";
+
+        button.classList.remove(
+            "edge-ai-research-complete"
+        );
+
+    }
+
+
+    /* =====================================
+       RESEARCHING STATE
+    ===================================== */
+
+    if (revenue) {
+        revenue.textContent =
+            "Researching...";
+    }
+
+    if (revenueGrowth) {
+        revenueGrowth.textContent =
+            "Researching...";
+    }
+
+    if (eps) {
+        eps.textContent =
+            "Researching...";
+    }
+
+    if (grossMargin) {
+        grossMargin.textContent =
+            "Researching...";
+    }
+
+    if (cash) {
+        cash.textContent =
+            "Researching...";
+    }
+
+    if (debt) {
+        debt.textContent =
+            "Researching...";
+    }
+
+    if (freeCashFlow) {
+        freeCashFlow.textContent =
+            "Researching...";
+    }
+
+    if (latestQuarter) {
+
+        latestQuarter.textContent =
+            "Researching latest reported financial results...";
+
+    }
+
+
+    try {
+
+        /* =================================
+           ONE API REQUEST
+        ================================= */
+
+        const response =
+            await fetch(
+                "/api/ai-financials",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        symbol:
+                            symbol,
+
+                        companyName:
+                            companyName
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Financial research failed"
+            );
+
+        }
+
+
+        const financials =
+            data.financialHighlights;
+
+
+        if (!financials) {
+
+            throw new Error(
+                "No financial highlights returned"
+            );
+
+        }
+
+
+        /* =================================
+           DISPLAY RESULTS
+        ================================= */
+
+        if (revenue) {
+
+            revenue.textContent =
+                financials.revenue ||
+                "Not verified";
+
+        }
+
+
+        if (revenueGrowth) {
+
+            revenueGrowth.textContent =
+                financials.revenueGrowth ||
+                "Not verified";
+
+        }
+
+
+        if (eps) {
+
+            eps.textContent =
+                financials.eps ||
+                "Not verified";
+
+        }
+
+
+        if (grossMargin) {
+
+            grossMargin.textContent =
+                financials.grossMargin ||
+                "Not verified";
+
+        }
+
+
+        if (cash) {
+
+            cash.textContent =
+                financials.cash ||
+                "Not verified";
+
+        }
+
+
+        if (debt) {
+
+            debt.textContent =
+                financials.debt ||
+                "Not verified";
+
+        }
+
+
+        if (freeCashFlow) {
+
+            freeCashFlow.textContent =
+                financials.freeCashFlow ||
+                "Not verified";
+
+        }
+
+
+        if (latestQuarter) {
+
+            latestQuarter.textContent =
+                financials.latestQuarter ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           BUTTON — COMPLETE
+        ================================= */
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "✓ Research Complete";
+
+            button.classList.add(
+                "edge-ai-research-complete"
+            );
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "EdgeBreak Financial Highlights:",
+            error
+        );
+
+
+        /* =================================
+           ERROR STATE
+        ================================= */
+
+        const fields = [
+            revenue,
+            revenueGrowth,
+            eps,
+            grossMargin,
+            cash,
+            debt,
+            freeCashFlow,
+            latestQuarter
+        ];
+
+
+        fields.forEach(field => {
+
+            if (field) {
+
+                field.textContent =
+                    "Research unavailable";
+
+            }
+
+        });
+
+
+        /* =================================
+           BUTTON — TRY AGAIN
+        ================================= */
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "✦ Try Again";
+
+            button.classList.remove(
+                "edge-ai-research-complete"
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================
+   FINANCIAL HIGHLIGHTS RESEARCH BUTTON
+========================================= */
+
+const edgeAIFinancialsResearchBtn =
+    document.getElementById(
+        "edgeAIFinancialsResearchBtn"
+    );
+
+
+if (edgeAIFinancialsResearchBtn) {
+
+    edgeAIFinancialsResearchBtn
+        .addEventListener(
+            "click",
+            function() {
+
+                const symbol =
+                    window.edgeBreakAIActiveSymbol;
+
+
+                if (!symbol) {
+
+                    console.warn(
+                        "EdgeBreak AI: No active symbol."
+                    );
+
+                    return;
+
+                }
+
+
+                loadEdgeBreakAIFinancials(
+                    symbol
+                );
+
+            }
+        );
+
+}
+
+
+
+/* =========================================
+   EDGEBREAK AI — INSTITUTIONAL ACTIVITY
+   ON-DEMAND RESEARCH
+========================================= */
+
+async function loadEdgeBreakAIInstitutional(
+    symbol,
+    companyName = ""
+) {
+
+    /* =====================================
+       RESEARCH BUTTON
+    ===================================== */
+
+    const button =
+        document.getElementById(
+            "edgeAIInstitutionalResearchBtn"
+        );
+
+
+    /* =====================================
+       INSTITUTIONAL ELEMENTS
+    ===================================== */
+
+    const ownership =
+        document.getElementById(
+            "edgeAIInstitutionalOwnership"
+        );
+
+    const period =
+        document.getElementById(
+            "edgeAIInstitutionalPeriod"
+        );
+
+    const holders =
+        document.getElementById(
+            "edgeAIMajorHolders"
+        );
+
+    const activity =
+        document.getElementById(
+            "edgeAIInstitutionalActivity"
+        );
+
+    const concentration =
+        document.getElementById(
+            "edgeAIOwnershipConcentration"
+        );
+
+    const summary =
+        document.getElementById(
+            "edgeAIInstitutionalSummary"
+        );
+
+
+    /* =====================================
+       BUTTON — RESEARCHING
+    ===================================== */
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "✦ Researching...";
+
+        button.classList.remove(
+            "edge-ai-research-complete"
+        );
+
+    }
+
+
+    /* =====================================
+       RESEARCHING STATE
+    ===================================== */
+
+    if (ownership) {
+
+        ownership.textContent =
+            "Researching...";
+
+    }
+
+
+    if (period) {
+
+        period.textContent =
+            "Researching...";
+
+    }
+
+
+    if (concentration) {
+
+        concentration.textContent =
+            "Researching ownership concentration...";
+
+    }
+
+
+    if (summary) {
+
+        summary.textContent =
+            "Researching institutional ownership...";
+
+    }
+
+
+    if (holders) {
+
+        holders.innerHTML = `
+            <div class="edge-ai-institutional-loading">
+                Researching major institutional holders...
+            </div>
+        `;
+
+    }
+
+
+    if (activity) {
+
+        activity.innerHTML = `
+            <div class="edge-ai-institutional-loading">
+                Researching recent disclosed activity...
+            </div>
+        `;
+
+    }
+
+
+    try {
+
+        /* =================================
+           ONE API REQUEST
+        ================================= */
+
+        const response =
+            await fetch(
+                "/api/ai-institutional",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        symbol:
+                            symbol,
+
+                        companyName:
+                            companyName
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Institutional research failed"
+            );
+
+        }
+
+
+        const institutional =
+            data.institutionalActivity;
+
+
+        if (!institutional) {
+
+            throw new Error(
+                "No institutional research returned"
+            );
+
+        }
+
+
+        /* =================================
+           OWNERSHIP
+        ================================= */
+
+        if (ownership) {
+
+            ownership.textContent =
+                institutional
+                    .institutionalOwnership ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           REPORTING PERIOD
+        ================================= */
+
+        if (period) {
+
+            period.textContent =
+                institutional.reportingPeriod ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           OWNERSHIP CONTEXT
+        ================================= */
+
+        if (concentration) {
+
+            concentration.textContent =
+                institutional
+                    .ownershipConcentration ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           SUMMARY
+        ================================= */
+
+        if (summary) {
+
+            summary.textContent =
+                institutional
+                    .institutionalSummary ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           MAJOR HOLDERS
+        ================================= */
+
+        if (holders) {
+
+            holders.innerHTML = "";
+
+
+            if (
+                Array.isArray(
+                    institutional.majorHolders
+                ) &&
+                institutional.majorHolders.length
+            ) {
+
+                institutional.majorHolders
+                    .forEach(holder => {
+
+                        const row =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        row.className =
+                            "edge-ai-holder-item";
+
+
+                        const name =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        name.className =
+                            "edge-ai-holder-name";
+
+
+                        name.textContent =
+                            holder.name ||
+                            "Not verified";
+
+
+                        const details =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        details.className =
+                            "edge-ai-holder-details";
+
+
+                        const detailParts = [];
+
+
+                        if (
+                            holder.ownershipPercent &&
+                            holder.ownershipPercent !==
+                                "Not verified"
+                        ) {
+
+                            detailParts.push(
+                                holder.ownershipPercent
+                            );
+
+                        }
+
+
+                        if (
+                            holder.shares &&
+                            holder.shares !==
+                                "Not verified"
+                        ) {
+
+                            detailParts.push(
+                                holder.shares
+                            );
+
+                        }
+
+
+                        if (
+                            holder.reportingPeriod &&
+                            holder.reportingPeriod !==
+                                "Not verified"
+                        ) {
+
+                            detailParts.push(
+                                holder.reportingPeriod
+                            );
+
+                        }
+
+
+                        details.textContent =
+                            detailParts.length
+                                ? detailParts.join(" · ")
+                                : "Details not verified";
+
+
+                        row.appendChild(
+                            name
+                        );
+
+                        row.appendChild(
+                            details
+                        );
+
+
+                        holders.appendChild(
+                            row
+                        );
+
+                    });
+
+            }
+            else {
+
+                holders.innerHTML = `
+                    <div class="edge-ai-institutional-loading">
+                        No major holder data verified.
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =================================
+           RECENT DISCLOSED ACTIVITY
+        ================================= */
+
+        if (activity) {
+
+            activity.innerHTML = "";
+
+
+            if (
+                Array.isArray(
+                    institutional.recentActivity
+                ) &&
+                institutional.recentActivity.length
+            ) {
+
+                institutional.recentActivity
+                    .forEach(item => {
+
+                        const row =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        row.className =
+                            "edge-ai-institutional-activity-item";
+
+
+                        const institution =
+                            document.createElement(
+                                "strong"
+                            );
+
+
+                        institution.textContent =
+                            item.institution ||
+                            "Institution not verified";
+
+
+                        const description =
+                            document.createElement(
+                                "p"
+                            );
+
+
+                        const parts = [];
+
+
+                        if (
+                            item.change &&
+                            item.change !==
+                                "Not verified"
+                        ) {
+
+                            parts.push(
+                                item.change
+                            );
+
+                        }
+
+
+                        if (
+                            item.reportingPeriod &&
+                            item.reportingPeriod !==
+                                "Not verified"
+                        ) {
+
+                            parts.push(
+                                item.reportingPeriod
+                            );
+
+                        }
+
+
+                        description.textContent =
+                            parts.length
+                                ? parts.join(" · ")
+                                : "Details not verified";
+
+
+                        row.appendChild(
+                            institution
+                        );
+
+                        row.appendChild(
+                            description
+                        );
+
+
+                        activity.appendChild(
+                            row
+                        );
+
+                    });
+
+            }
+            else {
+
+                activity.innerHTML = `
+                    <div class="edge-ai-institutional-loading">
+                        No recent institutional changes verified.
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =================================
+           BUTTON — COMPLETE
+        ================================= */
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "✓ Research Complete";
+
+            button.classList.add(
+                "edge-ai-research-complete"
+            );
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "EdgeBreak Institutional:",
+            error
+        );
+
+
+        /* =================================
+           ERROR STATE
+        ================================= */
+
+        if (ownership) {
+
+            ownership.textContent =
+                "Research unavailable";
+
+        }
+
+
+        if (period) {
+
+            period.textContent =
+                "Not verified";
+
+        }
+
+
+        if (concentration) {
+
+            concentration.textContent =
+                "Institutional ownership research is currently unavailable.";
+
+        }
+
+
+        if (summary) {
+
+            summary.textContent =
+                "Institutional research is currently unavailable.";
+
+        }
+
+
+        if (holders) {
+
+            holders.innerHTML = `
+                <div class="edge-ai-institutional-loading">
+                    Institutional holder data unavailable.
+                </div>
+            `;
+
+        }
+
+
+        if (activity) {
+
+            activity.innerHTML = `
+                <div class="edge-ai-institutional-loading">
+                    Institutional activity unavailable.
+                </div>
+            `;
+
+        }
+
+
+        /* =================================
+           BUTTON — TRY AGAIN
+        ================================= */
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "✦ Try Again";
+
+            button.classList.remove(
+                "edge-ai-research-complete"
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================
+   INSTITUTIONAL RESEARCH BUTTON
+========================================= */
+
+const edgeAIInstitutionalResearchBtn =
+    document.getElementById(
+        "edgeAIInstitutionalResearchBtn"
+    );
+
+
+if (edgeAIInstitutionalResearchBtn) {
+
+    edgeAIInstitutionalResearchBtn
+        .addEventListener(
+            "click",
+            function() {
+
+                const symbol =
+                    window.edgeBreakAIActiveSymbol;
+
+
+                if (!symbol) {
+
+                    console.warn(
+                        "EdgeBreak AI: No active symbol."
+                    );
+
+                    return;
+
+                }
+
+
+                loadEdgeBreakAIInstitutional(
+                    symbol
+                );
+
+            }
+        );
+
+}
+
+/* =========================================
+   EDGEBREAK AI — SEC FILINGS
+   ON-DEMAND RESEARCH
+========================================= */
+
+async function loadEdgeBreakAISecFilings(
+    symbol,
+    companyName = ""
+) {
+
+    /* =====================================
+       RESEARCH BUTTON
+    ===================================== */
+
+    const button =
+        document.getElementById(
+            "edgeAISecResearchBtn"
+        );
+
+
+    /* =====================================
+       ELEMENTS
+    ===================================== */
+
+    const annualForm =
+        document.getElementById(
+            "edgeAISecAnnualForm"
+        );
+
+    const annualDate =
+        document.getElementById(
+            "edgeAISecAnnualDate"
+        );
+
+    const annualSummary =
+        document.getElementById(
+            "edgeAISecAnnualSummary"
+        );
+
+    const quarterlyForm =
+        document.getElementById(
+            "edgeAISecQuarterlyForm"
+        );
+
+    const quarterlyDate =
+        document.getElementById(
+            "edgeAISecQuarterlyDate"
+        );
+
+    const quarterlySummary =
+        document.getElementById(
+            "edgeAISecQuarterlySummary"
+        );
+
+    const recentFilings =
+        document.getElementById(
+            "edgeAISecRecentFilings"
+        );
+
+    const insiderFilings =
+        document.getElementById(
+            "edgeAISecInsiderFilings"
+        );
+
+    const filingSummary =
+        document.getElementById(
+            "edgeAISecSummary"
+        );
+
+
+    /* =====================================
+       BUTTON — RESEARCHING
+    ===================================== */
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "✦ Researching...";
+
+        button.classList.remove(
+            "edge-ai-research-complete"
+        );
+
+    }
+
+
+    /* =====================================
+       RESEARCHING STATE
+    ===================================== */
+
+    if (annualForm) {
+        annualForm.textContent =
+            "Researching...";
+    }
+
+    if (annualDate) {
+        annualDate.textContent =
+            "Researching filing date...";
+    }
+
+    if (annualSummary) {
+        annualSummary.textContent =
+            "Researching latest annual filing...";
+    }
+
+
+    if (quarterlyForm) {
+        quarterlyForm.textContent =
+            "Researching...";
+    }
+
+    if (quarterlyDate) {
+        quarterlyDate.textContent =
+            "Researching filing date...";
+    }
+
+    if (quarterlySummary) {
+        quarterlySummary.textContent =
+            "Researching latest quarterly filing...";
+    }
+
+
+    if (recentFilings) {
+
+        recentFilings.innerHTML = `
+            <div class="edge-ai-sec-loading">
+                Researching recent SEC filings...
+            </div>
+        `;
+
+    }
+
+
+    if (insiderFilings) {
+
+        insiderFilings.innerHTML = `
+            <div class="edge-ai-sec-loading">
+                Researching recent Form 4 disclosures...
+            </div>
+        `;
+
+    }
+
+
+    if (filingSummary) {
+
+        filingSummary.textContent =
+            "Researching recent regulatory filings...";
+
+    }
+
+
+    try {
+
+        /* =================================
+           ONE API REQUEST
+        ================================= */
+
+        const response =
+            await fetch(
+                "/api/ai-sec-filings",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        symbol:
+                            symbol,
+
+                        companyName:
+                            companyName
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "SEC filings research failed"
+            );
+
+        }
+
+
+        const filings =
+            data.secFilings;
+
+
+        if (!filings) {
+
+            throw new Error(
+                "No SEC filings returned"
+            );
+
+        }
+
+
+        /* =================================
+           LATEST ANNUAL REPORT
+        ================================= */
+
+        const annual =
+            filings.latestAnnual || {};
+
+
+        if (annualForm) {
+
+            annualForm.textContent =
+                annual.form ||
+                "Not verified";
+
+        }
+
+
+        if (annualDate) {
+
+            const parts = [];
+
+
+            if (
+                annual.filingDate &&
+                annual.filingDate !==
+                    "Not verified"
+            ) {
+
+                parts.push(
+                    annual.filingDate
+                );
+
+            }
+
+
+            if (
+                annual.fiscalPeriod &&
+                annual.fiscalPeriod !==
+                    "Not verified"
+            ) {
+
+                parts.push(
+                    annual.fiscalPeriod
+                );
+
+            }
+
+
+            annualDate.textContent =
+                parts.length
+                    ? parts.join(" · ")
+                    : "Not verified";
+
+        }
+
+
+        if (annualSummary) {
+
+            annualSummary.textContent =
+                annual.summary ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           LATEST QUARTERLY REPORT
+        ================================= */
+
+        const quarterly =
+            filings.latestQuarterly || {};
+
+
+        if (quarterlyForm) {
+
+            quarterlyForm.textContent =
+                quarterly.form ||
+                "Not verified";
+
+        }
+
+
+        if (quarterlyDate) {
+
+            const parts = [];
+
+
+            if (
+                quarterly.filingDate &&
+                quarterly.filingDate !==
+                    "Not verified"
+            ) {
+
+                parts.push(
+                    quarterly.filingDate
+                );
+
+            }
+
+
+            if (
+                quarterly.fiscalPeriod &&
+                quarterly.fiscalPeriod !==
+                    "Not verified"
+            ) {
+
+                parts.push(
+                    quarterly.fiscalPeriod
+                );
+
+            }
+
+
+            quarterlyDate.textContent =
+                parts.length
+                    ? parts.join(" · ")
+                    : "Not verified";
+
+        }
+
+
+        if (quarterlySummary) {
+
+            quarterlySummary.textContent =
+                quarterly.summary ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           RECENT MATERIAL FILINGS
+        ================================= */
+
+        if (recentFilings) {
+
+            recentFilings.innerHTML = "";
+
+
+            if (
+                Array.isArray(
+                    filings.recentFilings
+                ) &&
+                filings.recentFilings.length
+            ) {
+
+                filings.recentFilings
+                    .forEach(item => {
+
+                        const card =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        card.className =
+                            "edge-ai-sec-item";
+
+
+                        /* HEADER */
+
+                        const header =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        header.className =
+                            "edge-ai-sec-item-header";
+
+
+                        const form =
+                            document.createElement(
+                                "span"
+                            );
+
+
+                        form.className =
+                            "edge-ai-sec-form";
+
+
+                        form.textContent =
+                            item.form ||
+                            "SEC";
+
+
+                        const date =
+                            document.createElement(
+                                "span"
+                            );
+
+
+                        date.className =
+                            "edge-ai-sec-date";
+
+
+                        date.textContent =
+                            item.date ||
+                            "Date not verified";
+
+
+                        header.appendChild(
+                            form
+                        );
+
+                        header.appendChild(
+                            date
+                        );
+
+
+                        /* TITLE */
+
+                        const title =
+                            document.createElement(
+                                "strong"
+                            );
+
+
+                        title.textContent =
+                            item.title ||
+                            "SEC filing";
+
+
+                        /* SUMMARY */
+
+                        const summary =
+                            document.createElement(
+                                "p"
+                            );
+
+
+                        summary.textContent =
+                            item.summary ||
+                            "Details not verified.";
+
+
+                        card.appendChild(
+                            header
+                        );
+
+                        card.appendChild(
+                            title
+                        );
+
+                        card.appendChild(
+                            summary
+                        );
+
+
+                        recentFilings.appendChild(
+                            card
+                        );
+
+                    });
+
+            }
+            else {
+
+                recentFilings.innerHTML = `
+                    <div class="edge-ai-sec-loading">
+                        No recent material filings verified.
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =================================
+           INSIDER / FORM 4 FILINGS
+        ================================= */
+
+        if (insiderFilings) {
+
+            insiderFilings.innerHTML = "";
+
+
+            if (
+                Array.isArray(
+                    filings.insiderFilings
+                ) &&
+                filings.insiderFilings.length
+            ) {
+
+                filings.insiderFilings
+                    .forEach(item => {
+
+                        const card =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        card.className =
+                            "edge-ai-sec-insider";
+
+
+                        /* HEADER */
+
+                        const header =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        header.className =
+                            "edge-ai-sec-insider-header";
+
+
+                        const personWrap =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        const person =
+                            document.createElement(
+                                "strong"
+                            );
+
+
+                        person.textContent =
+                            item.insider ||
+                            "Not verified";
+
+
+                        const role =
+                            document.createElement(
+                                "span"
+                            );
+
+
+                        role.className =
+                            "edge-ai-sec-insider-role";
+
+
+                        role.textContent =
+                            item.role ||
+                            "Role not verified";
+
+
+                        personWrap.appendChild(
+                            person
+                        );
+
+                        personWrap.appendChild(
+                            role
+                        );
+
+
+                        const date =
+                            document.createElement(
+                                "span"
+                            );
+
+
+                        date.className =
+                            "edge-ai-sec-date";
+
+
+                        date.textContent =
+                            item.date ||
+                            "Date not verified";
+
+
+                        header.appendChild(
+                            personWrap
+                        );
+
+                        header.appendChild(
+                            date
+                        );
+
+
+                        /* TRANSACTION */
+
+                        const transaction =
+                            document.createElement(
+                                "p"
+                            );
+
+
+                        transaction.textContent =
+                            item.transaction ||
+                            "Transaction details not verified.";
+
+
+                        card.appendChild(
+                            header
+                        );
+
+                        card.appendChild(
+                            transaction
+                        );
+
+
+                        insiderFilings.appendChild(
+                            card
+                        );
+
+                    });
+
+            }
+            else {
+
+                insiderFilings.innerHTML = `
+                    <div class="edge-ai-sec-loading">
+                        No recent Form 4 disclosures verified.
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =================================
+           FILING SUMMARY
+        ================================= */
+
+        if (filingSummary) {
+
+            filingSummary.textContent =
+                filings.filingSummary ||
+                "Not verified";
+
+        }
+
+
+        /* =================================
+           BUTTON — COMPLETE
+        ================================= */
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "✓ Research Complete";
+
+            button.classList.add(
+                "edge-ai-research-complete"
+            );
+
+        }
+
+    }
+    catch (error) {
+
+        console.error(
+            "EdgeBreak SEC Filings:",
+            error
+        );
+
+
+        /* =================================
+           ERROR STATE
+        ================================= */
+
+        if (annualForm) {
+            annualForm.textContent =
+                "Research unavailable";
+        }
+
+        if (annualDate) {
+            annualDate.textContent =
+                "Not verified";
+        }
+
+        if (annualSummary) {
+            annualSummary.textContent =
+                "SEC filing research is currently unavailable.";
+        }
+
+
+        if (quarterlyForm) {
+            quarterlyForm.textContent =
+                "Research unavailable";
+        }
+
+        if (quarterlyDate) {
+            quarterlyDate.textContent =
+                "Not verified";
+        }
+
+        if (quarterlySummary) {
+            quarterlySummary.textContent =
+                "SEC filing research is currently unavailable.";
+        }
+
+
+        if (recentFilings) {
+
+            recentFilings.innerHTML = `
+                <div class="edge-ai-sec-loading">
+                    Recent SEC filings unavailable.
+                </div>
+            `;
+
+        }
+
+
+        if (insiderFilings) {
+
+            insiderFilings.innerHTML = `
+                <div class="edge-ai-sec-loading">
+                    Insider filing data unavailable.
+                </div>
+            `;
+
+        }
+
+
+        if (filingSummary) {
+
+            filingSummary.textContent =
+                "SEC filing research is currently unavailable.";
+
+        }
+
+
+        /* =================================
+           BUTTON — TRY AGAIN
+        ================================= */
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "✦ Try Again";
+
+            button.classList.remove(
+                "edge-ai-research-complete"
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================
+   SEC FILINGS RESEARCH BUTTON
+========================================= */
+
+const edgeAISecResearchBtn =
+    document.getElementById(
+        "edgeAISecResearchBtn"
+    );
+
+
+if (edgeAISecResearchBtn) {
+
+    edgeAISecResearchBtn
+        .addEventListener(
+            "click",
+            function() {
+
+                const symbol =
+                    window.edgeBreakAIActiveSymbol;
+
+
+                if (!symbol) {
+
+                    console.warn(
+                        "EdgeBreak AI: No active symbol."
+                    );
+
+                    return;
+
+                }
+
+
+                loadEdgeBreakAISecFilings(
+                    symbol
+                );
+
+            }
+        );
+
+}
+
+</script>
+
 <!-- COMPONENTS -->
 
 <script src="/js/components.js"></script>
