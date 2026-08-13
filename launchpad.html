@@ -17,18 +17,22 @@
     content="width=device-width, initial-scale=1.0"
 >
 
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+
 <title>
-Launch Pad | Curated NASDAQ Research Opportunities | EdgeBreak
+Launch Pad Scanner | Find NASDAQ Stocks Building Technical Bases | EdgeBreak
 </title>
 
 <meta
     name="description"
-    content="Explore Launch Pad, EdgeBreak's curated collection of high-quality NASDAQ research opportunities. Discover stocks selected using proprietary scanner technology, Smart Money analysis and structured market research."
+    content="Discover NASDAQ stocks building established technical bases with the EdgeBreak Launch Pad Scanner. Research support, resistance, price structure, Smart Money activity and potential pre-breakout setups."
 >
 
 <meta
     name="keywords"
-    content="Launch Pad, NASDAQ research, NASDAQ opportunities, stock research platform, market intelligence, NASDAQ scanner, Smart Money, breakout scanner, stock scanner, EdgeBreak"
+    content="Launch Pad Scanner, NASDAQ stock scanner, pre breakout scanner, breakout stock scanner, technical base scanner, stock consolidation scanner, NASDAQ breakout stocks, support and resistance, Smart Money, stock research, EdgeBreak"
 >
 
 <meta
@@ -38,6 +42,11 @@ Launch Pad | Curated NASDAQ Research Opportunities | EdgeBreak
 
 <meta
     name="author"
+    content="EdgeBreak"
+>
+
+<meta
+    name="publisher"
     content="EdgeBreak"
 >
 
@@ -71,16 +80,6 @@ Launch Pad | Curated NASDAQ Research Opportunities | EdgeBreak
     content="en-US"
 >
 
-<meta
-    name="geo.region"
-    content="US"
->
-
-<meta
-    name="geo.placename"
-    content="United States"
->
-
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
@@ -107,12 +106,12 @@ OPEN GRAPH
 
 <meta
     property="og:title"
-    content="Launch Pad | EdgeBreak"
+    content="Launch Pad Scanner | NASDAQ Technical Base Research | EdgeBreak"
 >
 
 <meta
     property="og:description"
-    content="Explore Launch Pad, EdgeBreak's curated collection of high-quality NASDAQ research opportunities selected using proprietary scanner technology and structured market analysis."
+    content="Discover NASDAQ stocks building established technical bases using support, resistance, price structure and Smart Money research with the EdgeBreak Launch Pad Scanner."
 >
 
 <meta
@@ -132,11 +131,11 @@ OPEN GRAPH
 
 <meta
     property="og:image:alt"
-    content="EdgeBreak Launch Pad"
+    content="EdgeBreak Launch Pad NASDAQ Stock Scanner"
 >
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
 
 <meta
@@ -145,13 +144,23 @@ TWITTER
 >
 
 <meta
+    name="twitter:site"
+    content="@EdgeBreakAI"
+>
+
+<meta
+    name="twitter:creator"
+    content="@EdgeBreakAI"
+>
+
+<meta
     name="twitter:title"
-    content="Launch Pad | EdgeBreak"
+    content="Launch Pad Scanner | NASDAQ Technical Base Research | EdgeBreak"
 >
 
 <meta
     name="twitter:description"
-    content="Explore Launch Pad, EdgeBreak's curated collection of high-quality NASDAQ research opportunities selected using proprietary scanner technology and structured market analysis."
+    content="Discover NASDAQ stocks building technical bases and developing pre-breakout structures with the EdgeBreak Launch Pad Scanner."
 >
 
 <meta
@@ -161,7 +170,7 @@ TWITTER
 
 <meta
     name="twitter:image:alt"
-    content="EdgeBreak Launch Pad"
+    content="EdgeBreak Launch Pad NASDAQ Stock Scanner"
 >
 
 <!-- ===================================
@@ -206,6 +215,10 @@ CSS
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
 
+<!-- ===================================
+SUPABASE
+=================================== -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <!-- ===================================
@@ -235,170 +248,198 @@ STRUCTURED DATA
 
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@graph":[
+  "@context": "https://schema.org",
+  "@graph": [
 
     {
-      "@type":"Organization",
-      "@id":"https://www.edgebreak.ai/#organization",
-      "name":"EdgeBreak",
-      "url":"https://www.edgebreak.ai",
-      "logo":"https://www.edgebreak.ai/images/logo.webp"
-    },
-
-    {
-      "@type":"WebSite",
-      "@id":"https://www.edgebreak.ai/#website",
-      "url":"https://www.edgebreak.ai",
-      "name":"EdgeBreak",
-      "publisher":{
-        "@id":"https://www.edgebreak.ai/#organization"
-      }
-    },
-
-    {
-      "@type":"WebPage",
-      "@id":"https://www.edgebreak.ai/launchpad.html#webpage",
-      "url":"https://www.edgebreak.ai/launchpad.html",
-      "name":"Launch Pad",
-      "description":"Launch Pad is EdgeBreak's curated collection of high-quality NASDAQ research opportunities selected using proprietary scanner technology, Smart Money analysis and structured market research.",
-      "isPartOf":{
-        "@id":"https://www.edgebreak.ai/#website"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.edgebreak.ai/images/logo.webp"
       },
-      "about":{
-        "@type":"Thing",
-        "name":"NASDAQ Research Opportunities"
-      },
-      "publisher":{
-        "@id":"https://www.edgebreak.ai/#organization"
-      },
-      "speakable":{
-        "@type":"SpeakableSpecification",
-        "cssSelector":[
-          ".hero h1",
-          ".hero p",
-          ".section-title h2"
-        ]
-      }
-    },
-
-    {
-      "@type":"SoftwareApplication",
-      "@id":"https://www.edgebreak.ai/launchpad.html#software",
-      "name":"EdgeBreak Launch Pad",
-      "applicationCategory":"FinanceApplication",
-      "applicationSubCategory":"Market Intelligence Platform",
-      "operatingSystem":"Web",
-      "url":"https://www.edgebreak.ai/launchpad.html",
-      "description":"Launch Pad is a curated collection of high-quality NASDAQ research opportunities generated using EdgeBreak's proprietary scanner technology and structured market intelligence methodology.",
-      "creator":{
-        "@id":"https://www.edgebreak.ai/#organization"
-      },
-      "publisher":{
-        "@id":"https://www.edgebreak.ai/#organization"
-      },
-      "featureList":[
-        "Curated Research Opportunities",
-        "NASDAQ Scanner Integration",
-        "Smart Money Integration",
-        "TradingView Charts",
-        "My Workspace",
-        "Daily Updates"
+      "description": "EdgeBreak is a professional NASDAQ stock scanner and research platform providing specialised market scanners, Smart Money analysis, AI-assisted research and educational resources.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/EdgeBreakAI",
+        "https://x.com/EdgeBreakAI"
       ]
     },
 
     {
-      "@type":"Dataset",
-      "@id":"https://www.edgebreak.ai/launchpad.html#dataset",
-      "name":"EdgeBreak Launch Pad",
-      "description":"A daily updated collection of high-quality NASDAQ research opportunities selected using proprietary scanner technology, Smart Money analysis and structured market research.",
-      "url":"https://www.edgebreak.ai/launchpad.html",
-      "keywords":[
-        "NASDAQ",
-        "Launch Pad",
-        "Market Intelligence",
-        "Stock Research",
-        "Smart Money",
-        "Price Action",
-        "Breakout Research"
-      ],
-      "creator":{
-        "@id":"https://www.edgebreak.ai/#organization"
-      },
-      "publisher":{
-        "@id":"https://www.edgebreak.ai/#organization"
-      },
-      "license":"https://www.edgebreak.ai/terms.html"
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "url": "https://www.edgebreak.ai/",
+      "name": "EdgeBreak",
+      "publisher": {
+        "@id": "https://www.edgebreak.ai/#organization"
+      }
     },
 
     {
-      "@type":"BreadcrumbList",
-      "itemListElement":[
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/launchpad.html#webpage",
+      "url": "https://www.edgebreak.ai/launchpad.html",
+      "name": "Launch Pad Scanner | Find NASDAQ Stocks Building Technical Bases | EdgeBreak",
+      "description": "The EdgeBreak Launch Pad Scanner searches NASDAQ stocks for established trading ranges, technical bases, support and resistance structures and developing pre-breakout research opportunities.",
+      "isPartOf": {
+        "@id": "https://www.edgebreak.ai/#website"
+      },
+      "about": {
+        "@id": "https://www.edgebreak.ai/launchpad.html#software"
+      },
+      "publisher": {
+        "@id": "https://www.edgebreak.ai/#organization"
+      }
+    },
+
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://www.edgebreak.ai/launchpad.html#software",
+      "name": "EdgeBreak Launch Pad Scanner",
+      "applicationCategory": "FinanceApplication",
+      "applicationSubCategory": "NASDAQ Stock Scanner",
+      "operatingSystem": "Web",
+      "url": "https://www.edgebreak.ai/launchpad.html",
+      "description": "A specialised NASDAQ stock scanner designed to identify stocks trading within established ranges and building technical bases for further pre-breakout research.",
+      "creator": {
+        "@id": "https://www.edgebreak.ai/#organization"
+      },
+      "publisher": {
+        "@id": "https://www.edgebreak.ai/#organization"
+      },
+      "featureList": [
+        "NASDAQ Stock Scanning",
+        "Technical Base Detection",
+        "Established Range Detection",
+        "Support Structure Analysis",
+        "Resistance Structure Analysis",
+        "Pre-Breakout Research",
+        "Price Structure Analysis",
+        "Smart Money Integration",
+        "Price Group Filtering",
+        "Base Length Filtering",
+        "TradingView Chart Integration",
+        "Daily NASDAQ Updates"
+      ]
+    },
+
+    {
+      "@type": "Dataset",
+      "@id": "https://www.edgebreak.ai/launchpad.html#dataset",
+      "name": "EdgeBreak Launch Pad NASDAQ Research Data",
+      "description": "Research data covering NASDAQ stocks identified by the EdgeBreak Launch Pad Scanner as trading within established ranges and developing technical bases.",
+      "url": "https://www.edgebreak.ai/launchpad.html",
+      "keywords": [
+        "NASDAQ",
+        "Launch Pad Scanner",
+        "Technical Bases",
+        "Trading Ranges",
+        "Support",
+        "Resistance",
+        "Price Structure",
+        "Pre-Breakout",
+        "Smart Money",
+        "Stock Research"
+      ],
+      "creator": {
+        "@id": "https://www.edgebreak.ai/#organization"
+      },
+      "publisher": {
+        "@id": "https://www.edgebreak.ai/#organization"
+      },
+      "license": "https://www.edgebreak.ai/terms.html"
+    },
+
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/launchpad.html#breadcrumb",
+      "itemListElement": [
 
         {
-          "@type":"ListItem",
-          "position":1,
-          "name":"Home",
-          "item":"https://www.edgebreak.ai/"
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
         },
 
         {
-          "@type":"ListItem",
-          "position":2,
-          "name":"Launch Pad",
-          "item":"https://www.edgebreak.ai/launchpad.html"
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Launch Pad Scanner",
+          "item": "https://www.edgebreak.ai/launchpad.html"
         }
 
       ]
     },
 
     {
-      "@type":"FAQPage",
-      "@id":"https://www.edgebreak.ai/launchpad.html#faq",
-      "mainEntity":[
+      "@type": "FAQPage",
+      "@id": "https://www.edgebreak.ai/launchpad.html#faq",
+      "mainEntity": [
 
         {
-          "@type":"Question",
-          "name":"What is Launch Pad?",
-          "acceptedAnswer":{
-            "@type":"Answer",
-            "text":"Launch Pad is EdgeBreak's curated collection of high-quality NASDAQ research opportunities selected using proprietary scanner technology, Smart Money analysis and structured market research."
+          "@type": "Question",
+          "name": "What is the EdgeBreak Launch Pad Scanner?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The EdgeBreak Launch Pad Scanner is a specialised NASDAQ stock scanner designed to identify stocks trading within established ranges and building technical bases for further research."
           }
         },
 
         {
-          "@type":"Question",
-          "name":"How are Launch Pad stocks selected?",
-          "acceptedAnswer":{
-            "@type":"Answer",
-            "text":"Launch Pad highlights stocks displaying multiple EdgeBreak research characteristics including market structure, price action, volume behaviour, Smart Money activity and breakout potential."
+          "@type": "Question",
+          "name": "What does the Launch Pad Scanner look for?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Launch Pad searches for technical characteristics including established trading ranges, support and resistance structures, controlled price behaviour and developing technical bases."
           }
         },
 
         {
-          "@type":"Question",
-          "name":"Does Launch Pad provide financial advice?",
-          "acceptedAnswer":{
-            "@type":"Answer",
-            "text":"No. Launch Pad is a market intelligence and research feature designed to help investors discover high-quality research candidates. It does not provide financial or investment advice."
+          "@type": "Question",
+          "name": "Can Launch Pad find stocks before a breakout?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Launch Pad is designed to identify stocks developing technical bases before a potential breakout occurs. Identification by the scanner does not mean that a future breakout will occur."
           }
         },
 
         {
-          "@type":"Question",
-          "name":"How often is Launch Pad updated?",
-          "acceptedAnswer":{
-            "@type":"Answer",
-            "text":"Launch Pad is updated daily using the latest available NASDAQ market data and EdgeBreak's proprietary scanner technology."
+          "@type": "Question",
+          "name": "Can Smart Money be used with Launch Pad?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EdgeBreak allows Smart Money research to be incorporated into the Launch Pad research process to investigate accumulation characteristics alongside developing technical structures."
           }
         },
 
         {
-          "@type":"Question",
-          "name":"What is the difference between Launch Pad and the NASDAQ Scanner?",
-          "acceptedAnswer":{
-            "@type":"Answer",
-            "text":"The NASDAQ Scanner searches more than 3,000 stocks using multiple research filters, while Launch Pad presents a curated selection of the highest-quality research opportunities identified by the EdgeBreak platform."
+          "@type": "Question",
+          "name": "How often is the Launch Pad Scanner updated?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The EdgeBreak Launch Pad Scanner is updated after each trading session using the latest available NASDAQ market data."
+          }
+        },
+
+        {
+          "@type": "Question",
+          "name": "What market does Launch Pad scan?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The EdgeBreak Launch Pad Scanner focuses on NASDAQ-listed stocks as part of the EdgeBreak NASDAQ stock research platform."
+          }
+        },
+
+        {
+          "@type": "Question",
+          "name": "Does Launch Pad provide stock recommendations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Launch Pad is a stock discovery and research tool. It does not provide financial advice, investment recommendations, price targets or buy and sell signals."
           }
         }
 

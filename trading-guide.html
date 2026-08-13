@@ -17,18 +17,22 @@
     content="width=device-width, initial-scale=1.0"
 >
 
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+
 <title>
-Trading Guide | NASDAQ Stock Research & Breakout Education | EdgeBreak
+Trading Guide | NASDAQ Stock Research & Breakout Analysis | EdgeBreak
 </title>
 
 <meta
     name="description"
-    content="Learn how to use the EdgeBreak NASDAQ research platform. Discover the EdgeBreak workflow, breakout analysis, Smart Money research, price action techniques and structured market analysis."
+    content="Learn how to research NASDAQ stocks using the EdgeBreak workflow, including stock scanners, price action, market structure, Smart Money, breakout research, AI Research and watchlists."
 >
 
 <meta
     name="keywords"
-    content="trading guide, NASDAQ stock research, breakout trading guide, price action guide, smart money guide, stock scanner tutorial, NASDAQ scanner, breakout analysis, accumulation, EdgeBreak"
+    content="NASDAQ stock research, trading guide, stock research guide, breakout trading guide, breakout analysis, stock scanner tutorial, price action, market structure, Smart Money, NASDAQ scanner, EdgeBreak"
 >
 
 <meta
@@ -38,6 +42,11 @@ Trading Guide | NASDAQ Stock Research & Breakout Education | EdgeBreak
 
 <meta
     name="author"
+    content="EdgeBreak"
+>
+
+<meta
+    name="publisher"
     content="EdgeBreak"
 >
 
@@ -68,20 +77,18 @@ Trading Guide | NASDAQ Stock Research & Breakout Education | EdgeBreak
 
 <meta
     name="language"
-    content="en-US"
+    content="en-AU"
 >
 
-<meta
-    name="geo.region"
-    content="US"
+<!-- ===================================
+CANONICAL
+=================================== -->
+
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/trading-guide.html"
 >
 
-<meta
-    name="geo.placename"
-    content="United States"
->
-
-<!-- Open Graph -->
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
@@ -98,7 +105,7 @@ OPEN GRAPH
 
 <meta
     property="og:locale"
-    content="en_US"
+    content="en_AU"
 >
 
 <meta
@@ -108,12 +115,12 @@ OPEN GRAPH
 
 <meta
     property="og:title"
-    content="Trading Guide | NASDAQ Stock Research & Breakout Education | EdgeBreak"
+    content="Trading Guide | NASDAQ Stock Research & Breakout Analysis | EdgeBreak"
 >
 
 <meta
     property="og:description"
-    content="Learn the EdgeBreak workflow for researching NASDAQ stocks using price action, breakout analysis, Smart Money characteristics and structured market analysis."
+    content="Learn the EdgeBreak research workflow for analysing NASDAQ stocks using scanners, price action, market structure, Smart Money, breakout research and AI-assisted company research."
 >
 
 <meta
@@ -133,12 +140,11 @@ OPEN GRAPH
 
 <meta
     property="og:image:alt"
-    content="EdgeBreak Trading Guide"
+    content="EdgeBreak NASDAQ Stock Research Trading Guide"
 >
 
-<!-- Twitter -->
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
 
 <meta
@@ -147,13 +153,23 @@ TWITTER
 >
 
 <meta
+    name="twitter:site"
+    content="@EdgeBreakAI"
+>
+
+<meta
+    name="twitter:creator"
+    content="@EdgeBreakAI"
+>
+
+<meta
     name="twitter:title"
-    content="Trading Guide | NASDAQ Stock Research & Breakout Education | EdgeBreak"
+    content="Trading Guide | NASDAQ Stock Research | EdgeBreak"
 >
 
 <meta
     name="twitter:description"
-    content="Learn the EdgeBreak workflow for researching NASDAQ stocks using breakout analysis, Smart Money characteristics, price action and structured market analysis."
+    content="Learn how to research NASDAQ stocks using EdgeBreak scanners, Smart Money analysis, price action, market structure, breakout research and AI Research."
 >
 
 <meta
@@ -163,16 +179,7 @@ TWITTER
 
 <meta
     name="twitter:image:alt"
-    content="EdgeBreak Trading Guide"
->
-
-<!-- ===================================
-CANONICAL
-=================================== -->
-
-<link
-    rel="canonical"
-    href="https://www.edgebreak.ai/trading-guide.html"
+    content="EdgeBreak NASDAQ Stock Research Trading Guide"
 >
 
 <!-- ===================================
@@ -207,17 +214,28 @@ CSS
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <!-- ===================================
-FAVICONS
+SUPABASE
+=================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+window.supabaseClient = supabase.createClient(
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+);
+</script>
+
+<!-- ===================================
+FAVICON
 =================================== -->
 
 <link
     rel="icon"
-    href="/images/favicon.png"
-    sizes="32x32"
-    type="image/png"
+    type="image/webp"
+    href="/images/favicon.webp"
 >
 
 <link
@@ -230,187 +248,252 @@ FAVICONS
     href="/site.webmanifest"
 >
 
-<!-- Theme -->
-<meta name="theme-color" content="#0f172a">
-
-<!-- CSS -->
-<link rel="stylesheet" href="css/dashboard.css">
-
-<!-- Supabase -->
-
-
-<script>
-window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
-);
-</script>
-
-<!-- ORGANIZATION -->
 <!-- ===================================
 STRUCTURED DATA
 =================================== -->
 
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@graph":[
+  "@context": "https://schema.org",
+  "@graph": [
 
     {
-      "@type":"Organization",
-      "@id":"https://www.edgebreak.ai/#organization",
-      "name":"EdgeBreak",
-      "url":"https://www.edgebreak.ai",
-      "logo":"https://www.edgebreak.ai/images/logo.webp"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+
+      "name": "EdgeBreak",
+
+      "url": "https://www.edgebreak.ai/",
+
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.edgebreak.ai/images/logo.webp"
+      },
+
+      "description": "EdgeBreak is a NASDAQ stock scanner, research and education platform providing structured tools for stock discovery, technical research and independent market analysis.",
+
+      "areaServed": "Worldwide",
+
+      "knowsAbout": [
+        "NASDAQ Stocks",
+        "Stock Scanning",
+        "Breakout Research",
+        "Price Action",
+        "Market Structure",
+        "Resistance Levels",
+        "Higher Lows",
+        "Volume Analysis",
+        "Accumulation",
+        "Technical Analysis",
+        "Stock Research"
+      ]
     },
 
     {
-      "@type":"WebSite",
-      "@id":"https://www.edgebreak.ai/#website",
-      "url":"https://www.edgebreak.ai",
-      "name":"EdgeBreak",
-      "publisher":{
-        "@id":"https://www.edgebreak.ai/#organization"
-      }
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+
+      "url": "https://www.edgebreak.ai/",
+
+      "name": "EdgeBreak",
+
+      "publisher": {
+        "@id": "https://www.edgebreak.ai/#organization"
+      },
+
+      "inLanguage": "en-AU"
     },
 
     {
-      "@type":"Article",
-      "@id":"https://www.edgebreak.ai/trading-guide.html#article",
+      "@type": "Article",
+      "@id": "https://www.edgebreak.ai/trading-guide.html#article",
 
-      "headline":"EdgeBreak Trading Guide",
+      "headline": "EdgeBreak Trading Guide: NASDAQ Stock Research & Breakout Analysis",
 
-      "description":"Learn how to use the EdgeBreak NASDAQ research platform, including the scanner workflow, Smart Money Filter, breakout analysis and structured market research.",
+      "name": "EdgeBreak Trading Guide",
 
-      "url":"https://www.edgebreak.ai/trading-guide.html",
+      "description": "Educational guide explaining how to research NASDAQ stocks using the EdgeBreak workflow, including stock scanners, price action, market structure, Smart Money research, breakout analysis and research tools.",
 
-      "mainEntityOfPage":{
-        "@id":"https://www.edgebreak.ai/trading-guide.html#webpage"
+      "url": "https://www.edgebreak.ai/trading-guide.html",
+
+      "mainEntityOfPage": {
+        "@id": "https://www.edgebreak.ai/trading-guide.html#webpage"
       },
 
-      "author":{
-        "@type":"Organization",
-        "@id":"https://www.edgebreak.ai/#organization"
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://www.edgebreak.ai/images/edgebreak-trading-guide.webp"
       },
 
-      "publisher":{
-        "@id":"https://www.edgebreak.ai/#organization"
+      "author": {
+        "@id": "https://www.edgebreak.ai/#organization"
       },
 
-      "image":"https://www.edgebreak.ai/images/edgebreak-trading-guide.webp"
+      "publisher": {
+        "@id": "https://www.edgebreak.ai/#organization"
+      },
 
+      "about": [
+        {
+          "@type": "Thing",
+          "name": "NASDAQ Stock Research"
+        },
+        {
+          "@type": "Thing",
+          "name": "Stock Scanners"
+        },
+        {
+          "@type": "Thing",
+          "name": "Breakout Analysis"
+        },
+        {
+          "@type": "Thing",
+          "name": "Smart Money"
+        },
+        {
+          "@type": "Thing",
+          "name": "Price Action"
+        },
+        {
+          "@type": "Thing",
+          "name": "Market Structure"
+        }
+      ],
+
+      "inLanguage": "en-AU"
     },
 
     {
-      "@type":"WebPage",
-      "@id":"https://www.edgebreak.ai/trading-guide.html#webpage",
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/trading-guide.html#webpage",
 
-      "url":"https://www.edgebreak.ai/trading-guide.html",
+      "url": "https://www.edgebreak.ai/trading-guide.html",
 
-      "name":"Trading Guide",
+      "name": "Trading Guide | NASDAQ Stock Research & Breakout Analysis",
 
-      "description":"Educational guide explaining the EdgeBreak workflow for researching NASDAQ stocks using price action, breakout analysis and Smart Money characteristics.",
+      "description": "Learn the EdgeBreak workflow for researching NASDAQ stocks using scanners, price action, market structure, Smart Money, breakout analysis and research tools.",
 
-      "isPartOf":{
-        "@id":"https://www.edgebreak.ai/#website"
+      "isPartOf": {
+        "@id": "https://www.edgebreak.ai/#website"
       },
 
-      "about":{
-        "@type":"Thing",
-        "name":"NASDAQ Stock Research"
+      "mainEntity": {
+        "@id": "https://www.edgebreak.ai/trading-guide.html#article"
       },
 
-      "publisher":{
-        "@id":"https://www.edgebreak.ai/#organization"
+      "publisher": {
+        "@id": "https://www.edgebreak.ai/#organization"
       },
 
-      "speakable":{
-        "@type":"SpeakableSpecification",
-        "cssSelector":[
+      "breadcrumb": {
+        "@id": "https://www.edgebreak.ai/trading-guide.html#breadcrumb"
+      },
+
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
           ".guide-container h1",
           ".header-sub",
           ".section h2"
         ]
-      }
+      },
 
+      "inLanguage": "en-AU"
     },
 
     {
-      "@type":"BreadcrumbList",
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/trading-guide.html#breadcrumb",
 
-      "itemListElement":[
+      "itemListElement": [
 
         {
-          "@type":"ListItem",
-          "position":1,
-          "name":"Home",
-          "item":"https://www.edgebreak.ai/"
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
         },
 
         {
-          "@type":"ListItem",
-          "position":2,
-          "name":"Trading Guide",
-          "item":"https://www.edgebreak.ai/trading-guide.html"
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Trading Guide",
+          "item": "https://www.edgebreak.ai/trading-guide.html"
         }
 
       ]
-
     },
 
     {
-      "@type":"FAQPage",
-      "@id":"https://www.edgebreak.ai/trading-guide.html#faq",
+      "@type": "FAQPage",
+      "@id": "https://www.edgebreak.ai/trading-guide.html#faq",
 
-      "mainEntity":[
+      "mainEntity": [
 
         {
-          "@type":"Question",
-          "name":"What is the EdgeBreak Trading Guide?",
-          "acceptedAnswer":{
-            "@type":"Answer",
-            "text":"The Trading Guide explains how to use the EdgeBreak research platform to analyse NASDAQ stocks using structured price action, breakout analysis and Smart Money characteristics."
+          "@type": "Question",
+          "name": "What is the EdgeBreak Trading Guide?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The EdgeBreak Trading Guide explains the structured research workflow used across the EdgeBreak platform to discover and research NASDAQ-listed stocks."
           }
         },
 
         {
-          "@type":"Question",
-          "name":"Does the Trading Guide provide financial advice?",
-          "acceptedAnswer":{
-            "@type":"Answer",
-            "text":"No. The Trading Guide is educational and explains how to use the EdgeBreak research platform. It does not provide financial advice or investment recommendations."
+          "@type": "Question",
+          "name": "What will I learn in the EdgeBreak Trading Guide?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The guide explains stock discovery, price action, market structure, resistance, higher lows, volume, accumulation, Smart Money research, breakout analysis and the research tools available through EdgeBreak."
           }
         },
 
         {
-          "@type":"Question",
-          "name":"What will I learn?",
-          "acceptedAnswer":{
-            "@type":"Answer",
-            "text":"You'll learn how to use the NASDAQ Scanner, Smart Money Filter, My Workspace and EdgeBreak Trades together as part of a structured research workflow."
+          "@type": "Question",
+          "name": "What EdgeBreak tools are part of the research workflow?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The EdgeBreak research workflow includes the NASDAQ Scanner, Breakout Scanner, Pre-Breakout Scanner, Launch Pad Scanner, Smart Money Filter, My Workspace, watchlists, TradingView charts and EdgeBreak AI Research."
           }
         },
 
         {
-          "@type":"Question",
-          "name":"Who is this guide for?",
-          "acceptedAnswer":{
-            "@type":"Answer",
-            "text":"The guide is designed for traders and investors who want to research NASDAQ-listed stocks using a consistent, structured market analysis process."
+          "@type": "Question",
+          "name": "What market does EdgeBreak cover?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EdgeBreak focuses exclusively on NASDAQ-listed stocks and applies a structured research framework across more than 3,000 companies."
           }
         },
 
         {
-          "@type":"Question",
-          "name":"What market does EdgeBreak cover?",
-          "acceptedAnswer":{
-            "@type":"Answer",
-            "text":"EdgeBreak focuses exclusively on NASDAQ-listed stocks, allowing a consistent research framework to be applied across more than 3,000 companies."
+          "@type": "Question",
+          "name": "Is the EdgeBreak Trading Guide suitable for beginners?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The Trading Guide introduces the EdgeBreak research workflow and can be used alongside EdgeBreak Academy for more structured lessons covering market research and technical analysis."
+          }
+        },
+
+        {
+          "@type": "Question",
+          "name": "Does EdgeBreak AI Research provide stock recommendations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. EdgeBreak AI Research is designed to provide factual company, financial, market, institutional and regulatory research for further investigation. It does not provide stock scores, ratings or investment recommendations."
+          }
+        },
+
+        {
+          "@type": "Question",
+          "name": "Does the EdgeBreak Trading Guide provide financial advice?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The EdgeBreak Trading Guide is educational and does not provide financial advice, investment recommendations, stock ratings or buy and sell signals."
           }
         }
 
       ]
-
     }
 
   ]
