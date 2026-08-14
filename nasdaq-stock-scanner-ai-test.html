@@ -15075,13 +15075,127 @@ const chartAIAnalyseBtn =
 
 
 let chartAIImageFile = null;
+let chartAIOptimisedImage = null;
+
+/* =========================================
+OPTIMISE CHART FOR AI
+========================================= */
+
+async function optimiseChartAIImage(file) {
+
+    return new Promise((resolve, reject) => {
+
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+
+            const image = new Image();
+
+            image.onload = function() {
+
+                /*
+                Keep enough resolution for chart labels,
+                candles, volume and technical structure,
+                while avoiding unnecessarily large images.
+                */
+
+                const MAX_WIDTH = 1600;
+                const MAX_HEIGHT = 1200;
+
+                let width = image.width;
+                let height = image.height;
+
+                const scale = Math.min(
+                    MAX_WIDTH / width,
+                    MAX_HEIGHT / height,
+                    1
+                );
+
+                width = Math.round(width * scale);
+                height = Math.round(height * scale);
+
+
+                const canvas =
+                    document.createElement("canvas");
+
+                canvas.width = width;
+                canvas.height = height;
+
+
+                const ctx =
+                    canvas.getContext("2d");
+
+
+                ctx.drawImage(
+                    image,
+                    0,
+                    0,
+                    width,
+                    height
+                );
+
+
+                /*
+                JPEG gives us a substantially smaller payload.
+                0.85 should retain chart detail while reducing
+                unnecessary image size.
+                */
+
+                const optimisedDataURL =
+                    canvas.toDataURL(
+                        "image/jpeg",
+                        0.85
+                    );
+
+
+                resolve({
+                    dataURL: optimisedDataURL,
+                    width: width,
+                    height: height
+                });
+
+            };
+
+
+            image.onerror = function() {
+
+                reject(
+                    new Error(
+                        "Unable to process chart image."
+                    )
+                );
+
+            };
+
+
+            image.src = event.target.result;
+
+        };
+
+
+        reader.onerror = function() {
+
+            reject(
+                new Error(
+                    "Unable to read chart image."
+                )
+            );
+
+        };
+
+
+        reader.readAsDataURL(file);
+
+    });
+
+}
 
 
 /* =========================================
 LOAD IMAGE
 ========================================= */
 
-function loadChartAIImage(file) {
+async function loadChartAIImage(file) {
 
     if (!file) return;
 
@@ -15094,6 +15208,29 @@ function loadChartAIImage(file) {
 
 
     chartAIImageFile = file;
+
+    try {
+
+        chartAIOptimisedImage =
+            await optimiseChartAIImage(file);
+
+        console.log(
+            "Chart prepared for AI:",
+            chartAIOptimisedImage.width + "x" +
+            chartAIOptimisedImage.height
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Chart optimisation failed:",
+            error
+        );
+
+        chartAIOptimisedImage = null;
+
+    }
 
 
     const reader =
@@ -15269,6 +15406,8 @@ chartAIRemoveBtn?.addEventListener(
 
         chartAIImageFile = null;
 
+        chartAIOptimisedImage = null;
+
         chartAIFileInput.value = "";
 
         chartAIPreviewImage.src = "";
@@ -15299,9 +15438,28 @@ chartAIAnalyseBtn?.addEventListener(
         No OpenAI request is being made yet.
         */
 
+        if (!chartAIOptimisedImage) {
+
+            console.error(
+                "Optimised chart is not ready."
+            );
+
+            return;
+        }
+
+
         console.log(
-            "Chart ready for AI analysis:",
-            chartAIImageFile
+            "Optimised chart ready for AI:",
+            {
+                width:
+                    chartAIOptimisedImage.width,
+
+                height:
+                    chartAIOptimisedImage.height,
+
+                dataLength:
+                    chartAIOptimisedImage.dataURL.length
+            }
         );
 
     }
