@@ -1,13 +1,52 @@
 export default async function handler(req, res) {
 
     /* =========================================
-    METHOD CHECK
+       POST ONLY
     ========================================= */
 
     if (req.method !== "POST") {
 
         return res.status(405).json({
-            error: "Method not allowed."
+            error: "Method not allowed"
+        });
+
+    }
+
+
+    /* =========================================
+       CHECK OPENAI CONFIGURATION
+    ========================================= */
+
+    if (!process.env.OPENAI_API_KEY) {
+
+        console.error(
+            "Chart Analysis: OPENAI_API_KEY is missing"
+        );
+
+        return res.status(500).json({
+            error: "AI service is not configured"
+        });
+
+    }
+
+
+    /* =========================================
+       GET CHART IMAGE
+    ========================================= */
+
+    const {
+        image
+    } = req.body || {};
+
+
+    if (
+        !image ||
+        typeof image !== "string" ||
+        !image.startsWith("data:image/")
+    ) {
+
+        return res.status(400).json({
+            error: "A valid chart image is required"
         });
 
     }
@@ -16,139 +55,360 @@ export default async function handler(req, res) {
     try {
 
         /* =========================================
-        GET IMAGE
-        ========================================= */
-
-        const { image } = req.body || {};
-
-
-        if (
-            !image ||
-            typeof image !== "string" ||
-            !image.startsWith("data:image/")
-        ) {
-
-            return res.status(400).json({
-                error: "A valid chart image is required."
-            });
-
-        }
-
-
-        /* =========================================
-        OPENAI REQUEST
+           OPENAI CHART ANALYSIS
         ========================================= */
 
         const response = await fetch(
             "https://api.openai.com/v1/responses",
             {
+
                 method: "POST",
 
                 headers: {
-                    "Content-Type": "application/json",
+
+                    "Content-Type":
+                        "application/json",
+
                     "Authorization":
                         `Bearer ${process.env.OPENAI_API_KEY}`
+
                 },
 
                 body: JSON.stringify({
 
                     model: "gpt-5-mini",
 
+
+                    /* =================================
+                       CHART + INSTRUCTIONS
+                    ================================= */
+
                     input: [
 
                         {
+
                             role: "system",
 
                             content: [
+
                                 {
+
                                     type: "input_text",
 
                                     text: `
 You are a technical stock chart analysis assistant.
 
-Analyse ONLY the technical information that is visibly present in the supplied stock chart.
+Analyse ONLY the technical information visibly present in the supplied stock chart.
 
-Your purpose is to describe the chart clearly and concisely for market research.
+The purpose is to provide concise factual technical observations for market research.
 
-Focus on:
+Analyse these areas:
 
 1. Market structure
 2. Resistance
 3. Support and price structure
-4. Higher lows or lower highs where visible
-5. Volume behaviour where visible
-6. Base or consolidation structure
-7. Breakout structure or current position relative to resistance
-8. A very short plain-English chart summary
+4. Volume behaviour
+5. Base or consolidation structure
+6. Breakout structure
+7. A short plain-English chart summary
 
-IMPORTANT RULES:
 
-- Base the analysis only on what can actually be observed in the supplied chart.
-- Do not invent prices, dates, volume behaviour, support, resistance or patterns that are not clearly visible.
-- If something cannot be determined from the chart, say that it is not clearly visible.
-- Do not conduct company research.
-- Do not use web research.
-- Do not discuss news, financials, SEC filings or social-media activity.
-- Do not give investment advice.
-- Do not recommend buying, selling or holding.
-- Do not provide a stock score or setup rating.
-- Do not provide price targets.
-- Do not predict future returns or future price movement.
-- Do not say a stock is a good or bad investment.
-- Do not say the user should or should not trade the stock.
-- Do not refer to EdgeBreak as having an opinion, assessment, recommendation or belief.
+IMPORTANT ANALYSIS RULES:
 
-Technical terminology such as uptrend, downtrend, bullish structure, bearish structure, breakout, consolidation, resistance, support, compression and momentum may be used when it objectively describes what is visible.
+Only describe information that can reasonably be observed in the supplied chart.
 
-Keep every section concise.
+Do not invent:
 
-Return ONLY valid JSON using exactly this structure:
+- prices
+- dates
+- resistance levels
+- support levels
+- volume behaviour
+- chart patterns
+- technical structures
 
-{
-    "marketStructure": "",
-    "resistance": "",
-    "support": "",
-    "volume": "",
-    "base": "",
-    "breakout": "",
-    "summary": ""
-}
+If something cannot be determined from the chart, return:
 
-The summary should normally be no more than 2 or 3 short sentences.
+"Not clearly visible in the supplied chart."
 
-Do not include markdown.
-Do not include text before or after the JSON.
+
+MARKET STRUCTURE:
+
+Describe the dominant visible price structure.
+
+Examples may include:
+
+- uptrend
+- downtrend
+- sideways structure
+- consolidation
+- range
+- compression
+- transition in structure
+
+Mention higher lows or lower highs only where they are reasonably visible.
+
+
+RESISTANCE:
+
+Describe visible resistance areas or repeated tests.
+
+Do not invent an exact resistance price if the chart does not make it clearly readable.
+
+
+SUPPORT:
+
+Describe visible support and relevant price structure.
+
+Mention higher lows, lower lows or repeated support tests where visible.
+
+
+VOLUME:
+
+Describe only volume behaviour that is visibly shown on the chart.
+
+Examples may include:
+
+- volume contraction
+- volume expansion
+- increased volume during a price move
+- notable volume spike
+- relatively stable volume
+
+If volume is not displayed, state that it is not clearly visible.
+
+
+BASE / CONSOLIDATION:
+
+Describe whether the chart appears to contain a visible base, range, consolidation or compression structure.
+
+Where possible, describe its approximate visual duration without inventing exact dates.
+
+
+BREAKOUT STRUCTURE:
+
+Describe the current visible relationship between price and resistance.
+
+Examples may include:
+
+- trading below resistance
+- testing resistance
+- moving through resistance
+- trading above a previous resistance area
+- no clear breakout structure visible
+
+Do NOT predict whether a breakout will succeed or fail.
+
+
+CHART SUMMARY:
+
+Provide a concise plain-English summary of the most notable technical characteristics visible in the chart.
+
+The summary should normally contain no more than 2 short sentences.
+
+It should sound natural and useful rather than generic.
+
+For example, it may explain that:
+
+- price has spent an extended period consolidating
+- higher lows have developed
+- price is testing a resistance area
+- price has recently moved above a range
+- volume has expanded during the latest move
+
+Only mention characteristics actually visible in the supplied chart.
+
+
+STRICT SAFETY / PRODUCT RULES:
+
+Do not provide investment advice.
+
+Do not recommend buying.
+
+Do not recommend selling.
+
+Do not recommend holding.
+
+Do not tell the user whether they should trade the stock.
+
+Do not provide a stock score.
+
+Do not provide a setup rating.
+
+Do not provide price targets.
+
+Do not predict future returns.
+
+Do not predict future price movement.
+
+Do not claim that a stock will rise or fall.
+
+Do not describe the stock as a good or bad investment.
+
+Do not use phrases such as:
+
+- strong buy
+- buy opportunity
+- sell signal
+- winning stock
+- stock pick
+- guaranteed breakout
+- likely to rocket
+- going to the moon
+
+Do not attribute an opinion, recommendation or prediction to EdgeBreak.
+
+Do not perform web research.
+
+Do not research the company.
+
+Do not discuss:
+
+- company fundamentals
+- news
+- SEC filings
+- social media
+- institutional ownership
+- analyst ratings
+
+
+Keep each response field concise.
 `
+
                                 }
+
                             ]
+
                         },
 
+
                         {
+
                             role: "user",
 
                             content: [
 
                                 {
-                                    type: "input_text",
+
+                                    type:
+                                        "input_text",
 
                                     text:
                                         "Analyse the technical structure visible in this stock chart."
+
                                 },
 
                                 {
-                                    type: "input_image",
 
-                                    image_url: image,
+                                    type:
+                                        "input_image",
 
-                                    detail: "low"
+                                    image_url:
+                                        image,
+
+                                    /*
+                                    Start with LOW detail
+                                    to minimise image token cost.
+
+                                    We can increase this later
+                                    if chart recognition needs
+                                    more detail.
+                                    */
+
+                                    detail:
+                                        "low"
+
                                 }
 
                             ]
+
                         }
 
                     ],
 
-                    max_output_tokens: 650
+
+                    /* =================================
+                       STRUCTURED RESPONSE
+                    ================================= */
+
+                    text: {
+
+                        format: {
+
+                            type:
+                                "json_schema",
+
+                            name:
+                                "stock_chart_analysis",
+
+                            strict:
+                                true,
+
+                            schema: {
+
+                                type:
+                                    "object",
+
+                                properties: {
+
+                                    marketStructure: {
+                                        type: "string"
+                                    },
+
+                                    resistance: {
+                                        type: "string"
+                                    },
+
+                                    support: {
+                                        type: "string"
+                                    },
+
+                                    volume: {
+                                        type: "string"
+                                    },
+
+                                    base: {
+                                        type: "string"
+                                    },
+
+                                    breakout: {
+                                        type: "string"
+                                    },
+
+                                    summary: {
+                                        type: "string"
+                                    }
+
+                                },
+
+                                required: [
+
+                                    "marketStructure",
+                                    "resistance",
+                                    "support",
+                                    "volume",
+                                    "base",
+                                    "breakout",
+                                    "summary"
+
+                                ],
+
+                                additionalProperties:
+                                    false
+
+                            }
+
+                        }
+
+                    },
+
+
+                    /* =================================
+                       COST CONTROL
+                    ================================= */
+
+                    max_output_tokens:
+                        650
 
                 })
 
@@ -157,62 +417,84 @@ Do not include text before or after the JSON.
 
 
         /* =========================================
-        OPENAI ERROR
-        ========================================= */
-
-        if (!response.ok) {
-
-            const errorText =
-                await response.text();
-
-
-            console.error(
-                "OpenAI Chart Analysis Error:",
-                response.status,
-                errorText
-            );
-
-
-            return res.status(500).json({
-                error:
-                    "Chart analysis is temporarily unavailable."
-            });
-
-        }
-
-
-        /* =========================================
-        READ RESPONSE
+           READ OPENAI RESPONSE
         ========================================= */
 
         const data =
             await response.json();
 
 
+        /* =========================================
+           OPENAI ERROR
+        ========================================= */
+
+        if (!response.ok) {
+
+            console.error(
+                "Chart Analysis API Error:",
+                response.status,
+                JSON.stringify(data)
+            );
+
+
+            return res
+                .status(response.status)
+                .json({
+
+                    error:
+                        data?.error?.message ||
+                        "Chart analysis request failed"
+
+                });
+
+        }
+
+
+        /* =========================================
+           EXTRACT FINAL OUTPUT
+        ========================================= */
+
         let outputText = "";
 
 
-        if (
-            Array.isArray(data.output)
-        ) {
+        if (Array.isArray(data.output)) {
 
             for (const item of data.output) {
 
                 if (
-                    item.type === "message" &&
-                    Array.isArray(item.content)
+                    item.type !== "message"
                 ) {
 
-                    for (const content of item.content) {
+                    continue;
 
-                        if (
-                            content.type === "output_text"
-                        ) {
+                }
 
-                            outputText +=
-                                content.text || "";
 
-                        }
+                if (
+                    !Array.isArray(
+                        item.content
+                    )
+                ) {
+
+                    continue;
+
+                }
+
+
+                for (
+                    const content
+                    of item.content
+                ) {
+
+                    if (
+                        content.type ===
+                            "output_text" &&
+                        typeof content.text ===
+                            "string"
+                    ) {
+
+                        outputText =
+                            content.text.trim();
 
                     }
 
@@ -223,17 +505,30 @@ Do not include text before or after the JSON.
         }
 
 
+        /* =========================================
+           NO OUTPUT
+        ========================================= */
+
         if (!outputText) {
 
-            throw new Error(
-                "No chart analysis returned."
+            console.error(
+                "No final chart analysis output:",
+                JSON.stringify(data)
             );
+
+
+            return res.status(500).json({
+
+                error:
+                    "No chart analysis was returned"
+
+            });
 
         }
 
 
         /* =========================================
-        PARSE JSON
+           PARSE STRUCTURED JSON
         ========================================= */
 
         let analysis;
@@ -248,47 +543,141 @@ Do not include text before or after the JSON.
         catch (error) {
 
             console.error(
-                "Chart JSON Parse Error:",
+                "Chart Analysis JSON Parse Error:",
                 outputText
             );
 
 
-            throw new Error(
-                "Invalid chart analysis response."
-            );
+            return res.status(500).json({
+
+                error:
+                    "Unable to process chart analysis"
+
+            });
 
         }
 
 
         /* =========================================
-        RETURN ANALYSIS
+           CLEAN OUTPUT FIELD
+        ========================================= */
+
+        function cleanField(value) {
+
+            if (
+                value === null ||
+                value === undefined
+            ) {
+
+                return (
+                    "Not clearly visible " +
+                    "in the supplied chart."
+                );
+
+            }
+
+
+            const cleaned =
+                String(value)
+
+                    .replace(
+                        /\s+/g,
+                        " "
+                    )
+
+                    .trim();
+
+
+            if (!cleaned) {
+
+                return (
+                    "Not clearly visible " +
+                    "in the supplied chart."
+                );
+
+            }
+
+
+            return cleaned;
+
+        }
+
+
+        /* =========================================
+           BUILD SAFE ANALYSIS
+        ========================================= */
+
+        const cleanAnalysis = {
+
+            marketStructure:
+                cleanField(
+                    analysis.marketStructure
+                ),
+
+            resistance:
+                cleanField(
+                    analysis.resistance
+                ),
+
+            support:
+                cleanField(
+                    analysis.support
+                ),
+
+            volume:
+                cleanField(
+                    analysis.volume
+                ),
+
+            base:
+                cleanField(
+                    analysis.base
+                ),
+
+            breakout:
+                cleanField(
+                    analysis.breakout
+                ),
+
+            summary:
+                cleanField(
+                    analysis.summary
+                )
+
+        };
+
+
+        /* =========================================
+           RETURN ANALYSIS
         ========================================= */
 
         return res.status(200).json({
 
+            success:
+                true,
+
             marketStructure:
-                analysis.marketStructure || "",
+                cleanAnalysis.marketStructure,
 
             resistance:
-                analysis.resistance || "",
+                cleanAnalysis.resistance,
 
             support:
-                analysis.support || "",
+                cleanAnalysis.support,
 
             volume:
-                analysis.volume || "",
+                cleanAnalysis.volume,
 
             base:
-                analysis.base || "",
+                cleanAnalysis.base,
 
             breakout:
-                analysis.breakout || "",
+                cleanAnalysis.breakout,
 
             summary:
-                analysis.summary || ""
+                cleanAnalysis.summary
 
         });
-
 
     }
     catch (error) {
@@ -300,8 +689,10 @@ Do not include text before or after the JSON.
 
 
         return res.status(500).json({
+
             error:
-                "Unable to analyse chart."
+                "Unable to complete chart analysis"
+
         });
 
     }
