@@ -29,17 +29,17 @@ PRIMARY SEO
 
 <meta
     name="description"
-    content="EdgeBreak is a professional NASDAQ stock scanner and AI stock research platform. Scan 3,000+ NASDAQ stocks using breakout scanners, Smart Money analysis, technical research tools and EdgeBreak AI Research."
+    content="EdgeBreak combines a professional NASDAQ stock scanner with AI stock research and analysis. Discover 3,000+ NASDAQ stocks, then research company information, financials, news, institutional activity and SEC filings."
 >
 
 <meta
     name="keywords"
-    content="NASDAQ stock scanner, stock scanner, stock screener, NASDAQ screener, AI stock research, stock research platform, breakout scanner, Smart Money filter, breakout stocks, technical analysis, market structure, resistance levels, higher lows, stock research, NASDAQ stocks, EdgeBreak"
+    content="NASDAQ stock scanner, stock scanner, stock screener, AI stock research, AI stock analysis, stock research tool, stock market research, stock analysis tool, NASDAQ stock research, NASDAQ screener, breakout scanner, Smart Money filter, breakout stocks, technical analysis, market structure, company analysis, EdgeBreak"
 >
 
 <meta
     name="robots"
-    content="index, follow, max-image-preview:large"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
 >
 
 <meta name="author" content="EdgeBreak">
@@ -71,18 +71,28 @@ OPEN GRAPH
 >
 
 <meta
+    property="og:site_name"
+    content="EdgeBreak"
+>
+
+<meta
+    property="og:locale"
+    content="en_US"
+>
+
+<meta
+    property="og:url"
+    content="https://www.edgebreak.ai/"
+>
+
+<meta
     property="og:title"
     content="NASDAQ Stock Scanner & AI Stock Research | EdgeBreak"
 >
 
 <meta
     property="og:description"
-    content="Scan and research 3,000+ NASDAQ stocks using professional stock scanners, Smart Money analysis, breakout research and EdgeBreak AI Research."
->
-
-<meta
-    property="og:url"
-    content="https://www.edgebreak.ai/"
+    content="Discover NASDAQ stocks using professional market scanners, then investigate companies with integrated AI-powered stock research and analysis."
 >
 
 <meta
@@ -92,12 +102,7 @@ OPEN GRAPH
 
 <meta
     property="og:image:alt"
-    content="EdgeBreak NASDAQ Stock Scanner and AI Research Platform"
->
-
-<meta
-    property="og:site_name"
-    content="EdgeBreak"
+    content="EdgeBreak NASDAQ Stock Scanner and AI Stock Research Platform"
 >
 
 <!-- ===================================
@@ -110,13 +115,23 @@ TWITTER / X
 >
 
 <meta
+    name="twitter:site"
+    content="@EdgeBreakAI"
+>
+
+<meta
+    name="twitter:creator"
+    content="@EdgeBreakAI"
+>
+
+<meta
     name="twitter:title"
     content="NASDAQ Stock Scanner & AI Stock Research | EdgeBreak"
 >
 
 <meta
     name="twitter:description"
-    content="Discover and research NASDAQ stocks using professional stock scanners, Smart Money analysis, breakout research and EdgeBreak AI Research."
+    content="Discover and research NASDAQ stocks using EdgeBreak market scanners, Smart Money analysis and integrated AI stock research."
 >
 
 <meta
@@ -126,7 +141,7 @@ TWITTER / X
 
 <meta
     name="twitter:image:alt"
-    content="EdgeBreak NASDAQ Stock Scanner and AI Research Platform"
+    content="EdgeBreak NASDAQ Stock Scanner and AI Stock Research Platform"
 >
 
 <!-- ===================================
@@ -154,28 +169,39 @@ SUPABASE
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <!-- ===================================
-ORGANIZATION SCHEMA
+STRUCTURED DATA
 =================================== -->
 
 <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "@id": "https://www.edgebreak.ai/#organization",
-    "name": "EdgeBreak",
-    "url": "https://www.edgebreak.ai/",
-    "logo": {
+  "@context": "https://schema.org",
+  "@graph": [
+
+    {
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+
+      "name": "EdgeBreak",
+
+      "url": "https://www.edgebreak.ai/",
+
+      "logo": {
         "@type": "ImageObject",
         "url": "https://www.edgebreak.ai/images/logo.webp"
-    },
-    "description": "EdgeBreak is a professional NASDAQ stock scanner and AI stock research platform designed to help investors discover, research and analyse NASDAQ-listed stocks.",
-    "areaServed": "Worldwide",
-    "knowsAbout": [
+      },
+
+      "description": "EdgeBreak is a NASDAQ stock research platform combining professional stock scanners, market research tools and AI-powered stock research and analysis.",
+
+      "areaServed": "Worldwide",
+
+      "knowsAbout": [
         "NASDAQ Stocks",
-        "Stock Scanners",
+        "NASDAQ Stock Scanners",
         "Stock Screeners",
-        "Stock Research",
         "AI Stock Research",
+        "AI Stock Analysis",
+        "Stock Market Research",
+        "Company Analysis",
         "Technical Analysis",
         "Breakout Analysis",
         "Smart Money Analysis",
@@ -183,218 +209,248 @@ ORGANIZATION SCHEMA
         "Market Structure",
         "Support and Resistance",
         "Volume Analysis"
-    ],
-    "sameAs": [
+      ],
+
+      "sameAs": [
         "https://www.facebook.com/EdgeBreakAI",
         "https://x.com/EdgeBreakAI"
-    ]
-}
-</script>
+      ]
+    },
 
-<!-- ===================================
-WEBSITE SCHEMA
-=================================== -->
+    {
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
 
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "@id": "https://www.edgebreak.ai/#website",
-    "name": "EdgeBreak",
-    "url": "https://www.edgebreak.ai/",
-    "description": "Professional NASDAQ stock scanner and AI-powered stock research platform.",
-    "publisher": {
+      "name": "EdgeBreak",
+
+      "url": "https://www.edgebreak.ai/",
+
+      "description": "NASDAQ stock scanner and AI-powered stock research platform.",
+
+      "publisher": {
         "@id": "https://www.edgebreak.ai/#organization"
-    }
-}
-</script>
+      }
+    },
 
-<!-- ===================================
-SOFTWARE APPLICATION SCHEMA
-=================================== -->
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://www.edgebreak.ai/#software",
 
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "@id": "https://www.edgebreak.ai/#software",
-    "name": "EdgeBreak",
-    "url": "https://www.edgebreak.ai/",
-    "applicationCategory": "FinanceApplication",
-    "applicationSubCategory": "Stock Research Platform",
-    "operatingSystem": "Web",
-    "description": "EdgeBreak is a professional NASDAQ stock scanner and AI stock research platform combining specialised stock scanners, Smart Money analysis, technical research, watchlists, TradingView charts and AI-assisted company research.",
-    "featureList": [
+      "name": "EdgeBreak",
+
+      "url": "https://www.edgebreak.ai/",
+
+      "applicationCategory": "FinanceApplication",
+
+      "applicationSubCategory": "Stock Research Platform",
+
+      "operatingSystem": "Web",
+
+      "description": "EdgeBreak combines professional NASDAQ stock scanners, Smart Money analysis, technical research tools, watchlists, TradingView charts and integrated AI-powered stock research.",
+
+      "featureList": [
         "NASDAQ Stock Scanner",
         "Breakout Scanner",
         "Pre-Breakout Scanner",
         "Launch Pad Scanner",
         "Smart Money Filter",
-        "EdgeBreak AI Research",
-        "Market Attention and Recent News Research",
+        "AI Stock Research",
+        "Company Overview Research",
         "Financial Highlights Research",
+        "Market Attention Research",
+        "Recent News Research",
+        "Institutional Ownership Research",
         "Institutional Activity Research",
         "SEC Filing Research",
-        "Technical Context",
         "Personal Watchlists",
         "TradingView Charts",
         "EdgeBreak Academy"
-    ],
-    "provider": {
+      ],
+
+      "provider": {
         "@id": "https://www.edgebreak.ai/#organization"
-    },
-    "offers": {
+      },
+
+      "offers": {
         "@type": "Offer",
         "url": "https://www.edgebreak.ai/pricing.html",
         "price": "19.99",
         "priceCurrency": "USD",
         "availability": "https://schema.org/InStock"
-    }
-}
-</script>
+      }
+    },
 
-<!-- ===================================
-PRODUCT SCHEMA
-=================================== -->
+    {
+      "@type": "Product",
+      "@id": "https://www.edgebreak.ai/#product",
 
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "@id": "https://www.edgebreak.ai/#product",
-    "name": "EdgeBreak",
-    "url": "https://www.edgebreak.ai/",
-    "image": "https://www.edgebreak.ai/images/edgebreak-dashboard.webp",
-    "description": "Professional NASDAQ stock scanner and AI stock research platform featuring breakout scanners, Smart Money analysis, technical research tools and EdgeBreak AI Research.",
-    "brand": {
+      "name": "EdgeBreak Market Scanner + AI",
+
+      "url": "https://www.edgebreak.ai/",
+
+      "image": "https://www.edgebreak.ai/images/edgebreak-dashboard.webp",
+
+      "description": "NASDAQ stock scanning and AI-powered stock research platform combining market scanners, Smart Money analysis, company research, financial research, market attention, institutional activity and SEC filing research.",
+
+      "brand": {
         "@type": "Brand",
         "name": "EdgeBreak"
-    },
-    "category": "Financial Software",
-    "offers": {
+      },
+
+      "category": "Financial Software",
+
+      "offers": {
         "@type": "Offer",
         "url": "https://www.edgebreak.ai/pricing.html",
         "price": "19.99",
         "priceCurrency": "USD",
         "availability": "https://schema.org/InStock"
-    }
-}
-</script>
-
-<!-- ===================================
-FAQ SCHEMA
-=================================== -->
-
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {
-            "@type": "Question",
-            "name": "What is EdgeBreak?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "EdgeBreak is a professional NASDAQ stock scanner and stock research platform designed to help investors discover, research and analyse NASDAQ-listed stocks using specialised scanners, Smart Money analysis, technical research tools and AI-assisted research."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "What is the EdgeBreak NASDAQ Scanner?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "The EdgeBreak NASDAQ Scanner analyses more than 3,000 NASDAQ-listed stocks using research filters based on price action, volume, support and resistance, higher lows and market structure."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "What is EdgeBreak AI Research?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "EdgeBreak AI Research is an AI-assisted stock research tool that helps members investigate company information, financial highlights, market attention, recent news, institutional activity, SEC filings and technical context."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "What is the Smart Money Filter?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "The EdgeBreak Smart Money Filter searches NASDAQ stocks for price and volume characteristics associated with accumulation and increasing market participation."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "What markets does EdgeBreak cover?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "EdgeBreak focuses exclusively on NASDAQ-listed stocks and applies a consistent research methodology across more than 3,000 companies."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "What features are included with EdgeBreak?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "EdgeBreak includes the NASDAQ Scanner, Breakout Scanner, Pre-Breakout Scanner, Launch Pad Scanner, Smart Money Filter, EdgeBreak AI Research, My Workspace, personal watchlists, TradingView charts and EdgeBreak Academy."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Can beginners use EdgeBreak?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes. EdgeBreak combines stock research tools with EdgeBreak Academy, which provides educational lessons covering stock scanning, technical analysis, market structure, breakout research and platform tutorials."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Does EdgeBreak provide financial advice?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "No. EdgeBreak provides stock scanning, research tools and educational resources only. It does not provide financial advice, investment recommendations, stock ratings, price targets or buy and sell signals."
-            }
-        }
-    ]
-}
-</script>
-
-<!-- ===================================
-WEBPAGE SCHEMA
-=================================== -->
-
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "@id": "https://www.edgebreak.ai/#webpage",
-    "url": "https://www.edgebreak.ai/",
-    "name": "NASDAQ Stock Scanner & AI Stock Research | EdgeBreak",
-    "description": "EdgeBreak is a professional NASDAQ stock scanner and AI stock research platform combining specialised scanners, Smart Money analysis, technical research and educational resources.",
-    "isPartOf": {
-        "@id": "https://www.edgebreak.ai/#website"
+      }
     },
-    "about": {
+
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/#webpage",
+
+      "url": "https://www.edgebreak.ai/",
+
+      "name": "NASDAQ Stock Scanner & AI Stock Research | EdgeBreak",
+
+      "description": "EdgeBreak combines professional NASDAQ stock scanning with AI-powered stock research and analysis, Smart Money research and structured market intelligence.",
+
+      "isPartOf": {
+        "@id": "https://www.edgebreak.ai/#website"
+      },
+
+      "about": {
         "@id": "https://www.edgebreak.ai/#software"
-    }
-}
-</script>
+      },
 
-<!-- ===================================
-BREADCRUMB SCHEMA
-=================================== -->
+      "publisher": {
+        "@id": "https://www.edgebreak.ai/#organization"
+      },
 
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          ".hero h1",
+          ".hero p"
+        ]
+      }
+    },
+
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.edgebreak.ai/#faq",
+
+      "mainEntity": [
+
         {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://www.edgebreak.ai/"
+          "@type": "Question",
+
+          "name": "What is EdgeBreak?",
+
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EdgeBreak is a NASDAQ stock research platform combining professional market scanners, Smart Money analysis, technical research tools and AI-powered stock research."
+          }
+        },
+
+        {
+          "@type": "Question",
+
+          "name": "What is the EdgeBreak NASDAQ Stock Scanner?",
+
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The EdgeBreak NASDAQ Stock Scanner searches more than 3,000 NASDAQ-listed stocks using research filters based on price action, volume, support and resistance, higher lows and market structure."
+          }
+        },
+
+        {
+          "@type": "Question",
+
+          "name": "What is EdgeBreak AI Research?",
+
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EdgeBreak AI Research is an integrated AI-powered stock research tool for investigating companies discovered through the EdgeBreak market scanners."
+          }
+        },
+
+        {
+          "@type": "Question",
+
+          "name": "What can EdgeBreak AI Research investigate?",
+
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EdgeBreak AI Research can investigate company information, financial highlights, market attention, recent news, institutional ownership and activity, and SEC filings."
+          }
+        },
+
+        {
+          "@type": "Question",
+
+          "name": "Does EdgeBreak combine stock scanning with AI stock research?",
+
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. EdgeBreak allows investors to discover NASDAQ stocks using specialised market scanners and then investigate the companies using integrated AI-powered stock research."
+          }
+        },
+
+        {
+          "@type": "Question",
+
+          "name": "What is the Smart Money Filter?",
+
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The EdgeBreak Smart Money Filter searches NASDAQ stocks for price and volume characteristics associated with accumulation and increasing market participation."
+          }
+        },
+
+        {
+          "@type": "Question",
+
+          "name": "What markets does EdgeBreak cover?",
+
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "EdgeBreak focuses on NASDAQ-listed stocks and applies its research framework across more than 3,000 companies."
+          }
+        },
+
+        {
+          "@type": "Question",
+
+          "name": "Does EdgeBreak provide financial advice?",
+
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. EdgeBreak provides stock scanning, research tools and educational resources only. It does not provide financial advice, investment recommendations, stock ratings, price targets or buy and sell signals."
+          }
         }
-    ]
+
+      ]
+    },
+
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/#breadcrumb",
+
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        }
+      ]
+    }
+
+  ]
 }
 </script>
   <!-- ===================================
@@ -1243,65 +1299,65 @@ LAUNCH PAD PREVIEW
 
 </div>
 
-<!-- =================================== 
-EDGEBREAK AI RESEARCH PREVIEW 
-=================================== --> 
- 
-<div style=" 
-    max-width:1000px; 
-    margin:100px auto; 
-    text-align:center; 
-"> 
- 
-    <div class="section-icon"> 
- 
-        <svg width="90" height="90" viewBox="0 0 24 24" 
-             fill="none" 
-             stroke="#22c55e" 
-             stroke-width="2" 
-             stroke-linecap="round" 
-             stroke-linejoin="round"> 
- 
-            <path d="M12 2v4"/> 
-            <path d="M12 18v4"/> 
-            <path d="M4.93 4.93l2.83 2.83"/> 
-            <path d="M16.24 16.24l2.83 2.83"/> 
-            <path d="M2 12h4"/> 
-            <path d="M18 12h4"/> 
-            <path d="M4.93 19.07l2.83-2.83"/> 
-            <path d="M16.24 7.76l2.83-2.83"/> 
-            <circle cx="12" cy="12" r="4"/> 
- 
-        </svg> 
- 
-    </div> 
- 
-    <h2> 
-        EdgeBreak AI Research 
-    </h2> 
- 
-    <p style=" 
-        color:#94a3b8; 
-        max-width:800px; 
-        margin:20px auto 30px auto; 
-        line-height:1.8; 
-    "> 
-        Take your stock research further with EdgeBreak AI Research. Select a stock discovered through the EdgeBreak scanners and investigate the company using AI-powered research covering company information, financial highlights, market attention, recent news, institutional activity and SEC filings — all within the EdgeBreak research workflow.
-    </p> 
- 
-    <img 
-        src="images/ai-research-preview.webp" 
-        alt="EdgeBreak AI Research for NASDAQ stocks" 
-        width="1400" 
-        height="800" 
-        loading="lazy" 
-        style=" 
-            width:100%; 
-            border-radius:12px; 
-            border:1px solid #1e293b; 
-        " 
-    > 
- 
+<!-- ===================================  
+EDGEBREAK AI RESEARCH PREVIEW  
+=================================== -->  
+  
+<div style="  
+    max-width:1000px;  
+    margin:100px auto;  
+    text-align:center;  
+">  
+  
+    <div class="section-icon">  
+  
+        <svg width="90" height="90" viewBox="0 0 24 24"  
+             fill="none"  
+             stroke="#22c55e"  
+             stroke-width="2"  
+             stroke-linecap="round"  
+             stroke-linejoin="round">  
+  
+            <path d="M12 2v4"/>  
+            <path d="M12 18v4"/>  
+            <path d="M4.93 4.93l2.83 2.83"/>  
+            <path d="M16.24 16.24l2.83 2.83"/>  
+            <path d="M2 12h4"/>  
+            <path d="M18 12h4"/>  
+            <path d="M4.93 19.07l2.83-2.83"/>  
+            <path d="M16.24 7.76l2.83-2.83"/>  
+            <circle cx="12" cy="12" r="4"/>  
+  
+        </svg>  
+  
+    </div>  
+  
+    <h2>  
+        AI Stock Research & Market Analysis  
+    </h2>  
+  
+    <p style="  
+        color:#94a3b8;  
+        max-width:800px;  
+        margin:20px auto 30px auto;  
+        line-height:1.8;  
+    ">  
+        Take your NASDAQ stock research further with EdgeBreak AI Research. Discover stocks through the EdgeBreak market scanners, then use our integrated AI stock research tool to investigate company information, financial highlights, market attention, recent news, institutional activity and SEC filings — all within one research platform.
+    </p>  
+  
+    <img  
+        src="images/ai-research-preview.webp"  
+        alt="EdgeBreak AI stock research and market analysis tool for NASDAQ stocks"  
+        width="1400"  
+        height="800"  
+        loading="lazy"  
+        style="  
+            width:100%;  
+            border-radius:12px;  
+            border:1px solid #1e293b;  
+        "  
+    >  
+  
 </div>
 
 <!-- ===================================
