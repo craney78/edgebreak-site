@@ -15423,20 +15423,15 @@ chartAIRemoveBtn?.addEventListener(
 
 
 /* =========================================
-ANALYSE — TEMPORARY
+ANALYSE CHART
 ========================================= */
 
 chartAIAnalyseBtn?.addEventListener(
     "click",
-    function() {
+    async function() {
 
         if (!chartAIImageFile) return;
 
-
-        /*
-        API CONNECTION COMES NEXT.
-        No OpenAI request is being made yet.
-        */
 
         if (!chartAIOptimisedImage) {
 
@@ -15448,19 +15443,156 @@ chartAIAnalyseBtn?.addEventListener(
         }
 
 
-        console.log(
-            "Optimised chart ready for AI:",
-            {
-                width:
-                    chartAIOptimisedImage.width,
+        /* =========================================
+        LOADING STATE
+        ========================================= */
 
-                height:
-                    chartAIOptimisedImage.height,
+        const originalButtonText =
+            chartAIAnalyseBtn.innerHTML;
 
-                dataLength:
-                    chartAIOptimisedImage.dataURL.length
+
+        chartAIAnalyseBtn.disabled = true;
+
+        chartAIAnalyseBtn.innerHTML =
+            "✦ Analysing Chart...";
+
+
+        try {
+
+            /* =========================================
+            SEND CHART TO API
+            ========================================= */
+
+            const response = await fetch(
+                "/api/chart-analysis",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        image:
+                            chartAIOptimisedImage.dataURL
+                    })
+                }
+            );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.error ||
+                    "Chart analysis failed."
+                );
+
             }
-        );
+
+
+            /* =========================================
+            POPULATE RESULTS
+            ========================================= */
+
+            document.getElementById(
+                "chartAIMarketStructure"
+            ).textContent =
+                data.marketStructure ||
+                "Not clearly visible in the supplied chart.";
+
+
+            document.getElementById(
+                "chartAIResistance"
+            ).textContent =
+                data.resistance ||
+                "Not clearly visible in the supplied chart.";
+
+
+            document.getElementById(
+                "chartAISupport"
+            ).textContent =
+                data.support ||
+                "Not clearly visible in the supplied chart.";
+
+
+            document.getElementById(
+                "chartAIVolume"
+            ).textContent =
+                data.volume ||
+                "Not clearly visible in the supplied chart.";
+
+
+            document.getElementById(
+                "chartAIBase"
+            ).textContent =
+                data.base ||
+                "Not clearly visible in the supplied chart.";
+
+
+            document.getElementById(
+                "chartAIBreakout"
+            ).textContent =
+                data.breakout ||
+                "Not clearly visible in the supplied chart.";
+
+
+            document.getElementById(
+                "chartAISummary"
+            ).textContent =
+                data.summary ||
+                "No chart summary was returned.";
+
+
+            /* =========================================
+            SHOW RESULTS
+            ========================================= */
+
+            const results =
+                document.getElementById(
+                    "chartAIResults"
+                );
+
+
+            results.hidden = false;
+
+
+            results.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+
+        }
+        catch (error) {
+
+            console.error(
+                "AI Chart Analysis Error:",
+                error
+            );
+
+
+            alert(
+                "Chart analysis is temporarily unavailable. Please try again."
+            );
+
+        }
+        finally {
+
+            /* =========================================
+            RESET BUTTON
+            ========================================= */
+
+            chartAIAnalyseBtn.disabled = false;
+
+            chartAIAnalyseBtn.innerHTML =
+                originalButtonText;
+
+        }
 
     }
 );
