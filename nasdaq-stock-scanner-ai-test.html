@@ -13649,7 +13649,7 @@ if (edgeAIFinancialsResearchBtn) {
 
 /* =========================================
    EDGEBREAK AI — INSTITUTIONAL ACTIVITY
-   ON-DEMAND RESEARCH
+   GEMINI ON-DEMAND RESEARCH
 ========================================= */
 
 async function loadEdgeBreakAIInstitutional(
@@ -13731,14 +13731,12 @@ async function loadEdgeBreakAIInstitutional(
 
     }
 
-
     if (period) {
 
         period.textContent =
             "Researching...";
 
     }
-
 
     if (concentration) {
 
@@ -13747,14 +13745,12 @@ async function loadEdgeBreakAIInstitutional(
 
     }
 
-
     if (summary) {
 
         summary.textContent =
             "Researching institutional ownership...";
 
     }
-
 
     if (holders) {
 
@@ -13765,7 +13761,6 @@ async function loadEdgeBreakAIInstitutional(
         `;
 
     }
-
 
     if (activity) {
 
@@ -13781,12 +13776,12 @@ async function loadEdgeBreakAIInstitutional(
     try {
 
         /* =================================
-           ONE API REQUEST
+           GEMINI API REQUEST
         ================================= */
 
         const response =
             await fetch(
-                "/api/ai-institutional",
+                "/api/ai-research-gem",
                 {
 
                     method: "POST",
@@ -13802,13 +13797,20 @@ async function loadEdgeBreakAIInstitutional(
                             symbol,
 
                         companyName:
-                            companyName
+                            companyName,
+
+                        researchType:
+                            "institutional_activity"
 
                     })
 
                 }
             );
 
+
+        /* =================================
+           READ RESPONSE
+        ================================= */
 
         const data =
             await response.json();
@@ -13909,7 +13911,7 @@ async function loadEdgeBreakAIInstitutional(
             ) {
 
                 institutional.majorHolders
-                    .forEach(holder => {
+                    .forEach(item => {
 
                         const row =
                             document.createElement(
@@ -13918,88 +13920,67 @@ async function loadEdgeBreakAIInstitutional(
 
 
                         row.className =
-                            "edge-ai-holder-item";
+                            "edge-ai-institutional-holder";
 
 
-                        const name =
+                        const institution =
                             document.createElement(
-                                "div"
+                                "strong"
                             );
 
 
-                        name.className =
-                            "edge-ai-holder-name";
+                        institution.textContent =
+                            item.institution ||
+                            "Institution not verified";
 
 
-                        name.textContent =
-                            holder.name ||
-                            "Not verified";
-
-
-                        const details =
+                        const description =
                             document.createElement(
-                                "div"
+                                "p"
                             );
 
 
-                        details.className =
-                            "edge-ai-holder-details";
-
-
-                        const detailParts = [];
+                        const parts = [];
 
 
                         if (
-                            holder.ownershipPercent &&
-                            holder.ownershipPercent !==
+                            item.ownership &&
+                            item.ownership !==
                                 "Not verified"
                         ) {
 
-                            detailParts.push(
-                                holder.ownershipPercent
+                            parts.push(
+                                item.ownership
                             );
 
                         }
 
 
                         if (
-                            holder.shares &&
-                            holder.shares !==
+                            item.reportingPeriod &&
+                            item.reportingPeriod !==
                                 "Not verified"
                         ) {
 
-                            detailParts.push(
-                                holder.shares
+                            parts.push(
+                                item.reportingPeriod
                             );
 
                         }
 
 
-                        if (
-                            holder.reportingPeriod &&
-                            holder.reportingPeriod !==
-                                "Not verified"
-                        ) {
-
-                            detailParts.push(
-                                holder.reportingPeriod
-                            );
-
-                        }
-
-
-                        details.textContent =
-                            detailParts.length
-                                ? detailParts.join(" · ")
+                        description.textContent =
+                            parts.length
+                                ? parts.join(" · ")
                                 : "Details not verified";
 
 
                         row.appendChild(
-                            name
+                            institution
                         );
 
                         row.appendChild(
-                            details
+                            description
                         );
 
 
@@ -14014,7 +13995,7 @@ async function loadEdgeBreakAIInstitutional(
 
                 holders.innerHTML = `
                     <div class="edge-ai-institutional-loading">
-                        No major holder data verified.
+                        No major institutional holders verified.
                     </div>
                 `;
 
@@ -14154,7 +14135,7 @@ async function loadEdgeBreakAIInstitutional(
     catch (error) {
 
         console.error(
-            "EdgeBreak Institutional:",
+            "EdgeBreak Gemini Institutional:",
             error
         );
 
@@ -14170,14 +14151,12 @@ async function loadEdgeBreakAIInstitutional(
 
         }
 
-
         if (period) {
 
             period.textContent =
                 "Not verified";
 
         }
-
 
         if (concentration) {
 
@@ -14186,14 +14165,12 @@ async function loadEdgeBreakAIInstitutional(
 
         }
 
-
         if (summary) {
 
             summary.textContent =
                 "Institutional research is currently unavailable.";
 
         }
-
 
         if (holders) {
 
@@ -14204,7 +14181,6 @@ async function loadEdgeBreakAIInstitutional(
             `;
 
         }
-
 
         if (activity) {
 
