@@ -13226,7 +13226,7 @@ if (edgeAIMarketAttentionResearchBtn) {
 
 /* =========================================
    EDGEBREAK AI — FINANCIAL HIGHLIGHTS
-   ON-DEMAND RESEARCH
+   GEMINI ON-DEMAND RESEARCH
 ========================================= */
 
 async function loadEdgeBreakAIFinancials(
@@ -13357,12 +13357,12 @@ async function loadEdgeBreakAIFinancials(
     try {
 
         /* =================================
-           ONE API REQUEST
+           GEMINI API REQUEST
         ================================= */
 
         const response =
             await fetch(
-                "/api/ai-financials",
+                "/api/ai-research-gem",
                 {
 
                     method: "POST",
@@ -13378,13 +13378,20 @@ async function loadEdgeBreakAIFinancials(
                             symbol,
 
                         companyName:
-                            companyName
+                            companyName,
+
+                        researchType:
+                            "financial_highlights"
 
                     })
 
                 }
             );
 
+
+        /* =================================
+           READ RESPONSE
+        ================================= */
 
         const data =
             await response.json();
@@ -13400,6 +13407,10 @@ async function loadEdgeBreakAIFinancials(
         }
 
 
+        /* =================================
+           FINANCIAL DATA
+        ================================= */
+
         const financials =
             data.financialHighlights;
 
@@ -13414,7 +13425,7 @@ async function loadEdgeBreakAIFinancials(
 
 
         /* =================================
-           DISPLAY RESULTS
+           DISPLAY — REVENUE
         ================================= */
 
         if (revenue) {
@@ -13426,6 +13437,10 @@ async function loadEdgeBreakAIFinancials(
         }
 
 
+        /* =================================
+           DISPLAY — REVENUE GROWTH
+        ================================= */
+
         if (revenueGrowth) {
 
             revenueGrowth.textContent =
@@ -13434,6 +13449,10 @@ async function loadEdgeBreakAIFinancials(
 
         }
 
+
+        /* =================================
+           DISPLAY — EPS
+        ================================= */
 
         if (eps) {
 
@@ -13444,6 +13463,10 @@ async function loadEdgeBreakAIFinancials(
         }
 
 
+        /* =================================
+           DISPLAY — GROSS MARGIN
+        ================================= */
+
         if (grossMargin) {
 
             grossMargin.textContent =
@@ -13452,6 +13475,10 @@ async function loadEdgeBreakAIFinancials(
 
         }
 
+
+        /* =================================
+           DISPLAY — CASH
+        ================================= */
 
         if (cash) {
 
@@ -13462,6 +13489,10 @@ async function loadEdgeBreakAIFinancials(
         }
 
 
+        /* =================================
+           DISPLAY — DEBT
+        ================================= */
+
         if (debt) {
 
             debt.textContent =
@@ -13471,6 +13502,10 @@ async function loadEdgeBreakAIFinancials(
         }
 
 
+        /* =================================
+           DISPLAY — FREE CASH FLOW
+        ================================= */
+
         if (freeCashFlow) {
 
             freeCashFlow.textContent =
@@ -13479,6 +13514,10 @@ async function loadEdgeBreakAIFinancials(
 
         }
 
+
+        /* =================================
+           DISPLAY — LATEST QUARTER
+        ================================= */
 
         if (latestQuarter) {
 
@@ -13510,7 +13549,7 @@ async function loadEdgeBreakAIFinancials(
     catch (error) {
 
         console.error(
-            "EdgeBreak Financial Highlights:",
+            "EdgeBreak Gemini Financial Highlights:",
             error
         );
 
@@ -13520,6 +13559,7 @@ async function loadEdgeBreakAIFinancials(
         ================================= */
 
         const fields = [
+
             revenue,
             revenueGrowth,
             eps,
@@ -13528,6 +13568,7 @@ async function loadEdgeBreakAIFinancials(
             debt,
             freeCashFlow,
             latestQuarter
+
         ];
 
 
