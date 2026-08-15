@@ -551,192 +551,288 @@ async function runGemini({
 
 }) {
 
-    const body = {
+    /* =====================================
+    INTERNAL REQUEST FUNCTION
+    ===================================== */
 
-        systemInstruction: {
+    async function makeRequest(tokenLimit) {
 
-            parts: [
-                {
-                    text:
-                        getSystemInstruction()
-                }
-            ]
+        const body = {
 
-        },
-
-
-        contents: [
-
-            {
-
-                role: "user",
+            systemInstruction: {
 
                 parts: [
-
                     {
                         text:
-                            prompt
+                            getSystemInstruction()
                     }
-
                 ]
+
+            },
+
+
+            contents: [
+
+                {
+
+                    role: "user",
+
+                    parts: [
+
+                        {
+                            text:
+                                prompt
+                        }
+
+                    ]
+
+                }
+
+            ],
+
+
+            generationConfig: {
+
+                maxOutputTokens:
+                    tokenLimit,
+
+                responseMimeType:
+                    "application/json",
+
+                responseJsonSchema:
+                    schema
 
             }
 
-        ],
+        };
 
 
-        generationConfig: {
+        /* =====================================
+        GOOGLE SEARCH GROUNDING
+        ===================================== */
 
-            maxOutputTokens:
-                maxOutputTokens,
+        if (useSearch) {
 
-            responseMimeType:
-                "application/json",
+            body.tools = [
 
-            responseJsonSchema:
-                schema
+                {
+                    googleSearch: {}
+                }
+
+            ];
 
         }
 
-    };
+
+        const response =
+            await fetch(
+
+                `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
+
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "x-goog-api-key":
+                            process.env.GEMINI_API_KEY
+
+                    },
+
+                    body:
+                        JSON.stringify(body)
+
+                }
+
+            );
 
 
-    /* =====================================
-    GOOGLE SEARCH GROUNDING
-    ===================================== */
+        const responseText =
+            await response.text();
 
-    if (useSearch) {
 
-        body.tools = [
+        let data;
 
-            {
-                googleSearch: {}
-            }
 
-        ];
+        try {
+
+            data =
+                JSON.parse(responseText);
+
+        }
+        catch {
+
+            console.error(
+                "Gemini returned non-JSON API response:",
+                responseText
+            );
+
+
+            throw new Error(
+                "Invalid Gemini API response"
+            );
+
+        }
+
+
+        if (!response.ok) {
+
+            console.error(
+                "Gemini Research API Error:",
+                response.status,
+                JSON.stringify(data)
+            );
+
+
+            throw new Error(
+                data?.error?.message ||
+                "Gemini research request failed"
+            );
+
+        }
+
+
+        /* =====================================
+        EXTRACT MODEL OUTPUT
+        ===================================== */
+
+        const candidate =
+            data?.candidates?.[0];
+
+
+        const rawText =
+            candidate
+                ?.content
+                ?.parts
+                ?.map(
+                    part =>
+                        part.text || ""
+                )
+                ?.join("")
+                ?.trim();
+
+
+        if (!rawText) {
+
+            console.error(
+                "Gemini returned no research:",
+                JSON.stringify(data)
+            );
+
+
+            throw new Error(
+                "No Gemini research returned"
+            );
+
+        }
+
+
+        return {
+
+            rawText,
+
+            finishReason:
+                candidate?.finishReason || "",
+
+            data
+
+        };
 
     }
 
 
-    const response =
-        await fetch(
+    /* =====================================
+    FIRST REQUEST
+    ===================================== */
 
-            `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
+    const firstTokenLimit =
+        maxOutputTokens || 2048;
 
-            {
 
-                method: "POST",
-
-                headers: {
-
-                    "Content-Type":
-                        "application/json",
-
-                    "x-goog-api-key":
-                        process.env.GEMINI_API_KEY
-
-                },
-
-                body:
-                    JSON.stringify(body)
-
-            }
-
+    let result =
+        await makeRequest(
+            firstTokenLimit
         );
 
 
-    const responseText =
-        await response.text();
-
-
-    let data;
-
+    /* =====================================
+    PARSE FIRST RESPONSE
+    ===================================== */
 
     try {
 
-        data =
-            JSON.parse(responseText);
-
-    }
-    catch {
-
-        console.error(
-            "Gemini returned non-JSON API response:",
-            responseText
-        );
-
-
-        throw new Error(
-            "Invalid Gemini API response"
+        return JSON.parse(
+            result.rawText
         );
 
     }
+    catch (error) {
 
-
-    if (!response.ok) {
-
-        console.error(
-            "Gemini Research API Error:",
-            response.status,
-            JSON.stringify(data)
-        );
-
-
-        throw new Error(
-            data?.error?.message ||
-            "Gemini research request failed"
+        console.warn(
+            "Gemini structured output could not be parsed.",
+            "Finish reason:",
+            result.finishReason,
+            "Token limit:",
+            firstTokenLimit
         );
 
     }
 
 
     /* =====================================
-    EXTRACT MODEL OUTPUT
+    RETRY WITH LARGER OUTPUT LIMIT
     ===================================== */
 
-    const rawText =
-        data
-            ?.candidates?.[0]
-            ?.content
-            ?.parts
-            ?.map(
-                part =>
-                    part.text || ""
-            )
-            ?.join("")
-            ?.trim();
-
-
-    if (!rawText) {
-
-        console.error(
-            "Gemini returned no research:",
-            JSON.stringify(data)
+    const retryTokenLimit =
+        Math.max(
+            firstTokenLimit * 2,
+            4096
         );
 
 
-        throw new Error(
-            "No Gemini research returned"
-        );
+    console.warn(
+        `Retrying Gemini structured output with ${retryTokenLimit} tokens.`
+    );
 
-    }
+
+    result =
+        await makeRequest(
+            retryTokenLimit
+        );
 
 
     /* =====================================
-    PARSE STRUCTURED OUTPUT
+    PARSE RETRY RESPONSE
     ===================================== */
 
     try {
 
-        return JSON.parse(rawText);
+        return JSON.parse(
+            result.rawText
+        );
 
     }
     catch (error) {
 
         console.error(
             "Gemini Research JSON Parse Error:",
-            error,
-            rawText
+            error
+        );
+
+
+        console.error(
+            "Gemini finish reason:",
+            result.finishReason
+        );
+
+
+        console.error(
+            "Gemini raw output:",
+            result.rawText
         );
 
 
