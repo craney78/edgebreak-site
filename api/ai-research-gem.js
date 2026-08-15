@@ -590,19 +590,11 @@ async function runGemini({
             maxOutputTokens:
                 maxOutputTokens,
 
-            responseFormat: {
+            responseMimeType:
+                "application/json",
 
-                text: {
-
-                    mimeType:
-                        "application/json",
-
-                    schema:
-                        schema
-
-                }
-
-            }
+            responseJsonSchema:
+                schema
 
         }
 
