@@ -12232,30 +12232,30 @@ async function loadEdgeBreakAICompanyOverview(
            API REQUEST
         ================================= */
 
-        const response =
-            await fetch(
-                "/api/ai-company-overview",
-                {
+        const response = await fetch(
+            "/api/ai-research-gem",
+            {
+                method: "POST",
 
-                    method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
+                body: JSON.stringify({
 
-                    body: JSON.stringify({
+                    symbol:
+                        symbol,
 
-                        symbol:
-                            symbol,
+                    companyName:
+                        companyName,
 
-                        companyName:
-                            companyName
+                    researchType:
+                        "company_overview"
 
-                    })
+                })
 
-                }
-            );
+            }
+        );
 
 
         const data =
