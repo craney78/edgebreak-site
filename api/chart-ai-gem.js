@@ -21,11 +21,12 @@ export default async function handler(req, res) {
     try {
 
         /* =====================================
-        API KEY
+        GEMINI API KEY
         ===================================== */
 
         const apiKey =
             process.env.GEMINI_API_KEY;
+
 
         if (!apiKey) {
 
@@ -45,9 +46,8 @@ export default async function handler(req, res) {
         GET IMAGE
         ===================================== */
 
-        const {
-            image
-        } = req.body || {};
+        const { image } =
+            req.body || {};
 
 
         if (
@@ -64,12 +64,13 @@ export default async function handler(req, res) {
 
 
         /* =====================================
-        VALIDATE DATA URL
+        VALIDATE IMAGE DATA URL
         ===================================== */
 
-        const match = image.match(
-            /^data:(image\/(?:png|jpeg|webp));base64,(.+)$/
-        );
+        const match =
+            image.match(
+                /^data:(image\/(?:png|jpeg|webp));base64,(.+)$/
+            );
 
 
         if (!match) {
@@ -82,12 +83,15 @@ export default async function handler(req, res) {
         }
 
 
-        const mimeType = match[1];
-        const base64Image = match[2];
+        const mimeType =
+            match[1];
+
+        const base64Image =
+            match[2];
 
 
         /* =====================================
-        BASIC SIZE PROTECTION
+        IMAGE SIZE PROTECTION
         ===================================== */
 
         const approximateBytes =
@@ -114,93 +118,208 @@ export default async function handler(req, res) {
 
 
         /* =====================================
-        FIXED ANALYSIS INSTRUCTIONS
-
-        User cannot alter these instructions.
+        SYSTEM INSTRUCTION
         ===================================== */
 
         const systemInstruction = `
 
-You are a chart observation system.
+You analyse stock chart images.
 
-Analyse ONLY the visible information contained in the supplied stock chart image.
+Your task is to describe ONLY the technical characteristics
+that are reasonably visible in the supplied chart.
 
-Your task is descriptive technical analysis only.
-
-Focus on:
-
-- visible price trend
-- market structure
-- support areas
-- resistance areas
-- consolidation or base structure
-- higher lows or lower highs
-- breakout or breakdown behaviour already visible
-- visible volume behaviour
-- unusual recent price movement
+This is descriptive market research only.
 
 Do not provide investment advice.
 
-Do not tell the user to buy, sell, hold, enter, exit, avoid, accumulate or reduce a position.
+Do not recommend buying, selling or holding a security.
 
-Do not recommend any trading action.
+Do not tell the user whether they should enter, exit,
+avoid or trade a security.
+
+Do not generate trading signals.
+
+Do not provide stock scores or setup ratings.
 
 Do not provide price targets.
 
-Do not predict future prices.
+Do not estimate expected returns.
 
-Do not estimate future returns.
+Do not predict future price movement.
 
-Do not state that the stock will rise, fall, rally, crash, explode, moon, outperform or underperform.
-
-Do not assign ratings, scores or recommendations.
+Do not predict whether a breakout will succeed or fail.
 
 Do not describe the stock as a good or bad investment.
 
-Do not infer company fundamentals, news, sentiment, valuation or financial information from the chart.
+Do not use promotional language such as:
 
-Do not claim certainty.
+strong buy
+strong sell
+buy opportunity
+sell opportunity
+winning stock
+high probability trade
+guaranteed breakout
+likely winner
+going to the moon
 
-If something cannot reasonably be determined from the visible chart, say that it is not clear from the chart.
+Do not infer company fundamentals, news, valuation,
+financial results, sentiment or institutional activity.
 
-Use neutral observational language.
+Analyse only what can reasonably be observed in the chart.
 
-Keep the analysis concise.
+If something cannot clearly be determined from the image,
+say:
 
-Return valid JSON only.
+"Not clearly visible in the supplied chart."
 
-`;
+Use neutral, factual language.
 
+Keep every section concise.
 
-        const userInstruction = `
-
-Inspect this stock chart.
-
-Return a concise technical description of what is visibly happening.
-
-Use this exact JSON structure:
-
-{
-    "trend": "",
-    "structure": "",
-    "support": "",
-    "resistance": "",
-    "volume": "",
-    "recentAction": "",
-    "summary": ""
-}
-
-Each field should normally contain one short sentence.
-
-The summary should be approximately 1 to 3 short sentences.
-
-Do not include markdown.
+Return JSON only.
 
 `;
 
 
         /* =====================================
-        GEMINI REQUEST
+        CHART ANALYSIS INSTRUCTION
+        ===================================== */
+
+        const userInstruction = `
+
+Analyse the supplied stock chart.
+
+Return exactly these seven fields:
+
+{
+    "marketStructure": "",
+    "resistance": "",
+    "support": "",
+    "volume": "",
+    "base": "",
+    "breakout": "",
+    "summary": ""
+}
+
+
+MARKET STRUCTURE
+
+Describe the dominant visible structure.
+
+Consider:
+
+- uptrend
+- downtrend
+- sideways movement
+- consolidation
+- compression
+- higher lows
+- lower highs
+- changes in recent structure
+
+
+RESISTANCE
+
+Describe visible resistance areas and repeated resistance tests.
+
+Only mention approximate price areas when they are clearly
+readable from the chart.
+
+Do not invent exact levels.
+
+
+SUPPORT
+
+Describe visible support and price structure.
+
+Consider:
+
+- repeated support
+- higher lows
+- lower lows
+- previous resistance acting as support
+
+Only describe what is reasonably visible.
+
+
+VOLUME
+
+Describe visible volume behaviour.
+
+Consider:
+
+- contraction
+- expansion
+- notable volume spikes
+- increased volume accompanying recent movement
+- relatively stable volume
+
+If volume is not visible, state that clearly.
+
+
+BASE
+
+Describe any visible base, consolidation or trading range.
+
+Mention approximate duration only when reasonably visible
+from the chart.
+
+
+BREAKOUT
+
+Describe the CURRENT relationship between price and visible
+resistance.
+
+For example:
+
+- below resistance
+- testing resistance
+- moving through resistance
+- trading above previous resistance
+- returned below previous resistance
+- no clear breakout structure visible
+
+Describe only what has already occurred.
+
+Do not predict what will happen next.
+
+
+SUMMARY
+
+Give a very short plain-English description of the most
+important technical characteristics visible in the chart.
+
+Use approximately one or two short sentences.
+
+The summary should sound natural and useful rather than
+generic.
+
+It may describe whether the chart currently shows:
+
+- quiet or limited price movement
+- developing compression
+- an established trend
+- an active resistance test
+- an unusually large recent move
+- significant volume expansion
+- a change in recent market structure
+
+But it must remain observational.
+
+Do not tell the user whether the stock is attractive.
+
+Do not tell the user whether they should trade it.
+
+Do not predict its future performance.
+
+Return JSON only.
+
+`;
+
+
+        /* =====================================
+        SEND TO GEMINI
         ===================================== */
 
         const geminiResponse =
@@ -235,6 +354,7 @@ Do not include markdown.
 
                         },
 
+
                         contents: [
 
                             {
@@ -268,6 +388,7 @@ Do not include markdown.
 
                         ],
 
+
                         generationConfig: {
 
                             maxOutputTokens: 650,
@@ -285,7 +406,7 @@ Do not include markdown.
 
 
         /* =====================================
-        GEMINI ERROR
+        GEMINI API ERROR
         ===================================== */
 
         if (!geminiResponse.ok) {
@@ -293,11 +414,13 @@ Do not include markdown.
             const errorText =
                 await geminiResponse.text();
 
+
             console.error(
                 "Gemini Chart Analysis Error:",
                 geminiResponse.status,
                 errorText
             );
+
 
             return res.status(500).json({
                 error:
@@ -312,7 +435,7 @@ Do not include markdown.
 
 
         /* =====================================
-        EXTRACT RESPONSE
+        EXTRACT GEMINI TEXT
         ===================================== */
 
         const rawText =
@@ -320,7 +443,10 @@ Do not include markdown.
                 ?.candidates?.[0]
                 ?.content
                 ?.parts
-                ?.map(part => part.text || "")
+                ?.map(
+                    part =>
+                        part.text || ""
+                )
                 ?.join("")
                 ?.trim();
 
@@ -328,9 +454,12 @@ Do not include markdown.
         if (!rawText) {
 
             console.error(
-                "Gemini returned no chart analysis.",
-                geminiData
+                "Gemini returned no chart analysis:",
+                JSON.stringify(
+                    geminiData
+                )
             );
+
 
             return res.status(500).json({
                 error:
@@ -353,13 +482,14 @@ Do not include markdown.
                 JSON.parse(rawText);
 
         }
-        catch (parseError) {
+        catch (error) {
 
             console.error(
                 "Gemini JSON Parse Error:",
-                parseError,
+                error,
                 rawText
             );
+
 
             return res.status(500).json({
                 error:
@@ -370,24 +500,14 @@ Do not include markdown.
 
 
         /* =====================================
-        EXPECTED FIELDS ONLY
+        CLEAN EXPECTED FIELDS
         ===================================== */
 
         const cleanAnalysis = {
 
-            trend:
+            marketStructure:
                 cleanField(
-                    analysis.trend
-                ),
-
-            structure:
-                cleanField(
-                    analysis.structure
-                ),
-
-            support:
-                cleanField(
-                    analysis.support
+                    analysis.marketStructure
                 ),
 
             resistance:
@@ -395,14 +515,24 @@ Do not include markdown.
                     analysis.resistance
                 ),
 
+            support:
+                cleanField(
+                    analysis.support
+                ),
+
             volume:
                 cleanField(
                     analysis.volume
                 ),
 
-            recentAction:
+            base:
                 cleanField(
-                    analysis.recentAction
+                    analysis.base
+                ),
+
+            breakout:
+                cleanField(
+                    analysis.breakout
                 ),
 
             summary:
@@ -414,14 +544,38 @@ Do not include markdown.
 
 
         /* =====================================
-        SERVER-SIDE SAFETY CHECK
+        MAKE SURE FIELDS EXIST
+        ===================================== */
+
+        const fallback =
+            "Not clearly visible in the supplied chart.";
+
+
+        for (
+            const key of
+            Object.keys(cleanAnalysis)
+        ) {
+
+            if (!cleanAnalysis[key]) {
+
+                cleanAnalysis[key] =
+                    key === "summary"
+                        ? "No clear chart summary could be determined."
+                        : fallback;
+
+            }
+
+        }
+
+
+        /* =====================================
+        SERVER-SIDE SAFETY FILTER
         ===================================== */
 
         const combinedText =
             Object
                 .values(cleanAnalysis)
-                .join(" ")
-                .toLowerCase();
+                .join(" ");
 
 
         const prohibitedPatterns = [
@@ -430,17 +584,19 @@ Do not include markdown.
 
             /\bstrong sell\b/i,
 
-            /\bbuy this\b/i,
-
-            /\bsell this\b/i,
-
             /\byou should buy\b/i,
 
             /\byou should sell\b/i,
 
-            /\brecommend buying\b/i,
+            /\byou should hold\b/i,
 
-            /\brecommend selling\b/i,
+            /\brecommend(?:s|ed|ing)? buying\b/i,
+
+            /\brecommend(?:s|ed|ing)? selling\b/i,
+
+            /\bbuy opportunity\b/i,
+
+            /\bsell opportunity\b/i,
 
             /\bprice target\b/i,
 
@@ -454,7 +610,13 @@ Do not include markdown.
 
             /\bshould enter\b/i,
 
-            /\bshould exit\b/i
+            /\bshould exit\b/i,
+
+            /\bwinning stock\b/i,
+
+            /\bhigh probability trade\b/i,
+
+            /\bgoing to the moon\b/i
 
         ];
 
@@ -471,8 +633,9 @@ Do not include markdown.
         if (unsafe) {
 
             console.error(
-                "Gemini response blocked by chart safety filter."
+                "Gemini chart response blocked by safety filter."
             );
+
 
             return res.status(422).json({
                 error:
@@ -484,19 +647,34 @@ Do not include markdown.
 
         /* =====================================
         SUCCESS
+
+        IMPORTANT:
+        Return fields at TOP LEVEL because this
+        matches the existing frontend.
         ===================================== */
 
         return res.status(200).json({
 
-            success: true,
+            marketStructure:
+                cleanAnalysis.marketStructure,
 
-            provider: "gemini",
+            resistance:
+                cleanAnalysis.resistance,
 
-            model:
-                "gemini-3.6-flash",
+            support:
+                cleanAnalysis.support,
 
-            analysis:
-                cleanAnalysis
+            volume:
+                cleanAnalysis.volume,
+
+            base:
+                cleanAnalysis.base,
+
+            breakout:
+                cleanAnalysis.breakout,
+
+            summary:
+                cleanAnalysis.summary
 
         });
 
@@ -523,7 +701,7 @@ Do not include markdown.
 
 
 /* =========================================
-CLEAN OUTPUT FIELD
+CLEAN OUTPUT
 ========================================= */
 
 function cleanField(value) {
@@ -540,6 +718,6 @@ function cleanField(value) {
     return value
         .replace(/\s+/g, " ")
         .trim()
-        .slice(0, 900);
+        .slice(0, 800);
 
 }
