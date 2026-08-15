@@ -151,6 +151,12 @@ Do not predict whether a breakout will succeed or fail.
 
 Do not describe the stock as a good or bad investment.
 
+Do not claim that volume confirms, validates, supports,
+proves or causes a breakout or price movement.
+
+When discussing price and volume together, describe them
+only as observable events occurring alongside each other.
+
 Do not use promotional language such as:
 
 strong buy
@@ -245,15 +251,26 @@ Only describe what is reasonably visible.
 
 VOLUME
 
-Describe visible volume behaviour.
+Describe only the visible volume behaviour.
 
 Consider:
 
-- contraction
-- expansion
+- volume contraction
+- volume expansion
 - notable volume spikes
-- increased volume accompanying recent movement
+- changes in volume occurring alongside recent price movement
 - relatively stable volume
+
+Describe price and volume only as observations occurring
+alongside each other.
+
+Do not state or imply that volume caused, supported,
+confirmed, validated or proves a price movement or breakout.
+
+Prefer neutral wording such as:
+
+"Volume expansion is visible alongside the recent upward
+price movement."
 
 If volume is not visible, state that clearly.
 
@@ -305,7 +322,13 @@ It may describe whether the chart currently shows:
 - significant volume expansion
 - a change in recent market structure
 
-But it must remain observational.
+If price and volume are discussed together, describe only
+what is visibly occurring.
+
+Do not say that volume confirms, validates, supports,
+proves or causes a price movement or breakout.
+
+But the summary must remain observational.
 
 Do not tell the user whether the stock is attractive.
 
@@ -647,10 +670,6 @@ Return JSON only.
 
         /* =====================================
         SUCCESS
-
-        IMPORTANT:
-        Return fields at TOP LEVEL because this
-        matches the existing frontend.
         ===================================== */
 
         return res.status(200).json({
