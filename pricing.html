@@ -780,6 +780,62 @@ STRUCTURED DATA
     }
 
 }
+
+/* ===================================
+   TRIAL CONSENT
+=================================== */
+
+.trial-consent{
+
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+
+    margin:0 0 14px;
+
+    text-align:left;
+
+    color:#cbd5e1;
+
+    font-size:13px;
+    line-height:1.5;
+
+}
+
+.trial-consent input{
+
+    width:17px;
+    height:17px;
+
+    margin-top:2px;
+
+    flex-shrink:0;
+
+    accent-color:#22c55e;
+
+    cursor:pointer;
+
+}
+
+.trial-consent label{
+
+    cursor:pointer;
+
+}
+
+.trial-consent a{
+
+    color:#22c55e;
+
+    text-decoration:none;
+
+}
+
+.trial-consent a:hover{
+
+    text-decoration:underline;
+
+}
 </style>
 </head>
 
@@ -1656,6 +1712,47 @@ FREE TRIAL ELIGIBILITY POPUP
             autocomplete="email"
         >
 
+        <div class="trial-consent">
+
+            <input
+                type="checkbox"
+                id="trialAgeConfirm"
+            >
+
+            <label for="trialAgeConfirm">
+                I confirm that I am 18 years of age or older.
+            </label>
+
+        </div>
+
+        <div class="trial-consent">
+
+            <input
+                type="checkbox"
+                id="trialTermsConfirm"
+            >
+
+            <label for="trialTermsConfirm">
+                I agree to the
+                <a
+                    href="/terms.html"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    Terms of Service
+                </a>
+                and
+                <a
+                    href="/privacy.html"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    Privacy Policy
+                </a>.
+            </label>
+
+        </div>
+
         <div
             id="trialMessage"
             class="modal-message"
@@ -1696,7 +1793,15 @@ const trialMessage =
 const trialContinue =
     document.getElementById("trialContinue");
 
+const trialAgeConfirm =
+    document.getElementById(
+        "trialAgeConfirm"
+    );
 
+const trialTermsConfirm =
+    document.getElementById(
+        "trialTermsConfirm"
+    );
 // =========================
 // OPEN POPUP
 // =========================
@@ -1710,6 +1815,9 @@ startTrialButtons.forEach(button => {
         trialModal.classList.add("show");
 
         trialMessage.textContent = "";
+
+        trialAgeConfirm.checked = false;
+        trialTermsConfirm.checked = false;
 
         trialEmail.focus();
 
@@ -1770,6 +1878,41 @@ trialContinue.addEventListener("click", async function(){
 
         trialMessage.textContent =
             "Please enter a valid email address.";
+
+        return;
+
+    }
+
+    // =========================
+    // AGE + TERMS CONFIRMATION
+    // =========================
+
+    if (
+        !trialAgeConfirm.checked ||
+        !trialTermsConfirm.checked
+    ) {
+
+        if (
+            !trialAgeConfirm.checked &&
+            !trialTermsConfirm.checked
+        ) {
+
+            trialMessage.textContent =
+                "Please confirm that you are 18 or older and accept the Terms of Service and Privacy Policy to continue.";
+
+        }
+        else if (!trialAgeConfirm.checked) {
+
+            trialMessage.textContent =
+                "Please confirm that you are 18 years of age or older to continue.";
+
+        }
+        else {
+
+            trialMessage.textContent =
+                "Please accept the Terms of Service and Privacy Policy to continue.";
+
+        }
 
         return;
 
