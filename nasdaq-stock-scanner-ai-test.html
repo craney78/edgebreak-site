@@ -12483,9 +12483,8 @@ if (edgeAICompanyResearchBtn) {
 }
 
 /* =========================================
-   EDGEBREAK AI
-   MARKET ATTENTION + RECENT NEWS
-   ON-DEMAND RESEARCH
+   EDGEBREAK AI — MARKET ATTENTION + RECENT NEWS
+   GEMINI ON-DEMAND RESEARCH
 ========================================= */
 
 async function loadEdgeBreakAIMarketAttention(
@@ -12689,12 +12688,12 @@ async function loadEdgeBreakAIMarketAttention(
     try {
 
         /* =================================
-           ONE COMBINED API REQUEST
+           GEMINI COMBINED API REQUEST
         ================================= */
 
         const response =
             await fetch(
-                "/api/ai-market-attention",
+                "/api/ai-research-gem",
                 {
 
                     method: "POST",
@@ -12710,7 +12709,10 @@ async function loadEdgeBreakAIMarketAttention(
                             symbol,
 
                         companyName:
-                            companyName
+                            companyName,
+
+                        researchType:
+                            "market_attention_news"
 
                     })
 
@@ -13031,10 +13033,6 @@ async function loadEdgeBreakAIMarketAttention(
         }
         else {
 
-            /* =============================
-               NEWS NOT RETURNED
-            ============================= */
-
             if (newsLevel) {
 
                 newsLevel.textContent =
@@ -13090,13 +13088,13 @@ async function loadEdgeBreakAIMarketAttention(
     catch (error) {
 
         console.error(
-            "EdgeBreak Market Attention & News:",
+            "EdgeBreak Gemini Market Attention & News:",
             error
         );
 
 
         /* =================================
-           MARKET ERROR STATE
+           ERROR STATE
         ================================= */
 
         const fields = [
