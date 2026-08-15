@@ -11723,30 +11723,30 @@ async function loadEdgeBreakAICompanyOverview(
            API REQUEST
         ================================= */
 
-        const response =
-            await fetch(
-                "/api/ai-company-overview",
-                {
+        const response = await fetch(
+            "/api/ai-research-gem",
+            {
+                method: "POST",
 
-                    method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
+                body: JSON.stringify({
 
-                    body: JSON.stringify({
+                    symbol:
+                        symbol,
 
-                        symbol:
-                            symbol,
+                    companyName:
+                        companyName,
 
-                        companyName:
-                            companyName
+                    researchType:
+                        "company_overview"
 
-                    })
+                })
 
-                }
-            );
+            }
+        );
 
 
         const data =
@@ -11974,9 +11974,8 @@ if (edgeAICompanyResearchBtn) {
 }
 
 /* =========================================
-   EDGEBREAK AI
-   MARKET ATTENTION + RECENT NEWS
-   ON-DEMAND RESEARCH
+   EDGEBREAK AI — MARKET ATTENTION + RECENT NEWS
+   GEMINI ON-DEMAND RESEARCH
 ========================================= */
 
 async function loadEdgeBreakAIMarketAttention(
@@ -12180,12 +12179,12 @@ async function loadEdgeBreakAIMarketAttention(
     try {
 
         /* =================================
-           ONE COMBINED API REQUEST
+           GEMINI COMBINED API REQUEST
         ================================= */
 
         const response =
             await fetch(
-                "/api/ai-market-attention",
+                "/api/ai-research-gem",
                 {
 
                     method: "POST",
@@ -12201,7 +12200,10 @@ async function loadEdgeBreakAIMarketAttention(
                             symbol,
 
                         companyName:
-                            companyName
+                            companyName,
+
+                        researchType:
+                            "market_attention_news"
 
                     })
 
@@ -12522,10 +12524,6 @@ async function loadEdgeBreakAIMarketAttention(
         }
         else {
 
-            /* =============================
-               NEWS NOT RETURNED
-            ============================= */
-
             if (newsLevel) {
 
                 newsLevel.textContent =
@@ -12581,13 +12579,13 @@ async function loadEdgeBreakAIMarketAttention(
     catch (error) {
 
         console.error(
-            "EdgeBreak Market Attention & News:",
+            "EdgeBreak Gemini Market Attention & News:",
             error
         );
 
 
         /* =================================
-           MARKET ERROR STATE
+           ERROR STATE
         ================================= */
 
         const fields = [
@@ -12717,7 +12715,7 @@ if (edgeAIMarketAttentionResearchBtn) {
 
 /* =========================================
    EDGEBREAK AI — FINANCIAL HIGHLIGHTS
-   ON-DEMAND RESEARCH
+   GEMINI ON-DEMAND RESEARCH
 ========================================= */
 
 async function loadEdgeBreakAIFinancials(
@@ -12848,12 +12846,12 @@ async function loadEdgeBreakAIFinancials(
     try {
 
         /* =================================
-           ONE API REQUEST
+           GEMINI API REQUEST
         ================================= */
 
         const response =
             await fetch(
-                "/api/ai-financials",
+                "/api/ai-research-gem",
                 {
 
                     method: "POST",
@@ -12869,13 +12867,20 @@ async function loadEdgeBreakAIFinancials(
                             symbol,
 
                         companyName:
-                            companyName
+                            companyName,
+
+                        researchType:
+                            "financials"
 
                     })
 
                 }
             );
 
+
+        /* =================================
+           READ RESPONSE
+        ================================= */
 
         const data =
             await response.json();
@@ -12891,6 +12896,10 @@ async function loadEdgeBreakAIFinancials(
         }
 
 
+        /* =================================
+           FINANCIAL DATA
+        ================================= */
+
         const financials =
             data.financialHighlights;
 
@@ -12905,7 +12914,7 @@ async function loadEdgeBreakAIFinancials(
 
 
         /* =================================
-           DISPLAY RESULTS
+           DISPLAY — REVENUE
         ================================= */
 
         if (revenue) {
@@ -12917,6 +12926,10 @@ async function loadEdgeBreakAIFinancials(
         }
 
 
+        /* =================================
+           DISPLAY — REVENUE GROWTH
+        ================================= */
+
         if (revenueGrowth) {
 
             revenueGrowth.textContent =
@@ -12925,6 +12938,10 @@ async function loadEdgeBreakAIFinancials(
 
         }
 
+
+        /* =================================
+           DISPLAY — EPS
+        ================================= */
 
         if (eps) {
 
@@ -12935,6 +12952,10 @@ async function loadEdgeBreakAIFinancials(
         }
 
 
+        /* =================================
+           DISPLAY — GROSS MARGIN
+        ================================= */
+
         if (grossMargin) {
 
             grossMargin.textContent =
@@ -12943,6 +12964,10 @@ async function loadEdgeBreakAIFinancials(
 
         }
 
+
+        /* =================================
+           DISPLAY — CASH
+        ================================= */
 
         if (cash) {
 
@@ -12953,6 +12978,10 @@ async function loadEdgeBreakAIFinancials(
         }
 
 
+        /* =================================
+           DISPLAY — DEBT
+        ================================= */
+
         if (debt) {
 
             debt.textContent =
@@ -12962,6 +12991,10 @@ async function loadEdgeBreakAIFinancials(
         }
 
 
+        /* =================================
+           DISPLAY — FREE CASH FLOW
+        ================================= */
+
         if (freeCashFlow) {
 
             freeCashFlow.textContent =
@@ -12970,6 +13003,10 @@ async function loadEdgeBreakAIFinancials(
 
         }
 
+
+        /* =================================
+           DISPLAY — LATEST QUARTER
+        ================================= */
 
         if (latestQuarter) {
 
@@ -13001,7 +13038,7 @@ async function loadEdgeBreakAIFinancials(
     catch (error) {
 
         console.error(
-            "EdgeBreak Financial Highlights:",
+            "EdgeBreak Gemini Financial Highlights:",
             error
         );
 
@@ -13011,6 +13048,7 @@ async function loadEdgeBreakAIFinancials(
         ================================= */
 
         const fields = [
+
             revenue,
             revenueGrowth,
             eps,
@@ -13019,6 +13057,7 @@ async function loadEdgeBreakAIFinancials(
             debt,
             freeCashFlow,
             latestQuarter
+
         ];
 
 
@@ -13101,7 +13140,7 @@ if (edgeAIFinancialsResearchBtn) {
 
 /* =========================================
    EDGEBREAK AI — INSTITUTIONAL ACTIVITY
-   ON-DEMAND RESEARCH
+   GEMINI ON-DEMAND RESEARCH
 ========================================= */
 
 async function loadEdgeBreakAIInstitutional(
@@ -13183,14 +13222,12 @@ async function loadEdgeBreakAIInstitutional(
 
     }
 
-
     if (period) {
 
         period.textContent =
             "Researching...";
 
     }
-
 
     if (concentration) {
 
@@ -13199,14 +13236,12 @@ async function loadEdgeBreakAIInstitutional(
 
     }
 
-
     if (summary) {
 
         summary.textContent =
             "Researching institutional ownership...";
 
     }
-
 
     if (holders) {
 
@@ -13217,7 +13252,6 @@ async function loadEdgeBreakAIInstitutional(
         `;
 
     }
-
 
     if (activity) {
 
@@ -13233,12 +13267,12 @@ async function loadEdgeBreakAIInstitutional(
     try {
 
         /* =================================
-           ONE API REQUEST
+           GEMINI API REQUEST
         ================================= */
 
         const response =
             await fetch(
-                "/api/ai-institutional",
+                "/api/ai-research-gem",
                 {
 
                     method: "POST",
@@ -13254,13 +13288,20 @@ async function loadEdgeBreakAIInstitutional(
                             symbol,
 
                         companyName:
-                            companyName
+                            companyName,
+
+                        researchType:
+                            "institutional_activity"
 
                     })
 
                 }
             );
 
+
+        /* =================================
+           READ RESPONSE
+        ================================= */
 
         const data =
             await response.json();
@@ -13361,7 +13402,7 @@ async function loadEdgeBreakAIInstitutional(
             ) {
 
                 institutional.majorHolders
-                    .forEach(holder => {
+                    .forEach(item => {
 
                         const row =
                             document.createElement(
@@ -13370,88 +13411,67 @@ async function loadEdgeBreakAIInstitutional(
 
 
                         row.className =
-                            "edge-ai-holder-item";
+                            "edge-ai-institutional-holder";
 
 
-                        const name =
+                        const institution =
                             document.createElement(
-                                "div"
+                                "strong"
                             );
 
 
-                        name.className =
-                            "edge-ai-holder-name";
+                        institution.textContent =
+                            item.institution ||
+                            "Institution not verified";
 
 
-                        name.textContent =
-                            holder.name ||
-                            "Not verified";
-
-
-                        const details =
+                        const description =
                             document.createElement(
-                                "div"
+                                "p"
                             );
 
 
-                        details.className =
-                            "edge-ai-holder-details";
-
-
-                        const detailParts = [];
+                        const parts = [];
 
 
                         if (
-                            holder.ownershipPercent &&
-                            holder.ownershipPercent !==
+                            item.ownership &&
+                            item.ownership !==
                                 "Not verified"
                         ) {
 
-                            detailParts.push(
-                                holder.ownershipPercent
+                            parts.push(
+                                item.ownership
                             );
 
                         }
 
 
                         if (
-                            holder.shares &&
-                            holder.shares !==
+                            item.reportingPeriod &&
+                            item.reportingPeriod !==
                                 "Not verified"
                         ) {
 
-                            detailParts.push(
-                                holder.shares
+                            parts.push(
+                                item.reportingPeriod
                             );
 
                         }
 
 
-                        if (
-                            holder.reportingPeriod &&
-                            holder.reportingPeriod !==
-                                "Not verified"
-                        ) {
-
-                            detailParts.push(
-                                holder.reportingPeriod
-                            );
-
-                        }
-
-
-                        details.textContent =
-                            detailParts.length
-                                ? detailParts.join(" · ")
+                        description.textContent =
+                            parts.length
+                                ? parts.join(" · ")
                                 : "Details not verified";
 
 
                         row.appendChild(
-                            name
+                            institution
                         );
 
                         row.appendChild(
-                            details
+                            description
                         );
 
 
@@ -13466,7 +13486,7 @@ async function loadEdgeBreakAIInstitutional(
 
                 holders.innerHTML = `
                     <div class="edge-ai-institutional-loading">
-                        No major holder data verified.
+                        No major institutional holders verified.
                     </div>
                 `;
 
@@ -13606,7 +13626,7 @@ async function loadEdgeBreakAIInstitutional(
     catch (error) {
 
         console.error(
-            "EdgeBreak Institutional:",
+            "EdgeBreak Gemini Institutional:",
             error
         );
 
@@ -13622,14 +13642,12 @@ async function loadEdgeBreakAIInstitutional(
 
         }
 
-
         if (period) {
 
             period.textContent =
                 "Not verified";
 
         }
-
 
         if (concentration) {
 
@@ -13638,14 +13656,12 @@ async function loadEdgeBreakAIInstitutional(
 
         }
 
-
         if (summary) {
 
             summary.textContent =
                 "Institutional research is currently unavailable.";
 
         }
-
 
         if (holders) {
 
@@ -13656,7 +13672,6 @@ async function loadEdgeBreakAIInstitutional(
             `;
 
         }
-
 
         if (activity) {
 
@@ -13894,7 +13909,7 @@ async function loadEdgeBreakAISecFilings(
 
         const response =
             await fetch(
-                "/api/ai-sec-filings",
+                "/api/ai-research-gem",
                 {
 
                     method: "POST",
@@ -13910,7 +13925,10 @@ async function loadEdgeBreakAISecFilings(
                             symbol,
 
                         companyName:
-                            companyName
+                            companyName,
+
+                        researchType:
+                            "sec_filings"
 
                     })
 
@@ -14529,6 +14547,564 @@ if (edgeAISecResearchBtn) {
         );
 
 }
+
+</script>
+
+<script>
+/* =========================================
+AI CHART ANALYSIS — FRONTEND
+========================================= */
+
+const chartAIDropzone =
+    document.getElementById("chartAIDropzone");
+
+const chartAIFileInput =
+    document.getElementById("chartAIFileInput");
+
+const chartAIChooseBtn =
+    document.getElementById("chartAIChooseBtn");
+
+const chartAIEmpty =
+    document.getElementById("chartAIEmpty");
+
+const chartAIPreview =
+    document.getElementById("chartAIPreview");
+
+const chartAIPreviewImage =
+    document.getElementById("chartAIPreviewImage");
+
+const chartAIActions =
+    document.getElementById("chartAIActions");
+
+const chartAIRemoveBtn =
+    document.getElementById("chartAIRemoveBtn");
+
+const chartAIAnalyseBtn =
+    document.getElementById("chartAIAnalyseBtn");
+
+
+let chartAIImageFile = null;
+let chartAIOptimisedImage = null;
+
+/* =========================================
+OPTIMISE CHART FOR AI
+========================================= */
+
+async function optimiseChartAIImage(file) {
+
+    return new Promise((resolve, reject) => {
+
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+
+            const image = new Image();
+
+            image.onload = function() {
+
+                /*
+                Keep enough resolution for chart labels,
+                candles, volume and technical structure,
+                while avoiding unnecessarily large images.
+                */
+
+                const MAX_WIDTH = 1600;
+                const MAX_HEIGHT = 1200;
+
+                let width = image.width;
+                let height = image.height;
+
+                const scale = Math.min(
+                    MAX_WIDTH / width,
+                    MAX_HEIGHT / height,
+                    1
+                );
+
+                width = Math.round(width * scale);
+                height = Math.round(height * scale);
+
+
+                const canvas =
+                    document.createElement("canvas");
+
+                canvas.width = width;
+                canvas.height = height;
+
+
+                const ctx =
+                    canvas.getContext("2d");
+
+
+                ctx.drawImage(
+                    image,
+                    0,
+                    0,
+                    width,
+                    height
+                );
+
+
+                /*
+                JPEG gives us a substantially smaller payload.
+                0.85 should retain chart detail while reducing
+                unnecessary image size.
+                */
+
+                const optimisedDataURL =
+                    canvas.toDataURL(
+                        "image/jpeg",
+                        0.85
+                    );
+
+
+                resolve({
+                    dataURL: optimisedDataURL,
+                    width: width,
+                    height: height
+                });
+
+            };
+
+
+            image.onerror = function() {
+
+                reject(
+                    new Error(
+                        "Unable to process chart image."
+                    )
+                );
+
+            };
+
+
+            image.src = event.target.result;
+
+        };
+
+
+        reader.onerror = function() {
+
+            reject(
+                new Error(
+                    "Unable to read chart image."
+                )
+            );
+
+        };
+
+
+        reader.readAsDataURL(file);
+
+    });
+
+}
+
+
+/* =========================================
+LOAD IMAGE
+========================================= */
+
+async function loadChartAIImage(file) {
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+
+        alert("Please select an image file.");
+        return;
+
+    }
+
+
+    chartAIImageFile = file;
+
+    try {
+
+        chartAIOptimisedImage =
+            await optimiseChartAIImage(file);
+
+        console.log(
+            "Chart prepared for AI:",
+            chartAIOptimisedImage.width + "x" +
+            chartAIOptimisedImage.height
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "Chart optimisation failed:",
+            error
+        );
+
+        chartAIOptimisedImage = null;
+
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload = function(event) {
+
+        chartAIPreviewImage.src =
+            event.target.result;
+
+        chartAIEmpty.hidden = true;
+
+        chartAIPreview.hidden = false;
+
+        chartAIActions.hidden = false;
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+/* =========================================
+CHOOSE IMAGE
+========================================= */
+
+chartAIChooseBtn?.addEventListener(
+    "click",
+    function(event) {
+
+        event.stopPropagation();
+
+        chartAIFileInput.click();
+
+    }
+);
+
+
+chartAIFileInput?.addEventListener(
+    "change",
+    function() {
+
+        loadChartAIImage(
+            chartAIFileInput.files[0]
+        );
+
+    }
+);
+
+
+/* =========================================
+CLICK DROPZONE
+========================================= */
+
+chartAIDropzone?.addEventListener(
+    "click",
+    function() {
+
+        if (!chartAIImageFile) {
+
+            chartAIFileInput.click();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+DRAG AND DROP
+========================================= */
+
+chartAIDropzone?.addEventListener(
+    "dragover",
+    function(event) {
+
+        event.preventDefault();
+
+        chartAIDropzone.classList.add(
+            "chart-ai-dragover"
+        );
+
+    }
+);
+
+
+chartAIDropzone?.addEventListener(
+    "dragleave",
+    function() {
+
+        chartAIDropzone.classList.remove(
+            "chart-ai-dragover"
+        );
+
+    }
+);
+
+
+chartAIDropzone?.addEventListener(
+    "drop",
+    function(event) {
+
+        event.preventDefault();
+
+        chartAIDropzone.classList.remove(
+            "chart-ai-dragover"
+        );
+
+
+        const file =
+            event.dataTransfer.files[0];
+
+
+        loadChartAIImage(file);
+
+    }
+);
+
+
+/* =========================================
+PASTE IMAGE
+========================================= */
+
+document.addEventListener(
+    "paste",
+    function(event) {
+
+        const items =
+            event.clipboardData?.items;
+
+
+        if (!items) return;
+
+
+        for (const item of items) {
+
+            if (
+                item.type &&
+                item.type.startsWith("image/")
+            ) {
+
+                const file =
+                    item.getAsFile();
+
+
+                loadChartAIImage(file);
+
+                chartAIDropzone?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+                break;
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================================
+REMOVE IMAGE
+========================================= */
+
+chartAIRemoveBtn?.addEventListener(
+    "click",
+    function() {
+
+        chartAIImageFile = null;
+
+        chartAIOptimisedImage = null;
+
+        chartAIFileInput.value = "";
+
+        chartAIPreviewImage.src = "";
+
+        chartAIPreview.hidden = true;
+
+        chartAIActions.hidden = true;
+
+        chartAIEmpty.hidden = false;
+
+    }
+);
+
+
+/* =========================================
+ANALYSE CHART
+========================================= */
+
+chartAIAnalyseBtn?.addEventListener(
+    "click",
+    async function() {
+
+        if (!chartAIImageFile) return;
+
+
+        if (!chartAIOptimisedImage) {
+
+            console.error(
+                "Optimised chart is not ready."
+            );
+
+            return;
+        }
+
+
+        /* =========================================
+        LOADING STATE
+        ========================================= */
+
+        const originalButtonText =
+            chartAIAnalyseBtn.innerHTML;
+
+
+        chartAIAnalyseBtn.disabled = true;
+
+        chartAIAnalyseBtn.innerHTML =
+            "✦ Analysing Chart...";
+
+
+        try {
+
+            /* =========================================
+            SEND CHART TO API
+            ========================================= */
+
+            const response = await fetch(
+                "/api/chart-ai-gem",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        image:
+                            chartAIOptimisedImage.dataURL
+                    })
+                }
+            );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.error ||
+                    "Chart analysis failed."
+                );
+
+            }
+
+
+            /* =========================================
+            POPULATE RESULTS
+            ========================================= */
+
+            document.getElementById(
+                "chartAIMarketStructure"
+            ).textContent =
+                data.marketStructure ||
+                "Not clearly visible in the supplied chart.";
+
+
+            document.getElementById(
+                "chartAIResistance"
+            ).textContent =
+                data.resistance ||
+                "Not clearly visible in the supplied chart.";
+
+
+            document.getElementById(
+                "chartAISupport"
+            ).textContent =
+                data.support ||
+                "Not clearly visible in the supplied chart.";
+
+
+            document.getElementById(
+                "chartAIVolume"
+            ).textContent =
+                data.volume ||
+                "Not clearly visible in the supplied chart.";
+
+
+            document.getElementById(
+                "chartAIBase"
+            ).textContent =
+                data.base ||
+                "Not clearly visible in the supplied chart.";
+
+
+            document.getElementById(
+                "chartAIBreakout"
+            ).textContent =
+                data.breakout ||
+                "Not clearly visible in the supplied chart.";
+
+
+            document.getElementById(
+                "chartAISummary"
+            ).textContent =
+                data.summary ||
+                "No chart summary was returned.";
+
+
+            /* =========================================
+            SHOW RESULTS
+            ========================================= */
+
+            const results =
+                document.getElementById(
+                    "chartAIResults"
+                );
+
+
+            results.hidden = false;
+
+
+            results.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+
+        }
+        catch (error) {
+
+            console.error(
+                "AI Chart Analysis Error:",
+                error
+            );
+
+
+            alert(
+                "Chart analysis is temporarily unavailable. Please try again."
+            );
+
+        }
+        finally {
+
+            /* =========================================
+            RESET BUTTON
+            ========================================= */
+
+            chartAIAnalyseBtn.disabled = false;
+
+            chartAIAnalyseBtn.innerHTML =
+                originalButtonText;
+
+        }
+
+    }
+);
 
 </script>
 
