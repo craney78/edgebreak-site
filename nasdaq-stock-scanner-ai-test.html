@@ -14418,7 +14418,7 @@ async function loadEdgeBreakAISecFilings(
 
         const response =
             await fetch(
-                "/api/ai-sec-filings",
+                "/api/ai-research-gem",
                 {
 
                     method: "POST",
@@ -14434,7 +14434,10 @@ async function loadEdgeBreakAISecFilings(
                             symbol,
 
                         companyName:
-                            companyName
+                            companyName,
+
+                        researchType:
+                            "sec_filings"
 
                     })
 
