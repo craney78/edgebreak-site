@@ -5881,6 +5881,341 @@ EDGEBREAK AI — INSTITUTIONAL ACTIVITY
     }
 
 }
+
+/* ===================================
+AI CHART ANALYSIS
+=================================== */
+
+.chart-ai-tool {
+    width: 100%;
+    max-width: none;
+    margin: 40px 0;
+    padding: 32px;
+    box-sizing: border-box;
+    background: #081426;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+}
+
+.chart-ai-header {
+    margin-bottom: 26px;
+}
+
+.chart-ai-eyebrow {
+    color: #22c55e;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    margin-bottom: 8px;
+}
+
+.chart-ai-header h2 {
+    margin: 0 0 10px;
+    color: #ffffff;
+    font-size: 30px;
+}
+
+.chart-ai-header p {
+    max-width: 680px;
+    margin: 0;
+    color: #94a3b8;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+
+/* DROP AREA */
+
+.chart-ai-dropzone {
+    position: relative;
+    min-height: 330px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px dashed rgba(34,197,94,.35);
+    border-radius: 16px;
+
+    background: #06101f;
+
+    cursor: pointer;
+    overflow: hidden;
+
+    transition:
+        border-color .2s ease,
+        background .2s ease,
+        transform .2s ease;
+}
+
+.chart-ai-dropzone:hover {
+    border-color: #22c55e;
+    background: #08182a;
+}
+
+.chart-ai-dropzone.chart-ai-dragover {
+    border-color: #22c55e;
+    background: rgba(34,197,94,.06);
+    transform: scale(1.005);
+}
+
+
+/* EMPTY STATE */
+
+.chart-ai-empty {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.chart-ai-upload-icon {
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 18px;
+
+    border-radius: 14px;
+
+    background: rgba(34,197,94,.1);
+    border: 1px solid rgba(34,197,94,.25);
+
+    color: #22c55e;
+    font-size: 27px;
+}
+
+.chart-ai-empty h3 {
+    margin: 0 0 8px;
+    color: #ffffff;
+    font-size: 20px;
+}
+
+.chart-ai-empty p {
+    margin: 0 0 20px;
+    color: #94a3b8;
+}
+
+.chart-ai-choose-btn {
+    padding: 11px 18px;
+
+    border: 1px solid rgba(34,197,94,.35);
+    border-radius: 9px;
+
+    background: rgba(34,197,94,.08);
+    color: #22c55e;
+
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.chart-ai-choose-btn:hover {
+    background: rgba(34,197,94,.14);
+}
+
+.chart-ai-file-note {
+    display: block;
+    margin-top: 13px;
+
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+
+/* PREVIEW */
+
+.chart-ai-preview {
+    width: 100%;
+    padding: 14px;
+}
+
+.chart-ai-preview img {
+    display: block;
+
+    width: 100%;
+    max-height: 620px;
+
+    margin: auto;
+
+    object-fit: contain;
+
+    border-radius: 10px;
+}
+
+
+/* ACTION BUTTONS */
+
+.chart-ai-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-top: 18px;
+}
+
+.chart-ai-analyse-btn {
+    padding: 13px 22px;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: #22c55e;
+    color: #04120a;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.chart-ai-analyse-btn:hover {
+    filter: brightness(1.08);
+}
+
+.chart-ai-remove-btn {
+    padding: 12px 18px;
+
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 9px;
+
+    background: transparent;
+    color: #94a3b8;
+
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.chart-ai-remove-btn:hover {
+    color: #ffffff;
+    border-color: rgba(255,255,255,.25);
+}
+
+
+/* RESULTS */
+
+.chart-ai-results {
+    margin-top: 32px;
+    padding-top: 28px;
+
+    border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.chart-ai-results-heading span,
+.chart-ai-summary span {
+    color: #22c55e;
+
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+}
+
+.chart-ai-results-heading h3 {
+    margin: 5px 0 20px;
+    color: #ffffff;
+    font-size: 22px;
+}
+
+.chart-ai-results-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.chart-ai-result-card {
+    padding: 18px;
+
+    background: #06101f;
+
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 11px;
+}
+
+.chart-ai-result-card span {
+    color: #64748b;
+
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.chart-ai-result-card p {
+    margin: 8px 0 0;
+
+    color: #d7e0ea;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* SUMMARY */
+
+.chart-ai-summary {
+    margin-top: 16px;
+    padding: 20px;
+
+    background: rgba(34,197,94,.055);
+
+    border: 1px solid rgba(34,197,94,.2);
+    border-radius: 11px;
+}
+
+.chart-ai-summary p {
+    margin: 8px 0 0;
+
+    color: #e5edf5;
+
+    font-size: 15px;
+    line-height: 1.65;
+}
+
+
+/* DISCLAIMER */
+
+.chart-ai-notice {
+    margin-top: 16px;
+
+    color: #64748b;
+
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .chart-ai-tool {
+        margin: 25px 14px;
+        padding: 20px;
+    }
+
+    .chart-ai-header h2 {
+        font-size: 25px;
+    }
+
+    .chart-ai-dropzone {
+        min-height: 270px;
+    }
+
+    .chart-ai-results-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-ai-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .chart-ai-analyse-btn,
+    .chart-ai-remove-btn {
+        width: 100%;
+    }
+
+}
 </style>  
 
 
