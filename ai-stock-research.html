@@ -1861,6 +1861,47 @@ MATCH WATCHLIST HERO
     }
 
 }
+
+/* =========================================
+AI HERO ACTIONS
+========================================= */
+
+.ai-hero-actions{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-top:24px;
+}
+
+.ai-secondary-btn{
+    background:transparent !important;
+    color:#ffffff !important;
+    border:1px solid #334155 !important;
+}
+
+.ai-secondary-btn:hover{
+    border-color:#22c55e !important;
+    color:#22c55e !important;
+    background:rgba(34,197,94,.06) !important;
+}
+
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .ai-hero-actions{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .ai-hero-actions .btn{
+        width:100%;
+        text-align:center;
+    }
+
+}
 </style>  
 
 </head>
@@ -1940,65 +1981,87 @@ MATCH WATCHLIST HERO
 <div class="elite-container"> 
  
  
-<!-- HERO -->  
-  
-<div class="hero-content">  
-  
-    <div class="hero-text">  
-  
-        <h1>  
-            <h1>
+<!-- =========================================
+HERO
+========================================= -->
+
+<div class="hero-content">
+
+    <div class="hero-text">
+
+        <h1>
             AI Stock Research & Stock Chart Analysis
-        </h1> 
-         
-  
-        <p>  
-            EdgeBreak AI combines AI-powered stock research and stock chart analysis directly within the EdgeBreak market intelligence platform. Discover stocks using the EdgeBreak NASDAQ market scanners, then research the company behind the stock through company analysis, financial highlights, market attention, recent news, institutional activity and SEC filings. You can also upload or paste any stock chart into the EdgeBreak AI Stock Chart Analyser to investigate market structure, support and resistance, volume behaviour, consolidation and breakout structure.  
-        </p> 
-  
-        <a href="nasdaq-stock-scanner.html" class="btn">  
-            Explore AI Stock Research & AI Stock Chart Analysis 
-        </a>  
-  
-    </div>  
-  
-    <div class="hero-icon">  
-  
-        <svg  
-            viewBox="0 0 64 64"  
-            width="64"  
-            height="64"  
-            fill="none"  
-            stroke="currentColor"  
-            stroke-width="2.5"  
-            stroke-linecap="round"  
-            stroke-linejoin="round"  
-        >  
-  
-            <!-- Roof -->  
-  
-            <path d="M8 22L32 10L56 22"/>  
-  
-            <!-- Base -->  
-  
-            <path d="M10 50H54"/>  
-  
-            <!-- Top -->  
-  
-            <path d="M12 22H52"/>  
-  
-            <!-- Pillars -->  
-  
-            <line x1="18" y1="22" x2="18" y2="50"/>  
-            <line x1="28" y1="22" x2="28" y2="50"/>  
-            <line x1="36" y1="22" x2="36" y2="50"/>  
-            <line x1="46" y1="22" x2="46" y2="50"/>  
-  
-        </svg>  
-  
-    </div>  
-  
-</div>  
+        </h1>
+
+        <p>
+            EdgeBreak AI combines AI-powered stock research and stock chart analysis
+            directly within the EdgeBreak market intelligence platform. Discover stocks
+            using the EdgeBreak NASDAQ scanners, research company information, financial
+            highlights, market attention, recent news, institutional activity and SEC
+            filings, or upload your own stock chart for AI-powered technical analysis.
+        </p>
+
+
+        <div class="ai-hero-actions">
+
+            <!-- TRY FREE -->
+
+            <a
+                href="/edgebreak-free.html"
+                class="btn"
+            >
+                Try EdgeBreak Free
+            </a>
+
+
+            <!-- FULL ACCESS -->
+
+            <a
+                href="/nasdaq-stock-scanner.html"
+                class="btn ai-secondary-btn"
+            >
+                Explore Full AI Research
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="hero-icon">
+
+        <svg
+            viewBox="0 0 64 64"
+            width="64"
+            height="64"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+
+            <!-- AI / sparkle -->
+
+            <path d="M32 8L35 17L44 20L35 23L32 32L29 23L20 20L29 17L32 8Z"/>
+
+            <!-- Chart -->
+
+            <path d="M10 48L20 38L28 42L40 28L54 18"/>
+
+            <!-- Breakout arrow -->
+
+            <path d="M45 18H54V27"/>
+
+            <!-- Support / resistance -->
+
+            <path d="M10 52H54"/>
+
+        </svg>
+
+    </div>
+
+</div> 
   
   
 <div class="elite-featured">  
