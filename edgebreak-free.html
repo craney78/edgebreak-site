@@ -6544,6 +6544,192 @@ AI CHART ANALYSIS
     }
 
 }
+
+/* ======================================================
+   EDGEBREAK FREE — MEMBER FEATURES
+====================================================== */
+
+.free-member-tool-btn{
+    background:#111827 !important;
+    border:1px solid #334155 !important;
+    color:#94a3b8 !important;
+    cursor:pointer !important;
+}
+
+.free-member-tool-btn:hover{
+    color:#ffffff !important;
+    border-color:#22c55e !important;
+    background:#0f172a !important;
+}
+
+
+/* WATCHLIST LOCK */
+
+.free-watchlist-lock{
+    min-height:150px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    gap:7px;
+
+    padding:25px;
+
+    text-align:center;
+}
+
+.free-watchlist-lock-icon{
+    font-size:26px;
+}
+
+.free-watchlist-lock strong{
+    color:#ffffff;
+    font-size:17px;
+}
+
+.free-watchlist-lock span{
+    color:#94a3b8;
+    font-size:13px;
+}
+
+.free-watchlist-unlock{
+    margin-top:8px;
+
+    padding:10px 18px;
+
+    border:1px solid #22c55e;
+    border-radius:8px;
+
+    background:rgba(34,197,94,.08);
+
+    color:#22c55e;
+
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+.free-watchlist-unlock:hover{
+    background:#22c55e;
+    color:#020617;
+}
+
+
+/* ======================================================
+   MEMBER UPGRADE MODAL
+====================================================== */
+
+.free-member-modal{
+    position:fixed;
+    inset:0;
+
+    z-index:999999;
+
+    display:none;
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    background:rgba(2,6,23,.82);
+
+    backdrop-filter:blur(6px);
+}
+
+.free-member-modal.active{
+    display:flex;
+}
+
+
+.free-member-modal-card{
+    position:relative;
+
+    width:100%;
+    max-width:520px;
+
+    padding:38px 30px;
+
+    text-align:center;
+
+    background:#081426;
+
+    border:1px solid rgba(34,197,94,.4);
+    border-radius:18px;
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.55);
+}
+
+
+.free-member-modal-close{
+    position:absolute;
+
+    top:12px;
+    right:15px;
+
+    width:34px;
+    height:34px;
+
+    border:0;
+    background:transparent;
+
+    color:#94a3b8;
+
+    font-size:27px;
+    line-height:1;
+
+    cursor:pointer;
+}
+
+.free-member-modal-close:hover{
+    color:#ffffff;
+}
+
+
+.free-member-modal-icon{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+
+.free-member-modal-title{
+    color:#ffffff;
+
+    font-size:23px;
+    font-weight:800;
+
+    margin-bottom:12px;
+}
+
+
+.free-member-modal-text{
+    max-width:440px;
+
+    margin:
+        0 auto
+        22px;
+
+    color:#94a3b8;
+
+    font-size:14px;
+    line-height:1.7;
+}
+
+
+@media(max-width:768px){
+
+    .free-member-modal-card{
+        padding:34px 20px;
+    }
+
+    .free-member-modal-title{
+        font-size:20px;
+    }
+
+}
 </style>  
 
 
@@ -11307,9 +11493,51 @@ window.watchlist = [];
 
 document.addEventListener(
     "DOMContentLoaded",
-    async () => {
+    () => {
 
-        await loadWatchlist();
+        const tbody =
+            document.getElementById(
+                "watchlistResults"
+            );
+
+        if(!tbody) return;
+
+
+        tbody.innerHTML = `
+
+            <tr class="watchlist-empty">
+
+                <td colspan="8">
+
+                    <div class="free-watchlist-lock">
+
+                        <div class="free-watchlist-lock-icon">
+                            🔒
+                        </div>
+
+                        <strong>
+                            Personal Watchlist
+                        </strong>
+
+                        <span>
+                            Available to EdgeBreak members
+                        </span>
+
+                        <button
+                            type="button"
+                            class="free-watchlist-unlock"
+                            onclick="showFreeMemberUpgrade()"
+                        >
+                            Unlock Watchlist
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
 
     }
 );
@@ -11354,37 +11582,9 @@ async function loadWatchlist(){
 
 async function addToWatchlist(symbol){
 
-    const {
-        data:{ user }
-    } = await supabaseClient.auth.getUser();
+    showFreeMemberUpgrade();
 
-    if(!user) return;
-
-    const exists =
-        window.watchlist.find(
-            x => x.symbol === symbol
-        );
-
-    if(exists) return;
-
-    const { error } =
-        await supabaseClient
-            .from("watchlist")
-            .insert([
-                {
-                    user_id:user.id,
-                    symbol:symbol
-                }
-            ]);
-
-    if(error){
-
-        console.error(error);
-        return;
-
-    }
-
-    await loadWatchlist();
+    return;
 
 }
 
@@ -16365,6 +16565,180 @@ chartAIAnalyseBtn.addEventListener(
 
     }
 );
+
+</script>
+<script>
+/* =========================================
+   EDGEBREAK FREE — LOCK MEMBER TOOLS
+========================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const paidPages = [
+            "/my-workspace.html",
+            "/sector-performance.html",
+            "/currency-converter.html",
+            "/market-overview.html",
+            "/market-movers.html"
+        ];
+
+
+        paidPages.forEach(page => {
+
+            const link =
+                document.querySelector(
+                    `a[href="${page}"]`
+                );
+
+            if(!link) return;
+
+
+            /* Stop navigation */
+
+            link.removeAttribute("href");
+
+            link.classList.add(
+                "free-member-tool-btn"
+            );
+
+
+            /* Change button */
+
+            link.innerHTML =
+                "🔒 Paid Members Only";
+
+
+            link.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    showFreeMemberUpgrade();
+
+                }
+            );
+
+        });
+
+    }
+);
+
+
+/* =========================================
+   MEMBER FEATURE UPGRADE POPUP
+========================================= */
+
+function showFreeMemberUpgrade(){
+
+    let modal =
+        document.getElementById(
+            "freeMemberUpgradeModal"
+        );
+
+
+    if(!modal){
+
+        modal =
+            document.createElement("div");
+
+
+        modal.id =
+            "freeMemberUpgradeModal";
+
+
+        modal.className =
+            "free-member-modal";
+
+
+        modal.innerHTML = `
+
+            <div class="free-member-modal-card">
+
+                <button
+                    type="button"
+                    class="free-member-modal-close"
+                    onclick="closeFreeMemberUpgrade()"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+
+                <div class="free-member-modal-icon">
+                    🔒
+                </div>
+
+
+                <div class="free-member-modal-title">
+                    EdgeBreak Member Feature
+                </div>
+
+
+                <div class="free-member-modal-text">
+
+                    This feature is available with full
+                    EdgeBreak access.
+
+                    Unlock My Workspace, personal watchlists,
+                    Sector Performance, Currency Converter,
+                    Market Overview, Market Movers,
+                    complete scanner results and EdgeBreak AI.
+
+                </div>
+
+
+                <a
+                    href="/pricing.html"
+                    class="free-unlock-btn"
+                >
+                    Start 7 Day Free Trial
+                </a>
+
+
+                <div class="free-lock-trial">
+                    $19.99 Per Month After Trial • Cancel Anytime
+                </div>
+
+            </div>
+
+        `;
+
+
+        document.body.appendChild(
+            modal
+        );
+
+    }
+
+
+    modal.classList.add(
+        "active"
+    );
+
+}
+
+
+function closeFreeMemberUpgrade(){
+
+    const modal =
+        document.getElementById(
+            "freeMemberUpgradeModal"
+        );
+
+
+    if(modal){
+
+        modal.classList.remove(
+            "active"
+        );
+
+    }
+
+}
 
 </script>
 
