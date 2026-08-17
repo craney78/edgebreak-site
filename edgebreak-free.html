@@ -9955,7 +9955,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document
         .getElementById("scannerSearchBtn")
-        .addEventListener("click", runScanner);
+        .addEventListener(
+            "click",
+            () => {
+                handleFreeScanGate(
+                    runScanner
+                );
+            }
+        );
 
     document
         .getElementById("applyScannerSmartMoney")
