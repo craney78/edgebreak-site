@@ -9533,17 +9533,14 @@ function renderResults(results){
             "scannerResults"
         );
 
-    const lookback =
-        document.getElementById(
-            "lookback"
-        ).value;
-
     const smartMoneyPeriod =
         parseInt(
             document.getElementById(
                 "scannerSmartMoneyPeriod"
             ).value
-        );    
+        );
+
+    if(!tbody) return;
 
     if(results.length === 0){
 
@@ -9558,12 +9555,19 @@ function renderResults(results){
         return;
     }
 
+
+    /* ============================================
+       FREE ACCESS — FIRST 2 RESULTS ONLY
+    ============================================ */
+
+    const visibleResults = results.slice(0, 2);
+
     tbody.innerHTML =
-        results.slice(0,100).map(stock => {
+        visibleResults.map(stock => {
 
             const record =
                 window.smartMoneyLookup[stock.symbol];
-            
+
             const smartMoneyCount =
                 record
                     ? getSmartMoneyCount(
@@ -9594,7 +9598,9 @@ function renderResults(results){
                     ${stock.higher_lows || 0}
                 </td>
 
-                <td>${smartMoneyCount}</td>
+                <td>
+                    ${smartMoneyCount}
+                </td>
 
                 <td>
 
@@ -9626,29 +9632,103 @@ function renderResults(results){
 
                 </td>
 
-                </tr>
+            </tr>
+
+            `;
+
+        }).join("");
+
+
+    /* ============================================
+       LOCK REMAINING RESULTS
+    ============================================ */
+
+    if(results.length > 2){
+
+        const lockedCount =
+            results.length - 2;
+
+        tbody.innerHTML += `
+
+            <tr class="free-locked-preview">
+
+                <td colspan="7">
+
+                    <div class="free-lock-preview">
+
+                        <div class="free-lock-blur">
+
+                            <div class="fake-result-line"></div>
+                            <div class="fake-result-line"></div>
+                            <div class="fake-result-line"></div>
+
+                        </div>
+
+                        <div class="free-lock-content">
+
+                            <div class="free-lock-icon">
+                                🔒
+                            </div>
+
+                            <div class="free-lock-title">
+                                ${lockedCount} More Results Found
+                            </div>
+
+                            <div class="free-lock-text">
+
+                                Free access shows the first 2 scanner results.
+
+                                Unlock the complete NASDAQ scanner results,
+                                AI Research and all EdgeBreak scanners.
+
+                            </div>
+
+                            <a
+                                href="/pricing.html"
+                                class="free-unlock-btn"
+                            >
+                                Unlock All NASDAQ Results
+                            </a>
+
+                            <div class="free-lock-trial">
+                                7 Day Free Trial • Cancel Anytime
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </td>
+
+            </tr>
 
         `;
 
-        }).join("");
-         
-    
-    // 📱 Scroll to results on mobile
-    if (window.innerWidth <= 768) {
+    }
+
+
+    /* ============================================
+       MOBILE SCROLL
+    ============================================ */
+
+    if(window.innerWidth <= 768){
 
         const resultsSection =
-            document.getElementById("scannerResultsSection");
+            document.getElementById(
+                "scannerResultsSection"
+            );
 
-        if (resultsSection) {
+        if(resultsSection){
 
             setTimeout(() => {
 
                 window.scrollTo({
-                    top: resultsSection.offsetTop - 15,
-                    behavior: "smooth"
+                    top:
+                        resultsSection.offsetTop - 15,
+                    behavior:"smooth"
                 });
 
-            }, 100);
+            },100);
 
         }
 
