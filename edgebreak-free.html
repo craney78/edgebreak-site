@@ -6360,6 +6360,63 @@ AI CHART ANALYSIS
     }
 
 }
+
+/* ======================================================
+   EDGEBREAK FREE — AI RESEARCH LOCK
+====================================================== */
+
+.edge-ai-free-locked-btn{
+    background:#111827 !important;
+    border:1px solid #334155 !important;
+    color:#94a3b8 !important;
+    cursor:pointer !important;
+    opacity:1 !important;
+}
+
+.edge-ai-free-locked-btn:hover{
+    border-color:#22c55e !important;
+    color:#ffffff !important;
+    background:#0f172a !important;
+}
+
+
+.free-ai-upgrade-message{
+    margin:20px;
+    padding:28px 22px;
+
+    text-align:center;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(34,197,94,.08),
+            rgba(15,23,42,.96)
+        );
+
+    border:1px solid rgba(34,197,94,.35);
+    border-radius:14px;
+}
+
+.free-ai-upgrade-icon{
+    font-size:28px;
+    margin-bottom:8px;
+}
+
+.free-ai-upgrade-title{
+    color:#ffffff;
+    font-size:20px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.free-ai-upgrade-text{
+    max-width:560px;
+    margin:0 auto 18px;
+
+    color:#94a3b8;
+    font-size:13px;
+    line-height:1.7;
+}
 </style>  
 
 
@@ -12509,7 +12566,181 @@ function loadEdgeBreakAIResearch(symbol){
        section's Research button.
     ===================================== */
 
-}    
+    /* =====================================
+    FREE VERSION — LOCK AI BUTTONS
+    ===================================== */
+
+    setTimeout(() => {
+
+        lockFreeAIResearch();
+
+    }, 50);
+    
+} 
+
+/* =========================================
+   EDGEBREAK FREE — LOCK AI RESEARCH
+========================================= */
+
+function lockFreeAIResearch(){
+
+    const researchButtons = [
+        "edgeAICompanyResearchBtn",
+        "edgeAIMarketResearchBtn",
+        "edgeAIFinancialResearchBtn",
+        "edgeAIInstitutionalResearchBtn",
+        "edgeAIFilingsResearchBtn"
+    ];
+
+    researchButtons.forEach(id => {
+
+        const button =
+            document.getElementById(id);
+
+        if(!button) return;
+
+        /* Remove any existing click behaviour */
+
+        const lockedButton =
+            button.cloneNode(true);
+
+        button.parentNode.replaceChild(
+            lockedButton,
+            button
+        );
+
+        lockedButton.disabled = false;
+
+        lockedButton.innerHTML =
+            "🔒 Paid Members Only";
+
+        lockedButton.classList.add(
+            "edge-ai-free-locked-btn"
+        );
+
+        lockedButton.onclick = function(event){
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            showFreeAIUpgrade();
+
+            return false;
+
+        };
+
+    });
+
+
+    /* Change main panel message */
+
+    const summary =
+        document.getElementById(
+            "edgeAISummary"
+        );
+
+    if(summary){
+
+        summary.innerHTML = `
+            Preview the EdgeBreak AI Research tools below.
+            Full AI-powered company research is available
+            to paid EdgeBreak members.
+        `;
+
+    }
+
+}
+
+
+/* =========================================
+   FREE AI — UPGRADE MESSAGE
+========================================= */
+
+function showFreeAIUpgrade(){
+
+    let existing =
+        document.getElementById(
+            "freeAIUpgradeMessage"
+        );
+
+    if(existing){
+
+        existing.scrollIntoView({
+            behavior:"smooth",
+            block:"center"
+        });
+
+        return;
+
+    }
+
+
+    const panel =
+        document.querySelector(
+            ".edge-ai-panel"
+        ) ||
+        document.getElementById(
+            "edgeAIPanel"
+        );
+
+
+    if(!panel) return;
+
+
+    const message =
+        document.createElement("div");
+
+
+    message.id =
+        "freeAIUpgradeMessage";
+
+
+    message.className =
+        "free-ai-upgrade-message";
+
+
+    message.innerHTML = `
+
+        <div class="free-ai-upgrade-icon">
+            🔒
+        </div>
+
+        <div class="free-ai-upgrade-title">
+            EdgeBreak AI Research
+        </div>
+
+        <div class="free-ai-upgrade-text">
+            AI company research is available
+            to paid EdgeBreak members.
+            Start your 7 day free trial to unlock
+            company information, financial highlights,
+            market attention, recent news,
+            institutional activity and SEC filings.
+        </div>
+
+        <a
+            href="/pricing.html"
+            class="free-unlock-btn"
+        >
+            Unlock AI Research
+        </a>
+
+        <div class="free-lock-trial">
+            7 Day Free Trial • Cancel Anytime
+        </div>
+
+    `;
+
+
+    panel.prepend(message);
+
+
+    message.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+    });
+
+}
 
 /* =========================================
    EDGEBREAK AI — COMPANY OVERVIEW
