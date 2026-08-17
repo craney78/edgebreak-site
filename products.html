@@ -742,6 +742,22 @@ GLASS CTA BUTTON
 
 }
 
+/* =========================================
+PRODUCTS HERO SECONDARY CTA
+========================================= */
+
+.products-secondary-btn{
+    background:transparent !important;
+    color:#ffffff !important;
+    border:1px solid #334155 !important;
+}
+
+.products-secondary-btn:hover{
+    border-color:#22c55e !important;
+    color:#22c55e !important;
+    background:rgba(34,197,94,.06) !important;
+}
+
 </style>
 
 <script>
@@ -759,59 +775,100 @@ window.supabaseClient = supabase.createClient(
 
 <main>
 
-<!-- =================================== 
-PRODUCTS HERO 
-=================================== --> 
- 
-<section class="hero"> 
- 
-    <div class="hero-logo-wrap"> 
-        <img 
-            src="/images/logo.webp" 
-            class="hero-logo" 
-            alt="EdgeBreak NASDAQ Stock Scanner and AI Stock Research Platform" 
-            width="90" 
-            height="90" 
-            loading="eager" 
-            fetchpriority="high" 
-            decoding="async"> 
-    </div> 
- 
-    <div class="container"> 
- 
-        <div class="hero-content"> 
- 
-            <div class="hero-tag"> 
+<!-- ===================================
+PRODUCTS HERO
+=================================== -->
+
+<section class="hero">
+
+    <div class="hero-logo-wrap">
+
+        <img
+            src="/images/logo.webp"
+            class="hero-logo"
+            alt="EdgeBreak NASDAQ Stock Scanner and AI Stock Research Platform"
+            width="90"
+            height="90"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+        >
+
+    </div>
+
+
+    <div class="container">
+
+        <div class="hero-content">
+
+            <div class="hero-tag">
                 NASDAQ STOCK SCANNER • PATTERN RECOGNITION • AI STOCK RESEARCH
-            </div> 
- 
-            <h1> 
-                NASDAQ Stock Scanner<br> 
+            </div>
+
+
+            <h1>
+                NASDAQ Stock Scanner<br>
                 & AI Stock Research Platform
-            </h1> 
- 
-            <p> 
-                EdgeBreak combines a professional NASDAQ Stock Scanner with AI-powered stock research and analysis. Discover opportunities across more than 3,000 NASDAQ-listed stocks using advanced pattern recognition, market structure, Smart Money analysis and specialised breakout scanners.
-            </p> 
- 
-            <p> 
-                Once you discover a stock, take your research further with EdgeBreak AI Research. Investigate company information, financial highlights, market attention, recent news, institutional ownership and activity, and SEC filings — all within one integrated stock research platform.
-            </p> 
- 
-            <div class="hero-highlight"> 
-                3,000+ NASDAQ Stocks • Advanced Scanners • Smart Money • AI Stock Research
-            </div> 
- 
-            <br><br> 
- 
-            <a href="nasdaq-stock-scanner.html" class="btn"> 
-                Explore the NASDAQ Stock Scanner
-            </a> 
- 
-        </div> 
- 
-    </div> 
- 
+            </h1>
+
+
+            <p>
+                EdgeBreak combines specialised NASDAQ scanners with pattern recognition,
+                Smart Money analysis and AI-powered research. Scan more than 3,000
+                NASDAQ-listed stocks for breakout, pre-breakout and developing
+                market structures.
+            </p>
+
+
+            <p>
+                Once you discover a stock, continue your research with EdgeBreak AI.
+                Research company information, financial highlights, market attention,
+                recent news, institutional activity and SEC filings, or upload a stock
+                chart for AI-powered chart analysis.
+            </p>
+
+
+            <div class="hero-highlight">
+                3,000+ NASDAQ Stocks • Breakout Scanners • Pattern Recognition • AI Research • AI Chart Analysis
+            </div>
+
+
+            <br><br>
+
+
+            <div style="
+                display:flex;
+                gap:15px;
+                justify-content:center;
+                align-items:center;
+                flex-wrap:wrap;
+            ">
+
+                <!-- TRY FREE -->
+
+                <a
+                    href="/edgebreak-free.html"
+                    class="btn"
+                >
+                    Try EdgeBreak Free
+                </a>
+
+
+                <!-- FULL SCANNER -->
+
+                <a
+                    href="/nasdaq-stock-scanner.html"
+                    class="btn products-secondary-btn"
+                >
+                    Full NASDAQ Scanner
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
 
 <!-- =================================== 

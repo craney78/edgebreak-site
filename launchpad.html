@@ -1844,6 +1844,47 @@ MATCH WATCHLIST HERO
     }
 
 }
+
+/* =========================================
+LAUNCH PAD HERO ACTIONS
+========================================= */
+
+.launchpad-hero-actions{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-top:24px;
+}
+
+.launchpad-secondary-btn{
+    background:transparent !important;
+    color:#ffffff !important;
+    border:1px solid #334155 !important;
+}
+
+.launchpad-secondary-btn:hover{
+    border-color:#22c55e !important;
+    color:#22c55e !important;
+    background:rgba(34,197,94,.06) !important;
+}
+
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .launchpad-hero-actions{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .launchpad-hero-actions .btn{
+        width:100%;
+        text-align:center;
+    }
+
+}
 </style>  
 
 </head>
@@ -1925,7 +1966,9 @@ MATCH WATCHLIST HERO
 
 <!-- HERO -->
 
-<!-- HERO -->
+<!-- =========================================
+HERO
+========================================= -->
 
 <div class="elite-banner">
 
@@ -1938,14 +1981,38 @@ MATCH WATCHLIST HERO
             </h1>
 
             <p>
-                The EdgeBreak Launch Pad Scanner searches more than 3,000 NASDAQ-listed stocks each trading day, identifying companies trading within established ranges and forming strong technical bases that may be preparing for a potential breakout.
+                The EdgeBreak Launch Pad Scanner searches more than 3,000 NASDAQ-listed
+                stocks each trading day, identifying companies trading within established
+                ranges and forming strong technical bases that may be preparing for a
+                potential breakout.
             </p>
 
-            <a href="nasdaq-stock-scanner.html" class="btn">
-                Explore NASDAQ Scanner
-            </a>
+
+            <div class="launchpad-hero-actions">
+
+                <!-- TRY FREE -->
+
+                <a
+                    href="/edgebreak-free.html"
+                    class="btn"
+                >
+                    Try EdgeBreak Free
+                </a>
+
+
+                <!-- FULL SCANNER -->
+
+                <a
+                    href="/nasdaq-stock-scanner.html"
+                    class="btn launchpad-secondary-btn"
+                >
+                    Explore Full NASDAQ Scanner
+                </a>
+
+            </div>
 
         </div>
+
 
         <div class="hero-icon">
 
@@ -1960,7 +2027,11 @@ MATCH WATCHLIST HERO
 
                 <path d="M12 3C16 4 19 8 20 12C18 13 15 16 12 20C9 16 6 13 4 12C5 8 8 4 12 3Z"></path>
 
-                <circle cx="12" cy="10" r="1.5"></circle>
+                <circle
+                    cx="12"
+                    cy="10"
+                    r="1.5"
+                ></circle>
 
                 <path d="M9 18L7 21"></path>
 
@@ -1973,7 +2044,6 @@ MATCH WATCHLIST HERO
     </div>
 
 </div>
-
 
 <div class="elite-featured">
 
