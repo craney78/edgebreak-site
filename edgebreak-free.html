@@ -11070,13 +11070,17 @@ window.currentLaunchPadResults = [];
 ============================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
-
+    
     // Search Launch Pad
     document
         .getElementById("launchPadSearchBtn")
         ?.addEventListener(
             "click",
-            runLaunchPadScanner
+            () => {
+                handleFreeScanGate(
+                    runLaunchPadScanner
+                );
+            }
         );
 
     // Smart Money Filter
