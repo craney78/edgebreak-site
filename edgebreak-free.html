@@ -16060,173 +16060,181 @@ chartAIRemoveBtn?.addEventListener(
 ANALYSE CHART
 ========================================= */
 
-chartAIAnalyseBtn?.addEventListener(
+/* =========================================
+EDGEBREAK FREE — AI CHART PREVIEW
+NO GEMINI / NO API REQUEST
+========================================= */
+
+chartAIAnalyseBtn.addEventListener(
     "click",
-    async function() {
+    function(event) {
 
-        if (!chartAIImageFile) return;
+        event.preventDefault();
+        event.stopPropagation();
 
 
-        if (!chartAIOptimisedImage) {
+        /* =========================================
+        REQUIRE A CHART FIRST
+        ========================================= */
 
-            console.error(
-                "Optimised chart is not ready."
+        if (!chartAIImageFile) {
+
+            alert(
+                "Please upload or paste a stock chart first."
             );
 
             return;
+
         }
 
 
         /* =========================================
-        LOADING STATE
+        STATIC SAMPLE ANALYSIS
+
+        IMPORTANT:
+        This is intentionally generic preview
+        content. The uploaded chart has NOT been
+        analysed by AI.
         ========================================= */
 
-        const originalButtonText =
-            chartAIAnalyseBtn.innerHTML;
+        document.getElementById(
+            "chartAIMarketStructure"
+        ).textContent =
+            "The chart structure is reviewed for trend direction, higher highs, higher lows and changes in price behaviour.";
 
 
-        chartAIAnalyseBtn.disabled = true;
+        document.getElementById(
+            "chartAIResistance"
+        ).textContent =
+            "AI identifies visible resistance zones, repeated price reactions and important overhead price structure.";
 
-        chartAIAnalyseBtn.innerHTML =
-            "✦ Analysing Chart...";
+
+        document.getElementById(
+            "chartAISupport"
+        ).textContent =
+            "Support areas and higher-low structures are examined to identify important areas of price support.";
 
 
-        try {
+        document.getElementById(
+            "chartAIVolume"
+        ).textContent =
+            "Volume behaviour is reviewed alongside price movement to identify changes in participation and activity.";
 
-            /* =========================================
-            SEND CHART TO API
-            ========================================= */
 
-            const response = await fetch(
-                "/api/chart-ai-gem",
-                {
-                    method: "POST",
+        document.getElementById(
+            "chartAIBase"
+        ).textContent =
+            "The chart is examined for consolidation, base formation, tightening price action and developing technical structure.";
 
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
 
-                    body: JSON.stringify({
-                        image:
-                            chartAIOptimisedImage.dataURL
-                    })
-                }
+        document.getElementById(
+            "chartAIBreakout"
+        ).textContent =
+            "AI reviews the relationship between current price, resistance and the surrounding chart structure for breakout characteristics.";
+
+
+        document.getElementById(
+            "chartAISummary"
+        ).textContent =
+            "EdgeBreak AI combines the visible technical characteristics of the uploaded chart into a structured chart research summary.";
+
+
+        /* =========================================
+        SHOW EXISTING RESULTS PANEL
+        ========================================= */
+
+        const results =
+            document.getElementById(
+                "chartAIResults"
             );
 
 
-            const data =
-                await response.json();
+        if (!results) return;
 
 
-            if (!response.ok) {
+        results.hidden = false;
 
-                throw new Error(
-                    data.error ||
-                    "Chart analysis failed."
-                );
-
-            }
+        results.classList.add(
+            "chart-ai-free-preview"
+        );
 
 
-            /* =========================================
-            POPULATE RESULTS
-            ========================================= */
+        /* =========================================
+        ADD PAID MEMBER LOCK
+        ========================================= */
 
+        let lock =
             document.getElementById(
-                "chartAIMarketStructure"
-            ).textContent =
-                data.marketStructure ||
-                "Not clearly visible in the supplied chart.";
-
-
-            document.getElementById(
-                "chartAIResistance"
-            ).textContent =
-                data.resistance ||
-                "Not clearly visible in the supplied chart.";
-
-
-            document.getElementById(
-                "chartAISupport"
-            ).textContent =
-                data.support ||
-                "Not clearly visible in the supplied chart.";
-
-
-            document.getElementById(
-                "chartAIVolume"
-            ).textContent =
-                data.volume ||
-                "Not clearly visible in the supplied chart.";
-
-
-            document.getElementById(
-                "chartAIBase"
-            ).textContent =
-                data.base ||
-                "Not clearly visible in the supplied chart.";
-
-
-            document.getElementById(
-                "chartAIBreakout"
-            ).textContent =
-                data.breakout ||
-                "Not clearly visible in the supplied chart.";
-
-
-            document.getElementById(
-                "chartAISummary"
-            ).textContent =
-                data.summary ||
-                "No chart summary was returned.";
-
-
-            /* =========================================
-            SHOW RESULTS
-            ========================================= */
-
-            const results =
-                document.getElementById(
-                    "chartAIResults"
-                );
-
-
-            results.hidden = false;
-
-
-            results.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-
-
-        }
-        catch (error) {
-
-            console.error(
-                "AI Chart Analysis Error:",
-                error
+                "chartAIFreeLock"
             );
 
 
-            alert(
-                "Chart analysis is temporarily unavailable. Please try again."
-            );
+        if (!lock) {
+
+            lock =
+                document.createElement("div");
+
+
+            lock.id =
+                "chartAIFreeLock";
+
+
+            lock.className =
+                "chart-ai-free-lock";
+
+
+            lock.innerHTML = `
+
+                <div class="chart-ai-free-lock-box">
+
+                    <div class="chart-ai-free-lock-icon">
+                        🔒
+                    </div>
+
+                    <div class="chart-ai-free-lock-title">
+                        Full AI Chart Analysis
+                    </div>
+
+                    <div class="chart-ai-free-lock-text">
+                        Your chart is ready for EdgeBreak AI analysis.
+                        Full AI-powered chart research is available
+                        to paid EdgeBreak members.
+                    </div>
+
+                    <a
+                        href="/pricing.html"
+                        class="free-unlock-btn"
+                    >
+                        Unlock AI Chart Analysis
+                    </a>
+
+                    <div class="free-lock-trial">
+                        7 Day Free Trial • Cancel Anytime
+                    </div>
+
+                    <div class="chart-ai-free-sample-note">
+                        Preview shown below — your uploaded chart
+                        has not been analysed.
+                    </div>
+
+                </div>
+
+            `;
+
+
+            results.appendChild(lock);
 
         }
-        finally {
 
-            /* =========================================
-            RESET BUTTON
-            ========================================= */
 
-            chartAIAnalyseBtn.disabled = false;
+        /* =========================================
+        SCROLL TO PREVIEW
+        ========================================= */
 
-            chartAIAnalyseBtn.innerHTML =
-                originalButtonText;
-
-        }
+        results.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
 
     }
 );
