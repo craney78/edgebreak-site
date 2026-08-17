@@ -11924,17 +11924,10 @@ document.addEventListener(
                             .from(
                                 "edgebreak_free_leads"
                             )
-                            .upsert(
-                                {
-                                    email: email,
-                                    source:
-                                        "edgebreak_free"
-                                },
-                                {
-                                    onConflict:
-                                        "email"
-                                }
-                            );
+                            .insert({
+                                email: email,
+                                source: "edgebreak_free"
+                            });
 
 
                     if (error) {
