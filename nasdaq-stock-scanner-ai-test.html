@@ -16193,7 +16193,20 @@ chartAIAnalyseBtn?.addEventListener(
 
 /* =========================================
 EDGEBREAK DAILY BRIEF
+
+NEW FLOW:
+
+1. Check for completed Daily Brief
+2. If cached → open immediately
+3. Load candidate file
+4. Split into batches of 5
+5. Process ONE batch at a time
+6. Each successful batch is cached in Supabase
+7. Failed batch retries
+8. Previously completed batches are skipped
+9. Finalize completed Daily Brief
 ========================================= */
+
 
 const dailyBriefButton =
     document.getElementById(
@@ -16227,113 +16240,377 @@ dailyBriefButton.addEventListener(
 );
 
 
+/* =========================================
+SETTINGS
+========================================= */
+
+const DAILY_BRIEF_BATCH_SIZE = 5;
+
+const DAILY_BRIEF_MAX_ATTEMPTS = 3;
+
+const DAILY_BRIEF_RETRY_DELAY = 5000;
+
+
+/* =========================================
+OPEN DAILY BRIEF
+========================================= */
+
 async function openDailyBrief(){
 
     dailyBriefContent.hidden = false;
 
     dailyBriefLoading.hidden = false;
+
     dailyBriefError.hidden = true;
+
     dailyBriefResults.hidden = true;
 
     dailyBriefButton.disabled = true;
 
     dailyBriefButton.innerHTML =
-        "✦ Opening Today's Brief...";
+        "✦ Checking Today's Brief...";
 
 
     try{
 
         /* =================================
-        LOAD DAILY BRIEF CANDIDATES
+        STEP 1
+        CHECK FINAL CACHE FIRST
 
-        This file is only needed on a cache
-        miss. The API checks Supabase first.
+        This costs no Gemini research.
         ================================= */
 
-        let candidates = [];
+        const status =
+            await dailyBriefRequest({
+
+                action:"status"
+
+            });
 
 
-        try{
+        /* =================================
+        COMPLETE BRIEF ALREADY EXISTS
+        ================================= */
 
-            const candidateResponse =
-                await fetch(
-                    "/daily_brief_candidates.json",
-                    {
-                        cache:"no-store"
-                    }
+        if(status.complete){
+
+            console.log(
+                "Daily Brief complete cache hit."
+            );
+
+
+            renderDailyBrief(status);
+
+
+            dailyBriefLoading.hidden = true;
+
+            dailyBriefResults.hidden = false;
+
+
+            dailyBriefButton.innerHTML =
+                "✓ Today's Brief Open";
+
+
+            return;
+
+        }
+
+
+        /* =================================
+        STEP 2
+        LOAD CANDIDATES
+        ================================= */
+
+        dailyBriefButton.innerHTML =
+            "✦ Loading Today's Research...";
+
+
+        const candidateResponse =
+            await fetch(
+                "/daily_brief_candidates.json",
+                {
+                    cache:"no-store"
+                }
+            );
+
+
+        if(!candidateResponse.ok){
+
+            throw new Error(
+                "Today's Daily Brief candidates are unavailable."
+            );
+
+        }
+
+
+        const candidateData =
+            await candidateResponse.json();
+
+
+        const candidates =
+            Array.isArray(candidateData)
+                ? candidateData
+                : [];
+
+
+        if(candidates.length === 0){
+
+            throw new Error(
+                "No Daily Brief candidates are available today."
+            );
+
+        }
+
+
+        console.log(
+            `Daily Brief candidates: ${candidates.length}`
+        );
+
+
+        /* =================================
+        STEP 3
+        CREATE BATCHES OF FIVE
+        ================================= */
+
+        const batches = [];
+
+
+        for(
+            let i = 0;
+            i < candidates.length;
+            i += DAILY_BRIEF_BATCH_SIZE
+        ){
+
+            batches.push(
+
+                candidates.slice(
+                    i,
+                    i + DAILY_BRIEF_BATCH_SIZE
+                )
+
+            );
+
+        }
+
+
+        const totalBatches =
+            batches.length;
+
+
+        console.log(
+            `Daily Brief batches: ${totalBatches}`
+        );
+
+
+        /* =================================
+        EXISTING BATCHES
+
+        These may exist because:
+
+        - an earlier attempt partially worked
+        - browser was closed
+        - Gemini failed halfway through
+        - another user started generation
+
+        We do NOT pay for them again.
+        ================================= */
+
+        const completedBatches =
+            new Set(
+
+                Array.isArray(
+                    status.completedBatches
+                )
+                    ? status.completedBatches.map(
+                        Number
+                    )
+                    : []
+
+            );
+
+
+        console.log(
+            "Already completed Daily Brief batches:",
+            [...completedBatches]
+        );
+
+
+        /* =================================
+        STEP 4
+        PROCESS SEQUENTIALLY
+
+        IMPORTANT:
+
+        There is deliberately NO Promise.all().
+
+        Gemini gets ONE grounded research
+        request at a time.
+        ================================= */
+
+        for(
+            let index = 0;
+            index < batches.length;
+            index++
+        ){
+
+            const batchNumber =
+                index + 1;
+
+
+            /* =============================
+            SKIP CACHED BATCH
+            ============================= */
+
+            if(
+                completedBatches.has(
+                    batchNumber
+                )
+            ){
+
+                console.log(
+                    `Daily Brief Batch ${batchNumber}/${totalBatches} already cached — skipping Gemini.`
                 );
 
 
-            if(candidateResponse.ok){
+                updateDailyBriefProgress(
+                    batchNumber,
+                    totalBatches,
+                    "cached"
+                );
 
-                candidates =
-                    await candidateResponse.json();
+
+                continue;
+
+            }
+
+
+            /* =============================
+            RESEARCH THIS BATCH
+            ============================= */
+
+            updateDailyBriefProgress(
+                batchNumber,
+                totalBatches,
+                "researching"
+            );
+
+
+            const batchResult =
+                await processDailyBriefBatch(
+
+                    batches[index],
+
+                    batchNumber,
+
+                    totalBatches
+
+                );
+
+
+            if(
+                !batchResult ||
+                !batchResult.success
+            ){
+
+                throw new Error(
+                    `Daily Brief research stopped at batch ${batchNumber}.`
+                );
+
+            }
+
+
+            completedBatches.add(
+                batchNumber
+            );
+
+
+            console.log(
+                `Daily Brief Batch ${batchNumber}/${totalBatches} complete.`
+            );
+
+
+            /* =============================
+            SMALL GAP BETWEEN GEMINI CALLS
+
+            We're deliberately being gentle
+            with Google's grounded service.
+            ============================= */
+
+            if(
+                batchNumber <
+                totalBatches
+            ){
+
+                await dailyBriefSleep(
+                    1500
+                );
 
             }
 
         }
-        catch(candidateError){
 
-            console.warn(
-                "Candidate file unavailable:",
-                candidateError
+
+        /* =================================
+        STEP 5
+        FINALIZE
+
+        Gemini is NOT called here.
+
+        API reads all successful batches from
+        Supabase and creates daily_briefs row.
+        ================================= */
+
+        dailyBriefButton.innerHTML =
+            "✦ Building Today's Brief...";
+
+
+        const finalBrief =
+            await dailyBriefRequest({
+
+                action:
+                    "finalize",
+
+                totalBatches,
+
+                totalCandidates:
+                    candidates.length
+
+            });
+
+
+        if(
+            !finalBrief.complete
+        ){
+
+            throw new Error(
+                "Today's Daily Brief could not be completed."
             );
 
         }
 
 
         /* =================================
-        OPEN / GENERATE DAILY BRIEF
+        STEP 6
+        DISPLAY
         ================================= */
 
-        const response =
-            await fetch(
-                "/api/daily_brief_ai",
-                {
-
-                    method:"POST",
-
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:JSON.stringify({
-                        candidates:
-                            Array.isArray(candidates)
-                                ? candidates
-                                : []
-                    })
-
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        if(!response.ok){
-
-            throw new Error(
-                data.error ||
-                "Unable to open today's Daily Brief."
-            );
-
-        }
-
-
-        renderDailyBrief(data);
+        renderDailyBrief(
+            finalBrief
+        );
 
 
         dailyBriefLoading.hidden = true;
+
         dailyBriefResults.hidden = false;
 
 
         dailyBriefButton.innerHTML =
-            data.cached
-                ? "✓ Today's Brief Open"
-                : "✓ Today's Brief Ready";
+            "✓ Today's Brief Ready";
+
+
+        console.log(
+            "EdgeBreak Daily Brief complete."
+        );
 
 
     }
@@ -16349,17 +16626,338 @@ async function openDailyBrief(){
 
         dailyBriefError.hidden = false;
 
+
         dailyBriefError.textContent =
             error.message ||
             "Today's Daily Brief is temporarily unavailable.";
 
 
         dailyBriefButton.innerHTML =
-            "✦ Try Again";
+            "✦ Continue Today's Brief";
+
 
         dailyBriefButton.disabled = false;
 
     }
+
+}
+
+
+/* =========================================
+PROCESS ONE BATCH
+
+Retries only THIS batch.
+
+Successful previous batches remain safely
+cached in Supabase.
+========================================= */
+
+async function processDailyBriefBatch(
+    candidates,
+    batchNumber,
+    totalBatches
+){
+
+    let lastError = null;
+
+
+    for(
+        let attempt = 1;
+        attempt <= DAILY_BRIEF_MAX_ATTEMPTS;
+        attempt++
+    ){
+
+        try{
+
+            console.log(
+                `Daily Brief Batch ${batchNumber} attempt ${attempt}/${DAILY_BRIEF_MAX_ATTEMPTS}`
+            );
+
+
+            if(attempt > 1){
+
+                updateDailyBriefProgress(
+                    batchNumber,
+                    totalBatches,
+                    "retrying",
+                    attempt
+                );
+
+            }
+
+
+            const result =
+                await dailyBriefRequest({
+
+                    action:
+                        "batch",
+
+                    batchNumber,
+
+                    totalBatches,
+
+                    candidates
+
+                });
+
+
+            return result;
+
+        }
+        catch(error){
+
+            lastError = error;
+
+
+            console.warn(
+                `Daily Brief Batch ${batchNumber} attempt ${attempt} failed:`,
+                error
+            );
+
+
+            if(
+                attempt <
+                DAILY_BRIEF_MAX_ATTEMPTS
+            ){
+
+                updateDailyBriefProgress(
+                    batchNumber,
+                    totalBatches,
+                    "waiting",
+                    attempt + 1
+                );
+
+
+                await dailyBriefSleep(
+                    DAILY_BRIEF_RETRY_DELAY
+                );
+
+            }
+
+        }
+
+    }
+
+
+    throw new Error(
+        `Batch ${batchNumber} could not be completed after ${DAILY_BRIEF_MAX_ATTEMPTS} attempts. ${lastError?.message || ""}`
+    );
+
+}
+
+
+/* =========================================
+API REQUEST
+
+Important:
+
+We read text FIRST.
+
+This prevents the old:
+
+Unexpected token 'A'...
+is not valid JSON
+
+error if Vercel ever returns plain text/HTML.
+========================================= */
+
+async function dailyBriefRequest(
+    payload
+){
+
+    const response =
+        await fetch(
+            "/api/daily_brief_ai",
+            {
+
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:
+                    JSON.stringify(
+                        payload
+                    )
+
+            }
+        );
+
+
+    const rawResponse =
+        await response.text();
+
+
+    let data = {};
+
+
+    if(rawResponse){
+
+        try{
+
+            data =
+                JSON.parse(
+                    rawResponse
+                );
+
+        }
+        catch(parseError){
+
+            console.error(
+                "Daily Brief non-JSON API response:",
+                rawResponse
+            );
+
+
+            throw new Error(
+                response.ok
+                    ? "The Daily Brief server returned an invalid response."
+                    : `Daily Brief server error (${response.status}).`
+            );
+
+        }
+
+    }
+
+
+    if(!response.ok){
+
+        const error =
+            new Error(
+                data.error ||
+                `Daily Brief request failed (${response.status}).`
+            );
+
+
+        error.status =
+            response.status;
+
+
+        error.data =
+            data;
+
+
+        throw error;
+
+    }
+
+
+    return data;
+
+}
+
+
+/* =========================================
+PROGRESS MESSAGE
+
+Uses your existing loading element.
+No extra HTML required.
+========================================= */
+
+function updateDailyBriefProgress(
+    batchNumber,
+    totalBatches,
+    state,
+    attempt = 1
+){
+
+    let message = "";
+
+
+    switch(state){
+
+        case "researching":
+
+            message =
+                `Researching today's market activity... ${batchNumber} of ${totalBatches}`;
+
+            break;
+
+
+        case "retrying":
+
+            message =
+                `Research service busy — retrying section ${batchNumber} of ${totalBatches}...`;
+
+            break;
+
+
+        case "waiting":
+
+            message =
+                `Research service busy — preparing another attempt...`;
+
+            break;
+
+
+        case "cached":
+
+            message =
+                `Loading saved research... ${batchNumber} of ${totalBatches}`;
+
+            break;
+
+
+        default:
+
+            message =
+                `Preparing today's Daily Brief...`;
+
+    }
+
+
+    /*
+    Preserve loading element structure if
+    it contains child markup.
+
+    If it is just a normal text element,
+    update its text.
+    */
+
+    const progressTarget =
+        dailyBriefLoading.querySelector(
+            "[data-daily-brief-progress]"
+        );
+
+
+    if(progressTarget){
+
+        progressTarget.textContent =
+            message;
+
+    }
+    else{
+
+        /*
+        Do not overwrite a spinner or other
+        loading HTML unless the loading
+        element contains only text.
+        */
+
+        const textNodes =
+            [...dailyBriefLoading.childNodes]
+                .filter(
+                    node =>
+                        node.nodeType === 3
+                );
+
+
+        if(
+            dailyBriefLoading.children.length === 0
+        ){
+
+            dailyBriefLoading.textContent =
+                message;
+
+        }
+
+    }
+
+
+    dailyBriefButton.innerHTML =
+        `✦ Researching ${batchNumber}/${totalBatches}`;
 
 }
 
@@ -16398,7 +16996,9 @@ function renderDailyBrief(data){
 
 
     const results =
-        Array.isArray(data.results)
+        Array.isArray(
+            data.results
+        )
             ? data.results
             : [];
 
@@ -16412,88 +17012,120 @@ function renderDailyBrief(data){
             </div>
         `;
 
+
         return;
 
     }
 
 
-    results.forEach(company => {
+    results.forEach(
+        company => {
 
-        const card =
-            document.createElement("div");
-
-
-        card.className =
-            "daily-brief-stock-card";
-
-
-        const symbols =
-            Array.isArray(company.symbols)
-                ? company.symbols.join(" / ")
-                : "";
+            const card =
+                document.createElement(
+                    "div"
+                );
 
 
-        card.innerHTML = `
+            card.className =
+                "daily-brief-stock-card";
 
-            <div class="daily-brief-stock-top">
 
-                <div>
+            const symbols =
+                Array.isArray(
+                    company.symbols
+                )
+                    ? company.symbols.join(
+                        " / "
+                    )
+                    : "";
 
-                    <div class="daily-brief-symbol">
-                        ${escapeDailyBriefHtml(symbols)}
+
+            card.innerHTML = `
+
+                <div class="daily-brief-stock-top">
+
+                    <div>
+
+                        <div class="daily-brief-symbol">
+                            ${escapeDailyBriefHtml(
+                                symbols
+                            )}
+                        </div>
+
+                        <div class="daily-brief-company">
+                            ${escapeDailyBriefHtml(
+                                company.companyName || ""
+                            )}
+                        </div>
+
                     </div>
 
-                    <div class="daily-brief-company">
+                    <span class="daily-brief-attention">
                         ${escapeDailyBriefHtml(
-                            company.companyName || ""
-                        )}
-                    </div>
+                            company.attentionLevel || ""
+                        )} ATTENTION
+                    </span>
 
                 </div>
 
-                <span class="daily-brief-attention">
+
+                <h4>
                     ${escapeDailyBriefHtml(
-                        company.attentionLevel || ""
-                    )} ATTENTION
-                </span>
+                        company.headline || ""
+                    )}
+                </h4>
 
-            </div>
-
-
-            <h4>
-                ${escapeDailyBriefHtml(
-                    company.headline || ""
-                )}
-            </h4>
-
-
-            <p>
-                ${escapeDailyBriefHtml(
-                    company.summary || ""
-                )}
-            </p>
-
-
-            <div class="daily-brief-development">
-
-                <span>
-                    Current Development
-                </span>
 
                 <p>
                     ${escapeDailyBriefHtml(
-                        company.currentDevelopment || ""
+                        company.summary || ""
                     )}
                 </p>
 
-            </div>
 
-        `;
+                <div class="daily-brief-development">
+
+                    <span>
+                        Current Development
+                    </span>
+
+                    <p>
+                        ${escapeDailyBriefHtml(
+                            company.currentDevelopment || ""
+                        )}
+                    </p>
+
+                </div>
+
+            `;
 
 
-        container.appendChild(card);
+            container.appendChild(
+                card
+            );
 
-    });
+        }
+    );
+
+}
+
+
+/* =========================================
+SLEEP
+========================================= */
+
+function dailyBriefSleep(
+    milliseconds
+){
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                milliseconds
+            )
+    );
 
 }
 
@@ -16502,14 +17134,33 @@ function renderDailyBrief(data){
 SAFE HTML
 ========================================= */
 
-function escapeDailyBriefHtml(value){
+function escapeDailyBriefHtml(
+    value
+){
 
-    return String(value || "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+    return String(
+        value || ""
+    )
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
 }
 
