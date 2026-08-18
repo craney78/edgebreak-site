@@ -1,45 +1,163 @@
 /* =========================================
 EDGEBREAK — DAILY BRIEF AI RESEARCH
-daily_brief_ai.js
+/api/daily_brief_ai.js
 ========================================= */
 
-import fs from "fs";
+export default async function handler(req, res) {
+
+    /* =====================================
+    POST ONLY
+    ===================================== */
+
+    if (req.method !== "POST") {
+
+        return res.status(405).json({
+            error: "Method not allowed."
+        });
+
+    }
 
 
-/* =========================================
-FILES
-========================================= */
+    try {
 
-const INPUT_FILE =
-    "daily_brief_candidates.json";
+        /* =====================================
+        GEMINI API KEY
+        ===================================== */
 
-const OUTPUT_FILE =
-    "daily_brief_ai_results.json";
-
-
-/* =========================================
-GEMINI
-========================================= */
-
-const API_KEY =
-    process.env.GEMINI_API_KEY;
-
-const GEMINI_MODEL =
-    "gemini-3.6-flash";
+        const apiKey =
+            process.env.GEMINI_API_KEY;
 
 
-/* =========================================
-SETTINGS
-========================================= */
+        if (!apiKey) {
 
-const MAX_OUTPUT_TOKENS = 6000;
+            console.error(
+                "GEMINI_API_KEY is missing."
+            );
+
+            return res.status(500).json({
+                error:
+                    "Daily Brief research is temporarily unavailable."
+            });
+
+        }
 
 
-/* =========================================
-SYSTEM INSTRUCTION
-========================================= */
+        /* =====================================
+        GET CANDIDATES
+        ===================================== */
 
-const SYSTEM_INSTRUCTION = `
+        const { candidates } =
+            req.body || {};
+
+
+        if (
+            !Array.isArray(candidates) ||
+            candidates.length === 0
+        ) {
+
+            return res.status(400).json({
+                error:
+                    "No Daily Brief candidates were provided."
+            });
+
+        }
+
+
+        /* =====================================
+        SIZE PROTECTION
+        ===================================== */
+
+        if (candidates.length > 150) {
+
+            return res.status(400).json({
+                error:
+                    "Too many Daily Brief candidates were provided."
+            });
+
+        }
+
+
+        /* =====================================
+        CLEAN INPUT
+
+        Only send Gemini the information it
+        actually needs for company research.
+
+        Scanner technical calculations are
+        deliberately NOT sent.
+        ===================================== */
+
+        const cleanCandidates =
+            candidates
+                .filter(
+                    stock =>
+                        stock &&
+                        stock.symbol
+                )
+                .map(stock => ({
+
+                    symbol:
+                        String(
+                            stock.symbol
+                        )
+                            .trim()
+                            .toUpperCase(),
+
+                    scanners:
+                        Array.isArray(
+                            stock.scanners
+                        )
+                            ? stock.scanners
+                                .map(
+                                    scanner =>
+                                        String(scanner)
+                                            .trim()
+                                )
+                                .filter(Boolean)
+                            : [],
+
+                    company: {
+
+                        name:
+                            cleanField(
+                                stock.company?.name,
+                                200
+                            ),
+
+                        sector:
+                            cleanField(
+                                stock.company?.sector,
+                                150
+                            ),
+
+                        industry:
+                            cleanField(
+                                stock.company?.industry,
+                                150
+                            )
+
+                    }
+
+                }));
+
+
+        if (
+            cleanCandidates.length === 0
+        ) {
+
+            return res.status(400).json({
+                error:
+                    "No valid Daily Brief candidates were provided."
+            });
+
+        }
+
+
+        /* =====================================
+        SYSTEM INSTRUCTION
+        ===================================== */
+
+        const systemInstruction = `
 
 You are the market-attention research engine for EdgeBreak.
 
@@ -149,7 +267,7 @@ POSITIVE AND NEGATIVE DEVELOPMENTS:
 Both positive and negative developments may justify further
 research.
 
-Do not treat inclusion as an endorsement of the company.
+Inclusion is NOT an endorsement of the company.
 
 
 DUPLICATE COMPANIES:
@@ -159,41 +277,39 @@ share classes of the same company and are responding to the
 same underlying development, research the company once and
 combine the ticker symbols into one result.
 
-For example:
-
-NWS and NWSA should normally appear as one company result
-when the attention relates to the same company development.
+For example, NWS and NWSA should normally appear as one
+company result when the attention relates to the same
+underlying development.
 
 
 ATTENTION LEVEL:
 
-For every included company assign one of:
+Every included company must receive exactly one of:
 
 HIGH
 ELEVATED
 NOTABLE
 
-These labels describe the apparent level or significance of
-CURRENT market attention or company-specific developments.
+These labels describe CURRENT market attention or the
+significance of a current company-specific development.
 
 They are NOT investment ratings.
 
 HIGH:
 
-Use only when there is particularly significant,
-unusual or clearly elevated current attention or a major
-current development.
+Use only for particularly significant or clearly unusual
+current attention or a major current development.
 
 ELEVATED:
 
-Use when current attention or developments are meaningfully
-above what would normally be expected for the company.
+Use when current attention or developments appear
+meaningfully above what would normally be expected for that
+company.
 
 NOTABLE:
 
 Use when there is a credible current development worth
-investigating but the attention does not appear unusually
-high.
+investigating but attention does not appear unusually high.
 
 
 IMPORTANT:
@@ -202,163 +318,33 @@ Do not force companies into the results.
 
 Most supplied companies may be omitted.
 
-If there is no sufficiently noteworthy current reason to
-include a company, omit it.
-
 Quality is more important than quantity.
+
+Before including each company ask:
+
+"If I ignored the stock chart and recent price performance,
+would there STILL be a current factual reason that makes
+this company noteworthy?"
+
+If the answer is NO, omit the company.
 
 Return JSON only.
 
 `;
 
 
-/* =========================================
-LOAD JSON
-========================================= */
+        /* =====================================
+        USER INSTRUCTION
+        ===================================== */
 
-function loadJson(filename) {
+        const userInstruction = `
 
-    try {
+Research these NASDAQ companies for the EdgeBreak Daily
+Brief.
 
-        const raw =
-            fs.readFileSync(
-                filename,
-                "utf8"
-            );
+Companies supplied:
 
-        return JSON.parse(raw);
-
-    }
-    catch (error) {
-
-        console.error(
-            `Could not load ${filename}:`,
-            error.message
-        );
-
-        process.exit(1);
-
-    }
-
-}
-
-
-/* =========================================
-SAVE JSON
-========================================= */
-
-function saveJson(filename, data) {
-
-    fs.writeFileSync(
-        filename,
-        JSON.stringify(
-            data,
-            null,
-            4
-        )
-    );
-
-}
-
-
-/* =========================================
-CLEAN TEXT
-========================================= */
-
-function cleanField(
-    value,
-    maxLength = 1500
-) {
-
-    if (
-        typeof value !== "string"
-    ) {
-
-        return "";
-
-    }
-
-    return value
-        .replace(/\s+/g, " ")
-        .trim()
-        .slice(0, maxLength);
-
-}
-
-
-/* =========================================
-PREPARE CANDIDATES
-
-We deliberately send only the information
-Gemini actually needs.
-
-Gemini is NOT being asked to analyse the
-technical scanner calculations again.
-========================================= */
-
-function prepareCandidates(candidates) {
-
-    return candidates
-        .filter(
-            stock =>
-                stock &&
-                stock.symbol
-        )
-        .map(stock => {
-
-            return {
-
-                symbol:
-                    String(
-                        stock.symbol
-                    ).toUpperCase(),
-
-                scanners:
-                    Array.isArray(
-                        stock.scanners
-                    )
-                        ? stock.scanners
-                        : [],
-
-                company: {
-
-                    name:
-                        stock.company?.name ||
-                        "",
-
-                    sector:
-                        stock.company?.sector ||
-                        "",
-
-                    industry:
-                        stock.company?.industry ||
-                        ""
-
-                }
-
-            };
-
-        });
-
-}
-
-
-/* =========================================
-BUILD USER INSTRUCTION
-========================================= */
-
-function buildUserInstruction(
-    candidates
-) {
-
-    return `
-
-Research the following NASDAQ companies for the EdgeBreak
-Daily Brief.
-
-There are ${candidates.length} supplied ticker candidates.
-
-Remember:
+${cleanCandidates.length}
 
 These companies have ALREADY passed EdgeBreak's technical
 scanners.
@@ -368,14 +354,14 @@ Do not perform another technical assessment.
 Research CURRENT market attention and company-specific
 developments using Google Search grounding.
 
-Only return companies that genuinely satisfy the inclusion
-criteria in the system instruction.
+Only include companies that genuinely satisfy the criteria
+in the system instruction.
 
-Return this exact JSON structure:
+
+RETURN EXACTLY THIS JSON STRUCTURE:
 
 {
-    "generatedAt": "",
-    "companiesReviewed": ${candidates.length},
+    "companiesReviewed": ${cleanCandidates.length},
     "companiesIncluded": 0,
     "results": [
         {
@@ -397,49 +383,41 @@ Return this exact JSON structure:
 FIELD RULES
 
 
-generatedAt
-
-Use the current date/time if reasonably available.
-
-
 companiesReviewed
 
-Must equal:
-
-${candidates.length}
+Must equal ${cleanCandidates.length}.
 
 
 companiesIncluded
 
-Must equal the number of objects returned in results.
+Must equal the number of objects in results.
 
 
 symbols
 
-An array of ticker symbols.
+Array of supplied ticker symbols.
 
-Normally this contains one ticker.
+Normally one ticker.
 
-Combine multiple share classes when they represent the same
-company and same underlying development.
+Combine share classes when appropriate.
 
 
 companyName
 
-The company's current name.
+Current company name.
 
 
 scanners
 
-Return the scanner labels supplied with the candidate.
+Use the scanner labels supplied with the candidate.
 
-If combined share classes appeared in different scanners,
-combine the scanner labels without duplicates.
+If share classes are combined, combine scanner labels
+without duplicates.
 
 
 attentionLevel
 
-Must be exactly one of:
+Exactly one of:
 
 HIGH
 ELEVATED
@@ -448,31 +426,29 @@ NOTABLE
 
 headline
 
-A short factual headline describing why the company is
-currently noteworthy.
+A short factual headline describing the current reason for
+attention.
 
-Do not use promotional language.
+No promotional language.
 
-Do not make predictions.
-
-Keep this concise.
+No prediction.
 
 
 summary
 
-Approximately one or two concise sentences explaining the
-current situation.
+One or two concise sentences explaining the current
+situation.
 
-This will appear directly on the EdgeBreak Daily Brief.
+This text may appear directly on the EdgeBreak Daily Brief.
 
-Do not give investment advice.
+No investment advice.
 
 
 currentDevelopment
 
 State the specific current event, catalyst, filing,
-announcement, unusual activity or development responsible
-for inclusion.
+announcement, unusual activity or material development that
+justifies inclusion.
 
 Be factual and specific.
 
@@ -480,813 +456,642 @@ Be factual and specific.
 whyIncluded
 
 Briefly explain why the CURRENT attention or development is
-noteworthy enough to justify further research.
+noteworthy enough for further research.
 
-Do not mention technical chart quality as the primary
-reason.
+Technical chart quality must not be the primary reason.
 
 
 developmentDate
 
-Return the date of the most relevant current development
-when it can be established.
+Use YYYY-MM-DD when the date can reliably be established.
 
-Prefer:
-
-YYYY-MM-DD
-
-If a reliable date cannot be determined, return an empty
-string.
+Otherwise return an empty string.
 
 
 sourceNames
 
-Return a short array containing the names of the principal
-credible sources supporting the inclusion.
-
-Examples could include:
-
-company investor relations
-SEC
-Reuters
-Nasdaq
-FDA
-major financial news organisations
+Return a short array of the principal credible sources that
+support inclusion.
 
 Do not invent sources.
 
 
-IMPORTANT FINAL CHECK:
+FINAL TEST FOR EVERY RESULT:
 
-Before including each company ask:
+Ignore the stock's chart and recent price performance.
 
-"If I ignored the stock chart and recent price performance,
-would there STILL be a current factual reason that makes
-this company noteworthy?"
+Is there STILL a current factual reason for this company to
+appear in the Daily Brief?
 
-If the answer is NO:
+If NO:
 
-DO NOT INCLUDE IT.
-
-Return JSON only.
+OMIT IT.
 
 
 CANDIDATES:
 
 ${JSON.stringify(
-    candidates,
+    cleanCandidates,
     null,
     2
 )}
 
+Return JSON only.
+
 `;
 
-}
 
+        /* =====================================
+        SEND TO GEMINI
+        ===================================== */
 
-/* =========================================
-VALIDATE RESULT
-========================================= */
+        const geminiResponse =
+            await fetch(
 
-function validateResult(result) {
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
 
-    if (
-        !result ||
-        typeof result !== "object"
-    ) {
+                {
 
-        throw new Error(
-            "Gemini result is not an object."
-        );
+                    method: "POST",
 
-    }
+                    headers: {
 
+                        "Content-Type":
+                            "application/json",
 
-    if (
-        !Array.isArray(
-            result.results
-        )
-    ) {
-
-        throw new Error(
-            "Gemini result does not contain a results array."
-        );
-
-    }
-
-}
-
-
-/* =========================================
-CLEAN GEMINI RESULTS
-========================================= */
-
-function cleanResults(
-    rawResult,
-    reviewedCount
-) {
-
-    const allowedLevels =
-        new Set([
-            "HIGH",
-            "ELEVATED",
-            "NOTABLE"
-        ]);
-
-
-    const results = [];
-
-
-    for (
-        const item of
-        rawResult.results
-    ) {
-
-        if (
-            !item ||
-            typeof item !== "object"
-        ) {
-
-            continue;
-
-        }
-
-
-        const symbols =
-            Array.isArray(
-                item.symbols
-            )
-                ? item.symbols
-                    .map(
-                        symbol =>
-                            String(symbol)
-                                .trim()
-                                .toUpperCase()
-                    )
-                    .filter(Boolean)
-                : [];
-
-
-        if (
-            symbols.length === 0
-        ) {
-
-            continue;
-
-        }
-
-
-        const level =
-            String(
-                item.attentionLevel ||
-                ""
-            )
-                .trim()
-                .toUpperCase();
-
-
-        if (
-            !allowedLevels.has(
-                level
-            )
-        ) {
-
-            continue;
-
-        }
-
-
-        const headline =
-            cleanField(
-                item.headline,
-                220
-            );
-
-
-        const summary =
-            cleanField(
-                item.summary,
-                600
-            );
-
-
-        const currentDevelopment =
-            cleanField(
-                item.currentDevelopment,
-                1000
-            );
-
-
-        const whyIncluded =
-            cleanField(
-                item.whyIncluded,
-                800
-            );
-
-
-        /*
-        A result without an actual current
-        development is not useful enough
-        for the Daily Brief.
-        */
-
-        if (
-            !headline ||
-            !summary ||
-            !currentDevelopment
-        ) {
-
-            continue;
-
-        }
-
-
-        const scanners =
-            Array.isArray(
-                item.scanners
-            )
-                ? [
-                    ...new Set(
-                        item.scanners
-                            .map(
-                                value =>
-                                    String(value)
-                                        .trim()
-                            )
-                            .filter(Boolean)
-                    )
-                ]
-                : [];
-
-
-        const sourceNames =
-            Array.isArray(
-                item.sourceNames
-            )
-                ? [
-                    ...new Set(
-                        item.sourceNames
-                            .map(
-                                value =>
-                                    cleanField(
-                                        value,
-                                        120
-                                    )
-                            )
-                            .filter(Boolean)
-                    )
-                ]
-                : [];
-
-
-        results.push({
-
-            symbols,
-
-            companyName:
-                cleanField(
-                    item.companyName,
-                    200
-                ),
-
-            scanners,
-
-            attentionLevel:
-                level,
-
-            headline,
-
-            summary,
-
-            currentDevelopment,
-
-            whyIncluded,
-
-            developmentDate:
-                cleanField(
-                    item.developmentDate,
-                    40
-                ),
-
-            sourceNames
-
-        });
-
-    }
-
-
-    return {
-
-        generatedAt:
-            new Date()
-                .toISOString(),
-
-        companiesReviewed:
-            reviewedCount,
-
-        companiesIncluded:
-            results.length,
-
-        results
-
-    };
-
-}
-
-
-/* =========================================
-SAFETY CHECK
-========================================= */
-
-function containsUnsafeLanguage(
-    result
-) {
-
-    const text =
-        JSON.stringify(
-            result
-        );
-
-
-    const prohibitedPatterns = [
-
-        /\bstrong buy\b/i,
-
-        /\bstrong sell\b/i,
-
-        /\byou should buy\b/i,
-
-        /\byou should sell\b/i,
-
-        /\byou should hold\b/i,
-
-        /\brecommend(?:s|ed|ing)? buying\b/i,
-
-        /\brecommend(?:s|ed|ing)? selling\b/i,
-
-        /\bbuy opportunity\b/i,
-
-        /\bsell opportunity\b/i,
-
-        /\bprice target\b/i,
-
-        /\btarget price\b/i,
-
-        /\bexpected return\b/i,
-
-        /\bguaranteed return\b/i,
-
-        /\bguaranteed profit\b/i,
-
-        /\bshould enter\b/i,
-
-        /\bshould exit\b/i,
-
-        /\bwinning stock\b/i,
-
-        /\bhigh probability trade\b/i,
-
-        /\bgoing to the moon\b/i
-
-    ];
-
-
-    return prohibitedPatterns.some(
-        pattern =>
-            pattern.test(text)
-    );
-
-}
-
-
-/* =========================================
-CALL GEMINI
-========================================= */
-
-async function researchWithGemini(
-    candidates
-) {
-
-    if (!API_KEY) {
-
-        throw new Error(
-            "GEMINI_API_KEY is missing."
-        );
-
-    }
-
-
-    const userInstruction =
-        buildUserInstruction(
-            candidates
-        );
-
-
-    const response =
-        await fetch(
-
-            `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
-
-            {
-
-                method: "POST",
-
-                headers: {
-
-                    "Content-Type":
-                        "application/json",
-
-                    "x-goog-api-key":
-                        API_KEY
-
-                },
-
-                body: JSON.stringify({
-
-                    systemInstruction: {
-
-                        parts: [
-                            {
-                                text:
-                                    SYSTEM_INSTRUCTION
-                            }
-                        ]
+                        "x-goog-api-key":
+                            apiKey
 
                     },
 
+                    body: JSON.stringify({
 
-                    contents: [
-
-                        {
-
-                            role: "user",
+                        systemInstruction: {
 
                             parts: [
-
                                 {
                                     text:
-                                        userInstruction
+                                        systemInstruction
                                 }
-
                             ]
 
+                        },
+
+
+                        contents: [
+
+                            {
+
+                                role: "user",
+
+                                parts: [
+
+                                    {
+                                        text:
+                                            userInstruction
+                                    }
+
+                                ]
+
+                            }
+
+                        ],
+
+
+                        /* =====================
+                        GOOGLE SEARCH GROUNDING
+                        ===================== */
+
+                        tools: [
+
+                            {
+                                google_search: {}
+                            }
+
+                        ],
+
+
+                        generationConfig: {
+
+                            maxOutputTokens:
+                                6000,
+
+                            responseMimeType:
+                                "application/json",
+
+                            temperature:
+                                0.2
+
                         }
 
-                    ],
+                    })
+
+                }
+
+            );
 
 
-                    /*
-                    GOOGLE SEARCH GROUNDING
-                    */
+        /* =====================================
+        GEMINI API ERROR
+        ===================================== */
 
-                    tools: [
+        if (!geminiResponse.ok) {
 
-                        {
-                            google_search: {}
-                        }
-
-                    ],
+            const errorText =
+                await geminiResponse.text();
 
 
-                    generationConfig: {
+            console.error(
+                "Gemini Daily Brief Error:",
+                geminiResponse.status,
+                errorText
+            );
 
-                        maxOutputTokens:
-                            MAX_OUTPUT_TOKENS,
 
-                        responseMimeType:
-                            "application/json",
+            return res.status(500).json({
+                error:
+                    "Daily Brief research is temporarily unavailable."
+            });
 
-                        temperature:
-                            0.2
+        }
 
-                    }
 
-                })
+        const geminiData =
+            await geminiResponse.json();
+
+
+        /* =====================================
+        EXTRACT GEMINI TEXT
+        ===================================== */
+
+        const rawText =
+            geminiData
+                ?.candidates?.[0]
+                ?.content
+                ?.parts
+                ?.map(
+                    part =>
+                        part.text || ""
+                )
+                ?.join("")
+                ?.trim();
+
+
+        if (!rawText) {
+
+            console.error(
+                "Gemini returned no Daily Brief research:",
+                JSON.stringify(
+                    geminiData
+                )
+            );
+
+
+            return res.status(500).json({
+                error:
+                    "No Daily Brief research was returned."
+            });
+
+        }
+
+
+        /* =====================================
+        PARSE JSON
+        ===================================== */
+
+        let research;
+
+
+        try {
+
+            research =
+                JSON.parse(
+                    rawText
+                );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Gemini Daily Brief JSON Parse Error:",
+                error,
+                rawText
+            );
+
+
+            return res.status(500).json({
+                error:
+                    "Daily Brief research could not be processed."
+            });
+
+        }
+
+
+        /* =====================================
+        VALIDATE RESULTS ARRAY
+        ===================================== */
+
+        if (
+            !research ||
+            !Array.isArray(
+                research.results
+            )
+        ) {
+
+            console.error(
+                "Invalid Daily Brief structure:",
+                research
+            );
+
+
+            return res.status(500).json({
+                error:
+                    "Daily Brief research returned an invalid result."
+            });
+
+        }
+
+
+        /* =====================================
+        CLEAN RESULTS
+        ===================================== */
+
+        const allowedLevels =
+            new Set([
+                "HIGH",
+                "ELEVATED",
+                "NOTABLE"
+            ]);
+
+
+        const cleanResults = [];
+
+
+        for (
+            const item of
+            research.results
+        ) {
+
+            if (
+                !item ||
+                typeof item !== "object"
+            ) {
+
+                continue;
 
             }
 
-        );
+
+            const symbols =
+                Array.isArray(
+                    item.symbols
+                )
+                    ? [
+                        ...new Set(
+                            item.symbols
+                                .map(
+                                    symbol =>
+                                        String(symbol)
+                                            .trim()
+                                            .toUpperCase()
+                                )
+                                .filter(Boolean)
+                        )
+                    ]
+                    : [];
 
 
-    if (!response.ok) {
+            if (
+                symbols.length === 0
+            ) {
 
-        const errorText =
-            await response.text();
+                continue;
 
-
-        throw new Error(
-            `Gemini API error ${response.status}: ${errorText}`
-        );
-
-    }
+            }
 
 
-    const data =
-        await response.json();
+            /* =============================
+            ONLY ALLOW SUPPLIED SYMBOLS
+            ============================= */
+
+            const suppliedSymbols =
+                new Set(
+                    cleanCandidates.map(
+                        stock =>
+                            stock.symbol
+                    )
+                );
 
 
-    const rawText =
-        data
-            ?.candidates?.[0]
-            ?.content
-            ?.parts
-            ?.map(
-                part =>
-                    part.text || ""
-            )
-            ?.join("")
-            ?.trim();
+            const validSymbols =
+                symbols.filter(
+                    symbol =>
+                        suppliedSymbols.has(
+                            symbol
+                        )
+                );
 
 
-    if (!rawText) {
+            if (
+                validSymbols.length === 0
+            ) {
 
-        console.error(
+                continue;
+
+            }
+
+
+            const attentionLevel =
+                String(
+                    item.attentionLevel ||
+                    ""
+                )
+                    .trim()
+                    .toUpperCase();
+
+
+            if (
+                !allowedLevels.has(
+                    attentionLevel
+                )
+            ) {
+
+                continue;
+
+            }
+
+
+            const headline =
+                cleanField(
+                    item.headline,
+                    220
+                );
+
+
+            const summary =
+                cleanField(
+                    item.summary,
+                    650
+                );
+
+
+            const currentDevelopment =
+                cleanField(
+                    item.currentDevelopment,
+                    1000
+                );
+
+
+            const whyIncluded =
+                cleanField(
+                    item.whyIncluded,
+                    800
+                );
+
+
+            if (
+                !headline ||
+                !summary ||
+                !currentDevelopment ||
+                !whyIncluded
+            ) {
+
+                continue;
+
+            }
+
+
+            const scanners =
+                Array.isArray(
+                    item.scanners
+                )
+                    ? [
+                        ...new Set(
+                            item.scanners
+                                .map(
+                                    scanner =>
+                                        cleanField(
+                                            scanner,
+                                            80
+                                        )
+                                )
+                                .filter(Boolean)
+                        )
+                    ]
+                    : [];
+
+
+            const sourceNames =
+                Array.isArray(
+                    item.sourceNames
+                )
+                    ? [
+                        ...new Set(
+                            item.sourceNames
+                                .map(
+                                    source =>
+                                        cleanField(
+                                            source,
+                                            150
+                                        )
+                                )
+                                .filter(Boolean)
+                        )
+                    ]
+                    : [];
+
+
+            cleanResults.push({
+
+                symbols:
+                    validSymbols,
+
+                companyName:
+                    cleanField(
+                        item.companyName,
+                        200
+                    ),
+
+                scanners,
+
+                attentionLevel,
+
+                headline,
+
+                summary,
+
+                currentDevelopment,
+
+                whyIncluded,
+
+                developmentDate:
+                    cleanField(
+                        item.developmentDate,
+                        40
+                    ),
+
+                sourceNames
+
+            });
+
+        }
+
+
+        /* =====================================
+        FINAL RESPONSE
+        ===================================== */
+
+        const finalResearch = {
+
+            generatedAt:
+                new Date()
+                    .toISOString(),
+
+            companiesReviewed:
+                cleanCandidates.length,
+
+            companiesIncluded:
+                cleanResults.length,
+
+            results:
+                cleanResults
+
+        };
+
+
+        /* =====================================
+        SERVER-SIDE SAFETY FILTER
+        ===================================== */
+
+        const combinedText =
             JSON.stringify(
-                data,
-                null,
-                2
-            )
-        );
-
-
-        throw new Error(
-            "Gemini returned no research text."
-        );
-
-    }
-
-
-    let parsed;
-
-
-    try {
-
-        parsed =
-            JSON.parse(
-                rawText
+                finalResearch
             );
+
+
+        const prohibitedPatterns = [
+
+            /\bstrong buy\b/i,
+
+            /\bstrong sell\b/i,
+
+            /\byou should buy\b/i,
+
+            /\byou should sell\b/i,
+
+            /\byou should hold\b/i,
+
+            /\brecommend(?:s|ed|ing)? buying\b/i,
+
+            /\brecommend(?:s|ed|ing)? selling\b/i,
+
+            /\bbuy opportunity\b/i,
+
+            /\bsell opportunity\b/i,
+
+            /\bprice target\b/i,
+
+            /\btarget price\b/i,
+
+            /\bexpected return\b/i,
+
+            /\bguaranteed return\b/i,
+
+            /\bguaranteed profit\b/i,
+
+            /\bshould enter\b/i,
+
+            /\bshould exit\b/i,
+
+            /\bwinning stock\b/i,
+
+            /\bhigh probability trade\b/i,
+
+            /\bgoing to the moon\b/i
+
+        ];
+
+
+        const unsafe =
+            prohibitedPatterns.some(
+                pattern =>
+                    pattern.test(
+                        combinedText
+                    )
+            );
+
+
+        if (unsafe) {
+
+            console.error(
+                "Gemini Daily Brief response blocked by safety filter."
+            );
+
+
+            return res.status(422).json({
+                error:
+                    "The Daily Brief research could not be displayed."
+            });
+
+        }
+
+
+        /* =====================================
+        SUCCESS
+        ===================================== */
+
+        return res
+            .status(200)
+            .json(
+                finalResearch
+            );
+
 
     }
     catch (error) {
 
         console.error(
-            "RAW GEMINI RESPONSE:"
-        );
-
-        console.error(
-            rawText
+            "Gemini Daily Brief Server Error:",
+            error
         );
 
 
-        throw new Error(
-            "Gemini returned invalid JSON."
-        );
+        return res.status(500).json({
+
+            error:
+                "Daily Brief research is temporarily unavailable."
+
+        });
 
     }
-
-
-    return parsed;
 
 }
 
 
 /* =========================================
-MAIN
+CLEAN OUTPUT
 ========================================= */
 
-async function main() {
-
-    console.log();
-    console.log(
-        "==================================="
-    );
-    console.log(
-        "EDGEBREAK DAILY BRIEF AI"
-    );
-    console.log(
-        "==================================="
-    );
-    console.log();
-
-
-    /* =====================================
-    LOAD CANDIDATES
-    ===================================== */
-
-    const rawCandidates =
-        loadJson(
-            INPUT_FILE
-        );
-
+function cleanField(
+    value,
+    maxLength = 800
+) {
 
     if (
-        !Array.isArray(
-            rawCandidates
-        )
+        typeof value !== "string"
     ) {
 
-        throw new Error(
-            `${INPUT_FILE} must contain an array.`
-        );
+        return "";
 
     }
 
 
-    const candidates =
-        prepareCandidates(
-            rawCandidates
+    return value
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(
+            0,
+            maxLength
         );
-
-
-    console.log(
-        `Candidates loaded : ${candidates.length}`
-    );
-
-
-    if (
-        candidates.length === 0
-    ) {
-
-        console.log(
-            "No candidates to research."
-        );
-
-        saveJson(
-            OUTPUT_FILE,
-            {
-                generatedAt:
-                    new Date()
-                        .toISOString(),
-
-                companiesReviewed:
-                    0,
-
-                companiesIncluded:
-                    0,
-
-                results:
-                    []
-            }
-        );
-
-        return;
-
-    }
-
-
-    console.log(
-        "Sending candidates to Gemini..."
-    );
-
-    console.log(
-        "Google Search grounding enabled."
-    );
-
-    console.log();
-
-
-    /* =====================================
-    GEMINI RESEARCH
-    ===================================== */
-
-    const rawResult =
-        await researchWithGemini(
-            candidates
-        );
-
-
-    validateResult(
-        rawResult
-    );
-
-
-    /* =====================================
-    CLEAN OUTPUT
-    ===================================== */
-
-    const finalResult =
-        cleanResults(
-            rawResult,
-            candidates.length
-        );
-
-
-    /* =====================================
-    SAFETY
-    ===================================== */
-
-    if (
-        containsUnsafeLanguage(
-            finalResult
-        )
-    ) {
-
-        throw new Error(
-            "Gemini response blocked by Daily Brief safety filter."
-        );
-
-    }
-
-
-    /* =====================================
-    SAVE
-    ===================================== */
-
-    saveJson(
-        OUTPUT_FILE,
-        finalResult
-    );
-
-
-    /* =====================================
-    TERMINAL RESULTS
-    ===================================== */
-
-    console.log(
-        "==================================="
-    );
-
-    console.log(
-        "DAILY BRIEF AI RESULTS"
-    );
-
-    console.log(
-        "==================================="
-    );
-
-    console.log();
-
-
-    console.log(
-        `Companies reviewed : ${finalResult.companiesReviewed}`
-    );
-
-    console.log(
-        `Companies included : ${finalResult.companiesIncluded}`
-    );
-
-    console.log();
-
-
-    for (
-        const company of
-        finalResult.results
-    ) {
-
-        console.log(
-            "-----------------------------------"
-        );
-
-        console.log(
-            `${company.symbols.join("/")} | ${company.attentionLevel}`
-        );
-
-        console.log(
-            company.companyName
-        );
-
-        console.log(
-            company.headline
-        );
-
-        console.log();
-
-    }
-
-
-    console.log(
-        "-----------------------------------"
-    );
-
-    console.log();
-
-    console.log(
-        `Saved results to ${OUTPUT_FILE}`
-    );
-
-    console.log();
 
 }
-
-
-/* =========================================
-RUN
-========================================= */
-
-main()
-    .catch(error => {
-
-        console.error();
-        console.error(
-            "DAILY BRIEF AI FAILED"
-        );
-
-        console.error(
-            error.message
-        );
-
-        console.error();
-
-        process.exit(1);
-
-    });
