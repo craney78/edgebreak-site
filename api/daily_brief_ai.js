@@ -1,23 +1,26 @@
 /* =========================================
-EDGEBREAK — DAILY BRIEF AI RESEARCH
+EDGEBREAK DAILY BRIEF AI
 /api/daily_brief_ai.js
 
-FLOW:
-1. Check Supabase cache
-2. Clean candidates
-3. Split candidates into batches of 10
-4. Research all batches in parallel
-5. Retry temporary Gemini failures once
-6. Keep successful batches if one still fails
-7. Combine + validate + deduplicate
-8. Save ONE Daily Brief to Supabase
+NEW ARCHITECTURE
+
+STATUS:
+Browser asks whether today's completed brief exists.
+
+BATCH:
+Browser sends ONE small batch.
+Gemini researches only that batch.
+Successful batch is immediately cached.
+
+FINALIZE:
+When all batches are complete, browser asks API
+to combine cached batches into today's brief.
+
+No single request researches the entire candidate list.
 ========================================= */
 
-export default async function handler(req, res) {
 
-    /* =====================================
-    POST ONLY
-    ===================================== */
+export default async function handler(req, res) {
 
     if (req.method !== "POST") {
 
@@ -28,62 +31,328 @@ export default async function handler(req, res) {
     }
 
 
-    /* =====================================
-    ENVIRONMENT VARIABLES
-    ===================================== */
-
-    if (!process.env.GEMINI_API_KEY) {
-
-        return res.status(500).json({
-            error:
-                "Daily Brief AI is not configured."
-        });
-
-    }
-
-
-    if (
-        !process.env.SUPABASE_URL ||
-        !process.env.SUPABASE_SERVICE_KEY
-    ) {
-
-        return res.status(500).json({
-            error:
-                "Daily Brief cache is not configured."
-        });
-
-    }
-
-
     try {
 
-        /* =====================================
-        US MARKET DATE
-        ===================================== */
+        const action =
+            String(
+                req.body?.action || "status"
+            ).trim();
+
 
         const briefDate =
             getNewYorkDate();
 
 
         console.log(
-            `EdgeBreak Daily Brief date: ${briefDate}`
+            `Daily Brief action: ${action} | ${briefDate}`
         );
 
 
         /* =====================================
-        CHECK SUPABASE CACHE FIRST
+        CHECK ENVIRONMENT
         ===================================== */
 
-        const cachedBrief =
-            await getCachedBrief(
-                briefDate
+        if (
+            !process.env.SUPABASE_URL ||
+            !process.env.SUPABASE_SERVICE_KEY
+        ) {
+
+            return res.status(500).json({
+                error:
+                    "Daily Brief cache is not configured."
+            });
+
+        }
+
+
+        /* =====================================
+        STATUS
+        ===================================== */
+
+        if (action === "status") {
+
+            const completeBrief =
+                await getCompleteBrief(
+                    briefDate
+                );
+
+
+            if (completeBrief) {
+
+                console.log(
+                    `Daily Brief COMPLETE CACHE HIT: ${briefDate}`
+                );
+
+
+                return res.status(200).json({
+
+                    success: true,
+
+                    complete: true,
+
+                    cached: true,
+
+                    briefDate:
+                        completeBrief.brief_date,
+
+                    generatedAt:
+                        completeBrief.generated_at,
+
+                    companiesReviewed:
+                        completeBrief.companies_reviewed,
+
+                    companiesIncluded:
+                        completeBrief.companies_included,
+
+                    results:
+                        Array.isArray(
+                            completeBrief.ai_results?.results
+                        )
+                            ? completeBrief.ai_results.results
+                            : []
+
+                });
+
+            }
+
+
+            const existingBatches =
+                await getExistingBatches(
+                    briefDate
+                );
+
+
+            return res.status(200).json({
+
+                success: true,
+
+                complete: false,
+
+                cached: false,
+
+                briefDate,
+
+                completedBatches:
+                    existingBatches.map(
+                        row => row.batch_number
+                    )
+
+            });
+
+        }
+
+
+        /* =====================================
+        RESEARCH ONE BATCH
+        ===================================== */
+
+        if (action === "batch") {
+
+            if (!process.env.GEMINI_API_KEY) {
+
+                return res.status(500).json({
+                    error:
+                        "Daily Brief AI is not configured."
+                });
+
+            }
+
+
+            const batchNumber =
+                Number(
+                    req.body?.batchNumber
+                );
+
+
+            const totalBatches =
+                Number(
+                    req.body?.totalBatches
+                );
+
+
+            const candidates =
+                Array.isArray(
+                    req.body?.candidates
+                )
+                    ? req.body.candidates
+                    : [];
+
+
+            if (
+                !Number.isInteger(batchNumber) ||
+                batchNumber < 1
+            ) {
+
+                return res.status(400).json({
+                    error:
+                        "Invalid Daily Brief batch number."
+                });
+
+            }
+
+
+            if (
+                !Number.isInteger(totalBatches) ||
+                totalBatches < 1
+            ) {
+
+                return res.status(400).json({
+                    error:
+                        "Invalid Daily Brief total batch count."
+                });
+
+            }
+
+
+            /* =================================
+            HARD LIMIT
+
+            Browser will send five.
+            Backend refuses anything excessive.
+            ================================= */
+
+            if (
+                candidates.length === 0 ||
+                candidates.length > 5
+            ) {
+
+                return res.status(400).json({
+                    error:
+                        "Daily Brief batches must contain 1 to 5 companies."
+                });
+
+            }
+
+
+            /* =================================
+            CHECK WHETHER THIS BATCH EXISTS
+            ================================= */
+
+            const cachedBatch =
+                await getCachedBatch(
+                    briefDate,
+                    batchNumber
+                );
+
+
+            if (cachedBatch) {
+
+                console.log(
+                    `Daily Brief Batch ${batchNumber} CACHE HIT`
+                );
+
+
+                return res.status(200).json({
+
+                    success: true,
+
+                    cached: true,
+
+                    briefDate,
+
+                    batchNumber,
+
+                    companiesReviewed:
+                        cachedBatch.companies_reviewed,
+
+                    companiesIncluded:
+                        cachedBatch.companies_included,
+
+                    results:
+                        Array.isArray(
+                            cachedBatch.ai_results?.results
+                        )
+                            ? cachedBatch.ai_results.results
+                            : []
+
+                });
+
+            }
+
+
+            /* =================================
+            CLEAN CANDIDATES
+            ================================= */
+
+            const cleanCandidates =
+                candidates
+                    .filter(
+                        stock =>
+                            stock &&
+                            stock.symbol
+                    )
+                    .map(
+                        cleanCandidate
+                    );
+
+
+            if (
+                cleanCandidates.length === 0
+            ) {
+
+                return res.status(400).json({
+                    error:
+                        "No valid companies were supplied."
+                });
+
+            }
+
+
+            console.log(
+                `Daily Brief Batch ${batchNumber}/${totalBatches}: researching ${cleanCandidates.length} companies`
             );
 
 
-        if (cachedBrief) {
+            /* =================================
+            GEMINI
+
+            ONE small request only.
+            ================================= */
+
+            const research =
+                await researchBatch(
+                    cleanCandidates,
+                    briefDate,
+                    batchNumber
+                );
+
+
+            const cleanedResults =
+                cleanResearchResults(
+                    research.results,
+                    cleanCandidates
+                );
+
+
+            /* =================================
+            SAVE IMMEDIATELY
+
+            Once this succeeds, we never need
+            Gemini for this batch again today.
+            ================================= */
+
+            await saveBatch({
+
+                briefDate,
+
+                batchNumber,
+
+                totalBatches,
+
+                companiesReviewed:
+                    cleanCandidates.length,
+
+                companiesIncluded:
+                    cleanedResults.length,
+
+                results:
+                    cleanedResults
+
+            });
+
 
             console.log(
-                `EdgeBreak Daily Brief CACHE HIT: ${briefDate}`
+                `Daily Brief Batch ${batchNumber} SAVED`
             );
 
 
@@ -91,546 +360,241 @@ export default async function handler(req, res) {
 
                 success: true,
 
-                cached: true,
+                cached: false,
 
-                partial: false,
+                briefDate,
 
-                briefDate:
-                    cachedBrief.brief_date,
-
-                generatedAt:
-                    cachedBrief.generated_at,
+                batchNumber,
 
                 companiesReviewed:
-                    cachedBrief.companies_reviewed,
-
-                companiesIncluded:
-                    cachedBrief.companies_included,
-
-                results:
-                    Array.isArray(
-                        cachedBrief.ai_results?.results
-                    )
-                        ? cachedBrief.ai_results.results
-                        : [],
-
-                nasdaqToday:
-                    cachedBrief.nasdaq_today || null,
-
-                marketConditions:
-                    cachedBrief.market_conditions || null,
-
-                scannerActivity:
-                    cachedBrief.scanner_activity || null
-
-            });
-
-        }
-
-
-        console.log(
-            `EdgeBreak Daily Brief CACHE MISS: ${briefDate}`
-        );
-
-
-        /* =====================================
-        GET CANDIDATES
-        ===================================== */
-
-        const { candidates } =
-            req.body || {};
-
-
-        if (
-            !Array.isArray(candidates) ||
-            candidates.length === 0
-        ) {
-
-            return res.status(400).json({
-                error:
-                    "No Daily Brief candidates were provided."
-            });
-
-        }
-
-
-        if (candidates.length > 150) {
-
-            return res.status(400).json({
-                error:
-                    "Too many Daily Brief candidates were provided."
-            });
-
-        }
-
-
-        /* =====================================
-        CLEAN INPUT
-        ===================================== */
-
-        const cleanCandidates =
-            candidates
-                .filter(
-                    stock =>
-                        stock &&
-                        stock.symbol
-                )
-                .map(stock => ({
-
-                    symbol:
-                        String(
-                            stock.symbol
-                        )
-                            .trim()
-                            .toUpperCase(),
-
-                    scanners:
-                        Array.isArray(
-                            stock.scanners
-                        )
-                            ? stock.scanners
-                                .map(
-                                    scanner =>
-                                        String(scanner)
-                                            .trim()
-                                )
-                                .filter(Boolean)
-                            : [],
-
-                    company: {
-
-                        name:
-                            cleanField(
-                                stock.company?.name,
-                                200
-                            ),
-
-                        sector:
-                            cleanField(
-                                stock.company?.sector,
-                                150
-                            ),
-
-                        industry:
-                            cleanField(
-                                stock.company?.industry,
-                                150
-                            )
-
-                    }
-
-                }));
-
-
-        if (
-            cleanCandidates.length === 0
-        ) {
-
-            return res.status(400).json({
-                error:
-                    "No valid Daily Brief candidates were provided."
-            });
-
-        }
-
-
-        console.log(
-            `Daily Brief candidates received: ${cleanCandidates.length}`
-        );
-
-
-        /* =====================================
-        SPLIT INTO BATCHES OF 10
-        ===================================== */
-
-        const BATCH_SIZE = 10;
-
-        const researchBatches = [];
-
-
-        for (
-            let i = 0;
-            i < cleanCandidates.length;
-            i += BATCH_SIZE
-        ) {
-
-            researchBatches.push(
-                cleanCandidates.slice(
-                    i,
-                    i + BATCH_SIZE
-                )
-            );
-
-        }
-
-
-        console.log(
-            `Daily Brief split into ${researchBatches.length} research batches.`
-        );
-
-
-        researchBatches.forEach(
-            (batch, index) => {
-
-                console.log(
-                    `Daily Brief Batch ${index + 1}: ${batch.length} companies`
-                );
-
-            }
-        );
-
-
-        /* =====================================
-        RUN ALL BATCHES
-
-        Each batch:
-        - gets one normal attempt
-        - temporary failures retry once
-        - a permanently failed batch does NOT
-          kill the entire Daily Brief
-        ===================================== */
-
-        const batchPromises =
-            researchBatches.map(
-                (batch, index) =>
-
-                    researchBatchWithRetry(
-                        batch,
-                        briefDate,
-                        index + 1
-                    )
-
-            );
-
-
-        const batchOutcomes =
-            await Promise.all(
-                batchPromises
-            );
-
-
-        /* =====================================
-        SEPARATE SUCCESSFUL / FAILED BATCHES
-        ===================================== */
-
-        const successfulBatches =
-            batchOutcomes.filter(
-                outcome =>
-                    outcome.success
-            );
-
-
-        const failedBatches =
-            batchOutcomes.filter(
-                outcome =>
-                    !outcome.success
-            );
-
-
-        console.log(
-            `Daily Brief successful batches: ${successfulBatches.length}/${researchBatches.length}`
-        );
-
-
-        if (
-            failedBatches.length > 0
-        ) {
-
-            console.warn(
-                `Daily Brief failed batches: ${failedBatches
-                    .map(item => item.batchNumber)
-                    .join(", ")}`
-            );
-
-        }
-
-
-        /* =====================================
-        DO NOT CACHE TOTAL FAILURE
-        ===================================== */
-
-        if (
-            successfulBatches.length === 0
-        ) {
-
-            console.error(
-                "Daily Brief failed: no research batches completed."
-            );
-
-
-            return res.status(503).json({
-
-                error:
-                    "Daily Brief research is temporarily unavailable."
-
-            });
-
-        }
-
-
-        /* =====================================
-        COUNT ACTUALLY REVIEWED COMPANIES
-        ===================================== */
-
-        const companiesActuallyReviewed =
-            successfulBatches.reduce(
-                (total, outcome) =>
-                    total +
-                    outcome.candidateCount,
-                0
-            );
-
-
-        /* =====================================
-        COMBINE RAW RESULTS
-        ===================================== */
-
-        const combinedRawResults =
-            successfulBatches.flatMap(
-                outcome =>
-                    Array.isArray(
-                        outcome.research?.results
-                    )
-                        ? outcome.research.results
-                        : []
-            );
-
-
-        console.log(
-            `Daily Brief raw results returned: ${combinedRawResults.length}`
-        );
-
-
-        /* =====================================
-        CLEAN + VALIDATE RESULTS
-        ===================================== */
-
-        const cleanResults =
-            cleanResearchResults(
-                combinedRawResults,
-                cleanCandidates
-            );
-
-
-        /* =====================================
-        DEDUPLICATE RESULTS
-        ===================================== */
-
-        const deduplicatedResults =
-            deduplicateResults(
-                cleanResults
-            );
-
-
-        console.log(
-            `Daily Brief companies included: ${deduplicatedResults.length}`
-        );
-
-
-        /* =====================================
-        BUILD FINAL AI DATA
-        ===================================== */
-
-        const aiResults = {
-
-            results:
-                deduplicatedResults,
-
-            researchMeta: {
-
-                candidatesSupplied:
                     cleanCandidates.length,
 
-                companiesReviewed:
-                    companiesActuallyReviewed,
+                companiesIncluded:
+                    cleanedResults.length,
 
-                totalBatches:
-                    researchBatches.length,
+                results:
+                    cleanedResults
 
-                successfulBatches:
-                    successfulBatches.length,
-
-                failedBatches:
-                    failedBatches.map(
-                        outcome =>
-                            outcome.batchNumber
-                    )
-
-            }
-
-        };
-
-
-        /* =====================================
-        SERVER-SIDE SAFETY FILTER
-        ===================================== */
-
-        const combinedText =
-            JSON.stringify(
-                aiResults
-            );
-
-
-        const prohibitedPatterns = [
-
-            /\bstrong buy\b/i,
-            /\bstrong sell\b/i,
-            /\byou should buy\b/i,
-            /\byou should sell\b/i,
-            /\byou should hold\b/i,
-            /\brecommend(?:s|ed|ing)? buying\b/i,
-            /\brecommend(?:s|ed|ing)? selling\b/i,
-            /\bbuy opportunity\b/i,
-            /\bsell opportunity\b/i,
-            /\bprice target\b/i,
-            /\btarget price\b/i,
-            /\bexpected return\b/i,
-            /\bguaranteed return\b/i,
-            /\bguaranteed profit\b/i,
-            /\bshould enter\b/i,
-            /\bshould exit\b/i,
-            /\bwinning stock\b/i,
-            /\bhigh probability trade\b/i,
-            /\bgoing to the moon\b/i
-
-        ];
-
-
-        const unsafe =
-            prohibitedPatterns.some(
-                pattern =>
-                    pattern.test(
-                        combinedText
-                    )
-            );
-
-
-        if (unsafe) {
-
-            console.error(
-                "Daily Brief blocked by safety filter."
-            );
-
-
-            return res.status(422).json({
-                error:
-                    "The Daily Brief research could not be displayed."
             });
 
         }
 
 
         /* =====================================
-        PARTIAL STATUS
-
-        If every batch succeeded:
-        complete
-
-        If a batch failed even after retry:
-        partial
-
-        We deliberately DO NOT cache partial
-        research as "complete".
+        FINALIZE
         ===================================== */
 
-        const isPartial =
-            failedBatches.length > 0;
+        if (action === "finalize") {
+
+            const totalBatches =
+                Number(
+                    req.body?.totalBatches
+                );
 
 
-        const generatedAt =
-            new Date()
-                .toISOString();
+            const totalCandidates =
+                Number(
+                    req.body?.totalCandidates
+                );
 
 
-        /* =====================================
-        SAVE ONLY A FULLY COMPLETE BRIEF
+            if (
+                !Number.isInteger(totalBatches) ||
+                totalBatches < 1
+            ) {
 
-        This prevents a temporary failed batch
-        from becoming the permanent Daily Brief
-        for the entire market day.
+                return res.status(400).json({
+                    error:
+                        "Invalid Daily Brief batch count."
+                });
 
-        A partial result can still be returned
-        to the current user.
-        ===================================== */
+            }
 
-        if (!isPartial) {
 
-            await saveDailyBrief({
+            const batches =
+                await getExistingBatches(
+                    briefDate
+                );
+
+
+            /* =================================
+            REQUIRE EVERY BATCH
+
+            We do NOT create an incomplete
+            Daily Brief and pretend it is done.
+            ================================= */
+
+            const completedNumbers =
+                new Set(
+                    batches.map(
+                        row =>
+                            Number(
+                                row.batch_number
+                            )
+                    )
+                );
+
+
+            const missingBatches = [];
+
+
+            for (
+                let i = 1;
+                i <= totalBatches;
+                i++
+            ) {
+
+                if (
+                    !completedNumbers.has(i)
+                ) {
+
+                    missingBatches.push(i);
+
+                }
+
+            }
+
+
+            if (
+                missingBatches.length > 0
+            ) {
+
+                return res.status(409).json({
+
+                    error:
+                        "Daily Brief research is not yet complete.",
+
+                    missingBatches
+
+                });
+
+            }
+
+
+            /* =================================
+            COMBINE RESULTS
+            ================================= */
+
+            const allResults =
+                batches
+                    .sort(
+                        (a, b) =>
+                            Number(a.batch_number) -
+                            Number(b.batch_number)
+                    )
+                    .flatMap(
+                        row =>
+                            Array.isArray(
+                                row.ai_results?.results
+                            )
+                                ? row.ai_results.results
+                                : []
+                    );
+
+
+            const finalResults =
+                deduplicateResults(
+                    allResults
+                );
+
+
+            const companiesReviewed =
+                Number.isFinite(
+                    totalCandidates
+                )
+                    ? totalCandidates
+                    : batches.reduce(
+                        (total, row) =>
+                            total +
+                            Number(
+                                row.companies_reviewed || 0
+                            ),
+                        0
+                    );
+
+
+            const generatedAt =
+                new Date()
+                    .toISOString();
+
+
+            /* =================================
+            SAFETY CHECK
+            ================================= */
+
+            if (
+                containsProhibitedAdvice(
+                    finalResults
+                )
+            ) {
+
+                console.error(
+                    "Daily Brief blocked by safety filter."
+                );
+
+
+                return res.status(422).json({
+                    error:
+                        "Today's Daily Brief could not be displayed."
+                });
+
+            }
+
+
+            /* =================================
+            SAVE FINAL BRIEF
+            ================================= */
+
+            await saveCompleteBrief({
 
                 briefDate,
 
                 generatedAt,
 
-                companiesReviewed:
-                    cleanCandidates.length,
+                companiesReviewed,
 
                 companiesIncluded:
-                    deduplicatedResults.length,
+                    finalResults.length,
 
-                aiResults
+                results:
+                    finalResults
+
+            });
+
+
+            console.log(
+                `Daily Brief COMPLETE: ${briefDate}`
+            );
+
+
+            return res.status(200).json({
+
+                success: true,
+
+                complete: true,
+
+                cached: false,
+
+                briefDate,
+
+                generatedAt,
+
+                companiesReviewed,
+
+                companiesIncluded:
+                    finalResults.length,
+
+                results:
+                    finalResults
 
             });
 
         }
-        else {
-
-            console.warn(
-                "Daily Brief is partial — not caching as complete."
-            );
-
-        }
 
 
-        /* =====================================
-        SUCCESS
-        ===================================== */
-
-        return res.status(200).json({
-
-            success: true,
-
-            cached: false,
-
-            partial:
-                isPartial,
-
-            briefDate,
-
-            generatedAt,
-
-            companiesReviewed:
-                companiesActuallyReviewed,
-
-            companiesSupplied:
-                cleanCandidates.length,
-
-            companiesIncluded:
-                deduplicatedResults.length,
-
-            successfulBatches:
-                successfulBatches.length,
-
-            totalBatches:
-                researchBatches.length,
-
-            failedBatches:
-                failedBatches.map(
-                    outcome =>
-                        outcome.batchNumber
-                ),
-
-            results:
-                deduplicatedResults,
-
-            nasdaqToday:
-                null,
-
-            marketConditions:
-                null,
-
-            scannerActivity:
-                null
-
+        return res.status(400).json({
+            error:
+                "Unknown Daily Brief action."
         });
 
 
@@ -643,7 +607,11 @@ export default async function handler(req, res) {
         );
 
 
-        return res.status(500).json({
+        return res.status(
+            error?.status === 503
+                ? 503
+                : 500
+        ).json({
 
             error:
                 "Daily Brief research is temporarily unavailable."
@@ -656,152 +624,7 @@ export default async function handler(req, res) {
 
 
 /* =========================================
-RESEARCH BATCH WITH ONE RETRY
-========================================= */
-
-async function researchBatchWithRetry(
-    candidates,
-    briefDate,
-    batchNumber
-) {
-
-    const MAX_ATTEMPTS = 2;
-
-    const RETRY_DELAY_MS = 4000;
-
-
-    for (
-        let attempt = 1;
-        attempt <= MAX_ATTEMPTS;
-        attempt++
-    ) {
-
-        try {
-
-            console.log(
-                `Daily Brief Batch ${batchNumber} attempt ${attempt}/${MAX_ATTEMPTS}`
-            );
-
-
-            const research =
-                await researchBatch(
-                    candidates,
-                    briefDate,
-                    batchNumber
-                );
-
-
-            return {
-
-                success: true,
-
-                batchNumber,
-
-                candidateCount:
-                    candidates.length,
-
-                research
-
-            };
-
-        }
-        catch (error) {
-
-            const status =
-                Number(
-                    error?.status || 0
-                );
-
-
-            console.error(
-                `Daily Brief Batch ${batchNumber} attempt ${attempt} failed:`,
-                status || "unknown",
-                error?.message || error
-            );
-
-
-            const temporaryFailure =
-                [
-                    429,
-                    500,
-                    502,
-                    503,
-                    504
-                ].includes(
-                    status
-                );
-
-
-            const canRetry =
-                attempt < MAX_ATTEMPTS &&
-                temporaryFailure;
-
-
-            if (canRetry) {
-
-                console.log(
-                    `Daily Brief Batch ${batchNumber} retrying in ${RETRY_DELAY_MS / 1000} seconds...`
-                );
-
-
-                await sleep(
-                    RETRY_DELAY_MS
-                );
-
-
-                continue;
-
-            }
-
-
-            console.error(
-                `Daily Brief Batch ${batchNumber} permanently failed.`
-            );
-
-
-            return {
-
-                success: false,
-
-                batchNumber,
-
-                candidateCount:
-                    candidates.length,
-
-                status,
-
-                error:
-                    error?.message ||
-                    "Batch failed."
-
-            };
-
-        }
-
-    }
-
-
-    return {
-
-        success: false,
-
-        batchNumber,
-
-        candidateCount:
-            candidates.length,
-
-        status: 0,
-
-        error:
-            "Batch failed."
-
-    };
-
-}
-
-
-/* =========================================
-RESEARCH ONE BATCH
+GEMINI — RESEARCH ONE SMALL BATCH
 ========================================= */
 
 async function researchBatch(
@@ -810,21 +633,12 @@ async function researchBatch(
     batchNumber
 ) {
 
-    console.log(
-        `Daily Brief Batch ${batchNumber} research starting...`
-    );
-
-
-    /* =====================================
-    SYSTEM INSTRUCTION
-    ===================================== */
-
     const systemInstruction = `
 
 You are the market-attention research engine for EdgeBreak.
 
-You will receive a list of NASDAQ stocks that have already
-passed EdgeBreak's technical stock scanners and initial
+You will receive a SMALL list of NASDAQ stocks that have
+already passed EdgeBreak's technical scanners and initial
 liquidity and industry filters.
 
 DO NOT perform another technical scan.
@@ -835,44 +649,31 @@ DO NOT provide buy, sell or hold recommendations.
 
 DO NOT provide price targets, entry prices or predictions.
 
-Your task is to determine which of the supplied companies
-currently have noteworthy or unusual market attention,
-activity, news or developments that may justify further
-research by the user.
+Your task is to determine which supplied companies currently
+have noteworthy or unusual market attention, activity, news
+or developments that may justify further research.
 
-Use current Google Search grounding to research the supplied
-companies.
+Use current Google Search grounding.
 
-IMPORTANT:
-
-Do not favour a company simply because it is large, famous
-or regularly covered by the media.
-
-We are particularly interested in companies where CURRENT
-attention or activity appears elevated, unusual or
-meaningfully different from what would normally be expected
-for that company.
+Do not favour a company because it is large or famous.
 
 Smaller and lesser-known companies are important.
 
-Do not exclude a company simply because it normally receives
-little media coverage.
-
-A previously quiet company experiencing a sudden increase
-in attention may be more relevant than a large company that
-receives substantial coverage every day.
-
+A previously quiet company experiencing unusual new attention
+may be more relevant than a large company receiving normal
+daily coverage.
 
 LOOK FOR:
 
-- unusually high or increasing trading activity
+- unusual or increasing trading activity
 - unusual recent trading volume
 - breaking or recent company news
 - earnings surprises
 - material guidance changes
 - significant contracts
 - partnerships
-- acquisitions or strategic transactions
+- acquisitions
+- strategic transactions
 - FDA or regulatory developments
 - clinical trial developments
 - important product or technology announcements
@@ -883,155 +684,76 @@ LOOK FOR:
 - unusual increases in media or investor attention
 - other credible current company-specific catalysts
 
-
 RECENCY:
 
-Give strongest preference to developments from the last
-7 days.
+Strongest preference: last 7 days.
 
-You may consider developments up to 30 days old when they
-are clearly still relevant to current market attention.
+Up to 30 days may be considered when clearly relevant to
+current attention.
 
-Older developments should normally not justify inclusion.
+IMPORTANT:
 
+Do NOT include a company solely because its stock price moved,
+its chart looks strong, it broke resistance, it has momentum,
+or it is near a high.
 
-IMPORTANT EXCLUSION:
+EdgeBreak has already analysed technical structure.
 
-Do not flag a stock solely because:
+There must be a separate factual current reason for inclusion.
 
-- its price increased or decreased
-- it is near a 52-week high or low
-- it outperformed or underperformed the broader market
-- it has a technically strong chart
-- it recently broke resistance
-- it appears to have momentum
+Before including each company ask:
 
-EdgeBreak's scanners already analyse price and technical
-structure.
+"If I completely ignored the stock chart and recent price
+performance, would there STILL be a current factual reason
+this company deserves further research?"
 
-There must ALSO be credible evidence of at least one of:
-
-- unusual or materially increased trading activity
-- unusual or materially increased market or media attention
-- a current company-specific catalyst
-- significant company news
-- a material corporate, financial, regulatory, clinical or
-  strategic development
-
-Price movement may SUPPORT the reason for inclusion.
-
-Price movement alone is NOT sufficient.
-
-
-POSITIVE AND NEGATIVE DEVELOPMENTS:
-
-Both positive and negative developments may justify further
-research.
-
-Inclusion is NOT an endorsement of the company.
-
-
-DUPLICATE COMPANIES:
-
-If multiple supplied ticker symbols represent different
-share classes of the same company and are responding to the
-same underlying development, research the company once and
-combine the ticker symbols into one result when those
-symbols are supplied in this batch.
-
+If NO, omit it.
 
 ATTENTION LEVEL:
 
-Every included company must receive exactly one of:
+Every included company receives exactly one:
 
 HIGH
 ELEVATED
 NOTABLE
 
-These labels describe CURRENT market attention or the
-significance of a current company-specific development.
+These describe current attention.
 
 They are NOT investment ratings.
 
-
-HIGH:
-
-Use only for particularly significant or clearly unusual
-current attention or a major current development.
-
-
-ELEVATED:
-
-Use when current attention or developments appear
-meaningfully above what would normally be expected for that
-company.
-
-
-NOTABLE:
-
-Use when there is a credible current development worth
-investigating but attention does not appear unusually high.
-
-
-IMPORTANT:
-
 Do not force companies into the results.
 
-Most supplied companies may be omitted.
-
-Quality is more important than quantity.
-
-Before including each company ask:
-
-"If I ignored the stock chart and recent price performance,
-would there STILL be a current factual reason that makes
-this company noteworthy?"
-
-If the answer is NO, omit the company.
+It is completely acceptable for results to be empty.
 
 Return JSON only.
 
 `;
 
 
-    /* =====================================
-    USER INSTRUCTION
-    ===================================== */
+    const prompt = `
 
-    const userInstruction = `
+Research these NASDAQ companies for the EdgeBreak Daily Brief
+dated ${briefDate}.
 
-Research this group of NASDAQ companies for the EdgeBreak
-Daily Brief dated ${briefDate}.
+Batch: ${batchNumber}
 
-This is research batch ${batchNumber}.
+Companies:
 
-Companies supplied in this batch:
+${JSON.stringify(
+    candidates,
+    null,
+    2
+)}
 
-${candidates.length}
-
-These companies have ALREADY passed EdgeBreak's technical
-scanners.
-
-Do not perform another technical assessment.
-
-Research CURRENT market attention and company-specific
-developments using Google Search grounding.
-
-Only include companies that genuinely satisfy the criteria
-in the system instruction.
-
-
-RETURN EXACTLY THIS JSON STRUCTURE:
+Return exactly this JSON structure:
 
 {
-    "companiesReviewed": ${candidates.length},
-    "companiesIncluded": 0,
     "results": [
         {
-            "symbols": [],
+            "symbols": ["TICKER"],
             "companyName": "",
             "scanners": [],
-            "attentionLevel": "",
+            "attentionLevel": "HIGH",
             "headline": "",
             "summary": "",
             "currentDevelopment": "",
@@ -1042,91 +764,34 @@ RETURN EXACTLY THIS JSON STRUCTURE:
     ]
 }
 
+Only use ticker symbols supplied above.
 
-FIELD RULES:
-
-companiesReviewed:
-Must equal ${candidates.length}.
-
-companiesIncluded:
-Must equal the number of objects in results.
-
-symbols:
-Array of supplied ticker symbols.
-
-Do not return ticker symbols that were not supplied.
-
-companyName:
-Current company name.
-
-scanners:
-Use the scanner labels supplied with the candidate.
-
-attentionLevel:
-Exactly one of:
+attentionLevel must be:
 
 HIGH
 ELEVATED
 NOTABLE
 
 headline:
-Short factual headline describing the current reason for
-attention.
-
-No promotional language.
-
-No prediction.
+Short factual headline.
 
 summary:
-One or two concise factual sentences explaining the current
-situation.
-
-This may appear directly in the EdgeBreak Daily Brief.
-
-No investment advice.
+One or two concise factual sentences.
 
 currentDevelopment:
-State the specific current event, catalyst, filing,
-announcement, unusual activity or material development that
-justifies inclusion.
+The specific current factual event or development.
 
 whyIncluded:
-Briefly explain why the CURRENT attention or development is
-noteworthy enough for further research.
-
-Technical chart quality must not be the primary reason.
+Why the current development or unusual attention justifies
+further investigation.
 
 developmentDate:
-Use YYYY-MM-DD when the date can reliably be established.
-
-Otherwise return an empty string.
+YYYY-MM-DD where reliably known, otherwise "".
 
 sourceNames:
-Return a short array of the principal credible sources that
-support inclusion.
+Principal credible sources supporting inclusion.
 
 Do not invent sources.
-
-
-FINAL TEST FOR EVERY RESULT:
-
-Ignore the stock's chart and recent price performance.
-
-Is there STILL a current factual reason for this company to
-appear in today's Daily Brief?
-
-If NO:
-
-OMIT IT.
-
-
-CANDIDATES:
-
-${JSON.stringify(
-    candidates,
-    null,
-    2
-)}
 
 Return JSON only.
 
@@ -1134,131 +799,175 @@ Return JSON only.
 
 
     /* =====================================
-    GEMINI REQUEST
+    TIMEOUT GEMINI BEFORE VERCEL DOES
+
+    Important:
+    We would rather abandon ONE batch than
+    leave Vercel hanging for five minutes.
     ===================================== */
 
-    const geminiResponse =
-        await fetch(
+    const controller =
+        new AbortController();
 
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
 
-            {
+    const timeout =
+        setTimeout(
+            () =>
+                controller.abort(),
+            70000
+        );
 
-                method: "POST",
 
-                headers: {
+    let response;
 
-                    "Content-Type":
-                        "application/json",
 
-                    "x-goog-api-key":
-                        process.env.GEMINI_API_KEY
+    try {
 
-                },
+        response =
+            await fetch(
 
-                body: JSON.stringify({
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
 
-                    systemInstruction: {
+                {
 
-                        parts: [
-                            {
-                                text:
-                                    systemInstruction
-                            }
-                        ]
+                    method: "POST",
+
+                    signal:
+                        controller.signal,
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "x-goog-api-key":
+                            process.env.GEMINI_API_KEY
 
                     },
 
+                    body:
+                        JSON.stringify({
 
-                    contents: [
+                            systemInstruction: {
 
-                        {
+                                parts: [
+                                    {
+                                        text:
+                                            systemInstruction
+                                    }
+                                ]
 
-                            role: "user",
+                            },
 
-                            parts: [
+                            contents: [
+
                                 {
-                                    text:
-                                        userInstruction
+
+                                    role: "user",
+
+                                    parts: [
+                                        {
+                                            text:
+                                                prompt
+                                        }
+                                    ]
+
                                 }
-                            ]
 
-                        }
+                            ],
 
-                    ],
+                            tools: [
+                                {
+                                    google_search: {}
+                                }
+                            ],
 
+                            generationConfig: {
 
-                    tools: [
+                                temperature:
+                                    0.1,
 
-                        {
-                            google_search: {}
-                        }
+                                maxOutputTokens:
+                                    1600,
 
-                    ],
+                                responseMimeType:
+                                    "application/json"
 
+                            }
 
-                    generationConfig: {
+                        })
 
-                        maxOutputTokens:
-                            2000,
+                }
 
-                        responseMimeType:
-                            "application/json",
-
-                        temperature:
-                            0.2
-
-                    }
-
-                })
-
-            }
-
-        );
-
-
-    /* =====================================
-    GEMINI ERROR
-    ===================================== */
-
-    if (!geminiResponse.ok) {
-
-        const errorText =
-            await geminiResponse.text();
-
-
-        console.error(
-            `Gemini Daily Brief Batch ${batchNumber} Error:`,
-            geminiResponse.status,
-            errorText
-        );
-
-
-        const error =
-            new Error(
-                `Gemini returned HTTP ${geminiResponse.status}.`
             );
 
+    }
+    catch (error) {
 
-        error.status =
-            geminiResponse.status;
+        if (
+            error?.name ===
+            "AbortError"
+        ) {
+
+            const timeoutError =
+                new Error(
+                    `Daily Brief Batch ${batchNumber} timed out.`
+                );
+
+
+            timeoutError.status = 503;
+
+            throw timeoutError;
+
+        }
 
 
         throw error;
 
     }
+    finally {
+
+        clearTimeout(
+            timeout
+        );
+
+    }
 
 
-    const geminiData =
-        await geminiResponse.json();
+    if (!response.ok) {
+
+        const errorText =
+            await response.text();
 
 
-    /* =====================================
-    EXTRACT OUTPUT
-    ===================================== */
+        console.error(
+            `Gemini Daily Brief Batch ${batchNumber}:`,
+            response.status,
+            errorText
+        );
+
+
+        const geminiError =
+            new Error(
+                `Gemini returned HTTP ${response.status}.`
+            );
+
+
+        geminiError.status =
+            response.status;
+
+
+        throw geminiError;
+
+    }
+
+
+    const data =
+        await response.json();
+
 
     const rawText =
-        geminiData
+        data
             ?.candidates?.[0]
             ?.content
             ?.parts
@@ -1273,382 +982,90 @@ Return JSON only.
     if (!rawText) {
 
         console.error(
-            `Gemini Daily Brief Batch ${batchNumber} returned no text.`
+            `Daily Brief Batch ${batchNumber}: Gemini returned no text.`
         );
 
 
-        const error =
+        const noTextError =
             new Error(
-                `Daily Brief batch ${batchNumber} returned no research.`
+                "Gemini returned no research."
             );
 
 
-        error.status = 0;
+        noTextError.status = 503;
 
-
-        throw error;
+        throw noTextError;
 
     }
 
 
-    /* =====================================
-    PARSE JSON
-    ===================================== */
-
-    let research;
+    let parsed;
 
 
     try {
 
-        research =
+        parsed =
             JSON.parse(
-                rawText
+                cleanJsonText(
+                    rawText
+                )
             );
 
     }
-    catch (parseError) {
+    catch (error) {
 
         console.error(
-            `Daily Brief Batch ${batchNumber} JSON Parse Error:`,
+            `Daily Brief Batch ${batchNumber} invalid JSON:`,
             rawText
         );
 
 
-        const error =
+        const jsonError =
             new Error(
-                `Daily Brief batch ${batchNumber} returned invalid JSON.`
+                "Gemini returned invalid JSON."
             );
 
 
-        error.status = 0;
+        jsonError.status = 503;
 
-
-        throw error;
+        throw jsonError;
 
     }
 
 
     if (
-        !research ||
         !Array.isArray(
-            research.results
+            parsed?.results
         )
     ) {
 
-        const error =
+        const invalidError =
             new Error(
-                `Daily Brief batch ${batchNumber} returned an invalid result.`
+                "Gemini returned an invalid Daily Brief result."
             );
 
 
-        error.status = 0;
+        invalidError.status = 503;
 
-
-        throw error;
+        throw invalidError;
 
     }
 
 
-    console.log(
-        `Daily Brief Batch ${batchNumber} complete: ` +
-        `${research.results.length} included`
-    );
-
-
-    return research;
+    return parsed;
 
 }
 
 
 /* =========================================
-CLEAN + VALIDATE RESEARCH RESULTS
+SUPABASE — COMPLETE BRIEF
 ========================================= */
 
-function cleanResearchResults(
-    rawResults,
-    cleanCandidates
-) {
-
-    const allowedLevels =
-        new Set([
-            "HIGH",
-            "ELEVATED",
-            "NOTABLE"
-        ]);
-
-
-    const suppliedSymbols =
-        new Set(
-            cleanCandidates.map(
-                stock =>
-                    stock.symbol
-            )
-        );
-
-
-    const cleanResults = [];
-
-
-    for (
-        const item of
-        rawResults
-    ) {
-
-        if (
-            !item ||
-            typeof item !== "object"
-        ) {
-
-            continue;
-
-        }
-
-
-        const symbols =
-            Array.isArray(
-                item.symbols
-            )
-                ? [
-                    ...new Set(
-                        item.symbols
-                            .map(
-                                symbol =>
-                                    String(symbol)
-                                        .trim()
-                                        .toUpperCase()
-                            )
-                            .filter(
-                                symbol =>
-                                    suppliedSymbols.has(
-                                        symbol
-                                    )
-                            )
-                    )
-                ]
-                : [];
-
-
-        if (
-            symbols.length === 0
-        ) {
-
-            continue;
-
-        }
-
-
-        const attentionLevel =
-            String(
-                item.attentionLevel ||
-                ""
-            )
-                .trim()
-                .toUpperCase();
-
-
-        if (
-            !allowedLevels.has(
-                attentionLevel
-            )
-        ) {
-
-            continue;
-
-        }
-
-
-        const headline =
-            cleanField(
-                item.headline,
-                220
-            );
-
-
-        const summary =
-            cleanField(
-                item.summary,
-                650
-            );
-
-
-        const currentDevelopment =
-            cleanField(
-                item.currentDevelopment,
-                1000
-            );
-
-
-        const whyIncluded =
-            cleanField(
-                item.whyIncluded,
-                800
-            );
-
-
-        if (
-            !headline ||
-            !summary ||
-            !currentDevelopment ||
-            !whyIncluded
-        ) {
-
-            continue;
-
-        }
-
-
-        const scanners =
-            Array.isArray(
-                item.scanners
-            )
-                ? [
-                    ...new Set(
-                        item.scanners
-                            .map(
-                                scanner =>
-                                    cleanField(
-                                        scanner,
-                                        80
-                                    )
-                            )
-                            .filter(Boolean)
-                    )
-                ]
-                : [];
-
-
-        const sourceNames =
-            Array.isArray(
-                item.sourceNames
-            )
-                ? [
-                    ...new Set(
-                        item.sourceNames
-                            .map(
-                                source =>
-                                    cleanField(
-                                        source,
-                                        150
-                                    )
-                            )
-                            .filter(Boolean)
-                    )
-                ]
-                : [];
-
-
-        cleanResults.push({
-
-            symbols,
-
-            companyName:
-                cleanField(
-                    item.companyName,
-                    200
-                ),
-
-            scanners,
-
-            attentionLevel,
-
-            headline,
-
-            summary,
-
-            currentDevelopment,
-
-            whyIncluded,
-
-            developmentDate:
-                cleanField(
-                    item.developmentDate,
-                    40
-                ),
-
-            sourceNames
-
-        });
-
-    }
-
-
-    return cleanResults;
-
-}
-
-
-/* =========================================
-DEDUPLICATE RESULTS
-========================================= */
-
-function deduplicateResults(
-    results
-) {
-
-    const seenSymbols =
-        new Set();
-
-
-    const finalResults = [];
-
-
-    for (
-        const result of
-        results
-    ) {
-
-        const newSymbols =
-            result.symbols.filter(
-                symbol =>
-                    !seenSymbols.has(
-                        symbol
-                    )
-            );
-
-
-        if (
-            newSymbols.length === 0
-        ) {
-
-            continue;
-
-        }
-
-
-        newSymbols.forEach(
-            symbol =>
-                seenSymbols.add(
-                    symbol
-                )
-        );
-
-
-        finalResults.push({
-
-            ...result,
-
-            symbols:
-                newSymbols
-
-        });
-
-    }
-
-
-    return finalResults;
-
-}
-
-
-/* =========================================
-GET CACHED DAILY BRIEF
-========================================= */
-
-async function getCachedBrief(
+async function getCompleteBrief(
     briefDate
 ) {
 
-    const cacheUrl =
+    const url =
         `${process.env.SUPABASE_URL}` +
         `/rest/v1/daily_briefs` +
         `?brief_date=eq.${encodeURIComponent(briefDate)}` +
@@ -1657,76 +1074,228 @@ async function getCachedBrief(
         `&limit=1`;
 
 
-    try {
-
-        const response =
-            await fetch(
-                cacheUrl,
-                {
-
-                    method: "GET",
-
-                    headers: {
-
-                        "apikey":
-                            process.env.SUPABASE_SERVICE_KEY,
-
-                        "Authorization":
-                            `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
-
-                        "Content-Type":
-                            "application/json"
-
-                    }
-
-                }
-            );
+    const response =
+        await supabaseFetch(
+            url,
+            {
+                method: "GET"
+            }
+        );
 
 
-        if (!response.ok) {
+    if (!response.ok) {
 
-            const errorText =
-                await response.text();
-
-
-            console.error(
-                "Daily Brief Cache Read Error:",
-                errorText
-            );
-
-
-            return null;
-
-        }
-
-
-        const rows =
-            await response.json();
-
-
-        if (
-            Array.isArray(rows) &&
-            rows.length > 0 &&
-            rows[0].ai_results
-        ) {
-
-            return rows[0];
-
-        }
-
+        console.error(
+            "Daily Brief complete cache read failed:",
+            await response.text()
+        );
 
         return null;
 
     }
-    catch (error) {
 
-        console.error(
-            "Daily Brief Cache Read Error:",
-            error
+
+    const rows =
+        await response.json();
+
+
+    return (
+        Array.isArray(rows) &&
+        rows.length
+    )
+        ? rows[0]
+        : null;
+
+}
+
+
+/* =========================================
+SUPABASE — EXISTING BATCHES
+========================================= */
+
+async function getExistingBatches(
+    briefDate
+) {
+
+    const url =
+        `${process.env.SUPABASE_URL}` +
+        `/rest/v1/daily_brief_batches` +
+        `?brief_date=eq.${encodeURIComponent(briefDate)}` +
+        `&status=eq.complete` +
+        `&select=*` +
+        `&order=batch_number.asc`;
+
+
+    const response =
+        await supabaseFetch(
+            url,
+            {
+                method: "GET"
+            }
         );
 
 
+    if (!response.ok) {
+
+        throw new Error(
+            "Unable to read Daily Brief batches."
+        );
+
+    }
+
+
+    const rows =
+        await response.json();
+
+
+    return Array.isArray(rows)
+        ? rows
+        : [];
+
+}
+
+
+/* =========================================
+SUPABASE — ONE BATCH
+========================================= */
+
+async function getCachedBatch(
+    briefDate,
+    batchNumber
+) {
+
+    const url =
+        `${process.env.SUPABASE_URL}` +
+        `/rest/v1/daily_brief_batches` +
+        `?brief_date=eq.${encodeURIComponent(briefDate)}` +
+        `&batch_number=eq.${batchNumber}` +
+        `&status=eq.complete` +
+        `&select=*` +
+        `&limit=1`;
+
+
+    const response =
+        await supabaseFetch(
+            url,
+            {
+                method: "GET"
+            }
+        );
+
+
+    if (!response.ok) {
+
         return null;
+
+    }
+
+
+    const rows =
+        await response.json();
+
+
+    return (
+        Array.isArray(rows) &&
+        rows.length
+    )
+        ? rows[0]
+        : null;
+
+}
+
+
+/* =========================================
+SAVE ONE BATCH
+========================================= */
+
+async function saveBatch({
+
+    briefDate,
+    batchNumber,
+    totalBatches,
+    companiesReviewed,
+    companiesIncluded,
+    results
+
+}) {
+
+    const now =
+        new Date()
+            .toISOString();
+
+
+    const url =
+        `${process.env.SUPABASE_URL}` +
+        `/rest/v1/daily_brief_batches` +
+        `?on_conflict=brief_date,batch_number`;
+
+
+    const response =
+        await supabaseFetch(
+            url,
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Prefer":
+                        "resolution=merge-duplicates,return=minimal"
+
+                },
+
+                body:
+                    JSON.stringify({
+
+                        brief_date:
+                            briefDate,
+
+                        batch_number:
+                            batchNumber,
+
+                        total_batches:
+                            totalBatches,
+
+                        status:
+                            "complete",
+
+                        companies_reviewed:
+                            companiesReviewed,
+
+                        companies_included:
+                            companiesIncluded,
+
+                        ai_results: {
+                            results
+                        },
+
+                        generated_at:
+                            now,
+
+                        updated_at:
+                            now
+
+                    })
+
+            }
+        );
+
+
+    if (!response.ok) {
+
+        const text =
+            await response.text();
+
+
+        console.error(
+            "Daily Brief batch save failed:",
+            text
+        );
+
+
+        throw new Error(
+            "Daily Brief batch could not be cached."
+        );
 
     }
 
@@ -1734,55 +1303,41 @@ async function getCachedBrief(
 
 
 /* =========================================
-SAVE DAILY BRIEF
+SAVE COMPLETE DAILY BRIEF
 ========================================= */
 
-async function saveDailyBrief({
+async function saveCompleteBrief({
 
     briefDate,
-
     generatedAt,
-
     companiesReviewed,
-
     companiesIncluded,
-
-    aiResults
+    results
 
 }) {
 
-    const saveUrl =
+    const url =
         `${process.env.SUPABASE_URL}` +
         `/rest/v1/daily_briefs` +
         `?on_conflict=brief_date`;
 
 
-    try {
+    const response =
+        await supabaseFetch(
+            url,
+            {
 
-        const response =
-            await fetch(
-                saveUrl,
-                {
+                method: "POST",
 
-                    method: "POST",
+                headers: {
 
-                    headers: {
+                    "Prefer":
+                        "resolution=merge-duplicates,return=minimal"
 
-                        "apikey":
-                            process.env.SUPABASE_SERVICE_KEY,
+                },
 
-                        "Authorization":
-                            `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
-
-                        "Content-Type":
-                            "application/json",
-
-                        "Prefer":
-                            "resolution=merge-duplicates,return=minimal"
-
-                    },
-
-                    body: JSON.stringify({
+                body:
+                    JSON.stringify({
 
                         brief_date:
                             briefDate,
@@ -1796,8 +1351,9 @@ async function saveDailyBrief({
                         companies_included:
                             companiesIncluded,
 
-                        ai_results:
-                            aiResults,
+                        ai_results: {
+                            results
+                        },
 
                         generated_at:
                             generatedAt,
@@ -1807,51 +1363,21 @@ async function saveDailyBrief({
 
                     })
 
-                }
-            );
-
-
-        if (!response.ok) {
-
-            const errorText =
-                await response.text();
-
-
-            console.error(
-                "Daily Brief Cache Save Error:",
-                errorText
-            );
-
-
-            /*
-            Research succeeded.
-
-            Do not fail the user request just
-            because caching failed.
-            */
-
-            return false;
-
-        }
-
-
-        console.log(
-            `EdgeBreak Daily Brief CACHE SAVED: ${briefDate}`
+            }
         );
 
 
-        return true;
-
-    }
-    catch (error) {
+    if (!response.ok) {
 
         console.error(
-            "Daily Brief Cache Save Error:",
-            error
+            "Daily Brief final cache save failed:",
+            await response.text()
         );
 
 
-        return false;
+        throw new Error(
+            "Daily Brief could not be finalized."
+        );
 
     }
 
@@ -1859,7 +1385,375 @@ async function saveDailyBrief({
 
 
 /* =========================================
-NEW YORK MARKET DATE
+SUPABASE FETCH
+========================================= */
+
+function supabaseFetch(
+    url,
+    options = {}
+) {
+
+    return fetch(
+        url,
+        {
+
+            ...options,
+
+            headers: {
+
+                "apikey":
+                    process.env.SUPABASE_SERVICE_KEY,
+
+                "Authorization":
+                    `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+
+                "Content-Type":
+                    "application/json",
+
+                ...(options.headers || {})
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================
+CLEAN CANDIDATE
+========================================= */
+
+function cleanCandidate(
+    stock
+) {
+
+    return {
+
+        symbol:
+            String(
+                stock.symbol
+            )
+                .trim()
+                .toUpperCase(),
+
+        scanners:
+            Array.isArray(
+                stock.scanners
+            )
+                ? stock.scanners
+                    .map(
+                        scanner =>
+                            cleanField(
+                                scanner,
+                                80
+                            )
+                    )
+                    .filter(Boolean)
+                : [],
+
+        company: {
+
+            name:
+                cleanField(
+                    stock.company?.name,
+                    200
+                ),
+
+            sector:
+                cleanField(
+                    stock.company?.sector,
+                    150
+                ),
+
+            industry:
+                cleanField(
+                    stock.company?.industry,
+                    150
+                )
+
+        }
+
+    };
+
+}
+
+
+/* =========================================
+CLEAN AI RESULTS
+========================================= */
+
+function cleanResearchResults(
+    results,
+    candidates
+) {
+
+    if (
+        !Array.isArray(results)
+    ) {
+
+        return [];
+
+    }
+
+
+    const supplied =
+        new Set(
+            candidates.map(
+                candidate =>
+                    candidate.symbol
+            )
+        );
+
+
+    const allowedAttention =
+        new Set([
+            "HIGH",
+            "ELEVATED",
+            "NOTABLE"
+        ]);
+
+
+    return results
+        .map(item => {
+
+            const symbols =
+                Array.isArray(
+                    item?.symbols
+                )
+                    ? [
+                        ...new Set(
+                            item.symbols
+                                .map(
+                                    symbol =>
+                                        String(symbol)
+                                            .trim()
+                                            .toUpperCase()
+                                )
+                                .filter(
+                                    symbol =>
+                                        supplied.has(symbol)
+                                )
+                        )
+                    ]
+                    : [];
+
+
+            const attentionLevel =
+                String(
+                    item?.attentionLevel || ""
+                )
+                    .trim()
+                    .toUpperCase();
+
+
+            if (
+                symbols.length === 0 ||
+                !allowedAttention.has(
+                    attentionLevel
+                )
+            ) {
+
+                return null;
+
+            }
+
+
+            return {
+
+                symbols,
+
+                companyName:
+                    cleanField(
+                        item.companyName,
+                        200
+                    ),
+
+                scanners:
+                    Array.isArray(
+                        item.scanners
+                    )
+                        ? item.scanners
+                            .map(
+                                value =>
+                                    cleanField(
+                                        value,
+                                        80
+                                    )
+                            )
+                            .filter(Boolean)
+                        : [],
+
+                attentionLevel,
+
+                headline:
+                    cleanField(
+                        item.headline,
+                        250
+                    ),
+
+                summary:
+                    cleanField(
+                        item.summary,
+                        700
+                    ),
+
+                currentDevelopment:
+                    cleanField(
+                        item.currentDevelopment,
+                        1000
+                    ),
+
+                whyIncluded:
+                    cleanField(
+                        item.whyIncluded,
+                        800
+                    ),
+
+                developmentDate:
+                    cleanField(
+                        item.developmentDate,
+                        40
+                    ),
+
+                sourceNames:
+                    Array.isArray(
+                        item.sourceNames
+                    )
+                        ? item.sourceNames
+                            .map(
+                                value =>
+                                    cleanField(
+                                        value,
+                                        150
+                                    )
+                            )
+                            .filter(Boolean)
+                        : []
+
+            };
+
+        })
+        .filter(Boolean);
+
+}
+
+
+/* =========================================
+DEDUPLICATE
+========================================= */
+
+function deduplicateResults(
+    results
+) {
+
+    const seen =
+        new Set();
+
+
+    return results.filter(
+        item => {
+
+            const key =
+                Array.isArray(
+                    item.symbols
+                )
+                    ? item.symbols
+                        .slice()
+                        .sort()
+                        .join("|")
+                    : "";
+
+
+            if (
+                !key ||
+                seen.has(key)
+            ) {
+
+                return false;
+
+            }
+
+
+            seen.add(key);
+
+            return true;
+
+        }
+    );
+
+}
+
+
+/* =========================================
+SAFETY FILTER
+========================================= */
+
+function containsProhibitedAdvice(
+    results
+) {
+
+    const text =
+        JSON.stringify(
+            results
+        );
+
+
+    const patterns = [
+
+        /\bstrong buy\b/i,
+        /\bstrong sell\b/i,
+        /\byou should buy\b/i,
+        /\byou should sell\b/i,
+        /\byou should hold\b/i,
+        /\bbuy opportunity\b/i,
+        /\bsell opportunity\b/i,
+        /\bprice target\b/i,
+        /\btarget price\b/i,
+        /\bexpected return\b/i,
+        /\bguaranteed profit\b/i
+
+    ];
+
+
+    return patterns.some(
+        pattern =>
+            pattern.test(text)
+    );
+
+}
+
+
+/* =========================================
+CLEAN POSSIBLE JSON WRAPPER
+========================================= */
+
+function cleanJsonText(
+    value
+) {
+
+    return String(
+        value || ""
+    )
+        .replace(
+            /^```json\s*/i,
+            ""
+        )
+        .replace(
+            /^```\s*/i,
+            ""
+        )
+        .replace(
+            /```\s*$/i,
+            ""
+        )
+        .trim();
+
+}
+
+
+/* =========================================
+NEW YORK DATE
 ========================================= */
 
 function getNewYorkDate() {
@@ -1891,22 +1785,22 @@ function getNewYorkDate() {
     const values = {};
 
 
-    for (
-        const part of
-        parts
-    ) {
+    parts.forEach(
+        part => {
 
-        if (
-            part.type !== "literal"
-        ) {
+            if (
+                part.type !==
+                "literal"
+            ) {
 
-            values[
-                part.type
-            ] = part.value;
+                values[
+                    part.type
+                ] = part.value;
+
+            }
 
         }
-
-    }
+    );
 
 
     return (
@@ -1919,26 +1813,7 @@ function getNewYorkDate() {
 
 
 /* =========================================
-SLEEP
-========================================= */
-
-function sleep(
-    milliseconds
-) {
-
-    return new Promise(
-        resolve =>
-            setTimeout(
-                resolve,
-                milliseconds
-            )
-    );
-
-}
-
-
-/* =========================================
-CLEAN OUTPUT
+CLEAN FIELD
 ========================================= */
 
 function cleanField(
@@ -1947,7 +1822,8 @@ function cleanField(
 ) {
 
     if (
-        typeof value !== "string"
+        typeof value !==
+        "string"
     ) {
 
         return "";
@@ -1956,7 +1832,10 @@ function cleanField(
 
 
     return value
-        .replace(/\s+/g, " ")
+        .replace(
+            /\s+/g,
+            " "
+        )
         .trim()
         .slice(
             0,
