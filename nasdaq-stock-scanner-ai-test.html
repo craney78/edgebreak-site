@@ -6194,6 +6194,469 @@ AI CHART ANALYSIS
     }
 
 }
+
+/* ======================================================
+   EDGEBREAK AI DAILY BRIEF
+====================================================== */
+
+.daily-brief-panel{
+    margin:0 0 30px;
+    padding:32px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0b1220 0%,
+            #101827 100%
+        );
+
+    border:1px solid #1e293b;
+    border-radius:20px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.22);
+}
+
+.daily-brief-intro{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:40px;
+}
+
+.daily-brief-copy{
+    max-width:850px;
+}
+
+.daily-brief-label,
+.daily-brief-eyebrow{
+    color:#22c55e;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+}
+
+.daily-brief-label{
+    margin-bottom:10px;
+}
+
+.daily-brief-panel h2{
+    margin:0 0 12px;
+
+    color:#ffffff;
+
+    font-size:32px;
+    font-weight:800;
+    letter-spacing:-.02em;
+}
+
+.daily-brief-copy > p{
+    margin:0;
+
+    color:#94a3b8;
+
+    font-size:15px;
+    line-height:1.7;
+}
+
+.daily-brief-meta{
+    margin-top:15px;
+
+    color:#64748b;
+
+    font-size:12px;
+    font-weight:600;
+}
+
+.daily-brief-open-btn{
+    min-width:220px;
+    height:52px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+
+    padding:0 24px;
+
+    border:0;
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #22c55e,
+            #16a34a
+        );
+
+    color:#ffffff;
+
+    font-size:15px;
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+.daily-brief-open-btn:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 12px 28px rgba(34,197,94,.25);
+}
+
+.daily-brief-open-btn:disabled{
+    opacity:.65;
+    cursor:wait;
+    transform:none;
+}
+
+.daily-brief-divider{
+    height:1px;
+
+    margin:30px 0;
+
+    background:#1e293b;
+}
+
+
+/* LOADING */
+
+.daily-brief-loading{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+
+    padding:45px 20px;
+
+    color:#cbd5e1;
+}
+
+.daily-brief-loading strong{
+    display:block;
+    margin-bottom:4px;
+}
+
+.daily-brief-loading span{
+    display:block;
+
+    color:#64748b;
+    font-size:13px;
+}
+
+.daily-brief-spinner{
+    width:28px;
+    height:28px;
+
+    border:3px solid #263548;
+    border-top-color:#22c55e;
+    border-radius:50%;
+
+    animation:dailyBriefSpin .8s linear infinite;
+}
+
+@keyframes dailyBriefSpin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+
+/* ERROR */
+
+.daily-brief-error{
+    padding:18px 20px;
+
+    border:1px solid rgba(239,68,68,.25);
+    border-radius:12px;
+
+    background:rgba(239,68,68,.07);
+
+    color:#fca5a5;
+
+    font-size:14px;
+}
+
+
+/* DATE */
+
+.daily-brief-date-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:28px;
+
+    color:#64748b;
+
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.12em;
+}
+
+.daily-brief-date-row strong{
+    color:#94a3b8;
+}
+
+
+/* SECTIONS */
+
+.daily-brief-section{
+    padding:28px 0;
+
+    border-top:1px solid rgba(255,255,255,.06);
+}
+
+.daily-brief-section:first-of-type{
+    border-top:0;
+}
+
+.daily-brief-section-heading{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+
+    margin-bottom:20px;
+}
+
+.daily-brief-section-icon{
+    width:38px;
+    height:38px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex-shrink:0;
+
+    border-radius:10px;
+
+    background:rgba(34,197,94,.08);
+    border:1px solid rgba(34,197,94,.18);
+
+    color:#22c55e;
+
+    font-size:18px;
+}
+
+.daily-brief-section-heading h3{
+    margin:4px 0 0;
+
+    color:#ffffff;
+
+    font-size:23px;
+    font-weight:800;
+}
+
+.daily-brief-section-heading p{
+    margin:7px 0 0;
+
+    color:#64748b;
+
+    font-size:13px;
+    line-height:1.6;
+}
+
+.daily-brief-placeholder{
+    padding:20px;
+
+    background:#08111f;
+
+    border:1px solid #1e293b;
+    border-radius:12px;
+
+    color:#64748b;
+
+    font-size:14px;
+}
+
+
+/* SUMMARY */
+
+.daily-brief-summary-bar{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+
+    gap:14px;
+
+    margin-bottom:20px;
+}
+
+.daily-brief-summary-bar > div{
+    padding:16px 18px;
+
+    background:#08111f;
+
+    border:1px solid #1e293b;
+    border-radius:12px;
+}
+
+.daily-brief-summary-bar span{
+    display:block;
+
+    margin-bottom:5px;
+
+    color:#64748b;
+
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+}
+
+.daily-brief-summary-bar strong{
+    color:#ffffff;
+
+    font-size:23px;
+    font-weight:800;
+}
+
+
+/* STOCK CARDS */
+
+.daily-brief-stock-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:16px;
+}
+
+.daily-brief-stock-card{
+    padding:22px;
+
+    background:#08111f;
+
+    border:1px solid #1e293b;
+    border-radius:15px;
+}
+
+.daily-brief-stock-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:20px;
+
+    margin-bottom:15px;
+}
+
+.daily-brief-symbol{
+    color:#22c55e;
+
+    font-size:23px;
+    font-weight:900;
+}
+
+.daily-brief-company{
+    margin-top:3px;
+
+    color:#94a3b8;
+
+    font-size:12px;
+}
+
+.daily-brief-attention{
+    padding:6px 10px;
+
+    border-radius:999px;
+
+    background:rgba(34,197,94,.08);
+    border:1px solid rgba(34,197,94,.18);
+
+    color:#4ade80;
+
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.08em;
+
+    white-space:nowrap;
+}
+
+.daily-brief-stock-card h4{
+    margin:0 0 9px;
+
+    color:#ffffff;
+
+    font-size:16px;
+    line-height:1.45;
+}
+
+.daily-brief-stock-card p{
+    margin:0;
+
+    color:#94a3b8;
+
+    font-size:13px;
+    line-height:1.65;
+}
+
+.daily-brief-development{
+    margin-top:16px;
+    padding-top:14px;
+
+    border-top:1px solid rgba(255,255,255,.06);
+}
+
+.daily-brief-development span{
+    display:block;
+
+    margin-bottom:5px;
+
+    color:#64748b;
+
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+}
+
+
+/* DISCLAIMER */
+
+.daily-brief-disclaimer{
+    margin-top:25px;
+    padding-top:18px;
+
+    border-top:1px solid rgba(255,255,255,.06);
+
+    color:#64748b;
+
+    font-size:11px;
+    line-height:1.6;
+}
+
+
+/* MOBILE */
+
+@media(max-width:800px){
+
+    .daily-brief-panel{
+        padding:24px 20px;
+    }
+
+    .daily-brief-intro{
+        flex-direction:column;
+        align-items:stretch;
+        gap:22px;
+    }
+
+    .daily-brief-panel h2{
+        font-size:27px;
+    }
+
+    .daily-brief-open-btn{
+        width:100%;
+    }
+
+    .daily-brief-stock-grid{
+        grid-template-columns:1fr;
+    }
+
+}
 </style>  
 
 
@@ -6279,11 +6742,9 @@ AI CHART ANALYSIS
 
     <div>
 
-        <h1>NASDAQ BREAKOUT SCANNER, PRE BREAKOUT MARKET SCANNER & LAUNCHPAD (BASE) SCANNER</h1>
-
-        <p>
-            Track active breakout opportunities identified through the EdgeBreak framework or scan the entire NASDAQ using advanced price action and Smart Money filters. Discover Gold, Silver and Bronze breakouts, resistance structures, higher lows, accumulation characteristics and emerging market leaders.
-        </p>
+        <h1>
+            NASDAQ BREAKOUT & MARKET SCANNERS
+        </h1>
 
     </div>
 
@@ -6296,8 +6757,6 @@ AI CHART ANALYSIS
         stroke-linejoin="round"
     >
 
-        <!-- Resistance -->
-
         <line
             x1="3"
             y1="9"
@@ -6305,13 +6764,9 @@ AI CHART ANALYSIS
             y2="9"
         />
 
-        <!-- Breakout -->
-
         <polyline
             points="3,18 8,13 13,16 21,6"
         />
-
-        <!-- Arrow -->
 
         <polyline
             points="17,6 21,6 21,10"
@@ -6321,151 +6776,246 @@ AI CHART ANALYSIS
 
 </div>
 
-<div class="elite-featured">
+<!-- =========================================
+EDGEBREAK AI DAILY BRIEF
+========================================= -->
 
-    <div>
+<section class="daily-brief-panel" id="dailyBriefPanel">
 
-        <div class="featured-tag">
-            BREAKOUT, PRE BREAKOUT MARKET SCANNER & LAUNCHPAD (BASE) SCANNER
+    <div class="daily-brief-intro">
+
+        <div class="daily-brief-copy">
+
+            <div class="daily-brief-label">
+                ✦ AI DISCOVERY
+            </div>
+
+            <h2>EdgeBreak Daily Brief</h2>
+
+            <p>
+                Let EdgeBreak do the scanning and initial research for you.
+                Review today's NASDAQ market conditions, scanner activity
+                and companies showing noteworthy current developments.
+            </p>
+
+            <div class="daily-brief-meta">
+                Updated once daily • NASDAQ only • AI-powered research
+            </div>
+
         </div>
 
-        <h2>
-            Discover Breakouts Or Scan The Entire NASDAQ for stocks ready to breakout.
-        </h2>
-
-        <p>
-            The EdgeBreak Breakout Scanner identifies active Gold, Silver and Bronze breakout opportunities each day. The Pre Breakout NASDAQ Scanner allows you to search thousands of NASDAQ-listed stocks using resistance touches, higher lows, Smart Money filters, volume expansion and price action characteristics to identify accumulation and breakout opportunities.
-        </p>
+        <button
+            type="button"
+            class="daily-brief-open-btn"
+            id="openDailyBriefBtn"
+        >
+            <span>✦</span>
+            Open Today's Brief
+        </button>
 
     </div>
 
-    <div class="elite-feature-icons">
 
-    <!-- BREAKOUTS -->
+    <!-- DAILY BRIEF CONTENT -->
 
-    <div class="feature-item">
+    <div
+        class="daily-brief-content"
+        id="dailyBriefContent"
+        hidden
+    >
 
-        <div class="feature-icon">
+        <div class="daily-brief-divider"></div>
 
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3,17 8,12 12,13 21,4"></polyline>
-            </svg>
 
+        <!-- LOADING -->
+
+        <div
+            class="daily-brief-loading"
+            id="dailyBriefLoading"
+            hidden
+        >
+            <div class="daily-brief-spinner"></div>
+
+            <div>
+                <strong>Preparing today's Daily Brief...</strong>
+                <span>
+                    Checking today's NASDAQ research.
+                </span>
+            </div>
         </div>
 
-        <div>
 
-            <span>GOLD • SILVER • BRONZE</span>
-            <strong>BREAKOUTS</strong>
+        <!-- ERROR -->
+
+        <div
+            class="daily-brief-error"
+            id="dailyBriefError"
+            hidden
+        ></div>
+
+
+        <!-- BRIEF -->
+
+        <div
+            id="dailyBriefResults"
+            hidden
+        >
+
+            <div class="daily-brief-date-row">
+
+                <span>TODAY'S BRIEF</span>
+
+                <strong id="dailyBriefDate"></strong>
+
+            </div>
+
+
+            <!-- NASDAQ TODAY -->
+
+            <div class="daily-brief-section">
+
+                <div class="daily-brief-section-heading">
+
+                    <span class="daily-brief-section-icon">◎</span>
+
+                    <div>
+                        <span class="daily-brief-eyebrow">
+                            MARKET OVERVIEW
+                        </span>
+
+                        <h3>NASDAQ Today</h3>
+                    </div>
+
+                </div>
+
+                <div
+                    class="daily-brief-placeholder"
+                    id="dailyBriefNasdaq"
+                >
+                    Market overview coming next.
+                </div>
+
+            </div>
+
+
+            <!-- MARKET CONDITIONS -->
+
+            <div class="daily-brief-section">
+
+                <div class="daily-brief-section-heading">
+
+                    <span class="daily-brief-section-icon">↗</span>
+
+                    <div>
+                        <span class="daily-brief-eyebrow">
+                            MARKET CONDITIONS
+                        </span>
+
+                        <h3>Market Conditions</h3>
+                    </div>
+
+                </div>
+
+                <div
+                    class="daily-brief-placeholder"
+                    id="dailyBriefMarketConditions"
+                >
+                    Market-condition metrics coming next.
+                </div>
+
+            </div>
+
+
+            <!-- EDGE BREAK SCANNER ACTIVITY -->
+
+            <div class="daily-brief-section">
+
+                <div class="daily-brief-section-heading">
+
+                    <span class="daily-brief-section-icon">⌁</span>
+
+                    <div>
+                        <span class="daily-brief-eyebrow">
+                            TODAY'S SCANNER ACTIVITY
+                        </span>
+
+                        <h3>What EdgeBreak Is Seeing</h3>
+                    </div>
+
+                </div>
+
+                <div
+                    class="daily-brief-placeholder"
+                    id="dailyBriefScannerActivity"
+                >
+                    Scanner activity summary coming next.
+                </div>
+
+            </div>
+
+
+            <!-- STOCKS TO INVESTIGATE -->
+
+            <div class="daily-brief-section daily-brief-stocks-section">
+
+                <div class="daily-brief-section-heading">
+
+                    <span class="daily-brief-section-icon">✦</span>
+
+                    <div>
+                        <span class="daily-brief-eyebrow">
+                            AI RESEARCH
+                        </span>
+
+                        <h3>Stocks to Investigate</h3>
+
+                        <p>
+                            Scanner candidates showing noteworthy current
+                            attention or company-specific developments.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="daily-brief-summary-bar">
+
+                    <div>
+                        <span>Companies Reviewed</span>
+                        <strong id="dailyBriefReviewed">—</strong>
+                    </div>
+
+                    <div>
+                        <span>Included Today</span>
+                        <strong id="dailyBriefIncluded">—</strong>
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="daily-brief-stock-grid"
+                    id="dailyBriefStocks"
+                ></div>
+
+            </div>
+
+
+            <div class="daily-brief-disclaimer">
+                EdgeBreak Daily Brief provides factual market research and
+                educational information only. It does not provide investment
+                advice, recommendations, ratings, price targets or predictions.
+                AI-generated information may contain errors or outdated
+                information and important information should be independently
+                verified.
+            </div>
 
         </div>
 
     </div>
 
-    <!-- RESISTANCE -->
+</section>
 
-    <div class="feature-item">
-
-        <div class="feature-icon">
-
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="4" y1="12" x2="20" y2="12"></line>
-                <line x1="4" y1="8" x2="20" y2="8"></line>
-            </svg>
-
-        </div>
-
-        <div>
-
-            <span>RESISTANCE</span>
-            <strong>TOUCHES</strong>
-
-        </div>
-
-    </div>
-
-    <!-- HIGHER LOWS -->
-
-    <div class="feature-item">
-
-        <div class="feature-icon">
-
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3,18 8,14 13,11 21,6"></polyline>
-            </svg>
-
-        </div>
-
-        <div>
-
-            <span>HIGHER</span>
-            <strong>LOWS</strong>
-
-        </div>
-
-    </div>
-
-    <!-- SMART MONEY -->
-
-    <div class="feature-item">
-
-        <div class="feature-icon">
-
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-
-                <circle cx="12" cy="12" r="8"></circle>
-                <circle cx="12" cy="12" r="2"></circle>
-
-                <line x1="12" y1="2" x2="12" y2="6"></line>
-                <line x1="12" y1="18" x2="12" y2="22"></line>
-
-                <line x1="2" y1="12" x2="6" y2="12"></line>
-                <line x1="18" y1="12" x2="22" y2="12"></line>
-
-            </svg>
-
-        </div>
-
-        <div>
-
-        <span>SMART MONEY</span>
-        <strong>FILTER</strong>
-
-    </div>
-
-</div>
-
-    <!-- VOLUME -->
-
-    <div class="feature-item">
-
-        <div class="feature-icon">
-
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="5" y1="20" x2="5" y2="12"></line>
-                <line x1="10" y1="20" x2="10" y2="8"></line>
-                <line x1="15" y1="20" x2="15" y2="5"></line>
-                <line x1="20" y1="20" x2="20" y2="10"></line>
-            </svg>
-
-        </div>
-
-        <div>
-
-            <span>VOLUME</span>
-            <strong>EXPANSION</strong>
-
-        </div>
-
-    </div>
-
-</div>
-
-    <div class="featured-pill">
-        UPDATED DAILY
-    </div>
-
-</div>
 
 <!-- CHART -->
 <div class="scanner-chart" id="chartSection">
@@ -15614,6 +16164,332 @@ chartAIAnalyseBtn?.addEventListener(
 
     }
 );
+
+</script>
+
+<script>
+
+/* =========================================
+EDGEBREAK DAILY BRIEF
+========================================= */
+
+const dailyBriefButton =
+    document.getElementById(
+        "openDailyBriefBtn"
+    );
+
+const dailyBriefContent =
+    document.getElementById(
+        "dailyBriefContent"
+    );
+
+const dailyBriefLoading =
+    document.getElementById(
+        "dailyBriefLoading"
+    );
+
+const dailyBriefError =
+    document.getElementById(
+        "dailyBriefError"
+    );
+
+const dailyBriefResults =
+    document.getElementById(
+        "dailyBriefResults"
+    );
+
+
+dailyBriefButton.addEventListener(
+    "click",
+    openDailyBrief
+);
+
+
+async function openDailyBrief(){
+
+    dailyBriefContent.hidden = false;
+
+    dailyBriefLoading.hidden = false;
+    dailyBriefError.hidden = true;
+    dailyBriefResults.hidden = true;
+
+    dailyBriefButton.disabled = true;
+
+    dailyBriefButton.innerHTML =
+        "✦ Opening Today's Brief...";
+
+
+    try{
+
+        /* =================================
+        LOAD DAILY BRIEF CANDIDATES
+
+        This file is only needed on a cache
+        miss. The API checks Supabase first.
+        ================================= */
+
+        let candidates = [];
+
+
+        try{
+
+            const candidateResponse =
+                await fetch(
+                    "/daily_brief_candidates.json",
+                    {
+                        cache:"no-store"
+                    }
+                );
+
+
+            if(candidateResponse.ok){
+
+                candidates =
+                    await candidateResponse.json();
+
+            }
+
+        }
+        catch(candidateError){
+
+            console.warn(
+                "Candidate file unavailable:",
+                candidateError
+            );
+
+        }
+
+
+        /* =================================
+        OPEN / GENERATE DAILY BRIEF
+        ================================= */
+
+        const response =
+            await fetch(
+                "/api/daily_brief_ai",
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+                        candidates:
+                            Array.isArray(candidates)
+                                ? candidates
+                                : []
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.error ||
+                "Unable to open today's Daily Brief."
+            );
+
+        }
+
+
+        renderDailyBrief(data);
+
+
+        dailyBriefLoading.hidden = true;
+        dailyBriefResults.hidden = false;
+
+
+        dailyBriefButton.innerHTML =
+            data.cached
+                ? "✓ Today's Brief Open"
+                : "✓ Today's Brief Ready";
+
+
+    }
+    catch(error){
+
+        console.error(
+            "Daily Brief Error:",
+            error
+        );
+
+
+        dailyBriefLoading.hidden = true;
+
+        dailyBriefError.hidden = false;
+
+        dailyBriefError.textContent =
+            error.message ||
+            "Today's Daily Brief is temporarily unavailable.";
+
+
+        dailyBriefButton.innerHTML =
+            "✦ Try Again";
+
+        dailyBriefButton.disabled = false;
+
+    }
+
+}
+
+
+/* =========================================
+RENDER DAILY BRIEF
+========================================= */
+
+function renderDailyBrief(data){
+
+    document.getElementById(
+        "dailyBriefDate"
+    ).textContent =
+        data.briefDate || "";
+
+
+    document.getElementById(
+        "dailyBriefReviewed"
+    ).textContent =
+        data.companiesReviewed ?? "—";
+
+
+    document.getElementById(
+        "dailyBriefIncluded"
+    ).textContent =
+        data.companiesIncluded ?? "—";
+
+
+    const container =
+        document.getElementById(
+            "dailyBriefStocks"
+        );
+
+
+    container.innerHTML = "";
+
+
+    const results =
+        Array.isArray(data.results)
+            ? data.results
+            : [];
+
+
+    if(results.length === 0){
+
+        container.innerHTML = `
+            <div class="daily-brief-placeholder">
+                No companies met today's Daily Brief
+                research criteria.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    results.forEach(company => {
+
+        const card =
+            document.createElement("div");
+
+
+        card.className =
+            "daily-brief-stock-card";
+
+
+        const symbols =
+            Array.isArray(company.symbols)
+                ? company.symbols.join(" / ")
+                : "";
+
+
+        card.innerHTML = `
+
+            <div class="daily-brief-stock-top">
+
+                <div>
+
+                    <div class="daily-brief-symbol">
+                        ${escapeDailyBriefHtml(symbols)}
+                    </div>
+
+                    <div class="daily-brief-company">
+                        ${escapeDailyBriefHtml(
+                            company.companyName || ""
+                        )}
+                    </div>
+
+                </div>
+
+                <span class="daily-brief-attention">
+                    ${escapeDailyBriefHtml(
+                        company.attentionLevel || ""
+                    )} ATTENTION
+                </span>
+
+            </div>
+
+
+            <h4>
+                ${escapeDailyBriefHtml(
+                    company.headline || ""
+                )}
+            </h4>
+
+
+            <p>
+                ${escapeDailyBriefHtml(
+                    company.summary || ""
+                )}
+            </p>
+
+
+            <div class="daily-brief-development">
+
+                <span>
+                    Current Development
+                </span>
+
+                <p>
+                    ${escapeDailyBriefHtml(
+                        company.currentDevelopment || ""
+                    )}
+                </p>
+
+            </div>
+
+        `;
+
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* =========================================
+SAFE HTML
+========================================= */
+
+function escapeDailyBriefHtml(value){
+
+    return String(value || "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
 
 </script>
 
