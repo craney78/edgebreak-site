@@ -5,8 +5,8 @@ EDGEBREAK — DAILY BRIEF AI RESEARCH
 FLOW:
 1. Check Supabase cache
 2. Clean candidates
-3. Split candidates into 2 batches
-4. Research both batches in parallel
+3. Split candidates into batches of 10
+4. Research all batches in parallel
 5. Combine + validate + deduplicate
 6. Save ONE Daily Brief to Supabase
 ========================================= */
@@ -230,75 +230,73 @@ export default async function handler(req, res) {
         }
 
 
+        console.log(
+            `Daily Brief candidates received: ${cleanCandidates.length}`
+        );
+
+
         /* =====================================
-        SPLIT INTO TWO GROUPS
+        SPLIT INTO SMALL RESEARCH BATCHES
 
         Example:
-        69 stocks = 35 + 34
+        69 stocks =
+        10 + 10 + 10 + 10 + 10 + 10 + 9
 
-        Both requests run at the same time.
+        All batches run in parallel.
         ===================================== */
 
-        const midpoint =
-            Math.ceil(
-                cleanCandidates.length / 2
+        const BATCH_SIZE = 10;
+
+        const researchBatches = [];
+
+
+        for (
+            let i = 0;
+            i < cleanCandidates.length;
+            i += BATCH_SIZE
+        ) {
+
+            researchBatches.push(
+                cleanCandidates.slice(
+                    i,
+                    i + BATCH_SIZE
+                )
             );
 
-
-        const batchOne =
-            cleanCandidates.slice(
-                0,
-                midpoint
-            );
-
-
-        const batchTwo =
-            cleanCandidates.slice(
-                midpoint
-            );
+        }
 
 
         console.log(
-            `Daily Brief Batch 1: ${batchOne.length} companies`
+            `Daily Brief split into ${researchBatches.length} research batches.`
         );
 
 
-        console.log(
-            `Daily Brief Batch 2: ${batchTwo.length} companies`
+        researchBatches.forEach(
+            (batch, index) => {
+
+                console.log(
+                    `Daily Brief Batch ${index + 1}: ${batch.length} companies`
+                );
+
+            }
         );
 
 
         /* =====================================
-        RESEARCH BOTH BATCHES IN PARALLEL
+        RESEARCH ALL BATCHES IN PARALLEL
         ===================================== */
 
-        const researchPromises = [];
+        const researchPromises =
+            researchBatches.map(
+                (batch, index) =>
 
+                    researchBatch(
+                        batch,
+                        briefDate,
+                        index + 1
+                    )
 
-        if (batchOne.length > 0) {
-
-            researchPromises.push(
-                researchBatch(
-                    batchOne,
-                    briefDate,
-                    1
-                )
             );
-
-        }
-
-
-        if (batchTwo.length > 0) {
-
-            researchPromises.push(
-                researchBatch(
-                    batchTwo,
-                    briefDate,
-                    2
-                )
-            );
-
-        }
 
 
         const batchResearch =
@@ -340,10 +338,6 @@ export default async function handler(req, res) {
 
         /* =====================================
         DEDUPLICATE
-
-        Normally batches contain different
-        symbols, but this provides protection
-        against duplicate AI output.
         ===================================== */
 
         const deduplicatedResults =
@@ -910,7 +904,7 @@ Return JSON only.
                     generationConfig: {
 
                         maxOutputTokens:
-                            4000,
+                            2000,
 
                         responseMimeType:
                             "application/json",
