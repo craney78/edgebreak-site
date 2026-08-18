@@ -12808,15 +12808,37 @@ async function loadEdgeBreakAICompanyOverview(
         );
 
 
-        const data =
-            await response.json();
+        const responseText =
+            await response.text();
+
+        let data;
+
+        try{
+
+            data =
+                JSON.parse(responseText);
+
+        }
+        catch(error){
+
+            console.error(
+                "Daily Brief API returned non-JSON:",
+                response.status,
+                responseText
+            );
+
+            throw new Error(
+                "Today's Daily Brief took too long to generate. Please try again."
+            );
+
+        }
 
 
-        if (!response.ok) {
+        if(!response.ok){
 
             throw new Error(
                 data.error ||
-                "Company overview failed"
+                "Unable to open today's Daily Brief."
             );
 
         }
