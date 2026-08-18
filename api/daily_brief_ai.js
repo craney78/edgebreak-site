@@ -7,8 +7,10 @@ FLOW:
 2. Clean candidates
 3. Split candidates into batches of 10
 4. Research all batches in parallel
-5. Combine + validate + deduplicate
-6. Save ONE Daily Brief to Supabase
+5. Retry temporary Gemini failures once
+6. Keep successful batches if one still fails
+7. Combine + validate + deduplicate
+8. Save ONE Daily Brief to Supabase
 ========================================= */
 
 export default async function handler(req, res) {
@@ -90,6 +92,8 @@ export default async function handler(req, res) {
                 success: true,
 
                 cached: true,
+
+                partial: false,
 
                 briefDate:
                     cachedBrief.brief_date,
@@ -236,13 +240,7 @@ export default async function handler(req, res) {
 
 
         /* =====================================
-        SPLIT INTO SMALL RESEARCH BATCHES
-
-        Example:
-        69 stocks =
-        10 + 10 + 10 + 10 + 10 + 10 + 9
-
-        All batches run in parallel.
+        SPLIT INTO BATCHES OF 10
         ===================================== */
 
         const BATCH_SIZE = 10;
@@ -283,14 +281,20 @@ export default async function handler(req, res) {
 
 
         /* =====================================
-        RESEARCH ALL BATCHES IN PARALLEL
+        RUN ALL BATCHES
+
+        Each batch:
+        - gets one normal attempt
+        - temporary failures retry once
+        - a permanently failed batch does NOT
+          kill the entire Daily Brief
         ===================================== */
 
-        const researchPromises =
+        const batchPromises =
             researchBatches.map(
                 (batch, index) =>
 
-                    researchBatch(
+                    researchBatchWithRetry(
                         batch,
                         briefDate,
                         index + 1
@@ -299,9 +303,81 @@ export default async function handler(req, res) {
             );
 
 
-        const batchResearch =
+        const batchOutcomes =
             await Promise.all(
-                researchPromises
+                batchPromises
+            );
+
+
+        /* =====================================
+        SEPARATE SUCCESSFUL / FAILED BATCHES
+        ===================================== */
+
+        const successfulBatches =
+            batchOutcomes.filter(
+                outcome =>
+                    outcome.success
+            );
+
+
+        const failedBatches =
+            batchOutcomes.filter(
+                outcome =>
+                    !outcome.success
+            );
+
+
+        console.log(
+            `Daily Brief successful batches: ${successfulBatches.length}/${researchBatches.length}`
+        );
+
+
+        if (
+            failedBatches.length > 0
+        ) {
+
+            console.warn(
+                `Daily Brief failed batches: ${failedBatches
+                    .map(item => item.batchNumber)
+                    .join(", ")}`
+            );
+
+        }
+
+
+        /* =====================================
+        DO NOT CACHE TOTAL FAILURE
+        ===================================== */
+
+        if (
+            successfulBatches.length === 0
+        ) {
+
+            console.error(
+                "Daily Brief failed: no research batches completed."
+            );
+
+
+            return res.status(503).json({
+
+                error:
+                    "Daily Brief research is temporarily unavailable."
+
+            });
+
+        }
+
+
+        /* =====================================
+        COUNT ACTUALLY REVIEWED COMPANIES
+        ===================================== */
+
+        const companiesActuallyReviewed =
+            successfulBatches.reduce(
+                (total, outcome) =>
+                    total +
+                    outcome.candidateCount,
+                0
             );
 
 
@@ -310,12 +386,12 @@ export default async function handler(req, res) {
         ===================================== */
 
         const combinedRawResults =
-            batchResearch.flatMap(
-                research =>
+            successfulBatches.flatMap(
+                outcome =>
                     Array.isArray(
-                        research?.results
+                        outcome.research?.results
                     )
-                        ? research.results
+                        ? outcome.research.results
                         : []
             );
 
@@ -337,7 +413,7 @@ export default async function handler(req, res) {
 
 
         /* =====================================
-        DEDUPLICATE
+        DEDUPLICATE RESULTS
         ===================================== */
 
         const deduplicatedResults =
@@ -358,7 +434,29 @@ export default async function handler(req, res) {
         const aiResults = {
 
             results:
-                deduplicatedResults
+                deduplicatedResults,
+
+            researchMeta: {
+
+                candidatesSupplied:
+                    cleanCandidates.length,
+
+                companiesReviewed:
+                    companiesActuallyReviewed,
+
+                totalBatches:
+                    researchBatches.length,
+
+                successfulBatches:
+                    successfulBatches.length,
+
+                failedBatches:
+                    failedBatches.map(
+                        outcome =>
+                            outcome.batchNumber
+                    )
+
+            }
 
         };
 
@@ -423,29 +521,64 @@ export default async function handler(req, res) {
 
 
         /* =====================================
-        SAVE ONE COMPLETED BRIEF
+        PARTIAL STATUS
+
+        If every batch succeeded:
+        complete
+
+        If a batch failed even after retry:
+        partial
+
+        We deliberately DO NOT cache partial
+        research as "complete".
         ===================================== */
+
+        const isPartial =
+            failedBatches.length > 0;
+
 
         const generatedAt =
             new Date()
                 .toISOString();
 
 
-        await saveDailyBrief({
+        /* =====================================
+        SAVE ONLY A FULLY COMPLETE BRIEF
 
-            briefDate,
+        This prevents a temporary failed batch
+        from becoming the permanent Daily Brief
+        for the entire market day.
 
-            generatedAt,
+        A partial result can still be returned
+        to the current user.
+        ===================================== */
 
-            companiesReviewed:
-                cleanCandidates.length,
+        if (!isPartial) {
 
-            companiesIncluded:
-                deduplicatedResults.length,
+            await saveDailyBrief({
 
-            aiResults
+                briefDate,
 
-        });
+                generatedAt,
+
+                companiesReviewed:
+                    cleanCandidates.length,
+
+                companiesIncluded:
+                    deduplicatedResults.length,
+
+                aiResults
+
+            });
+
+        }
+        else {
+
+            console.warn(
+                "Daily Brief is partial — not caching as complete."
+            );
+
+        }
 
 
         /* =====================================
@@ -458,15 +591,33 @@ export default async function handler(req, res) {
 
             cached: false,
 
+            partial:
+                isPartial,
+
             briefDate,
 
             generatedAt,
 
             companiesReviewed:
+                companiesActuallyReviewed,
+
+            companiesSupplied:
                 cleanCandidates.length,
 
             companiesIncluded:
                 deduplicatedResults.length,
+
+            successfulBatches:
+                successfulBatches.length,
+
+            totalBatches:
+                researchBatches.length,
+
+            failedBatches:
+                failedBatches.map(
+                    outcome =>
+                        outcome.batchNumber
+                ),
 
             results:
                 deduplicatedResults,
@@ -500,6 +651,151 @@ export default async function handler(req, res) {
         });
 
     }
+
+}
+
+
+/* =========================================
+RESEARCH BATCH WITH ONE RETRY
+========================================= */
+
+async function researchBatchWithRetry(
+    candidates,
+    briefDate,
+    batchNumber
+) {
+
+    const MAX_ATTEMPTS = 2;
+
+    const RETRY_DELAY_MS = 4000;
+
+
+    for (
+        let attempt = 1;
+        attempt <= MAX_ATTEMPTS;
+        attempt++
+    ) {
+
+        try {
+
+            console.log(
+                `Daily Brief Batch ${batchNumber} attempt ${attempt}/${MAX_ATTEMPTS}`
+            );
+
+
+            const research =
+                await researchBatch(
+                    candidates,
+                    briefDate,
+                    batchNumber
+                );
+
+
+            return {
+
+                success: true,
+
+                batchNumber,
+
+                candidateCount:
+                    candidates.length,
+
+                research
+
+            };
+
+        }
+        catch (error) {
+
+            const status =
+                Number(
+                    error?.status || 0
+                );
+
+
+            console.error(
+                `Daily Brief Batch ${batchNumber} attempt ${attempt} failed:`,
+                status || "unknown",
+                error?.message || error
+            );
+
+
+            const temporaryFailure =
+                [
+                    429,
+                    500,
+                    502,
+                    503,
+                    504
+                ].includes(
+                    status
+                );
+
+
+            const canRetry =
+                attempt < MAX_ATTEMPTS &&
+                temporaryFailure;
+
+
+            if (canRetry) {
+
+                console.log(
+                    `Daily Brief Batch ${batchNumber} retrying in ${RETRY_DELAY_MS / 1000} seconds...`
+                );
+
+
+                await sleep(
+                    RETRY_DELAY_MS
+                );
+
+
+                continue;
+
+            }
+
+
+            console.error(
+                `Daily Brief Batch ${batchNumber} permanently failed.`
+            );
+
+
+            return {
+
+                success: false,
+
+                batchNumber,
+
+                candidateCount:
+                    candidates.length,
+
+                status,
+
+                error:
+                    error?.message ||
+                    "Batch failed."
+
+            };
+
+        }
+
+    }
+
+
+    return {
+
+        success: false,
+
+        batchNumber,
+
+        candidateCount:
+            candidates.length,
+
+        status: 0,
+
+        error:
+            "Batch failed."
+
+    };
 
 }
 
@@ -938,9 +1234,17 @@ Return JSON only.
         );
 
 
-        throw new Error(
-            `Daily Brief batch ${batchNumber} failed.`
-        );
+        const error =
+            new Error(
+                `Gemini returned HTTP ${geminiResponse.status}.`
+            );
+
+
+        error.status =
+            geminiResponse.status;
+
+
+        throw error;
 
     }
 
@@ -973,9 +1277,16 @@ Return JSON only.
         );
 
 
-        throw new Error(
-            `Daily Brief batch ${batchNumber} returned no research.`
-        );
+        const error =
+            new Error(
+                `Daily Brief batch ${batchNumber} returned no research.`
+            );
+
+
+        error.status = 0;
+
+
+        throw error;
 
     }
 
@@ -995,7 +1306,7 @@ Return JSON only.
             );
 
     }
-    catch (error) {
+    catch (parseError) {
 
         console.error(
             `Daily Brief Batch ${batchNumber} JSON Parse Error:`,
@@ -1003,9 +1314,16 @@ Return JSON only.
         );
 
 
-        throw new Error(
-            `Daily Brief batch ${batchNumber} returned invalid JSON.`
-        );
+        const error =
+            new Error(
+                `Daily Brief batch ${batchNumber} returned invalid JSON.`
+            );
+
+
+        error.status = 0;
+
+
+        throw error;
 
     }
 
@@ -1017,9 +1335,16 @@ Return JSON only.
         )
     ) {
 
-        throw new Error(
-            `Daily Brief batch ${batchNumber} returned an invalid result.`
-        );
+        const error =
+            new Error(
+                `Daily Brief batch ${batchNumber} returned an invalid result.`
+            );
+
+
+        error.status = 0;
+
+
+        throw error;
 
     }
 
@@ -1499,7 +1824,7 @@ async function saveDailyBrief({
 
 
             /*
-            AI research succeeded.
+            Research succeeded.
 
             Do not fail the user request just
             because caching failed.
@@ -1588,6 +1913,25 @@ function getNewYorkDate() {
         `${values.year}-` +
         `${values.month}-` +
         `${values.day}`
+    );
+
+}
+
+
+/* =========================================
+SLEEP
+========================================= */
+
+function sleep(
+    milliseconds
+) {
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                milliseconds
+            )
     );
 
 }
