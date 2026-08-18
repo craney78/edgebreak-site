@@ -18,28 +18,170 @@ export default async function handler(req, res) {
     }
 
 
+    /* =====================================
+    CHECK ENVIRONMENT VARIABLES
+    ===================================== */
+
+    if (!process.env.GEMINI_API_KEY) {
+
+        return res.status(500).json({
+            error:
+                "Daily Brief AI is not configured."
+        });
+
+    }
+
+
+    if (
+        !process.env.SUPABASE_URL ||
+        !process.env.SUPABASE_SERVICE_KEY
+    ) {
+
+        return res.status(500).json({
+            error:
+                "Daily Brief cache is not configured."
+        });
+
+    }
+
+
     try {
 
         /* =====================================
-        GEMINI API KEY
+        US MARKET DATE
         ===================================== */
 
-        const apiKey =
-            process.env.GEMINI_API_KEY;
+        const briefDate =
+            getNewYorkDate();
 
 
-        if (!apiKey) {
+        console.log(
+            `EdgeBreak Daily Brief date: ${briefDate}`
+        );
 
-            console.error(
-                "GEMINI_API_KEY is missing."
+
+        /* =====================================
+        CHECK SUPABASE CACHE FIRST
+        ===================================== */
+
+        const cacheUrl =
+            `${process.env.SUPABASE_URL}` +
+            `/rest/v1/daily_briefs` +
+            `?brief_date=eq.${encodeURIComponent(briefDate)}` +
+            `&status=eq.complete` +
+            `&select=*` +
+            `&limit=1`;
+
+
+        const cacheResponse =
+            await fetch(
+                cacheUrl,
+                {
+
+                    method: "GET",
+
+                    headers: {
+
+                        "apikey":
+                            process.env.SUPABASE_SERVICE_KEY,
+
+                        "Authorization":
+                            `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+
+                        "Content-Type":
+                            "application/json"
+
+                    }
+
+                }
             );
 
-            return res.status(500).json({
-                error:
-                    "Daily Brief research is temporarily unavailable."
-            });
+
+        if (cacheResponse.ok) {
+
+            const cachedRows =
+                await cacheResponse.json();
+
+
+            if (
+                Array.isArray(cachedRows) &&
+                cachedRows.length > 0 &&
+                cachedRows[0].ai_results
+            ) {
+
+                const row =
+                    cachedRows[0];
+
+
+                console.log(
+                    `EdgeBreak Daily Brief CACHE HIT: ${briefDate}`
+                );
+
+
+                return res.status(200).json({
+
+                    success: true,
+
+                    cached: true,
+
+                    briefDate:
+                        row.brief_date,
+
+                    generatedAt:
+                        row.generated_at,
+
+                    companiesReviewed:
+                        row.companies_reviewed,
+
+                    companiesIncluded:
+                        row.companies_included,
+
+                    results:
+                        Array.isArray(
+                            row.ai_results?.results
+                        )
+                            ? row.ai_results.results
+                            : [],
+
+                    nasdaqToday:
+                        row.nasdaq_today || null,
+
+                    marketConditions:
+                        row.market_conditions || null,
+
+                    scannerActivity:
+                        row.scanner_activity || null
+
+                });
+
+            }
 
         }
+        else {
+
+            const cacheError =
+                await cacheResponse.text();
+
+
+            console.error(
+                "Daily Brief Cache Read Error:",
+                cacheError
+            );
+
+            /*
+            Same behaviour as the existing
+            EdgeBreak research cache:
+
+            cache failure does not prevent
+            the AI request from continuing.
+            */
+
+        }
+
+
+        console.log(
+            `EdgeBreak Daily Brief CACHE MISS: ${briefDate}`
+        );
 
 
         /* =====================================
@@ -63,10 +205,6 @@ export default async function handler(req, res) {
         }
 
 
-        /* =====================================
-        SIZE PROTECTION
-        ===================================== */
-
         if (candidates.length > 150) {
 
             return res.status(400).json({
@@ -79,12 +217,6 @@ export default async function handler(req, res) {
 
         /* =====================================
         CLEAN INPUT
-
-        Only send Gemini the information it
-        actually needs for company research.
-
-        Scanner technical calculations are
-        deliberately NOT sent.
         ===================================== */
 
         const cleanCandidates =
@@ -181,8 +313,6 @@ research by the user.
 Use current Google Search grounding to research the supplied
 companies.
 
-IMPORTANT:
-
 Do not favour a company simply because it is large, famous
 or regularly covered by the media.
 
@@ -193,11 +323,8 @@ for that company.
 
 Smaller and lesser-known companies are important.
 
-Do not exclude a company simply because it normally receives
-little media coverage.
-
-A previously quiet company experiencing a sudden increase in
-attention may be more relevant than a large company that
+A previously quiet company experiencing a sudden increase
+in attention may be more relevant than a large company that
 receives substantial coverage every day.
 
 
@@ -247,8 +374,7 @@ Do not flag a stock solely because:
 EdgeBreak's scanners already analyse price and technical
 structure.
 
-There must ALSO be credible evidence of at least one of the
-following:
+There must ALSO be credible evidence of at least one of:
 
 - unusual or materially increased trading activity
 - unusual or materially increased market or media attention
@@ -257,7 +383,7 @@ following:
 - a material corporate, financial, regulatory, clinical or
   strategic development
 
-Price movement may SUPPORT the reason for inclusion.
+Price movement may support the reason for inclusion.
 
 Price movement alone is NOT sufficient.
 
@@ -290,26 +416,25 @@ HIGH
 ELEVATED
 NOTABLE
 
-These labels describe CURRENT market attention or the
-significance of a current company-specific development.
+These describe CURRENT attention or the significance of a
+current development.
 
 They are NOT investment ratings.
 
 HIGH:
 
-Use only for particularly significant or clearly unusual
-current attention or a major current development.
+Particularly significant or clearly unusual current
+attention or a major current development.
 
 ELEVATED:
 
-Use when current attention or developments appear
-meaningfully above what would normally be expected for that
-company.
+Current attention or developments appear meaningfully above
+what would normally be expected for that company.
 
 NOTABLE:
 
-Use when there is a credible current development worth
-investigating but attention does not appear unusually high.
+There is a credible current development worth investigating,
+but attention does not appear unusually high.
 
 
 IMPORTANT:
@@ -340,7 +465,7 @@ Return JSON only.
         const userInstruction = `
 
 Research these NASDAQ companies for the EdgeBreak Daily
-Brief.
+Brief dated ${briefDate}.
 
 Companies supplied:
 
@@ -380,99 +505,52 @@ RETURN EXACTLY THIS JSON STRUCTURE:
 }
 
 
-FIELD RULES
+FIELD RULES:
 
-
-companiesReviewed
-
+companiesReviewed:
 Must equal ${cleanCandidates.length}.
 
-
-companiesIncluded
-
+companiesIncluded:
 Must equal the number of objects in results.
 
-
-symbols
-
+symbols:
 Array of supplied ticker symbols.
-
-Normally one ticker.
-
 Combine share classes when appropriate.
 
-
-companyName
-
+companyName:
 Current company name.
 
+scanners:
+Use the supplied scanner labels.
+Combine labels without duplicates when required.
 
-scanners
+attentionLevel:
+Exactly HIGH, ELEVATED or NOTABLE.
 
-Use the scanner labels supplied with the candidate.
-
-If share classes are combined, combine scanner labels
-without duplicates.
-
-
-attentionLevel
-
-Exactly one of:
-
-HIGH
-ELEVATED
-NOTABLE
-
-
-headline
-
-A short factual headline describing the current reason for
+headline:
+Short factual headline explaining the current reason for
 attention.
 
-No promotional language.
+summary:
+One or two concise factual sentences suitable for direct
+display in the EdgeBreak Daily Brief.
 
-No prediction.
+currentDevelopment:
+The specific current event, catalyst, filing, announcement,
+unusual activity or material development justifying
+inclusion.
 
+whyIncluded:
+Briefly explain why the CURRENT development or attention
+warrants further research.
 
-summary
-
-One or two concise sentences explaining the current
-situation.
-
-This text may appear directly on the EdgeBreak Daily Brief.
-
-No investment advice.
-
-
-currentDevelopment
-
-State the specific current event, catalyst, filing,
-announcement, unusual activity or material development that
-justifies inclusion.
-
-Be factual and specific.
-
-
-whyIncluded
-
-Briefly explain why the CURRENT attention or development is
-noteworthy enough for further research.
-
-Technical chart quality must not be the primary reason.
-
-
-developmentDate
-
-Use YYYY-MM-DD when the date can reliably be established.
-
+developmentDate:
+Use YYYY-MM-DD when reliably established.
 Otherwise return an empty string.
 
-
-sourceNames
-
-Return a short array of the principal credible sources that
-support inclusion.
-
+sourceNames:
+Short array containing the principal credible sources
+supporting inclusion.
 Do not invent sources.
 
 
@@ -481,7 +559,7 @@ FINAL TEST FOR EVERY RESULT:
 Ignore the stock's chart and recent price performance.
 
 Is there STILL a current factual reason for this company to
-appear in the Daily Brief?
+appear in today's Daily Brief?
 
 If NO:
 
@@ -520,7 +598,7 @@ Return JSON only.
                             "application/json",
 
                         "x-goog-api-key":
-                            apiKey
+                            process.env.GEMINI_API_KEY
 
                     },
 
@@ -545,22 +623,16 @@ Return JSON only.
                                 role: "user",
 
                                 parts: [
-
                                     {
                                         text:
                                             userInstruction
                                     }
-
                                 ]
 
                             }
 
                         ],
 
-
-                        /* =====================
-                        GOOGLE SEARCH GROUNDING
-                        ===================== */
 
                         tools: [
 
@@ -592,7 +664,7 @@ Return JSON only.
 
 
         /* =====================================
-        GEMINI API ERROR
+        GEMINI ERROR
         ===================================== */
 
         if (!geminiResponse.ok) {
@@ -621,7 +693,7 @@ Return JSON only.
 
 
         /* =====================================
-        EXTRACT GEMINI TEXT
+        EXTRACT GEMINI OUTPUT
         ===================================== */
 
         const rawText =
@@ -673,8 +745,7 @@ Return JSON only.
         catch (error) {
 
             console.error(
-                "Gemini Daily Brief JSON Parse Error:",
-                error,
+                "Daily Brief JSON Parse Error:",
                 rawText
             );
 
@@ -687,10 +758,6 @@ Return JSON only.
         }
 
 
-        /* =====================================
-        VALIDATE RESULTS ARRAY
-        ===================================== */
-
         if (
             !research ||
             !Array.isArray(
@@ -698,15 +765,9 @@ Return JSON only.
             )
         ) {
 
-            console.error(
-                "Invalid Daily Brief structure:",
-                research
-            );
-
-
             return res.status(500).json({
                 error:
-                    "Daily Brief research returned an invalid result."
+                    "Daily Brief returned an invalid result."
             });
 
         }
@@ -722,6 +783,15 @@ Return JSON only.
                 "ELEVATED",
                 "NOTABLE"
             ]);
+
+
+        const suppliedSymbols =
+            new Set(
+                cleanCandidates.map(
+                    stock =>
+                        stock.symbol
+                )
+            );
 
 
         const cleanResults = [];
@@ -755,7 +825,12 @@ Return JSON only.
                                             .trim()
                                             .toUpperCase()
                                 )
-                                .filter(Boolean)
+                                .filter(
+                                    symbol =>
+                                        suppliedSymbols.has(
+                                            symbol
+                                        )
+                                )
                         )
                     ]
                     : [];
@@ -763,37 +838,6 @@ Return JSON only.
 
             if (
                 symbols.length === 0
-            ) {
-
-                continue;
-
-            }
-
-
-            /* =============================
-            ONLY ALLOW SUPPLIED SYMBOLS
-            ============================= */
-
-            const suppliedSymbols =
-                new Set(
-                    cleanCandidates.map(
-                        stock =>
-                            stock.symbol
-                    )
-                );
-
-
-            const validSymbols =
-                symbols.filter(
-                    symbol =>
-                        suppliedSymbols.has(
-                            symbol
-                        )
-                );
-
-
-            if (
-                validSymbols.length === 0
             ) {
 
                 continue;
@@ -903,8 +947,7 @@ Return JSON only.
 
             cleanResults.push({
 
-                symbols:
-                    validSymbols,
+                symbols,
 
                 companyName:
                     cleanField(
@@ -938,20 +981,10 @@ Return JSON only.
 
 
         /* =====================================
-        FINAL RESPONSE
+        BUILD FINAL AI DATA
         ===================================== */
 
-        const finalResearch = {
-
-            generatedAt:
-                new Date()
-                    .toISOString(),
-
-            companiesReviewed:
-                cleanCandidates.length,
-
-            companiesIncluded:
-                cleanResults.length,
+        const aiResults = {
 
             results:
                 cleanResults
@@ -965,48 +998,30 @@ Return JSON only.
 
         const combinedText =
             JSON.stringify(
-                finalResearch
+                aiResults
             );
 
 
         const prohibitedPatterns = [
 
             /\bstrong buy\b/i,
-
             /\bstrong sell\b/i,
-
             /\byou should buy\b/i,
-
             /\byou should sell\b/i,
-
             /\byou should hold\b/i,
-
             /\brecommend(?:s|ed|ing)? buying\b/i,
-
             /\brecommend(?:s|ed|ing)? selling\b/i,
-
             /\bbuy opportunity\b/i,
-
             /\bsell opportunity\b/i,
-
             /\bprice target\b/i,
-
             /\btarget price\b/i,
-
             /\bexpected return\b/i,
-
             /\bguaranteed return\b/i,
-
             /\bguaranteed profit\b/i,
-
             /\bshould enter\b/i,
-
             /\bshould exit\b/i,
-
             /\bwinning stock\b/i,
-
             /\bhigh probability trade\b/i,
-
             /\bgoing to the moon\b/i
 
         ];
@@ -1024,7 +1039,7 @@ Return JSON only.
         if (unsafe) {
 
             console.error(
-                "Gemini Daily Brief response blocked by safety filter."
+                "Daily Brief blocked by safety filter."
             );
 
 
@@ -1037,21 +1052,146 @@ Return JSON only.
 
 
         /* =====================================
+        SAVE TO SUPABASE
+
+        Unique brief_date means there can only
+        be one cached brief for the US market
+        date.
+        ===================================== */
+
+        const generatedAt =
+            new Date()
+                .toISOString();
+
+
+        const saveUrl =
+            `${process.env.SUPABASE_URL}` +
+            `/rest/v1/daily_briefs` +
+            `?on_conflict=brief_date`;
+
+
+        const saveResponse =
+            await fetch(
+                saveUrl,
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "apikey":
+                            process.env.SUPABASE_SERVICE_KEY,
+
+                        "Authorization":
+                            `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Prefer":
+                            "resolution=merge-duplicates,return=minimal"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        brief_date:
+                            briefDate,
+
+                        status:
+                            "complete",
+
+                        companies_reviewed:
+                            cleanCandidates.length,
+
+                        companies_included:
+                            cleanResults.length,
+
+                        ai_results:
+                            aiResults,
+
+                        generated_at:
+                            generatedAt,
+
+                        updated_at:
+                            generatedAt
+
+                    })
+
+                }
+            );
+
+
+        if (!saveResponse.ok) {
+
+            const saveError =
+                await saveResponse.text();
+
+
+            console.error(
+                "Daily Brief Cache Save Error:",
+                saveError
+            );
+
+            /*
+            Same philosophy as the existing
+            EdgeBreak AI cache.
+
+            Gemini research succeeded, so a
+            cache failure should not prevent
+            this request returning the result.
+            */
+
+        }
+        else {
+
+            console.log(
+                `EdgeBreak Daily Brief CACHE SAVED: ${briefDate}`
+            );
+
+        }
+
+
+        /* =====================================
         SUCCESS
         ===================================== */
 
-        return res
-            .status(200)
-            .json(
-                finalResearch
-            );
+        return res.status(200).json({
+
+            success: true,
+
+            cached: false,
+
+            briefDate,
+
+            generatedAt,
+
+            companiesReviewed:
+                cleanCandidates.length,
+
+            companiesIncluded:
+                cleanResults.length,
+
+            results:
+                cleanResults,
+
+            nasdaqToday:
+                null,
+
+            marketConditions:
+                null,
+
+            scannerActivity:
+                null
+
+        });
 
 
     }
     catch (error) {
 
         console.error(
-            "Gemini Daily Brief Server Error:",
+            "EdgeBreak Daily Brief Error:",
             error
         );
 
@@ -1059,11 +1199,66 @@ Return JSON only.
         return res.status(500).json({
 
             error:
-                "Daily Brief research is temporarily unavailable."
+                "Unable to generate today's Daily Brief."
 
         });
 
     }
+
+}
+
+
+/* =========================================
+NEW YORK MARKET DATE
+========================================= */
+
+function getNewYorkDate() {
+
+    const parts =
+        new Intl.DateTimeFormat(
+            "en-CA",
+            {
+                timeZone:
+                    "America/New_York",
+
+                year:
+                    "numeric",
+
+                month:
+                    "2-digit",
+
+                day:
+                    "2-digit"
+            }
+        )
+            .formatToParts(
+                new Date()
+            );
+
+
+    const values = {};
+
+
+    for (const part of parts) {
+
+        if (
+            part.type !== "literal"
+        ) {
+
+            values[
+                part.type
+            ] = part.value;
+
+        }
+
+    }
+
+
+    return (
+        `${values.year}-` +
+        `${values.month}-` +
+        `${values.day}`
+    );
 
 }
 
