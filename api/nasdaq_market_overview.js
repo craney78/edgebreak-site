@@ -382,7 +382,7 @@ Use exactly this structure:
 
         generationConfig: {
             temperature: 0.1,
-            maxOutputTokens: 1800
+            maxOutputTokens: 6000
         }
 
     };
