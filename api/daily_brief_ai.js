@@ -7,8 +7,9 @@ FLOW:
 2. Clean candidates
 3. Split candidates into 2 batches
 4. Research both batches in parallel
-5. Combine + validate + deduplicate
-6. Save ONE Daily Brief to Supabase
+5. Recover valid Gemini results if outer JSON is malformed
+6. Combine + validate + deduplicate
+7. Save ONE Daily Brief to Supabase
 ========================================= */
 
 export default async function handler(req, res) {
@@ -235,8 +236,6 @@ export default async function handler(req, res) {
 
         Example:
         69 stocks = 35 + 34
-
-        Both requests run at the same time.
         ===================================== */
 
         const midpoint =
@@ -340,10 +339,6 @@ export default async function handler(req, res) {
 
         /* =====================================
         DEDUPLICATE
-
-        Normally batches contain different
-        symbols, but this provides protection
-        against duplicate AI output.
         ===================================== */
 
         const deduplicatedResults =
@@ -909,8 +904,20 @@ Return JSON only.
 
                     generationConfig: {
 
+                        /*
+                        8000 is the maximum
+                        available output space.
+
+                        Gemini does NOT have to
+                        use all 8000 tokens.
+
+                        This reduces the chance
+                        of a researched batch
+                        being truncated.
+                        */
+
                         maxOutputTokens:
-                            4000,
+                            16000,
 
                         responseMimeType:
                             "application/json",
@@ -987,7 +994,14 @@ Return JSON only.
 
 
     /* =====================================
-    PARSE JSON
+    PARSE / RECOVER JSON
+
+    First try normal JSON parsing.
+
+    If Gemini has produced valid research
+    objects but damaged/truncated the outer
+    JSON, recover the complete result objects
+    rather than throwing away the whole batch.
     ===================================== */
 
     let research;
@@ -1003,15 +1017,56 @@ Return JSON only.
     }
     catch (error) {
 
-        console.error(
-            `Daily Brief Batch ${batchNumber} JSON Parse Error:`,
-            rawText
+        console.warn(
+            `Daily Brief Batch ${batchNumber} normal JSON parse failed. Attempting recovery...`
         );
 
 
-        throw new Error(
-            `Daily Brief batch ${batchNumber} returned invalid JSON.`
+        const recoveredResults =
+            recoverGeminiResults(
+                rawText
+            );
+
+
+        if (
+            recoveredResults.length === 0
+        ) {
+
+            console.error(
+                `Daily Brief Batch ${batchNumber} JSON recovery failed.`
+            );
+
+
+            console.error(
+                rawText
+            );
+
+
+            throw new Error(
+                `Daily Brief batch ${batchNumber} returned invalid JSON.`
+            );
+
+        }
+
+
+        console.log(
+            `Daily Brief Batch ${batchNumber} recovered ` +
+            `${recoveredResults.length} complete results.`
         );
+
+
+        research = {
+
+            companiesReviewed:
+                candidates.length,
+
+            companiesIncluded:
+                recoveredResults.length,
+
+            results:
+                recoveredResults
+
+        };
 
     }
 
@@ -1037,6 +1092,269 @@ Return JSON only.
 
 
     return research;
+
+}
+
+
+/* =========================================
+RECOVER GEMINI RESULT OBJECTS
+
+Used only when Gemini's complete response
+cannot be parsed normally.
+
+Find the "results" array and recover each
+complete JSON object independently.
+
+If the final object is truncated, the
+complete earlier objects are preserved.
+========================================= */
+
+function recoverGeminiResults(
+    rawText
+) {
+
+    if (
+        typeof rawText !== "string" ||
+        !rawText.trim()
+    ) {
+
+        return [];
+
+    }
+
+
+    /* =====================================
+    FIND RESULTS ARRAY
+    ===================================== */
+
+    const resultsKeyIndex =
+        rawText.indexOf(
+            '"results"'
+        );
+
+
+    if (
+        resultsKeyIndex === -1
+    ) {
+
+        return [];
+
+    }
+
+
+    const arrayStart =
+        rawText.indexOf(
+            "[",
+            resultsKeyIndex
+        );
+
+
+    if (
+        arrayStart === -1
+    ) {
+
+        return [];
+
+    }
+
+
+    const recovered =
+        [];
+
+
+    let objectStart =
+        -1;
+
+    let braceDepth =
+        0;
+
+    let insideString =
+        false;
+
+    let escaping =
+        false;
+
+
+    /* =====================================
+    WALK THROUGH RESULTS ARRAY
+    ===================================== */
+
+    for (
+        let i = arrayStart + 1;
+        i < rawText.length;
+        i++
+    ) {
+
+        const char =
+            rawText[i];
+
+
+        /* =================================
+        CURRENTLY INSIDE STRING
+        ================================= */
+
+        if (
+            insideString
+        ) {
+
+            if (
+                escaping
+            ) {
+
+                escaping =
+                    false;
+
+                continue;
+
+            }
+
+
+            if (
+                char === "\\"
+            ) {
+
+                escaping =
+                    true;
+
+                continue;
+
+            }
+
+
+            if (
+                char === '"'
+            ) {
+
+                insideString =
+                    false;
+
+            }
+
+
+            continue;
+
+        }
+
+
+        /* =================================
+        STRING START
+        ================================= */
+
+        if (
+            char === '"'
+        ) {
+
+            insideString =
+                true;
+
+            continue;
+
+        }
+
+
+        /* =================================
+        OBJECT START
+        ================================= */
+
+        if (
+            char === "{"
+        ) {
+
+            if (
+                braceDepth === 0
+            ) {
+
+                objectStart =
+                    i;
+
+            }
+
+
+            braceDepth++;
+
+            continue;
+
+        }
+
+
+        /* =================================
+        OBJECT END
+        ================================= */
+
+        if (
+            char === "}"
+        ) {
+
+            if (
+                braceDepth > 0
+            ) {
+
+                braceDepth--;
+
+            }
+
+
+            /*
+            End of one complete top-level
+            result object.
+            */
+
+            if (
+                braceDepth === 0 &&
+                objectStart !== -1
+            ) {
+
+                const objectText =
+                    rawText.slice(
+                        objectStart,
+                        i + 1
+                    );
+
+
+                try {
+
+                    const parsedObject =
+                        JSON.parse(
+                            objectText
+                        );
+
+
+                    if (
+                        parsedObject &&
+                        typeof parsedObject ===
+                            "object" &&
+                        !Array.isArray(
+                            parsedObject
+                        )
+                    ) {
+
+                        recovered.push(
+                            parsedObject
+                        );
+
+                    }
+
+                }
+                catch (objectError) {
+
+                    console.warn(
+                        "Skipped one malformed Daily Brief result object during recovery."
+                    );
+
+                }
+
+
+                objectStart =
+                    -1;
+
+            }
+
+        }
+
+    }
+
+
+    return recovered;
 
 }
 
