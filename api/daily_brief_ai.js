@@ -509,6 +509,10 @@ export default async function handler(req, res) {
 RESEARCH ONE BATCH
 ========================================= */
 
+/* =========================================
+RESEARCH ONE BATCH
+========================================= */
+
 async function researchBatch(
     candidates,
     briefDate,
@@ -839,117 +843,191 @@ Return JSON only.
 
 
     /* =====================================
-    GEMINI REQUEST
+    GEMINI REQUEST BODY
     ===================================== */
 
-    const geminiResponse =
-        await fetch(
+    const requestBody = {
 
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+        systemInstruction: {
+
+            parts: [
+                {
+                    text:
+                        systemInstruction
+                }
+            ]
+
+        },
+
+
+        contents: [
 
             {
 
-                method: "POST",
+                role: "user",
 
-                headers: {
-
-                    "Content-Type":
-                        "application/json",
-
-                    "x-goog-api-key":
-                        process.env.GEMINI_API_KEY
-
-                },
-
-                body: JSON.stringify({
-
-                    systemInstruction: {
-
-                        parts: [
-                            {
-                                text:
-                                    systemInstruction
-                            }
-                        ]
-
-                    },
-
-
-                    contents: [
-
-                        {
-
-                            role: "user",
-
-                            parts: [
-                                {
-                                    text:
-                                        userInstruction
-                                }
-                            ]
-
-                        }
-
-                    ],
-
-
-                    tools: [
-
-                        {
-                            google_search: {}
-                        }
-
-                    ],
-
-
-                    generationConfig: {
-
-                        /*
-                        8000 is the maximum
-                        available output space.
-
-                        Gemini does NOT have to
-                        use all 8000 tokens.
-
-                        This reduces the chance
-                        of a researched batch
-                        being truncated.
-                        */
-
-                        maxOutputTokens:
-                            16000,
-
-                        responseMimeType:
-                            "application/json",
-
-                        temperature:
-                            0.2
-
+                parts: [
+                    {
+                        text:
+                            userInstruction
                     }
-
-                })
+                ]
 
             }
 
-        );
+        ],
+
+
+        tools: [
+
+            {
+                google_search: {}
+            }
+
+        ],
+
+
+        generationConfig: {
+
+            maxOutputTokens:
+                16000,
+
+            responseMimeType:
+                "application/json",
+
+            temperature:
+                0.2
+
+        }
+
+    };
 
 
     /* =====================================
-    GEMINI ERROR
+    GEMINI REQUEST
+    SHORT RETRY FOR TEMPORARY 503
     ===================================== */
 
-    if (!geminiResponse.ok) {
+    let geminiResponse = null;
+
+    const maxAttempts = 2;
+
+
+    for (
+        let attempt = 1;
+        attempt <= maxAttempts;
+        attempt++
+    ) {
+
+        console.log(
+            `Daily Brief Batch ${batchNumber} Gemini attempt ${attempt}/${maxAttempts}`
+        );
+
+
+        geminiResponse =
+            await fetch(
+
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "x-goog-api-key":
+                            process.env.GEMINI_API_KEY
+
+                    },
+
+                    body:
+                        JSON.stringify(
+                            requestBody
+                        )
+
+                }
+
+            );
+
+
+        /* =================================
+        SUCCESS
+        ================================= */
+
+        if (
+            geminiResponse.ok
+        ) {
+
+            break;
+
+        }
+
+
+        /* =================================
+        READ GEMINI ERROR
+        ================================= */
 
         const errorText =
             await geminiResponse.text();
 
 
         console.error(
-            `Gemini Daily Brief Batch ${batchNumber} Error:`,
+            `Gemini Daily Brief Batch ${batchNumber} Error on attempt ${attempt}:`,
             geminiResponse.status,
             errorText
         );
 
+
+        /* =================================
+        RETRY ONE TEMPORARY 503
+        ================================= */
+
+        if (
+            geminiResponse.status === 503 &&
+            attempt < maxAttempts
+        ) {
+
+            console.log(
+                `Daily Brief Batch ${batchNumber} received temporary Gemini 503. Retrying in 6 seconds...`
+            );
+
+
+            await new Promise(
+                resolve =>
+                    setTimeout(
+                        resolve,
+                        6000
+                    )
+            );
+
+
+            continue;
+
+        }
+
+
+        /* =================================
+        NO MORE RETRIES
+        ================================= */
+
+        throw new Error(
+            `Daily Brief batch ${batchNumber} failed. Gemini returned ${geminiResponse.status}.`
+        );
+
+    }
+
+
+    /* =====================================
+    FINAL RESPONSE CHECK
+    ===================================== */
+
+    if (
+        !geminiResponse ||
+        !geminiResponse.ok
+    ) {
 
         throw new Error(
             `Daily Brief batch ${batchNumber} failed.`
@@ -995,13 +1073,6 @@ Return JSON only.
 
     /* =====================================
     PARSE / RECOVER JSON
-
-    First try normal JSON parsing.
-
-    If Gemini has produced valid research
-    objects but damaged/truncated the outer
-    JSON, recover the complete result objects
-    rather than throwing away the whole batch.
     ===================================== */
 
     let research;
