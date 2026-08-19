@@ -372,114 +372,102 @@ export default async function handler(req, res) {
 
                                 response_format: {
 
-                                    type: "json_schema",
+                                    type: "object",
 
-                                    json_schema: {
+                                    properties: {
 
-                                        name: "daily_brief",
+                                        results: {
 
-                                        schema: {
+                                            type: "array",
 
-                                            type: "object",
+                                            items: {
 
-                                            properties: {
+                                                type: "object",
 
-                                                results: {
+                                                properties: {
 
-                                                    type: "array",
+                                                    symbols: {
+                                                        type: "array",
+                                                        items: {
+                                                            type: "string"
+                                                        }
+                                                    },
 
-                                                    items: {
+                                                    companyName: {
+                                                        type: "string"
+                                                    },
 
-                                                        type: "object",
+                                                    scanners: {
+                                                        type: "array",
+                                                        items: {
+                                                            type: "string"
+                                                        }
+                                                    },
 
-                                                        properties: {
+                                                    attentionLevel: {
+                                                        type: "string",
+                                                        enum: [
+                                                            "HIGH",
+                                                            "ELEVATED",
+                                                            "NOTABLE"
+                                                        ]
+                                                    },
 
-                                                            symbols: {
-                                                                type: "array",
-                                                                items: {
-                                                                    type: "string"
-                                                                }
-                                                            },
+                                                    headline: {
+                                                        type: "string"
+                                                    },
 
-                                                            companyName: {
-                                                                type: "string"
-                                                            },
+                                                    summary: {
+                                                        type: "string"
+                                                    },
 
-                                                            scanners: {
-                                                                type: "array",
-                                                                items: {
-                                                                    type: "string"
-                                                                }
-                                                            },
+                                                    currentDevelopment: {
+                                                        type: "string"
+                                                    },
 
-                                                            attentionLevel: {
-                                                                type: "string",
-                                                                enum: [
-                                                                    "HIGH",
-                                                                    "ELEVATED",
-                                                                    "NOTABLE"
-                                                                ]
-                                                            },
+                                                    whyIncluded: {
+                                                        type: "string"
+                                                    },
 
-                                                            headline: {
-                                                                type: "string"
-                                                            },
+                                                    developmentDate: {
+                                                        type: "string"
+                                                    },
 
-                                                            summary: {
-                                                                type: "string"
-                                                            },
-
-                                                            currentDevelopment: {
-                                                                type: "string"
-                                                            },
-
-                                                            whyIncluded: {
-                                                                type: "string"
-                                                            },
-
-                                                            developmentDate: {
-                                                                type: "string"
-                                                            },
-
-                                                            sourceNames: {
-                                                                type: "array",
-                                                                items: {
-                                                                    type: "string"
-                                                                }
-                                                            }
-
-                                                        },
-
-                                                        required: [
-                                                            "symbols",
-                                                            "companyName",
-                                                            "scanners",
-                                                            "attentionLevel",
-                                                            "headline",
-                                                            "summary",
-                                                            "currentDevelopment",
-                                                            "whyIncluded",
-                                                            "developmentDate",
-                                                            "sourceNames"
-                                                        ],
-
-                                                        additionalProperties: false
-
+                                                    sourceNames: {
+                                                        type: "array",
+                                                        items: {
+                                                            type: "string"
+                                                        }
                                                     }
 
-                                                }
+                                                },
 
-                                            },
+                                                required: [
+                                                    "symbols",
+                                                    "companyName",
+                                                    "scanners",
+                                                    "attentionLevel",
+                                                    "headline",
+                                                    "summary",
+                                                    "currentDevelopment",
+                                                    "whyIncluded",
+                                                    "developmentDate",
+                                                    "sourceNames"
+                                                ],
 
-                                            required: [
-                                                "results"
-                                            ],
+                                                additionalProperties: false
 
-                                            additionalProperties: false
+                                            }
 
                                         }
 
-                                    }
+                                    },
+
+                                    required: [
+                                        "results"
+                                    ],
+
+                                    additionalProperties: false
 
                                 },
 
