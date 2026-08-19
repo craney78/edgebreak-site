@@ -6897,253 +6897,344 @@ AI CHART ANALYSIS
  
 </div> 
  
-<!-- =========================================  
-EDGEBREAK AI END-OF-DAY MARKET ANALYSIS
-========================================= -->  
-  
-<section class="daily-brief-panel" id="dailyBriefPanel">  
-  
-    <div class="daily-brief-intro">  
-  
-        <div class="daily-brief-copy">  
-  
-            <div class="daily-brief-label">  
-                ✦ FULLY AUTOMATED STOCK SCANNING + AI MARKET RESEARCH
-            </div>  
-  
-            <h2>EdgeBreak AI End-of-Day Market Analysis</h2>  
-  
-            <p>  
-                After each U.S. market close, EdgeBreak automatically scans 
-                thousands of NASDAQ stocks for Breakout, Pre-Breakout and 
-                Base Forming setups, filters the results, then uses AI to 
-                research current company developments and market attention. 
-                Open EdgeBreak and your stock research for the next market 
-                session is already waiting.
-            </p>  
-  
-            <div class="daily-brief-meta">  
-                Runs after each U.S. market close • NASDAQ only • Prepared for the next market session
-            </div>  
-  
-        </div>  
-  
-        <button  
-            type="button"  
-            class="daily-brief-open-btn"  
-            id="openDailyBriefBtn"  
-        >  
-            <span>✦</span>  
-            Open End-of-Day Analysis
-        </button>  
-  
-    </div>  
-  
-  
-    <!-- DAILY BRIEF CONTENT -->  
-  
-    <div  
-        class="daily-brief-content"  
-        id="dailyBriefContent"  
-        hidden  
-    >  
-  
-        <div class="daily-brief-divider"></div>  
-  
-  
-        <!-- LOADING -->  
-  
-        <div  
-            class="daily-brief-loading"  
-            id="dailyBriefLoading"  
-            hidden  
-        >  
-            <div class="daily-brief-spinner"></div>  
-  
-            <div>  
-                <strong>Loading your End-of-Day Market Analysis...</strong>  
-                <span>  
-                    Retrieving today's automated NASDAQ scan and AI market research.
-                </span>  
-            </div>  
-        </div>  
-  
-  
-        <!-- ERROR -->  
-  
-        <div  
-            class="daily-brief-error"  
-            id="dailyBriefError"  
-            hidden  
-        ></div>  
-  
-  
-        <!-- BRIEF -->  
-  
-        <div  
-            id="dailyBriefResults"  
-            hidden  
-        >  
-  
-            <div class="daily-brief-date-row">  
-  
-                <span>END-OF-DAY ANALYSIS</span>  
-  
-                <strong id="dailyBriefDate"></strong>  
-  
-            </div>  
-  
-  
-            <!-- NASDAQ TODAY -->  
-  
-            <div class="daily-brief-section">  
-  
-                <div class="daily-brief-section-heading">  
-  
-                    <span class="daily-brief-section-icon">◎</span>  
-  
-                    <div>  
-                        <span class="daily-brief-eyebrow">  
-                            MARKET OVERVIEW  
-                        </span>  
-  
-                        <h3>NASDAQ Market Close</h3>  
-                    </div>  
-  
-                </div>  
-  
-                <div  
-                    class="daily-brief-placeholder"  
-                    id="dailyBriefNasdaq"  
-                >  
-                    Today's NASDAQ closing market overview, ready for your next-session research.
-                </div>  
-  
-            </div>  
-  
-  
-            <!-- MARKET CONDITIONS -->  
-  
-            <div class="daily-brief-section">  
-  
-                <div class="daily-brief-section-heading">  
-  
-                    <span class="daily-brief-section-icon">↗</span>  
-  
-                    <div>  
-                        <span class="daily-brief-eyebrow">  
-                            MARKET CONDITIONS  
-                        </span>  
-  
-                        <h3>End-of-Day Market Conditions</h3>  
-                    </div>  
-  
-                </div>  
-  
-                <div  
-                    class="daily-brief-placeholder"  
-                    id="dailyBriefMarketConditions"  
-                >  
-                    A snapshot of NASDAQ market conditions at the close, providing context for the next market session.
-                </div>  
-  
-            </div>  
-  
-  
-            <!-- EDGE BREAK SCANNER ACTIVITY -->  
-  
-            <div class="daily-brief-section">  
-  
-                <div class="daily-brief-section-heading">  
-  
-                    <span class="daily-brief-section-icon">⌁</span>  
-  
-                    <div>  
-                        <span class="daily-brief-eyebrow">  
-                            AUTOMATED NASDAQ SCANNING
-                        </span>  
-  
-                        <h3>What EdgeBreak Found Today</h3> 
-                    </div>  
-  
-                </div>  
-  
-                <div  
-                    class="daily-brief-placeholder"  
-                    id="dailyBriefScannerActivity"  
-                >  
-                    EdgeBreak automatically scanned the NASDAQ for Breakout, Pre-Breakout and Base Forming setups and filtered the results for further AI research.
-                </div>  
-  
-            </div>  
-  
-  
-            <!-- STOCKS TO INVESTIGATE -->  
-  
-            <div class="daily-brief-section daily-brief-stocks-section">  
-  
-                <div class="daily-brief-section-heading">  
-  
-                    <span class="daily-brief-section-icon">✦</span>  
-  
-                    <div>  
-                        <span class="daily-brief-eyebrow">  
+<!-- =========================================
+EDGEBREAK AUTOMATED AI END-OF-DAY MARKET ANALYSIS
+========================================= -->
+
+<section class="daily-brief-panel" id="dailyBriefPanel">
+
+    <div class="daily-brief-intro">
+
+        <div class="daily-brief-copy">
+
+            <div class="daily-brief-label">
+                ✦ FULLY AUTOMATED NASDAQ SCANNING + AI MARKET RESEARCH
+            </div>
+
+            <h2>EdgeBreak AI End-of-Day Market Analysis</h2>
+
+            <p>
+                EdgeBreak does the market scanning and initial research for you.
+                After each U.S. market close, the platform automatically scans
+                the NASDAQ for Breakout, Pre-Breakout and Base Forming setups,
+                filters the stocks it finds, then uses AI market intelligence
+                to research the resulting companies for current market attention
+                and company-specific developments.
+            </p>
+
+            <p>
+                By the time you open EdgeBreak, thousands of NASDAQ stocks have
+                already been reduced to a focused list of companies to investigate
+                before the next market open.
+            </p>
+
+            <div class="daily-brief-meta">
+                Entire NASDAQ scanned • Automated technical discovery • AI company research • Prepared after each U.S. market close
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            class="daily-brief-open-btn"
+            id="openDailyBriefBtn"
+        >
+            <span>✦</span>
+            View Today's AI Analysis
+        </button>
+
+    </div>
+
+
+    <!-- END-OF-DAY ANALYSIS CONTENT -->
+
+    <div
+        class="daily-brief-content"
+        id="dailyBriefContent"
+        hidden
+    >
+
+        <div class="daily-brief-divider"></div>
+
+
+        <!-- LOADING -->
+
+        <div
+            class="daily-brief-loading"
+            id="dailyBriefLoading"
+            hidden
+        >
+
+            <div class="daily-brief-spinner"></div>
+
+            <div>
+
+                <strong>Loading today's automated market analysis...</strong>
+
+                <span>
+                    Retrieving the completed NASDAQ scan and AI market research.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div
+            class="daily-brief-error"
+            id="dailyBriefError"
+            hidden
+        ></div>
+
+
+        <!-- RESULTS -->
+
+        <div
+            id="dailyBriefResults"
+            hidden
+        >
+
+            <div class="daily-brief-date-row">
+
+                <span>AUTOMATED END-OF-DAY ANALYSIS</span>
+
+                <strong id="dailyBriefDate"></strong>
+
+            </div>
+
+
+            <!-- NASDAQ MARKET CLOSE -->
+
+            <div class="daily-brief-section">
+
+                <div class="daily-brief-section-heading">
+
+                    <span class="daily-brief-section-icon">◎</span>
+
+                    <div>
+
+                        <span class="daily-brief-eyebrow">
+                            NASDAQ MARKET INTELLIGENCE
+                        </span>
+
+                        <h3>NASDAQ Market Close</h3>
+
+                        <p>
+                            End-of-day NASDAQ context to help prepare your
+                            research for the next U.S. market session.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="daily-brief-placeholder"
+                    id="dailyBriefNasdaq"
+                >
+                    Today's NASDAQ closing market overview.
+                </div>
+
+            </div>
+
+
+            <!-- MARKET CONDITIONS -->
+
+            <div class="daily-brief-section">
+
+                <div class="daily-brief-section-heading">
+
+                    <span class="daily-brief-section-icon">↗</span>
+
+                    <div>
+
+                        <span class="daily-brief-eyebrow">
+                            END-OF-DAY MARKET CONDITIONS
+                        </span>
+
+                        <h3>Market Conditions</h3>
+
+                        <p>
+                            A snapshot of broader NASDAQ conditions at the
+                            close before the next market session.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="daily-brief-placeholder"
+                    id="dailyBriefMarketConditions"
+                >
+                    Today's end-of-day NASDAQ market conditions.
+                </div>
+
+            </div>
+
+
+            <!-- AUTOMATED SCANNER ACTIVITY -->
+
+            <div class="daily-brief-section">
+
+                <div class="daily-brief-section-heading">
+
+                    <span class="daily-brief-section-icon">⌁</span>
+
+                    <div>
+
+                        <span class="daily-brief-eyebrow">
+                            FULL NASDAQ AUTOMATED SCAN
+                        </span>
+
+                        <h3>Thousands of Stocks Scanned. Setups Automatically Found.</h3>
+
+                        <p>
+                            EdgeBreak automatically checks the NASDAQ for
+                            Breakout, Pre-Breakout and Base Forming setups,
+                            then filters the results before they move into
+                            the AI research stage.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="daily-brief-placeholder"
+                    id="dailyBriefScannerActivity"
+                >
+                    Today's automated NASDAQ scanner activity.
+                </div>
+
+            </div>
+
+
+            <!-- AI RESEARCH RESULTS -->
+
+            <div class="daily-brief-section daily-brief-stocks-section">
+
+                <div class="daily-brief-section-heading">
+
+                    <span class="daily-brief-section-icon">✦</span>
+
+                    <div>
+
+                        <span class="daily-brief-eyebrow">
                             AUTOMATED AI MARKET RESEARCH
-                        </span>  
-  
-                        <h3>Stocks to Investigate Before the Next Market Open</h3>  
-  
-                        <p>  
-                            EdgeBreak has already scanned the NASDAQ, identified 
-                            relevant technical setups and used AI to research the 
-                            resulting companies for current market attention and 
-                            company-specific developments. The companies below 
-                            were surfaced for further investigation before the 
-                            next market session.
-                        </p>  
-                    </div>  
-  
-                </div>  
-  
-  
-                <div class="daily-brief-summary-bar">  
-  
-                    <div>  
-                        <span>Companies AI Researched</span>  
-                        <strong id="dailyBriefReviewed">—</strong>  
-                    </div>  
-  
-                    <div>  
-                        <span>Stocks to Investigate</span> 
-                        <strong id="dailyBriefIncluded">—</strong>  
-                    </div>  
-  
-                </div>  
-  
-  
-                <div  
-                    class="daily-brief-stock-grid"  
-                    id="dailyBriefStocks"  
-                ></div>  
-  
-            </div>  
-  
-  
-            <div class="daily-brief-disclaimer">  
-                EdgeBreak AI End-of-Day Market Analysis provides automated 
-                stock discovery, factual market research and educational 
-                information only. Stocks surfaced for investigation are not 
-                recommendations or investment ratings. EdgeBreak does not 
-                provide investment advice, buy or sell recommendations, price 
-                targets or predictions. AI-generated information may contain 
-                errors or outdated information and important information should 
-                be independently verified.
-            </div>  
-  
-        </div>  
-  
-    </div>  
-  
+                        </span>
+
+                        <h3>From the Entire NASDAQ to Stocks Worth Investigating</h3>
+
+                        <p>
+                            EdgeBreak has already done the first stages of the
+                            research process. The NASDAQ was automatically scanned
+                            for relevant technical setups, the resulting candidates
+                            were filtered, and AI market intelligence researched
+                            those companies for current attention, news and
+                            company-specific developments.
+                        </p>
+
+                        <p>
+                            The companies below are the final stocks surfaced
+                            from today's automated scanning and AI research process
+                            for further investigation before the next market open.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- AUTOMATED RESEARCH FUNNEL -->
+
+                <div class="daily-brief-summary-bar">
+
+                    <div>
+
+                        <span>NASDAQ Stocks Scanned</span>
+
+                        <strong>3,253</strong>
+
+                        <small>
+                            Scanned for Breakout, Pre-Breakout and Base Forming setups
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>Technical Setups Found</span>
+
+                        <strong id="dailyBriefCandidates">69</strong>
+
+                        <small>
+                            Candidates remaining after EdgeBreak's automated scanning and filters
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>Companies AI Researched</span>
+
+                        <strong id="dailyBriefReviewed">—</strong>
+
+                        <small>
+                            Researched for current market attention and company developments
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>Stocks to Investigate</span>
+
+                        <strong id="dailyBriefIncluded">—</strong>
+
+                        <small>
+                            Final companies surfaced for further research before the next market open
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STOCK RESULTS -->
+
+                <div
+                    class="daily-brief-stock-grid"
+                    id="dailyBriefStocks"
+                ></div>
+
+            </div>
+
+
+            <!-- DISCLAIMER -->
+
+            <div class="daily-brief-disclaimer">
+
+                EdgeBreak AI End-of-Day Market Analysis provides automated
+                stock discovery, factual market research and educational
+                information only. Stocks surfaced for investigation are not
+                recommendations or investment ratings. EdgeBreak does not
+                provide investment advice, buy or sell recommendations,
+                price targets or predictions. AI-generated information may
+                contain errors or outdated information and important
+                information should be independently verified.
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
 
 
