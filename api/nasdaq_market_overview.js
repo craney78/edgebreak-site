@@ -582,9 +582,6 @@ Return JSON only.
 
                             maxOutputTokens: 2000,
 
-                            responseMimeType:
-                                "application/json",
-
                             temperature: 0.1
 
                         }
