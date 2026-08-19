@@ -6892,6 +6892,652 @@ MUST REMAIN AFTER ALL DAILY BRIEF CSS
 #dailyBriefResults[hidden] {
     display: none !important;
 }
+
+/* =========================================
+EDGEBREAK NASDAQ END-OF-DAY MARKET OVERVIEW
+========================================= */
+
+.nasdaq-overview-panel {
+    width: 100%;
+    margin: 32px 0;
+    padding: 34px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(8, 18, 34, 0.98),
+            rgba(6, 15, 29, 0.98)
+        );
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 22px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+HEADER
+========================================= */
+
+.nasdaq-overview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.nasdaq-overview-header > div:first-child {
+    flex: 1;
+    min-width: 0;
+}
+
+.nasdaq-overview-label {
+    margin-bottom: 12px;
+    color: #22e883;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.nasdaq-overview-header h2 {
+    margin: 0 0 14px;
+    color: #ffffff;
+    font-size: clamp(28px, 3vw, 38px);
+    line-height: 1.15;
+    font-weight: 800;
+}
+
+.nasdaq-overview-header p {
+    max-width: 900px;
+    margin: 0;
+    color: #9fb4d0;
+    font-size: 16px;
+    line-height: 1.75;
+}
+
+
+/* =========================================
+BUTTON
+========================================= */
+
+.nasdaq-overview-btn {
+    flex-shrink: 0;
+    min-width: 245px;
+    padding: 17px 24px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(
+        135deg,
+        #22c55e,
+        #16a34a
+    );
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow:
+        0 12px 28px rgba(34, 197, 94, 0.16);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.nasdaq-overview-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 16px 34px rgba(34, 197, 94, 0.24);
+}
+
+.nasdaq-overview-btn:disabled {
+    cursor: default;
+    opacity: 0.75;
+    transform: none;
+}
+
+
+/* =========================================
+CONTENT
+========================================= */
+
+.nasdaq-overview-content {
+    margin-top: 28px;
+}
+
+.nasdaq-overview-divider {
+    width: 100%;
+    height: 1px;
+    margin-bottom: 30px;
+    background: rgba(148, 163, 184, 0.14);
+}
+
+
+/* =========================================
+LOADING
+========================================= */
+
+.nasdaq-overview-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    min-height: 110px;
+    padding: 20px;
+}
+
+.nasdaq-overview-loading[hidden] {
+    display: none !important;
+}
+
+.nasdaq-overview-spinner {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border: 3px solid rgba(96, 165, 250, 0.2);
+    border-top-color: #22c55e;
+    border-radius: 50%;
+    animation: nasdaqOverviewSpin 0.8s linear infinite;
+}
+
+@keyframes nasdaqOverviewSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.nasdaq-overview-loading strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #f8fafc;
+    font-size: 16px;
+}
+
+.nasdaq-overview-loading span {
+    display: block;
+    color: #6f88ab;
+    font-size: 14px;
+}
+
+
+/* =========================================
+ERROR
+========================================= */
+
+.nasdaq-overview-error {
+    padding: 18px 20px;
+    margin: 12px 0 24px;
+    border: 1px solid rgba(239, 68, 68, 0.32);
+    border-radius: 12px;
+    background: rgba(127, 29, 29, 0.13);
+    color: #fca5a5;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.nasdaq-overview-error[hidden] {
+    display: none !important;
+}
+
+
+/* =========================================
+RESULTS
+========================================= */
+
+.nasdaq-overview-results[hidden] {
+    display: none !important;
+}
+
+.nasdaq-overview-date-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    color: #7189aa;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.nasdaq-overview-date-row strong {
+    color: #9db5d5;
+}
+
+
+/* =========================================
+SECTIONS
+========================================= */
+
+.nasdaq-overview-section {
+    padding: 32px 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.11);
+}
+
+.nasdaq-overview-eyebrow {
+    display: block;
+    margin-bottom: 8px;
+    color: #22e883;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+}
+
+.nasdaq-overview-section > h3 {
+    margin: 0 0 12px;
+    color: #ffffff;
+    font-size: 23px;
+    line-height: 1.3;
+    font-weight: 800;
+}
+
+.nasdaq-overview-section > p {
+    max-width: 1050px;
+    margin: 0 0 22px;
+    color: #8299b9;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* =========================================
+NASDAQ INDEX CARDS
+========================================= */
+
+.nasdaq-index-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 22px;
+}
+
+.nasdaq-index-card {
+    padding: 22px;
+    background: rgba(5, 14, 28, 0.68);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 14px;
+}
+
+.nasdaq-index-card > span {
+    display: block;
+    margin-bottom: 8px;
+    color: #7f97b8;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+.nasdaq-index-card > strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #ffffff;
+    font-size: 27px;
+    line-height: 1.2;
+    font-weight: 800;
+}
+
+.nasdaq-index-card > small {
+    display: block;
+    margin-bottom: 12px;
+    color: #6f88aa;
+    font-size: 12px;
+}
+
+.nasdaq-index-card > p {
+    margin: 0;
+    color: #91a7c5;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+
+/* =========================================
+STRONG / WEAK AREAS
+========================================= */
+
+.nasdaq-strength-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 22px;
+}
+
+.nasdaq-strength-card {
+    padding: 22px;
+    background: rgba(5, 14, 28, 0.68);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 14px;
+}
+
+.nasdaq-strength-card h4 {
+    margin: 0 0 18px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.nasdaq-strength-card:first-child h4 {
+    color: #4ade80;
+}
+
+.nasdaq-strength-card:last-child h4 {
+    color: #f87171;
+}
+
+.nasdaq-area-item {
+    padding: 13px 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.nasdaq-area-item:first-child {
+    padding-top: 0;
+}
+
+.nasdaq-area-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.nasdaq-area-item strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #e7eef8;
+    font-size: 14px;
+}
+
+.nasdaq-area-item p {
+    margin: 0;
+    color: #8096b5;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+MARKET DRIVERS / UPCOMING EVENTS
+========================================= */
+
+.nasdaq-overview-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.nasdaq-list-item {
+    position: relative;
+    padding: 17px 18px 17px 21px;
+    background: rgba(5, 14, 28, 0.6);
+    border: 1px solid rgba(148, 163, 184, 0.13);
+    border-radius: 12px;
+}
+
+.nasdaq-list-item::before {
+    content: "";
+    position: absolute;
+    top: 17px;
+    bottom: 17px;
+    left: 0;
+    width: 3px;
+    border-radius: 3px;
+    background: #22c55e;
+}
+
+.nasdaq-list-item strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #edf3fb;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.nasdaq-list-item p {
+    margin: 0;
+    color: #8097b7;
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.nasdaq-event-date {
+    display: block;
+    margin-bottom: 5px;
+    color: #22c55e;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+}
+
+
+/* =========================================
+EDGEBREAK SCANNER ACTIVITY
+========================================= */
+
+.nasdaq-scanner-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 22px;
+}
+
+.nasdaq-scanner-card {
+    min-height: 125px;
+    padding: 19px;
+    background: rgba(5, 14, 28, 0.7);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 13px;
+}
+
+.nasdaq-scanner-card > span {
+    display: block;
+    margin-bottom: 9px;
+    color: #7892b4;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+}
+
+.nasdaq-scanner-card > strong {
+    display: block;
+    margin-bottom: 7px;
+    color: #ffffff;
+    font-size: 27px;
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.nasdaq-scanner-card > small {
+    display: block;
+    color: #637c9e;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* =========================================
+END-OF-DAY TAKEAWAY
+========================================= */
+
+.nasdaq-overview-takeaway {
+    margin-top: 30px;
+    padding: 22px 24px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(34, 197, 94, 0.09),
+            rgba(34, 197, 94, 0.025)
+        );
+    border: 1px solid rgba(34, 197, 94, 0.23);
+    border-radius: 14px;
+}
+
+.nasdaq-overview-takeaway span {
+    display: block;
+    margin-bottom: 8px;
+    color: #22e883;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.nasdaq-overview-takeaway p {
+    margin: 0;
+    color: #c2d1e4;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* =========================================
+DISCLAIMER
+========================================= */
+
+.nasdaq-overview-disclaimer {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(148, 163, 184, 0.1);
+    color: #536b8d;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+EMPTY STATES
+========================================= */
+
+.nasdaq-empty {
+    margin: 0;
+    color: #637c9e;
+    font-size: 13px;
+}
+
+
+/* =========================================
+TABLET
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .nasdaq-overview-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .nasdaq-overview-btn {
+        width: 100%;
+    }
+
+    .nasdaq-scanner-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* =========================================
+MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .nasdaq-overview-panel {
+        margin: 22px 0;
+        padding: 22px 18px;
+        border-radius: 17px;
+    }
+
+    .nasdaq-overview-header {
+        gap: 20px;
+    }
+
+    .nasdaq-overview-label {
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .nasdaq-overview-header h2 {
+        font-size: 27px;
+    }
+
+    .nasdaq-overview-header p {
+        font-size: 14px;
+        line-height: 1.65;
+    }
+
+    .nasdaq-overview-btn {
+        min-width: 0;
+        padding: 15px 18px;
+        font-size: 15px;
+    }
+
+    .nasdaq-overview-content {
+        margin-top: 23px;
+    }
+
+    .nasdaq-overview-date-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .nasdaq-overview-section {
+        padding: 26px 0;
+    }
+
+    .nasdaq-overview-section > h3 {
+        font-size: 20px;
+    }
+
+    .nasdaq-index-grid,
+    .nasdaq-strength-grid,
+    .nasdaq-scanner-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nasdaq-index-card > strong,
+    .nasdaq-scanner-card > strong {
+        font-size: 25px;
+    }
+
+    .nasdaq-overview-loading {
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 18px 4px;
+    }
+
+}
+
+
+/* =========================================
+VERY SMALL MOBILE
+========================================= */
+
+@media (max-width: 420px) {
+
+    .nasdaq-overview-panel {
+        padding: 20px 15px;
+    }
+
+    .nasdaq-overview-header h2 {
+        font-size: 24px;
+    }
+
+    .nasdaq-index-card,
+    .nasdaq-strength-card,
+    .nasdaq-scanner-card {
+        padding: 17px;
+    }
+
+    .nasdaq-overview-takeaway {
+        padding: 19px;
+    }
+
+}
 </style>  
 
 
