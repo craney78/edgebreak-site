@@ -281,12 +281,11 @@ export default async function handler(req, res) {
             if (
                 existing?.interaction_id &&
                 (
-                    existing?.research_status ===
-                        "in_progress" ||
-                    existing?.research_status ===
-                        "requires_action"
+                    existing?.research_status === "queued" ||
+                    existing?.research_status === "in_progress" ||
+                    existing?.research_status === "requires_action"
                 )
-            ) {
+            )
 
                 console.log(
                     "Daily Brief research already exists."
@@ -371,22 +370,131 @@ export default async function handler(req, res) {
 
                                 tools: [
                                     {
-                                        type:
-                                            "google_search",
-
+                                        type: "google_search",
                                         search_types: [
                                             "web_search"
                                         ]
                                     }
                                 ],
 
+                                response_format: {
+
+                                    type: "json_schema",
+
+                                    json_schema: {
+
+                                        name: "daily_brief",
+
+                                        schema: {
+
+                                            type: "object",
+
+                                            properties: {
+
+                                                results: {
+
+                                                    type: "array",
+
+                                                    items: {
+
+                                                        type: "object",
+
+                                                        properties: {
+
+                                                            symbols: {
+                                                                type: "array",
+                                                                items: {
+                                                                    type: "string"
+                                                                }
+                                                            },
+
+                                                            companyName: {
+                                                                type: "string"
+                                                            },
+
+                                                            scanners: {
+                                                                type: "array",
+                                                                items: {
+                                                                    type: "string"
+                                                                }
+                                                            },
+
+                                                            attentionLevel: {
+                                                                type: "string",
+                                                                enum: [
+                                                                    "HIGH",
+                                                                    "ELEVATED",
+                                                                    "NOTABLE"
+                                                                ]
+                                                            },
+
+                                                            headline: {
+                                                                type: "string"
+                                                            },
+
+                                                            summary: {
+                                                                type: "string"
+                                                            },
+
+                                                            currentDevelopment: {
+                                                                type: "string"
+                                                            },
+
+                                                            whyIncluded: {
+                                                                type: "string"
+                                                            },
+
+                                                            developmentDate: {
+                                                                type: "string"
+                                                            },
+
+                                                            sourceNames: {
+                                                                type: "array",
+                                                                items: {
+                                                                    type: "string"
+                                                                }
+                                                            }
+
+                                                        },
+
+                                                        required: [
+                                                            "symbols",
+                                                            "companyName",
+                                                            "scanners",
+                                                            "attentionLevel",
+                                                            "headline",
+                                                            "summary",
+                                                            "currentDevelopment",
+                                                            "whyIncluded",
+                                                            "developmentDate",
+                                                            "sourceNames"
+                                                        ],
+
+                                                        additionalProperties: false
+
+                                                    }
+
+                                                }
+
+                                            },
+
+                                            required: [
+                                                "results"
+                                            ],
+
+                                            additionalProperties: false
+
+                                        }
+
+                                    }
+
+                                },
+
                                 generation_config: {
 
-                                    max_output_tokens:
-                                        8000,
+                                    max_output_tokens: 16000,
 
-                                    thinking_level:
-                                        "medium"
+                                    thinking_level: "medium"
 
                                 }
 
@@ -694,11 +802,10 @@ export default async function handler(req, res) {
             ================================= */
 
             if (
-                researchStatus ===
-                    "in_progress" ||
-                researchStatus ===
-                    "requires_action"
-            ) {
+                researchStatus === "queued" ||
+                researchStatus === "in_progress" ||
+                researchStatus === "requires_action"
+            )
 
                 await updateResearchStatus(
                     briefDate,
