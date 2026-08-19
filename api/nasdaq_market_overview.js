@@ -1123,7 +1123,7 @@ async function saveCachedOverview(
 
         const url =
             `${SUPABASE_URL}/rest/v1/nasdaq_market_overviews` +
-            `?on_conflict=report_date`;
+            `?on_conflict=market_date`;
 
 
         const response =
@@ -1148,7 +1148,7 @@ async function saveCachedOverview(
                         JSON.stringify([
 
                             {
-                                report_date:
+                                market_date:
                                     reportDate,
 
                                 overview,
