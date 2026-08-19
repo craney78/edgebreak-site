@@ -1043,7 +1043,7 @@ async function getCachedOverview(
     try {
 
         const url =
-            `${SUPABASE_URL}/rest/v1/daily_market_overviews` +
+            `${SUPABASE_URL}/rest/v1/nasdaq_market_overviews` +
             `?report_date=eq.${encodeURIComponent(reportDate)}` +
             `&select=overview` +
             `&limit=1`;
@@ -1122,7 +1122,7 @@ async function saveCachedOverview(
     try {
 
         const url =
-            `${SUPABASE_URL}/rest/v1/daily_market_overviews` +
+            `${SUPABASE_URL}/rest/v1/nasdaq_market_overviews` +
             `?on_conflict=report_date`;
 
 
