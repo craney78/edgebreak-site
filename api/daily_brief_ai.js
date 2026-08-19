@@ -7,8 +7,9 @@ FLOW:
 2. Clean candidates
 3. Split candidates into 2 batches
 4. Research both batches in parallel
-5. Combine + validate + deduplicate
-6. Save ONE Daily Brief to Supabase
+5. Retry temporary Gemini failures automatically
+6. Combine + validate + deduplicate
+7. Save ONE completed Daily Brief to Supabase
 ========================================= */
 
 export default async function handler(req, res) {
@@ -270,6 +271,9 @@ export default async function handler(req, res) {
 
         /* =====================================
         RESEARCH BOTH BATCHES IN PARALLEL
+
+        Each batch handles its own temporary
+        Gemini retry logic.
         ===================================== */
 
         const researchPromises = [];
@@ -426,6 +430,10 @@ export default async function handler(req, res) {
 
         /* =====================================
         SAVE ONE COMPLETED BRIEF
+
+        Nothing is written to Supabase until
+        both Gemini batches have completed and
+        the final results have been validated.
         ===================================== */
 
         const generatedAt =
@@ -508,6 +516,22 @@ export default async function handler(req, res) {
 
 /* =========================================
 RESEARCH ONE BATCH
+
+Temporary Gemini failures are retried.
+
+Attempts:
+1 = immediate
+2 = wait 5 seconds
+3 = wait 10 seconds
+
+Retryable:
+429
+500
+502
+503
+504
+
+Non-retryable errors fail immediately.
 ========================================= */
 
 async function researchBatch(
@@ -515,6 +539,9 @@ async function researchBatch(
     briefDate,
     batchNumber
 ) {
+
+    const maxAttempts = 3;
+
 
     console.log(
         `Daily Brief Batch ${batchNumber} research starting...`
@@ -840,199 +867,419 @@ Return JSON only.
 
 
     /* =====================================
-    GEMINI REQUEST
+    RETRY LOOP
     ===================================== */
 
-    const geminiResponse =
-        await fetch(
+    for (
+        let attempt = 1;
+        attempt <= maxAttempts;
+        attempt++
+    ) {
 
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
+        if (attempt > 1) {
 
-            {
-
-                method: "POST",
-
-                headers: {
-
-                    "Content-Type":
-                        "application/json",
-
-                    "x-goog-api-key":
-                        process.env.GEMINI_API_KEY
-
-                },
-
-                body: JSON.stringify({
-
-                    systemInstruction: {
-
-                        parts: [
-                            {
-                                text:
-                                    systemInstruction
-                            }
-                        ]
-
-                    },
+            const delayMs =
+                attempt === 2
+                    ? 5000
+                    : 10000;
 
 
-                    contents: [
+            console.log(
+                `Daily Brief Batch ${batchNumber} retry ${attempt}/${maxAttempts} ` +
+                `in ${delayMs / 1000} seconds...`
+            );
 
-                        {
 
-                            role: "user",
+            await sleep(
+                delayMs
+            );
 
-                            parts: [
+        }
+
+
+        console.log(
+            `Daily Brief Batch ${batchNumber} Gemini attempt ` +
+            `${attempt}/${maxAttempts}`
+        );
+
+
+        let geminiResponse;
+
+
+        try {
+
+            /* =====================================
+            GEMINI REQUEST
+            ===================================== */
+
+            geminiResponse =
+                await fetch(
+
+                    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
+
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "x-goog-api-key":
+                                process.env.GEMINI_API_KEY
+
+                        },
+
+                        body: JSON.stringify({
+
+                            systemInstruction: {
+
+                                parts: [
+                                    {
+                                        text:
+                                            systemInstruction
+                                    }
+                                ]
+
+                            },
+
+
+                            contents: [
+
                                 {
-                                    text:
-                                        userInstruction
+
+                                    role: "user",
+
+                                    parts: [
+                                        {
+                                            text:
+                                                userInstruction
+                                        }
+                                    ]
+
                                 }
-                            ]
 
-                        }
-
-                    ],
+                            ],
 
 
-                    tools: [
+                            tools: [
 
-                        {
-                            google_search: {}
-                        }
+                                {
+                                    google_search: {}
+                                }
 
-                    ],
+                            ],
 
 
-                    generationConfig: {
+                            generationConfig: {
 
-                        maxOutputTokens:
-                            4000,
+                                maxOutputTokens:
+                                    4000,
 
-                        responseMimeType:
-                            "application/json",
+                                responseMimeType:
+                                    "application/json",
 
-                        temperature:
-                            0.2
+                                temperature:
+                                    0.2
+
+                            }
+
+                        })
 
                     }
 
-                })
+                );
+
+        }
+        catch (fetchError) {
+
+            console.error(
+                `Gemini Daily Brief Batch ${batchNumber} ` +
+                `Network Error on attempt ${attempt}:`,
+                fetchError
+            );
+
+
+            if (
+                attempt <
+                maxAttempts
+            ) {
+
+                continue;
 
             }
 
-        );
+
+            throw new Error(
+                `Daily Brief batch ${batchNumber} failed after ${maxAttempts} attempts.`
+            );
+
+        }
 
 
-    /* =====================================
-    GEMINI ERROR
-    ===================================== */
+        /* =====================================
+        GEMINI HTTP ERROR
+        ===================================== */
 
-    if (!geminiResponse.ok) {
+        if (!geminiResponse.ok) {
 
-        const errorText =
-            await geminiResponse.text();
-
-
-        console.error(
-            `Gemini Daily Brief Batch ${batchNumber} Error:`,
-            geminiResponse.status,
-            errorText
-        );
+            const errorText =
+                await geminiResponse.text();
 
 
-        throw new Error(
-            `Daily Brief batch ${batchNumber} failed.`
-        );
-
-    }
-
-
-    const geminiData =
-        await geminiResponse.json();
+            console.error(
+                `Gemini Daily Brief Batch ${batchNumber} ` +
+                `Error on attempt ${attempt}:`,
+                geminiResponse.status,
+                errorText
+            );
 
 
-    /* =====================================
-    EXTRACT OUTPUT
-    ===================================== */
-
-    const rawText =
-        geminiData
-            ?.candidates?.[0]
-            ?.content
-            ?.parts
-            ?.map(
-                part =>
-                    part.text || ""
-            )
-            ?.join("")
-            ?.trim();
+            const retryableStatus =
+                [
+                    429,
+                    500,
+                    502,
+                    503,
+                    504
+                ].includes(
+                    geminiResponse.status
+                );
 
 
-    if (!rawText) {
+            if (
+                retryableStatus &&
+                attempt < maxAttempts
+            ) {
 
-        console.error(
-            `Gemini Daily Brief Batch ${batchNumber} returned no text.`
-        );
-
-
-        throw new Error(
-            `Daily Brief batch ${batchNumber} returned no research.`
-        );
-
-    }
+                console.log(
+                    `Daily Brief Batch ${batchNumber} received temporary ` +
+                    `Gemini ${geminiResponse.status}. Retrying...`
+                );
 
 
-    /* =====================================
-    PARSE JSON
-    ===================================== */
+                continue;
 
-    let research;
+            }
 
 
-    try {
+            if (retryableStatus) {
 
-        research =
-            JSON.parse(
+                throw new Error(
+                    `Daily Brief batch ${batchNumber} failed after ` +
+                    `${maxAttempts} attempts. Gemini returned ` +
+                    `${geminiResponse.status}.`
+                );
+
+            }
+
+
+            throw new Error(
+                `Daily Brief batch ${batchNumber} failed. ` +
+                `Gemini returned ${geminiResponse.status}.`
+            );
+
+        }
+
+
+        /* =====================================
+        GEMINI SUCCESS
+        ===================================== */
+
+        const geminiData =
+            await geminiResponse.json();
+
+
+        /* =====================================
+        EXTRACT OUTPUT
+        ===================================== */
+
+        const rawText =
+            geminiData
+                ?.candidates?.[0]
+                ?.content
+                ?.parts
+                ?.map(
+                    part =>
+                        part.text || ""
+                )
+                ?.join("")
+                ?.trim();
+
+
+        if (!rawText) {
+
+            console.error(
+                `Gemini Daily Brief Batch ${batchNumber} ` +
+                `returned no text on attempt ${attempt}.`
+            );
+
+
+            /*
+            Empty output can be temporary.
+
+            Retry while attempts remain.
+            */
+
+            if (
+                attempt <
+                maxAttempts
+            ) {
+
+                console.log(
+                    `Daily Brief Batch ${batchNumber} ` +
+                    `returned empty output. Retrying...`
+                );
+
+
+                continue;
+
+            }
+
+
+            throw new Error(
+                `Daily Brief batch ${batchNumber} returned no research ` +
+                `after ${maxAttempts} attempts.`
+            );
+
+        }
+
+
+        /* =====================================
+        PARSE JSON
+        ===================================== */
+
+        let research;
+
+
+        try {
+
+            research =
+                JSON.parse(
+                    rawText
+                );
+
+        }
+        catch (error) {
+
+            console.error(
+                `Daily Brief Batch ${batchNumber} JSON Parse Error ` +
+                `on attempt ${attempt}:`,
                 rawText
             );
 
-    }
-    catch (error) {
 
-        console.error(
-            `Daily Brief Batch ${batchNumber} JSON Parse Error:`,
-            rawText
+            /*
+            Retry invalid output while attempts
+            remain. A fresh generation may return
+            valid JSON.
+            */
+
+            if (
+                attempt <
+                maxAttempts
+            ) {
+
+                console.log(
+                    `Daily Brief Batch ${batchNumber} returned invalid JSON. ` +
+                    `Retrying...`
+                );
+
+
+                continue;
+
+            }
+
+
+            throw new Error(
+                `Daily Brief batch ${batchNumber} returned invalid JSON ` +
+                `after ${maxAttempts} attempts.`
+            );
+
+        }
+
+
+        if (
+            !research ||
+            !Array.isArray(
+                research.results
+            )
+        ) {
+
+            console.error(
+                `Daily Brief Batch ${batchNumber} returned an invalid result ` +
+                `on attempt ${attempt}.`
+            );
+
+
+            if (
+                attempt <
+                maxAttempts
+            ) {
+
+                console.log(
+                    `Daily Brief Batch ${batchNumber} invalid result. Retrying...`
+                );
+
+
+                continue;
+
+            }
+
+
+            throw new Error(
+                `Daily Brief batch ${batchNumber} returned an invalid result ` +
+                `after ${maxAttempts} attempts.`
+            );
+
+        }
+
+
+        /* =====================================
+        BATCH SUCCESS
+        ===================================== */
+
+        console.log(
+            `Daily Brief Batch ${batchNumber} complete on attempt ${attempt}: ` +
+            `${research.results.length} included`
         );
 
 
-        throw new Error(
-            `Daily Brief batch ${batchNumber} returned invalid JSON.`
-        );
+        return research;
 
     }
 
 
-    if (
-        !research ||
-        !Array.isArray(
-            research.results
-        )
-    ) {
+    /*
+    Defensive fallback.
 
-        throw new Error(
-            `Daily Brief batch ${batchNumber} returned an invalid result.`
-        );
+    The loop should always either return
+    successful research or throw.
+    */
 
-    }
-
-
-    console.log(
-        `Daily Brief Batch ${batchNumber} complete: ` +
-        `${research.results.length} included`
+    throw new Error(
+        `Daily Brief batch ${batchNumber} failed.`
     );
 
+}
 
-    return research;
+
+/* =========================================
+WAIT / RETRY DELAY
+========================================= */
+
+function sleep(
+    milliseconds
+) {
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                milliseconds
+            )
+    );
 
 }
 
