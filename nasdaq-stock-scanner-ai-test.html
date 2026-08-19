@@ -6478,7 +6478,7 @@ AI CHART ANALYSIS
 
 .daily-brief-summary-bar{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(4,1fr);
 
     gap:14px;
 
@@ -6774,6 +6774,28 @@ AI CHART ANALYSIS
     }
 
     .daily-brief-stock-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+.daily-brief-summary-bar small{
+    display:block;
+    margin-top:8px;
+
+    color:#64748b;
+
+    font-size:11px;
+    line-height:1.45;
+}
+
+.daily-brief-summary-bar{
+    grid-template-columns:repeat(2,1fr);
+}
+
+@media(max-width:500px){
+
+    .daily-brief-summary-bar{
         grid-template-columns:1fr;
     }
 
