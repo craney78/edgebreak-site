@@ -85,8 +85,6 @@ export default async function handler(req, res) {
                 );
 
 
-            /* COMPLETE */
-
             if (
                 row?.status === "complete" &&
                 row?.ai_results
@@ -130,8 +128,6 @@ export default async function handler(req, res) {
             }
 
 
-            /* EXISTING BACKGROUND JOB */
-
             if (
                 row?.interaction_id &&
                 row?.research_status
@@ -160,8 +156,6 @@ export default async function handler(req, res) {
 
             }
 
-
-            /* NOTHING STARTED */
 
             return res.status(200).json({
 
@@ -308,7 +302,7 @@ export default async function handler(req, res) {
 
             }
 
-                    
+
             /* =================================
             BUILD RESEARCH INSTRUCTION
             ================================= */
@@ -581,11 +575,6 @@ export default async function handler(req, res) {
 
             /* =================================
             SAVE INTERACTION ID
-
-            Vercel can now finish.
-
-            Gemini continues working on Google's
-            servers after this request ends.
             ================================= */
 
             await saveResearchJob({
@@ -648,8 +637,6 @@ export default async function handler(req, res) {
                     briefDate
                 );
 
-
-            /* ALREADY COMPLETE */
 
             if (
                 row?.status === "complete" &&
@@ -825,8 +812,6 @@ export default async function handler(req, res) {
 
             }
 
-                    
-
 
             /* =================================
             FAILED
@@ -841,6 +826,16 @@ export default async function handler(req, res) {
                     extractInteractionError(
                         interaction
                     );
+
+
+                console.error(
+                    "Daily Brief FAILED interaction:",
+                    JSON.stringify(
+                        interaction,
+                        null,
+                        2
+                    )
+                );
 
 
                 await saveResearchFailure({
@@ -875,16 +870,71 @@ export default async function handler(req, res) {
             /* =================================
             INCOMPLETE
 
-            We don't cache an incomplete answer
-            as today's completed Daily Brief.
+            IMPORTANT:
+            Log the ENTIRE interaction so we can
+            see Google's incomplete reason,
+            usage, steps and any partial output.
             ================================= */
 
             if (
                 researchStatus === "incomplete"
             ) {
 
+                console.error(
+                    "Daily Brief INCOMPLETE interaction:",
+                    JSON.stringify(
+                        interaction,
+                        null,
+                        2
+                    )
+                );
+
+
+                const incompleteReason =
+                    interaction?.incomplete_details?.reason ||
+                    interaction?.incompleteDetails?.reason ||
+                    interaction?.error?.message ||
+                    "Unknown incomplete reason";
+
+
+                console.error(
+                    "Daily Brief incomplete reason:",
+                    incompleteReason
+                );
+
+
+                if (interaction?.usage) {
+
+                    console.error(
+                        "Daily Brief incomplete usage:",
+                        JSON.stringify(
+                            interaction.usage,
+                            null,
+                            2
+                        )
+                    );
+
+                }
+
+
+                const partialOutput =
+                    extractOutputText(
+                        interaction
+                    );
+
+
+                if (partialOutput) {
+
+                    console.error(
+                        "Daily Brief partial output:",
+                        partialOutput
+                    );
+
+                }
+
+
                 const errorMessage =
-                    "Gemini completed the research with incomplete output.";
+                    `Gemini incomplete: ${incompleteReason}`;
 
 
                 await saveResearchFailure({
@@ -903,7 +953,9 @@ export default async function handler(req, res) {
                     error:
                         "Daily Brief research returned an incomplete result.",
 
-                    researchStatus
+                    researchStatus,
+
+                    incompleteReason
 
                 });
 
@@ -1051,13 +1103,6 @@ export default async function handler(req, res) {
                     interaction?.usage || null;
 
 
-                /* =============================
-                LOG REAL USAGE
-
-                This lets us see actual token
-                and Google Search consumption.
-                ============================= */
-
                 console.log(
                     "Daily Brief Gemini usage:",
                     JSON.stringify(
@@ -1137,8 +1182,6 @@ export default async function handler(req, res) {
 
             }
 
-
-            /* UNKNOWN STATE */
 
             return res.status(200).json({
 
@@ -1492,8 +1535,6 @@ function extractOutputText(
     interaction
 ) {
 
-    /* Some API responses may expose output_text */
-
     if (
         typeof interaction?.output_text ===
         "string"
@@ -1503,10 +1544,6 @@ function extractOutputText(
 
     }
 
-
-    /* REST response documented form:
-       steps → model_output → content → text
-    */
 
     const pieces = [];
 
