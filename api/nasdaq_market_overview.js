@@ -748,6 +748,8 @@ Return JSON only.
 
     /* =====================================
     PARSE JSON
+
+    ROBUST GEMINI RESPONSE PARSER
     ===================================== */
 
     let overview;
@@ -755,16 +757,117 @@ Return JSON only.
 
     try {
 
-        overview =
-            JSON.parse(
+
+        /*
+        FIRST ATTEMPT:
+
+        Parse exactly what Gemini returned.
+        */
+
+        try {
+
+            overview =
+                JSON.parse(
+                    rawText
+                );
+
+        }
+
+
+        /*
+        SECOND ATTEMPT:
+
+        Gemini can occasionally return valid JSON
+        wrapped in markdown fences or with extra
+        surrounding text.
+
+        Clean that without changing the actual
+        JSON content.
+        */
+
+        catch (directParseError) {
+
+
+            let cleanedText =
                 rawText
-            );
+                    .replace(
+                        /^```(?:json)?\s*/i,
+                        ""
+                    )
+                    .replace(
+                        /\s*```$/i,
+                        ""
+                    )
+                    .trim();
+
+
+            /*
+            Find the beginning and end of
+            the JSON object.
+            */
+
+            const firstBrace =
+                cleanedText.indexOf(
+                    "{"
+                );
+
+
+            const lastBrace =
+                cleanedText.lastIndexOf(
+                    "}"
+                );
+
+
+            if (
+                firstBrace === -1 ||
+                lastBrace === -1 ||
+                lastBrace <= firstBrace
+            ) {
+
+                throw directParseError;
+
+            }
+
+
+            cleanedText =
+                cleanedText.slice(
+                    firstBrace,
+                    lastBrace + 1
+                );
+
+
+            /*
+            Parse the isolated JSON.
+            */
+
+            overview =
+                JSON.parse(
+                    cleanedText
+                );
+
+        }
+
 
     }
     catch (error) {
 
+
         console.error(
             "NASDAQ Market Overview JSON Parse Error:",
+            error
+        );
+
+
+        /*
+        Keep the raw Gemini response in the
+        Vercel logs if parsing ever fails again.
+
+        This lets us diagnose the exact response
+        rather than guessing.
+        */
+
+        console.error(
+            "NASDAQ Market Overview RAW Gemini Response:",
             rawText
         );
 
@@ -774,6 +877,11 @@ Return JSON only.
         );
 
     }
+
+
+    console.log(
+        "NASDAQ Market Overview JSON parsed successfully."
+    );
 
 
     console.log(
