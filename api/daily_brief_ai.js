@@ -177,6 +177,458 @@ export default async function handler(req, res) {
 
         }
 
+        /* =====================================
+        NASDAQ MARKET CLOSE
+        ===================================== */
+
+        if (action === "market_close") {
+
+            if (!process.env.GEMINI_API_KEY) {
+
+                return res.status(500).json({
+                    error:
+                        "Daily Brief AI is not configured."
+                });
+
+            }
+
+
+            /* =================================
+            CHECK EXISTING CACHE
+            ================================= */
+
+            const existing =
+                await getDailyBriefRow(
+                    briefDate
+                );
+
+
+            if (existing?.nasdaq_today) {
+
+                console.log(
+                    `NASDAQ Market Close cache hit: ${briefDate}`
+                );
+
+
+                return res.status(200).json({
+
+                    success: true,
+
+                    cached: true,
+
+                    briefDate,
+
+                    nasdaqToday:
+                        existing.nasdaq_today
+
+                });
+
+            }
+
+
+            /* =================================
+            BUILD MARKET CLOSE PROMPT
+            ================================= */
+
+            const prompt = `
+        You are preparing the NASDAQ Market Close section of
+        EdgeBreak's End-of-Day Market Analysis.
+
+        MARKET DATE:
+        ${briefDate}
+
+        Use current Google Search grounding to research the
+        completed U.S. trading session for this date.
+
+        Your job is to provide a concise factual overview of
+        what happened in the NASDAQ market during the session.
+
+        Research and report:
+
+        - NASDAQ Composite closing performance
+        - whether the NASDAQ finished higher or lower
+        - the approximate percentage move
+        - the major market themes that influenced the session
+        - important sectors or groups that materially affected
+        NASDAQ trading
+        - major macroeconomic, Federal Reserve, earnings or
+        company developments that materially influenced the
+        NASDAQ session
+        - whether the session showed broad strength, broad
+        weakness or mixed trading
+
+        IMPORTANT:
+
+        This is an END-OF-DAY factual market summary.
+
+        Do not provide investment advice.
+
+        Do not provide buy, sell or hold recommendations.
+
+        Do not provide price targets.
+
+        Do not predict what the market will do tomorrow.
+
+        Do not describe a development as affecting today's
+        market unless current sources support that connection.
+
+        Keep the summary useful and concise.
+
+        Return JSON only.
+        `;
+
+
+            console.log(
+                `Generating NASDAQ Market Close: ${briefDate}`
+            );
+
+
+            /* =================================
+            GEMINI + GOOGLE SEARCH
+            ================================= */
+
+            const googleResponse =
+                await fetch(
+                    `${GEMINI_BASE}/interactions`,
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "x-goog-api-key":
+                                process.env.GEMINI_API_KEY,
+
+                            "Api-Revision":
+                                API_REVISION
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                model:
+                                    "gemini-3.6-flash",
+
+                                input:
+                                    prompt,
+
+                                system_instruction:
+                                    `You are a factual financial market research assistant.
+
+        Use Google Search grounding to verify current market information.
+
+        Report facts only.
+
+        Do not provide investment advice, recommendations, ratings, price targets or predictions.
+
+        Return only the requested JSON structure.`,
+
+                                tools: [
+                                    {
+                                        type:
+                                            "google_search",
+
+                                        search_types: [
+                                            "web_search"
+                                        ]
+                                    }
+                                ],
+
+                                response_format: {
+
+                                    type:
+                                        "text",
+
+                                    mime_type:
+                                        "application/json",
+
+                                    schema: {
+
+                                        type:
+                                            "object",
+
+                                        properties: {
+
+                                            headline: {
+                                                type:
+                                                    "string"
+                                            },
+
+                                            summary: {
+                                                type:
+                                                    "string"
+                                            },
+
+                                            direction: {
+                                                type:
+                                                    "string",
+                                                enum: [
+                                                    "HIGHER",
+                                                    "LOWER",
+                                                    "MIXED",
+                                                    "FLAT"
+                                                ]
+                                            },
+
+                                            percentageMove: {
+                                                type:
+                                                    "string"
+                                            },
+
+                                            keyDrivers: {
+
+                                                type:
+                                                    "array",
+
+                                                items: {
+                                                    type:
+                                                        "string"
+                                                }
+
+                                            },
+
+                                            marketBreadth: {
+                                                type:
+                                                    "string"
+                                            },
+
+                                            sourceNames: {
+
+                                                type:
+                                                    "array",
+
+                                                items: {
+                                                    type:
+                                                        "string"
+                                                }
+
+                                            }
+
+                                        },
+
+                                        required: [
+                                            "headline",
+                                            "summary",
+                                            "direction",
+                                            "percentageMove",
+                                            "keyDrivers",
+                                            "marketBreadth",
+                                            "sourceNames"
+                                        ],
+
+                                        additionalProperties:
+                                            false
+
+                                    }
+
+                                },
+
+                                generation_config: {
+
+                                    max_output_tokens:
+                                        1800,
+
+                                    thinking_level:
+                                        "low"
+
+                                }
+
+                            })
+
+                    }
+                );
+
+
+            const googleText =
+                await googleResponse.text();
+
+
+            let interaction;
+
+
+            try {
+
+                interaction =
+                    googleText
+                        ? JSON.parse(
+                            googleText
+                        )
+                        : {};
+
+            }
+            catch {
+
+                console.error(
+                    "NASDAQ Market Close returned non-JSON:",
+                    googleText
+                );
+
+
+                return res.status(502).json({
+                    error:
+                        "NASDAQ Market Close returned an invalid response."
+                });
+
+            }
+
+
+            if (!googleResponse.ok) {
+
+                console.error(
+                    "NASDAQ Market Close Gemini error:",
+                    googleResponse.status,
+                    interaction
+                );
+
+
+                return res.status(
+                    googleResponse.status
+                ).json({
+
+                    error:
+                        interaction?.error?.message ||
+                        "Unable to generate NASDAQ Market Close."
+
+                });
+
+            }
+
+
+            /* =================================
+            EXTRACT GEMINI OUTPUT
+            ================================= */
+
+            let outputText = "";
+
+
+            if (
+                Array.isArray(
+                    interaction?.outputs
+                )
+            ) {
+
+                for (
+                    const output of
+                    interaction.outputs
+                ) {
+
+                    if (
+                        output?.type === "text" &&
+                        output?.text
+                    ) {
+
+                        outputText +=
+                            output.text;
+
+                    }
+
+                }
+
+            }
+
+
+            if (
+                !outputText &&
+                typeof interaction?.output_text ===
+                    "string"
+            ) {
+
+                outputText =
+                    interaction.output_text;
+
+            }
+
+
+            if (!outputText) {
+
+                console.error(
+                    "NASDAQ Market Close had no output:",
+                    interaction
+                );
+
+
+                return res.status(502).json({
+                    error:
+                        "NASDAQ Market Close returned no research."
+                });
+
+            }
+
+
+            /* =================================
+            PARSE JSON RESULT
+            ================================= */
+
+            let nasdaqToday;
+
+
+            try {
+
+                nasdaqToday =
+                    JSON.parse(
+                        cleanJsonText(
+                            outputText
+                        )
+                    );
+
+            }
+            catch {
+
+                console.error(
+                    "NASDAQ Market Close JSON parse error:",
+                    outputText
+                );
+
+
+                return res.status(502).json({
+                    error:
+                        "NASDAQ Market Close returned invalid JSON."
+                });
+
+            }
+
+
+            /* =================================
+            SAVE TO SUPABASE
+            ================================= */
+
+            await patchDailyBrief(
+                briefDate,
+                {
+
+                    nasdaq_today:
+                        nasdaqToday,
+
+                    updated_at:
+                        new Date()
+                            .toISOString()
+
+                }
+            );
+
+
+            console.log(
+                `NASDAQ Market Close saved: ${briefDate}`
+            );
+
+
+            return res.status(200).json({
+
+                success: true,
+
+                cached: false,
+
+                briefDate,
+
+                nasdaqToday
+
+            });
+
+        }
 
         /* =====================================
         START BACKGROUND RESEARCH
