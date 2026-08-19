@@ -370,11 +370,125 @@ export default async function handler(req, res) {
                                     }
                                 ],
 
+                                response_format: {
+
+                                    type: "text",
+
+                                    mime_type:
+                                        "application/json",
+
+                                    schema: {
+
+                                        type: "object",
+
+                                        properties: {
+
+                                            results: {
+
+                                                type: "array",
+
+                                                items: {
+
+                                                    type: "object",
+
+                                                    properties: {
+
+                                                        symbols: {
+                                                            type: "array",
+                                                            items: {
+                                                                type: "string"
+                                                            }
+                                                        },
+
+                                                        companyName: {
+                                                            type: "string"
+                                                        },
+
+                                                        scanners: {
+                                                            type: "array",
+                                                            items: {
+                                                                type: "string"
+                                                            }
+                                                        },
+
+                                                        attentionLevel: {
+                                                            type: "string",
+                                                            enum: [
+                                                                "HIGH",
+                                                                "ELEVATED",
+                                                                "NOTABLE"
+                                                            ]
+                                                        },
+
+                                                        headline: {
+                                                            type: "string"
+                                                        },
+
+                                                        summary: {
+                                                            type: "string"
+                                                        },
+
+                                                        currentDevelopment: {
+                                                            type: "string"
+                                                        },
+
+                                                        whyIncluded: {
+                                                            type: "string"
+                                                        },
+
+                                                        developmentDate: {
+                                                            type: "string"
+                                                        },
+
+                                                        sourceNames: {
+                                                            type: "array",
+                                                            items: {
+                                                                type: "string"
+                                                            }
+                                                        }
+
+                                                    },
+
+                                                    required: [
+                                                        "symbols",
+                                                        "companyName",
+                                                        "scanners",
+                                                        "attentionLevel",
+                                                        "headline",
+                                                        "summary",
+                                                        "currentDevelopment",
+                                                        "whyIncluded",
+                                                        "developmentDate",
+                                                        "sourceNames"
+                                                    ],
+
+                                                    additionalProperties:
+                                                        false
+
+                                                }
+
+                                            }
+
+                                        },
+
+                                        required: [
+                                            "results"
+                                        ],
+
+                                        additionalProperties:
+                                            false
+
+                                    }
+
+                                },
+
                                 generation_config: {
 
-                                    max_output_tokens: 16000,
+                                    max_output_tokens:
+                                        16000,
 
-                                    thinking_level: "medium"
+                                    thinking_level:
+                                        "medium"
 
                                 }
 
@@ -756,11 +870,6 @@ export default async function handler(req, res) {
 
             /* =================================
             INCOMPLETE
-
-            IMPORTANT:
-            Log the ENTIRE interaction so we can
-            see Google's incomplete reason,
-            usage, steps and any partial output.
             ================================= */
 
             if (
