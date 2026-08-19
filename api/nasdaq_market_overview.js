@@ -1,44 +1,18 @@
 /* =========================================
 EDGEBREAK — NASDAQ END-OF-DAY MARKET OVERVIEW
 /api/nasdaq_market_overview.js
-
-PURPOSE:
-
-Lightweight end-of-day NASDAQ market briefing.
-
-This function:
-
-1. Determines the U.S. market date
-2. Checks Supabase for today's cached overview
-3. If cached, returns it immediately
-4. If not cached, makes ONE grounded Gemini request
-5. Researches ONLY broad NASDAQ market conditions
-6. Saves the completed overview to Supabase
-7. Returns the completed overview
-
-IMPORTANT:
-
-This function does NOT research individual stocks.
-
-EdgeBreak scanner statistics are supplied separately
-from EdgeBreak's own scanner data.
-
 ========================================= */
 
-
 export default async function handler(req, res) {
-
 
     /* =====================================
     POST ONLY
     ===================================== */
 
     if (req.method !== "POST") {
-
         return res.status(405).json({
             error: "Method not allowed."
         });
-
     }
 
 
@@ -47,38 +21,28 @@ export default async function handler(req, res) {
     ===================================== */
 
     if (!process.env.GEMINI_API_KEY) {
-
         return res.status(500).json({
-            error:
-                "NASDAQ Market Overview AI is not configured."
+            error: "NASDAQ Market Overview AI is not configured."
         });
-
     }
-
 
     if (
         !process.env.SUPABASE_URL ||
         !process.env.SUPABASE_SERVICE_KEY
     ) {
-
         return res.status(500).json({
-            error:
-                "NASDAQ Market Overview cache is not configured."
+            error: "NASDAQ Market Overview cache is not configured."
         });
-
     }
 
 
     try {
 
-
         /* =====================================
         U.S. MARKET DATE
         ===================================== */
 
-        const marketDate =
-            getNewYorkDate();
-
+        const marketDate = getNewYorkDate();
 
         console.log(
             `NASDAQ Market Overview date: ${marketDate}`
@@ -90,9 +54,7 @@ export default async function handler(req, res) {
         ===================================== */
 
         const cachedOverview =
-            await getCachedOverview(
-                marketDate
-            );
+            await getCachedOverview(marketDate);
 
 
         if (cachedOverview) {
@@ -101,24 +63,13 @@ export default async function handler(req, res) {
                 `NASDAQ Market Overview CACHE HIT: ${marketDate}`
             );
 
-
             return res.status(200).json({
-
                 success: true,
-
                 cached: true,
-
-                marketDate:
-                    cachedOverview.market_date,
-
-                generatedAt:
-                    cachedOverview.generated_at,
-
-                overview:
-                    cachedOverview.overview
-
+                marketDate: cachedOverview.market_date,
+                generatedAt: cachedOverview.generated_at,
+                overview: cachedOverview.overview
             });
-
         }
 
 
@@ -132,27 +83,21 @@ export default async function handler(req, res) {
         ===================================== */
 
         const overview =
-            await researchNasdaqMarket(
-                marketDate
-            );
+            await researchNasdaqMarket(marketDate);
 
 
         /* =====================================
-        SAFETY CHECK
+        CLEAN RESULT
         ===================================== */
 
         const safeOverview =
-            cleanOverview(
-                overview
-            );
+            cleanOverview(overview);
 
 
         if (!safeOverview) {
-
             throw new Error(
                 "NASDAQ Market Overview returned invalid research."
             );
-
         }
 
 
@@ -161,9 +106,7 @@ export default async function handler(req, res) {
         ===================================== */
 
         const combinedText =
-            JSON.stringify(
-                safeOverview
-            );
+            JSON.stringify(safeOverview);
 
 
         const prohibitedPatterns = [
@@ -190,9 +133,7 @@ export default async function handler(req, res) {
         const unsafe =
             prohibitedPatterns.some(
                 pattern =>
-                    pattern.test(
-                        combinedText
-                    )
+                    pattern.test(combinedText)
             );
 
 
@@ -202,12 +143,10 @@ export default async function handler(req, res) {
                 "NASDAQ Market Overview blocked by safety filter."
             );
 
-
             return res.status(422).json({
                 error:
                     "Today's NASDAQ Market Overview could not be displayed."
             });
-
         }
 
 
@@ -216,19 +155,13 @@ export default async function handler(req, res) {
         ===================================== */
 
         const generatedAt =
-            new Date()
-                .toISOString();
+            new Date().toISOString();
 
 
         await saveOverview({
-
             marketDate,
-
             generatedAt,
-
-            overview:
-                safeOverview
-
+            overview: safeOverview
         });
 
 
@@ -246,11 +179,9 @@ export default async function handler(req, res) {
 
             generatedAt,
 
-            overview:
-                safeOverview
+            overview: safeOverview
 
         });
-
 
     }
     catch (error) {
@@ -260,29 +191,19 @@ export default async function handler(req, res) {
             error
         );
 
-
         return res.status(500).json({
-
             error:
                 "Today's NASDAQ Market Overview is temporarily unavailable."
-
         });
-
     }
-
 }
 
 
 /* =========================================
 RESEARCH NASDAQ MARKET
-
-ONE SMALL GROUNDED GEMINI REQUEST
 ========================================= */
 
-async function researchNasdaqMarket(
-    marketDate
-) {
-
+async function researchNasdaqMarket(marketDate) {
 
     console.log(
         "NASDAQ Market Overview AI research starting..."
@@ -597,8 +518,6 @@ Return JSON only.
 
     /* =====================================
     GEMINI REQUEST
-
-    ONE REQUEST ONLY
     ===================================== */
 
     const geminiResponse =
@@ -608,8 +527,7 @@ Return JSON only.
 
             {
 
-                method:
-                    "POST",
+                method: "POST",
 
                 headers: {
 
@@ -635,13 +553,11 @@ Return JSON only.
 
                         },
 
-
                         contents: [
 
                             {
 
-                                role:
-                                    "user",
+                                role: "user",
 
                                 parts: [
                                     {
@@ -654,7 +570,6 @@ Return JSON only.
 
                         ],
 
-
                         tools: [
 
                             {
@@ -663,25 +578,14 @@ Return JSON only.
 
                         ],
 
-
                         generationConfig: {
 
-                            /*
-                            Deliberately small.
-
-                            This is a lightweight
-                            end-of-day market brief,
-                            NOT deep stock research.
-                            */
-
-                            maxOutputTokens:
-                                2000,
+                            maxOutputTokens: 2000,
 
                             responseMimeType:
                                 "application/json",
 
-                            temperature:
-                                0.1
+                            temperature: 0.1
 
                         }
 
@@ -693,7 +597,7 @@ Return JSON only.
 
 
     /* =====================================
-    GEMINI ERROR
+    GEMINI HTTP ERROR
     ===================================== */
 
     if (!geminiResponse.ok) {
@@ -701,55 +605,114 @@ Return JSON only.
         const errorText =
             await geminiResponse.text();
 
-
         console.error(
             "Gemini NASDAQ Market Overview Error:",
             geminiResponse.status,
             errorText
         );
 
-
         throw new Error(
             `NASDAQ Market Overview Gemini request failed (${geminiResponse.status}).`
         );
-
     }
 
 
+    /* =====================================
+    READ GEMINI RESPONSE
+    ===================================== */
+
     const geminiData =
         await geminiResponse.json();
+
+
+    /*
+    IMPORTANT DIAGNOSTIC
+
+    If Gemini returns HTTP 200 but no normal
+    text output, this prints the complete response
+    to Vercel so we can see exactly what Gemini did.
+    */
+
+    console.log(
+        "NASDAQ MARKET OVERVIEW FULL GEMINI RESPONSE:",
+        JSON.stringify(
+            geminiData,
+            null,
+            2
+        )
+    );
 
 
     /* =====================================
     EXTRACT OUTPUT
     ===================================== */
 
+    const candidate =
+        geminiData?.candidates?.[0];
+
+
+    console.log(
+        "NASDAQ Market Overview finish reason:",
+        candidate?.finishReason || "NONE"
+    );
+
+
     const rawText =
-        geminiData
-            ?.candidates?.[0]
+        candidate
             ?.content
             ?.parts
             ?.map(
                 part =>
-                    part.text || ""
+                    typeof part?.text === "string"
+                        ? part.text
+                        : ""
             )
             ?.join("")
             ?.trim();
 
 
+    /* =====================================
+    NO TEXT RETURNED
+    ===================================== */
+
     if (!rawText) {
+
+        console.error(
+            "NASDAQ Market Overview returned no text."
+        );
+
+        console.error(
+            "NASDAQ Market Overview candidate:",
+            JSON.stringify(
+                candidate,
+                null,
+                2
+            )
+        );
+
+        console.error(
+            "NASDAQ Market Overview prompt feedback:",
+            JSON.stringify(
+                geminiData?.promptFeedback || null,
+                null,
+                2
+            )
+        );
 
         throw new Error(
             "NASDAQ Market Overview returned no research."
         );
-
     }
+
+
+    console.log(
+        "NASDAQ Market Overview raw text received. Characters:",
+        rawText.length
+    );
 
 
     /* =====================================
     PARSE JSON
-
-    ROBUST GEMINI RESPONSE PARSER
     ===================================== */
 
     let overview;
@@ -757,36 +720,23 @@ Return JSON only.
 
     try {
 
-
         /*
-        FIRST ATTEMPT:
-
-        Parse exactly what Gemini returned.
+        FIRST ATTEMPT
         */
 
         try {
 
             overview =
-                JSON.parse(
-                    rawText
-                );
+                JSON.parse(rawText);
 
         }
-
-
-        /*
-        SECOND ATTEMPT:
-
-        Gemini can occasionally return valid JSON
-        wrapped in markdown fences or with extra
-        surrounding text.
-
-        Clean that without changing the actual
-        JSON content.
-        */
-
         catch (directParseError) {
 
+            /*
+            SECOND ATTEMPT
+
+            Remove markdown code fences.
+            */
 
             let cleanedText =
                 rawText
@@ -802,20 +752,14 @@ Return JSON only.
 
 
             /*
-            Find the beginning and end of
-            the JSON object.
+            Isolate outer JSON object.
             */
 
             const firstBrace =
-                cleanedText.indexOf(
-                    "{"
-                );
-
+                cleanedText.indexOf("{");
 
             const lastBrace =
-                cleanedText.lastIndexOf(
-                    "}"
-                );
+                cleanedText.lastIndexOf("}");
 
 
             if (
@@ -823,9 +767,7 @@ Return JSON only.
                 lastBrace === -1 ||
                 lastBrace <= firstBrace
             ) {
-
                 throw directParseError;
-
             }
 
 
@@ -836,46 +778,27 @@ Return JSON only.
                 );
 
 
-            /*
-            Parse the isolated JSON.
-            */
-
             overview =
-                JSON.parse(
-                    cleanedText
-                );
+                JSON.parse(cleanedText);
 
         }
 
-
     }
     catch (error) {
-
 
         console.error(
             "NASDAQ Market Overview JSON Parse Error:",
             error
         );
 
-
-        /*
-        Keep the raw Gemini response in the
-        Vercel logs if parsing ever fails again.
-
-        This lets us diagnose the exact response
-        rather than guessing.
-        */
-
         console.error(
             "NASDAQ Market Overview RAW Gemini Response:",
             rawText
         );
 
-
         throw new Error(
             "NASDAQ Market Overview returned invalid JSON."
         );
-
     }
 
 
@@ -883,14 +806,12 @@ Return JSON only.
         "NASDAQ Market Overview JSON parsed successfully."
     );
 
-
     console.log(
         "NASDAQ Market Overview AI research complete."
     );
 
 
     return overview;
-
 }
 
 
@@ -898,23 +819,15 @@ Return JSON only.
 CLEAN OVERVIEW
 ========================================= */
 
-function cleanOverview(
-    overview
-) {
+function cleanOverview(overview) {
 
     if (
         !overview ||
         typeof overview !== "object"
     ) {
-
         return null;
-
     }
 
-
-    /* =====================================
-    INDEX DATA
-    ===================================== */
 
     const nasdaqComposite = {
 
@@ -962,19 +875,10 @@ function cleanOverview(
     };
 
 
-    /* =====================================
-    STRONG AREAS
-    ===================================== */
-
     const strongAreas =
-        Array.isArray(
-            overview.strongAreas
-        )
+        Array.isArray(overview.strongAreas)
             ? overview.strongAreas
-                .slice(
-                    0,
-                    3
-                )
+                .slice(0, 3)
                 .map(
                     item => ({
 
@@ -999,20 +903,11 @@ function cleanOverview(
                 )
             : [];
 
-
-    /* =====================================
-    WEAK AREAS
-    ===================================== */
 
     const weakAreas =
-        Array.isArray(
-            overview.weakAreas
-        )
+        Array.isArray(overview.weakAreas)
             ? overview.weakAreas
-                .slice(
-                    0,
-                    3
-                )
+                .slice(0, 3)
                 .map(
                     item => ({
 
@@ -1038,19 +933,10 @@ function cleanOverview(
             : [];
 
 
-    /* =====================================
-    MARKET DRIVERS
-    ===================================== */
-
     const marketDrivers =
-        Array.isArray(
-            overview.marketDrivers
-        )
+        Array.isArray(overview.marketDrivers)
             ? overview.marketDrivers
-                .slice(
-                    0,
-                    3
-                )
+                .slice(0, 3)
                 .map(
                     item => ({
 
@@ -1076,19 +962,10 @@ function cleanOverview(
             : [];
 
 
-    /* =====================================
-    UPCOMING EVENTS
-    ===================================== */
-
     const upcomingEvents =
-        Array.isArray(
-            overview.upcomingEvents
-        )
+        Array.isArray(overview.upcomingEvents)
             ? overview.upcomingEvents
-                .slice(
-                    0,
-                    3
-                )
+                .slice(0, 3)
                 .map(
                     item => ({
 
@@ -1120,10 +997,6 @@ function cleanOverview(
             : [];
 
 
-    /* =====================================
-    FINAL CLEAN OBJECT
-    ===================================== */
-
     return {
 
         marketSummary:
@@ -1151,7 +1024,6 @@ function cleanOverview(
             )
 
     };
-
 }
 
 
@@ -1159,10 +1031,7 @@ function cleanOverview(
 GET CACHED OVERVIEW
 ========================================= */
 
-async function getCachedOverview(
-    marketDate
-) {
-
+async function getCachedOverview(marketDate) {
 
     const cacheUrl =
         `${process.env.SUPABASE_URL}` +
@@ -1175,14 +1044,12 @@ async function getCachedOverview(
 
     try {
 
-
         const response =
             await fetch(
                 cacheUrl,
                 {
 
-                    method:
-                        "GET",
+                    method: "GET",
 
                     headers: {
 
@@ -1206,15 +1073,12 @@ async function getCachedOverview(
             const errorText =
                 await response.text();
 
-
             console.error(
                 "NASDAQ Market Overview Cache Read Error:",
                 errorText
             );
 
-
             return null;
-
         }
 
 
@@ -1227,29 +1091,22 @@ async function getCachedOverview(
             rows.length > 0 &&
             rows[0].overview
         ) {
-
             return rows[0];
-
         }
 
 
         return null;
 
-
     }
     catch (error) {
-
 
         console.error(
             "NASDAQ Market Overview Cache Read Error:",
             error
         );
 
-
         return null;
-
     }
-
 }
 
 
@@ -1260,13 +1117,10 @@ SAVE OVERVIEW
 async function saveOverview({
 
     marketDate,
-
     generatedAt,
-
     overview
 
 }) {
-
 
     const saveUrl =
         `${process.env.SUPABASE_URL}` +
@@ -1276,14 +1130,12 @@ async function saveOverview({
 
     try {
 
-
         const response =
             await fetch(
                 saveUrl,
                 {
 
-                    method:
-                        "POST",
+                    method: "POST",
 
                     headers: {
 
@@ -1310,8 +1162,7 @@ async function saveOverview({
                             status:
                                 "complete",
 
-                            overview:
-                                overview,
+                            overview,
 
                             generated_at:
                                 generatedAt,
@@ -1330,22 +1181,12 @@ async function saveOverview({
             const errorText =
                 await response.text();
 
-
             console.error(
                 "NASDAQ Market Overview Cache Save Error:",
                 errorText
             );
 
-
-            /*
-            The market overview succeeded.
-
-            Do not fail the user request
-            solely because caching failed.
-            */
-
             return false;
-
         }
 
 
@@ -1353,24 +1194,18 @@ async function saveOverview({
             `NASDAQ Market Overview CACHE SAVED: ${marketDate}`
         );
 
-
         return true;
-
 
     }
     catch (error) {
-
 
         console.error(
             "NASDAQ Market Overview Cache Save Error:",
             error
         );
 
-
         return false;
-
     }
-
 }
 
 
@@ -1379,7 +1214,6 @@ NEW YORK MARKET DATE
 ========================================= */
 
 function getNewYorkDate() {
-
 
     const parts =
         new Intl.DateTimeFormat(
@@ -1408,22 +1242,14 @@ function getNewYorkDate() {
     const values = {};
 
 
-    for (
-        const part of
-        parts
-    ) {
+    for (const part of parts) {
 
-        if (
-            part.type !== "literal"
-        ) {
+        if (part.type !== "literal") {
 
-            values[
-                part.type
-            ] =
+            values[part.type] =
                 part.value;
 
         }
-
     }
 
 
@@ -1432,7 +1258,6 @@ function getNewYorkDate() {
         `${values.month}-` +
         `${values.day}`
     );
-
 }
 
 
@@ -1445,13 +1270,8 @@ function cleanField(
     maxLength = 800
 ) {
 
-
-    if (
-        typeof value !== "string"
-    ) {
-
+    if (typeof value !== "string") {
         return "";
-
     }
 
 
@@ -1465,5 +1285,4 @@ function cleanField(
             0,
             maxLength
         );
-
 }
