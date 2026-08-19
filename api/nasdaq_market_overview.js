@@ -1,18 +1,47 @@
 /* =========================================
 EDGEBREAK — NASDAQ END-OF-DAY MARKET OVERVIEW
 /api/nasdaq_market_overview.js
+
+PURPOSE:
+
+Lightweight end-of-day NASDAQ market briefing.
+
+FLOW:
+
+1. Determine U.S. market date
+2. Check Supabase cache
+3. If cached, return immediately
+4. If not cached, make ONE grounded Gemini request
+5. Research broad NASDAQ market conditions only
+6. Clean and validate result
+7. Save completed overview to Supabase
+8. Return overview
+
+IMPORTANT:
+
+This is END-OF-DAY reporting.
+
+This function does NOT research individual stocks.
+
+EdgeBreak scanner statistics are handled separately
+using EdgeBreak's own scanner data.
+
 ========================================= */
 
+
 export default async function handler(req, res) {
+
 
     /* =====================================
     POST ONLY
     ===================================== */
 
     if (req.method !== "POST") {
+
         return res.status(405).json({
             error: "Method not allowed."
         });
+
     }
 
 
@@ -21,28 +50,38 @@ export default async function handler(req, res) {
     ===================================== */
 
     if (!process.env.GEMINI_API_KEY) {
+
         return res.status(500).json({
-            error: "NASDAQ Market Overview AI is not configured."
+            error:
+                "NASDAQ Market Overview AI is not configured."
         });
+
     }
+
 
     if (
         !process.env.SUPABASE_URL ||
         !process.env.SUPABASE_SERVICE_KEY
     ) {
+
         return res.status(500).json({
-            error: "NASDAQ Market Overview cache is not configured."
+            error:
+                "NASDAQ Market Overview cache is not configured."
         });
+
     }
 
 
     try {
 
+
         /* =====================================
         U.S. MARKET DATE
         ===================================== */
 
-        const marketDate = getNewYorkDate();
+        const marketDate =
+            getNewYorkDate();
+
 
         console.log(
             `NASDAQ Market Overview date: ${marketDate}`
@@ -54,7 +93,9 @@ export default async function handler(req, res) {
         ===================================== */
 
         const cachedOverview =
-            await getCachedOverview(marketDate);
+            await getCachedOverview(
+                marketDate
+            );
 
 
         if (cachedOverview) {
@@ -63,13 +104,24 @@ export default async function handler(req, res) {
                 `NASDAQ Market Overview CACHE HIT: ${marketDate}`
             );
 
+
             return res.status(200).json({
+
                 success: true,
+
                 cached: true,
-                marketDate: cachedOverview.market_date,
-                generatedAt: cachedOverview.generated_at,
-                overview: cachedOverview.overview
+
+                marketDate:
+                    cachedOverview.market_date,
+
+                generatedAt:
+                    cachedOverview.generated_at,
+
+                overview:
+                    cachedOverview.overview
+
             });
+
         }
 
 
@@ -83,7 +135,9 @@ export default async function handler(req, res) {
         ===================================== */
 
         const overview =
-            await researchNasdaqMarket(marketDate);
+            await researchNasdaqMarket(
+                marketDate
+            );
 
 
         /* =====================================
@@ -91,13 +145,17 @@ export default async function handler(req, res) {
         ===================================== */
 
         const safeOverview =
-            cleanOverview(overview);
+            cleanOverview(
+                overview
+            );
 
 
         if (!safeOverview) {
+
             throw new Error(
                 "NASDAQ Market Overview returned invalid research."
             );
+
         }
 
 
@@ -106,7 +164,9 @@ export default async function handler(req, res) {
         ===================================== */
 
         const combinedText =
-            JSON.stringify(safeOverview);
+            JSON.stringify(
+                safeOverview
+            );
 
 
         const prohibitedPatterns = [
@@ -122,6 +182,7 @@ export default async function handler(req, res) {
             /\bsell opportunity\b/i,
             /\bprice target\b/i,
             /\btarget price\b/i,
+            /\bexpected return\b/i,
             /\bguaranteed return\b/i,
             /\bguaranteed profit\b/i,
             /\bmarket will rise\b/i,
@@ -133,7 +194,9 @@ export default async function handler(req, res) {
         const unsafe =
             prohibitedPatterns.some(
                 pattern =>
-                    pattern.test(combinedText)
+                    pattern.test(
+                        combinedText
+                    )
             );
 
 
@@ -143,10 +206,14 @@ export default async function handler(req, res) {
                 "NASDAQ Market Overview blocked by safety filter."
             );
 
+
             return res.status(422).json({
+
                 error:
                     "Today's NASDAQ Market Overview could not be displayed."
+
             });
+
         }
 
 
@@ -155,13 +222,19 @@ export default async function handler(req, res) {
         ===================================== */
 
         const generatedAt =
-            new Date().toISOString();
+            new Date()
+                .toISOString();
 
 
         await saveOverview({
+
             marketDate,
+
             generatedAt,
-            overview: safeOverview
+
+            overview:
+                safeOverview
+
         });
 
 
@@ -179,23 +252,31 @@ export default async function handler(req, res) {
 
             generatedAt,
 
-            overview: safeOverview
+            overview:
+                safeOverview
 
         });
 
+
     }
     catch (error) {
+
 
         console.error(
             "NASDAQ Market Overview Error:",
             error
         );
 
+
         return res.status(500).json({
+
             error:
                 "Today's NASDAQ Market Overview is temporarily unavailable."
+
         });
+
     }
+
 }
 
 
@@ -203,7 +284,10 @@ export default async function handler(req, res) {
 RESEARCH NASDAQ MARKET
 ========================================= */
 
-async function researchNasdaqMarket(marketDate) {
+async function researchNasdaqMarket(
+    marketDate
+) {
+
 
     console.log(
         "NASDAQ Market Overview AI research starting..."
@@ -224,11 +308,17 @@ COMPLETED U.S. trading session.
 
 This is END-OF-DAY reporting.
 
-The U.S. market session has already closed.
+The U.S. market session for the supplied market date
+has already closed.
 
-Do NOT write as though the market is currently trading.
+You are reporting what happened during that completed
+session.
 
-Use language such as:
+Do NOT describe the market as though it is currently
+trading.
+
+
+USE PAST-TENSE LANGUAGE SUCH AS:
 
 - finished
 - closed
@@ -240,7 +330,8 @@ Use language such as:
 - strengthened
 - weakened
 
-Do NOT use language such as:
+
+DO NOT USE LANGUAGE SUCH AS:
 
 - is currently trading
 - is rising
@@ -259,8 +350,8 @@ Focus on:
 - NASDAQ-100
 - NASDAQ-relevant sectors and industries
 - major developments that influenced the completed session
-- important scheduled events AFTER today's close that may
-  be relevant to upcoming NASDAQ trading sessions
+- important scheduled events occurring AFTER the completed
+  session that may be relevant to upcoming NASDAQ sessions
 
 
 THIS IS NOT:
@@ -279,17 +370,16 @@ finished the completed session.
 
 Use factual closing performance where reliably available.
 
-Do not invent index figures.
+If reliable closing figures cannot be established,
+leave those particular fields blank.
+
+Never invent index figures.
 
 
-STRONG AND WEAK AREAS:
+STRONG AREAS:
 
-Identify no more than THREE NASDAQ-relevant sectors or
-industries that showed notable strength during the
-completed session.
-
-Identify no more than THREE NASDAQ-relevant sectors or
-industries that showed notable weakness.
+Identify up to THREE NASDAQ-relevant sectors or industries
+that showed notable strength during the completed session.
 
 Examples may include:
 
@@ -303,16 +393,25 @@ Examples may include:
 - renewable energy
 - financial technology
 
-Only include areas where current evidence supports the
-assessment.
+Only include areas supported by current factual evidence.
 
-Do not force three results if fewer are genuinely notable.
+Do not force three results.
+
+
+WEAK AREAS:
+
+Identify up to THREE NASDAQ-relevant sectors or industries
+that showed notable weakness during the completed session.
+
+Only include areas supported by current factual evidence.
+
+Do not force three results.
 
 
 MARKET DRIVERS:
 
-Identify no more than THREE important developments that
-help explain the completed NASDAQ session.
+Identify up to THREE important developments that helped
+explain the completed NASDAQ session.
 
 Examples may include:
 
@@ -326,15 +425,16 @@ Examples may include:
 - geopolitical developments
 - broad risk sentiment
 
-Focus on developments relevant to the NASDAQ overall.
+Focus specifically on developments relevant to NASDAQ
+market behaviour.
 
-Do not turn this into a general news summary.
+Do not turn this into a general news report.
 
 
 UPCOMING EVENTS:
 
-Identify no more than THREE important scheduled events
-occurring AFTER the completed market session.
+Identify up to THREE important scheduled events occurring
+AFTER the completed session.
 
 These should be events that could reasonably be relevant
 to NASDAQ market conditions during upcoming sessions.
@@ -348,20 +448,18 @@ Examples:
 - Federal Reserve speeches
 - major technology earnings
 - major semiconductor earnings
-- other significant scheduled economic events
+- significant scheduled economic releases
 
 For each event:
 
-State what the event is.
+- state the event
+- state the date
+- briefly explain why NASDAQ market participants may
+  pay attention to it
 
-State the date.
+Do NOT predict how the NASDAQ will react.
 
-Briefly explain WHY NASDAQ market participants may pay
-attention to it.
-
-Do NOT predict how the NASDAQ will respond.
-
-Do NOT say the event will cause the market to rise or fall.
+Do NOT say an event will cause the market to rise or fall.
 
 
 TAKEAWAY:
@@ -372,7 +470,7 @@ takeaway.
 Summarize:
 
 - the character of the completed NASDAQ session
-- the most important area to watch going into upcoming
+- the main issue or event worth monitoring in upcoming
   sessions
 
 Do not make predictions.
@@ -391,6 +489,13 @@ Do NOT provide:
 - expected returns
 - trading instructions
 
+
+IMPORTANT:
+
+This is designed to be a quick daily briefing.
+
+Be concise.
+
 Return JSON only.
 
 `;
@@ -403,24 +508,29 @@ Return JSON only.
     const userInstruction = `
 
 Prepare the EdgeBreak NASDAQ End-of-Day Market Overview
-for the completed U.S. market session dated:
+for the COMPLETED U.S. market session dated:
 
 ${marketDate}
 
-Use current Google Search grounding.
+Use current Google Search grounding to verify the
+completed session.
 
-Keep the entire response concise.
+IMPORTANT:
 
-This is intended to be a quick market briefing displayed
-above EdgeBreak's detailed stock research.
+The requested date is the completed U.S. market session
+being reported.
 
-Do NOT research every NASDAQ company.
+Do not report intraday conditions.
 
-Do NOT provide a long market report.
+Do not describe the market as currently open.
 
-Do NOT provide investment advice.
+Do not research every NASDAQ company.
 
-Do NOT predict future market direction.
+Do not provide a long market report.
+
+Do not provide investment advice.
+
+Do not predict future market direction.
 
 
 RETURN EXACTLY THIS JSON STRUCTURE:
@@ -480,19 +590,19 @@ Maximum 1 sentence.
 strongAreas:
 Maximum 3 objects.
 
-Each summary:
+Each strongAreas summary:
 Maximum 1 sentence.
 
 weakAreas:
 Maximum 3 objects.
 
-Each summary:
+Each weakAreas summary:
 Maximum 1 sentence.
 
 marketDrivers:
 Maximum 3 objects.
 
-Each summary:
+Each marketDrivers summary:
 Maximum 2 short sentences.
 
 upcomingEvents:
@@ -505,11 +615,17 @@ takeaway:
 Maximum 2 sentences.
 
 
-IMPORTANT:
+DATA ACCURACY:
 
 If a precise closing value or percentage cannot be
-reliably verified, return an empty string rather than
-inventing a figure.
+reliably verified, return an empty string for that field.
+
+Never invent a closing value.
+
+Never invent a percentage move.
+
+Never invent an upcoming event or date.
+
 
 Return JSON only.
 
@@ -517,100 +633,217 @@ Return JSON only.
 
 
     /* =====================================
-    GEMINI REQUEST
+    GEMINI REQUEST BODY
+
+    MATCHES WORKING DAILY BRIEF APPROACH
     ===================================== */
 
-    const geminiResponse =
-        await fetch(
+    const requestBody = {
 
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+
+        systemInstruction: {
+
+            parts: [
+
+                {
+
+                    text:
+                        systemInstruction
+
+                }
+
+            ]
+
+        },
+
+
+        contents: [
 
             {
 
-                method: "POST",
+                role:
+                    "user",
 
-                headers: {
+                parts: [
 
-                    "Content-Type":
-                        "application/json",
+                    {
 
-                    "x-goog-api-key":
-                        process.env.GEMINI_API_KEY
+                        text:
+                            userInstruction
 
-                },
+                    }
 
-                body:
-                    JSON.stringify({
-
-                        systemInstruction: {
-
-                            parts: [
-                                {
-                                    text:
-                                        systemInstruction
-                                }
-                            ]
-
-                        },
-
-                        contents: [
-
-                            {
-
-                                role: "user",
-
-                                parts: [
-                                    {
-                                        text:
-                                            userInstruction
-                                    }
-                                ]
-
-                            }
-
-                        ],
-
-                        tools: [
-
-                            {
-                                google_search: {}
-                            }
-
-                        ],
-
-                        generationConfig: {
-
-                            maxOutputTokens: 2000,
-
-                            temperature: 0.1
-
-                        }
-
-                    })
+                ]
 
             }
 
-        );
+        ],
+
+
+        tools: [
+
+            {
+
+                google_search: {}
+
+            }
+
+        ],
+
+
+        generationConfig: {
+
+            /*
+            Lightweight overview.
+
+            Much smaller than detailed
+            Daily Brief company research.
+            */
+
+            maxOutputTokens:
+                2200,
+
+            responseMimeType:
+                "application/json",
+
+            temperature:
+                0.1
+
+        }
+
+    };
 
 
     /* =====================================
-    GEMINI HTTP ERROR
+    GEMINI REQUEST
+    WITH SHORT 503 RETRY
     ===================================== */
 
-    if (!geminiResponse.ok) {
+    let geminiResponse =
+        null;
+
+
+    const maxAttempts =
+        2;
+
+
+    for (
+        let attempt = 1;
+        attempt <= maxAttempts;
+        attempt++
+    ) {
+
+
+        console.log(
+            `NASDAQ Market Overview Gemini attempt ${attempt}/${maxAttempts}`
+        );
+
+
+        geminiResponse =
+            await fetch(
+
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "x-goog-api-key":
+                            process.env.GEMINI_API_KEY
+
+                    },
+
+                    body:
+                        JSON.stringify(
+                            requestBody
+                        )
+
+                }
+
+            );
+
+
+        /* =================================
+        SUCCESS
+        ================================= */
+
+        if (geminiResponse.ok) {
+
+            break;
+
+        }
+
+
+        /* =================================
+        READ GEMINI ERROR
+        ================================= */
 
         const errorText =
             await geminiResponse.text();
 
+
         console.error(
-            "Gemini NASDAQ Market Overview Error:",
+            `Gemini NASDAQ Market Overview Error on attempt ${attempt}:`,
             geminiResponse.status,
             errorText
         );
 
+
+        /* =================================
+        RETRY TEMPORARY 503
+        ================================= */
+
+        if (
+            geminiResponse.status === 503 &&
+            attempt < maxAttempts
+        ) {
+
+
+            console.log(
+                "NASDAQ Market Overview received temporary Gemini 503. Retrying in 5 seconds..."
+            );
+
+
+            await sleep(
+                5000
+            );
+
+
+            continue;
+
+        }
+
+
+        /* =================================
+        NO MORE RETRIES
+        ================================= */
+
         throw new Error(
             `NASDAQ Market Overview Gemini request failed (${geminiResponse.status}).`
         );
+
+    }
+
+
+    /* =====================================
+    FINAL RESPONSE CHECK
+    ===================================== */
+
+    if (
+        !geminiResponse ||
+        !geminiResponse.ok
+    ) {
+
+        throw new Error(
+            "NASDAQ Market Overview Gemini request failed."
+        );
+
     }
 
 
@@ -622,13 +855,9 @@ Return JSON only.
         await geminiResponse.json();
 
 
-    /*
-    IMPORTANT DIAGNOSTIC
-
-    If Gemini returns HTTP 200 but no normal
-    text output, this prints the complete response
-    to Vercel so we can see exactly what Gemini did.
-    */
+    /* =====================================
+    DIAGNOSTIC
+    ===================================== */
 
     console.log(
         "NASDAQ MARKET OVERVIEW FULL GEMINI RESPONSE:",
@@ -641,11 +870,12 @@ Return JSON only.
 
 
     /* =====================================
-    EXTRACT OUTPUT
+    EXTRACT CANDIDATE
     ===================================== */
 
     const candidate =
-        geminiData?.candidates?.[0];
+        geminiData
+            ?.candidates?.[0];
 
 
     console.log(
@@ -654,13 +884,23 @@ Return JSON only.
     );
 
 
+    /* =====================================
+    EXTRACT TEXT ONLY
+
+    Google grounding metadata may also
+    appear inside parts.
+
+    We only collect actual text parts.
+    ===================================== */
+
     const rawText =
         candidate
             ?.content
             ?.parts
             ?.map(
                 part =>
-                    typeof part?.text === "string"
+                    typeof part?.text ===
+                        "string"
                         ? part.text
                         : ""
             )
@@ -674,9 +914,11 @@ Return JSON only.
 
     if (!rawText) {
 
+
         console.error(
             "NASDAQ Market Overview returned no text."
         );
+
 
         console.error(
             "NASDAQ Market Overview candidate:",
@@ -687,6 +929,7 @@ Return JSON only.
             )
         );
 
+
         console.error(
             "NASDAQ Market Overview prompt feedback:",
             JSON.stringify(
@@ -696,9 +939,11 @@ Return JSON only.
             )
         );
 
+
         throw new Error(
             "NASDAQ Market Overview returned no research."
         );
+
     }
 
 
@@ -717,23 +962,32 @@ Return JSON only.
 
     try {
 
-        /*
+
+        /* =================================
         FIRST ATTEMPT
-        */
+        ================================= */
+
+        overview =
+            JSON.parse(
+                rawText
+            );
+
+
+    }
+    catch (directParseError) {
+
+
+        console.warn(
+            "NASDAQ Market Overview normal JSON parse failed. Attempting cleanup..."
+        );
+
 
         try {
 
-            overview =
-                JSON.parse(rawText);
 
-        }
-        catch (directParseError) {
-
-            /*
-            SECOND ATTEMPT
-
-            Remove markdown code fences.
-            */
+            /* =================================
+            REMOVE POSSIBLE MARKDOWN FENCES
+            ================================= */
 
             let cleanedText =
                 rawText
@@ -748,15 +1002,20 @@ Return JSON only.
                     .trim();
 
 
-            /*
-            Isolate outer JSON object.
-            */
+            /* =================================
+            FIND OUTER JSON OBJECT
+            ================================= */
 
             const firstBrace =
-                cleanedText.indexOf("{");
+                cleanedText.indexOf(
+                    "{"
+                );
+
 
             const lastBrace =
-                cleanedText.lastIndexOf("}");
+                cleanedText.lastIndexOf(
+                    "}"
+                );
 
 
             if (
@@ -764,7 +1023,9 @@ Return JSON only.
                 lastBrace === -1 ||
                 lastBrace <= firstBrace
             ) {
+
                 throw directParseError;
+
             }
 
 
@@ -776,26 +1037,50 @@ Return JSON only.
 
 
             overview =
-                JSON.parse(cleanedText);
+                JSON.parse(
+                    cleanedText
+                );
+
+
+        }
+        catch (recoveryError) {
+
+
+            console.error(
+                "NASDAQ Market Overview JSON Parse Error:",
+                recoveryError
+            );
+
+
+            console.error(
+                "NASDAQ Market Overview RAW Gemini Response:",
+                rawText
+            );
+
+
+            throw new Error(
+                "NASDAQ Market Overview returned invalid JSON."
+            );
 
         }
 
     }
-    catch (error) {
 
-        console.error(
-            "NASDAQ Market Overview JSON Parse Error:",
-            error
-        );
 
-        console.error(
-            "NASDAQ Market Overview RAW Gemini Response:",
-            rawText
-        );
+    /* =====================================
+    BASIC RESULT VALIDATION
+    ===================================== */
+
+    if (
+        !overview ||
+        typeof overview !== "object" ||
+        Array.isArray(overview)
+    ) {
 
         throw new Error(
-            "NASDAQ Market Overview returned invalid JSON."
+            "NASDAQ Market Overview returned an invalid object."
         );
+
     }
 
 
@@ -803,12 +1088,14 @@ Return JSON only.
         "NASDAQ Market Overview JSON parsed successfully."
     );
 
+
     console.log(
         "NASDAQ Market Overview AI research complete."
     );
 
 
     return overview;
+
 }
 
 
@@ -816,66 +1103,108 @@ Return JSON only.
 CLEAN OVERVIEW
 ========================================= */
 
-function cleanOverview(overview) {
+function cleanOverview(
+    overview
+) {
+
 
     if (
         !overview ||
-        typeof overview !== "object"
+        typeof overview !== "object" ||
+        Array.isArray(overview)
     ) {
+
         return null;
+
     }
 
 
+    /* =====================================
+    NASDAQ COMPOSITE
+    ===================================== */
+
     const nasdaqComposite = {
+
 
         close:
             cleanField(
-                overview.nasdaqComposite?.close,
+                overview
+                    ?.nasdaqComposite
+                    ?.close,
                 40
             ),
 
+
         changePercent:
             cleanField(
-                overview.nasdaqComposite?.changePercent,
+                overview
+                    ?.nasdaqComposite
+                    ?.changePercent,
                 30
             ),
 
+
         summary:
             cleanField(
-                overview.nasdaqComposite?.summary,
+                overview
+                    ?.nasdaqComposite
+                    ?.summary,
                 300
             )
 
     };
 
+
+    /* =====================================
+    NASDAQ 100
+    ===================================== */
 
     const nasdaq100 = {
 
+
         close:
             cleanField(
-                overview.nasdaq100?.close,
+                overview
+                    ?.nasdaq100
+                    ?.close,
                 40
             ),
 
+
         changePercent:
             cleanField(
-                overview.nasdaq100?.changePercent,
+                overview
+                    ?.nasdaq100
+                    ?.changePercent,
                 30
             ),
 
+
         summary:
             cleanField(
-                overview.nasdaq100?.summary,
+                overview
+                    ?.nasdaq100
+                    ?.summary,
                 300
             )
 
     };
 
 
+    /* =====================================
+    STRONG AREAS
+    ===================================== */
+
     const strongAreas =
-        Array.isArray(overview.strongAreas)
-            ? overview.strongAreas
-                .slice(0, 3)
+        Array.isArray(
+            overview.strongAreas
+        )
+            ? overview
+                .strongAreas
+                .slice(
+                    0,
+                    3
+                )
                 .map(
                     item => ({
 
@@ -900,11 +1229,21 @@ function cleanOverview(overview) {
                 )
             : [];
 
+
+    /* =====================================
+    WEAK AREAS
+    ===================================== */
 
     const weakAreas =
-        Array.isArray(overview.weakAreas)
-            ? overview.weakAreas
-                .slice(0, 3)
+        Array.isArray(
+            overview.weakAreas
+        )
+            ? overview
+                .weakAreas
+                .slice(
+                    0,
+                    3
+                )
                 .map(
                     item => ({
 
@@ -930,10 +1269,20 @@ function cleanOverview(overview) {
             : [];
 
 
+    /* =====================================
+    MARKET DRIVERS
+    ===================================== */
+
     const marketDrivers =
-        Array.isArray(overview.marketDrivers)
-            ? overview.marketDrivers
-                .slice(0, 3)
+        Array.isArray(
+            overview.marketDrivers
+        )
+            ? overview
+                .marketDrivers
+                .slice(
+                    0,
+                    3
+                )
                 .map(
                     item => ({
 
@@ -959,10 +1308,20 @@ function cleanOverview(overview) {
             : [];
 
 
+    /* =====================================
+    UPCOMING EVENTS
+    ===================================== */
+
     const upcomingEvents =
-        Array.isArray(overview.upcomingEvents)
-            ? overview.upcomingEvents
-                .slice(0, 3)
+        Array.isArray(
+            overview.upcomingEvents
+        )
+            ? overview
+                .upcomingEvents
+                .slice(
+                    0,
+                    3
+                )
                 .map(
                     item => ({
 
@@ -994,7 +1353,12 @@ function cleanOverview(overview) {
             : [];
 
 
+    /* =====================================
+    FINAL CLEAN OBJECT
+    ===================================== */
+
     return {
+
 
         marketSummary:
             cleanField(
@@ -1002,17 +1366,24 @@ function cleanOverview(overview) {
                 900
             ),
 
+
         nasdaqComposite,
+
 
         nasdaq100,
 
+
         strongAreas,
+
 
         weakAreas,
 
+
         marketDrivers,
 
+
         upcomingEvents,
+
 
         takeaway:
             cleanField(
@@ -1021,6 +1392,7 @@ function cleanOverview(overview) {
             )
 
     };
+
 }
 
 
@@ -1028,7 +1400,10 @@ function cleanOverview(overview) {
 GET CACHED OVERVIEW
 ========================================= */
 
-async function getCachedOverview(marketDate) {
+async function getCachedOverview(
+    marketDate
+) {
+
 
     const cacheUrl =
         `${process.env.SUPABASE_URL}` +
@@ -1041,12 +1416,16 @@ async function getCachedOverview(marketDate) {
 
     try {
 
+
         const response =
             await fetch(
+
                 cacheUrl,
+
                 {
 
-                    method: "GET",
+                    method:
+                        "GET",
 
                     headers: {
 
@@ -1062,20 +1441,25 @@ async function getCachedOverview(marketDate) {
                     }
 
                 }
+
             );
 
 
         if (!response.ok) {
 
+
             const errorText =
                 await response.text();
+
 
             console.error(
                 "NASDAQ Market Overview Cache Read Error:",
                 errorText
             );
 
+
             return null;
+
         }
 
 
@@ -1084,26 +1468,35 @@ async function getCachedOverview(marketDate) {
 
 
         if (
-            Array.isArray(rows) &&
+            Array.isArray(
+                rows
+            ) &&
             rows.length > 0 &&
             rows[0].overview
         ) {
+
             return rows[0];
+
         }
 
 
         return null;
 
+
     }
     catch (error) {
+
 
         console.error(
             "NASDAQ Market Overview Cache Read Error:",
             error
         );
 
+
         return null;
+
     }
+
 }
 
 
@@ -1114,10 +1507,13 @@ SAVE OVERVIEW
 async function saveOverview({
 
     marketDate,
+
     generatedAt,
+
     overview
 
 }) {
+
 
     const saveUrl =
         `${process.env.SUPABASE_URL}` +
@@ -1127,12 +1523,16 @@ async function saveOverview({
 
     try {
 
+
         const response =
             await fetch(
+
                 saveUrl,
+
                 {
 
-                    method: "POST",
+                    method:
+                        "POST",
 
                     headers: {
 
@@ -1159,7 +1559,8 @@ async function saveOverview({
                             status:
                                 "complete",
 
-                            overview,
+                            overview:
+                                overview,
 
                             generated_at:
                                 generatedAt,
@@ -1170,20 +1571,32 @@ async function saveOverview({
                         })
 
                 }
+
             );
 
 
         if (!response.ok) {
 
+
             const errorText =
                 await response.text();
+
 
             console.error(
                 "NASDAQ Market Overview Cache Save Error:",
                 errorText
             );
 
+
+            /*
+            Research succeeded.
+
+            Do not fail the user's request
+            solely because caching failed.
+            */
+
             return false;
+
         }
 
 
@@ -1191,18 +1604,24 @@ async function saveOverview({
             `NASDAQ Market Overview CACHE SAVED: ${marketDate}`
         );
 
+
         return true;
+
 
     }
     catch (error) {
+
 
         console.error(
             "NASDAQ Market Overview Cache Save Error:",
             error
         );
 
+
         return false;
+
     }
+
 }
 
 
@@ -1212,9 +1631,12 @@ NEW YORK MARKET DATE
 
 function getNewYorkDate() {
 
+
     const parts =
         new Intl.DateTimeFormat(
+
             "en-CA",
+
             {
 
                 timeZone:
@@ -1230,6 +1652,7 @@ function getNewYorkDate() {
                     "2-digit"
 
             }
+
         )
             .formatToParts(
                 new Date()
@@ -1239,22 +1662,56 @@ function getNewYorkDate() {
     const values = {};
 
 
-    for (const part of parts) {
+    for (
+        const part of parts
+    ) {
 
-        if (part.type !== "literal") {
 
-            values[part.type] =
+        if (
+            part.type !==
+            "literal"
+        ) {
+
+            values[
+                part.type
+            ] =
                 part.value;
 
         }
+
     }
 
 
     return (
+
         `${values.year}-` +
         `${values.month}-` +
         `${values.day}`
+
     );
+
+}
+
+
+/* =========================================
+SLEEP
+========================================= */
+
+function sleep(
+    milliseconds
+) {
+
+
+    return new Promise(
+
+        resolve =>
+            setTimeout(
+                resolve,
+                milliseconds
+            )
+
+    );
+
 }
 
 
@@ -1267,8 +1724,14 @@ function cleanField(
     maxLength = 800
 ) {
 
-    if (typeof value !== "string") {
+
+    if (
+        typeof value !==
+        "string"
+    ) {
+
         return "";
+
     }
 
 
@@ -1282,4 +1745,5 @@ function cleanField(
             0,
             maxLength
         );
+
 }
