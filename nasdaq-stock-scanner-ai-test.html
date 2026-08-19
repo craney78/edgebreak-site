@@ -6903,71 +6903,7 @@ MUST REMAIN AFTER ALL DAILY BRIEF CSS
 <div id="navbar"></div>
 
 <main>
-<!-- =========================
-📈 MARKET TICKER TAPE
-========================= -->
-<div class="ticker-wrapper">
 
-    <div class="tradingview-widget-container">
-        <div class="tradingview-widget-container__widget"></div>
-
-        <script
-            type="text/javascript"
-            src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
-            async>
-        {
-          "symbols": [
-            {
-              "proName": "NASDAQ:QQQ",
-              "title": "QQQ"
-            },
-            {
-              "proName": "AMEX:SPY",
-              "title": "SPY"
-            },
-            {
-              "proName": "NASDAQ:NVDA",
-              "title": "NVDA"
-            },
-            {
-              "proName": "NASDAQ:MSFT",
-              "title": "MSFT"
-            },
-            {
-              "proName": "NASDAQ:AAPL",
-              "title": "AAPL"
-            },
-            {
-              "proName": "NASDAQ:AMZN",
-              "title": "AMZN"
-            },
-            {
-              "proName": "NASDAQ:META",
-              "title": "META"
-            },
-            {
-              "proName": "NASDAQ:TSLA",
-              "title": "TSLA"
-            },
-            {
-              "proName": "NASDAQ:PLTR",
-              "title": "PLTR"
-            },
-            {
-              "proName": "NASDAQ:RKLB",
-              "title": "RKLB"
-            }
-          ],
-          "showSymbolLogo": true,
-          "isTransparent": true,
-          "displayMode": "adaptive",
-          "colorTheme": "dark",
-          "locale": "en"
-        }
-        </script>
-    </div>
-
-</div>
 
 <div class="elite-container">
 
@@ -6983,33 +6919,326 @@ MUST REMAIN AFTER ALL DAILY BRIEF CSS
  
     </div> 
  
-    <svg 
-        viewBox="0 0 24 24" 
-        fill="none" 
-        stroke="currentColor" 
-        stroke-width="1.75" 
-        stroke-linecap="round" 
-        stroke-linejoin="round" 
-    > 
- 
-        <line 
-            x1="3" 
-            y1="9" 
-            x2="17" 
-            y2="9" 
-        /> 
- 
-        <polyline 
-            points="3,18 8,13 13,16 21,6" 
-        /> 
- 
-        <polyline 
-            points="17,6 21,6 21,10" 
-        /> 
- 
-    </svg> 
+    
  
 </div> 
+
+<!-- =========================================
+EDGEBREAK NASDAQ END-OF-DAY MARKET OVERVIEW
+========================================= -->
+
+<section class="nasdaq-overview-panel" id="nasdaqOverviewPanel">
+
+    <div class="nasdaq-overview-header">
+
+        <div>
+
+            <div class="nasdaq-overview-label">
+                ✦ NASDAQ END-OF-DAY MARKET OVERVIEW
+            </div>
+
+            <h2>Today's NASDAQ Market</h2>
+
+            <p>
+                A quick end-of-day look at how the NASDAQ performed,
+                where market strength and weakness appeared, what
+                influenced the session and the important events ahead.
+            </p>
+
+        </div>
+
+        <button
+            type="button"
+            class="nasdaq-overview-btn"
+            id="openNasdaqOverviewBtn"
+        >
+            ✦ View Market Overview
+        </button>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <div
+        class="nasdaq-overview-content"
+        id="nasdaqOverviewContent"
+        hidden
+    >
+
+        <div class="nasdaq-overview-divider"></div>
+
+
+        <!-- LOADING -->
+
+        <div
+            class="nasdaq-overview-loading"
+            id="nasdaqOverviewLoading"
+            hidden
+        >
+
+            <div class="nasdaq-overview-spinner"></div>
+
+            <div>
+                <strong>
+                    Loading today's NASDAQ market overview...
+                </strong>
+
+                <span>
+                    Reviewing the completed U.S. market session.
+                </span>
+            </div>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div
+            class="nasdaq-overview-error"
+            id="nasdaqOverviewError"
+            hidden
+        ></div>
+
+
+        <!-- RESULTS -->
+
+        <div
+            class="nasdaq-overview-results"
+            id="nasdaqOverviewResults"
+            hidden
+        >
+
+            <div class="nasdaq-overview-date-row">
+
+                <span>
+                    NASDAQ END-OF-DAY REPORT
+                </span>
+
+                <strong id="nasdaqOverviewDate"></strong>
+
+            </div>
+
+
+            <!-- MARKET SUMMARY -->
+
+            <div class="nasdaq-overview-section">
+
+                <span class="nasdaq-overview-eyebrow">
+                    MARKET CLOSE
+                </span>
+
+                <h3>How the NASDAQ Finished</h3>
+
+                <p id="nasdaqMarketSummary"></p>
+
+
+                <div class="nasdaq-index-grid">
+
+                    <div class="nasdaq-index-card">
+
+                        <span>NASDAQ Composite</span>
+
+                        <strong id="nasdaqCompositeChange">—</strong>
+
+                        <small id="nasdaqCompositeClose"></small>
+
+                        <p id="nasdaqCompositeSummary"></p>
+
+                    </div>
+
+
+                    <div class="nasdaq-index-card">
+
+                        <span>NASDAQ-100</span>
+
+                        <strong id="nasdaq100Change">—</strong>
+
+                        <small id="nasdaq100Close"></small>
+
+                        <p id="nasdaq100Summary"></p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MARKET STRENGTH -->
+
+            <div class="nasdaq-overview-section">
+
+                <span class="nasdaq-overview-eyebrow">
+                    MARKET LEADERSHIP
+                </span>
+
+                <h3>Where Strength & Weakness Appeared</h3>
+
+
+                <div class="nasdaq-strength-grid">
+
+                    <div class="nasdaq-strength-card">
+
+                        <h4>▲ Stronger Areas</h4>
+
+                        <div id="nasdaqStrongAreas"></div>
+
+                    </div>
+
+
+                    <div class="nasdaq-strength-card">
+
+                        <h4>▼ Weaker Areas</h4>
+
+                        <div id="nasdaqWeakAreas"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MARKET DRIVERS -->
+
+            <div class="nasdaq-overview-section">
+
+                <span class="nasdaq-overview-eyebrow">
+                    TODAY'S SESSION
+                </span>
+
+                <h3>What Mattered Today</h3>
+
+                <div
+                    class="nasdaq-overview-list"
+                    id="nasdaqMarketDrivers"
+                ></div>
+
+            </div>
+
+
+            <!-- =========================================
+            EDGEBREAK SCANNER ACTIVITY
+            ========================================= -->
+
+            <div class="nasdaq-overview-section">
+
+                <span class="nasdaq-overview-eyebrow">
+                    EDGEBREAK MARKET ACTIVITY
+                </span>
+
+                <h3>What EdgeBreak Found Across the NASDAQ</h3>
+
+                <p>
+                    EdgeBreak completed its end-of-day NASDAQ scan
+                    across Breakout, Pre-Breakout and Base Forming
+                    setups.
+                </p>
+
+
+                <div class="nasdaq-scanner-grid">
+
+
+                    <div class="nasdaq-scanner-card">
+
+                        <span>NASDAQ Stocks Scanned</span>
+
+                        <strong>3,253</strong>
+
+                        <small>
+                            Stocks checked across EdgeBreak scanners
+                        </small>
+
+                    </div>
+
+
+                    <div class="nasdaq-scanner-card">
+
+                        <span>Breakout Setups</span>
+
+                        <strong id="nasdaqBreakoutCount">—</strong>
+
+                        <small>
+                            Breakout Scanner results
+                        </small>
+
+                    </div>
+
+
+                    <div class="nasdaq-scanner-card">
+
+                        <span>Pre-Breakout Setups</span>
+
+                        <strong id="nasdaqPreBreakoutCount">—</strong>
+
+                        <small>
+                            Pre-Breakout Scanner results
+                        </small>
+
+                    </div>
+
+
+                    <div class="nasdaq-scanner-card">
+
+                        <span>Base Forming Setups</span>
+
+                        <strong id="nasdaqBaseCount">—</strong>
+
+                        <small>
+                            Launch Pad Scanner results
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- UPCOMING -->
+
+            <div class="nasdaq-overview-section">
+
+                <span class="nasdaq-overview-eyebrow">
+                    LOOKING AHEAD
+                </span>
+
+                <h3>Important Events Ahead</h3>
+
+                <div
+                    class="nasdaq-overview-list"
+                    id="nasdaqUpcomingEvents"
+                ></div>
+
+            </div>
+
+
+            <!-- TAKEAWAY -->
+
+            <div class="nasdaq-overview-takeaway">
+
+                <span>END-OF-DAY TAKEAWAY</span>
+
+                <p id="nasdaqTakeaway"></p>
+
+            </div>
+
+
+            <div class="nasdaq-overview-disclaimer">
+
+                Market information is provided for research and
+                educational purposes only and does not constitute
+                investment advice or a recommendation to buy or sell
+                securities.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
  
 <!-- =========================================
 EDGEBREAK AUTOMATED AI END-OF-DAY STOCK RESEARCH
@@ -17333,6 +17562,759 @@ function escapeDailyBriefHtml(
 
 }
 
+</script>
+<script>
+/* =========================================
+EDGEBREAK
+NASDAQ END-OF-DAY MARKET OVERVIEW
+FRONT-END
+========================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const button =
+        document.getElementById("openNasdaqOverviewBtn");
+
+    const content =
+        document.getElementById("nasdaqOverviewContent");
+
+    const loading =
+        document.getElementById("nasdaqOverviewLoading");
+
+    const errorBox =
+        document.getElementById("nasdaqOverviewError");
+
+    const results =
+        document.getElementById("nasdaqOverviewResults");
+
+
+    if (
+        !button ||
+        !content ||
+        !loading ||
+        !errorBox ||
+        !results
+    ) {
+
+        console.warn(
+            "NASDAQ Market Overview elements not found."
+        );
+
+        return;
+
+    }
+
+
+    let loaded = false;
+
+
+    button.addEventListener(
+        "click",
+        async () => {
+
+            content.hidden = false;
+
+
+            /* Already loaded */
+
+            if (loaded) {
+
+                results.hidden = false;
+
+                results.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+                return;
+
+            }
+
+
+            await loadNasdaqOverview();
+
+        }
+    );
+
+
+    async function loadNasdaqOverview() {
+
+        loading.hidden = false;
+        errorBox.hidden = true;
+        results.hidden = true;
+
+        button.disabled = true;
+
+        button.textContent =
+            "Loading Market Overview...";
+
+
+        try {
+
+            console.log(
+                "NASDAQ Market Overview request starting..."
+            );
+
+
+            const response =
+                await fetch(
+                    "/api/nasdaq_market_overview",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({})
+                    }
+                );
+
+
+            const rawText =
+                await response.text();
+
+
+            console.log(
+                "NASDAQ Market Overview HTTP status:",
+                response.status
+            );
+
+
+            console.log(
+                "NASDAQ Market Overview raw response:",
+                rawText
+            );
+
+
+            let data;
+
+
+            try {
+
+                data =
+                    JSON.parse(rawText);
+
+            }
+            catch (parseError) {
+
+                throw new Error(
+                    "The NASDAQ Market Overview server returned an invalid response."
+                );
+
+            }
+
+
+            if (
+                !response.ok ||
+                !data.success
+            ) {
+
+                throw new Error(
+                    data?.debug?.message ||
+                    data?.error ||
+                    "Today's NASDAQ Market Overview is unavailable."
+                );
+
+            }
+
+
+            if (!data.overview) {
+
+                throw new Error(
+                    "No NASDAQ market overview was returned."
+                );
+
+            }
+
+
+            renderNasdaqOverview(
+                data
+            );
+
+
+            loaded = true;
+
+
+            button.textContent =
+                "✓ Today's Market Overview Ready";
+
+
+            console.log(
+                data.cached
+                    ? "NASDAQ Market Overview loaded from cache."
+                    : "NASDAQ Market Overview generated successfully."
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "NASDAQ Market Overview Error:",
+                error
+            );
+
+
+            errorBox.textContent =
+                error.message ||
+                "Today's NASDAQ Market Overview is temporarily unavailable.";
+
+
+            errorBox.hidden = false;
+
+
+            button.textContent =
+                "Try Market Overview Again";
+
+        }
+        finally {
+
+            loading.hidden = true;
+
+            button.disabled = false;
+
+        }
+
+    }
+
+
+    /* =====================================
+    RENDER OVERVIEW
+    ===================================== */
+
+    function renderNasdaqOverview(data) {
+
+        const overview =
+            data.overview;
+
+
+        /* DATE */
+
+        setText(
+            "nasdaqOverviewDate",
+            formatDate(
+                data.marketDate
+            )
+        );
+
+
+        /* MARKET SUMMARY */
+
+        setText(
+            "nasdaqMarketSummary",
+            overview.marketSummary
+        );
+
+
+        /* NASDAQ COMPOSITE */
+
+        setText(
+            "nasdaqCompositeChange",
+            overview.nasdaqComposite
+                ?.changePercent || "—"
+        );
+
+
+        setText(
+            "nasdaqCompositeClose",
+            overview.nasdaqComposite
+                ?.close
+                ? `Close: ${overview.nasdaqComposite.close}`
+                : ""
+        );
+
+
+        setText(
+            "nasdaqCompositeSummary",
+            overview.nasdaqComposite
+                ?.summary || ""
+        );
+
+
+        /* NASDAQ 100 */
+
+        setText(
+            "nasdaq100Change",
+            overview.nasdaq100
+                ?.changePercent || "—"
+        );
+
+
+        setText(
+            "nasdaq100Close",
+            overview.nasdaq100
+                ?.close
+                ? `Close: ${overview.nasdaq100.close}`
+                : ""
+        );
+
+
+        setText(
+            "nasdaq100Summary",
+            overview.nasdaq100
+                ?.summary || ""
+        );
+
+
+        /* STRONG AREAS */
+
+        renderAreas(
+            "nasdaqStrongAreas",
+            overview.strongAreas
+        );
+
+
+        /* WEAK AREAS */
+
+        renderAreas(
+            "nasdaqWeakAreas",
+            overview.weakAreas
+        );
+
+
+        /* MARKET DRIVERS */
+
+        renderDrivers(
+            overview.marketDrivers
+        );
+
+
+        /* UPCOMING EVENTS */
+
+        renderUpcomingEvents(
+            overview.upcomingEvents
+        );
+
+
+        /* TAKEAWAY */
+
+        setText(
+            "nasdaqTakeaway",
+            overview.takeaway
+        );
+
+
+        /* =====================================
+        EDGEBREAK SCANNER COUNTS
+
+        Pull counts from the scanner data already
+        loaded on the scanner page.
+        ===================================== */
+
+        updateScannerCounts();
+
+
+        /* SHOW RESULTS */
+
+        results.hidden = false;
+
+    }
+
+
+    /* =====================================
+    RENDER STRONG / WEAK AREAS
+    ===================================== */
+
+    function renderAreas(
+        elementId,
+        areas
+    ) {
+
+        const container =
+            document.getElementById(
+                elementId
+            );
+
+
+        if (!container) {
+            return;
+        }
+
+
+        container.innerHTML = "";
+
+
+        if (
+            !Array.isArray(areas) ||
+            areas.length === 0
+        ) {
+
+            container.innerHTML =
+                `<p class="nasdaq-empty">
+                    No notable area identified.
+                </p>`;
+
+            return;
+
+        }
+
+
+        areas.forEach(area => {
+
+            const item =
+                document.createElement("div");
+
+
+            item.className =
+                "nasdaq-area-item";
+
+
+            const title =
+                document.createElement("strong");
+
+
+            title.textContent =
+                area.name || "";
+
+
+            const description =
+                document.createElement("p");
+
+
+            description.textContent =
+                area.summary || "";
+
+
+            item.appendChild(title);
+            item.appendChild(description);
+
+            container.appendChild(item);
+
+        });
+
+    }
+
+
+    /* =====================================
+    MARKET DRIVERS
+    ===================================== */
+
+    function renderDrivers(drivers) {
+
+        const container =
+            document.getElementById(
+                "nasdaqMarketDrivers"
+            );
+
+
+        if (!container) {
+            return;
+        }
+
+
+        container.innerHTML = "";
+
+
+        if (
+            !Array.isArray(drivers) ||
+            drivers.length === 0
+        ) {
+
+            container.innerHTML =
+                `<p class="nasdaq-empty">
+                    No major market drivers identified.
+                </p>`;
+
+            return;
+
+        }
+
+
+        drivers.forEach(driver => {
+
+            const item =
+                document.createElement("div");
+
+
+            item.className =
+                "nasdaq-list-item";
+
+
+            const title =
+                document.createElement("strong");
+
+
+            title.textContent =
+                driver.headline || "";
+
+
+            const description =
+                document.createElement("p");
+
+
+            description.textContent =
+                driver.summary || "";
+
+
+            item.appendChild(title);
+            item.appendChild(description);
+
+            container.appendChild(item);
+
+        });
+
+    }
+
+
+    /* =====================================
+    UPCOMING EVENTS
+    ===================================== */
+
+    function renderUpcomingEvents(events) {
+
+        const container =
+            document.getElementById(
+                "nasdaqUpcomingEvents"
+            );
+
+
+        if (!container) {
+            return;
+        }
+
+
+        container.innerHTML = "";
+
+
+        if (
+            !Array.isArray(events) ||
+            events.length === 0
+        ) {
+
+            container.innerHTML =
+                `<p class="nasdaq-empty">
+                    No major scheduled events identified.
+                </p>`;
+
+            return;
+
+        }
+
+
+        events.forEach(event => {
+
+            const item =
+                document.createElement("div");
+
+
+            item.className =
+                "nasdaq-list-item";
+
+
+            const date =
+                document.createElement("span");
+
+
+            date.className =
+                "nasdaq-event-date";
+
+
+            date.textContent =
+                event.date || "";
+
+
+            const title =
+                document.createElement("strong");
+
+
+            title.textContent =
+                event.event || "";
+
+
+            const description =
+                document.createElement("p");
+
+
+            description.textContent =
+                event.whyItMatters || "";
+
+
+            item.appendChild(date);
+            item.appendChild(title);
+            item.appendChild(description);
+
+            container.appendChild(item);
+
+        });
+
+    }
+
+
+    /* =====================================
+    SCANNER COUNTS
+    ===================================== */
+
+    function updateScannerCounts() {
+
+        /*
+        Your scanner page already loads these
+        datasets.
+
+        We try the common EdgeBreak variable
+        names first.
+
+        If one is unavailable we leave "—"
+        rather than breaking the market overview.
+        */
+
+
+        const breakoutCount =
+            getArrayLength([
+                "breakoutStocks",
+                "breakoutResults",
+                "breakouts"
+            ]);
+
+
+        const preBreakoutCount =
+            getArrayLength([
+                "preBreakoutStocks",
+                "preBreakoutResults",
+                "preBreakouts"
+            ]);
+
+
+        const baseCount =
+            getArrayLength([
+                "launchPadStocks",
+                "launchpadStocks",
+                "launchPadResults"
+            ]);
+
+
+        if (breakoutCount !== null) {
+
+            setText(
+                "nasdaqBreakoutCount",
+                breakoutCount
+            );
+
+        }
+
+
+        if (preBreakoutCount !== null) {
+
+            setText(
+                "nasdaqPreBreakoutCount",
+                preBreakoutCount
+            );
+
+        }
+
+
+        if (baseCount !== null) {
+
+            setText(
+                "nasdaqBaseCount",
+                baseCount
+            );
+
+        }
+
+    }
+
+
+    function getArrayLength(
+        variableNames
+    ) {
+
+        for (
+            const variableName of
+            variableNames
+        ) {
+
+            try {
+
+                const value =
+                    window[
+                        variableName
+                    ];
+
+
+                if (
+                    Array.isArray(value)
+                ) {
+
+                    return value.length;
+
+                }
+
+            }
+            catch (error) {
+
+                // Ignore and try next name.
+
+            }
+
+        }
+
+
+        return null;
+
+    }
+
+
+    /* =====================================
+    HELPERS
+    ===================================== */
+
+    function setText(
+        elementId,
+        value
+    ) {
+
+        const element =
+            document.getElementById(
+                elementId
+            );
+
+
+        if (element) {
+
+            element.textContent =
+                value ?? "";
+
+        }
+
+    }
+
+
+    function formatDate(dateString) {
+
+        if (!dateString) {
+            return "";
+        }
+
+
+        try {
+
+            const date =
+                new Date(
+                    `${dateString}T12:00:00`
+                );
+
+
+            return new Intl.DateTimeFormat(
+                "en-US",
+                {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric"
+                }
+            ).format(date);
+
+        }
+        catch (error) {
+
+            return dateString;
+
+        }
+
+    }
+
+});
 </script>
 
 <!-- COMPONENTS -->
