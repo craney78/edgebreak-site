@@ -122,11 +122,6 @@ export default async function handler(req, res) {
 
             } catch (error) {
 
-                // ------------------------------------------------
-                // IMPORTANT:
-                // Gemini failure must NOT destroy the whole report.
-                // ------------------------------------------------
-
                 console.warn(
                     "NASDAQ Market Overview AI summary unavailable:",
                     error.message
@@ -168,9 +163,11 @@ export default async function handler(req, res) {
             watchNext:
                 aiSummary.watchNext || [],
 
-            nasdaq: marketData.nasdaq,
+            nasdaq:
+                marketData.nasdaq,
 
-            sectors: marketData.sectors,
+            sectors:
+                marketData.sectors,
 
             generatedAt:
                 new Date().toISOString()
@@ -321,7 +318,6 @@ async function getYahooChart(symbol) {
         const data =
             await response.json();
 
-
         const result =
             data?.chart?.result?.[0];
 
@@ -337,19 +333,14 @@ async function getYahooChart(symbol) {
         const meta =
             result.meta || {};
 
-
         const quote =
-            result.indicators
-                ?.quote?.[0] || {};
-
+            result.indicators?.quote?.[0] || {};
 
         const timestamps =
             result.timestamp || [];
 
-
         const closes =
             quote.close || [];
-
 
         const validRows = [];
 
@@ -363,24 +354,17 @@ async function getYahooChart(symbol) {
             const close =
                 Number(closes[i]);
 
-            if (
-                Number.isFinite(close)
-            ) {
+            if (Number.isFinite(close)) {
 
                 validRows.push({
-
-                    timestamp:
-                        timestamps[i],
-
+                    timestamp: timestamps[i],
                     close
                 });
             }
         }
 
 
-        if (
-            validRows.length < 2
-        ) {
+        if (validRows.length < 2) {
 
             throw new Error(
                 `Insufficient Yahoo history for ${symbol}.`
@@ -392,7 +376,6 @@ async function getYahooChart(symbol) {
             validRows[
                 validRows.length - 1
             ];
-
 
         const previous =
             validRows[
@@ -472,20 +455,9 @@ async function getYahooChart(symbol) {
 
 async function getNasdaqMarketData() {
 
-    // --------------------------------------------------------
-    // NASDAQ Composite
-    // --------------------------------------------------------
-
     const nasdaqPromise =
         getYahooChart("^IXIC");
 
-
-    // --------------------------------------------------------
-    // NASDAQ-heavy sector / industry ETFs
-    //
-    // These are being used as simple market-area proxies.
-    // They are NOT presented as NASDAQ sector indexes.
-    // --------------------------------------------------------
 
     const sectorDefinitions = [
 
@@ -588,10 +560,7 @@ async function getNasdaqMarketData() {
         sectorResults
             .filter(Boolean)
             .sort(
-                (
-                    a,
-                    b
-                ) =>
+                (a, b) =>
                     b.percentChange -
                     a.percentChange
             );
@@ -617,7 +586,6 @@ async function createMarketSummary(
 
     const controller =
         new AbortController();
-
 
     const timeout =
         setTimeout(
@@ -842,9 +810,7 @@ function normalizeAiSummary(data) {
             .toUpperCase();
 
 
-    if (
-        !validTone.includes(tone)
-    ) {
+    if (!validTone.includes(tone)) {
 
         tone =
             "MIXED";
@@ -882,8 +848,6 @@ function normalizeAiSummary(data) {
 
 // ============================================================
 // FALLBACK SUMMARY
-//
-// This means the page STILL WORKS even if Gemini is down.
 // ============================================================
 
 function createFallbackSummary(
@@ -892,7 +856,6 @@ function createFallbackSummary(
 
     const nasdaq =
         marketData.nasdaq;
-
 
     const sectors =
         marketData.sectors || [];
@@ -955,10 +918,7 @@ function createFallbackSummary(
     const weakest =
         [...sectors]
             .sort(
-                (
-                    a,
-                    b
-                ) =>
+                (a, b) =>
                     a.percentChange -
                     b.percentChange
             )
@@ -1020,7 +980,9 @@ function createFallbackSummary(
 
 
 // ============================================================
-// CACHE
+// CACHE LOOKUP
+// CORRECT TABLE: nasdaq_market_overviews
+// CORRECT DATE COLUMN: market_date
 // ============================================================
 
 async function getCachedOverview(
@@ -1044,7 +1006,7 @@ async function getCachedOverview(
 
         const url =
             `${SUPABASE_URL}/rest/v1/nasdaq_market_overviews` +
-            `?report_date=eq.${encodeURIComponent(reportDate)}` +
+            `?market_date=eq.${encodeURIComponent(reportDate)}` +
             `&select=overview` +
             `&limit=1`;
 
@@ -1061,9 +1023,13 @@ async function getCachedOverview(
 
         if (!response.ok) {
 
+            const text =
+                await response.text();
+
             console.warn(
                 "NASDAQ Market Overview cache lookup failed:",
-                response.status
+                response.status,
+                text
             );
 
             return null;
@@ -1103,6 +1069,8 @@ async function getCachedOverview(
 
 // ============================================================
 // SAVE CACHE
+// CORRECT TABLE: nasdaq_market_overviews
+// CORRECT DATE COLUMN: market_date
 // ============================================================
 
 async function saveCachedOverview(
@@ -1124,6 +1092,10 @@ async function saveCachedOverview(
         const url =
             `${SUPABASE_URL}/rest/v1/nasdaq_market_overviews` +
             `?on_conflict=market_date`;
+
+
+        const now =
+            new Date().toISOString();
 
 
         const response =
@@ -1151,11 +1123,17 @@ async function saveCachedOverview(
                                 market_date:
                                     reportDate,
 
-                                overview,
+                                status:
+                                    "ready",
+
+                                overview:
+                                    overview,
+
+                                generated_at:
+                                    now,
 
                                 updated_at:
-                                    new Date()
-                                        .toISOString()
+                                    now
                             }
                         ])
                 }
@@ -1172,7 +1150,15 @@ async function saveCachedOverview(
                 response.status,
                 text
             );
+
+            return;
         }
+
+
+        console.log(
+            "NASDAQ Market Overview CACHE SAVED:",
+            reportDate
+        );
 
 
     } catch (error) {
@@ -1266,9 +1252,7 @@ function cleanJsonText(text) {
 
 function normalizeStringArray(value) {
 
-    if (
-        !Array.isArray(value)
-    ) {
+    if (!Array.isArray(value)) {
 
         return [];
     }
@@ -1301,9 +1285,7 @@ function roundNumber(
         Number(value);
 
 
-    if (
-        !Number.isFinite(number)
-    ) {
+    if (!Number.isFinite(number)) {
 
         return 0;
     }
