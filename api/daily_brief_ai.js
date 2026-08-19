@@ -1,1351 +1,490 @@
 /* =========================================
-EDGEBREAK DAILY BRIEF AI
+EDGEBREAK — DAILY BRIEF AI RESEARCH
 /api/daily_brief_ai.js
+
+FLOW:
+1. Check Supabase cache
+2. Clean candidates
+3. Split candidates into 2 batches
+4. Research both batches in parallel
+5. Combine + validate + deduplicate
+6. Save ONE Daily Brief to Supabase
 ========================================= */
-
-const GEMINI_BASE =
-    "https://generativelanguage.googleapis.com/v1beta";
-
-const API_REVISION =
-    "2026-05-20";
-
 
 export default async function handler(req, res) {
 
+    /* =====================================
+    POST ONLY
+    ===================================== */
+
     if (req.method !== "POST") {
+
         return res.status(405).json({
             error: "Method not allowed."
         });
+
     }
+
+
+    /* =====================================
+    ENVIRONMENT VARIABLES
+    ===================================== */
+
+    if (!process.env.GEMINI_API_KEY) {
+
+        return res.status(500).json({
+            error:
+                "Daily Brief AI is not configured."
+        });
+
+    }
+
 
     if (
         !process.env.SUPABASE_URL ||
         !process.env.SUPABASE_SERVICE_KEY
     ) {
+
         return res.status(500).json({
-            error: "Daily Brief cache is not configured."
+            error:
+                "Daily Brief cache is not configured."
         });
+
     }
+
 
     try {
 
-        const action =
-            String(req.body?.action || "status")
-                .trim()
-                .toLowerCase();
+        /* =====================================
+        US MARKET DATE
+        ===================================== */
 
         const briefDate =
             getNewYorkDate();
 
+
         console.log(
-            `Daily Brief ${action}: ${briefDate}`
+            `EdgeBreak Daily Brief date: ${briefDate}`
         );
 
 
         /* =====================================
-        STATUS
+        CHECK SUPABASE CACHE FIRST
         ===================================== */
 
-        if (action === "status") {
-
-            const row =
-                await getDailyBriefRow(briefDate);
-
-            if (
-                row?.status === "complete" &&
-                row?.ai_results
-            ) {
-                return res.status(200).json({
-                    success: true,
-                    complete: true,
-                    cached: true,
-                    researchStatus: "completed",
-                    briefDate: row.brief_date,
-                    generatedAt: row.generated_at,
-                    companiesReviewed:
-                        row.companies_reviewed,
-                    companiesIncluded:
-                        row.companies_included,
-                    results:
-                        Array.isArray(
-                            row.ai_results?.results
-                        )
-                            ? row.ai_results.results
-                            : [],
-                    usage:
-                        row.usage_data || null,
-                    nasdaqToday:
-                        row.nasdaq_today || null,
-                    marketConditions:
-                        row.market_conditions || null,
-                    scannerActivity:
-                        row.scanner_activity || null
-                });
-            }
-
-            if (
-                row?.interaction_id &&
-                row?.research_status
-            ) {
-                return res.status(200).json({
-                    success: true,
-                    complete: false,
-                    cached: false,
-                    briefDate,
-                    researchStatus:
-                        row.research_status,
-                    interactionExists: true,
-                    researchStartedAt:
-                        row.research_started_at || null,
-                    nasdaqToday:
-                        row.nasdaq_today || null,
-                    marketConditions:
-                        row.market_conditions || null,
-                    scannerActivity:
-                        row.scanner_activity || null
-                });
-            }
-
-            return res.status(200).json({
-                success: true,
-                complete: false,
-                cached: false,
-                briefDate,
-                researchStatus: "not_started",
-                interactionExists: false,
-                nasdaqToday:
-                    row?.nasdaq_today || null,
-                marketConditions:
-                    row?.market_conditions || null,
-                scannerActivity:
-                    row?.scanner_activity || null
-            });
-        }
-
-
-        /* =====================================
-        START BACKGROUND COMPANY RESEARCH
-        ===================================== */
-
-        if (action === "start") {
-
-            if (!process.env.GEMINI_API_KEY) {
-                return res.status(500).json({
-                    error:
-                        "Daily Brief AI is not configured."
-                });
-            }
-
-            const candidates =
-                cleanCandidates(
-                    req.body?.candidates
-                );
-
-            if (candidates.length === 0) {
-                return res.status(400).json({
-                    error:
-                        "No Daily Brief candidates were supplied."
-                });
-            }
-
-            if (candidates.length > 150) {
-                return res.status(400).json({
-                    error:
-                        "Too many Daily Brief candidates were supplied."
-                });
-            }
-
-            const existing =
-                await getDailyBriefRow(
-                    briefDate
-                );
-
-            if (
-                existing?.status === "complete" &&
-                existing?.ai_results
-            ) {
-                return res.status(200).json({
-                    success: true,
-                    complete: true,
-                    cached: true,
-                    researchStatus: "completed",
-                    briefDate,
-                    generatedAt:
-                        existing.generated_at,
-                    companiesReviewed:
-                        existing.companies_reviewed,
-                    companiesIncluded:
-                        existing.companies_included,
-                    results:
-                        existing.ai_results?.results || [],
-                    usage:
-                        existing.usage_data || null
-                });
-            }
-
-            if (
-                existing?.interaction_id &&
-                (
-                    existing?.research_status ===
-                        "queued" ||
-                    existing?.research_status ===
-                        "in_progress" ||
-                    existing?.research_status ===
-                        "requires_action"
-                )
-            ) {
-                return res.status(200).json({
-                    success: true,
-                    complete: false,
-                    started: false,
-                    researchStatus:
-                        existing.research_status,
-                    briefDate
-                });
-            }
-
-            const prompt =
-                buildResearchPrompt(
-                    candidates,
-                    briefDate
-                );
-
-            console.log(
-                `Starting background Daily Brief research for ${candidates.length} candidates.`
-            );
-
-            const interactionResponse =
-                await fetch(
-                    `${GEMINI_BASE}/interactions`,
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type":
-                                "application/json",
-
-                            "x-goog-api-key":
-                                process.env
-                                    .GEMINI_API_KEY,
-
-                            "Api-Revision":
-                                API_REVISION
-                        },
-
-                        body:
-                            JSON.stringify({
-                                model:
-                                    "gemini-3.6-flash",
-
-                                input:
-                                    prompt,
-
-                                system_instruction:
-                                    buildSystemInstruction(),
-
-                                background:
-                                    true,
-
-                                store:
-                                    true,
-
-                                tools: [
-                                    {
-                                        type:
-                                            "google_search",
-
-                                        search_types: [
-                                            "web_search"
-                                        ]
-                                    }
-                                ],
-
-                                response_format: {
-                                    type: "text",
-
-                                    mime_type:
-                                        "application/json",
-
-                                    schema: {
-                                        type: "object",
-
-                                        properties: {
-                                            results: {
-                                                type: "array",
-
-                                                items: {
-                                                    type:
-                                                        "object",
-
-                                                    properties: {
-                                                        symbols: {
-                                                            type:
-                                                                "array",
-                                                            items: {
-                                                                type:
-                                                                    "string"
-                                                            }
-                                                        },
-
-                                                        companyName: {
-                                                            type:
-                                                                "string"
-                                                        },
-
-                                                        scanners: {
-                                                            type:
-                                                                "array",
-                                                            items: {
-                                                                type:
-                                                                    "string"
-                                                            }
-                                                        },
-
-                                                        attentionLevel: {
-                                                            type:
-                                                                "string",
-                                                            enum: [
-                                                                "HIGH",
-                                                                "ELEVATED",
-                                                                "NOTABLE"
-                                                            ]
-                                                        },
-
-                                                        headline: {
-                                                            type:
-                                                                "string"
-                                                        },
-
-                                                        summary: {
-                                                            type:
-                                                                "string"
-                                                        },
-
-                                                        currentDevelopment: {
-                                                            type:
-                                                                "string"
-                                                        },
-
-                                                        whyIncluded: {
-                                                            type:
-                                                                "string"
-                                                        },
-
-                                                        developmentDate: {
-                                                            type:
-                                                                "string"
-                                                        },
-
-                                                        sourceNames: {
-                                                            type:
-                                                                "array",
-                                                            items: {
-                                                                type:
-                                                                    "string"
-                                                            }
-                                                        }
-                                                    },
-
-                                                    required: [
-                                                        "symbols",
-                                                        "companyName",
-                                                        "scanners",
-                                                        "attentionLevel",
-                                                        "headline",
-                                                        "summary",
-                                                        "currentDevelopment",
-                                                        "whyIncluded",
-                                                        "developmentDate",
-                                                        "sourceNames"
-                                                    ],
-
-                                                    additionalProperties:
-                                                        false
-                                                }
-                                            }
-                                        },
-
-                                        required: [
-                                            "results"
-                                        ],
-
-                                        additionalProperties:
-                                            false
-                                    }
-                                },
-
-                                generation_config: {
-                                    max_output_tokens:
-                                        16000,
-
-                                    thinking_level:
-                                        "medium"
-                                }
-                            })
-                    }
-                );
-
-            const interactionText =
-                await interactionResponse.text();
-
-            let interaction;
-
-            try {
-                interaction =
-                    interactionText
-                        ? JSON.parse(
-                            interactionText
-                        )
-                        : {};
-            }
-            catch {
-                console.error(
-                    "Gemini interaction returned non-JSON:",
-                    interactionText
-                );
-
-                return res.status(502).json({
-                    error:
-                        "Gemini returned an invalid research response."
-                });
-            }
-
-            if (!interactionResponse.ok) {
-                console.error(
-                    "Gemini interaction start error:",
-                    interactionResponse.status,
-                    interaction
-                );
-
-                return res
-                    .status(
-                        interactionResponse.status
-                    )
-                    .json({
-                        error:
-                            interaction?.error
-                                ?.message ||
-                            "Unable to start Daily Brief research."
-                    });
-            }
-
-            if (!interaction?.id) {
-                console.error(
-                    "Gemini interaction had no ID:",
-                    interaction
-                );
-
-                return res.status(502).json({
-                    error:
-                        "Gemini did not return a research job ID."
-                });
-            }
-
-            await saveResearchJob({
-                briefDate,
-                interactionId:
-                    interaction.id,
-                researchStatus:
-                    interaction.status ||
-                    "in_progress",
-                companiesReviewed:
-                    candidates.length
-            });
-
-            console.log(
-                `Daily Brief interaction started: ${interaction.id}`
-            );
-
-            return res.status(202).json({
-                success: true,
-                complete: false,
-                started: true,
-                briefDate,
-                researchStatus:
-                    interaction.status ||
-                    "in_progress",
-                companiesReviewed:
-                    candidates.length
-            });
-        }
-
-
-        /* =====================================
-        NASDAQ MARKET CLOSE
-        ===================================== */
-
-        if (action === "market_close") {
-
-            if (!process.env.GEMINI_API_KEY) {
-                return res.status(500).json({
-                    error:
-                        "Daily Brief AI is not configured."
-                });
-            }
-
-            const existing =
-                await getDailyBriefRow(
-                    briefDate
-                );
-
-            if (existing?.nasdaq_today) {
-                console.log(
-                    `NASDAQ Market Close cache hit: ${briefDate}`
-                );
-
-                return res.status(200).json({
-                    success: true,
-                    complete: true,
-                    cached: true,
-                    briefDate,
-                    nasdaqToday:
-                        existing.nasdaq_today
-                });
-            }
-
-            const prompt = `
-You are preparing the NASDAQ Market Close section of
-EdgeBreak's End-of-Day Market Analysis.
-
-MARKET DATE:
-${briefDate}
-
-Use current Google Search grounding to research the
-completed U.S. trading session for this date.
-
-Provide a concise factual overview of what happened in
-the NASDAQ market during the completed session.
-
-Research:
-
-- NASDAQ Composite closing performance
-- whether the NASDAQ finished higher or lower
-- approximate percentage move
-- major themes influencing the session
-- important sectors or groups affecting NASDAQ trading
-- important macroeconomic developments
-- Federal Reserve developments where relevant
-- major earnings or company developments that materially
-  influenced the session
-- whether trading showed broad strength, broad weakness
-  or mixed conditions
-
-IMPORTANT:
-
-This is factual end-of-day market research.
-
-Do not provide investment advice.
-Do not provide buy, sell or hold recommendations.
-Do not provide price targets.
-Do not predict tomorrow's market.
-Do not invent causal relationships.
-
-Return valid JSON only.
-
-Use exactly:
-
-{
-    "headline": "",
-    "summary": "",
-    "direction": "HIGHER",
-    "percentageMove": "",
-    "keyDrivers": [],
-    "marketBreadth": "",
-    "sourceNames": []
-}
-
-direction must be exactly one of:
-
-HIGHER
-LOWER
-MIXED
-FLAT
-
-Do not include markdown.
-Do not include commentary outside JSON.
-`;
-
-            const startResponse =
-                await fetch(
-                    `${GEMINI_BASE}/interactions`,
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type":
-                                "application/json",
-
-                            "x-goog-api-key":
-                                process.env
-                                    .GEMINI_API_KEY,
-
-                            "Api-Revision":
-                                API_REVISION
-                        },
-
-                        body:
-                            JSON.stringify({
-                                model:
-                                    "gemini-3.6-flash",
-
-                                input:
-                                    prompt,
-
-                                system_instruction:
-                                    `You are a factual financial market research assistant.
-
-Use Google Search grounding to verify current market information.
-
-Report facts only.
-
-Do not provide investment advice, recommendations, ratings, price targets or predictions.
-
-Return only the requested JSON structure.`,
-
-                                background:
-                                    true,
-
-                                store:
-                                    true,
-
-                                tools: [
-                                    {
-                                        type:
-                                            "google_search",
-
-                                        search_types: [
-                                            "web_search"
-                                        ]
-                                    }
-                                ],
-
-                                response_format: {
-                                    type: "text",
-
-                                    mime_type:
-                                        "application/json",
-
-                                    schema: {
-                                        type: "object",
-
-                                        properties: {
-                                            headline: {
-                                                type:
-                                                    "string"
-                                            },
-
-                                            summary: {
-                                                type:
-                                                    "string"
-                                            },
-
-                                            direction: {
-                                                type:
-                                                    "string",
-
-                                                enum: [
-                                                    "HIGHER",
-                                                    "LOWER",
-                                                    "MIXED",
-                                                    "FLAT"
-                                                ]
-                                            },
-
-                                            percentageMove: {
-                                                type:
-                                                    "string"
-                                            },
-
-                                            keyDrivers: {
-                                                type:
-                                                    "array",
-
-                                                items: {
-                                                    type:
-                                                        "string"
-                                                }
-                                            },
-
-                                            marketBreadth: {
-                                                type:
-                                                    "string"
-                                            },
-
-                                            sourceNames: {
-                                                type:
-                                                    "array",
-
-                                                items: {
-                                                    type:
-                                                        "string"
-                                                }
-                                            }
-                                        },
-
-                                        required: [
-                                            "headline",
-                                            "summary",
-                                            "direction",
-                                            "percentageMove",
-                                            "keyDrivers",
-                                            "marketBreadth",
-                                            "sourceNames"
-                                        ],
-
-                                        additionalProperties:
-                                            false
-                                    }
-                                },
-
-                                generation_config: {
-                                    max_output_tokens:
-                                        1800,
-
-                                    thinking_level:
-                                        "low"
-                                }
-                            })
-                    }
-                );
-
-            const startText =
-                await startResponse.text();
-
-            let startedInteraction;
-
-            try {
-                startedInteraction =
-                    startText
-                        ? JSON.parse(startText)
-                        : {};
-            }
-            catch {
-                console.error(
-                    "NASDAQ Market Close start returned non-JSON:",
-                    startText
-                );
-
-                return res.status(502).json({
-                    error:
-                        "NASDAQ Market Close returned an invalid start response."
-                });
-            }
-
-            if (!startResponse.ok) {
-                console.error(
-                    "NASDAQ Market Close start error:",
-                    startResponse.status,
-                    startedInteraction
-                );
-
-                return res
-                    .status(startResponse.status)
-                    .json({
-                        error:
-                            startedInteraction
-                                ?.error
-                                ?.message ||
-                            "Unable to start NASDAQ Market Close research."
-                    });
-            }
-
-            if (!startedInteraction?.id) {
-                return res.status(502).json({
-                    error:
-                        "NASDAQ Market Close did not return a research job ID."
-                });
-            }
-
-            const interactionId =
-                startedInteraction.id;
-
-            console.log(
-                `NASDAQ Market Close interaction started: ${interactionId}`
-            );
-
-            let completedInteraction =
-                null;
-
-            const maxAttempts =
-                10;
-
-            const waitMilliseconds =
-                1500;
-
-            for (
-                let attempt = 1;
-                attempt <= maxAttempts;
-                attempt++
-            ) {
-
-                if (attempt > 1) {
-                    await sleep(
-                        waitMilliseconds
-                    );
-                }
-
-                console.log(
-                    `NASDAQ Market Close status check ${attempt}/${maxAttempts}`
-                );
-
-                const checkResponse =
-                    await fetch(
-                        `${GEMINI_BASE}/interactions/${encodeURIComponent(
-                            interactionId
-                        )}`,
-                        {
-                            method: "GET",
-
-                            headers: {
-                                "x-goog-api-key":
-                                    process.env
-                                        .GEMINI_API_KEY,
-
-                                "Api-Revision":
-                                    API_REVISION
-                            }
-                        }
-                    );
-
-                const checkText =
-                    await checkResponse.text();
-
-                let checkedInteraction;
-
-                try {
-                    checkedInteraction =
-                        checkText
-                            ? JSON.parse(
-                                checkText
-                            )
-                            : {};
-                }
-                catch {
-                    console.error(
-                        "NASDAQ Market Close check returned non-JSON:",
-                        checkText
-                    );
-
-                    return res
-                        .status(502)
-                        .json({
-                            error:
-                                "Unable to read NASDAQ Market Close research status."
-                        });
-                }
-
-                if (!checkResponse.ok) {
-                    console.error(
-                        "NASDAQ Market Close check error:",
-                        checkResponse.status,
-                        checkedInteraction
-                    );
-
-                    return res
-                        .status(
-                            checkResponse.status
-                        )
-                        .json({
-                            error:
-                                checkedInteraction
-                                    ?.error
-                                    ?.message ||
-                                "Unable to check NASDAQ Market Close research."
-                        });
-                }
-
-                const marketCloseStatus =
-                    String(
-                        checkedInteraction
-                            ?.status ||
-                        "unknown"
-                    )
-                        .trim()
-                        .toLowerCase();
-
-                console.log(
-                    `NASDAQ Market Close interaction status: ${marketCloseStatus}`
-                );
-
-                if (
-                    marketCloseStatus ===
-                    "completed"
-                ) {
-                    completedInteraction =
-                        checkedInteraction;
-
-                    break;
-                }
-
-                if (
-                    marketCloseStatus ===
-                        "failed" ||
-                    marketCloseStatus ===
-                        "cancelled" ||
-                    marketCloseStatus ===
-                        "incomplete"
-                ) {
-                    return res.status(502).json({
-                        error:
-                            checkedInteraction
-                                ?.error
-                                ?.message ||
-                            checkedInteraction
-                                ?.incomplete_details
-                                ?.reason ||
-                            checkedInteraction
-                                ?.incompleteDetails
-                                ?.reason ||
-                            `NASDAQ Market Close research ended with status: ${marketCloseStatus}`
-                    });
-                }
-            }
-
-            if (!completedInteraction) {
-                return res.status(202).json({
-                    success: true,
-                    complete: false,
-                    cached: false,
-                    briefDate,
-                    interactionId,
-                    researchStatus:
-                        "in_progress"
-                });
-            }
-
-            const outputText =
-                extractOutputText(
-                    completedInteraction
-                );
-
-            if (!outputText) {
-                console.error(
-                    "NASDAQ Market Close completed with no output:",
-                    JSON.stringify(
-                        completedInteraction,
-                        null,
-                        2
-                    )
-                );
-
-                return res.status(502).json({
-                    error:
-                        "NASDAQ Market Close completed but returned no usable research."
-                });
-            }
-
-            let nasdaqToday;
-
-            try {
-                nasdaqToday =
-                    JSON.parse(
-                        cleanJsonText(
-                            outputText
-                        )
-                    );
-            }
-            catch {
-                console.error(
-                    "NASDAQ Market Close JSON parse error:",
-                    outputText
-                );
-
-                return res.status(502).json({
-                    error:
-                        "NASDAQ Market Close returned invalid JSON."
-                });
-            }
-
-            if (
-                !nasdaqToday ||
-                typeof nasdaqToday !==
-                    "object" ||
-                !nasdaqToday.headline ||
-                !nasdaqToday.summary
-            ) {
-                return res.status(502).json({
-                    error:
-                        "NASDAQ Market Close returned an incomplete result."
-                });
-            }
-
-            await ensureDailyBriefRow(
+        const cachedBrief =
+            await getCachedBrief(
                 briefDate
             );
 
-            await patchDailyBrief(
-                briefDate,
-                {
-                    nasdaq_today:
-                        nasdaqToday,
 
-                    updated_at:
-                        new Date()
-                            .toISOString()
-                }
-            );
+        if (cachedBrief) {
 
             console.log(
-                `NASDAQ Market Close saved: ${briefDate}`
+                `EdgeBreak Daily Brief CACHE HIT: ${briefDate}`
             );
 
+
             return res.status(200).json({
+
                 success: true,
-                complete: true,
-                cached: false,
-                briefDate,
-                nasdaqToday
+
+                cached: true,
+
+                briefDate:
+                    cachedBrief.brief_date,
+
+                generatedAt:
+                    cachedBrief.generated_at,
+
+                companiesReviewed:
+                    cachedBrief.companies_reviewed,
+
+                companiesIncluded:
+                    cachedBrief.companies_included,
+
+                results:
+                    Array.isArray(
+                        cachedBrief.ai_results?.results
+                    )
+                        ? cachedBrief.ai_results.results
+                        : [],
+
+                nasdaqToday:
+                    cachedBrief.nasdaq_today || null,
+
+                marketConditions:
+                    cachedBrief.market_conditions || null,
+
+                scannerActivity:
+                    cachedBrief.scanner_activity || null
+
             });
+
+        }
+
+
+        console.log(
+            `EdgeBreak Daily Brief CACHE MISS: ${briefDate}`
+        );
+
+
+        /* =====================================
+        GET CANDIDATES
+        ===================================== */
+
+        const { candidates } =
+            req.body || {};
+
+
+        if (
+            !Array.isArray(candidates) ||
+            candidates.length === 0
+        ) {
+
+            return res.status(400).json({
+                error:
+                    "No Daily Brief candidates were provided."
+            });
+
+        }
+
+
+        if (candidates.length > 150) {
+
+            return res.status(400).json({
+                error:
+                    "Too many Daily Brief candidates were provided."
+            });
+
         }
 
 
         /* =====================================
-        CHECK COMPANY RESEARCH
+        CLEAN INPUT
         ===================================== */
 
-        if (action === "check") {
-
-            if (!process.env.GEMINI_API_KEY) {
-                return res.status(500).json({
-                    error:
-                        "Daily Brief AI is not configured."
-                });
-            }
-
-            const row =
-                await getDailyBriefRow(
-                    briefDate
-                );
-
-            if (
-                row?.status === "complete" &&
-                row?.ai_results
-            ) {
-                return res.status(200).json({
-                    success: true,
-                    complete: true,
-                    cached: true,
-                    researchStatus:
-                        "completed",
-                    briefDate,
-                    generatedAt:
-                        row.generated_at,
-                    companiesReviewed:
-                        row.companies_reviewed,
-                    companiesIncluded:
-                        row.companies_included,
-                    results:
-                        row.ai_results?.results || [],
-                    usage:
-                        row.usage_data || null,
-                    nasdaqToday:
-                        row.nasdaq_today || null,
-                    marketConditions:
-                        row.market_conditions || null,
-                    scannerActivity:
-                        row.scanner_activity || null
-                });
-            }
-
-            if (!row?.interaction_id) {
-                return res.status(404).json({
-                    error:
-                        "No Daily Brief research job exists for today."
-                });
-            }
-
-            const googleResponse =
-                await fetch(
-                    `${GEMINI_BASE}/interactions/${encodeURIComponent(
-                        row.interaction_id
-                    )}`,
-                    {
-                        method: "GET",
-
-                        headers: {
-                            "x-goog-api-key":
-                                process.env
-                                    .GEMINI_API_KEY,
-
-                            "Api-Revision":
-                                API_REVISION
-                        }
-                    }
-                );
-
-            const googleText =
-                await googleResponse.text();
-
-            let interaction;
-
-            try {
-                interaction =
-                    googleText
-                        ? JSON.parse(
-                            googleText
-                        )
-                        : {};
-            }
-            catch {
-                console.error(
-                    "Gemini interaction check returned non-JSON:",
-                    googleText
-                );
-
-                return res.status(502).json({
-                    error:
-                        "Unable to read Daily Brief research status."
-                });
-            }
-
-            if (!googleResponse.ok) {
-                console.error(
-                    "Gemini interaction check error:",
-                    googleResponse.status,
-                    interaction
-                );
-
-                return res
-                    .status(
-                        googleResponse.status
-                    )
-                    .json({
-                        error:
-                            interaction?.error
-                                ?.message ||
-                            "Unable to check Daily Brief research."
-                    });
-            }
-
-            const researchStatus =
-                String(
-                    interaction?.status ||
-                    "unknown"
+        const cleanCandidates =
+            candidates
+                .filter(
+                    stock =>
+                        stock &&
+                        stock.symbol
                 )
-                    .trim()
-                    .toLowerCase();
+                .map(stock => ({
 
-            console.log(
-                `Daily Brief interaction status: ${researchStatus}`
-            );
+                    symbol:
+                        String(
+                            stock.symbol
+                        )
+                            .trim()
+                            .toUpperCase(),
 
-            if (
-                researchStatus === "queued" ||
-                researchStatus ===
-                    "in_progress" ||
-                researchStatus ===
-                    "requires_action"
-            ) {
-                await updateResearchStatus(
-                    briefDate,
-                    researchStatus
-                );
+                    scanners:
+                        Array.isArray(
+                            stock.scanners
+                        )
+                            ? stock.scanners
+                                .map(
+                                    scanner =>
+                                        String(scanner)
+                                            .trim()
+                                )
+                                .filter(Boolean)
+                            : [],
 
-                return res.status(200).json({
-                    success: true,
-                    complete: false,
-                    briefDate,
-                    researchStatus
-                });
-            }
+                    company: {
 
-            if (
-                researchStatus === "failed" ||
-                researchStatus ===
-                    "cancelled"
-            ) {
-                const errorMessage =
-                    extractInteractionError(
-                        interaction
-                    );
+                        name:
+                            cleanField(
+                                stock.company?.name,
+                                200
+                            ),
 
-                await saveResearchFailure({
-                    briefDate,
-                    researchStatus,
-                    errorMessage
-                });
+                        sector:
+                            cleanField(
+                                stock.company?.sector,
+                                150
+                            ),
 
-                return res.status(503).json({
-                    error:
-                        "Daily Brief research could not be completed.",
-                    researchStatus
-                });
-            }
-
-            if (
-                researchStatus ===
-                "incomplete"
-            ) {
-                const incompleteReason =
-                    interaction
-                        ?.incomplete_details
-                        ?.reason ||
-                    interaction
-                        ?.incompleteDetails
-                        ?.reason ||
-                    interaction
-                        ?.error
-                        ?.message ||
-                    "Unknown incomplete reason";
-
-                const errorMessage =
-                    `Gemini incomplete: ${incompleteReason}`;
-
-                await saveResearchFailure({
-                    briefDate,
-                    researchStatus,
-                    errorMessage
-                });
-
-                return res.status(503).json({
-                    error:
-                        "Daily Brief research returned an incomplete result.",
-                    researchStatus,
-                    incompleteReason
-                });
-            }
-
-            if (
-                researchStatus ===
-                "completed"
-            ) {
-                const outputText =
-                    extractOutputText(
-                        interaction
-                    );
-
-                if (!outputText) {
-                    await saveResearchFailure({
-                        briefDate,
-                        researchStatus:
-                            "failed",
-                        errorMessage:
-                            "Completed interaction contained no output text."
-                    });
-
-                    return res.status(502).json({
-                        error:
-                            "Daily Brief research returned no usable result."
-                    });
-                }
-
-                let parsed;
-
-                try {
-                    parsed =
-                        JSON.parse(
-                            cleanJsonText(
-                                outputText
+                        industry:
+                            cleanField(
+                                stock.company?.industry,
+                                150
                             )
-                        );
-                }
-                catch {
-                    console.error(
-                        "Daily Brief JSON parse error:",
-                        outputText
-                    );
 
-                    await saveResearchFailure({
-                        briefDate,
-                        researchStatus:
-                            "failed",
-                        errorMessage:
-                            "Gemini returned invalid JSON."
-                    });
+                    }
 
-                    return res.status(502).json({
-                        error:
-                            "Daily Brief research returned invalid JSON."
-                    });
-                }
+                }));
 
-                const results =
-                    cleanResearchResults(
-                        parsed?.results
-                    );
 
-                if (
-                    containsProhibitedAdvice(
-                        results
-                    )
-                ) {
-                    await saveResearchFailure({
-                        briefDate,
-                        researchStatus:
-                            "failed",
-                        errorMessage:
-                            "Output failed Daily Brief safety validation."
-                    });
+        if (
+            cleanCandidates.length === 0
+        ) {
 
-                    return res.status(422).json({
-                        error:
-                            "Today's Daily Brief could not be displayed."
-                    });
-                }
-
-                const generatedAt =
-                    new Date()
-                        .toISOString();
-
-                const companiesReviewed =
-                    Number(
-                        row.companies_reviewed ||
-                        0
-                    );
-
-                const usage =
-                    interaction?.usage ||
-                    null;
-
-                await saveCompletedBrief({
-                    briefDate,
-                    generatedAt,
-                    companiesReviewed,
-                    companiesIncluded:
-                        results.length,
-                    results,
-                    usage
-                });
-
-                console.log(
-                    `Daily Brief COMPLETE: ${briefDate} | ${results.length} companies included`
-                );
-
-                return res.status(200).json({
-                    success: true,
-                    complete: true,
-                    cached: false,
-                    researchStatus:
-                        "completed",
-                    briefDate,
-                    generatedAt,
-                    companiesReviewed,
-                    companiesIncluded:
-                        results.length,
-                    results,
-                    usage,
-                    nasdaqToday:
-                        row.nasdaq_today || null,
-                    marketConditions:
-                        row.market_conditions || null,
-                    scannerActivity:
-                        row.scanner_activity || null
-                });
-            }
-
-            return res.status(200).json({
-                success: true,
-                complete: false,
-                briefDate,
-                researchStatus
+            return res.status(400).json({
+                error:
+                    "No valid Daily Brief candidates were provided."
             });
+
         }
 
 
-        return res.status(400).json({
-            error:
-                "Unknown Daily Brief action."
+        /* =====================================
+        SPLIT INTO TWO GROUPS
+
+        Example:
+        69 stocks = 35 + 34
+
+        Both requests run at the same time.
+        ===================================== */
+
+        const midpoint =
+            Math.ceil(
+                cleanCandidates.length / 2
+            );
+
+
+        const batchOne =
+            cleanCandidates.slice(
+                0,
+                midpoint
+            );
+
+
+        const batchTwo =
+            cleanCandidates.slice(
+                midpoint
+            );
+
+
+        console.log(
+            `Daily Brief Batch 1: ${batchOne.length} companies`
+        );
+
+
+        console.log(
+            `Daily Brief Batch 2: ${batchTwo.length} companies`
+        );
+
+
+        /* =====================================
+        RESEARCH BOTH BATCHES IN PARALLEL
+        ===================================== */
+
+        const researchPromises = [];
+
+
+        if (batchOne.length > 0) {
+
+            researchPromises.push(
+                researchBatch(
+                    batchOne,
+                    briefDate,
+                    1
+                )
+            );
+
+        }
+
+
+        if (batchTwo.length > 0) {
+
+            researchPromises.push(
+                researchBatch(
+                    batchTwo,
+                    briefDate,
+                    2
+                )
+            );
+
+        }
+
+
+        const batchResearch =
+            await Promise.all(
+                researchPromises
+            );
+
+
+        /* =====================================
+        COMBINE RAW RESULTS
+        ===================================== */
+
+        const combinedRawResults =
+            batchResearch.flatMap(
+                research =>
+                    Array.isArray(
+                        research?.results
+                    )
+                        ? research.results
+                        : []
+            );
+
+
+        console.log(
+            `Daily Brief raw results returned: ${combinedRawResults.length}`
+        );
+
+
+        /* =====================================
+        CLEAN + VALIDATE RESULTS
+        ===================================== */
+
+        const cleanResults =
+            cleanResearchResults(
+                combinedRawResults,
+                cleanCandidates
+            );
+
+
+        /* =====================================
+        DEDUPLICATE
+        ===================================== */
+
+        const deduplicatedResults =
+            deduplicateResults(
+                cleanResults
+            );
+
+
+        console.log(
+            `Daily Brief companies included: ${deduplicatedResults.length}`
+        );
+
+
+        /* =====================================
+        BUILD FINAL AI DATA
+        ===================================== */
+
+        const aiResults = {
+
+            results:
+                deduplicatedResults
+
+        };
+
+
+        /* =====================================
+        SERVER-SIDE SAFETY FILTER
+        ===================================== */
+
+        const combinedText =
+            JSON.stringify(
+                aiResults
+            );
+
+
+        const prohibitedPatterns = [
+
+            /\bstrong buy\b/i,
+            /\bstrong sell\b/i,
+            /\byou should buy\b/i,
+            /\byou should sell\b/i,
+            /\byou should hold\b/i,
+            /\brecommend(?:s|ed|ing)? buying\b/i,
+            /\brecommend(?:s|ed|ing)? selling\b/i,
+            /\bbuy opportunity\b/i,
+            /\bsell opportunity\b/i,
+            /\bprice target\b/i,
+            /\btarget price\b/i,
+            /\bexpected return\b/i,
+            /\bguaranteed return\b/i,
+            /\bguaranteed profit\b/i,
+            /\bshould enter\b/i,
+            /\bshould exit\b/i,
+            /\bwinning stock\b/i,
+            /\bhigh probability trade\b/i,
+            /\bgoing to the moon\b/i
+
+        ];
+
+
+        const unsafe =
+            prohibitedPatterns.some(
+                pattern =>
+                    pattern.test(
+                        combinedText
+                    )
+            );
+
+
+        if (unsafe) {
+
+            console.error(
+                "Daily Brief blocked by safety filter."
+            );
+
+
+            return res.status(422).json({
+                error:
+                    "The Daily Brief research could not be displayed."
+            });
+
+        }
+
+
+        /* =====================================
+        SAVE ONE COMPLETED BRIEF
+        ===================================== */
+
+        const generatedAt =
+            new Date()
+                .toISOString();
+
+
+        await saveDailyBrief({
+
+            briefDate,
+
+            generatedAt,
+
+            companiesReviewed:
+                cleanCandidates.length,
+
+            companiesIncluded:
+                deduplicatedResults.length,
+
+            aiResults
+
         });
+
+
+        /* =====================================
+        SUCCESS
+        ===================================== */
+
+        return res.status(200).json({
+
+            success: true,
+
+            cached: false,
+
+            briefDate,
+
+            generatedAt,
+
+            companiesReviewed:
+                cleanCandidates.length,
+
+            companiesIncluded:
+                deduplicatedResults.length,
+
+            results:
+                deduplicatedResults,
+
+            nasdaqToday:
+                null,
+
+            marketConditions:
+                null,
+
+            scannerActivity:
+                null
+
+        });
+
+
     }
     catch (error) {
 
@@ -1354,55 +493,85 @@ Return only the requested JSON structure.`,
             error
         );
 
+
         return res.status(500).json({
+
             error:
                 "Daily Brief research is temporarily unavailable."
+
         });
+
     }
+
 }
 
 
 /* =========================================
-SYSTEM INSTRUCTION
+RESEARCH ONE BATCH
 ========================================= */
 
-function buildSystemInstruction() {
+async function researchBatch(
+    candidates,
+    briefDate,
+    batchNumber
+) {
 
-    return `
+    console.log(
+        `Daily Brief Batch ${batchNumber} research starting...`
+    );
+
+
+    /* =====================================
+    SYSTEM INSTRUCTION
+    ===================================== */
+
+    const systemInstruction = `
 
 You are the market-attention research engine for EdgeBreak.
 
-The supplied NASDAQ companies have ALREADY passed EdgeBreak's
-technical stock scanners and initial deterministic filters.
+You will receive a list of NASDAQ stocks that have already
+passed EdgeBreak's technical stock scanners and initial
+liquidity and industry filters.
 
-DO NOT perform another technical stock scan.
+DO NOT perform another technical scan.
 
-DO NOT decide whether a company is a good investment.
+DO NOT decide whether a stock is a good investment.
 
 DO NOT provide buy, sell or hold recommendations.
 
-DO NOT provide price targets, entry prices, expected returns
-or predictions.
+DO NOT provide price targets, entry prices or predictions.
 
-Your job is to research the supplied companies using current
-Google Search information and identify which currently have
-noteworthy or unusual market attention, activity, news or
-company-specific developments that justify further research.
+Your task is to determine which of the supplied companies
+currently have noteworthy or unusual market attention,
+activity, news or developments that may justify further
+research by the user.
+
+Use current Google Search grounding to research the supplied
+companies.
 
 IMPORTANT:
 
-Do not favour a company because it is large, famous or
-regularly covered by financial media.
+Do not favour a company simply because it is large, famous
+or regularly covered by the media.
+
+We are particularly interested in companies where CURRENT
+attention or activity appears elevated, unusual or
+meaningfully different from what would normally be expected
+for that company.
 
 Smaller and lesser-known companies are important.
 
-A normally quiet company experiencing a sudden increase in
-attention may be more relevant than a major company receiving
-its normal level of coverage.
+Do not exclude a company simply because it normally receives
+little media coverage.
+
+A previously quiet company experiencing a sudden increase
+in attention may be more relevant than a large company that
+receives substantial coverage every day.
+
 
 LOOK FOR:
 
-- unusual or increasing trading activity
+- unusually high or increasing trading activity
 - unusual recent trading volume
 - breaking or recent company news
 - earnings surprises
@@ -1420,112 +589,155 @@ LOOK FOR:
 - unusual increases in media or investor attention
 - other credible current company-specific catalysts
 
+
 RECENCY:
 
 Give strongest preference to developments from the last
 7 days.
 
-Developments up to 30 days old may be considered when they
-remain clearly relevant to current market attention.
+You may consider developments up to 30 days old when they
+are clearly still relevant to current market attention.
 
-Do not include a company merely because:
+Older developments should normally not justify inclusion.
 
-- its share price increased or decreased
-- it is near a 52-week high
-- it broke resistance
-- its technical chart looks strong
-- it has momentum
-- it appeared in an EdgeBreak scanner
 
-The scanners already handled technical structure.
+IMPORTANT EXCLUSION:
 
-There must be a CURRENT factual reason beyond the technical
-setup.
+Do not flag a stock solely because:
 
-Both positive and negative developments may qualify.
+- its price increased or decreased
+- it is near a 52-week high or low
+- it outperformed or underperformed the broader market
+- it has a technically strong chart
+- it recently broke resistance
+- it appears to have momentum
 
-Inclusion is NOT an endorsement.
+EdgeBreak's scanners already analyse price and technical
+structure.
+
+There must ALSO be credible evidence of at least one of:
+
+- unusual or materially increased trading activity
+- unusual or materially increased market or media attention
+- a current company-specific catalyst
+- significant company news
+- a material corporate, financial, regulatory, clinical or
+  strategic development
+
+Price movement may SUPPORT the reason for inclusion.
+
+Price movement alone is NOT sufficient.
+
+
+POSITIVE AND NEGATIVE DEVELOPMENTS:
+
+Both positive and negative developments may justify further
+research.
+
+Inclusion is NOT an endorsement of the company.
+
+
+DUPLICATE COMPANIES:
+
+If multiple supplied ticker symbols represent different
+share classes of the same company and are responding to the
+same underlying development, research the company once and
+combine the ticker symbols into one result when those
+symbols are supplied in this batch.
+
 
 ATTENTION LEVEL:
 
-Every included company must receive exactly one:
+Every included company must receive exactly one of:
 
 HIGH
 ELEVATED
 NOTABLE
 
-These labels describe CURRENT attention or significance of a
-current development.
+These labels describe CURRENT market attention or the
+significance of a current company-specific development.
 
 They are NOT investment ratings.
 
+
 HIGH:
-Particularly significant or clearly unusual current attention
-or a major current development.
+
+Use only for particularly significant or clearly unusual
+current attention or a major current development.
+
 
 ELEVATED:
-Current attention or developments meaningfully above what
-would normally be expected for that company.
+
+Use when current attention or developments appear
+meaningfully above what would normally be expected for that
+company.
+
 
 NOTABLE:
-A credible current development worth investigating, but
-attention does not appear unusually high.
 
-DO NOT force companies into the results.
+Use when there is a credible current development worth
+investigating but attention does not appear unusually high.
+
+
+IMPORTANT:
+
+Do not force companies into the results.
 
 Most supplied companies may be omitted.
 
-Before including a company ask:
+Quality is more important than quantity.
 
-"If I ignored its chart and recent share-price performance,
-would there STILL be a current factual reason for this
-company to appear in today's research?"
+Before including each company ask:
 
-If NO, omit it.
+"If I ignored the stock chart and recent price performance,
+would there STILL be a current factual reason that makes
+this company noteworthy?"
+
+If the answer is NO, omit the company.
+
+Return JSON only.
 
 `;
-}
 
 
-/* =========================================
-RESEARCH PROMPT
-========================================= */
+    /* =====================================
+    USER INSTRUCTION
+    ===================================== */
 
-function buildResearchPrompt(
-    candidates,
-    briefDate
-) {
+    const userInstruction = `
 
-    return `
-
-Research the following NASDAQ companies for the EdgeBreak
+Research this group of NASDAQ companies for the EdgeBreak
 Daily Brief dated ${briefDate}.
 
-There are ${candidates.length} supplied candidates.
+This is research batch ${batchNumber}.
 
-They have already passed EdgeBreak's technical scanners.
+Companies supplied in this batch:
 
-Research CURRENT company-specific developments and unusual
-market attention using Google Search.
+${candidates.length}
 
-Do not technically rescan the stocks.
+These companies have ALREADY passed EdgeBreak's technical
+scanners.
 
-Do not provide investment advice.
+Do not perform another technical assessment.
 
-Do not rank companies according to investment attractiveness.
+Research CURRENT market attention and company-specific
+developments using Google Search grounding.
 
-Return ONLY companies that genuinely satisfy the current
-attention/development criteria.
+Only include companies that genuinely satisfy the criteria
+in the system instruction.
 
-Return valid JSON ONLY using exactly this top-level format:
+
+RETURN EXACTLY THIS JSON STRUCTURE:
 
 {
+    "companiesReviewed": ${candidates.length},
+    "companiesIncluded": 0,
     "results": [
         {
-            "symbols": ["TICKER"],
+            "symbols": [],
             "companyName": "",
             "scanners": [],
-            "attentionLevel": "HIGH",
+            "attentionLevel": "",
             "headline": "",
             "summary": "",
             "currentDevelopment": "",
@@ -1536,47 +748,83 @@ Return valid JSON ONLY using exactly this top-level format:
     ]
 }
 
+
 FIELD RULES:
 
+companiesReviewed:
+Must equal ${candidates.length}.
+
+companiesIncluded:
+Must equal the number of objects in results.
+
 symbols:
-Only ticker symbols supplied in the candidate data.
+Array of supplied ticker symbols.
+
+Do not return ticker symbols that were not supplied.
 
 companyName:
 Current company name.
 
 scanners:
-Use the EdgeBreak scanner names supplied for that company.
+Use the scanner labels supplied with the candidate.
 
 attentionLevel:
-Exactly HIGH, ELEVATED or NOTABLE.
+Exactly one of:
+
+HIGH
+ELEVATED
+NOTABLE
 
 headline:
-Short factual headline describing why the company currently
-deserves further investigation.
+Short factual headline describing the current reason for
+attention.
+
+No promotional language.
+
+No prediction.
 
 summary:
-One or two concise factual sentences.
+One or two concise factual sentences explaining the current
+situation.
+
+This may appear directly in the EdgeBreak Daily Brief.
+
+No investment advice.
 
 currentDevelopment:
-Describe the specific current event, catalyst, filing,
-announcement, unusual activity or material development.
+State the specific current event, catalyst, filing,
+announcement, unusual activity or material development that
+justifies inclusion.
 
 whyIncluded:
-Explain briefly why the CURRENT development or attention is
-noteworthy.
+Briefly explain why the CURRENT attention or development is
+noteworthy enough for further research.
+
+Technical chart quality must not be the primary reason.
 
 developmentDate:
-YYYY-MM-DD where reliably known. Otherwise "".
+Use YYYY-MM-DD when the date can reliably be established.
+
+Otherwise return an empty string.
 
 sourceNames:
-Short list of principal credible sources supporting the
-finding.
+Return a short array of the principal credible sources that
+support inclusion.
 
 Do not invent sources.
 
-Do not include markdown.
 
-Do not include commentary outside the JSON.
+FINAL TEST FOR EVERY RESULT:
+
+Ignore the stock's chart and recent price performance.
+
+Is there STILL a current factual reason for this company to
+appear in today's Daily Brief?
+
+If NO:
+
+OMIT IT.
+
 
 CANDIDATES:
 
@@ -1586,747 +834,704 @@ ${JSON.stringify(
     2
 )}
 
+Return JSON only.
+
 `;
-}
 
 
-/* =========================================
-CLEAN CANDIDATES
-========================================= */
+    /* =====================================
+    GEMINI REQUEST
+    ===================================== */
 
-function cleanCandidates(input) {
+    const geminiResponse =
+        await fetch(
 
-    if (!Array.isArray(input)) {
-        return [];
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
+
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type":
+                        "application/json",
+
+                    "x-goog-api-key":
+                        process.env.GEMINI_API_KEY
+
+                },
+
+                body: JSON.stringify({
+
+                    systemInstruction: {
+
+                        parts: [
+                            {
+                                text:
+                                    systemInstruction
+                            }
+                        ]
+
+                    },
+
+
+                    contents: [
+
+                        {
+
+                            role: "user",
+
+                            parts: [
+                                {
+                                    text:
+                                        userInstruction
+                                }
+                            ]
+
+                        }
+
+                    ],
+
+
+                    tools: [
+
+                        {
+                            google_search: {}
+                        }
+
+                    ],
+
+
+                    generationConfig: {
+
+                        maxOutputTokens:
+                            4000,
+
+                        responseMimeType:
+                            "application/json",
+
+                        temperature:
+                            0.2
+
+                    }
+
+                })
+
+            }
+
+        );
+
+
+    /* =====================================
+    GEMINI ERROR
+    ===================================== */
+
+    if (!geminiResponse.ok) {
+
+        const errorText =
+            await geminiResponse.text();
+
+
+        console.error(
+            `Gemini Daily Brief Batch ${batchNumber} Error:`,
+            geminiResponse.status,
+            errorText
+        );
+
+
+        throw new Error(
+            `Daily Brief batch ${batchNumber} failed.`
+        );
+
     }
 
-    return input
-        .filter(
-            item =>
-                item &&
-                item.symbol
+
+    const geminiData =
+        await geminiResponse.json();
+
+
+    /* =====================================
+    EXTRACT OUTPUT
+    ===================================== */
+
+    const rawText =
+        geminiData
+            ?.candidates?.[0]
+            ?.content
+            ?.parts
+            ?.map(
+                part =>
+                    part.text || ""
+            )
+            ?.join("")
+            ?.trim();
+
+
+    if (!rawText) {
+
+        console.error(
+            `Gemini Daily Brief Batch ${batchNumber} returned no text.`
+        );
+
+
+        throw new Error(
+            `Daily Brief batch ${batchNumber} returned no research.`
+        );
+
+    }
+
+
+    /* =====================================
+    PARSE JSON
+    ===================================== */
+
+    let research;
+
+
+    try {
+
+        research =
+            JSON.parse(
+                rawText
+            );
+
+    }
+    catch (error) {
+
+        console.error(
+            `Daily Brief Batch ${batchNumber} JSON Parse Error:`,
+            rawText
+        );
+
+
+        throw new Error(
+            `Daily Brief batch ${batchNumber} returned invalid JSON.`
+        );
+
+    }
+
+
+    if (
+        !research ||
+        !Array.isArray(
+            research.results
         )
-        .map(item => ({
-            symbol:
-                String(item.symbol)
-                    .trim()
-                    .toUpperCase(),
-
-            scanners:
-                Array.isArray(
-                    item.scanners
-                )
-                    ? item.scanners
-                        .map(value =>
-                            cleanField(
-                                value,
-                                100
-                            )
-                        )
-                        .filter(Boolean)
-                    : [],
-
-            company: {
-                name:
-                    cleanField(
-                        item.company?.name,
-                        200
-                    ),
-
-                sector:
-                    cleanField(
-                        item.company?.sector,
-                        150
-                    ),
-
-                industry:
-                    cleanField(
-                        item.company?.industry,
-                        150
-                    )
-            }
-        }));
-}
-
-
-/* =========================================
-EXTRACT INTERACTION OUTPUT
-========================================= */
-
-function extractOutputText(
-    interaction
-) {
-
-    if (
-        typeof interaction?.output_text ===
-        "string"
     ) {
-        return interaction
-            .output_text
-            .trim();
+
+        throw new Error(
+            `Daily Brief batch ${batchNumber} returned an invalid result.`
+        );
+
     }
 
-    const pieces = [];
 
-    if (
-        Array.isArray(
-            interaction?.steps
-        )
-    ) {
-        for (
-            const step of
-            interaction.steps
-        ) {
-            if (
-                step?.type !==
-                "model_output"
-            ) {
-                continue;
-            }
-
-            if (
-                !Array.isArray(
-                    step?.content
-                )
-            ) {
-                continue;
-            }
-
-            for (
-                const block of
-                step.content
-            ) {
-                if (
-                    block?.type ===
-                        "text" &&
-                    typeof block?.text ===
-                        "string"
-                ) {
-                    pieces.push(
-                        block.text
-                    );
-                }
-            }
-        }
-    }
-
-    return pieces
-        .join("")
-        .trim();
-}
-
-
-/* =========================================
-INTERACTION ERROR
-========================================= */
-
-function extractInteractionError(
-    interaction
-) {
-
-    if (
-        typeof interaction?.error
-            ?.message === "string"
-    ) {
-        return interaction
-            .error
-            .message;
-    }
-
-    return (
-        "Gemini interaction ended with status: " +
-        `${interaction?.status || "unknown"}`
+    console.log(
+        `Daily Brief Batch ${batchNumber} complete: ` +
+        `${research.results.length} included`
     );
+
+
+    return research;
+
 }
 
 
 /* =========================================
-CLEAN MODEL RESULTS
+CLEAN + VALIDATE RESEARCH RESULTS
 ========================================= */
 
 function cleanResearchResults(
-    results
+    rawResults,
+    cleanCandidates
 ) {
 
-    if (!Array.isArray(results)) {
-        return [];
-    }
-
-    const allowed =
+    const allowedLevels =
         new Set([
             "HIGH",
             "ELEVATED",
             "NOTABLE"
         ]);
 
-    return results
-        .map(item => {
 
-            if (
-                !item ||
-                typeof item !==
-                    "object"
-            ) {
-                return null;
-            }
+    const suppliedSymbols =
+        new Set(
+            cleanCandidates.map(
+                stock =>
+                    stock.symbol
+            )
+        );
 
-            const symbols =
-                Array.isArray(
-                    item.symbols
-                )
-                    ? [
-                        ...new Set(
-                            item.symbols
-                                .map(value =>
-                                    String(value)
+
+    const cleanResults = [];
+
+
+    for (
+        const item of
+        rawResults
+    ) {
+
+        if (
+            !item ||
+            typeof item !== "object"
+        ) {
+
+            continue;
+
+        }
+
+
+        const symbols =
+            Array.isArray(
+                item.symbols
+            )
+                ? [
+                    ...new Set(
+                        item.symbols
+                            .map(
+                                symbol =>
+                                    String(symbol)
                                         .trim()
                                         .toUpperCase()
-                                )
-                                .filter(Boolean)
-                        )
-                    ]
-                    : [];
+                            )
+                            .filter(
+                                symbol =>
+                                    suppliedSymbols.has(
+                                        symbol
+                                    )
+                            )
+                    )
+                ]
+                : [];
 
-            const attentionLevel =
-                String(
-                    item.attentionLevel ||
-                    ""
-                )
-                    .trim()
-                    .toUpperCase();
 
-            if (
-                symbols.length === 0 ||
-                !allowed.has(
-                    attentionLevel
-                )
-            ) {
-                return null;
-            }
+        if (
+            symbols.length === 0
+        ) {
 
-            return {
-                symbols,
+            continue;
 
-                companyName:
-                    cleanField(
-                        item.companyName,
-                        200
-                    ),
+        }
 
-                scanners:
-                    Array.isArray(
+
+        const attentionLevel =
+            String(
+                item.attentionLevel ||
+                ""
+            )
+                .trim()
+                .toUpperCase();
+
+
+        if (
+            !allowedLevels.has(
+                attentionLevel
+            )
+        ) {
+
+            continue;
+
+        }
+
+
+        const headline =
+            cleanField(
+                item.headline,
+                220
+            );
+
+
+        const summary =
+            cleanField(
+                item.summary,
+                650
+            );
+
+
+        const currentDevelopment =
+            cleanField(
+                item.currentDevelopment,
+                1000
+            );
+
+
+        const whyIncluded =
+            cleanField(
+                item.whyIncluded,
+                800
+            );
+
+
+        if (
+            !headline ||
+            !summary ||
+            !currentDevelopment ||
+            !whyIncluded
+        ) {
+
+            continue;
+
+        }
+
+
+        const scanners =
+            Array.isArray(
+                item.scanners
+            )
+                ? [
+                    ...new Set(
                         item.scanners
-                    )
-                        ? item.scanners
-                            .map(value =>
-                                cleanField(
-                                    value,
-                                    100
-                                )
+                            .map(
+                                scanner =>
+                                    cleanField(
+                                        scanner,
+                                        80
+                                    )
                             )
                             .filter(Boolean)
-                        : [],
+                    )
+                ]
+                : [];
 
-                attentionLevel,
 
-                headline:
-                    cleanField(
-                        item.headline,
-                        250
-                    ),
-
-                summary:
-                    cleanField(
-                        item.summary,
-                        800
-                    ),
-
-                currentDevelopment:
-                    cleanField(
-                        item.currentDevelopment,
-                        1200
-                    ),
-
-                whyIncluded:
-                    cleanField(
-                        item.whyIncluded,
-                        900
-                    ),
-
-                developmentDate:
-                    cleanField(
-                        item.developmentDate,
-                        40
-                    ),
-
-                sourceNames:
-                    Array.isArray(
+        const sourceNames =
+            Array.isArray(
+                item.sourceNames
+            )
+                ? [
+                    ...new Set(
                         item.sourceNames
-                    )
-                        ? item.sourceNames
-                            .map(value =>
-                                cleanField(
-                                    value,
-                                    160
-                                )
+                            .map(
+                                source =>
+                                    cleanField(
+                                        source,
+                                        150
+                                    )
                             )
                             .filter(Boolean)
-                        : []
-            };
-        })
-        .filter(Boolean);
+                    )
+                ]
+                : [];
+
+
+        cleanResults.push({
+
+            symbols,
+
+            companyName:
+                cleanField(
+                    item.companyName,
+                    200
+                ),
+
+            scanners,
+
+            attentionLevel,
+
+            headline,
+
+            summary,
+
+            currentDevelopment,
+
+            whyIncluded,
+
+            developmentDate:
+                cleanField(
+                    item.developmentDate,
+                    40
+                ),
+
+            sourceNames
+
+        });
+
+    }
+
+
+    return cleanResults;
+
 }
 
 
 /* =========================================
-SAFETY
+DEDUPLICATE RESULTS
 ========================================= */
 
-function containsProhibitedAdvice(
+function deduplicateResults(
     results
 ) {
 
-    const text =
-        JSON.stringify(results);
+    const seenSymbols =
+        new Set();
 
-    const patterns = [
-        /\bstrong buy\b/i,
-        /\bstrong sell\b/i,
-        /\byou should buy\b/i,
-        /\byou should sell\b/i,
-        /\byou should hold\b/i,
-        /\bbuy opportunity\b/i,
-        /\bsell opportunity\b/i,
-        /\bprice target\b/i,
-        /\btarget price\b/i,
-        /\bexpected return\b/i,
-        /\bguaranteed return\b/i,
-        /\bguaranteed profit\b/i,
-        /\bshould enter\b/i,
-        /\bshould exit\b/i
-    ];
 
-    return patterns.some(
-        pattern =>
-            pattern.test(text)
-    );
+    const finalResults = [];
+
+
+    for (
+        const result of
+        results
+    ) {
+
+        const newSymbols =
+            result.symbols.filter(
+                symbol =>
+                    !seenSymbols.has(
+                        symbol
+                    )
+            );
+
+
+        if (
+            newSymbols.length === 0
+        ) {
+
+            continue;
+
+        }
+
+
+        newSymbols.forEach(
+            symbol =>
+                seenSymbols.add(
+                    symbol
+                )
+        );
+
+
+        finalResults.push({
+
+            ...result,
+
+            symbols:
+                newSymbols
+
+        });
+
+    }
+
+
+    return finalResults;
+
 }
 
 
 /* =========================================
-SUPABASE — READ TODAY
+GET CACHED DAILY BRIEF
 ========================================= */
 
-async function getDailyBriefRow(
+async function getCachedBrief(
     briefDate
 ) {
 
-    const url =
+    const cacheUrl =
         `${process.env.SUPABASE_URL}` +
         `/rest/v1/daily_briefs` +
-        `?brief_date=eq.${encodeURIComponent(
-            briefDate
-        )}` +
+        `?brief_date=eq.${encodeURIComponent(briefDate)}` +
+        `&status=eq.complete` +
         `&select=*` +
         `&limit=1`;
 
-    const response =
-        await supabaseFetch(
-            url,
-            {
-                method: "GET"
-            }
-        );
 
-    if (!response.ok) {
+    try {
+
+        const response =
+            await fetch(
+                cacheUrl,
+                {
+
+                    method: "GET",
+
+                    headers: {
+
+                        "apikey":
+                            process.env.SUPABASE_SERVICE_KEY,
+
+                        "Authorization":
+                            `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+
+                        "Content-Type":
+                            "application/json"
+
+                    }
+
+                }
+            );
+
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+
+            console.error(
+                "Daily Brief Cache Read Error:",
+                errorText
+            );
+
+
+            return null;
+
+        }
+
+
+        const rows =
+            await response.json();
+
+
+        if (
+            Array.isArray(rows) &&
+            rows.length > 0 &&
+            rows[0].ai_results
+        ) {
+
+            return rows[0];
+
+        }
+
+
+        return null;
+
+    }
+    catch (error) {
+
         console.error(
-            "Daily Brief Supabase read error:",
-            await response.text()
+            "Daily Brief Cache Read Error:",
+            error
         );
 
-        throw new Error(
-            "Unable to read Daily Brief cache."
-        );
+
+        return null;
+
     }
 
-    const rows =
-        await response.json();
-
-    return (
-        Array.isArray(rows) &&
-        rows.length > 0
-    )
-        ? rows[0]
-        : null;
 }
 
 
 /* =========================================
-ENSURE DAILY BRIEF ROW EXISTS
+SAVE DAILY BRIEF
 ========================================= */
 
-async function ensureDailyBriefRow(
-    briefDate
-) {
+async function saveDailyBrief({
 
-    const existing =
-        await getDailyBriefRow(
-            briefDate
-        );
-
-    if (existing) {
-        return existing;
-    }
-
-    const now =
-        new Date()
-            .toISOString();
-
-    await upsertDailyBrief({
-        brief_date:
-            briefDate,
-
-        status:
-            "pending",
-
-        research_status:
-            "not_started",
-
-        companies_reviewed:
-            0,
-
-        companies_included:
-            0,
-
-        updated_at:
-            now
-    });
-
-    return getDailyBriefRow(
-        briefDate
-    );
-}
-
-
-/* =========================================
-SAVE BACKGROUND JOB
-========================================= */
-
-async function saveResearchJob({
     briefDate,
-    interactionId,
-    researchStatus,
-    companiesReviewed
-}) {
 
-    const now =
-        new Date()
-            .toISOString();
-
-    /*
-    IMPORTANT:
-    Do not wipe nasdaq_today,
-    market_conditions or scanner_activity.
-    Those are separate cached sections.
-    */
-
-    await upsertDailyBrief({
-        brief_date:
-            briefDate,
-
-        status:
-            "researching",
-
-        interaction_id:
-            interactionId,
-
-        research_status:
-            researchStatus,
-
-        research_started_at:
-            now,
-
-        research_error:
-            null,
-
-        companies_reviewed:
-            companiesReviewed,
-
-        companies_included:
-            0,
-
-        ai_results:
-            null,
-
-        usage_data:
-            null,
-
-        generated_at:
-            null,
-
-        updated_at:
-            now
-    });
-}
-
-
-/* =========================================
-UPDATE RESEARCH STATUS
-========================================= */
-
-async function updateResearchStatus(
-    briefDate,
-    researchStatus
-) {
-
-    await patchDailyBrief(
-        briefDate,
-        {
-            research_status:
-                researchStatus,
-
-            updated_at:
-                new Date()
-                    .toISOString()
-        }
-    );
-}
-
-
-/* =========================================
-SAVE FAILURE
-========================================= */
-
-async function saveResearchFailure({
-    briefDate,
-    researchStatus,
-    errorMessage
-}) {
-
-    await patchDailyBrief(
-        briefDate,
-        {
-            status:
-                "failed",
-
-            research_status:
-                researchStatus,
-
-            research_error:
-                cleanField(
-                    errorMessage,
-                    1500
-                ),
-
-            updated_at:
-                new Date()
-                    .toISOString()
-        }
-    );
-}
-
-
-/* =========================================
-SAVE COMPLETED BRIEF
-========================================= */
-
-async function saveCompletedBrief({
-    briefDate,
     generatedAt,
+
     companiesReviewed,
+
     companiesIncluded,
-    results,
-    usage
+
+    aiResults
+
 }) {
 
-    await patchDailyBrief(
-        briefDate,
-        {
-            status:
-                "complete",
-
-            research_status:
-                "completed",
-
-            research_error:
-                null,
-
-            companies_reviewed:
-                companiesReviewed,
-
-            companies_included:
-                companiesIncluded,
-
-            ai_results: {
-                results
-            },
-
-            usage_data:
-                usage,
-
-            generated_at:
-                generatedAt,
-
-            updated_at:
-                generatedAt
-        }
-    );
-}
-
-
-/* =========================================
-UPSERT DAILY BRIEF
-========================================= */
-
-async function upsertDailyBrief(
-    body
-) {
-
-    const url =
+    const saveUrl =
         `${process.env.SUPABASE_URL}` +
         `/rest/v1/daily_briefs` +
         `?on_conflict=brief_date`;
 
-    const response =
-        await supabaseFetch(
-            url,
-            {
-                method: "POST",
 
-                headers: {
-                    "Prefer":
-                        "resolution=merge-duplicates,return=minimal"
-                },
+    try {
 
-                body:
-                    JSON.stringify(
-                        body
-                    )
-            }
-        );
+        const response =
+            await fetch(
+                saveUrl,
+                {
 
-    if (!response.ok) {
-        const errorText =
-            await response.text();
+                    method: "POST",
 
-        console.error(
-            "Daily Brief Supabase upsert error:",
-            errorText
-        );
+                    headers: {
 
-        throw new Error(
-            "Unable to save Daily Brief."
-        );
-    }
-}
+                        "apikey":
+                            process.env.SUPABASE_SERVICE_KEY,
 
+                        "Authorization":
+                            `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
 
-/* =========================================
-PATCH DAILY BRIEF
-========================================= */
+                        "Content-Type":
+                            "application/json",
 
-async function patchDailyBrief(
-    briefDate,
-    body
-) {
+                        "Prefer":
+                            "resolution=merge-duplicates,return=minimal"
 
-    const url =
-        `${process.env.SUPABASE_URL}` +
-        `/rest/v1/daily_briefs` +
-        `?brief_date=eq.${encodeURIComponent(
-            briefDate
-        )}`;
+                    },
 
-    const response =
-        await supabaseFetch(
-            url,
-            {
-                method: "PATCH",
+                    body: JSON.stringify({
 
-                headers: {
-                    "Prefer":
-                        "return=minimal"
-                },
+                        brief_date:
+                            briefDate,
 
-                body:
-                    JSON.stringify(
-                        body
-                    )
-            }
-        );
+                        status:
+                            "complete",
 
-    if (!response.ok) {
-        const errorText =
-            await response.text();
+                        companies_reviewed:
+                            companiesReviewed,
 
-        console.error(
-            "Daily Brief Supabase patch error:",
-            errorText
-        );
+                        companies_included:
+                            companiesIncluded,
 
-        throw new Error(
-            "Unable to update Daily Brief."
-        );
-    }
-}
+                        ai_results:
+                            aiResults,
+
+                        generated_at:
+                            generatedAt,
+
+                        updated_at:
+                            generatedAt
+
+                    })
+
+                }
+            );
 
 
-/* =========================================
-SUPABASE FETCH
-========================================= */
+        if (!response.ok) {
 
-function supabaseFetch(
-    url,
-    options = {}
-) {
+            const errorText =
+                await response.text();
 
-    return fetch(
-        url,
-        {
-            ...options,
 
-            headers: {
-                "apikey":
-                    process.env
-                        .SUPABASE_SERVICE_KEY,
+            console.error(
+                "Daily Brief Cache Save Error:",
+                errorText
+            );
 
-                "Authorization":
-                    `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
 
-                "Content-Type":
-                    "application/json",
+            /*
+            AI research succeeded.
 
-                ...(options.headers || {})
-            }
+            Do not fail the user request just
+            because caching failed.
+            */
+
+            return false;
+
         }
-    );
-}
 
 
-/* =========================================
-CLEAN JSON
-========================================= */
+        console.log(
+            `EdgeBreak Daily Brief CACHE SAVED: ${briefDate}`
+        );
 
-function cleanJsonText(
-    value
-) {
 
-    return String(
-        value || ""
-    )
-        .replace(
-            /^```json\s*/i,
-            ""
-        )
-        .replace(
-            /^```\s*/i,
-            ""
-        )
-        .replace(
-            /```\s*$/i,
-            ""
-        )
-        .trim();
+        return true;
+
+    }
+    catch (error) {
+
+        console.error(
+            "Daily Brief Cache Save Error:",
+            error
+        );
+
+
+        return false;
+
+    }
+
 }
 
 
@@ -2340,6 +1545,7 @@ function getNewYorkDate() {
         new Intl.DateTimeFormat(
             "en-CA",
             {
+
                 timeZone:
                     "America/New_York",
 
@@ -2351,56 +1557,46 @@ function getNewYorkDate() {
 
                 day:
                     "2-digit"
+
             }
         )
             .formatToParts(
                 new Date()
             );
 
+
     const values = {};
+
 
     for (
         const part of
         parts
     ) {
+
         if (
-            part.type !==
-            "literal"
+            part.type !== "literal"
         ) {
+
             values[
                 part.type
             ] = part.value;
+
         }
+
     }
+
 
     return (
         `${values.year}-` +
         `${values.month}-` +
         `${values.day}`
     );
+
 }
 
 
 /* =========================================
-SLEEP
-========================================= */
-
-function sleep(
-    milliseconds
-) {
-
-    return new Promise(
-        resolve =>
-            setTimeout(
-                resolve,
-                milliseconds
-            )
-    );
-}
-
-
-/* =========================================
-CLEAN FIELD
+CLEAN OUTPUT
 ========================================= */
 
 function cleanField(
@@ -2409,20 +1605,20 @@ function cleanField(
 ) {
 
     if (
-        typeof value !==
-        "string"
+        typeof value !== "string"
     ) {
+
         return "";
+
     }
 
+
     return value
-        .replace(
-            /\s+/g,
-            " "
-        )
+        .replace(/\s+/g, " ")
         .trim()
         .slice(
             0,
             maxLength
         );
+
 }
