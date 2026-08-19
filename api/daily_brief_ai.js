@@ -285,12 +285,11 @@ export default async function handler(req, res) {
                     existing?.research_status === "in_progress" ||
                     existing?.research_status === "requires_action"
                 )
-            )
+            ) {
 
                 console.log(
                     "Daily Brief research already exists."
                 );
-
 
                 return res.status(200).json({
 
@@ -309,7 +308,7 @@ export default async function handler(req, res) {
 
             }
 
-
+                    
             /* =================================
             BUILD RESEARCH INSTRUCTION
             ================================= */
@@ -805,13 +804,12 @@ export default async function handler(req, res) {
                 researchStatus === "queued" ||
                 researchStatus === "in_progress" ||
                 researchStatus === "requires_action"
-            )
+            ) {
 
                 await updateResearchStatus(
                     briefDate,
                     researchStatus
                 );
-
 
                 return res.status(200).json({
 
@@ -826,6 +824,8 @@ export default async function handler(req, res) {
                 });
 
             }
+
+                    
 
 
             /* =================================
