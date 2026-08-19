@@ -16200,17 +16200,18 @@ chartAIAnalyseBtn?.addEventListener(
 <script>
 
 /* =========================================
-EDGEBREAK DAILY BRIEF
+EDGEBREAK END-OF-DAY AI MARKET ANALYSIS
 
 BACKGROUND AI FLOW
 
-1. Check Supabase for today's brief
+1. Check Supabase for today's analysis
 2. If complete → display immediately
 3. If not started → load candidates
 4. Start ONE Gemini background interaction
 5. Poll status every 10 seconds
 6. When complete → API saves to Supabase
-7. Display finished Daily Brief
+7. Display finished analysis
+8. Allow direct Chart + AI Deep Research
 ========================================= */
 
 
@@ -16259,7 +16260,7 @@ dailyBriefButton.addEventListener(
 
 
 /* =========================================
-OPEN DAILY BRIEF
+OPEN END-OF-DAY ANALYSIS
 ========================================= */
 
 async function openDailyBrief(){
@@ -16275,7 +16276,7 @@ async function openDailyBrief(){
     dailyBriefButton.disabled = true;
 
     setDailyBriefButton(
-        "✦ Checking Today's Brief..."
+        "✦ Checking End-of-Day Analysis..."
     );
 
 
@@ -16296,14 +16297,12 @@ async function openDailyBrief(){
 
         /* =================================
         ALREADY COMPLETE
-
-        No Gemini call.
         ================================= */
 
         if(status.complete){
 
             console.log(
-                "Daily Brief complete cache hit."
+                "End-of-Day Analysis cache hit."
             );
 
 
@@ -16318,23 +16317,20 @@ async function openDailyBrief(){
 
 
         console.log(
-            "Daily Brief status:",
+            "End-of-Day Analysis status:",
             status.researchStatus
         );
 
 
         /* =================================
         EXISTING BACKGROUND JOB
-
-        Somebody may already have started
-        today's research.
-
-        Do NOT start another one.
         ================================= */
 
         if(
             status.interactionExists &&
             (
+                status.researchStatus ===
+                    "queued" ||
                 status.researchStatus ===
                     "in_progress" ||
                 status.researchStatus ===
@@ -16343,12 +16339,12 @@ async function openDailyBrief(){
         ){
 
             setDailyBriefProgress(
-                "Today's market research is already running..."
+                "Today's automated AI market research is already running..."
             );
 
 
             setDailyBriefButton(
-                "✦ Researching Today's Market..."
+                "✦ AI Market Research Running..."
             );
 
 
@@ -16363,18 +16359,15 @@ async function openDailyBrief(){
         /* =================================
         STEP 2
         LOAD CANDIDATES
-
-        Only happens when today's research
-        has not already been started.
         ================================= */
 
         setDailyBriefButton(
-            "✦ Preparing Today's Research..."
+            "✦ Preparing Automated Research..."
         );
 
 
         setDailyBriefProgress(
-            "Preparing today's NASDAQ research..."
+            "Loading today's NASDAQ scanner discoveries..."
         );
 
 
@@ -16390,7 +16383,7 @@ async function openDailyBrief(){
         if(!candidateResponse.ok){
 
             throw new Error(
-                "Today's Daily Brief candidates are unavailable."
+                "Today's NASDAQ research candidates are unavailable."
             );
 
         }
@@ -16411,34 +16404,29 @@ async function openDailyBrief(){
         if(candidates.length === 0){
 
             throw new Error(
-                "No Daily Brief candidates are available today."
+                "No NASDAQ research candidates are available today."
             );
 
         }
 
 
         console.log(
-            `Daily Brief candidates: ${candidates.length}`
+            `End-of-Day candidates: ${candidates.length}`
         );
 
 
         /* =================================
         STEP 3
         START ONE BACKGROUND INTERACTION
-
-        This request should return quickly.
-
-        Gemini continues working after
-        Vercel has finished.
         ================================= */
 
         setDailyBriefButton(
-            "✦ Starting Today's Research..."
+            "✦ Starting AI Market Research..."
         );
 
 
         setDailyBriefProgress(
-            `Researching ${candidates.length} NASDAQ candidates...`
+            `AI researching ${candidates.length} NASDAQ scanner candidates...`
         );
 
 
@@ -16454,9 +16442,6 @@ async function openDailyBrief(){
 
         /* =================================
         POSSIBLE CACHE HIT
-
-        Another request could theoretically
-        have completed between status/start.
         ================================= */
 
         if(start.complete){
@@ -16472,7 +16457,7 @@ async function openDailyBrief(){
 
 
         console.log(
-            "Daily Brief background research started:",
+            "End-of-Day background research started:",
             start
         );
 
@@ -16483,12 +16468,12 @@ async function openDailyBrief(){
         ================================= */
 
         setDailyBriefButton(
-            "✦ Researching Today's Market..."
+            "✦ AI Market Research Running..."
         );
 
 
         setDailyBriefProgress(
-            "AI research is running in the background. This may take a few minutes..."
+            "EdgeBreak AI is researching current company developments and market attention..."
         );
 
 
@@ -16509,10 +16494,6 @@ async function openDailyBrief(){
 
 /* =========================================
 WAIT FOR BACKGROUND RESEARCH
-
-Every check is a NEW short Vercel request.
-
-Vercel is never left waiting for Gemini.
 ========================================= */
 
 async function waitForDailyBrief(){
@@ -16521,10 +16502,6 @@ async function waitForDailyBrief(){
 
 
     while(true){
-
-        /* =================================
-        WAIT BEFORE NEXT STATUS CHECK
-        ================================= */
 
         await dailyBriefSleep(
             DAILY_BRIEF_POLL_INTERVAL
@@ -16535,7 +16512,7 @@ async function waitForDailyBrief(){
 
 
         console.log(
-            `Daily Brief status check ${checks}`
+            `End-of-Day Analysis status check ${checks}`
         );
 
 
@@ -16554,17 +16531,8 @@ async function waitForDailyBrief(){
         }
         catch(error){
 
-            /*
-            A temporary Vercel/network error
-            while polling should not instantly
-            destroy a background Gemini job.
-
-            We allow a couple of polling errors
-            before showing failure.
-            */
-
             console.warn(
-                "Daily Brief status check failed:",
+                "End-of-Day Analysis status check failed:",
                 error
             );
 
@@ -16575,7 +16543,7 @@ async function waitForDailyBrief(){
             ){
 
                 setDailyBriefProgress(
-                    "Research is still running. Checking again..."
+                    "AI research is still running. Checking again..."
                 );
 
 
@@ -16596,7 +16564,7 @@ async function waitForDailyBrief(){
         if(result.complete){
 
             console.log(
-                "Daily Brief research complete."
+                "End-of-Day AI Market Analysis complete."
             );
 
 
@@ -16618,7 +16586,7 @@ async function waitForDailyBrief(){
 
 
         console.log(
-            "Daily Brief research status:",
+            "End-of-Day research status:",
             researchStatus
         );
 
@@ -16628,6 +16596,8 @@ async function waitForDailyBrief(){
         ================================= */
 
         if(
+            researchStatus ===
+                "queued" ||
             researchStatus ===
                 "in_progress" ||
             researchStatus ===
@@ -16657,21 +16627,14 @@ async function waitForDailyBrief(){
         ){
 
             throw new Error(
-                "Today's Daily Brief research could not be completed."
+                "Today's automated AI market research could not be completed."
             );
 
         }
 
 
-        /* =================================
-        UNKNOWN STATUS
-
-        Don't instantly kill the job.
-        Check again.
-        ================================= */
-
         setDailyBriefProgress(
-            "Today's research is still processing..."
+            "Today's AI market research is still processing..."
         );
 
     }
@@ -16681,11 +16644,6 @@ async function waitForDailyBrief(){
 
 /* =========================================
 API REQUEST
-
-Read text first so Vercel HTML/plain-text
-errors do not cause:
-
-Unexpected token 'A'...
 ========================================= */
 
 async function dailyBriefRequest(
@@ -16733,7 +16691,7 @@ async function dailyBriefRequest(
         catch(parseError){
 
             console.error(
-                "Daily Brief API returned non-JSON:",
+                "End-of-Day Analysis API returned non-JSON:",
                 raw
             );
 
@@ -16741,8 +16699,8 @@ async function dailyBriefRequest(
             const error =
                 new Error(
                     response.ok
-                        ? "The Daily Brief server returned an invalid response."
-                        : `Daily Brief server error (${response.status}).`
+                        ? "The End-of-Day Analysis server returned an invalid response."
+                        : `End-of-Day Analysis server error (${response.status}).`
                 );
 
 
@@ -16762,7 +16720,7 @@ async function dailyBriefRequest(
         const error =
             new Error(
                 data.error ||
-                `Daily Brief request failed (${response.status}).`
+                `End-of-Day Analysis request failed (${response.status}).`
             );
 
 
@@ -16785,7 +16743,7 @@ async function dailyBriefRequest(
 
 
 /* =========================================
-COMPLETED DAILY BRIEF
+COMPLETED ANALYSIS
 ========================================= */
 
 function showCompletedDailyBrief(
@@ -16806,33 +16764,18 @@ function showCompletedDailyBrief(
 
     setDailyBriefButton(
         data.cached
-            ? "✓ Today's Brief Open"
-            : "✓ Today's Brief Ready"
+            ? "✓ End-of-Day Analysis Open"
+            : "✓ End-of-Day Analysis Ready"
     );
 
-
-    /*
-    Keep disabled once opened.
-
-    User doesn't need to start anything again.
-    */
 
     dailyBriefButton.disabled = true;
 
 
-    /* =====================================
-    COST / USAGE LOGGING
-
-    Not shown to subscribers.
-
-    We can inspect this in browser console
-    after our first successful run.
-    ===================================== */
-
     if(data.usage){
 
         console.log(
-            "EdgeBreak Daily Brief Gemini usage:",
+            "EdgeBreak End-of-Day Gemini usage:",
             data.usage
         );
 
@@ -16850,7 +16793,7 @@ function showDailyBriefError(
 ){
 
     console.error(
-        "Daily Brief Error:",
+        "End-of-Day Analysis Error:",
         error
     );
 
@@ -16864,11 +16807,11 @@ function showDailyBriefError(
 
     dailyBriefError.textContent =
         error?.message ||
-        "Today's Daily Brief is temporarily unavailable.";
+        "Today's End-of-Day Market Analysis is temporarily unavailable.";
 
 
     setDailyBriefButton(
-        "✦ Try Today's Brief Again"
+        "✦ Try End-of-Day Analysis Again"
     );
 
 
@@ -16884,11 +16827,6 @@ PROGRESS MESSAGE
 function setDailyBriefProgress(
     message
 ){
-
-    /*
-    If your loading HTML later gets a specific
-    progress element, this supports it.
-    */
 
     const progressElement =
         dailyBriefLoading.querySelector(
@@ -16906,14 +16844,6 @@ function setDailyBriefProgress(
 
     }
 
-
-    /*
-    If dailyBriefLoading is currently just
-    text, update it directly.
-
-    If it contains spinner markup, leave the
-    spinner untouched.
-    */
 
     if(
         dailyBriefLoading.children.length === 0
@@ -16938,7 +16868,7 @@ function getDailyBriefResearchMessage(
     if(checks <= 2){
 
         return (
-            "Researching current company developments and market attention..."
+            "AI researching current company developments and market attention..."
         );
 
     }
@@ -16947,7 +16877,7 @@ function getDailyBriefResearchMessage(
     if(checks <= 6){
 
         return (
-            "Reviewing today's NASDAQ candidates using current market information..."
+            "EdgeBreak AI is reviewing today's NASDAQ scanner candidates..."
         );
 
     }
@@ -16956,14 +16886,14 @@ function getDailyBriefResearchMessage(
     if(checks <= 12){
 
         return (
-            "Today's research is still running. EdgeBreak is reviewing current developments..."
+            "Automated market research is still running across today's scanner discoveries..."
         );
 
     }
 
 
     return (
-        "Research is still running in the background. You can leave this page and return later."
+        "AI research is still running in the background. You can leave this page and return later."
     );
 
 }
@@ -16984,7 +16914,7 @@ function setDailyBriefButton(
 
 
 /* =========================================
-RENDER DAILY BRIEF
+RENDER END-OF-DAY ANALYSIS
 ========================================= */
 
 function renderDailyBrief(data){
@@ -17026,8 +16956,6 @@ function renderDailyBrief(data){
 
     /* =====================================
     NO COMPANIES QUALIFIED
-
-    This is a legitimate Daily Brief result.
     ===================================== */
 
     if(results.length === 0){
@@ -17036,8 +16964,8 @@ function renderDailyBrief(data){
 
             <div class="daily-brief-placeholder">
 
-                No companies met today's Daily Brief
-                market-attention research criteria.
+                No companies met today's automated
+                AI market-research criteria.
 
             </div>
 
@@ -17066,14 +16994,26 @@ function renderDailyBrief(data){
                 "daily-brief-stock-card";
 
 
-            const symbols =
+            const symbolArray =
                 Array.isArray(
                     company.symbols
                 )
-                    ? company.symbols.join(
-                        " / "
-                    )
-                    : "";
+                    ? company.symbols
+                    : [];
+
+
+            const primarySymbol =
+                String(
+                    symbolArray[0] || ""
+                )
+                    .trim()
+                    .toUpperCase();
+
+
+            const symbols =
+                symbolArray.join(
+                    " / "
+                );
 
 
             card.innerHTML = `
@@ -17082,7 +17022,21 @@ function renderDailyBrief(data){
 
                     <div>
 
-                        <div class="daily-brief-symbol">
+                        <div
+                            class="daily-brief-symbol"
+                            ${primarySymbol
+                                ? `data-daily-brief-chart="${escapeDailyBriefHtml(primarySymbol)}"`
+                                : ""
+                            }
+                            style="${primarySymbol
+                                ? "cursor:pointer;"
+                                : ""
+                            }"
+                            title="${primarySymbol
+                                ? "Open " + escapeDailyBriefHtml(primarySymbol) + " chart"
+                                : ""
+                            }"
+                        >
 
                             ${escapeDailyBriefHtml(
                                 symbols
@@ -17148,6 +17102,49 @@ function renderDailyBrief(data){
 
                 </div>
 
+
+                ${
+                    primarySymbol
+                        ? `
+
+                <div
+                    style="
+                        display:flex;
+                        gap:10px;
+                        flex-wrap:wrap;
+                        margin-top:18px;
+                    "
+                >
+
+                    <button
+                        type="button"
+                        class="watchlist-open"
+                        data-daily-brief-chart="${escapeDailyBriefHtml(
+                            primarySymbol
+                        )}"
+                    >
+                        View ${escapeDailyBriefHtml(
+                            primarySymbol
+                        )} Chart
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="watchlist-open"
+                        data-daily-brief-research="${escapeDailyBriefHtml(
+                            primarySymbol
+                        )}"
+                    >
+                        ✦ AI Deep Research
+                    </button>
+
+                </div>
+
+                `
+                        : ""
+                }
+
             `;
 
 
@@ -17157,6 +17154,136 @@ function renderDailyBrief(data){
 
         }
     );
+
+
+    /* =====================================
+    CHART LINKS
+
+    Reuses existing EdgeBreak loadChart()
+    ===================================== */
+
+    container
+        .querySelectorAll(
+            "[data-daily-brief-chart]"
+        )
+        .forEach(
+            element => {
+
+                element.addEventListener(
+                    "click",
+                    function(){
+
+                        const symbol =
+                            this.getAttribute(
+                                "data-daily-brief-chart"
+                            );
+
+
+                        if(!symbol){
+                            return;
+                        }
+
+
+                        if(
+                            typeof loadChart !==
+                            "function"
+                        ){
+
+                            console.error(
+                                "EdgeBreak loadChart() is unavailable."
+                            );
+
+                            return;
+
+                        }
+
+
+                        loadChart(
+                            symbol
+                        );
+
+
+                        const chart =
+                            document.getElementById(
+                                "tv_chart"
+                            );
+
+
+                        if(chart){
+
+                            chart.scrollIntoView({
+                                behavior:"smooth",
+                                block:"start"
+                            });
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+    /* =====================================
+    AI DEEP RESEARCH
+
+    Reuses existing EdgeBreak AI panel.
+    Opening the panel itself makes NO AI call.
+    Research remains user-triggered inside
+    the panel.
+    ===================================== */
+
+    container
+        .querySelectorAll(
+            "[data-daily-brief-research]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    function(){
+
+                        const symbol =
+                            this.getAttribute(
+                                "data-daily-brief-research"
+                            );
+
+
+                        if(!symbol){
+                            return;
+                        }
+
+
+                        if(
+                            typeof openEdgeBreakAI !==
+                                "function" ||
+                            typeof loadEdgeBreakAIResearch !==
+                                "function"
+                        ){
+
+                            console.error(
+                                "EdgeBreak AI Research panel is unavailable."
+                            );
+
+                            return;
+
+                        }
+
+
+                        openEdgeBreakAI();
+
+
+                        loadEdgeBreakAIResearch(
+                            symbol
+                        );
+
+                    }
+                );
+
+            }
+        );
 
 }
 
