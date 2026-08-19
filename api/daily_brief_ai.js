@@ -5,36 +5,10 @@ EDGEBREAK — DAILY BRIEF AI RESEARCH
 FLOW:
 1. Check Supabase cache
 2. Clean candidates
-3. Split candidates into SMALL batches
-4. Research batches SEQUENTIALLY
-5. Retry temporary Gemini failures
-6. Keep successful batches if one batch fails
-7. Combine + validate + deduplicate
-8. Save ONE completed Daily Brief to Supabase
-
-IMPORTANT:
-This version deliberately avoids sending
-35+ companies to Gemini in one grounded request.
-========================================= */
-
-
-/* =========================================
-CONFIGURATION
-========================================= */
-
-const BATCH_SIZE = 8;
-
-const MAX_ATTEMPTS = 3;
-
-const RETRY_DELAYS = [
-    0,
-    6000,
-    15000
-];
-
-
-/* =========================================
-MAIN HANDLER
+3. Split candidates into 2 batches
+4. Research both batches in parallel
+5. Combine + validate + deduplicate
+6. Save ONE Daily Brief to Supabase
 ========================================= */
 
 export default async function handler(req, res) {
@@ -241,11 +215,7 @@ export default async function handler(req, res) {
 
                     }
 
-                }))
-                .filter(
-                    stock =>
-                        stock.symbol
-                );
+                }));
 
 
         if (
@@ -260,253 +230,101 @@ export default async function handler(req, res) {
         }
 
 
+        /* =====================================
+        SPLIT INTO TWO GROUPS
+
+        Example:
+        69 stocks = 35 + 34
+
+        Both requests run at the same time.
+        ===================================== */
+
+        const midpoint =
+            Math.ceil(
+                cleanCandidates.length / 2
+            );
+
+
+        const batchOne =
+            cleanCandidates.slice(
+                0,
+                midpoint
+            );
+
+
+        const batchTwo =
+            cleanCandidates.slice(
+                midpoint
+            );
+
+
         console.log(
-            `Daily Brief candidates cleaned: ${cleanCandidates.length}`
+            `Daily Brief Batch 1: ${batchOne.length} companies`
+        );
+
+
+        console.log(
+            `Daily Brief Batch 2: ${batchTwo.length} companies`
         );
 
 
         /* =====================================
-        CREATE SMALL BATCHES
+        RESEARCH BOTH BATCHES IN PARALLEL
         ===================================== */
 
-        const batches =
-            createBatches(
-                cleanCandidates,
-                BATCH_SIZE
+        const researchPromises = [];
+
+
+        if (batchOne.length > 0) {
+
+            researchPromises.push(
+                researchBatch(
+                    batchOne,
+                    briefDate,
+                    1
+                )
             );
-
-
-        console.log(
-            `Daily Brief split into ${batches.length} small batches.`
-        );
-
-
-        batches.forEach(
-            (batch, index) => {
-
-                console.log(
-                    `Daily Brief Batch ${index + 1}: ${batch.length} companies`
-                );
-
-            }
-        );
-
-
-        /* =====================================
-        RESEARCH BATCHES SEQUENTIALLY
-
-        IMPORTANT:
-
-        We deliberately DO NOT use Promise.all.
-
-        Each grounded Gemini request finishes
-        before the next request begins.
-
-        This reduces simultaneous load and
-        makes temporary 503 errors less likely.
-        ===================================== */
-
-        const combinedRawResults = [];
-
-        const failedBatches = [];
-
-        let successfullyReviewed = 0;
-
-
-        for (
-            let index = 0;
-            index < batches.length;
-            index++
-        ) {
-
-            const batch =
-                batches[index];
-
-            const batchNumber =
-                index + 1;
-
-
-            console.log(
-                `=========================================`
-            );
-
-            console.log(
-                `Starting Daily Brief Batch ${batchNumber}/${batches.length}`
-            );
-
-            console.log(
-                `${batch.length} companies`
-            );
-
-            console.log(
-                `=========================================`
-            );
-
-
-            try {
-
-                const research =
-                    await researchBatch(
-                        batch,
-                        briefDate,
-                        batchNumber,
-                        batches.length
-                    );
-
-
-                if (
-                    research &&
-                    Array.isArray(
-                        research.results
-                    )
-                ) {
-
-                    combinedRawResults.push(
-                        ...research.results
-                    );
-
-                }
-
-
-                successfullyReviewed +=
-                    batch.length;
-
-
-                console.log(
-                    `Daily Brief Batch ${batchNumber}/${batches.length} COMPLETE`
-                );
-
-
-                /*
-                Small pause between successful
-                grounded requests.
-
-                This helps avoid immediately
-                hammering Gemini with another
-                Google Search request.
-                */
-
-                if (
-                    index <
-                    batches.length - 1
-                ) {
-
-                    console.log(
-                        "Waiting 2 seconds before next Daily Brief batch..."
-                    );
-
-
-                    await sleep(
-                        2000
-                    );
-
-                }
-
-            }
-            catch (error) {
-
-                console.error(
-                    `Daily Brief Batch ${batchNumber} permanently failed:`,
-                    error
-                );
-
-
-                failedBatches.push({
-
-                    batchNumber,
-
-                    symbols:
-                        batch.map(
-                            stock =>
-                                stock.symbol
-                        ),
-
-                    error:
-                        error?.message ||
-                        "Unknown batch error"
-
-                });
-
-
-                /*
-                IMPORTANT:
-
-                Do NOT destroy the entire Daily
-                Brief because one small batch
-                experienced a Gemini outage.
-
-                Continue to the next batch.
-                */
-
-                console.log(
-                    `Continuing to Batch ${batchNumber + 1}...`
-                );
-
-
-                if (
-                    index <
-                    batches.length - 1
-                ) {
-
-                    await sleep(
-                        5000
-                    );
-
-                }
-
-            }
 
         }
 
 
+        if (batchTwo.length > 0) {
+
+            researchPromises.push(
+                researchBatch(
+                    batchTwo,
+                    briefDate,
+                    2
+                )
+            );
+
+        }
+
+
+        const batchResearch =
+            await Promise.all(
+                researchPromises
+            );
+
+
         /* =====================================
-        RESEARCH SUMMARY
+        COMBINE RAW RESULTS
         ===================================== */
 
-        console.log(
-            `Daily Brief successful candidate reviews: ${successfullyReviewed}/${cleanCandidates.length}`
-        );
+        const combinedRawResults =
+            batchResearch.flatMap(
+                research =>
+                    Array.isArray(
+                        research?.results
+                    )
+                        ? research.results
+                        : []
+            );
 
 
         console.log(
             `Daily Brief raw results returned: ${combinedRawResults.length}`
         );
-
-
-        console.log(
-            `Daily Brief failed batches: ${failedBatches.length}`
-        );
-
-
-        /* =====================================
-        NOTHING SUCCEEDED
-
-        If Gemini was completely unavailable,
-        do NOT save an empty completed brief.
-        ===================================== */
-
-        if (
-            successfullyReviewed === 0
-        ) {
-
-            console.error(
-                "Daily Brief failed: Gemini could not complete any research batches."
-            );
-
-
-            return res.status(503).json({
-
-                error:
-                    "Daily Brief research is temporarily unavailable.",
-
-                retryable:
-                    true,
-
-                failedBatches
-
-            });
-
-        }
 
 
         /* =====================================
@@ -522,6 +340,10 @@ export default async function handler(req, res) {
 
         /* =====================================
         DEDUPLICATE
+
+        Normally batches contain different
+        symbols, but this provides protection
+        against duplicate AI output.
         ===================================== */
 
         const deduplicatedResults =
@@ -542,32 +364,7 @@ export default async function handler(req, res) {
         const aiResults = {
 
             results:
-                deduplicatedResults,
-
-            processing: {
-
-                totalCandidates:
-                    cleanCandidates.length,
-
-                successfullyReviewed,
-
-                failedBatchCount:
-                    failedBatches.length,
-
-                failedBatches:
-                    failedBatches.map(
-                        batch => ({
-
-                            batchNumber:
-                                batch.batchNumber,
-
-                            symbols:
-                                batch.symbols
-
-                        })
-                    )
-
-            }
+                deduplicatedResults
 
         };
 
@@ -632,32 +429,7 @@ export default async function handler(req, res) {
 
 
         /* =====================================
-        DETERMINE COMPLETION STATUS
-
-        If every candidate was researched:
-        complete
-
-        If some batches failed:
-        partial
-
-        IMPORTANT:
-        Cache lookup only retrieves "complete",
-        so a partial result can be regenerated
-        on another attempt.
-        ===================================== */
-
-        const allBatchesCompleted =
-            failedBatches.length === 0;
-
-
-        const briefStatus =
-            allBatchesCompleted
-                ? "complete"
-                : "partial";
-
-
-        /* =====================================
-        SAVE DAILY BRIEF
+        SAVE ONE COMPLETED BRIEF
         ===================================== */
 
         const generatedAt =
@@ -671,11 +443,8 @@ export default async function handler(req, res) {
 
             generatedAt,
 
-            status:
-                briefStatus,
-
             companiesReviewed:
-                successfullyReviewed,
+                cleanCandidates.length,
 
             companiesIncluded:
                 deduplicatedResults.length,
@@ -686,7 +455,7 @@ export default async function handler(req, res) {
 
 
         /* =====================================
-        SUCCESS RESPONSE
+        SUCCESS
         ===================================== */
 
         return res.status(200).json({
@@ -695,24 +464,15 @@ export default async function handler(req, res) {
 
             cached: false,
 
-            partial:
-                !allBatchesCompleted,
-
             briefDate,
 
             generatedAt,
 
             companiesReviewed:
-                successfullyReviewed,
-
-            totalCandidates:
                 cleanCandidates.length,
 
             companiesIncluded:
                 deduplicatedResults.length,
-
-            failedBatchCount:
-                failedBatches.length,
 
             results:
                 deduplicatedResults,
@@ -751,51 +511,17 @@ export default async function handler(req, res) {
 
 
 /* =========================================
-CREATE SMALL BATCHES
-========================================= */
-
-function createBatches(
-    candidates,
-    batchSize
-) {
-
-    const batches = [];
-
-
-    for (
-        let index = 0;
-        index < candidates.length;
-        index += batchSize
-    ) {
-
-        batches.push(
-            candidates.slice(
-                index,
-                index + batchSize
-            )
-        );
-
-    }
-
-
-    return batches;
-
-}
-
-
-/* =========================================
-RESEARCH ONE SMALL BATCH
+RESEARCH ONE BATCH
 ========================================= */
 
 async function researchBatch(
     candidates,
     briefDate,
-    batchNumber,
-    totalBatches
+    batchNumber
 ) {
 
     console.log(
-        `Daily Brief Batch ${batchNumber}/${totalBatches} research starting...`
+        `Daily Brief Batch ${batchNumber} research starting...`
     );
 
 
@@ -807,9 +533,9 @@ async function researchBatch(
 
 You are the market-attention research engine for EdgeBreak.
 
-You will receive a small list of NASDAQ stocks that have
-already passed EdgeBreak's technical stock scanners and
-initial liquidity and industry filters.
+You will receive a list of NASDAQ stocks that have already
+passed EdgeBreak's technical stock scanners and initial
+liquidity and industry filters.
 
 DO NOT perform another technical scan.
 
@@ -984,10 +710,10 @@ Return JSON only.
 
     const userInstruction = `
 
-Research this small group of NASDAQ companies for the
-EdgeBreak Daily Brief dated ${briefDate}.
+Research this group of NASDAQ companies for the EdgeBreak
+Daily Brief dated ${briefDate}.
 
-This is research batch ${batchNumber} of ${totalBatches}.
+This is research batch ${batchNumber}.
 
 Companies supplied in this batch:
 
@@ -1118,403 +844,199 @@ Return JSON only.
 
 
     /* =====================================
-    RETRY LOOP
+    GEMINI REQUEST
     ===================================== */
 
-    for (
-        let attempt = 1;
-        attempt <= MAX_ATTEMPTS;
-        attempt++
-    ) {
+    const geminiResponse =
+        await fetch(
 
-        /* =====================================
-        RETRY DELAY
-        ===================================== */
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
 
-        const delayMs =
-            RETRY_DELAYS[
-                attempt - 1
-            ] || 0;
+            {
 
+                method: "POST",
 
-        if (
-            delayMs > 0
-        ) {
+                headers: {
 
-            console.log(
-                `Daily Brief Batch ${batchNumber} retry ${attempt}/${MAX_ATTEMPTS} ` +
-                `in ${delayMs / 1000} seconds...`
-            );
+                    "Content-Type":
+                        "application/json",
 
+                    "x-goog-api-key":
+                        process.env.GEMINI_API_KEY
 
-            await sleep(
-                delayMs
-            );
+                },
 
-        }
+                body: JSON.stringify({
 
+                    systemInstruction: {
 
-        console.log(
-            `Daily Brief Batch ${batchNumber} Gemini attempt ` +
-            `${attempt}/${MAX_ATTEMPTS}`
-        );
-
-
-        let geminiResponse;
-
-
-        try {
-
-            /* =====================================
-            GEMINI REQUEST
-            ===================================== */
-
-            geminiResponse =
-                await fetch(
-
-                    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
-
-                    {
-
-                        method: "POST",
-
-                        headers: {
-
-                            "Content-Type":
-                                "application/json",
-
-                            "x-goog-api-key":
-                                process.env.GEMINI_API_KEY
-
-                        },
-
-                        body: JSON.stringify({
-
-                            systemInstruction: {
-
-                                parts: [
-                                    {
-                                        text:
-                                            systemInstruction
-                                    }
-                                ]
-
-                            },
-
-
-                            contents: [
-
-                                {
-
-                                    role: "user",
-
-                                    parts: [
-                                        {
-                                            text:
-                                                userInstruction
-                                        }
-                                    ]
-
-                                }
-
-                            ],
-
-
-                            tools: [
-
-                                {
-                                    google_search: {}
-                                }
-
-                            ],
-
-
-                            generationConfig: {
-
-                                maxOutputTokens:
-                                    2500,
-
-                                responseMimeType:
-                                    "application/json",
-
-                                temperature:
-                                    0.2
-
+                        parts: [
+                            {
+                                text:
+                                    systemInstruction
                             }
+                        ]
 
-                        })
+                    },
+
+
+                    contents: [
+
+                        {
+
+                            role: "user",
+
+                            parts: [
+                                {
+                                    text:
+                                        userInstruction
+                                }
+                            ]
+
+                        }
+
+                    ],
+
+
+                    tools: [
+
+                        {
+                            google_search: {}
+                        }
+
+                    ],
+
+
+                    generationConfig: {
+
+                        maxOutputTokens:
+                            4000,
+
+                        responseMimeType:
+                            "application/json",
+
+                        temperature:
+                            0.2
 
                     }
 
-                );
-
-        }
-        catch (fetchError) {
-
-            console.error(
-                `Gemini Daily Brief Batch ${batchNumber} ` +
-                `Network Error on attempt ${attempt}:`,
-                fetchError
-            );
-
-
-            if (
-                attempt <
-                MAX_ATTEMPTS
-            ) {
-
-                continue;
+                })
 
             }
 
-
-            throw new Error(
-                `Daily Brief batch ${batchNumber} failed after ${MAX_ATTEMPTS} attempts.`
-            );
-
-        }
-
-
-        /* =====================================
-        GEMINI HTTP ERROR
-        ===================================== */
-
-        if (!geminiResponse.ok) {
-
-            const errorText =
-                await geminiResponse.text();
-
-
-            console.error(
-                `Gemini Daily Brief Batch ${batchNumber} ` +
-                `Error on attempt ${attempt}:`,
-                geminiResponse.status,
-                errorText
-            );
-
-
-            const retryableStatus =
-                [
-                    429,
-                    500,
-                    502,
-                    503,
-                    504
-                ].includes(
-                    geminiResponse.status
-                );
-
-
-            if (
-                retryableStatus &&
-                attempt < MAX_ATTEMPTS
-            ) {
-
-                console.log(
-                    `Daily Brief Batch ${batchNumber} received temporary ` +
-                    `Gemini ${geminiResponse.status}. Retrying...`
-                );
-
-
-                continue;
-
-            }
-
-
-            if (retryableStatus) {
-
-                throw new Error(
-                    `Daily Brief batch ${batchNumber} failed after ` +
-                    `${MAX_ATTEMPTS} attempts. Gemini returned ` +
-                    `${geminiResponse.status}.`
-                );
-
-            }
-
-
-            throw new Error(
-                `Daily Brief batch ${batchNumber} failed. ` +
-                `Gemini returned ${geminiResponse.status}.`
-            );
-
-        }
-
-
-        /* =====================================
-        GEMINI SUCCESS
-        ===================================== */
-
-        const geminiData =
-            await geminiResponse.json();
-
-
-        /* =====================================
-        EXTRACT OUTPUT
-        ===================================== */
-
-        const rawText =
-            geminiData
-                ?.candidates?.[0]
-                ?.content
-                ?.parts
-                ?.map(
-                    part =>
-                        part.text || ""
-                )
-                ?.join("")
-                ?.trim();
-
-
-        if (!rawText) {
-
-            console.error(
-                `Gemini Daily Brief Batch ${batchNumber} ` +
-                `returned no text on attempt ${attempt}.`
-            );
-
-
-            if (
-                attempt <
-                MAX_ATTEMPTS
-            ) {
-
-                console.log(
-                    `Daily Brief Batch ${batchNumber} returned empty output. Retrying...`
-                );
-
-
-                continue;
-
-            }
-
-
-            throw new Error(
-                `Daily Brief batch ${batchNumber} returned no research ` +
-                `after ${MAX_ATTEMPTS} attempts.`
-            );
-
-        }
-
-
-        /* =====================================
-        PARSE JSON
-        ===================================== */
-
-        let research;
-
-
-        try {
-
-            research =
-                JSON.parse(
-                    rawText
-                );
-
-        }
-        catch (error) {
-
-            console.error(
-                `Daily Brief Batch ${batchNumber} JSON Parse Error ` +
-                `on attempt ${attempt}:`,
-                rawText
-            );
-
-
-            if (
-                attempt <
-                MAX_ATTEMPTS
-            ) {
-
-                console.log(
-                    `Daily Brief Batch ${batchNumber} returned invalid JSON. Retrying...`
-                );
-
-
-                continue;
-
-            }
-
-
-            throw new Error(
-                `Daily Brief batch ${batchNumber} returned invalid JSON ` +
-                `after ${MAX_ATTEMPTS} attempts.`
-            );
-
-        }
-
-
-        /* =====================================
-        VALIDATE BATCH RESPONSE
-        ===================================== */
-
-        if (
-            !research ||
-            !Array.isArray(
-                research.results
-            )
-        ) {
-
-            console.error(
-                `Daily Brief Batch ${batchNumber} returned an invalid result ` +
-                `on attempt ${attempt}.`
-            );
-
-
-            if (
-                attempt <
-                MAX_ATTEMPTS
-            ) {
-
-                continue;
-
-            }
-
-
-            throw new Error(
-                `Daily Brief batch ${batchNumber} returned an invalid result ` +
-                `after ${MAX_ATTEMPTS} attempts.`
-            );
-
-        }
-
-
-        /* =====================================
-        BATCH SUCCESS
-        ===================================== */
-
-        console.log(
-            `Daily Brief Batch ${batchNumber}/${totalBatches} complete ` +
-            `on attempt ${attempt}: ${research.results.length} included`
         );
 
 
-        return research;
+    /* =====================================
+    GEMINI ERROR
+    ===================================== */
+
+    if (!geminiResponse.ok) {
+
+        const errorText =
+            await geminiResponse.text();
+
+
+        console.error(
+            `Gemini Daily Brief Batch ${batchNumber} Error:`,
+            geminiResponse.status,
+            errorText
+        );
+
+
+        throw new Error(
+            `Daily Brief batch ${batchNumber} failed.`
+        );
 
     }
 
 
-    throw new Error(
-        `Daily Brief batch ${batchNumber} failed.`
-    );
-
-}
+    const geminiData =
+        await geminiResponse.json();
 
 
-/* =========================================
-WAIT / RETRY DELAY
-========================================= */
+    /* =====================================
+    EXTRACT OUTPUT
+    ===================================== */
 
-function sleep(
-    milliseconds
-) {
-
-    return new Promise(
-        resolve =>
-            setTimeout(
-                resolve,
-                milliseconds
+    const rawText =
+        geminiData
+            ?.candidates?.[0]
+            ?.content
+            ?.parts
+            ?.map(
+                part =>
+                    part.text || ""
             )
+            ?.join("")
+            ?.trim();
+
+
+    if (!rawText) {
+
+        console.error(
+            `Gemini Daily Brief Batch ${batchNumber} returned no text.`
+        );
+
+
+        throw new Error(
+            `Daily Brief batch ${batchNumber} returned no research.`
+        );
+
+    }
+
+
+    /* =====================================
+    PARSE JSON
+    ===================================== */
+
+    let research;
+
+
+    try {
+
+        research =
+            JSON.parse(
+                rawText
+            );
+
+    }
+    catch (error) {
+
+        console.error(
+            `Daily Brief Batch ${batchNumber} JSON Parse Error:`,
+            rawText
+        );
+
+
+        throw new Error(
+            `Daily Brief batch ${batchNumber} returned invalid JSON.`
+        );
+
+    }
+
+
+    if (
+        !research ||
+        !Array.isArray(
+            research.results
+        )
+    ) {
+
+        throw new Error(
+            `Daily Brief batch ${batchNumber} returned an invalid result.`
+        );
+
+    }
+
+
+    console.log(
+        `Daily Brief Batch ${batchNumber} complete: ` +
+        `${research.results.length} included`
     );
+
+
+    return research;
 
 }
 
@@ -1541,17 +1063,6 @@ function cleanResearchResults(
             cleanCandidates.map(
                 stock =>
                     stock.symbol
-            )
-        );
-
-
-    const candidateMap =
-        new Map(
-            cleanCandidates.map(
-                stock => [
-                    stock.symbol,
-                    stock
-                ]
             )
         );
 
@@ -1667,66 +1178,24 @@ function cleanResearchResults(
         }
 
 
-        /* =====================================
-        SCANNER LABELS
-
-        Prefer scanner labels supplied by our
-        own candidate data rather than trusting
-        the model to reproduce them perfectly.
-        ===================================== */
-
-        const scannerSet =
-            new Set();
-
-
-        for (
-            const symbol of
-            symbols
-        ) {
-
-            const candidate =
-                candidateMap.get(
-                    symbol
-                );
-
-
-            if (
-                candidate &&
-                Array.isArray(
-                    candidate.scanners
-                )
-            ) {
-
-                candidate.scanners.forEach(
-                    scanner => {
-
-                        const cleanScanner =
-                            cleanField(
-                                scanner,
-                                80
-                            );
-
-
-                        if (cleanScanner) {
-
-                            scannerSet.add(
-                                cleanScanner
-                            );
-
-                        }
-
-                    }
-                );
-
-            }
-
-        }
-
-
         const scanners =
-            [
-                ...scannerSet
-            ];
+            Array.isArray(
+                item.scanners
+            )
+                ? [
+                    ...new Set(
+                        item.scanners
+                            .map(
+                                scanner =>
+                                    cleanField(
+                                        scanner,
+                                        80
+                                    )
+                            )
+                            .filter(Boolean)
+                    )
+                ]
+                : [];
 
 
         const sourceNames =
@@ -1955,8 +1424,6 @@ async function saveDailyBrief({
 
     generatedAt,
 
-    status,
-
     companiesReviewed,
 
     companiesIncluded,
@@ -2001,7 +1468,8 @@ async function saveDailyBrief({
                         brief_date:
                             briefDate,
 
-                        status,
+                        status:
+                            "complete",
 
                         companies_reviewed:
                             companiesReviewed,
@@ -2037,10 +1505,10 @@ async function saveDailyBrief({
 
 
             /*
-            Research succeeded.
+            AI research succeeded.
 
-            Do not fail the user request merely
-            because Supabase caching failed.
+            Do not fail the user request just
+            because caching failed.
             */
 
             return false;
@@ -2049,7 +1517,7 @@ async function saveDailyBrief({
 
 
         console.log(
-            `EdgeBreak Daily Brief CACHE SAVED: ${briefDate} (${status})`
+            `EdgeBreak Daily Brief CACHE SAVED: ${briefDate}`
         );
 
 
