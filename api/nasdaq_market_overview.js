@@ -6,20 +6,36 @@
 // /api/nasdaq_market_overview.js
 //
 // PURPOSE:
-// 1. Get NASDAQ end-of-day market data directly
-// 2. Get major NASDAQ sector/industry ETF performance directly
-// 3. Give Gemini the facts instead of asking Gemini to search for them
-// 4. Produce a SHORT end-of-day NASDAQ market summary
-// 5. Cache the completed overview in Supabase
+//
+// 1. Get completed-session NASDAQ Composite performance
+// 2. Get completed-session NASDAQ-100 performance
+// 3. Calculate strongest / weakest market areas over ~1 month
+// 4. Use Gemini + Google Search only for:
+//      - 3 notable NASDAQ-100 gainers
+//      - 3 notable NASDAQ-100 losers
+//      - very short reasons for those moves
+//      - major market-moving events in the next 7 days
+//      - short end-of-day takeaway
+// 5. Cache ONE completed overview per US market date in Supabase
 //
 // IMPORTANT:
-// This function DOES NOT perform stock discovery.
-// The heavy Stocks to Investigate research remains separate.
+//
+// - This is END-OF-DAY reporting.
+// - It is NOT an intraday market report.
+// - It does NOT perform stock discovery.
+// - It does NOT provide investment advice.
+// - EdgeBreak scanner counts remain separate for now.
 // ============================================================
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
+const GEMINI_API_KEY =
+    process.env.GEMINI_API_KEY;
+
+
+const SUPABASE_URL =
+    process.env.SUPABASE_URL;
+
+
 const SUPABASE_SERVICE_ROLE_KEY =
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
     process.env.SUPABASE_SERVICE_KEY;
@@ -29,19 +45,42 @@ const SUPABASE_SERVICE_ROLE_KEY =
 // MAIN HANDLER
 // ============================================================
 
-export default async function handler(req, res) {
+export default async function handler(
+    req,
+    res
+) {
 
-    res.setHeader("Cache-Control", "no-store");
+    res.setHeader(
+        "Cache-Control",
+        "no-store"
+    );
 
-    if (req.method !== "POST") {
-        return res.status(405).json({
-            error: "Method not allowed."
-        });
+
+    if (
+        req.method !== "POST"
+    ) {
+
+        return res
+            .status(405)
+            .json({
+
+                error:
+                    "Method not allowed."
+
+            });
+
     }
+
 
     try {
 
-        const reportDate = getNewYorkReportDate();
+        // ====================================================
+        // REPORT DATE
+        // ====================================================
+
+        const reportDate =
+            getNewYorkReportDate();
+
 
         console.log(
             "NASDAQ Market Overview date:",
@@ -50,24 +89,41 @@ export default async function handler(req, res) {
 
 
         // ====================================================
-        // CHECK CACHE
+        // CACHE CHECK
         // ====================================================
 
-        const cached = await getCachedOverview(reportDate);
+        const cached =
+            await getCachedOverview(
+                reportDate
+            );
 
-        if (cached) {
+
+        if (
+            cached
+        ) {
 
             console.log(
                 "NASDAQ Market Overview CACHE HIT:",
                 reportDate
             );
 
-            return res.status(200).json({
-                success: true,
-                cached: true,
-                date: reportDate,
-                overview: cached
-            });
+
+            return res
+                .status(200)
+                .json({
+
+                    success: true,
+
+                    cached: true,
+
+                    date:
+                        reportDate,
+
+                    overview:
+                        cached
+
+                });
+
         }
 
 
@@ -78,99 +134,264 @@ export default async function handler(req, res) {
 
 
         // ====================================================
-        // GET MARKET DATA DIRECTLY
+        // MARKET DATA
         // ====================================================
 
         console.log(
             "NASDAQ Market Overview market data starting..."
         );
 
-        const marketData = await getNasdaqMarketData();
+
+        const marketData =
+            await getNasdaqMarketData();
+
 
         console.log(
             "NASDAQ Market Overview market data complete."
         );
 
+
         console.log(
-            "NASDAQ:",
-            marketData.nasdaq
+            "NASDAQ Composite:",
+            marketData.nasdaqComposite
+        );
+
+
+        console.log(
+            "NASDAQ-100:",
+            marketData.nasdaq100
+        );
+
+
+        console.log(
+            "Strongest monthly areas:",
+            marketData.strongestAreas
+        );
+
+
+        console.log(
+            "Weakest monthly areas:",
+            marketData.weakestAreas
         );
 
 
         // ====================================================
-        // CREATE SHORT AI SUMMARY
+        // GEMINI MARKET RESEARCH
         // ====================================================
 
-        let aiSummary = null;
+        let aiResearch =
+            null;
 
-        if (GEMINI_API_KEY) {
+
+        if (
+            GEMINI_API_KEY
+        ) {
 
             try {
 
                 console.log(
-                    "NASDAQ Market Overview AI summary starting..."
+                    "NASDAQ Market Overview Gemini research starting..."
                 );
 
-                aiSummary = await createMarketSummary(
-                    marketData,
-                    reportDate
-                );
+
+                aiResearch =
+                    await createMarketResearch(
+                        marketData,
+                        reportDate
+                    );
+
 
                 console.log(
-                    "NASDAQ Market Overview AI summary complete."
+                    "NASDAQ Market Overview Gemini research complete."
                 );
 
-            } catch (error) {
+            }
+            catch (
+                error
+            ) {
 
                 console.warn(
-                    "NASDAQ Market Overview AI summary unavailable:",
+                    "NASDAQ Market Overview Gemini research unavailable:",
                     error.message
                 );
+
             }
+
         }
 
 
         // ====================================================
-        // FALLBACK SUMMARY
+        // AI FALLBACK
         // ====================================================
 
-        if (!aiSummary) {
+        if (
+            !aiResearch
+        ) {
 
-            aiSummary = createFallbackSummary(
+            aiResearch =
+                createAiFallback();
+
+        }
+
+
+        // ====================================================
+        // DETERMINISTIC SESSION SUMMARY
+        // ====================================================
+
+        const sessionSummary =
+            createSessionSummary(
                 marketData
             );
-        }
 
 
         // ====================================================
-        // FINAL RESULT
+        // DETERMINISTIC SECTOR SENTENCES
+        // ====================================================
+
+        const strongerAreasSummary =
+            createStrongerAreasSummary(
+                marketData.strongestAreas
+            );
+
+
+        const weakerAreasSummary =
+            createWeakerAreasSummary(
+                marketData.weakestAreas
+            );
+
+
+        // ====================================================
+        // FINAL OVERVIEW
+        //
+        // Keep several compatibility fields so the existing
+        // front-end does not suddenly lose data while we
+        // update the display.
         // ====================================================
 
         const overview = {
 
+            // ================================================
+            // HOW THE NASDAQ FINISHED
+            // ================================================
+
             marketSummary:
-                aiSummary.marketSummary || "",
+                sessionSummary,
 
             marketTone:
-                aiSummary.marketTone || "MIXED",
+                determineMarketTone(
+                    marketData
+                ),
 
-            hotAreas:
-                aiSummary.hotAreas || [],
-
-            weakAreas:
-                aiSummary.weakAreas || [],
-
-            watchNext:
-                aiSummary.watchNext || [],
 
             nasdaq:
-                marketData.nasdaq,
+                marketData.nasdaqComposite,
+
+            nasdaqComposite:
+                marketData.nasdaqComposite,
+
+            nasdaq100:
+                marketData.nasdaq100,
+
+
+            // ================================================
+            // MONTHLY STRENGTH / WEAKNESS
+            // ================================================
+
+            strongerAreasSummary,
+
+            weakerAreasSummary,
+
+            strongestAreas:
+                marketData.strongestAreas,
+
+            weakestAreas:
+                marketData.weakestAreas,
+
+
+            // ================================================
+            // OLD FRONT-END COMPATIBILITY
+            // ================================================
+
+            hotAreas:
+                strongerAreasSummary
+                    ? [
+                        strongerAreasSummary
+                    ]
+                    : [],
+
+            weakAreas:
+                weakerAreasSummary
+                    ? [
+                        weakerAreasSummary
+                    ]
+                    : [],
+
+
+            // ================================================
+            // TODAY'S NOTABLE MOVERS
+            // ================================================
+
+            notableGainers:
+                aiResearch.notableGainers ||
+                [],
+
+            notableLosers:
+                aiResearch.notableLosers ||
+                [],
+
+
+            // ================================================
+            // IMPORTANT EVENTS AHEAD
+            // NEXT 7 CALENDAR DAYS ONLY
+            // ================================================
+
+            importantEvents:
+                aiResearch.importantEvents ||
+                [],
+
+
+            // ================================================
+            // OLD FRONT-END COMPATIBILITY
+            // ================================================
+
+            watchNext:
+                aiResearch.importantEvents ||
+                [],
+
+
+            // ================================================
+            // END-OF-DAY TAKEAWAY
+            // ================================================
+
+            endOfDayTakeaway:
+                aiResearch.endOfDayTakeaway ||
+                createFallbackTakeaway(
+                    marketData
+                ),
+
+
+            // ================================================
+            // RAW MARKET AREA DATA
+            // ================================================
 
             sectors:
                 marketData.sectors,
 
+
+            // ================================================
+            // EDGE BREAK SCANNER ACTIVITY
+            //
+            // Deliberately NOT populated here yet.
+            // ================================================
+
+            scannerActivity:
+                null,
+
+
             generatedAt:
-                new Date().toISOString()
+                new Date()
+                    .toISOString()
+
         };
 
 
@@ -190,35 +411,46 @@ export default async function handler(req, res) {
         );
 
 
-        return res.status(200).json({
+        return res
+            .status(200)
+            .json({
 
-            success: true,
+                success: true,
 
-            cached: false,
+                cached: false,
 
-            date: reportDate,
+                date:
+                    reportDate,
 
-            overview
-        });
+                overview
 
+            });
 
-    } catch (error) {
+    }
+    catch (
+        error
+    ) {
 
         console.error(
             "NASDAQ Market Overview Error:",
             error
         );
 
-        return res.status(500).json({
 
-            success: false,
+        return res
+            .status(500)
+            .json({
 
-            error:
-                error?.message ||
-                "Today's NASDAQ Market Overview is temporarily unavailable."
+                success: false,
 
-        });
+                error:
+                    error?.message ||
+                    "Today's NASDAQ Market Overview is temporarily unavailable."
+
+            });
+
     }
+
 }
 
 
@@ -232,58 +464,94 @@ function getNewYorkReportDate() {
         new Intl.DateTimeFormat(
             "en-CA",
             {
-                timeZone: "America/New_York",
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit"
+
+                timeZone:
+                    "America/New_York",
+
+                year:
+                    "numeric",
+
+                month:
+                    "2-digit",
+
+                day:
+                    "2-digit"
+
             }
         );
+
 
     const parts =
         formatter.formatToParts(
             new Date()
         );
 
+
     const year =
         parts.find(
-            part => part.type === "year"
+            part =>
+                part.type ===
+                "year"
         )?.value;
+
 
     const month =
         parts.find(
-            part => part.type === "month"
+            part =>
+                part.type ===
+                "month"
         )?.value;
+
 
     const day =
         parts.find(
-            part => part.type === "day"
+            part =>
+                part.type ===
+                "day"
         )?.value;
 
-    return `${year}-${month}-${day}`;
+
+    return (
+        `${year}-${month}-${day}`
+    );
+
 }
 
 
 // ============================================================
-// YAHOO FINANCE CHART
+// YAHOO FINANCE HISTORY
+//
+// range=1mo gives enough history to:
+// - calculate latest completed daily move
+// - calculate approximate one-month sector performance
 // ============================================================
 
-async function getYahooChart(symbol) {
+async function getYahooHistory(
+    symbol
+) {
 
     const encodedSymbol =
-        encodeURIComponent(symbol);
+        encodeURIComponent(
+            symbol
+        );
+
 
     const url =
         `https://query1.finance.yahoo.com/v8/finance/chart/${encodedSymbol}` +
-        `?range=5d&interval=1d&includePrePost=false&events=div%2Csplits`;
+        `?range=1mo&interval=1d&includePrePost=false&events=div%2Csplits`;
+
 
     const controller =
         new AbortController();
 
+
     const timeout =
         setTimeout(
-            () => controller.abort(),
+            () =>
+                controller.abort(),
             8000
         );
+
 
     try {
 
@@ -291,58 +559,80 @@ async function getYahooChart(symbol) {
             await fetch(
                 url,
                 {
-                    method: "GET",
+
+                    method:
+                        "GET",
 
                     headers: {
+
                         "User-Agent":
                             "Mozilla/5.0 EdgeBreak Market Research",
 
                         "Accept":
                             "application/json"
+
                     },
 
                     signal:
                         controller.signal
+
                 }
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `Yahoo request failed for ${symbol}: ${response.status}`
             );
+
         }
 
 
         const data =
             await response.json();
 
+
         const result =
             data?.chart?.result?.[0];
 
 
-        if (!result) {
+        if (
+            !result
+        ) {
 
             throw new Error(
                 `No Yahoo market data returned for ${symbol}.`
             );
+
         }
 
 
         const meta =
-            result.meta || {};
+            result.meta ||
+            {};
+
 
         const quote =
-            result.indicators?.quote?.[0] || {};
+            result.indicators
+                ?.quote?.[0] ||
+            {};
+
 
         const timestamps =
-            result.timestamp || [];
+            result.timestamp ||
+            [];
+
 
         const closes =
-            quote.close || [];
+            quote.close ||
+            [];
 
-        const validRows = [];
+
+        const validRows =
+            [];
 
 
         for (
@@ -352,23 +642,39 @@ async function getYahooChart(symbol) {
         ) {
 
             const close =
-                Number(closes[i]);
+                Number(
+                    closes[i]
+                );
 
-            if (Number.isFinite(close)) {
+
+            if (
+                Number.isFinite(
+                    close
+                )
+            ) {
 
                 validRows.push({
-                    timestamp: timestamps[i],
+
+                    timestamp:
+                        timestamps[i],
+
                     close
+
                 });
+
             }
+
         }
 
 
-        if (validRows.length < 2) {
+        if (
+            validRows.length < 2
+        ) {
 
             throw new Error(
                 `Insufficient Yahoo history for ${symbol}.`
             );
+
         }
 
 
@@ -377,24 +683,47 @@ async function getYahooChart(symbol) {
                 validRows.length - 1
             ];
 
+
         const previous =
             validRows[
                 validRows.length - 2
             ];
 
 
-        const change =
+        const first =
+            validRows[0];
+
+
+        const dailyChange =
             latest.close -
             previous.close;
 
 
-        const percentChange =
+        const dailyPercentChange =
             previous.close !== 0
-                ? (
-                    change /
+                ?
+                (
+                    dailyChange /
                     previous.close
-                ) * 100
-                : 0;
+                ) *
+                100
+                :
+                0;
+
+
+        const monthlyPercentChange =
+            first.close !== 0
+                ?
+                (
+                    (
+                        latest.close -
+                        first.close
+                    ) /
+                    first.close
+                ) *
+                100
+                :
+                0;
 
 
         return {
@@ -420,32 +749,69 @@ async function getYahooChart(symbol) {
 
             change:
                 roundNumber(
-                    change,
+                    dailyChange,
                     2
                 ),
 
             percentChange:
                 roundNumber(
-                    percentChange,
+                    dailyPercentChange,
+                    2
+                ),
+
+            monthlyPercentChange:
+                roundNumber(
+                    monthlyPercentChange,
                     2
                 ),
 
             direction:
-                percentChange > 0
-                    ? "UP"
-                    : percentChange < 0
-                        ? "DOWN"
-                        : "FLAT",
+                dailyPercentChange > 0
+                    ?
+                    "UP"
+                    :
+                    dailyPercentChange < 0
+                        ?
+                        "DOWN"
+                        :
+                        "FLAT",
 
             marketTime:
-                latest.timestamp
+                latest.timestamp,
+
+            historyCount:
+                validRows.length
+
         };
 
-
-    } finally {
-
-        clearTimeout(timeout);
     }
+    catch (
+        error
+    ) {
+
+        if (
+            error?.name ===
+            "AbortError"
+        ) {
+
+            throw new Error(
+                `Yahoo request timed out for ${symbol}.`
+            );
+
+        }
+
+
+        throw error;
+
+    }
+    finally {
+
+        clearTimeout(
+            timeout
+        );
+
+    }
+
 }
 
 
@@ -455,64 +821,137 @@ async function getYahooChart(symbol) {
 
 async function getNasdaqMarketData() {
 
-    const nasdaqPromise =
-        getYahooChart("^IXIC");
+    // ========================================================
+    // INDEXES
+    // ========================================================
 
+    const nasdaqCompositePromise =
+        getYahooHistory(
+            "^IXIC"
+        );
+
+
+    const nasdaq100Promise =
+        getYahooHistory(
+            "^NDX"
+        );
+
+
+    // ========================================================
+    // MARKET AREAS
+    //
+    // These are liquid ETF proxies used only to rank relative
+    // one-month strength / weakness.
+    //
+    // We keep the existing EdgeBreak market-area concept
+    // rather than asking Gemini to determine performance.
+    // ========================================================
 
     const sectorDefinitions = [
 
         {
-            symbol: "XLK",
-            name: "Technology"
+            symbol:
+                "XLK",
+
+            name:
+                "Technology"
         },
 
         {
-            symbol: "SOXX",
-            name: "Semiconductors"
+            symbol:
+                "SOXX",
+
+            name:
+                "Semiconductors"
         },
 
         {
-            symbol: "XLC",
-            name: "Communication Services"
+            symbol:
+                "XLC",
+
+            name:
+                "Communication Services"
         },
 
         {
-            symbol: "XLY",
-            name: "Consumer Discretionary"
+            symbol:
+                "XLY",
+
+            name:
+                "Consumer Discretionary"
         },
 
         {
-            symbol: "XLI",
-            name: "Industrials"
+            symbol:
+                "XLI",
+
+            name:
+                "Industrials"
         },
 
         {
-            symbol: "XLV",
-            name: "Healthcare"
+            symbol:
+                "XLV",
+
+            name:
+                "Healthcare"
         },
 
         {
-            symbol: "XLF",
-            name: "Financials"
+            symbol:
+                "XLF",
+
+            name:
+                "Financials"
         },
 
         {
-            symbol: "XLE",
-            name: "Energy"
+            symbol:
+                "XLE",
+
+            name:
+                "Energy"
+        },
+
+        {
+            symbol:
+                "XLP",
+
+            name:
+                "Consumer Staples"
+        },
+
+        {
+            symbol:
+                "XLU",
+
+            name:
+                "Utilities"
+        },
+
+        {
+            symbol:
+                "XLRE",
+
+            name:
+                "Real Estate"
         }
+
     ];
 
 
     const sectorPromises =
         sectorDefinitions.map(
+
             async sector => {
 
                 try {
 
                     const result =
-                        await getYahooChart(
+                        await getYahooHistory(
                             sector.symbol
                         );
+
 
                     return {
 
@@ -522,155 +961,438 @@ async function getNasdaqMarketData() {
                         symbol:
                             sector.symbol,
 
-                        percentChange:
-                            result.percentChange,
+                        monthlyPercentChange:
+                            result.monthlyPercentChange,
 
-                        direction:
-                            result.direction
+                        dailyPercentChange:
+                            result.percentChange
+
                     };
 
-                } catch (error) {
+                }
+                catch (
+                    error
+                ) {
 
                     console.warn(
                         `Market area data unavailable for ${sector.symbol}:`,
                         error.message
                     );
 
+
                     return null;
+
                 }
+
             }
+
         );
 
 
     const [
-        nasdaq,
+        nasdaqComposite,
+        nasdaq100,
         sectorResults
     ] =
         await Promise.all([
 
-            nasdaqPromise,
+            nasdaqCompositePromise,
+
+            nasdaq100Promise,
 
             Promise.all(
                 sectorPromises
             )
+
         ]);
 
 
     const sectors =
         sectorResults
-            .filter(Boolean)
+            .filter(
+                Boolean
+            )
             .sort(
-                (a, b) =>
-                    b.percentChange -
-                    a.percentChange
+                (
+                    a,
+                    b
+                ) =>
+                    b.monthlyPercentChange -
+                    a.monthlyPercentChange
+            );
+
+
+    const strongestAreas =
+        sectors.slice(
+            0,
+            2
+        );
+
+
+    const weakestAreas =
+        [
+            ...sectors
+        ]
+            .sort(
+                (
+                    a,
+                    b
+                ) =>
+                    a.monthlyPercentChange -
+                    b.monthlyPercentChange
+            )
+            .slice(
+                0,
+                2
             );
 
 
     return {
 
-        nasdaq,
+        nasdaqComposite,
 
-        sectors
+        nasdaq100,
+
+        sectors,
+
+        strongestAreas,
+
+        weakestAreas
+
     };
+
 }
 
 
 // ============================================================
-// GEMINI
+// GEMINI MARKET RESEARCH
+//
+// Proven pattern copied from the working Daily Brief:
+// - Gemini 3.5 Flash
+// - Google Search grounding
+// - JSON response
+// - one retry for temporary 503
+//
+// Gemini is NOT asked to calculate index or sector performance.
 // ============================================================
 
-async function createMarketSummary(
+async function createMarketResearch(
     marketData,
     reportDate
 ) {
 
-    const controller =
-        new AbortController();
+    // ========================================================
+    // SYSTEM INSTRUCTION
+    // ========================================================
 
-    const timeout =
-        setTimeout(
-            () => controller.abort(),
-            12000
-        );
+    const systemInstruction = `
+
+You are preparing a concise END-OF-DAY NASDAQ market intelligence
+section for EdgeBreak.
+
+This is NOT investment advice.
+
+Do NOT provide buy, sell or hold recommendations.
+
+Do NOT provide price targets.
+
+Do NOT predict future stock prices.
+
+The supplied index and market-area performance data has already
+been calculated.
+
+Do NOT recalculate it.
+
+Your research tasks are deliberately narrow.
+
+TASK 1 — TODAY'S NOTABLE NASDAQ-100 MOVERS
+
+Using current Google Search grounding, identify:
+
+- 3 notable gainers from the NASDAQ-100 for the completed session
+- 3 notable losers from the NASDAQ-100 for the completed session
+
+For each company:
+
+- return ticker
+- company name
+- completed-session percentage move when reliably available
+- ONE very short factual reason for the move
+
+The reason should preferably identify a clear company-specific
+catalyst such as earnings, guidance, analyst action, company news,
+regulatory news, product news or another credible development.
+
+Do not invent a catalyst.
+
+If no clear company-specific reason can be established, say:
+
+"No clear company-specific catalyst identified."
 
 
-    try {
+TASK 2 — IMPORTANT EVENTS AHEAD
 
-        const prompt = `
-You are preparing a SHORT end-of-day NASDAQ market overview for EdgeBreak.
+Look ONLY at the next 7 calendar days after the report date.
 
-REPORT DATE:
+Return a maximum of 3 scheduled events.
+
+Only include genuinely major events reasonably capable of
+materially affecting the NASDAQ or broader US equity market.
+
+Examples include:
+
+- Federal Reserve interest-rate decisions
+- major Federal Reserve / Chair Powell events
+- CPI
+- PCE inflation
+- US employment report
+- major GDP releases
+- exceptionally important mega-cap NASDAQ earnings when clearly
+  capable of affecting the broader market
+
+Do NOT fill the list with minor economic releases.
+
+If no event genuinely qualifies, return an empty array.
+
+
+TASK 3 — END-OF-DAY TAKEAWAY
+
+Write one short paragraph of no more than 3 concise sentences.
+
+Use the supplied completed-session NASDAQ data, one-month market
+area data, notable movers and important events.
+
+Summarise the completed session.
+
+Do not provide predictions or recommendations.
+
+Keep it factual and easy to understand.
+
+Return JSON only.
+
+`;
+
+
+    // ========================================================
+    // USER INSTRUCTION
+    // ========================================================
+
+    const userInstruction = `
+
+Prepare the EdgeBreak NASDAQ End-of-Day Market Overview for:
+
 ${reportDate}
 
-IMPORTANT:
 
-You are NOT performing stock research.
+SUPPLIED COMPLETED-SESSION MARKET DATA:
 
-You are NOT searching the web.
-
-You are NOT giving investment advice.
-
-Use ONLY the market data supplied below.
-
-This is an END-OF-DAY report.
-
-The user wants to understand quickly:
-
-1. How the NASDAQ performed overall.
-2. Which market areas were strongest.
-3. Which market areas were weakest.
-4. What the general NASDAQ tone looked like.
-
-Keep this concise.
-
-Do not discuss individual stocks.
-
-Do not provide predictions.
-
-Do not provide buy, sell or hold recommendations.
-
-Do not invent economic events or future events because no economic-calendar data has been supplied to you.
-
-MARKET DATA:
+NASDAQ COMPOSITE:
 
 ${JSON.stringify(
-    marketData,
+    marketData.nasdaqComposite,
     null,
     2
 )}
 
-Return ONLY valid JSON.
 
-Use exactly this structure:
+NASDAQ-100:
+
+${JSON.stringify(
+    marketData.nasdaq100,
+    null,
+    2
+)}
+
+
+TWO STRONGEST MARKET AREAS OVER APPROXIMATELY ONE MONTH:
+
+${JSON.stringify(
+    marketData.strongestAreas,
+    null,
+    2
+)}
+
+
+TWO WEAKEST MARKET AREAS OVER APPROXIMATELY ONE MONTH:
+
+${JSON.stringify(
+    marketData.weakestAreas,
+    null,
+    2
+)}
+
+
+IMPORTANT:
+
+The numerical market data above is supplied as fact.
+
+Do not replace it with different index or sector calculations.
+
+Use Google Search grounding only for the narrow research tasks
+defined in the system instruction.
+
+
+RETURN EXACTLY THIS JSON STRUCTURE:
 
 {
-  "marketSummary": "2-3 concise sentences describing the NASDAQ session.",
-  "marketTone": "POSITIVE | MIXED | NEGATIVE",
-  "hotAreas": [
-    "Short factual observation",
-    "Short factual observation"
-  ],
-  "weakAreas": [
-    "Short factual observation",
-    "Short factual observation"
-  ],
-  "watchNext": [
-    "Monitor whether today's strongest areas continue to show relative strength.",
-    "Monitor whether today's weaker areas stabilise or remain under pressure."
-  ]
+    "notableGainers": [
+        {
+            "symbol": "",
+            "companyName": "",
+            "percentChange": null,
+            "reason": ""
+        }
+    ],
+    "notableLosers": [
+        {
+            "symbol": "",
+            "companyName": "",
+            "percentChange": null,
+            "reason": ""
+        }
+    ],
+    "importantEvents": [
+        {
+            "date": "YYYY-MM-DD",
+            "event": ""
+        }
+    ],
+    "endOfDayTakeaway": ""
 }
+
+
+RULES:
+
+notableGainers:
+Maximum exactly 3 when reliable data is available.
+
+notableLosers:
+Maximum exactly 3 when reliable data is available.
+
+Only use NASDAQ-100 constituents.
+
+Do not return a company outside the NASDAQ-100.
+
+reason:
+Maximum one short sentence.
+
+importantEvents:
+Maximum 3.
+
+Only events occurring within the next 7 calendar days.
+
+If there are no genuinely major market-moving scheduled events,
+return [].
+
+endOfDayTakeaway:
+Maximum 3 short sentences.
+
+Return JSON only.
+
 `;
 
 
-        const url =
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+    // ========================================================
+    // REQUEST BODY
+    // ========================================================
 
+    const requestBody = {
 
-        const response =
-            await fetch(
-                url,
+        systemInstruction: {
+
+            parts: [
+
                 {
-                    method: "POST",
+                    text:
+                        systemInstruction
+                }
+
+            ]
+
+        },
+
+
+        contents: [
+
+            {
+
+                role:
+                    "user",
+
+                parts: [
+
+                    {
+                        text:
+                            userInstruction
+                    }
+
+                ]
+
+            }
+
+        ],
+
+
+        tools: [
+
+            {
+                google_search: {}
+            }
+
+        ],
+
+
+        generationConfig: {
+
+            // Far smaller than Stocks to Investigate.
+            // Still enough room for grounded output.
+
+            maxOutputTokens:
+                4000,
+
+            responseMimeType:
+                "application/json",
+
+            temperature:
+                0.1
+
+        }
+
+    };
+
+
+    // ========================================================
+    // GEMINI REQUEST
+    // ========================================================
+
+    let geminiResponse =
+        null;
+
+
+    const maxAttempts =
+        2;
+
+
+    for (
+        let attempt = 1;
+        attempt <= maxAttempts;
+        attempt++
+    ) {
+
+        console.log(
+            `NASDAQ Market Overview Gemini attempt ${attempt}/${maxAttempts}`
+        );
+
+
+        geminiResponse =
+            await fetch(
+
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+
+                {
+
+                    method:
+                        "POST",
 
                     headers: {
 
@@ -679,310 +1401,723 @@ Use exactly this structure:
 
                         "x-goog-api-key":
                             GEMINI_API_KEY
+
                     },
 
                     body:
-                        JSON.stringify({
+                        JSON.stringify(
+                            requestBody
+                        )
 
-                            contents: [
-
-                                {
-                                    role: "user",
-
-                                    parts: [
-
-                                        {
-                                            text: prompt
-                                        }
-                                    ]
-                                }
-                            ],
-
-                            generationConfig: {
-
-                                temperature:
-                                    0.1,
-
-                                maxOutputTokens:
-                                    600,
-
-                                responseMimeType:
-                                    "application/json"
-                            }
-                        }),
-
-                    signal:
-                        controller.signal
                 }
+
             );
 
 
-        if (!response.ok) {
+        if (
+            geminiResponse.ok
+        ) {
 
-            const errorText =
-                await response.text();
+            break;
 
-            throw new Error(
-                `Gemini returned ${response.status}: ${errorText.slice(0, 300)}`
-            );
         }
 
 
-        const data =
-            await response.json();
+        const errorText =
+            await geminiResponse.text();
 
 
-        const text =
-            data?.candidates?.[0]
-                ?.content?.parts
-                ?.map(
-                    part =>
-                        part.text || ""
-                )
-                .join("")
-                .trim();
-
-
-        if (!text) {
-
-            throw new Error(
-                "Gemini returned no summary text."
-            );
-        }
-
-
-        const cleaned =
-            cleanJsonText(text);
-
-
-        const parsed =
-            JSON.parse(cleaned);
-
-
-        return normalizeAiSummary(
-            parsed
+        console.error(
+            `NASDAQ Market Overview Gemini Error on attempt ${attempt}:`,
+            geminiResponse.status,
+            errorText
         );
 
 
-    } catch (error) {
+        // ====================================================
+        // RETRY TEMPORARY 503 ONCE
+        // ====================================================
 
         if (
-            error?.name ===
-            "AbortError"
+            geminiResponse.status ===
+                503 &&
+            attempt <
+                maxAttempts
         ) {
 
-            throw new Error(
-                "Gemini summary timed out."
+            console.log(
+                "NASDAQ Market Overview received temporary Gemini 503. Retrying in 6 seconds..."
             );
+
+
+            await sleep(
+                6000
+            );
+
+
+            continue;
+
         }
 
 
-        throw error;
+        throw new Error(
+            `Gemini returned ${geminiResponse.status}.`
+        );
 
-
-    } finally {
-
-        clearTimeout(timeout);
     }
-}
-
-
-// ============================================================
-// NORMALISE GEMINI OUTPUT
-// ============================================================
-
-function normalizeAiSummary(data) {
-
-    const validTone =
-        [
-            "POSITIVE",
-            "MIXED",
-            "NEGATIVE"
-        ];
-
-
-    let tone =
-        String(
-            data?.marketTone ||
-            "MIXED"
-        )
-            .trim()
-            .toUpperCase();
-
-
-    if (!validTone.includes(tone)) {
-
-        tone =
-            "MIXED";
-    }
-
-
-    return {
-
-        marketSummary:
-            String(
-                data?.marketSummary ||
-                ""
-            ).trim(),
-
-        marketTone:
-            tone,
-
-        hotAreas:
-            normalizeStringArray(
-                data?.hotAreas
-            ),
-
-        weakAreas:
-            normalizeStringArray(
-                data?.weakAreas
-            ),
-
-        watchNext:
-            normalizeStringArray(
-                data?.watchNext
-            )
-    };
-}
-
-
-// ============================================================
-// FALLBACK SUMMARY
-// ============================================================
-
-function createFallbackSummary(
-    marketData
-) {
-
-    const nasdaq =
-        marketData.nasdaq;
-
-    const sectors =
-        marketData.sectors || [];
-
-
-    let tone =
-        "MIXED";
 
 
     if (
-        nasdaq.percentChange >= 0.5
+        !geminiResponse ||
+        !geminiResponse.ok
     ) {
 
-        tone =
-            "POSITIVE";
+        throw new Error(
+            "Gemini market research failed."
+        );
 
-    } else if (
-        nasdaq.percentChange <= -0.5
-    ) {
-
-        tone =
-            "NEGATIVE";
     }
 
 
-    const directionText =
-        nasdaq.percentChange > 0
-            ? "rose"
-            : nasdaq.percentChange < 0
-                ? "fell"
-                : "finished little changed";
+    // ========================================================
+    // PARSE GEMINI RESPONSE
+    // ========================================================
+
+    const geminiData =
+        await geminiResponse.json();
 
 
-    const absoluteMove =
-        Math.abs(
-            nasdaq.percentChange
-        ).toFixed(2);
-
-
-    const marketSummary =
-        nasdaq.percentChange === 0
-            ?
-            `The NASDAQ Composite finished the session little changed at ${formatNumber(nasdaq.close)}. Market-area performance was mixed across the session.`
-            :
-            `The NASDAQ Composite ${directionText} ${absoluteMove}% to close at ${formatNumber(nasdaq.close)}. Performance across major market areas showed a mix of relative strength and weakness.`;
-
-
-    const strongest =
-        sectors
-            .filter(
-                item =>
-                    item.percentChange > 0
+    const rawText =
+        geminiData
+            ?.candidates?.[0]
+            ?.content
+            ?.parts
+            ?.map(
+                part =>
+                    part.text ||
+                    ""
             )
-            .slice(
-                0,
-                3
+            ?.join("")
+            ?.trim();
+
+
+    if (
+        !rawText
+    ) {
+
+        throw new Error(
+            "Gemini returned no market research text."
+        );
+
+    }
+
+
+    let parsed;
+
+
+    try {
+
+        parsed =
+            JSON.parse(
+                cleanJsonText(
+                    rawText
+                )
             );
 
+    }
+    catch (
+        error
+    ) {
 
-    const weakest =
-        [...sectors]
-            .sort(
-                (a, b) =>
-                    a.percentChange -
-                    b.percentChange
-            )
-            .filter(
-                item =>
-                    item.percentChange < 0
-            )
-            .slice(
-                0,
-                3
-            );
+        console.error(
+            "NASDAQ Market Overview Gemini JSON parse failed:"
+        );
 
 
-    const hotAreas =
-        strongest.length
-            ?
-            strongest.map(
-                item =>
-                    `${item.name} finished ${formatSignedPercent(item.percentChange)}.`
-            )
-            :
-            [
-                "No major tracked market area finished meaningfully higher."
-            ];
+        console.error(
+            rawText
+        );
 
 
-    const weakAreas =
-        weakest.length
-            ?
-            weakest.map(
-                item =>
-                    `${item.name} finished ${formatSignedPercent(item.percentChange)}.`
-            )
-            :
-            [
-                "No major tracked market area finished meaningfully lower."
-            ];
+        throw new Error(
+            "Gemini returned invalid market research JSON."
+        );
+
+    }
+
+
+    return normalizeMarketResearch(
+        parsed,
+        reportDate
+    );
+
+}
+
+
+// ============================================================
+// NORMALISE GEMINI MARKET RESEARCH
+// ============================================================
+
+function normalizeMarketResearch(
+    data,
+    reportDate
+) {
+
+    const notableGainers =
+        normalizeMovers(
+            data?.notableGainers
+        );
+
+
+    const notableLosers =
+        normalizeMovers(
+            data?.notableLosers
+        );
+
+
+    const importantEvents =
+        normalizeEvents(
+            data?.importantEvents,
+            reportDate
+        );
+
+
+    const endOfDayTakeaway =
+        cleanField(
+            data?.endOfDayTakeaway,
+            900
+        );
 
 
     return {
 
-        marketSummary,
+        notableGainers,
 
-        marketTone:
-            tone,
+        notableLosers,
 
-        hotAreas,
+        importantEvents,
 
-        weakAreas,
+        endOfDayTakeaway
 
-        watchNext: [
-
-            "Watch whether the strongest areas from today's session continue to show relative strength.",
-
-            "Watch whether today's weaker areas stabilise or remain under pressure in the next session."
-        ]
     };
+
+}
+
+
+// ============================================================
+// NORMALISE MOVERS
+// ============================================================
+
+function normalizeMovers(
+    value
+) {
+
+    if (
+        !Array.isArray(
+            value
+        )
+    ) {
+
+        return [];
+
+    }
+
+
+    return value
+        .map(
+            item => {
+
+                if (
+                    !item ||
+                    typeof item !==
+                        "object"
+                ) {
+
+                    return null;
+
+                }
+
+
+                const symbol =
+                    cleanField(
+                        item.symbol,
+                        20
+                    )
+                        .toUpperCase();
+
+
+                const companyName =
+                    cleanField(
+                        item.companyName,
+                        180
+                    );
+
+
+                const reason =
+                    cleanField(
+                        item.reason,
+                        280
+                    );
+
+
+                const numericPercent =
+                    Number(
+                        item.percentChange
+                    );
+
+
+                const percentChange =
+                    Number.isFinite(
+                        numericPercent
+                    )
+                        ?
+                        roundNumber(
+                            numericPercent,
+                            2
+                        )
+                        :
+                        null;
+
+
+                if (
+                    !symbol
+                ) {
+
+                    return null;
+
+                }
+
+
+                return {
+
+                    symbol,
+
+                    companyName,
+
+                    percentChange,
+
+                    reason:
+                        reason ||
+                        "No clear company-specific catalyst identified."
+
+                };
+
+            }
+        )
+        .filter(
+            Boolean
+        )
+        .slice(
+            0,
+            3
+        );
+
+}
+
+
+// ============================================================
+// NORMALISE EVENTS
+// ============================================================
+
+function normalizeEvents(
+    value,
+    reportDate
+) {
+
+    if (
+        !Array.isArray(
+            value
+        )
+    ) {
+
+        return [];
+
+    }
+
+
+    const startDate =
+        parseDateOnly(
+            reportDate
+        );
+
+
+    if (
+        !startDate
+    ) {
+
+        return [];
+
+    }
+
+
+    const maxDate =
+        new Date(
+            startDate.getTime() +
+            (
+                7 *
+                24 *
+                60 *
+                60 *
+                1000
+            )
+        );
+
+
+    return value
+        .map(
+            item => {
+
+                if (
+                    !item ||
+                    typeof item !==
+                        "object"
+                ) {
+
+                    return null;
+
+                }
+
+
+                const date =
+                    cleanField(
+                        item.date,
+                        20
+                    );
+
+
+                const event =
+                    cleanField(
+                        item.event,
+                        280
+                    );
+
+
+                const eventDate =
+                    parseDateOnly(
+                        date
+                    );
+
+
+                if (
+                    !event ||
+                    !eventDate
+                ) {
+
+                    return null;
+
+                }
+
+
+                if (
+                    eventDate <=
+                        startDate ||
+                    eventDate >
+                        maxDate
+                ) {
+
+                    return null;
+
+                }
+
+
+                return {
+
+                    date,
+
+                    event
+
+                };
+
+            }
+        )
+        .filter(
+            Boolean
+        )
+        .slice(
+            0,
+            3
+        );
+
+}
+
+
+// ============================================================
+// SESSION SUMMARY
+// ============================================================
+
+function createSessionSummary(
+    marketData
+) {
+
+    const composite =
+        marketData.nasdaqComposite;
+
+
+    const ndx =
+        marketData.nasdaq100;
+
+
+    const compositeDirection =
+        getDirectionWord(
+            composite.percentChange
+        );
+
+
+    const ndxDirection =
+        getDirectionWord(
+            ndx.percentChange
+        );
+
+
+    const compositeMove =
+        Math.abs(
+            composite.percentChange
+        )
+            .toFixed(
+                2
+            );
+
+
+    const ndxMove =
+        Math.abs(
+            ndx.percentChange
+        )
+            .toFixed(
+                2
+            );
+
+
+    return (
+        `The NASDAQ Composite ${compositeDirection} ${compositeMove}% ` +
+        `to close at ${formatNumber(composite.close)}, while the NASDAQ-100 ` +
+        `${ndxDirection} ${ndxMove}% to ${formatNumber(ndx.close)}.`
+    );
+
+}
+
+
+// ============================================================
+// STRONGER AREAS SUMMARY
+// ============================================================
+
+function createStrongerAreasSummary(
+    areas
+) {
+
+    if (
+        !Array.isArray(
+            areas
+        ) ||
+        areas.length === 0
+    ) {
+
+        return (
+            "No stronger market areas were identified."
+        );
+
+    }
+
+
+    if (
+        areas.length === 1
+    ) {
+
+        return (
+            `${areas[0].name} was the strongest tracked market area over approximately the past month.`
+        );
+
+    }
+
+
+    return (
+        `${areas[0].name} and ${areas[1].name} were the two strongest tracked market areas over approximately the past month.`
+    );
+
+}
+
+
+// ============================================================
+// WEAKER AREAS SUMMARY
+// ============================================================
+
+function createWeakerAreasSummary(
+    areas
+) {
+
+    if (
+        !Array.isArray(
+            areas
+        ) ||
+        areas.length === 0
+    ) {
+
+        return (
+            "No weaker market areas were identified."
+        );
+
+    }
+
+
+    if (
+        areas.length === 1
+    ) {
+
+        return (
+            `${areas[0].name} was the weakest tracked market area over approximately the past month.`
+        );
+
+    }
+
+
+    return (
+        `${areas[0].name} and ${areas[1].name} were the two weakest tracked market areas over approximately the past month.`
+    );
+
+}
+
+
+// ============================================================
+// MARKET TONE
+// ============================================================
+
+function determineMarketTone(
+    marketData
+) {
+
+    const composite =
+        Number(
+            marketData
+                ?.nasdaqComposite
+                ?.percentChange
+        );
+
+
+    const ndx =
+        Number(
+            marketData
+                ?.nasdaq100
+                ?.percentChange
+        );
+
+
+    if (
+        composite > 0 &&
+        ndx > 0
+    ) {
+
+        return "POSITIVE";
+
+    }
+
+
+    if (
+        composite < 0 &&
+        ndx < 0
+    ) {
+
+        return "NEGATIVE";
+
+    }
+
+
+    return "MIXED";
+
+}
+
+
+// ============================================================
+// AI FALLBACK
+// ============================================================
+
+function createAiFallback() {
+
+    return {
+
+        notableGainers:
+            [],
+
+        notableLosers:
+            [],
+
+        importantEvents:
+            [],
+
+        endOfDayTakeaway:
+            ""
+
+    };
+
+}
+
+
+// ============================================================
+// FALLBACK TAKEAWAY
+// ============================================================
+
+function createFallbackTakeaway(
+    marketData
+) {
+
+    const composite =
+        marketData.nasdaqComposite;
+
+
+    const ndx =
+        marketData.nasdaq100;
+
+
+    const strongest =
+        marketData
+            .strongestAreas ||
+        [];
+
+
+    const weakest =
+        marketData
+            .weakestAreas ||
+        [];
+
+
+    const direction =
+        composite.percentChange > 0
+            ?
+            "higher"
+            :
+            composite.percentChange < 0
+                ?
+                "lower"
+                :
+                "little changed";
+
+
+    let text =
+        `The NASDAQ finished the completed session ${direction}, with the NASDAQ Composite moving ${formatSignedPercent(composite.percentChange)} and the NASDAQ-100 moving ${formatSignedPercent(ndx.percentChange)}.`;
+
+
+    if (
+        strongest.length >= 2 &&
+        weakest.length >= 2
+    ) {
+
+        text +=
+            ` Over approximately the past month, ${strongest[0].name} and ${strongest[1].name} have been the strongest tracked areas, while ${weakest[0].name} and ${weakest[1].name} have been the weakest.`;
+
+    }
+
+
+    return text;
+
 }
 
 
 // ============================================================
 // CACHE LOOKUP
-// CORRECT TABLE: nasdaq_market_overviews
-// CORRECT DATE COLUMN: market_date
+//
+// TABLE:
+// nasdaq_market_overviews
+//
+// DATE COLUMN:
+// market_date
 // ============================================================
 
 async function getCachedOverview(
@@ -998,7 +2133,9 @@ async function getCachedOverview(
             "NASDAQ Market Overview Supabase cache disabled."
         );
 
+
         return null;
+
     }
 
 
@@ -1015,16 +2152,21 @@ async function getCachedOverview(
             await fetch(
                 url,
                 {
+
                     headers:
                         getSupabaseHeaders()
+
                 }
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             const text =
                 await response.text();
+
 
             console.warn(
                 "NASDAQ Market Overview cache lookup failed:",
@@ -1032,7 +2174,9 @@ async function getCachedOverview(
                 text
             );
 
+
             return null;
+
         }
 
 
@@ -1041,11 +2185,14 @@ async function getCachedOverview(
 
 
         if (
-            !Array.isArray(rows) ||
+            !Array.isArray(
+                rows
+            ) ||
             !rows.length
         ) {
 
             return null;
+
         }
 
 
@@ -1054,23 +2201,26 @@ async function getCachedOverview(
             null
         );
 
-
-    } catch (error) {
+    }
+    catch (
+        error
+    ) {
 
         console.warn(
             "NASDAQ Market Overview cache lookup error:",
             error.message
         );
 
+
         return null;
+
     }
+
 }
 
 
 // ============================================================
 // SAVE CACHE
-// CORRECT TABLE: nasdaq_market_overviews
-// CORRECT DATE COLUMN: market_date
 // ============================================================
 
 async function saveCachedOverview(
@@ -1084,6 +2234,7 @@ async function saveCachedOverview(
     ) {
 
         return;
+
     }
 
 
@@ -1095,13 +2246,15 @@ async function saveCachedOverview(
 
 
         const now =
-            new Date().toISOString();
+            new Date()
+                .toISOString();
 
 
         const response =
             await fetch(
                 url,
                 {
+
                     method:
                         "POST",
 
@@ -1114,36 +2267,43 @@ async function saveCachedOverview(
 
                         "Prefer":
                             "resolution=merge-duplicates,return=minimal"
+
                     },
 
                     body:
                         JSON.stringify([
 
                             {
+
                                 market_date:
                                     reportDate,
 
                                 status:
                                     "ready",
 
-                                overview:
-                                    overview,
+                                overview,
 
                                 generated_at:
                                     now,
 
                                 updated_at:
                                     now
+
                             }
+
                         ])
+
                 }
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             const text =
                 await response.text();
+
 
             console.warn(
                 "NASDAQ Market Overview cache save failed:",
@@ -1151,7 +2311,9 @@ async function saveCachedOverview(
                 text
             );
 
+
             return;
+
         }
 
 
@@ -1160,14 +2322,18 @@ async function saveCachedOverview(
             reportDate
         );
 
-
-    } catch (error) {
+    }
+    catch (
+        error
+    ) {
 
         console.warn(
             "NASDAQ Market Overview cache save error:",
             error.message
         );
+
     }
+
 }
 
 
@@ -1184,7 +2350,9 @@ function getSupabaseHeaders() {
 
         Authorization:
             `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
+
     };
+
 }
 
 
@@ -1192,10 +2360,15 @@ function getSupabaseHeaders() {
 // CLEAN JSON
 // ============================================================
 
-function cleanJsonText(text) {
+function cleanJsonText(
+    text
+) {
 
     let cleaned =
-        String(text || "")
+        String(
+            text ||
+            ""
+        )
             .trim();
 
 
@@ -1221,17 +2394,22 @@ function cleanJsonText(text) {
 
 
     const firstBrace =
-        cleaned.indexOf("{");
+        cleaned.indexOf(
+            "{"
+        );
 
 
     const lastBrace =
-        cleaned.lastIndexOf("}");
+        cleaned.lastIndexOf(
+            "}"
+        );
 
 
     if (
         firstBrace !== -1 &&
         lastBrace !== -1 &&
-        lastBrace > firstBrace
+        lastBrace >
+            firstBrace
     ) {
 
         cleaned =
@@ -1239,36 +2417,160 @@ function cleanJsonText(text) {
                 firstBrace,
                 lastBrace + 1
             );
+
     }
 
 
     return cleaned;
+
 }
 
 
 // ============================================================
-// ARRAY NORMALISER
+// CLEAN FIELD
 // ============================================================
 
-function normalizeStringArray(value) {
+function cleanField(
+    value,
+    maxLength = 800
+) {
 
-    if (!Array.isArray(value)) {
+    if (
+        typeof value !==
+        "string"
+    ) {
 
-        return [];
+        return "";
+
     }
 
 
     return value
-        .map(
-            item =>
-                String(item || "")
-                    .trim()
+        .replace(
+            /\s+/g,
+            " "
         )
-        .filter(Boolean)
+        .trim()
         .slice(
             0,
-            4
+            maxLength
         );
+
+}
+
+
+// ============================================================
+// DATE ONLY PARSER
+// ============================================================
+
+function parseDateOnly(
+    value
+) {
+
+    if (
+        typeof value !==
+        "string" ||
+        !/^\d{4}-\d{2}-\d{2}$/.test(
+            value
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    const [
+        year,
+        month,
+        day
+    ] =
+        value
+            .split("-")
+            .map(
+                Number
+            );
+
+
+    const date =
+        new Date(
+            Date.UTC(
+                year,
+                month - 1,
+                day
+            )
+        );
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    return date;
+
+}
+
+
+// ============================================================
+// DIRECTION WORD
+// ============================================================
+
+function getDirectionWord(
+    percentChange
+) {
+
+    const value =
+        Number(
+            percentChange
+        );
+
+
+    if (
+        value > 0
+    ) {
+
+        return "rose";
+
+    }
+
+
+    if (
+        value < 0
+    ) {
+
+        return "fell";
+
+    }
+
+
+    return "finished little changed";
+
+}
+
+
+// ============================================================
+// SLEEP
+// ============================================================
+
+function sleep(
+    milliseconds
+) {
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                milliseconds
+            )
+    );
+
 }
 
 
@@ -1282,17 +2584,25 @@ function roundNumber(
 ) {
 
     const number =
-        Number(value);
+        Number(
+            value
+        );
 
 
-    if (!Number.isFinite(number)) {
+    if (
+        !Number.isFinite(
+            number
+        )
+    ) {
 
         return 0;
+
     }
 
 
     const multiplier =
-        10 ** decimals;
+        10 **
+        decimals;
 
 
     return (
@@ -1302,35 +2612,58 @@ function roundNumber(
         ) /
         multiplier
     );
+
 }
 
 
-function formatNumber(value) {
+// ============================================================
+// FORMAT NUMBER
+// ============================================================
 
-    return Number(value)
+function formatNumber(
+    value
+) {
+
+    return Number(
+        value
+    )
         .toLocaleString(
             "en-US",
             {
+
                 maximumFractionDigits:
                     2
+
             }
         );
+
 }
 
 
-function formatSignedPercent(value) {
+// ============================================================
+// FORMAT SIGNED PERCENT
+// ============================================================
+
+function formatSignedPercent(
+    value
+) {
 
     const number =
-        Number(value);
+        Number(
+            value
+        );
 
 
     const sign =
         number > 0
-            ? "+"
-            : "";
+            ?
+            "+"
+            :
+            "";
 
 
     return (
         `${sign}${number.toFixed(2)}%`
     );
+
 }
