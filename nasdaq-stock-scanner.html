@@ -6194,6 +6194,1350 @@ AI CHART ANALYSIS
     }
 
 }
+
+/* ======================================================
+   EDGEBREAK AI DAILY BRIEF
+====================================================== */
+
+.daily-brief-panel{
+    margin:0 0 30px;
+    padding:32px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0b1220 0%,
+            #101827 100%
+        );
+
+    border:1px solid #1e293b;
+    border-radius:20px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.22);
+}
+
+.daily-brief-intro{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:40px;
+}
+
+.daily-brief-copy{
+    max-width:850px;
+}
+
+.daily-brief-label,
+.daily-brief-eyebrow{
+    color:#22c55e;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+}
+
+.daily-brief-label{
+    margin-bottom:10px;
+}
+
+.daily-brief-panel h2{
+    margin:0 0 12px;
+
+    color:#ffffff;
+
+    font-size:32px;
+    font-weight:800;
+    letter-spacing:-.02em;
+}
+
+.daily-brief-copy > p{
+    margin:0;
+
+    color:#94a3b8;
+
+    font-size:15px;
+    line-height:1.7;
+}
+
+.daily-brief-meta{
+    margin-top:15px;
+
+    color:#64748b;
+
+    font-size:12px;
+    font-weight:600;
+}
+
+.daily-brief-open-btn{
+    min-width:220px;
+    height:52px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+
+    padding:0 24px;
+
+    border:0;
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #22c55e,
+            #16a34a
+        );
+
+    color:#ffffff;
+
+    font-size:15px;
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+.daily-brief-open-btn:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 12px 28px rgba(34,197,94,.25);
+}
+
+.daily-brief-open-btn:disabled{
+    opacity:.65;
+    cursor:wait;
+    transform:none;
+}
+
+.daily-brief-divider{
+    height:1px;
+
+    margin:30px 0;
+
+    background:#1e293b;
+}
+
+
+/* LOADING */
+
+.daily-brief-loading{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+
+    padding:45px 20px;
+
+    color:#cbd5e1;
+}
+
+.daily-brief-loading strong{
+    display:block;
+    margin-bottom:4px;
+}
+
+.daily-brief-loading span{
+    display:block;
+
+    color:#64748b;
+    font-size:13px;
+}
+
+.daily-brief-spinner{
+    width:28px;
+    height:28px;
+
+    border:3px solid #263548;
+    border-top-color:#22c55e;
+    border-radius:50%;
+
+    animation:dailyBriefSpin .8s linear infinite;
+}
+
+@keyframes dailyBriefSpin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+
+/* ERROR */
+
+.daily-brief-error{
+    padding:18px 20px;
+
+    border:1px solid rgba(239,68,68,.25);
+    border-radius:12px;
+
+    background:rgba(239,68,68,.07);
+
+    color:#fca5a5;
+
+    font-size:14px;
+}
+
+
+/* DATE */
+
+.daily-brief-date-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:28px;
+
+    color:#64748b;
+
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.12em;
+}
+
+.daily-brief-date-row strong{
+    color:#94a3b8;
+}
+
+
+/* SECTIONS */
+
+.daily-brief-section{
+    padding:28px 0;
+
+    border-top:1px solid rgba(255,255,255,.06);
+}
+
+.daily-brief-section:first-of-type{
+    border-top:0;
+}
+
+.daily-brief-section-heading{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+
+    margin-bottom:20px;
+}
+
+.daily-brief-section-icon{
+    width:38px;
+    height:38px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex-shrink:0;
+
+    border-radius:10px;
+
+    background:rgba(34,197,94,.08);
+    border:1px solid rgba(34,197,94,.18);
+
+    color:#22c55e;
+
+    font-size:18px;
+}
+
+.daily-brief-section-heading h3{
+    margin:4px 0 0;
+
+    color:#ffffff;
+
+    font-size:23px;
+    font-weight:800;
+}
+
+.daily-brief-section-heading p{
+    margin:7px 0 0;
+
+    color:#64748b;
+
+    font-size:13px;
+    line-height:1.6;
+}
+
+.daily-brief-placeholder{
+    padding:20px;
+
+    background:#08111f;
+
+    border:1px solid #1e293b;
+    border-radius:12px;
+
+    color:#64748b;
+
+    font-size:14px;
+}
+
+
+/* SUMMARY */
+
+.daily-brief-summary-bar{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+
+    gap:14px;
+
+    margin-bottom:20px;
+}
+
+.daily-brief-summary-bar > div{
+    padding:16px 18px;
+
+    background:#08111f;
+
+    border:1px solid #1e293b;
+    border-radius:12px;
+}
+
+.daily-brief-summary-bar span{
+    display:block;
+
+    margin-bottom:5px;
+
+    color:#64748b;
+
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+}
+
+.daily-brief-summary-bar strong{
+    color:#ffffff;
+
+    font-size:23px;
+    font-weight:800;
+}
+
+
+/* STOCK CARDS */
+
+.daily-brief-stock-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:16px;
+}
+
+.daily-brief-stock-card{
+    padding:22px;
+
+    background:#08111f;
+
+    border:1px solid #1e293b;
+    border-radius:15px;
+}
+
+.daily-brief-stock-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:20px;
+
+    margin-bottom:15px;
+}
+
+.daily-brief-symbol{
+    color:#22c55e;
+
+    font-size:23px;
+    font-weight:900;
+}
+
+.daily-brief-company{
+    margin-top:3px;
+
+    color:#94a3b8;
+
+    font-size:12px;
+}
+
+.daily-brief-attention{
+    padding:6px 10px;
+
+    border-radius:999px;
+
+    background:rgba(34,197,94,.08);
+    border:1px solid rgba(34,197,94,.18);
+
+    color:#4ade80;
+
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.08em;
+
+    white-space:nowrap;
+}
+
+.daily-brief-stock-card h4{
+    margin:0 0 9px;
+
+    color:#ffffff;
+
+    font-size:16px;
+    line-height:1.45;
+}
+
+.daily-brief-stock-card p{
+    margin:0;
+
+    color:#94a3b8;
+
+    font-size:13px;
+    line-height:1.65;
+}
+
+.daily-brief-development{
+    margin-top:16px;
+    padding-top:14px;
+
+    border-top:1px solid rgba(255,255,255,.06);
+}
+
+.daily-brief-development span{
+    display:block;
+
+    margin-bottom:5px;
+
+    color:#64748b;
+
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+}
+
+/* ======================================================
+   DAILY BRIEF STOCK ACTIONS
+====================================================== */
+
+/* CLICKABLE TICKER */
+
+.daily-brief-symbol[data-daily-brief-chart]{
+    display:inline-block;
+
+    cursor:pointer;
+
+    transition:
+        color .2s ease,
+        transform .2s ease;
+}
+
+.daily-brief-symbol[data-daily-brief-chart]:hover{
+    color:#4ade80;
+
+    transform:translateY(-1px);
+
+    text-decoration:underline;
+    text-underline-offset:4px;
+}
+
+
+/* STOCK ACTION BUTTON ROW */
+
+.daily-brief-stock-card .watchlist-open{
+    min-height:40px;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:0 15px;
+
+    border:1px solid #263548;
+    border-radius:9px;
+
+    background:#101827;
+
+    color:#cbd5e1;
+
+    font-size:12px;
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+/* VIEW CHART */
+
+.daily-brief-stock-card
+.watchlist-open[data-daily-brief-chart]{
+
+    background:#101827;
+
+    border-color:#334155;
+
+    color:#e2e8f0;
+}
+
+.daily-brief-stock-card
+.watchlist-open[data-daily-brief-chart]:hover{
+
+    background:#172033;
+
+    border-color:#475569;
+
+    color:#ffffff;
+
+    transform:translateY(-1px);
+}
+
+
+/* AI DEEP RESEARCH */
+
+.daily-brief-stock-card
+.watchlist-open[data-daily-brief-research]{
+
+    background:rgba(34,197,94,.10);
+
+    border-color:rgba(34,197,94,.35);
+
+    color:#4ade80;
+}
+
+.daily-brief-stock-card
+.watchlist-open[data-daily-brief-research]:hover{
+
+    background:rgba(34,197,94,.16);
+
+    border-color:#22c55e;
+
+    color:#ffffff;
+
+    transform:translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(34,197,94,.12);
+}
+
+
+/* MOBILE STOCK ACTIONS */
+
+@media(max-width:600px){
+
+    .daily-brief-stock-card .watchlist-open{
+        flex:1;
+
+        min-width:140px;
+    }
+
+}
+/* DISCLAIMER */
+
+.daily-brief-disclaimer{
+    margin-top:25px;
+    padding-top:18px;
+
+    border-top:1px solid rgba(255,255,255,.06);
+
+    color:#64748b;
+
+    font-size:11px;
+    line-height:1.6;
+}
+
+
+/* MOBILE */
+
+@media(max-width:800px){
+
+    .daily-brief-panel{
+        padding:24px 20px;
+    }
+
+    .daily-brief-intro{
+        flex-direction:column;
+        align-items:stretch;
+        gap:22px;
+    }
+
+    .daily-brief-panel h2{
+        font-size:27px;
+    }
+
+    .daily-brief-open-btn{
+        width:100%;
+    }
+
+    .daily-brief-stock-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+.daily-brief-summary-bar small{
+    display:block;
+    margin-top:8px;
+
+    color:#64748b;
+
+    font-size:11px;
+    line-height:1.45;
+}
+
+.daily-brief-summary-bar{
+    grid-template-columns:repeat(2,1fr);
+}
+
+@media(max-width:500px){
+
+    .daily-brief-summary-bar{
+        grid-template-columns:1fr;
+    }
+
+}
+
+/* ======================================================
+   CHART AI SCREENSHOT PROMPT
+====================================================== */
+
+.chart-ai-hint{
+    display:flex;
+    align-items:center;
+    gap:14px;
+
+    margin:16px 18px 18px;
+    padding:14px 16px;
+
+    background:rgba(34,197,94,.06);
+
+    border:1px solid rgba(34,197,94,.18);
+    border-radius:10px;
+}
+
+.chart-ai-hint-icon{
+    width:34px;
+    height:34px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex-shrink:0;
+
+    background:rgba(34,197,94,.10);
+    border:1px solid rgba(34,197,94,.20);
+    border-radius:9px;
+
+    color:#22c55e;
+
+    font-size:16px;
+}
+
+.chart-ai-hint-copy strong{
+    display:block;
+
+    margin-bottom:3px;
+
+    color:#ffffff;
+
+    font-size:13px;
+    font-weight:800;
+}
+
+.chart-ai-hint-copy span{
+    display:block;
+
+    color:#94a3b8;
+
+    font-size:12px;
+    line-height:1.5;
+}
+
+.chart-ai-hint-copy b{
+    color:#4ade80;
+    font-weight:700;
+}
+
+
+@media(max-width:600px){
+
+    .chart-ai-hint{
+        align-items:flex-start;
+
+        margin:14px 12px 16px;
+    }
+
+}
+
+.daily-brief-summary-bar{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    margin-bottom:20px;
+}
+
+/* =========================================
+DAILY BRIEF HIDDEN STATE
+MUST REMAIN AFTER ALL DAILY BRIEF CSS
+========================================= */
+
+.daily-brief-content[hidden],
+.daily-brief-loading[hidden],
+.daily-brief-error[hidden],
+#dailyBriefResults[hidden] {
+    display: none !important;
+}
+
+/* =========================================
+EDGEBREAK NASDAQ END-OF-DAY MARKET OVERVIEW
+========================================= */
+
+.nasdaq-overview-panel {
+    width: 100%;
+    margin: 32px 0;
+    padding: 34px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(8, 18, 34, 0.98),
+            rgba(6, 15, 29, 0.98)
+        );
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 22px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+HEADER
+========================================= */
+
+.nasdaq-overview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.nasdaq-overview-header > div:first-child {
+    flex: 1;
+    min-width: 0;
+}
+
+.nasdaq-overview-label {
+    margin-bottom: 12px;
+    color: #22e883;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.nasdaq-overview-header h2 {
+    margin: 0 0 14px;
+    color: #ffffff;
+    font-size: clamp(28px, 3vw, 38px);
+    line-height: 1.15;
+    font-weight: 800;
+}
+
+.nasdaq-overview-header p {
+    max-width: 900px;
+    margin: 0;
+    color: #9fb4d0;
+    font-size: 16px;
+    line-height: 1.75;
+}
+
+
+/* =========================================
+BUTTON
+========================================= */
+
+.nasdaq-overview-btn {
+    flex-shrink: 0;
+    min-width: 245px;
+    padding: 17px 24px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(
+        135deg,
+        #22c55e,
+        #16a34a
+    );
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow:
+        0 12px 28px rgba(34, 197, 94, 0.16);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.nasdaq-overview-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 16px 34px rgba(34, 197, 94, 0.24);
+}
+
+.nasdaq-overview-btn:disabled {
+    cursor: default;
+    opacity: 0.75;
+    transform: none;
+}
+
+
+/* =========================================
+CONTENT
+========================================= */
+
+.nasdaq-overview-content {
+    margin-top: 28px;
+}
+
+.nasdaq-overview-divider {
+    width: 100%;
+    height: 1px;
+    margin-bottom: 30px;
+    background: rgba(148, 163, 184, 0.14);
+}
+
+
+/* =========================================
+LOADING
+========================================= */
+
+.nasdaq-overview-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    min-height: 110px;
+    padding: 20px;
+}
+
+.nasdaq-overview-loading[hidden] {
+    display: none !important;
+}
+
+.nasdaq-overview-spinner {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border: 3px solid rgba(96, 165, 250, 0.2);
+    border-top-color: #22c55e;
+    border-radius: 50%;
+    animation: nasdaqOverviewSpin 0.8s linear infinite;
+}
+
+@keyframes nasdaqOverviewSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.nasdaq-overview-loading strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #f8fafc;
+    font-size: 16px;
+}
+
+.nasdaq-overview-loading span {
+    display: block;
+    color: #6f88ab;
+    font-size: 14px;
+}
+
+
+/* =========================================
+ERROR
+========================================= */
+
+.nasdaq-overview-error {
+    padding: 18px 20px;
+    margin: 12px 0 24px;
+    border: 1px solid rgba(239, 68, 68, 0.32);
+    border-radius: 12px;
+    background: rgba(127, 29, 29, 0.13);
+    color: #fca5a5;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.nasdaq-overview-error[hidden] {
+    display: none !important;
+}
+
+
+/* =========================================
+RESULTS
+========================================= */
+
+.nasdaq-overview-results[hidden] {
+    display: none !important;
+}
+
+.nasdaq-overview-date-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    color: #7189aa;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.nasdaq-overview-date-row strong {
+    color: #9db5d5;
+}
+
+
+/* =========================================
+SECTIONS
+========================================= */
+
+.nasdaq-overview-section {
+    padding: 32px 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.11);
+}
+
+.nasdaq-overview-eyebrow {
+    display: block;
+    margin-bottom: 8px;
+    color: #22e883;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+}
+
+.nasdaq-overview-section > h3 {
+    margin: 0 0 12px;
+    color: #ffffff;
+    font-size: 23px;
+    line-height: 1.3;
+    font-weight: 800;
+}
+
+.nasdaq-overview-section > p {
+    max-width: 1050px;
+    margin: 0 0 22px;
+    color: #8299b9;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* =========================================
+NASDAQ INDEX CARDS
+========================================= */
+
+.nasdaq-index-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 22px;
+}
+
+.nasdaq-index-card {
+    padding: 22px;
+    background: rgba(5, 14, 28, 0.68);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 14px;
+}
+
+.nasdaq-index-card > span {
+    display: block;
+    margin-bottom: 8px;
+    color: #7f97b8;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+.nasdaq-index-card > strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #ffffff;
+    font-size: 27px;
+    line-height: 1.2;
+    font-weight: 800;
+}
+
+.nasdaq-index-card > small {
+    display: block;
+    margin-bottom: 12px;
+    color: #6f88aa;
+    font-size: 12px;
+}
+
+.nasdaq-index-card > p {
+    margin: 0;
+    color: #91a7c5;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+
+/* =========================================
+STRONG / WEAK AREAS
+========================================= */
+
+.nasdaq-strength-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 22px;
+}
+
+.nasdaq-strength-card {
+    padding: 22px;
+    background: rgba(5, 14, 28, 0.68);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 14px;
+}
+
+.nasdaq-strength-card h4 {
+    margin: 0 0 18px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.nasdaq-strength-card:first-child h4 {
+    color: #4ade80;
+}
+
+.nasdaq-strength-card:last-child h4 {
+    color: #f87171;
+}
+
+.nasdaq-area-item {
+    padding: 13px 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.nasdaq-area-item:first-child {
+    padding-top: 0;
+}
+
+.nasdaq-area-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.nasdaq-area-item strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #e7eef8;
+    font-size: 14px;
+}
+
+.nasdaq-area-item p {
+    margin: 0;
+    color: #8096b5;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+MARKET DRIVERS / UPCOMING EVENTS
+========================================= */
+
+.nasdaq-overview-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.nasdaq-list-item {
+    position: relative;
+    padding: 17px 18px 17px 21px;
+    background: rgba(5, 14, 28, 0.6);
+    border: 1px solid rgba(148, 163, 184, 0.13);
+    border-radius: 12px;
+}
+
+.nasdaq-list-item::before {
+    content: "";
+    position: absolute;
+    top: 17px;
+    bottom: 17px;
+    left: 0;
+    width: 3px;
+    border-radius: 3px;
+    background: #22c55e;
+}
+
+.nasdaq-list-item strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #edf3fb;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.nasdaq-list-item p {
+    margin: 0;
+    color: #8097b7;
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.nasdaq-event-date {
+    display: block;
+    margin-bottom: 5px;
+    color: #22c55e;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+}
+
+
+/* =========================================
+EDGEBREAK SCANNER ACTIVITY
+========================================= */
+
+.nasdaq-scanner-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 22px;
+}
+
+.nasdaq-scanner-card {
+    min-height: 125px;
+    padding: 19px;
+    background: rgba(5, 14, 28, 0.7);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 13px;
+}
+
+.nasdaq-scanner-card > span {
+    display: block;
+    margin-bottom: 9px;
+    color: #7892b4;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+}
+
+.nasdaq-scanner-card > strong {
+    display: block;
+    margin-bottom: 7px;
+    color: #ffffff;
+    font-size: 27px;
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.nasdaq-scanner-card > small {
+    display: block;
+    color: #637c9e;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* =========================================
+END-OF-DAY TAKEAWAY
+========================================= */
+
+.nasdaq-overview-takeaway {
+    margin-top: 30px;
+    padding: 22px 24px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(34, 197, 94, 0.09),
+            rgba(34, 197, 94, 0.025)
+        );
+    border: 1px solid rgba(34, 197, 94, 0.23);
+    border-radius: 14px;
+}
+
+.nasdaq-overview-takeaway span {
+    display: block;
+    margin-bottom: 8px;
+    color: #22e883;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.nasdaq-overview-takeaway p {
+    margin: 0;
+    color: #c2d1e4;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* =========================================
+DISCLAIMER
+========================================= */
+
+.nasdaq-overview-disclaimer {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(148, 163, 184, 0.1);
+    color: #536b8d;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+EMPTY STATES
+========================================= */
+
+.nasdaq-empty {
+    margin: 0;
+    color: #637c9e;
+    font-size: 13px;
+}
+
+
+/* =========================================
+TABLET
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .nasdaq-overview-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .nasdaq-overview-btn {
+        width: 100%;
+    }
+
+    .nasdaq-scanner-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* =========================================
+MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .nasdaq-overview-panel {
+        margin: 22px 0;
+        padding: 22px 18px;
+        border-radius: 17px;
+    }
+
+    .nasdaq-overview-header {
+        gap: 20px;
+    }
+
+    .nasdaq-overview-label {
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .nasdaq-overview-header h2 {
+        font-size: 27px;
+    }
+
+    .nasdaq-overview-header p {
+        font-size: 14px;
+        line-height: 1.65;
+    }
+
+    .nasdaq-overview-btn {
+        min-width: 0;
+        padding: 15px 18px;
+        font-size: 15px;
+    }
+
+    .nasdaq-overview-content {
+        margin-top: 23px;
+    }
+
+    .nasdaq-overview-date-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .nasdaq-overview-section {
+        padding: 26px 0;
+    }
+
+    .nasdaq-overview-section > h3 {
+        font-size: 20px;
+    }
+
+    .nasdaq-index-grid,
+    .nasdaq-strength-grid,
+    .nasdaq-scanner-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nasdaq-index-card > strong,
+    .nasdaq-scanner-card > strong {
+        font-size: 25px;
+    }
+
+    .nasdaq-overview-loading {
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 18px 4px;
+    }
+
+}
+
+
+/* =========================================
+VERY SMALL MOBILE
+========================================= */
+
+@media (max-width: 420px) {
+
+    .nasdaq-overview-panel {
+        padding: 20px 15px;
+    }
+
+    .nasdaq-overview-header h2 {
+        font-size: 24px;
+    }
+
+    .nasdaq-index-card,
+    .nasdaq-strength-card,
+    .nasdaq-scanner-card {
+        padding: 17px;
+    }
+
+    .nasdaq-overview-takeaway {
+        padding: 19px;
+    }
+
+}
 </style>  
 
 
@@ -6205,276 +7549,656 @@ AI CHART ANALYSIS
 <div id="navbar"></div>
 
 <main>
-<!-- =========================
-📈 MARKET TICKER TAPE
-========================= -->
-<div class="ticker-wrapper">
 
-    <div class="tradingview-widget-container">
-        <div class="tradingview-widget-container__widget"></div>
-
-        <script
-            type="text/javascript"
-            src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
-            async>
-        {
-          "symbols": [
-            {
-              "proName": "NASDAQ:QQQ",
-              "title": "QQQ"
-            },
-            {
-              "proName": "AMEX:SPY",
-              "title": "SPY"
-            },
-            {
-              "proName": "NASDAQ:NVDA",
-              "title": "NVDA"
-            },
-            {
-              "proName": "NASDAQ:MSFT",
-              "title": "MSFT"
-            },
-            {
-              "proName": "NASDAQ:AAPL",
-              "title": "AAPL"
-            },
-            {
-              "proName": "NASDAQ:AMZN",
-              "title": "AMZN"
-            },
-            {
-              "proName": "NASDAQ:META",
-              "title": "META"
-            },
-            {
-              "proName": "NASDAQ:TSLA",
-              "title": "TSLA"
-            },
-            {
-              "proName": "NASDAQ:PLTR",
-              "title": "PLTR"
-            },
-            {
-              "proName": "NASDAQ:RKLB",
-              "title": "RKLB"
-            }
-          ],
-          "showSymbolLogo": true,
-          "isTransparent": true,
-          "displayMode": "adaptive",
-          "colorTheme": "dark",
-          "locale": "en"
-        }
-        </script>
-    </div>
-
-</div>
 
 <div class="elite-container">
 
-<!-- HERO -->
+<!-- HERO --> 
+ 
+<div class="elite-banner"> 
+ 
+    <div> 
+ 
+        <h1> 
+            NASDAQ MARKET INTELLIGENCE & AI STOCK DISCOVERY
+        </h1> 
+ 
+    </div> 
+ 
+    
+ 
+</div> 
 
-<div class="elite-banner">
+<!-- =========================================
+EDGEBREAK NASDAQ END-OF-DAY MARKET OVERVIEW
+========================================= -->
 
-    <div>
+<section class="nasdaq-overview-panel" id="nasdaqOverviewPanel">
 
-        <h1>
-            NASDAQ BREAKOUT & MARKET SCANNERS
-        </h1>
+    <div class="nasdaq-overview-header">
+
+        <div>
+
+            <div class="nasdaq-overview-label">
+                ✦ NASDAQ END-OF-DAY MARKET OVERVIEW
+            </div>
+
+            <h2>Today's NASDAQ Market</h2>
+
+            <p>
+                A quick end-of-day look at how the NASDAQ performed,
+                where market strength and weakness appeared, what
+                influenced the session and the important events ahead.
+            </p>
+
+        </div>
+
+        <button
+            type="button"
+            class="nasdaq-overview-btn"
+            id="openNasdaqOverviewBtn"
+        >
+            ✦ View Market Overview
+        </button>
 
     </div>
 
-    <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.75"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+
+    <!-- CONTENT -->
+
+    <div
+        class="nasdaq-overview-content"
+        id="nasdaqOverviewContent"
+        hidden
     >
 
-        <line
-            x1="3"
-            y1="9"
-            x2="17"
-            y2="9"
-        />
-
-        <polyline
-            points="3,18 8,13 13,16 21,6"
-        />
-
-        <polyline
-            points="17,6 21,6 21,10"
-        />
-
-    </svg>
-
-</div>
+        <div class="nasdaq-overview-divider"></div>
 
 
-<!-- SCANNER FEATURES -->
+        <!-- LOADING -->
 
-<div class="elite-featured">
+        <div
+            class="nasdaq-overview-loading"
+            id="nasdaqOverviewLoading"
+            hidden
+        >
 
-    <div>
+            <div class="nasdaq-overview-spinner"></div>
 
-        <div class="featured-tag">
-            EDGEBREAK NASDAQ SCANNERS
+            <div>
+                <strong>
+                    Loading today's NASDAQ market overview...
+                </strong>
+
+                <span>
+                    Reviewing the completed U.S. market session.
+                </span>
+            </div>
+
         </div>
 
-        <h2>
-            Breakout • Pre-Breakout • Launch Pad
-        </h2>
+
+        <!-- ERROR -->
+
+        <div
+            class="nasdaq-overview-error"
+            id="nasdaqOverviewError"
+            hidden
+        ></div>
+
+
+        <!-- RESULTS -->
+
+        <div
+            class="nasdaq-overview-results"
+            id="nasdaqOverviewResults"
+            hidden
+        >
+
+            <div class="nasdaq-overview-date-row">
+
+                <span>
+                    NASDAQ END-OF-DAY REPORT
+                </span>
+
+                <strong id="nasdaqOverviewDate"></strong>
+
+            </div>
+
+
+            <!-- MARKET SUMMARY -->
+
+            <div class="nasdaq-overview-section">
+
+                <span class="nasdaq-overview-eyebrow">
+                    MARKET CLOSE
+                </span>
+
+                <h3>How the NASDAQ Finished</h3>
+
+                <p id="nasdaqMarketSummary"></p>
+
+
+                <div class="nasdaq-index-grid">
+
+                    <div class="nasdaq-index-card">
+
+                        <span>NASDAQ Composite</span>
+
+                        <strong id="nasdaqCompositeChange">—</strong>
+
+                        <small id="nasdaqCompositeClose"></small>
+
+                        <p id="nasdaqCompositeSummary"></p>
+
+                    </div>
+
+
+                    <div class="nasdaq-index-card">
+
+                        <span>NASDAQ-100</span>
+
+                        <strong id="nasdaq100Change">—</strong>
+
+                        <small id="nasdaq100Close"></small>
+
+                        <p id="nasdaq100Summary"></p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MARKET STRENGTH -->
+
+            <div class="nasdaq-overview-section">
+
+                <span class="nasdaq-overview-eyebrow">
+                    MARKET LEADERSHIP
+                </span>
+
+                <h3>Where Strength & Weakness Appeared</h3>
+
+
+                <div class="nasdaq-strength-grid">
+
+                    <div class="nasdaq-strength-card">
+
+                        <h4>▲ Stronger Areas</h4>
+
+                        <div id="nasdaqStrongAreas"></div>
+
+                    </div>
+
+
+                    <div class="nasdaq-strength-card">
+
+                        <h4>▼ Weaker Areas</h4>
+
+                        <div id="nasdaqWeakAreas"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MARKET DRIVERS -->
+
+            <div class="nasdaq-overview-section">
+
+                <span class="nasdaq-overview-eyebrow">
+                    TODAY'S SESSION
+                </span>
+
+                <h3>What Mattered Today</h3>
+
+                <div
+                    class="nasdaq-overview-list"
+                    id="nasdaqMarketDrivers"
+                ></div>
+
+            </div>
+
+
+            <!-- =========================================
+            EDGEBREAK SCANNER ACTIVITY
+            ========================================= -->
+
+            <div class="nasdaq-overview-section">
+
+                <span class="nasdaq-overview-eyebrow">
+                    EDGEBREAK MARKET ACTIVITY
+                </span>
+
+                <h3>What EdgeBreak Found Across the NASDAQ</h3>
+
+                <p>
+                    EdgeBreak completed its end-of-day NASDAQ scan
+                    across Breakout, Pre-Breakout and Base Forming
+                    setups.
+                </p>
+
+
+                <div class="nasdaq-scanner-grid">
+
+
+                    <div class="nasdaq-scanner-card">
+
+                        <span>NASDAQ Stocks Scanned</span>
+
+                        <strong>3,253</strong>
+
+                        <small>
+                            Stocks checked across EdgeBreak scanners
+                        </small>
+
+                    </div>
+
+
+                    <div class="nasdaq-scanner-card">
+
+                        <span>Breakout Setups</span>
+
+                        <strong id="nasdaqBreakoutCount">—</strong>
+
+                        <small>
+                            Breakout Scanner results
+                        </small>
+
+                    </div>
+
+
+                    <div class="nasdaq-scanner-card">
+
+                        <span>Pre-Breakout Setups</span>
+
+                        <strong id="nasdaqPreBreakoutCount">—</strong>
+
+                        <small>
+                            Pre-Breakout Scanner results
+                        </small>
+
+                    </div>
+
+
+                    <div class="nasdaq-scanner-card">
+
+                        <span>Base Forming Setups</span>
+
+                        <strong id="nasdaqBaseCount">—</strong>
+
+                        <small>
+                            Launch Pad Scanner results
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- UPCOMING -->
+
+            <div class="nasdaq-overview-section">
+
+                <span class="nasdaq-overview-eyebrow">
+                    LOOKING AHEAD
+                </span>
+
+                <h3>Important Events Ahead</h3>
+
+                <div
+                    class="nasdaq-overview-list"
+                    id="nasdaqUpcomingEvents"
+                ></div>
+
+            </div>
+
+
+            <!-- TAKEAWAY -->
+
+            <div class="nasdaq-overview-takeaway">
+
+                <span>END-OF-DAY TAKEAWAY</span>
+
+                <p id="nasdaqTakeaway"></p>
+
+            </div>
+
+
+            <div class="nasdaq-overview-disclaimer">
+
+                Market information is provided for research and
+                educational purposes only and does not constitute
+                investment advice or a recommendation to buy or sell
+                securities.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+ 
+<!-- =========================================
+EDGEBREAK AUTOMATED AI END-OF-DAY STOCK RESEARCH
+========================================= -->
+
+<section class="daily-brief-panel" id="dailyBriefPanel">
+
+    <div class="daily-brief-intro">
+
+        <div class="daily-brief-copy">
+
+            <div class="daily-brief-label">
+                ✦ FULLY AUTOMATED NASDAQ SCANNING + AI MARKET RESEARCH
+            </div>
+
+            <h2>EdgeBreak AI End-of-Day Stock Research</h2>
+
+            <p>
+                EdgeBreak does the market scanning and initial research for you.
+                After each U.S. market close, the platform automatically scans
+                the NASDAQ for Breakout, Pre-Breakout and Base Forming setups,
+                filters the stocks it finds, then uses AI market intelligence
+                to research the resulting companies for current market attention,
+                news and company-specific developments.
+            </p>
+
+            <p>
+                By the time you open EdgeBreak, thousands of NASDAQ stocks have
+                already been reduced to a focused list of companies for further
+                investigation before the next market open.
+            </p>
+
+            <div class="daily-brief-meta">
+                Entire NASDAQ scanned • Automated technical discovery • AI company research • Prepared after each U.S. market close
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="daily-brief-open-btn"
+            id="openDailyBriefBtn"
+        >
+            <span>✦</span>
+            View Today's AI Research
+        </button>
 
     </div>
 
 
-    <div class="elite-feature-icons">
+    <!-- =========================================
+    DAILY BRIEF CONTENT
+    ========================================= -->
 
-        <!-- BREAKOUTS -->
+    <div
+        class="daily-brief-content"
+        id="dailyBriefContent"
+        hidden
+    >
 
-        <div class="feature-item">
+        <div class="daily-brief-divider"></div>
 
-            <div class="feature-icon">
 
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <polyline points="3,17 8,12 12,13 21,4"></polyline>
-                </svg>
+        <!-- =========================================
+        LOADING
+        ========================================= -->
 
-            </div>
+        <div
+            class="daily-brief-loading"
+            id="dailyBriefLoading"
+            hidden
+        >
+
+            <div class="daily-brief-spinner"></div>
 
             <div>
 
-                <span>GOLD • SILVER • BRONZE</span>
-                <strong>BREAKOUTS</strong>
+                <strong>
+                    Loading today's automated stock research...
+                </strong>
+
+                <span>
+                    Retrieving the completed NASDAQ scan and AI company research.
+                </span>
 
             </div>
 
         </div>
 
 
-        <!-- RESISTANCE -->
+        <!-- =========================================
+        ERROR
+        ========================================= -->
 
-        <div class="feature-item">
-
-            <div class="feature-icon">
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <line x1="4" y1="12" x2="20" y2="12"></line>
-                    <line x1="4" y1="8" x2="20" y2="8"></line>
-                </svg>
-
-            </div>
-
-            <div>
-
-                <span>RESISTANCE</span>
-                <strong>TOUCHES</strong>
-
-            </div>
-
-        </div>
+        <div
+            class="daily-brief-error"
+            id="dailyBriefError"
+            hidden
+        ></div>
 
 
-        <!-- HIGHER LOWS -->
+        <!-- =========================================
+        RESULTS
+        ========================================= -->
 
-        <div class="feature-item">
+        <div
+            id="dailyBriefResults"
+            hidden
+        >
 
-            <div class="feature-icon">
+            <div class="daily-brief-date-row">
 
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <polyline points="3,18 8,14 13,11 21,6"></polyline>
-                </svg>
+                <span>
+                    AUTOMATED END-OF-DAY STOCK RESEARCH
+                </span>
+
+                <strong id="dailyBriefDate"></strong>
 
             </div>
 
-            <div>
 
-                <span>HIGHER</span>
-                <strong>LOWS</strong>
+            <!-- =========================================
+            AUTOMATED RESEARCH PROCESS
+            ========================================= -->
+
+            <div class="daily-brief-section">
+
+                <div class="daily-brief-section-heading">
+
+                    <span class="daily-brief-section-icon">
+                        ⌁
+                    </span>
+
+                    <div>
+
+                        <span class="daily-brief-eyebrow">
+                            FULL NASDAQ AUTOMATED SCAN
+                        </span>
+
+                        <h3>
+                            From Thousands of NASDAQ Stocks to a Focused Research List
+                        </h3>
+
+                        <p>
+                            EdgeBreak automatically scans the NASDAQ for
+                            Breakout, Pre-Breakout and Base Forming setups.
+                            Stocks identified by the scanners are filtered
+                            before being passed to EdgeBreak's AI market
+                            research process.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                AUTOMATED RESEARCH FUNNEL
+                ========================================= -->
+
+                <div class="daily-brief-summary-bar">
+
+
+                    <!-- NASDAQ SCANNED -->
+
+                    <div>
+
+                        <span>
+                            NASDAQ Stocks Scanned
+                        </span>
+
+                        <strong>
+                            3,253
+                        </strong>
+
+                        <small>
+                            Checked for Breakout, Pre-Breakout and Base Forming setups
+                        </small>
+
+                    </div>
+
+
+                    <!-- TECHNICAL CANDIDATES -->
+
+                    <div>
+
+                        <span>
+                            Technical Setups Found
+                        </span>
+
+                        <strong id="dailyBriefCandidates">
+                            69
+                        </strong>
+
+                        <small>
+                            Candidates remaining after automated scanning and filtering
+                        </small>
+
+                    </div>
+
+
+                    <!-- AI RESEARCH -->
+
+                    <div>
+
+                        <span>
+                            Companies AI Researched
+                        </span>
+
+                        <strong id="dailyBriefReviewed">
+                            —
+                        </strong>
+
+                        <small>
+                            Researched for current attention, news and company developments
+                        </small>
+
+                    </div>
+
+
+                    <!-- FINAL RESULTS -->
+
+                    <div>
+
+                        <span>
+                            Stocks to Investigate
+                        </span>
+
+                        <strong id="dailyBriefIncluded">
+                            —
+                        </strong>
+
+                        <small>
+                            Companies surfaced for further research
+                        </small>
+
+                    </div>
+
+                </div>
 
             </div>
 
-        </div>
+
+            <!-- =========================================
+            STOCKS TO INVESTIGATE
+            ========================================= -->
+
+            <div class="daily-brief-section daily-brief-stocks-section">
+
+                <div class="daily-brief-section-heading">
+
+                    <span class="daily-brief-section-icon">
+                        ✦
+                    </span>
+
+                    <div>
+
+                        <span class="daily-brief-eyebrow">
+                            AUTOMATED AI MARKET RESEARCH
+                        </span>
+
+                        <h3>
+                            Stocks to Investigate Before the Next Market Open
+                        </h3>
+
+                        <p>
+                            EdgeBreak has already completed the first stages
+                            of the research process. The NASDAQ was scanned
+                            for relevant technical setups, the resulting
+                            candidates were filtered, and AI market
+                            intelligence researched those companies for
+                            current market attention and company-specific
+                            developments.
+                        </p>
+
+                        <p>
+                            The companies below were surfaced from today's
+                            automated scanning and AI research process for
+                            further investigation before the next U.S.
+                            market session.
+                        </p>
+
+                    </div>
+
+                </div>
 
 
-        <!-- SMART MONEY -->
+                <!-- =========================================
+                STOCK RESULTS
+                ========================================= -->
 
-        <div class="feature-item">
-
-            <div class="feature-icon">
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-
-                    <circle cx="12" cy="12" r="8"></circle>
-                    <circle cx="12" cy="12" r="2"></circle>
-
-                    <line x1="12" y1="2" x2="12" y2="6"></line>
-                    <line x1="12" y1="18" x2="12" y2="22"></line>
-
-                    <line x1="2" y1="12" x2="6" y2="12"></line>
-                    <line x1="18" y1="12" x2="22" y2="12"></line>
-
-                </svg>
-
-            </div>
-
-            <div>
-
-                <span>SMART MONEY</span>
-                <strong>FILTER</strong>
-
-            </div>
-
-        </div>
-
-
-        <!-- VOLUME -->
-
-        <div class="feature-item">
-
-            <div class="feature-icon">
-
-                <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <line x1="5" y1="20" x2="5" y2="12"></line>
-                    <line x1="10" y1="20" x2="10" y2="8"></line>
-                    <line x1="15" y1="20" x2="15" y2="5"></line>
-                    <line x1="20" y1="20" x2="20" y2="10"></line>
-                </svg>
+                <div
+                    class="daily-brief-stock-grid"
+                    id="dailyBriefStocks"
+                ></div>
 
             </div>
 
-            <div>
 
-                <span>VOLUME</span>
-                <strong>EXPANSION</strong>
+            <!-- =========================================
+            DISCLAIMER
+            ========================================= -->
+
+            <div class="daily-brief-disclaimer">
+
+                EdgeBreak AI End-of-Day Stock Research provides automated
+                stock discovery, factual market research and educational
+                information only. Stocks surfaced for investigation are not
+                recommendations or investment ratings. EdgeBreak does not
+                provide investment advice, buy or sell recommendations,
+                price targets or predictions. AI-generated information may
+                contain errors or outdated information and important
+                information should be independently verified.
 
             </div>
 
@@ -6482,14 +8206,11 @@ AI CHART ANALYSIS
 
     </div>
 
+</section>
 
-    <div class="featured-pill">
-        UPDATED DAILY
-    </div>
-
-</div>
 
 <!-- CHART -->
+
 <div class="scanner-chart" id="chartSection">
 
     <div
@@ -6501,152 +8222,26 @@ AI CHART ANALYSIS
 
     <div id="tv_chart"></div>
 
-</div>
-<!-- =========================================
-SCANNER SELECTOR
-========================================= -->
 
-<div class="scanner-panel scanner-selector-panel">
+    <!-- CHART AI PROMPT -->
 
-    <div class="scanner-selector-header">
+    <div class="chart-ai-hint">
 
-        <div class="scanner-selector-icon">
-
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="2">
-
-                <circle cx="11" cy="11" r="7"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-
-            </svg>
-
+        <div class="chart-ai-hint-icon">
+            ✦
         </div>
 
-        <div>
+        <div class="chart-ai-hint-copy">
 
-            <h2>EdgeBreak Scanner</h2>
+            <strong>
+                Want AI to analyse this chart?
+            </strong>
 
-            <p>
-                Select a scanner to begin researching the NASDAQ.
-            </p>
-
-        </div>
-
-    </div>
-
-    <label class="scanner-label">
-
-        Scanner Type
-
-    </label>
-
-    <div
-        class="scanner-dropdown"
-        id="scannerDropdown"
-    >
-
-        <div
-            class="scanner-selected"
-            id="scannerSelected"
-        >
-
-            <div class="scanner-selected-left">
-
-                <div class="scanner-circle breakout"></div>
-
-                <span>
-                    Breakout Scanner
-                </span>
-
-            </div>
-
-            <svg
-                class="scanner-arrow"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-            >
-
-                <polyline
-                    points="6 9 12 15 18 9"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                />
-
-            </svg>
-
-        </div>
-
-        <div
-            class="scanner-options"
-            id="scannerOptions"
-        >
-
-            <div
-                class="scanner-option active"
-                data-value="breakout"
-            >
-
-                <div class="scanner-circle breakout"></div>
-
-                <div>
-
-                    <strong>
-                        Breakout Scanner
-                    </strong>
-
-                    <small>
-                        Stocks breaking resistance
-                    </small>
-
-                </div>
-
-            </div>
-
-            <div
-                class="scanner-option"
-                data-value="pre"
-            >
-
-                <div class="scanner-circle pre"></div>
-
-                <div>
-
-                    <strong>
-                        Pre-Breakout Scanner
-                    </strong>
-
-                    <small>
-                        Building pressure beneath resistance
-                    </small>
-
-                </div>
-
-            </div>
-
-            <div
-                class="scanner-option"
-                data-value="launchpad"
-            >
-
-                <div class="scanner-circle launch"></div>
-
-                <div>
-
-                    <strong>
-                        Launch Pad Scanner
-                    </strong>
-
-                    <small>
-                        Institutional accumulation bases
-                    </small>
-
-                </div>
-
-            </div>
+            <span>
+                Take a screenshot of the chart, then drag or paste it into
+                <b>AI Chart Analysis</b> below for an instant technical
+                breakdown.
+            </span>
 
         </div>
 
@@ -12280,15 +13875,37 @@ async function loadEdgeBreakAICompanyOverview(
         );
 
 
-        const data =
-            await response.json();
+        const responseText =
+            await response.text();
+
+        let data;
+
+        try{
+
+            data =
+                JSON.parse(responseText);
+
+        }
+        catch(error){
+
+            console.error(
+                "Daily Brief API returned non-JSON:",
+                response.status,
+                responseText
+            );
+
+            throw new Error(
+                "Today's Daily Brief took too long to generate. Please try again."
+            );
+
+        }
 
 
-        if (!response.ok) {
+        if(!response.ok){
 
             throw new Error(
                 data.error ||
-                "Company overview failed"
+                "Unable to open today's Daily Brief."
             );
 
         }
@@ -15637,6 +17254,1713 @@ chartAIAnalyseBtn?.addEventListener(
     }
 );
 
+</script>
+<script>
+
+/* =========================================
+EDGEBREAK AUTOMATED AI END-OF-DAY
+STOCK RESEARCH
+
+WORKING FLOW
+
+1. Load today's scanner candidates
+2. Send candidates to daily_brief_ai.js
+3. API checks Supabase cache
+4. If cached → return immediately
+5. If not cached → research in 2 Gemini batches
+6. API combines + validates results
+7. Completed research saved to Supabase
+8. Display Stocks to Investigate
+========================================= */
+
+
+/* =========================================
+ELEMENTS
+========================================= */
+
+const dailyBriefButton =
+    document.getElementById(
+        "openDailyBriefBtn"
+    );
+
+
+const dailyBriefContent =
+    document.getElementById(
+        "dailyBriefContent"
+    );
+
+
+const dailyBriefLoading =
+    document.getElementById(
+        "dailyBriefLoading"
+    );
+
+
+const dailyBriefError =
+    document.getElementById(
+        "dailyBriefError"
+    );
+
+
+const dailyBriefResults =
+    document.getElementById(
+        "dailyBriefResults"
+    );
+
+
+/* =========================================
+BUTTON
+========================================= */
+
+dailyBriefButton.addEventListener(
+    "click",
+    openDailyBrief
+);
+
+
+/* =========================================
+OPEN TODAY'S AI STOCK RESEARCH
+========================================= */
+
+async function openDailyBrief(){
+
+    dailyBriefContent.hidden =
+        false;
+
+
+    dailyBriefLoading.hidden =
+        false;
+
+
+    dailyBriefError.hidden =
+        true;
+
+
+    dailyBriefResults.hidden =
+        true;
+
+
+    dailyBriefButton.disabled =
+        true;
+
+
+    setDailyBriefButton(
+        "✦ Loading Today's AI Research..."
+    );
+
+
+    setDailyBriefProgress(
+        "Checking today's automated NASDAQ stock research..."
+    );
+
+
+    try{
+
+
+        /* =================================
+        LOAD TODAY'S SCANNER CANDIDATES
+        ================================= */
+
+        const candidateResponse =
+            await fetch(
+                "/daily_brief_candidates.json",
+                {
+                    cache:
+                        "no-store"
+                }
+            );
+
+
+        if(
+            !candidateResponse.ok
+        ){
+
+            throw new Error(
+                "Today's NASDAQ scanner candidates are unavailable."
+            );
+
+        }
+
+
+        const candidateData =
+            await candidateResponse.json();
+
+
+        const candidates =
+            Array.isArray(
+                candidateData
+            )
+                ? candidateData
+                : [];
+
+
+        if(
+            candidates.length === 0
+        ){
+
+            throw new Error(
+                "No NASDAQ research candidates are available today."
+            );
+
+        }
+
+
+        console.log(
+            `Daily Brief candidates: ${candidates.length}`
+        );
+
+
+        /* =================================
+        UPDATE FUNNEL CANDIDATE COUNT
+        ================================= */
+
+        const candidateCount =
+            document.getElementById(
+                "dailyBriefCandidates"
+            );
+
+
+        if(candidateCount){
+
+            candidateCount.textContent =
+                candidates.length;
+
+        }
+
+
+        /* =================================
+        REQUEST DAILY BRIEF
+
+        API checks Supabase cache first.
+
+        If today's research already exists,
+        Gemini is NOT called again.
+        ================================= */
+
+        setDailyBriefButton(
+            "✦ AI Stock Research Running..."
+        );
+
+
+        setDailyBriefProgress(
+            `EdgeBreak identified ${candidates.length} scanner candidates. Loading today's AI company research...`
+        );
+
+
+        const response =
+            await fetch(
+                "/api/daily_brief_ai",
+                {
+
+                    method:
+                        "POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            candidates
+
+                        })
+
+                }
+            );
+
+
+        const raw =
+            await response.text();
+
+
+        let data = {};
+
+
+        if(raw){
+
+            try{
+
+                data =
+                    JSON.parse(
+                        raw
+                    );
+
+            }
+            catch(error){
+
+                console.error(
+                    "Daily Brief API returned non-JSON:",
+                    raw
+                );
+
+
+                throw new Error(
+                    "The AI stock research server returned an invalid response."
+                );
+
+            }
+
+        }
+
+
+        if(
+            !response.ok
+        ){
+
+            throw new Error(
+                data.error ||
+                `AI stock research request failed (${response.status}).`
+            );
+
+        }
+
+
+        /* =================================
+        DISPLAY COMPLETED RESEARCH
+        ================================= */
+
+        showCompletedDailyBrief(
+            data,
+            candidates.length
+        );
+
+
+    }
+    catch(error){
+
+        showDailyBriefError(
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+COMPLETED RESEARCH
+========================================= */
+
+function showCompletedDailyBrief(
+    data,
+    candidateCount
+){
+
+    renderDailyBrief(
+        data,
+        candidateCount
+    );
+
+
+    dailyBriefLoading.hidden =
+        true;
+
+
+    dailyBriefError.hidden =
+        true;
+
+
+    dailyBriefResults.hidden =
+        false;
+
+
+    setDailyBriefButton(
+        data.cached
+            ? "✓ Today's AI Research Open"
+            : "✓ Today's AI Research Ready"
+    );
+
+
+    dailyBriefButton.disabled =
+        true;
+
+
+    console.log(
+        data.cached
+            ? "EdgeBreak Daily Brief loaded from Supabase cache."
+            : "EdgeBreak Daily Brief AI research completed."
+    );
+
+}
+
+
+/* =========================================
+ERROR
+========================================= */
+
+function showDailyBriefError(
+    error
+){
+
+    console.error(
+        "AI Stock Research Error:",
+        error
+    );
+
+
+    dailyBriefLoading.hidden =
+        true;
+
+
+    dailyBriefResults.hidden =
+        true;
+
+
+    dailyBriefError.hidden =
+        false;
+
+
+    dailyBriefError.textContent =
+        error?.message ||
+        "Today's automated AI stock research is temporarily unavailable.";
+
+
+    setDailyBriefButton(
+        "✦ Try Today's AI Research Again"
+    );
+
+
+    dailyBriefButton.disabled =
+        false;
+
+}
+
+
+/* =========================================
+PROGRESS MESSAGE
+========================================= */
+
+function setDailyBriefProgress(
+    message
+){
+
+    const progressElement =
+        dailyBriefLoading.querySelector(
+            "[data-daily-brief-progress]"
+        );
+
+
+    if(progressElement){
+
+        progressElement.textContent =
+            message;
+
+
+        return;
+
+    }
+
+
+    const textContainer =
+        dailyBriefLoading.querySelector(
+            "div:last-child"
+        );
+
+
+    if(textContainer){
+
+        const span =
+            textContainer.querySelector(
+                "span"
+            );
+
+
+        if(span){
+
+            span.textContent =
+                message;
+
+        }
+
+    }
+
+}
+
+
+/* =========================================
+BUTTON TEXT
+========================================= */
+
+function setDailyBriefButton(
+    text
+){
+
+    dailyBriefButton.innerHTML =
+        text;
+
+}
+
+
+/* =========================================
+RENDER DAILY BRIEF
+========================================= */
+
+function renderDailyBrief(
+    data,
+    candidateCount
+){
+
+
+    /* =====================================
+    DATE
+    ===================================== */
+
+    const dateElement =
+        document.getElementById(
+            "dailyBriefDate"
+        );
+
+
+    if(dateElement){
+
+        dateElement.textContent =
+            data.briefDate || "";
+
+    }
+
+
+    /* =====================================
+    FUNNEL COUNTS
+    ===================================== */
+
+    const candidatesElement =
+        document.getElementById(
+            "dailyBriefCandidates"
+        );
+
+
+    if(candidatesElement){
+
+        candidatesElement.textContent =
+            candidateCount ?? "—";
+
+    }
+
+
+    const reviewedElement =
+        document.getElementById(
+            "dailyBriefReviewed"
+        );
+
+
+    if(reviewedElement){
+
+        reviewedElement.textContent =
+            data.companiesReviewed ?? "—";
+
+    }
+
+
+    const includedElement =
+        document.getElementById(
+            "dailyBriefIncluded"
+        );
+
+
+    if(includedElement){
+
+        includedElement.textContent =
+            data.companiesIncluded ?? "—";
+
+    }
+
+
+    /* =====================================
+    STOCK CONTAINER
+    ===================================== */
+
+    const container =
+        document.getElementById(
+            "dailyBriefStocks"
+        );
+
+
+    if(!container){
+
+        console.error(
+            "dailyBriefStocks container not found."
+        );
+
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    const results =
+        Array.isArray(
+            data.results
+        )
+            ? data.results
+            : [];
+
+
+    /* =====================================
+    NO COMPANIES QUALIFIED
+    ===================================== */
+
+    if(
+        results.length === 0
+    ){
+
+        container.innerHTML = `
+
+            <div class="daily-brief-placeholder">
+
+                No companies met today's automated
+                AI market-research criteria.
+
+            </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    /* =====================================
+    RESULT CARDS
+    ===================================== */
+
+    results.forEach(
+        company => {
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "daily-brief-stock-card";
+
+
+            const symbolArray =
+                Array.isArray(
+                    company.symbols
+                )
+                    ? company.symbols
+                    : [];
+
+
+            const primarySymbol =
+                String(
+                    symbolArray[0] || ""
+                )
+                    .trim()
+                    .toUpperCase();
+
+
+            const symbols =
+                symbolArray.join(
+                    " / "
+                );
+
+
+            card.innerHTML = `
+
+                <div class="daily-brief-stock-top">
+
+                    <div>
+
+                        <div
+                            class="daily-brief-symbol"
+                            ${primarySymbol
+                                ? `data-daily-brief-chart="${escapeDailyBriefHtml(
+                                    primarySymbol
+                                )}"`
+                                : ""
+                            }
+                            ${primarySymbol
+                                ? `title="Open ${escapeDailyBriefHtml(
+                                    primarySymbol
+                                )} chart"`
+                                : ""
+                            }
+                        >
+
+                            ${escapeDailyBriefHtml(
+                                symbols
+                            )}
+
+                        </div>
+
+
+                        <div class="daily-brief-company">
+
+                            ${escapeDailyBriefHtml(
+                                company.companyName || ""
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <span class="daily-brief-attention">
+
+                        ${escapeDailyBriefHtml(
+                            company.attentionLevel || ""
+                        )} ATTENTION
+
+                    </span>
+
+                </div>
+
+
+                <h4>
+
+                    ${escapeDailyBriefHtml(
+                        company.headline || ""
+                    )}
+
+                </h4>
+
+
+                <p>
+
+                    ${escapeDailyBriefHtml(
+                        company.summary || ""
+                    )}
+
+                </p>
+
+
+                <div class="daily-brief-development">
+
+                    <span>
+                        Current Development
+                    </span>
+
+
+                    <p>
+
+                        ${escapeDailyBriefHtml(
+                            company.currentDevelopment || ""
+                        )}
+
+                    </p>
+
+                </div>
+
+
+                ${
+                    company.whyIncluded
+                        ? `
+
+                <div class="daily-brief-development">
+
+                    <span>
+                        Why It Was Surfaced
+                    </span>
+
+                    <p>
+
+                        ${escapeDailyBriefHtml(
+                            company.whyIncluded
+                        )}
+
+                    </p>
+
+                </div>
+
+                `
+                        : ""
+                }
+
+
+                ${
+                    primarySymbol
+                        ? `
+
+                <div
+                    class="daily-brief-stock-actions"
+                    style="
+                        display:flex;
+                        gap:10px;
+                        flex-wrap:wrap;
+                        margin-top:18px;
+                    "
+                >
+
+                    <button
+                        type="button"
+                        class="watchlist-open"
+                        data-daily-brief-chart="${escapeDailyBriefHtml(
+                            primarySymbol
+                        )}"
+                    >
+                        View ${escapeDailyBriefHtml(
+                            primarySymbol
+                        )} Chart
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="watchlist-open"
+                        data-daily-brief-research="${escapeDailyBriefHtml(
+                            primarySymbol
+                        )}"
+                    >
+                        ✦ AI Deep Research
+                    </button>
+
+                </div>
+
+                `
+                        : ""
+                }
+
+            `;
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    /* =====================================
+    CHART LINKS
+
+    Reuses existing EdgeBreak loadChart()
+    ===================================== */
+
+    container
+        .querySelectorAll(
+            "[data-daily-brief-chart]"
+        )
+        .forEach(
+            element => {
+
+
+                element.addEventListener(
+                    "click",
+                    function(){
+
+
+                        const symbol =
+                            this.getAttribute(
+                                "data-daily-brief-chart"
+                            );
+
+
+                        if(!symbol){
+
+                            return;
+
+                        }
+
+
+                        if(
+                            typeof loadChart !==
+                            "function"
+                        ){
+
+                            console.error(
+                                "EdgeBreak loadChart() is unavailable."
+                            );
+
+
+                            return;
+
+                        }
+
+
+                        loadChart(
+                            symbol
+                        );
+
+
+                        const chart =
+                            document.getElementById(
+                                "tv_chart"
+                            );
+
+
+                        if(chart){
+
+                            chart.scrollIntoView({
+                                behavior:
+                                    "smooth",
+
+                                block:
+                                    "start"
+                            });
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+    /* =====================================
+    AI DEEP RESEARCH
+
+    Reuses existing EdgeBreak AI panel.
+    ===================================== */
+
+    container
+        .querySelectorAll(
+            "[data-daily-brief-research]"
+        )
+        .forEach(
+            button => {
+
+
+                button.addEventListener(
+                    "click",
+                    function(){
+
+
+                        const symbol =
+                            this.getAttribute(
+                                "data-daily-brief-research"
+                            );
+
+
+                        if(!symbol){
+
+                            return;
+
+                        }
+
+
+                        if(
+                            typeof openEdgeBreakAI !==
+                                "function" ||
+                            typeof loadEdgeBreakAIResearch !==
+                                "function"
+                        ){
+
+                            console.error(
+                                "EdgeBreak AI Research panel is unavailable."
+                            );
+
+
+                            return;
+
+                        }
+
+
+                        openEdgeBreakAI();
+
+
+                        loadEdgeBreakAIResearch(
+                            symbol
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================
+SAFE HTML
+========================================= */
+
+function escapeDailyBriefHtml(
+    value
+){
+
+    return String(
+        value || ""
+    )
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+</script>
+<script>
+/* =========================================
+EDGEBREAK
+NASDAQ END-OF-DAY MARKET OVERVIEW
+FRONT-END
+========================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const button =
+        document.getElementById("openNasdaqOverviewBtn");
+
+    const content =
+        document.getElementById("nasdaqOverviewContent");
+
+    const loading =
+        document.getElementById("nasdaqOverviewLoading");
+
+    const errorBox =
+        document.getElementById("nasdaqOverviewError");
+
+    const results =
+        document.getElementById("nasdaqOverviewResults");
+
+
+    if (
+        !button ||
+        !content ||
+        !loading ||
+        !errorBox ||
+        !results
+    ) {
+
+        console.warn(
+            "NASDAQ Market Overview elements not found."
+        );
+
+        return;
+
+    }
+
+
+    let loaded = false;
+
+
+    button.addEventListener(
+        "click",
+        async () => {
+
+            content.hidden = false;
+
+
+            /* Already loaded */
+
+            if (loaded) {
+
+                results.hidden = false;
+
+                results.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+                return;
+
+            }
+
+
+            await loadNasdaqOverview();
+
+        }
+    );
+
+
+    async function loadNasdaqOverview() {
+
+        loading.hidden = false;
+        errorBox.hidden = true;
+        results.hidden = true;
+
+        button.disabled = true;
+
+        button.textContent =
+            "Loading Market Overview...";
+
+
+        try {
+
+            console.log(
+                "NASDAQ Market Overview request starting..."
+            );
+
+
+            const response =
+                await fetch(
+                    "/api/nasdaq_market_overview",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({})
+                    }
+                );
+
+
+            const rawText =
+                await response.text();
+
+
+            console.log(
+                "NASDAQ Market Overview HTTP status:",
+                response.status
+            );
+
+
+            console.log(
+                "NASDAQ Market Overview raw response:",
+                rawText
+            );
+
+
+            let data;
+
+
+            try {
+
+                data =
+                    JSON.parse(rawText);
+
+            }
+            catch (parseError) {
+
+                throw new Error(
+                    "The NASDAQ Market Overview server returned an invalid response."
+                );
+
+            }
+
+
+            if (
+                !response.ok ||
+                !data.success
+            ) {
+
+                throw new Error(
+                    data?.debug?.message ||
+                    data?.error ||
+                    "Today's NASDAQ Market Overview is unavailable."
+                );
+
+            }
+
+
+            if (!data.overview) {
+
+                throw new Error(
+                    "No NASDAQ market overview was returned."
+                );
+
+            }
+
+
+            renderNasdaqOverview(
+                data
+            );
+
+
+            loaded = true;
+
+
+            button.textContent =
+                "✓ Today's Market Overview Ready";
+
+
+            console.log(
+                data.cached
+                    ? "NASDAQ Market Overview loaded from cache."
+                    : "NASDAQ Market Overview generated successfully."
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "NASDAQ Market Overview Error:",
+                error
+            );
+
+
+            errorBox.textContent =
+                error.message ||
+                "Today's NASDAQ Market Overview is temporarily unavailable.";
+
+
+            errorBox.hidden = false;
+
+
+            button.textContent =
+                "Try Market Overview Again";
+
+        }
+        finally {
+
+            loading.hidden = true;
+
+            button.disabled = false;
+
+        }
+
+    }
+
+
+    /* =====================================
+    RENDER OVERVIEW
+    ===================================== */
+
+    function renderNasdaqOverview(data) {
+
+        const overview =
+            data.overview;
+
+
+        /* DATE */
+
+        setText(
+            "nasdaqOverviewDate",
+            formatDate(
+                data.marketDate
+            )
+        );
+
+
+        /* MARKET SUMMARY */
+
+        setText(
+            "nasdaqMarketSummary",
+            overview.marketSummary
+        );
+
+
+        /* NASDAQ COMPOSITE */
+
+        setText(
+            "nasdaqCompositeChange",
+            overview.nasdaqComposite
+                ?.changePercent || "—"
+        );
+
+
+        setText(
+            "nasdaqCompositeClose",
+            overview.nasdaqComposite
+                ?.close
+                ? `Close: ${overview.nasdaqComposite.close}`
+                : ""
+        );
+
+
+        setText(
+            "nasdaqCompositeSummary",
+            overview.nasdaqComposite
+                ?.summary || ""
+        );
+
+
+        /* NASDAQ 100 */
+
+        setText(
+            "nasdaq100Change",
+            overview.nasdaq100
+                ?.changePercent || "—"
+        );
+
+
+        setText(
+            "nasdaq100Close",
+            overview.nasdaq100
+                ?.close
+                ? `Close: ${overview.nasdaq100.close}`
+                : ""
+        );
+
+
+        setText(
+            "nasdaq100Summary",
+            overview.nasdaq100
+                ?.summary || ""
+        );
+
+
+        /* STRONG AREAS */
+
+        renderAreas(
+            "nasdaqStrongAreas",
+            overview.strongAreas
+        );
+
+
+        /* WEAK AREAS */
+
+        renderAreas(
+            "nasdaqWeakAreas",
+            overview.weakAreas
+        );
+
+
+        /* MARKET DRIVERS */
+
+        renderDrivers(
+            overview.marketDrivers
+        );
+
+
+        /* UPCOMING EVENTS */
+
+        renderUpcomingEvents(
+            overview.upcomingEvents
+        );
+
+
+        /* TAKEAWAY */
+
+        setText(
+            "nasdaqTakeaway",
+            overview.takeaway
+        );
+
+
+        /* =====================================
+        EDGEBREAK SCANNER COUNTS
+
+        Pull counts from the scanner data already
+        loaded on the scanner page.
+        ===================================== */
+
+        updateScannerCounts();
+
+
+        /* SHOW RESULTS */
+
+        results.hidden = false;
+
+    }
+
+
+    /* =====================================
+    RENDER STRONG / WEAK AREAS
+    ===================================== */
+
+    function renderAreas(
+        elementId,
+        areas
+    ) {
+
+        const container =
+            document.getElementById(
+                elementId
+            );
+
+
+        if (!container) {
+            return;
+        }
+
+
+        container.innerHTML = "";
+
+
+        if (
+            !Array.isArray(areas) ||
+            areas.length === 0
+        ) {
+
+            container.innerHTML =
+                `<p class="nasdaq-empty">
+                    No notable area identified.
+                </p>`;
+
+            return;
+
+        }
+
+
+        areas.forEach(area => {
+
+            const item =
+                document.createElement("div");
+
+
+            item.className =
+                "nasdaq-area-item";
+
+
+            const title =
+                document.createElement("strong");
+
+
+            title.textContent =
+                area.name || "";
+
+
+            const description =
+                document.createElement("p");
+
+
+            description.textContent =
+                area.summary || "";
+
+
+            item.appendChild(title);
+            item.appendChild(description);
+
+            container.appendChild(item);
+
+        });
+
+    }
+
+
+    /* =====================================
+    MARKET DRIVERS
+    ===================================== */
+
+    function renderDrivers(drivers) {
+
+        const container =
+            document.getElementById(
+                "nasdaqMarketDrivers"
+            );
+
+
+        if (!container) {
+            return;
+        }
+
+
+        container.innerHTML = "";
+
+
+        if (
+            !Array.isArray(drivers) ||
+            drivers.length === 0
+        ) {
+
+            container.innerHTML =
+                `<p class="nasdaq-empty">
+                    No major market drivers identified.
+                </p>`;
+
+            return;
+
+        }
+
+
+        drivers.forEach(driver => {
+
+            const item =
+                document.createElement("div");
+
+
+            item.className =
+                "nasdaq-list-item";
+
+
+            const title =
+                document.createElement("strong");
+
+
+            title.textContent =
+                driver.headline || "";
+
+
+            const description =
+                document.createElement("p");
+
+
+            description.textContent =
+                driver.summary || "";
+
+
+            item.appendChild(title);
+            item.appendChild(description);
+
+            container.appendChild(item);
+
+        });
+
+    }
+
+
+    /* =====================================
+    UPCOMING EVENTS
+    ===================================== */
+
+    function renderUpcomingEvents(events) {
+
+        const container =
+            document.getElementById(
+                "nasdaqUpcomingEvents"
+            );
+
+
+        if (!container) {
+            return;
+        }
+
+
+        container.innerHTML = "";
+
+
+        if (
+            !Array.isArray(events) ||
+            events.length === 0
+        ) {
+
+            container.innerHTML =
+                `<p class="nasdaq-empty">
+                    No major scheduled events identified.
+                </p>`;
+
+            return;
+
+        }
+
+
+        events.forEach(event => {
+
+            const item =
+                document.createElement("div");
+
+
+            item.className =
+                "nasdaq-list-item";
+
+
+            const date =
+                document.createElement("span");
+
+
+            date.className =
+                "nasdaq-event-date";
+
+
+            date.textContent =
+                event.date || "";
+
+
+            const title =
+                document.createElement("strong");
+
+
+            title.textContent =
+                event.event || "";
+
+
+            const description =
+                document.createElement("p");
+
+
+            description.textContent =
+                event.whyItMatters || "";
+
+
+            item.appendChild(date);
+            item.appendChild(title);
+            item.appendChild(description);
+
+            container.appendChild(item);
+
+        });
+
+    }
+
+
+    /* =====================================
+    SCANNER COUNTS
+    ===================================== */
+
+    function updateScannerCounts() {
+
+        /*
+        Your scanner page already loads these
+        datasets.
+
+        We try the common EdgeBreak variable
+        names first.
+
+        If one is unavailable we leave "—"
+        rather than breaking the market overview.
+        */
+
+
+        const breakoutCount =
+            getArrayLength([
+                "breakoutStocks",
+                "breakoutResults",
+                "breakouts"
+            ]);
+
+
+        const preBreakoutCount =
+            getArrayLength([
+                "preBreakoutStocks",
+                "preBreakoutResults",
+                "preBreakouts"
+            ]);
+
+
+        const baseCount =
+            getArrayLength([
+                "launchPadStocks",
+                "launchpadStocks",
+                "launchPadResults"
+            ]);
+
+
+        if (breakoutCount !== null) {
+
+            setText(
+                "nasdaqBreakoutCount",
+                breakoutCount
+            );
+
+        }
+
+
+        if (preBreakoutCount !== null) {
+
+            setText(
+                "nasdaqPreBreakoutCount",
+                preBreakoutCount
+            );
+
+        }
+
+
+        if (baseCount !== null) {
+
+            setText(
+                "nasdaqBaseCount",
+                baseCount
+            );
+
+        }
+
+    }
+
+
+    function getArrayLength(
+        variableNames
+    ) {
+
+        for (
+            const variableName of
+            variableNames
+        ) {
+
+            try {
+
+                const value =
+                    window[
+                        variableName
+                    ];
+
+
+                if (
+                    Array.isArray(value)
+                ) {
+
+                    return value.length;
+
+                }
+
+            }
+            catch (error) {
+
+                // Ignore and try next name.
+
+            }
+
+        }
+
+
+        return null;
+
+    }
+
+
+    /* =====================================
+    HELPERS
+    ===================================== */
+
+    function setText(
+        elementId,
+        value
+    ) {
+
+        const element =
+            document.getElementById(
+                elementId
+            );
+
+
+        if (element) {
+
+            element.textContent =
+                value ?? "";
+
+        }
+
+    }
+
+
+    function formatDate(dateString) {
+
+        if (!dateString) {
+            return "";
+        }
+
+
+        try {
+
+            const date =
+                new Date(
+                    `${dateString}T12:00:00`
+                );
+
+
+            return new Intl.DateTimeFormat(
+                "en-US",
+                {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric"
+                }
+            ).format(date);
+
+        }
+        catch (error) {
+
+            return dateString;
+
+        }
+
+    }
+
+});
 </script>
 
 <!-- COMPONENTS -->
