@@ -8275,6 +8275,148 @@ html {
     }
 
 }
+
+/* =========================================
+FREE PAGE — LOCKED AI STOCK RESULTS
+========================================= */
+
+.daily-brief-stock-grid {
+    position: relative;
+}
+
+
+/* STOCKS AFTER THE FIRST TWO */
+
+.daily-brief-stock-card.free-ai-locked {
+    filter: blur(7px);
+    opacity: 0.55;
+    user-select: none;
+    pointer-events: none;
+}
+
+
+/* LOCKED RESULTS WRAPPER */
+
+.free-ai-locked-area {
+    position: relative;
+}
+
+
+/* LOCK MESSAGE */
+
+.free-ai-lock-overlay {
+    position: absolute;
+
+    top: 55px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: calc(100% - 40px);
+    max-width: 620px;
+
+    z-index: 20;
+
+    padding: 28px 24px;
+
+    text-align: center;
+
+    background: rgba(7, 18, 37, 0.96);
+
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    border-radius: 14px;
+
+    box-shadow:
+        0 18px 50px rgba(0, 0, 0, 0.45);
+}
+
+
+.free-ai-lock-icon {
+    display: block;
+
+    margin-bottom: 10px;
+
+    font-size: 26px;
+}
+
+
+.free-ai-lock-overlay h4 {
+    margin: 0 0 10px;
+
+    color: #ffffff;
+
+    font-size: 21px;
+    font-weight: 800;
+}
+
+
+.free-ai-lock-overlay p {
+    max-width: 480px;
+
+    margin: 0 auto 18px;
+
+    color: #a9b7ca;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* TRIAL BUTTON */
+
+.free-ai-unlock-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 22px;
+
+    background: #22c55e;
+
+    color: #071225;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    text-decoration: none;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.free-ai-unlock-btn:hover {
+    transform: translateY(-1px);
+    opacity: 0.92;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .free-ai-lock-overlay {
+        top: 35px;
+
+        width: calc(100% - 20px);
+
+        padding: 22px 16px;
+    }
+
+
+    .free-ai-lock-overlay h4 {
+        font-size: 18px;
+    }
+
+
+    .free-ai-unlock-btn {
+        width: 100%;
+    }
+
+}
 </style>  
 
 
@@ -19303,6 +19445,1442 @@ function closeFreeMemberUpgrade(){
         );
 
     }
+
+}
+
+</script>
+
+<script>
+
+/* =========================================
+EDGEBREAK AUTOMATED AI STOCK RESEARCH
+
+BACKGROUND AI FLOW
+
+1. Check Supabase for today's research
+2. If complete → display immediately
+3. If not started → load scanner candidates
+4. Start ONE Gemini background interaction
+5. Poll status every 10 seconds
+6. When complete → API saves to Supabase
+7. Display finished stock research
+8. Allow direct Chart + AI Deep Research
+========================================= */
+
+
+/* =========================================
+ELEMENTS
+========================================= */
+
+const dailyBriefButton =
+    document.getElementById(
+        "openDailyBriefBtn"
+    );
+
+const dailyBriefContent =
+    document.getElementById(
+        "dailyBriefContent"
+    );
+
+const dailyBriefLoading =
+    document.getElementById(
+        "dailyBriefLoading"
+    );
+
+const dailyBriefError =
+    document.getElementById(
+        "dailyBriefError"
+    );
+
+const dailyBriefResults =
+    document.getElementById(
+        "dailyBriefResults"
+    );
+
+
+/* =========================================
+SETTINGS
+========================================= */
+
+const DAILY_BRIEF_POLL_INTERVAL =
+    10000;
+
+
+/* =========================================
+BUTTON
+========================================= */
+
+if (dailyBriefButton) {
+
+    dailyBriefButton.addEventListener(
+        "click",
+        openDailyBrief
+    );
+
+}
+
+
+/* =========================================
+OPEN TODAY'S AI STOCK RESEARCH
+========================================= */
+
+async function openDailyBrief(){
+
+    if (
+        !dailyBriefButton ||
+        !dailyBriefContent ||
+        !dailyBriefLoading ||
+        !dailyBriefError ||
+        !dailyBriefResults
+    ) {
+
+        console.error(
+            "EdgeBreak AI Stock Research elements are missing."
+        );
+
+        return;
+
+    }
+
+
+    dailyBriefContent.hidden =
+        false;
+
+
+    dailyBriefLoading.hidden =
+        false;
+
+
+    dailyBriefError.hidden =
+        true;
+
+
+    dailyBriefResults.hidden =
+        true;
+
+
+    dailyBriefButton.disabled =
+        true;
+
+
+    setDailyBriefButton(
+        "✦ Checking Today's AI Research..."
+    );
+
+
+    setDailyBriefProgress(
+        "Checking today's automated NASDAQ stock research..."
+    );
+
+
+    try {
+
+
+        /* =================================
+        STEP 1
+        CHECK TODAY'S CACHE / JOB STATUS
+        ================================= */
+
+        const status =
+            await dailyBriefRequest({
+
+                action:
+                    "status"
+
+            });
+
+
+        /* =================================
+        ALREADY COMPLETE
+        ================================= */
+
+        if (status.complete) {
+
+            console.log(
+                "AI Stock Research cache hit."
+            );
+
+
+            showCompletedDailyBrief(
+                status
+            );
+
+
+            return;
+
+        }
+
+
+        console.log(
+            "AI Stock Research status:",
+            status.researchStatus
+        );
+
+
+        /* =================================
+        EXISTING BACKGROUND JOB
+        ================================= */
+
+        if (
+            status.interactionExists &&
+            (
+                status.researchStatus ===
+                    "queued" ||
+
+                status.researchStatus ===
+                    "in_progress" ||
+
+                status.researchStatus ===
+                    "requires_action"
+            )
+        ) {
+
+            setDailyBriefProgress(
+                "Today's automated AI stock research is already running..."
+            );
+
+
+            setDailyBriefButton(
+                "✦ AI Stock Research Running..."
+            );
+
+
+            await waitForDailyBrief();
+
+
+            return;
+
+        }
+
+
+        /* =================================
+        STEP 2
+        LOAD TODAY'S SCANNER CANDIDATES
+        ================================= */
+
+        setDailyBriefButton(
+            "✦ Preparing Automated Research..."
+        );
+
+
+        setDailyBriefProgress(
+            "Loading today's NASDAQ scanner discoveries..."
+        );
+
+
+        const candidateResponse =
+            await fetch(
+                "/daily_brief_candidates.json",
+                {
+                    cache:
+                        "no-store"
+                }
+            );
+
+
+        if (!candidateResponse.ok) {
+
+            throw new Error(
+                "Today's NASDAQ research candidates are unavailable."
+            );
+
+        }
+
+
+        const candidateData =
+            await candidateResponse.json();
+
+
+        const candidates =
+            Array.isArray(
+                candidateData
+            )
+                ? candidateData
+                : [];
+
+
+        if (candidates.length === 0) {
+
+            throw new Error(
+                "No NASDAQ research candidates are available today."
+            );
+
+        }
+
+
+        console.log(
+            `AI Stock Research candidates: ${candidates.length}`
+        );
+
+
+        /* =================================
+        UPDATE CANDIDATE COUNT
+        ================================= */
+
+        const candidateCount =
+            document.getElementById(
+                "dailyBriefCandidates"
+            );
+
+
+        if (candidateCount) {
+
+            candidateCount.textContent =
+                candidates.length;
+
+        }
+
+
+        /* =================================
+        STEP 3
+        START BACKGROUND GEMINI RESEARCH
+        ================================= */
+
+        setDailyBriefButton(
+            "✦ Starting AI Stock Research..."
+        );
+
+
+        setDailyBriefProgress(
+            `EdgeBreak AI is researching ${candidates.length} NASDAQ scanner candidates...`
+        );
+
+
+        const start =
+            await dailyBriefRequest({
+
+                action:
+                    "start",
+
+                candidates:
+                    candidates
+
+            });
+
+
+        /* =================================
+        POSSIBLE CACHE HIT
+        ================================= */
+
+        if (start.complete) {
+
+            showCompletedDailyBrief(
+                start
+            );
+
+
+            return;
+
+        }
+
+
+        console.log(
+            "AI Stock Research background job started:",
+            start
+        );
+
+
+        /* =================================
+        STEP 4
+        POLL BACKGROUND JOB
+        ================================= */
+
+        setDailyBriefButton(
+            "✦ AI Stock Research Running..."
+        );
+
+
+        setDailyBriefProgress(
+            "EdgeBreak AI is researching current company developments and market attention..."
+        );
+
+
+        await waitForDailyBrief();
+
+    }
+    catch (error) {
+
+        showDailyBriefError(
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+WAIT FOR BACKGROUND RESEARCH
+========================================= */
+
+async function waitForDailyBrief(){
+
+    let checks =
+        0;
+
+
+    while (true) {
+
+
+        await dailyBriefSleep(
+            DAILY_BRIEF_POLL_INTERVAL
+        );
+
+
+        checks++;
+
+
+        console.log(
+            `AI Stock Research status check ${checks}`
+        );
+
+
+        let result;
+
+
+        try {
+
+
+            result =
+                await dailyBriefRequest({
+
+                    action:
+                        "check"
+
+                });
+
+
+        }
+        catch (error) {
+
+
+            console.warn(
+                "AI Stock Research status check failed:",
+                error
+            );
+
+
+            /*
+            A temporary Vercel/API error does not
+            necessarily mean Gemini stopped.
+
+            Allow a couple of retries before
+            showing the user an error.
+            */
+
+            if (
+                error.status >= 500 &&
+                checks < 3
+            ) {
+
+                setDailyBriefProgress(
+                    "AI research is still running. Checking again..."
+                );
+
+
+                continue;
+
+            }
+
+
+            throw error;
+
+        }
+
+
+        /* =================================
+        COMPLETE
+        ================================= */
+
+        if (result.complete) {
+
+
+            console.log(
+                "AI Stock Research complete."
+            );
+
+
+            showCompletedDailyBrief(
+                result
+            );
+
+
+            return;
+
+        }
+
+
+        const researchStatus =
+            String(
+                result.researchStatus ||
+                ""
+            );
+
+
+        console.log(
+            "AI Stock Research status:",
+            researchStatus
+        );
+
+
+        /* =================================
+        STILL RUNNING
+        ================================= */
+
+        if (
+            researchStatus ===
+                "queued" ||
+
+            researchStatus ===
+                "in_progress" ||
+
+            researchStatus ===
+                "requires_action"
+        ) {
+
+
+            setDailyBriefProgress(
+                getDailyBriefResearchMessage(
+                    checks
+                )
+            );
+
+
+            continue;
+
+        }
+
+
+        /* =================================
+        FAILED
+        ================================= */
+
+        if (
+            researchStatus ===
+                "failed" ||
+
+            researchStatus ===
+                "cancelled" ||
+
+            researchStatus ===
+                "incomplete"
+        ) {
+
+
+            throw new Error(
+                "Today's automated AI stock research could not be completed."
+            );
+
+        }
+
+
+        /*
+        Unknown but non-error status.
+
+        Don't kill the process.
+        Keep checking.
+        */
+
+        setDailyBriefProgress(
+            "Today's AI stock research is still processing..."
+        );
+
+    }
+
+}
+
+
+/* =========================================
+API REQUEST
+========================================= */
+
+async function dailyBriefRequest(
+    payload
+){
+
+    const response =
+        await fetch(
+            "/api/daily_brief_ai",
+            {
+
+                method:
+                    "POST",
+
+                headers: {
+
+                    "Content-Type":
+                        "application/json"
+
+                },
+
+                body:
+                    JSON.stringify(
+                        payload
+                    )
+
+            }
+        );
+
+
+    const raw =
+        await response.text();
+
+
+    let data =
+        {};
+
+
+    if (raw) {
+
+
+        try {
+
+
+            data =
+                JSON.parse(
+                    raw
+                );
+
+
+        }
+        catch (parseError) {
+
+
+            console.error(
+                "AI Stock Research API returned non-JSON:",
+                raw
+            );
+
+
+            const error =
+                new Error(
+                    response.ok
+                        ? "The AI Stock Research server returned an invalid response."
+                        : `AI Stock Research server error (${response.status}).`
+                );
+
+
+            error.status =
+                response.status;
+
+
+            throw error;
+
+        }
+
+    }
+
+
+    if (!response.ok) {
+
+
+        const error =
+            new Error(
+                data.error ||
+                `AI Stock Research request failed (${response.status}).`
+            );
+
+
+        error.status =
+            response.status;
+
+
+        error.data =
+            data;
+
+
+        throw error;
+
+    }
+
+
+    return data;
+
+}
+
+
+/* =========================================
+COMPLETED RESEARCH
+========================================= */
+
+function showCompletedDailyBrief(
+    data
+){
+
+    renderDailyBrief(
+        data
+    );
+
+
+    dailyBriefLoading.hidden =
+        true;
+
+
+    dailyBriefError.hidden =
+        true;
+
+
+    dailyBriefResults.hidden =
+        false;
+
+
+    setDailyBriefButton(
+        data.cached
+            ? "✓ Today's AI Research Open"
+            : "✓ Today's AI Research Ready"
+    );
+
+
+    dailyBriefButton.disabled =
+        true;
+
+
+    if (data.usage) {
+
+        console.log(
+            "EdgeBreak AI Stock Research Gemini usage:",
+            data.usage
+        );
+
+    }
+
+}
+
+
+/* =========================================
+ERROR
+========================================= */
+
+function showDailyBriefError(
+    error
+){
+
+    console.error(
+        "AI Stock Research Error:",
+        error
+    );
+
+
+    dailyBriefLoading.hidden =
+        true;
+
+
+    dailyBriefResults.hidden =
+        true;
+
+
+    dailyBriefError.hidden =
+        false;
+
+
+    dailyBriefError.textContent =
+        error?.message ||
+        "Today's automated AI stock research is temporarily unavailable.";
+
+
+    setDailyBriefButton(
+        "✦ Try Today's AI Research Again"
+    );
+
+
+    dailyBriefButton.disabled =
+        false;
+
+}
+
+
+/* =========================================
+PROGRESS MESSAGE
+========================================= */
+
+function setDailyBriefProgress(
+    message
+){
+
+    if (!dailyBriefLoading) {
+        return;
+    }
+
+
+    const progressElement =
+        dailyBriefLoading.querySelector(
+            "[data-daily-brief-progress]"
+        );
+
+
+    if (progressElement) {
+
+
+        progressElement.textContent =
+            message;
+
+
+        return;
+
+    }
+
+
+    /*
+    Your existing HTML has:
+
+    <div>
+        <strong>...</strong>
+        <span>...</span>
+    </div>
+
+    So update that span without changing
+    the HTML structure.
+    */
+
+    const textContainer =
+        dailyBriefLoading.querySelector(
+            "div:last-child"
+        );
+
+
+    if (textContainer) {
+
+
+        const span =
+            textContainer.querySelector(
+                "span"
+            );
+
+
+        if (span) {
+
+            span.textContent =
+                message;
+
+        }
+
+    }
+
+}
+
+
+/* =========================================
+FRIENDLY RESEARCH MESSAGE
+========================================= */
+
+function getDailyBriefResearchMessage(
+    checks
+){
+
+    if (checks <= 2) {
+
+        return (
+            "AI researching current company developments and market attention..."
+        );
+
+    }
+
+
+    if (checks <= 6) {
+
+        return (
+            "EdgeBreak AI is reviewing today's NASDAQ scanner candidates..."
+        );
+
+    }
+
+
+    if (checks <= 12) {
+
+        return (
+            "Automated AI research is still running across today's scanner discoveries..."
+        );
+
+    }
+
+
+    return (
+        "AI research is still running in the background. You can leave this page and return later."
+    );
+
+}
+
+
+/* =========================================
+BUTTON TEXT
+========================================= */
+
+function setDailyBriefButton(
+    text
+){
+
+    if (!dailyBriefButton) {
+        return;
+    }
+
+
+    dailyBriefButton.innerHTML =
+        text;
+
+}
+
+
+/* =========================================
+RENDER AI STOCK RESEARCH
+========================================= */
+
+function renderDailyBrief(
+    data
+){
+
+
+    /* =====================================
+    DATE
+    ===================================== */
+
+    const dateElement =
+        document.getElementById(
+            "dailyBriefDate"
+        );
+
+
+    if (dateElement) {
+
+        dateElement.textContent =
+            data.briefDate || "";
+
+    }
+
+
+    /* =====================================
+    FUNNEL COUNTS
+    ===================================== */
+
+    const reviewedElement =
+        document.getElementById(
+            "dailyBriefReviewed"
+        );
+
+
+    if (reviewedElement) {
+
+        reviewedElement.textContent =
+            data.companiesReviewed ?? "—";
+
+    }
+
+
+    const includedElement =
+        document.getElementById(
+            "dailyBriefIncluded"
+        );
+
+
+    if (includedElement) {
+
+        includedElement.textContent =
+            data.companiesIncluded ?? "—";
+
+    }
+
+
+    /* =====================================
+    STOCK CONTAINER
+    ===================================== */
+
+    const container =
+        document.getElementById(
+            "dailyBriefStocks"
+        );
+
+
+    if (!container) {
+
+
+        console.error(
+            "dailyBriefStocks container not found."
+        );
+
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    const allResults =
+        Array.isArray(
+            data.results
+        )
+            ? data.results
+            : [];
+
+
+    /* =====================================
+    HARD DISPLAY CAP — MAXIMUM 12 STOCKS
+
+    Backend remains untouched.
+
+    If Gemini returns fewer than 12,
+    display only those returned.
+
+    If Gemini returns more than 12,
+    display the first/highest-ranked 12.
+    ===================================== */
+
+    const results =
+        allResults.slice(
+            0,
+            12
+        );
+
+
+    /* =====================================
+    NO COMPANIES QUALIFIED
+    ===================================== */
+
+    if (
+        results.length === 0
+    ) {
+
+
+        container.innerHTML = `
+
+            <div class="daily-brief-placeholder">
+
+                No companies met today's automated
+                AI market-research criteria.
+
+            </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    /* =====================================
+    RESULT CARDS
+    ===================================== */
+
+    results.forEach(
+        company => {
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "daily-brief-stock-card";
+
+
+            const symbolArray =
+                Array.isArray(
+                    company.symbols
+                )
+                    ? company.symbols
+                    : [];
+
+
+            const primarySymbol =
+                String(
+                    symbolArray[0] || ""
+                )
+                    .trim()
+                    .toUpperCase();
+
+
+            const symbols =
+                symbolArray.join(
+                    " / "
+                );
+
+
+            card.innerHTML = `
+
+                <div class="daily-brief-stock-top">
+
+                    <div>
+
+                        <div
+                            class="daily-brief-symbol"
+
+                            ${primarySymbol
+                                ? `data-daily-brief-chart="${escapeDailyBriefHtml(
+                                    primarySymbol
+                                )}"`
+                                : ""
+                            }
+
+                            ${primarySymbol
+                                ? `title="Open ${escapeDailyBriefHtml(
+                                    primarySymbol
+                                )} chart"`
+                                : ""
+                            }
+                        >
+
+                            ${escapeDailyBriefHtml(
+                                symbols
+                            )}
+
+                        </div>
+
+
+                        <div class="daily-brief-company">
+
+                            ${escapeDailyBriefHtml(
+                                company.companyName || ""
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <span class="daily-brief-attention">
+
+                        ${escapeDailyBriefHtml(
+                            company.attentionLevel || ""
+                        )} ATTENTION
+
+                    </span>
+
+                </div>
+
+
+                <h4>
+
+                    ${escapeDailyBriefHtml(
+                        company.headline || ""
+                    )}
+
+                </h4>
+
+
+                <p>
+
+                    ${escapeDailyBriefHtml(
+                        company.summary || ""
+                    )}
+
+                </p>
+
+
+                <div class="daily-brief-development">
+
+                    <span>
+                        Current Development
+                    </span>
+
+
+                    <p>
+
+                        ${escapeDailyBriefHtml(
+                            company.currentDevelopment || ""
+                        )}
+
+                    </p>
+
+                </div>
+
+
+                ${
+                    company.whyIncluded
+                        ? `
+
+                <div class="daily-brief-development">
+
+                    <span>
+                        Why It Was Surfaced
+                    </span>
+
+
+                    <p>
+
+                        ${escapeDailyBriefHtml(
+                            company.whyIncluded
+                        )}
+
+                    </p>
+
+                </div>
+
+                `
+                        : ""
+                }
+
+
+                ${
+                    primarySymbol
+                        ? `
+
+                <div
+                    class="daily-brief-stock-actions"
+
+                    style="
+                        display:flex;
+                        gap:10px;
+                        flex-wrap:wrap;
+                        margin-top:18px;
+                    "
+                >
+
+                    <button
+                        type="button"
+
+                        class="watchlist-open"
+
+                        data-daily-brief-chart="${escapeDailyBriefHtml(
+                            primarySymbol
+                        )}"
+                    >
+
+                        View ${escapeDailyBriefHtml(
+                            primarySymbol
+                        )} Chart
+
+                    </button>
+
+
+                    <button
+                        type="button"
+
+                        class="watchlist-open"
+
+                        data-daily-brief-research="${escapeDailyBriefHtml(
+                            primarySymbol
+                        )}"
+                    >
+
+                        ✦ AI Deep Research
+
+                    </button>
+
+                </div>
+
+                `
+                        : ""
+                }
+
+            `;
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    /* =====================================
+    CHART LINKS
+
+    REUSES EXISTING EDGEBREAK loadChart()
+    ===================================== */
+
+    container
+        .querySelectorAll(
+            "[data-daily-brief-chart]"
+        )
+        .forEach(
+            element => {
+
+
+                element.addEventListener(
+                    "click",
+                    function(){
+
+
+                        const symbol =
+                            this.getAttribute(
+                                "data-daily-brief-chart"
+                            );
+
+
+                        if (!symbol) {
+
+                            return;
+
+                        }
+
+
+                        if (
+                            typeof loadChart !==
+                            "function"
+                        ) {
+
+
+                            console.error(
+                                "EdgeBreak loadChart() is unavailable."
+                            );
+
+
+                            return;
+
+                        }
+
+
+                        loadChart(
+                            symbol
+                        );
+
+
+                        const chart =
+                            document.getElementById(
+                                "tv_chart"
+                            );
+
+
+                        if (chart) {
+
+
+                            chart.scrollIntoView({
+
+                                behavior:
+                                    "smooth",
+
+                                block:
+                                    "start"
+
+                            });
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+    /* =====================================
+    AI DEEP RESEARCH
+
+    REUSES EXISTING EDGEBREAK AI PANEL.
+
+    Opening panel does NOT trigger a new
+    Gemini call.
+
+    User chooses individual research
+    sections inside the panel.
+    ===================================== */
+
+    container
+        .querySelectorAll(
+            "[data-daily-brief-research]"
+        )
+        .forEach(
+            button => {
+
+
+                button.addEventListener(
+                    "click",
+                    function(){
+
+
+                        const symbol =
+                            this.getAttribute(
+                                "data-daily-brief-research"
+                            );
+
+
+                        if (!symbol) {
+
+                            return;
+
+                        }
+
+
+                        if (
+                            typeof openEdgeBreakAI !==
+                                "function" ||
+
+                            typeof loadEdgeBreakAIResearch !==
+                                "function"
+                        ) {
+
+
+                            console.error(
+                                "EdgeBreak AI Research panel is unavailable."
+                            );
+
+
+                            return;
+
+                        }
+
+
+                        openEdgeBreakAI();
+
+
+                        loadEdgeBreakAIResearch(
+                            symbol
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================
+SLEEP
+========================================= */
+
+function dailyBriefSleep(
+    milliseconds
+){
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                milliseconds
+            )
+    );
+
+}
+
+
+/* =========================================
+SAFE HTML
+========================================= */
+
+function escapeDailyBriefHtml(
+    value
+){
+
+    return String(
+        value || ""
+    )
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
 }
 
