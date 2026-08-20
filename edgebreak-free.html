@@ -19453,18 +19453,25 @@ function closeFreeMemberUpgrade(){
 <script>
 
 /* =========================================
-EDGEBREAK AUTOMATED AI STOCK RESEARCH
+EDGEBREAK AUTOMATED AI END-OF-DAY
+STOCK RESEARCH
 
-BACKGROUND AI FLOW
+FREE PAGE
 
-1. Check Supabase for today's research
-2. If complete → display immediately
-3. If not started → load scanner candidates
-4. Start ONE Gemini background interaction
-5. Poll status every 10 seconds
-6. When complete → API saves to Supabase
-7. Display finished stock research
-8. Allow direct Chart + AI Deep Research
+WORKING FLOW PRESERVED
+
+1. Load today's scanner candidates
+2. Send candidates to daily_brief_ai.js
+3. API checks Supabase cache
+4. If cached → return immediately
+5. If not cached → research in 2 Gemini batches
+6. API combines + validates results
+7. Completed research saved to Supabase
+8. Display Stocks to Investigate
+
+FREE PAGE DISPLAY ONLY:
+First 2 stocks visible
+Remaining stocks blurred + locked
 ========================================= */
 
 
@@ -19477,20 +19484,24 @@ const dailyBriefButton =
         "openDailyBriefBtn"
     );
 
+
 const dailyBriefContent =
     document.getElementById(
         "dailyBriefContent"
     );
+
 
 const dailyBriefLoading =
     document.getElementById(
         "dailyBriefLoading"
     );
 
+
 const dailyBriefError =
     document.getElementById(
         "dailyBriefError"
     );
+
 
 const dailyBriefResults =
     document.getElementById(
@@ -19499,25 +19510,13 @@ const dailyBriefResults =
 
 
 /* =========================================
-SETTINGS
-========================================= */
-
-const DAILY_BRIEF_POLL_INTERVAL =
-    10000;
-
-
-/* =========================================
 BUTTON
 ========================================= */
 
-if (dailyBriefButton) {
-
-    dailyBriefButton.addEventListener(
-        "click",
-        openDailyBrief
-    );
-
-}
+dailyBriefButton.addEventListener(
+    "click",
+    openDailyBrief
+);
 
 
 /* =========================================
@@ -19525,23 +19524,6 @@ OPEN TODAY'S AI STOCK RESEARCH
 ========================================= */
 
 async function openDailyBrief(){
-
-    if (
-        !dailyBriefButton ||
-        !dailyBriefContent ||
-        !dailyBriefLoading ||
-        !dailyBriefError ||
-        !dailyBriefResults
-    ) {
-
-        console.error(
-            "EdgeBreak AI Stock Research elements are missing."
-        );
-
-        return;
-
-    }
-
 
     dailyBriefContent.hidden =
         false;
@@ -19564,7 +19546,7 @@ async function openDailyBrief(){
 
 
     setDailyBriefButton(
-        "✦ Checking Today's AI Research..."
+        "✦ Loading Today's AI Research..."
     );
 
 
@@ -19573,100 +19555,12 @@ async function openDailyBrief(){
     );
 
 
-    try {
+    try{
 
 
         /* =================================
-        STEP 1
-        CHECK TODAY'S CACHE / JOB STATUS
-        ================================= */
-
-        const status =
-            await dailyBriefRequest({
-
-                action:
-                    "status"
-
-            });
-
-
-        /* =================================
-        ALREADY COMPLETE
-        ================================= */
-
-        if (status.complete) {
-
-            console.log(
-                "AI Stock Research cache hit."
-            );
-
-
-            showCompletedDailyBrief(
-                status
-            );
-
-
-            return;
-
-        }
-
-
-        console.log(
-            "AI Stock Research status:",
-            status.researchStatus
-        );
-
-
-        /* =================================
-        EXISTING BACKGROUND JOB
-        ================================= */
-
-        if (
-            status.interactionExists &&
-            (
-                status.researchStatus ===
-                    "queued" ||
-
-                status.researchStatus ===
-                    "in_progress" ||
-
-                status.researchStatus ===
-                    "requires_action"
-            )
-        ) {
-
-            setDailyBriefProgress(
-                "Today's automated AI stock research is already running..."
-            );
-
-
-            setDailyBriefButton(
-                "✦ AI Stock Research Running..."
-            );
-
-
-            await waitForDailyBrief();
-
-
-            return;
-
-        }
-
-
-        /* =================================
-        STEP 2
         LOAD TODAY'S SCANNER CANDIDATES
         ================================= */
-
-        setDailyBriefButton(
-            "✦ Preparing Automated Research..."
-        );
-
-
-        setDailyBriefProgress(
-            "Loading today's NASDAQ scanner discoveries..."
-        );
-
 
         const candidateResponse =
             await fetch(
@@ -19678,10 +19572,12 @@ async function openDailyBrief(){
             );
 
 
-        if (!candidateResponse.ok) {
+        if(
+            !candidateResponse.ok
+        ){
 
             throw new Error(
-                "Today's NASDAQ research candidates are unavailable."
+                "Today's NASDAQ scanner candidates are unavailable."
             );
 
         }
@@ -19699,7 +19595,9 @@ async function openDailyBrief(){
                 : [];
 
 
-        if (candidates.length === 0) {
+        if(
+            candidates.length === 0
+        ){
 
             throw new Error(
                 "No NASDAQ research candidates are available today."
@@ -19709,12 +19607,12 @@ async function openDailyBrief(){
 
 
         console.log(
-            `AI Stock Research candidates: ${candidates.length}`
+            `Daily Brief candidates: ${candidates.length}`
         );
 
 
         /* =================================
-        UPDATE CANDIDATE COUNT
+        UPDATE FUNNEL CANDIDATE COUNT
         ================================= */
 
         const candidateCount =
@@ -19723,7 +19621,7 @@ async function openDailyBrief(){
             );
 
 
-        if (candidateCount) {
+        if(candidateCount){
 
             candidateCount.textContent =
                 candidates.length;
@@ -19732,57 +19630,12 @@ async function openDailyBrief(){
 
 
         /* =================================
-        STEP 3
-        START BACKGROUND GEMINI RESEARCH
-        ================================= */
+        REQUEST DAILY BRIEF
 
-        setDailyBriefButton(
-            "✦ Starting AI Stock Research..."
-        );
+        API checks Supabase cache first.
 
-
-        setDailyBriefProgress(
-            `EdgeBreak AI is researching ${candidates.length} NASDAQ scanner candidates...`
-        );
-
-
-        const start =
-            await dailyBriefRequest({
-
-                action:
-                    "start",
-
-                candidates:
-                    candidates
-
-            });
-
-
-        /* =================================
-        POSSIBLE CACHE HIT
-        ================================= */
-
-        if (start.complete) {
-
-            showCompletedDailyBrief(
-                start
-            );
-
-
-            return;
-
-        }
-
-
-        console.log(
-            "AI Stock Research background job started:",
-            start
-        );
-
-
-        /* =================================
-        STEP 4
-        POLL BACKGROUND JOB
+        If today's research already exists,
+        Gemini is NOT called again.
         ================================= */
 
         setDailyBriefButton(
@@ -19791,14 +19644,92 @@ async function openDailyBrief(){
 
 
         setDailyBriefProgress(
-            "EdgeBreak AI is researching current company developments and market attention..."
+            `EdgeBreak identified ${candidates.length} scanner candidates. Loading today's AI company research...`
         );
 
 
-        await waitForDailyBrief();
+        const response =
+            await fetch(
+                "/api/daily_brief_ai",
+                {
+
+                    method:
+                        "POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            candidates
+
+                        })
+
+                }
+            );
+
+
+        const raw =
+            await response.text();
+
+
+        let data = {};
+
+
+        if(raw){
+
+            try{
+
+                data =
+                    JSON.parse(
+                        raw
+                    );
+
+            }
+            catch(error){
+
+                console.error(
+                    "Daily Brief API returned non-JSON:",
+                    raw
+                );
+
+
+                throw new Error(
+                    "The AI stock research server returned an invalid response."
+                );
+
+            }
+
+        }
+
+
+        if(
+            !response.ok
+        ){
+
+            throw new Error(
+                data.error ||
+                `AI stock research request failed (${response.status}).`
+            );
+
+        }
+
+
+        /* =================================
+        DISPLAY COMPLETED RESEARCH
+        ================================= */
+
+        showCompletedDailyBrief(
+            data,
+            candidates.length
+        );
+
 
     }
-    catch (error) {
+    catch(error){
 
         showDailyBriefError(
             error
@@ -19810,305 +19741,17 @@ async function openDailyBrief(){
 
 
 /* =========================================
-WAIT FOR BACKGROUND RESEARCH
-========================================= */
-
-async function waitForDailyBrief(){
-
-    let checks =
-        0;
-
-
-    while (true) {
-
-
-        await dailyBriefSleep(
-            DAILY_BRIEF_POLL_INTERVAL
-        );
-
-
-        checks++;
-
-
-        console.log(
-            `AI Stock Research status check ${checks}`
-        );
-
-
-        let result;
-
-
-        try {
-
-
-            result =
-                await dailyBriefRequest({
-
-                    action:
-                        "check"
-
-                });
-
-
-        }
-        catch (error) {
-
-
-            console.warn(
-                "AI Stock Research status check failed:",
-                error
-            );
-
-
-            /*
-            A temporary Vercel/API error does not
-            necessarily mean Gemini stopped.
-
-            Allow a couple of retries before
-            showing the user an error.
-            */
-
-            if (
-                error.status >= 500 &&
-                checks < 3
-            ) {
-
-                setDailyBriefProgress(
-                    "AI research is still running. Checking again..."
-                );
-
-
-                continue;
-
-            }
-
-
-            throw error;
-
-        }
-
-
-        /* =================================
-        COMPLETE
-        ================================= */
-
-        if (result.complete) {
-
-
-            console.log(
-                "AI Stock Research complete."
-            );
-
-
-            showCompletedDailyBrief(
-                result
-            );
-
-
-            return;
-
-        }
-
-
-        const researchStatus =
-            String(
-                result.researchStatus ||
-                ""
-            );
-
-
-        console.log(
-            "AI Stock Research status:",
-            researchStatus
-        );
-
-
-        /* =================================
-        STILL RUNNING
-        ================================= */
-
-        if (
-            researchStatus ===
-                "queued" ||
-
-            researchStatus ===
-                "in_progress" ||
-
-            researchStatus ===
-                "requires_action"
-        ) {
-
-
-            setDailyBriefProgress(
-                getDailyBriefResearchMessage(
-                    checks
-                )
-            );
-
-
-            continue;
-
-        }
-
-
-        /* =================================
-        FAILED
-        ================================= */
-
-        if (
-            researchStatus ===
-                "failed" ||
-
-            researchStatus ===
-                "cancelled" ||
-
-            researchStatus ===
-                "incomplete"
-        ) {
-
-
-            throw new Error(
-                "Today's automated AI stock research could not be completed."
-            );
-
-        }
-
-
-        /*
-        Unknown but non-error status.
-
-        Don't kill the process.
-        Keep checking.
-        */
-
-        setDailyBriefProgress(
-            "Today's AI stock research is still processing..."
-        );
-
-    }
-
-}
-
-
-/* =========================================
-API REQUEST
-========================================= */
-
-async function dailyBriefRequest(
-    payload
-){
-
-    const response =
-        await fetch(
-            "/api/daily_brief_ai",
-            {
-
-                method:
-                    "POST",
-
-                headers: {
-
-                    "Content-Type":
-                        "application/json"
-
-                },
-
-                body:
-                    JSON.stringify(
-                        payload
-                    )
-
-            }
-        );
-
-
-    const raw =
-        await response.text();
-
-
-    let data =
-        {};
-
-
-    if (raw) {
-
-
-        try {
-
-
-            data =
-                JSON.parse(
-                    raw
-                );
-
-
-        }
-        catch (parseError) {
-
-
-            console.error(
-                "AI Stock Research API returned non-JSON:",
-                raw
-            );
-
-
-            const error =
-                new Error(
-                    response.ok
-                        ? "The AI Stock Research server returned an invalid response."
-                        : `AI Stock Research server error (${response.status}).`
-                );
-
-
-            error.status =
-                response.status;
-
-
-            throw error;
-
-        }
-
-    }
-
-
-    if (!response.ok) {
-
-
-        const error =
-            new Error(
-                data.error ||
-                `AI Stock Research request failed (${response.status}).`
-            );
-
-
-        error.status =
-            response.status;
-
-
-        error.data =
-            data;
-
-
-        throw error;
-
-    }
-
-
-    return data;
-
-}
-
-
-/* =========================================
 COMPLETED RESEARCH
 ========================================= */
 
 function showCompletedDailyBrief(
-    data
+    data,
+    candidateCount
 ){
 
     renderDailyBrief(
-        data
+        data,
+        candidateCount
     );
 
 
@@ -20135,14 +19778,11 @@ function showCompletedDailyBrief(
         true;
 
 
-    if (data.usage) {
-
-        console.log(
-            "EdgeBreak AI Stock Research Gemini usage:",
-            data.usage
-        );
-
-    }
+    console.log(
+        data.cached
+            ? "EdgeBreak Daily Brief loaded from Supabase cache."
+            : "EdgeBreak Daily Brief AI research completed."
+    );
 
 }
 
@@ -20197,19 +19837,13 @@ function setDailyBriefProgress(
     message
 ){
 
-    if (!dailyBriefLoading) {
-        return;
-    }
-
-
     const progressElement =
         dailyBriefLoading.querySelector(
             "[data-daily-brief-progress]"
         );
 
 
-    if (progressElement) {
-
+    if(progressElement){
 
         progressElement.textContent =
             message;
@@ -20220,26 +19854,13 @@ function setDailyBriefProgress(
     }
 
 
-    /*
-    Your existing HTML has:
-
-    <div>
-        <strong>...</strong>
-        <span>...</span>
-    </div>
-
-    So update that span without changing
-    the HTML structure.
-    */
-
     const textContainer =
         dailyBriefLoading.querySelector(
             "div:last-child"
         );
 
 
-    if (textContainer) {
-
+    if(textContainer){
 
         const span =
             textContainer.querySelector(
@@ -20247,7 +19868,7 @@ function setDailyBriefProgress(
             );
 
 
-        if (span) {
+        if(span){
 
             span.textContent =
                 message;
@@ -20260,59 +19881,12 @@ function setDailyBriefProgress(
 
 
 /* =========================================
-FRIENDLY RESEARCH MESSAGE
-========================================= */
-
-function getDailyBriefResearchMessage(
-    checks
-){
-
-    if (checks <= 2) {
-
-        return (
-            "AI researching current company developments and market attention..."
-        );
-
-    }
-
-
-    if (checks <= 6) {
-
-        return (
-            "EdgeBreak AI is reviewing today's NASDAQ scanner candidates..."
-        );
-
-    }
-
-
-    if (checks <= 12) {
-
-        return (
-            "Automated AI research is still running across today's scanner discoveries..."
-        );
-
-    }
-
-
-    return (
-        "AI research is still running in the background. You can leave this page and return later."
-    );
-
-}
-
-
-/* =========================================
 BUTTON TEXT
 ========================================= */
 
 function setDailyBriefButton(
     text
 ){
-
-    if (!dailyBriefButton) {
-        return;
-    }
-
 
     dailyBriefButton.innerHTML =
         text;
@@ -20321,11 +19895,12 @@ function setDailyBriefButton(
 
 
 /* =========================================
-RENDER AI STOCK RESEARCH
+RENDER DAILY BRIEF
 ========================================= */
 
 function renderDailyBrief(
-    data
+    data,
+    candidateCount
 ){
 
 
@@ -20339,7 +19914,7 @@ function renderDailyBrief(
         );
 
 
-    if (dateElement) {
+    if(dateElement){
 
         dateElement.textContent =
             data.briefDate || "";
@@ -20351,13 +19926,27 @@ function renderDailyBrief(
     FUNNEL COUNTS
     ===================================== */
 
+    const candidatesElement =
+        document.getElementById(
+            "dailyBriefCandidates"
+        );
+
+
+    if(candidatesElement){
+
+        candidatesElement.textContent =
+            candidateCount ?? "—";
+
+    }
+
+
     const reviewedElement =
         document.getElementById(
             "dailyBriefReviewed"
         );
 
 
-    if (reviewedElement) {
+    if(reviewedElement){
 
         reviewedElement.textContent =
             data.companiesReviewed ?? "—";
@@ -20371,7 +19960,7 @@ function renderDailyBrief(
         );
 
 
-    if (includedElement) {
+    if(includedElement){
 
         includedElement.textContent =
             data.companiesIncluded ?? "—";
@@ -20389,8 +19978,7 @@ function renderDailyBrief(
         );
 
 
-    if (!container) {
-
+    if(!container){
 
         console.error(
             "dailyBriefStocks container not found."
@@ -20406,7 +19994,7 @@ function renderDailyBrief(
         "";
 
 
-    const allResults =
+    const results =
         Array.isArray(
             data.results
         )
@@ -20415,32 +20003,12 @@ function renderDailyBrief(
 
 
     /* =====================================
-    HARD DISPLAY CAP — MAXIMUM 12 STOCKS
-
-    Backend remains untouched.
-
-    If Gemini returns fewer than 12,
-    display only those returned.
-
-    If Gemini returns more than 12,
-    display the first/highest-ranked 12.
-    ===================================== */
-
-    const results =
-        allResults.slice(
-            0,
-            12
-        );
-
-
-    /* =====================================
     NO COMPANIES QUALIFIED
     ===================================== */
 
-    if (
+    if(
         results.length === 0
-    ) {
-
+    ){
 
         container.innerHTML = `
 
@@ -20461,10 +20029,14 @@ function renderDailyBrief(
 
     /* =====================================
     RESULT CARDS
+
+    FREE PAGE:
+    #1 + #2 = fully visible
+    #3 onward = blurred + locked
     ===================================== */
 
     results.forEach(
-        company => {
+        (company, index) => {
 
 
             const card =
@@ -20475,6 +20047,24 @@ function renderDailyBrief(
 
             card.className =
                 "daily-brief-stock-card";
+
+
+            /* =================================
+            FREE PAGE LOCK
+
+            Do not alter result data.
+
+            Simply add the CSS class to every
+            rendered stock after the first two.
+            ================================= */
+
+            if(index >= 2){
+
+                card.classList.add(
+                    "free-ai-locked"
+                );
+
+            }
 
 
             const symbolArray =
@@ -20507,14 +20097,12 @@ function renderDailyBrief(
 
                         <div
                             class="daily-brief-symbol"
-
                             ${primarySymbol
                                 ? `data-daily-brief-chart="${escapeDailyBriefHtml(
                                     primarySymbol
                                 )}"`
                                 : ""
                             }
-
                             ${primarySymbol
                                 ? `title="Open ${escapeDailyBriefHtml(
                                     primarySymbol
@@ -20598,7 +20186,6 @@ function renderDailyBrief(
                         Why It Was Surfaced
                     </span>
 
-
                     <p>
 
                         ${escapeDailyBriefHtml(
@@ -20620,7 +20207,6 @@ function renderDailyBrief(
 
                 <div
                     class="daily-brief-stock-actions"
-
                     style="
                         display:flex;
                         gap:10px;
@@ -20631,33 +20217,25 @@ function renderDailyBrief(
 
                     <button
                         type="button"
-
                         class="watchlist-open"
-
                         data-daily-brief-chart="${escapeDailyBriefHtml(
                             primarySymbol
                         )}"
                     >
-
                         View ${escapeDailyBriefHtml(
                             primarySymbol
                         )} Chart
-
                     </button>
 
 
                     <button
                         type="button"
-
                         class="watchlist-open"
-
                         data-daily-brief-research="${escapeDailyBriefHtml(
                             primarySymbol
                         )}"
                     >
-
                         ✦ AI Deep Research
-
                     </button>
 
                 </div>
@@ -20678,9 +20256,72 @@ function renderDailyBrief(
 
 
     /* =====================================
+    FREE PAGE LOCK OVERLAY
+
+    Only show the subscription message when
+    today's report actually contains more
+    than two results.
+    ===================================== */
+
+    if(results.length > 2){
+
+        const lockedCount =
+            results.length - 2;
+
+
+        const overlay =
+            document.createElement(
+                "div"
+            );
+
+
+        overlay.className =
+            "free-ai-lock-overlay";
+
+
+        overlay.innerHTML = `
+
+            <span class="free-ai-lock-icon">
+                🔒
+            </span>
+
+            <h4>
+                Unlock Today's Full AI Research
+            </h4>
+
+            <p>
+                You've seen 2 of today's
+                ${results.length} stocks surfaced by
+                EdgeBreak AI. Unlock the remaining
+                ${lockedCount} results, complete AI
+                research and all EdgeBreak NASDAQ
+                scanning tools.
+            </p>
+
+            <a
+                href="/pricing.html"
+                class="free-ai-unlock-btn"
+            >
+                Start 7-Day Free Trial
+            </a>
+
+        `;
+
+
+        container.appendChild(
+            overlay
+        );
+
+    }
+
+
+    /* =====================================
     CHART LINKS
 
-    REUSES EXISTING EDGEBREAK loadChart()
+    Reuses existing EdgeBreak loadChart()
+
+    Locked cards cannot be clicked because
+    your CSS applies pointer-events:none.
     ===================================== */
 
     container
@@ -20702,18 +20343,17 @@ function renderDailyBrief(
                             );
 
 
-                        if (!symbol) {
+                        if(!symbol){
 
                             return;
 
                         }
 
 
-                        if (
+                        if(
                             typeof loadChart !==
                             "function"
-                        ) {
-
+                        ){
 
                             console.error(
                                 "EdgeBreak loadChart() is unavailable."
@@ -20736,17 +20376,14 @@ function renderDailyBrief(
                             );
 
 
-                        if (chart) {
-
+                        if(chart){
 
                             chart.scrollIntoView({
-
                                 behavior:
                                     "smooth",
 
                                 block:
                                     "start"
-
                             });
 
                         }
@@ -20761,13 +20398,10 @@ function renderDailyBrief(
     /* =====================================
     AI DEEP RESEARCH
 
-    REUSES EXISTING EDGEBREAK AI PANEL.
+    Reuses existing EdgeBreak AI panel.
 
-    Opening panel does NOT trigger a new
-    Gemini call.
-
-    User chooses individual research
-    sections inside the panel.
+    Locked cards cannot be clicked because
+    your CSS applies pointer-events:none.
     ===================================== */
 
     container
@@ -20789,21 +20423,19 @@ function renderDailyBrief(
                             );
 
 
-                        if (!symbol) {
+                        if(!symbol){
 
                             return;
 
                         }
 
 
-                        if (
+                        if(
                             typeof openEdgeBreakAI !==
                                 "function" ||
-
                             typeof loadEdgeBreakAIResearch !==
                                 "function"
-                        ) {
-
+                        ){
 
                             console.error(
                                 "EdgeBreak AI Research panel is unavailable."
@@ -20827,25 +20459,6 @@ function renderDailyBrief(
 
             }
         );
-
-}
-
-
-/* =========================================
-SLEEP
-========================================= */
-
-function dailyBriefSleep(
-    milliseconds
-){
-
-    return new Promise(
-        resolve =>
-            setTimeout(
-                resolve,
-                milliseconds
-            )
-    );
 
 }
 
