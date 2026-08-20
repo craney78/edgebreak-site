@@ -8014,8 +8014,8 @@ EDGEBREAK AI AUTOMATED NASDAQ SCANNING
                 EdgeBreak automatically scans the NASDAQ for Breakout,
                 Pre-Breakout and Base Forming setups, filters the stocks
                 it finds, then uses AI market research to investigate
-                companies showing noteworthy market attention and
-                company-specific developments.
+                companies showing noteworthy market attention, recent news
+                and company-specific developments.
             </p>
 
             <p>
@@ -8037,10 +8037,278 @@ EDGEBREAK AI AUTOMATED NASDAQ SCANNING
             id="openDailyBriefBtn"
         >
             <span>✦</span>
-            View Today's EdgeBreak AI Results
+            View Today's AI Results
         </button>
 
     </div>
+
+
+    <!-- =========================================
+    EDGEBREAK AI CONTENT
+    ========================================= -->
+
+    <div
+        class="daily-brief-content"
+        id="dailyBriefContent"
+        hidden
+    >
+
+        <div class="daily-brief-divider"></div>
+
+
+        <!-- =========================================
+        LOADING
+        ========================================= -->
+
+        <div
+            class="daily-brief-loading"
+            id="dailyBriefLoading"
+            hidden
+        >
+
+            <div class="daily-brief-spinner"></div>
+
+            <div>
+
+                <strong>
+                    Loading today's EdgeBreak AI results...
+                </strong>
+
+                <span>
+                    Retrieving today's completed NASDAQ scan and AI research.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================================
+        ERROR
+        ========================================= -->
+
+        <div
+            class="daily-brief-error"
+            id="dailyBriefError"
+            hidden
+        ></div>
+
+
+        <!-- =========================================
+        RESULTS
+        ========================================= -->
+
+        <div
+            id="dailyBriefResults"
+            hidden
+        >
+
+            <div class="daily-brief-date-row">
+
+                <span>
+                    EDGEBREAK AI • TODAY'S AUTOMATED NASDAQ RESULTS
+                </span>
+
+                <strong id="dailyBriefDate"></strong>
+
+            </div>
+
+
+            <!-- =========================================
+            AUTOMATED SCANNING PROCESS
+            ========================================= -->
+
+            <div class="daily-brief-section">
+
+                <div class="daily-brief-section-heading">
+
+                    <span class="daily-brief-section-icon">
+                        ⌁
+                    </span>
+
+                    <div>
+
+                        <span class="daily-brief-eyebrow">
+                            AUTOMATED NASDAQ SCANNING
+                        </span>
+
+                        <h3>
+                            EdgeBreak Has Already Scanned the Market
+                        </h3>
+
+                        <p>
+                            EdgeBreak scans thousands of NASDAQ stocks for
+                            Breakout, Pre-Breakout and Base Forming setups,
+                            filters the results, then passes the remaining
+                            companies through AI market research.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                AUTOMATED RESEARCH FUNNEL
+                ========================================= -->
+
+                <div class="daily-brief-summary-bar">
+
+
+                    <!-- NASDAQ SCANNED -->
+
+                    <div>
+
+                        <span>
+                            NASDAQ Stocks Scanned
+                        </span>
+
+                        <strong>
+                            3,253
+                        </strong>
+
+                        <small>
+                            Checked for Breakout, Pre-Breakout and Base Forming setups
+                        </small>
+
+                    </div>
+
+
+                    <!-- TECHNICAL CANDIDATES -->
+
+                    <div>
+
+                        <span>
+                            Technical Setups Found
+                        </span>
+
+                        <strong id="dailyBriefCandidates">
+                            69
+                        </strong>
+
+                        <small>
+                            Candidates remaining after automated scanning and filtering
+                        </small>
+
+                    </div>
+
+
+                    <!-- AI RESEARCH -->
+
+                    <div>
+
+                        <span>
+                            Companies AI Researched
+                        </span>
+
+                        <strong id="dailyBriefReviewed">
+                            —
+                        </strong>
+
+                        <small>
+                            Researched for current attention, news and company developments
+                        </small>
+
+                    </div>
+
+
+                    <!-- FINAL RESULTS -->
+
+                    <div>
+
+                        <span>
+                            Stocks to Investigate
+                        </span>
+
+                        <strong id="dailyBriefIncluded">
+                            —
+                        </strong>
+
+                        <small>
+                            Companies surfaced for further research
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================================
+            STOCKS TO INVESTIGATE
+            ========================================= -->
+
+            <div class="daily-brief-section daily-brief-stocks-section">
+
+                <div class="daily-brief-section-heading">
+
+                    <span class="daily-brief-section-icon">
+                        ✦
+                    </span>
+
+                    <div>
+
+                        <span class="daily-brief-eyebrow">
+                            EDGEBREAK AI RESEARCH
+                        </span>
+
+                        <h3>
+                            Today's Stocks to Investigate
+                        </h3>
+
+                        <p>
+                            EdgeBreak AI researched the companies identified
+                            by today's automated scans for current market
+                            attention, recent news and company-specific
+                            developments.
+                        </p>
+
+                        <p>
+                            The companies below were surfaced from today's
+                            completed EdgeBreak scanning, filtering and AI
+                            research process for further investigation.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                STOCK RESULTS
+                ========================================= -->
+
+                <div
+                    class="daily-brief-stock-grid"
+                    id="dailyBriefStocks"
+                ></div>
+
+            </div>
+
+
+            <!-- =========================================
+            DISCLAIMER
+            ========================================= -->
+
+            <div class="daily-brief-disclaimer">
+
+                EdgeBreak AI provides automated stock discovery, factual
+                market research and educational information only. Stocks
+                surfaced for investigation are not recommendations or
+                investment ratings. EdgeBreak does not provide investment
+                advice, buy or sell recommendations, price targets or
+                predictions. AI-generated information may contain errors
+                or outdated information and important information should
+                be independently verified.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
 <!-- CHART -->
 
