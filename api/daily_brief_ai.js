@@ -348,7 +348,52 @@ export default async function handler(req, res) {
 
 
         console.log(
-            `Daily Brief companies included: ${deduplicatedResults.length}`
+            `Daily Brief companies qualified before cap: ${deduplicatedResults.length}`
+        );
+
+
+        /* =====================================
+        RANK + CAP FINAL RESULTS
+
+        HIGH first
+        ELEVATED second
+        NOTABLE third
+
+        12 is a MAXIMUM only.
+        If fewer than 12 qualify, keep them all.
+        ===================================== */
+
+        const attentionPriority = {
+
+            HIGH: 3,
+            ELEVATED: 2,
+            NOTABLE: 1
+
+        };
+
+
+        const rankedResults =
+            [...deduplicatedResults]
+                .sort(
+                    (a, b) =>
+                        (
+                            attentionPriority[b.attentionLevel] || 0
+                        ) -
+                        (
+                            attentionPriority[a.attentionLevel] || 0
+                        )
+                );
+
+
+        const finalResults =
+            rankedResults.slice(
+                0,
+                12
+            );
+
+
+        console.log(
+            `Daily Brief final companies included after 12-stock cap: ${finalResults.length}`
         );
 
 
@@ -359,13 +404,22 @@ export default async function handler(req, res) {
         const aiResults = {
 
             results:
-                deduplicatedResults
+                finalResults
 
         };
 
 
         /* =====================================
         SERVER-SIDE SAFETY FILTER
+
+        EdgeBreak may report factual financial
+        information, including analyst actions,
+        ratings and price targets.
+
+        Block only language where the generated
+        research itself gives investment advice,
+        a trading instruction, or promises a
+        financial result.
         ===================================== */
 
         const combinedText =
@@ -376,25 +430,54 @@ export default async function handler(req, res) {
 
         const prohibitedPatterns = [
 
-            /\bstrong buy\b/i,
-            /\bstrong sell\b/i,
+            /* DIRECT BUY / SELL / HOLD ADVICE */
+
             /\byou should buy\b/i,
             /\byou should sell\b/i,
             /\byou should hold\b/i,
-            /\brecommend(?:s|ed|ing)? buying\b/i,
-            /\brecommend(?:s|ed|ing)? selling\b/i,
-            /\bbuy opportunity\b/i,
-            /\bsell opportunity\b/i,
-            /\bprice target\b/i,
-            /\btarget price\b/i,
-            /\bexpected return\b/i,
+
+            /\binvestors should buy\b/i,
+            /\binvestors should sell\b/i,
+            /\binvestors should hold\b/i,
+
+            /\bwe recommend buying\b/i,
+            /\bwe recommend selling\b/i,
+            /\bwe recommend holding\b/i,
+
+            /\bthis stock is a strong buy\b/i,
+            /\bthis stock is a strong sell\b/i,
+
+            /\bthis is a buy opportunity\b/i,
+            /\bthis is a sell opportunity\b/i,
+
+
+            /* DIRECT TRADING INSTRUCTIONS */
+
+            /\byou should enter\b/i,
+            /\byou should exit\b/i,
+
+            /\binvestors should enter\b/i,
+            /\binvestors should exit\b/i,
+
+            /\bbuy this stock\b/i,
+            /\bsell this stock\b/i,
+
+
+            /* PROMISED / GUARANTEED RESULTS */
+
             /\bguaranteed return\b/i,
             /\bguaranteed profit\b/i,
-            /\bshould enter\b/i,
-            /\bshould exit\b/i,
-            /\bwinning stock\b/i,
-            /\bhigh probability trade\b/i,
-            /\bgoing to the moon\b/i
+            /\bguaranteed gain\b/i,
+
+            /\bwill definitely rise\b/i,
+            /\bwill definitely increase\b/i,
+            /\bwill definitely gain\b/i,
+
+            /\bguaranteed to rise\b/i,
+            /\bguaranteed to increase\b/i,
+
+            /\brisk[- ]free return\b/i,
+            /\brisk[- ]free profit\b/i
 
         ];
 
@@ -411,7 +494,7 @@ export default async function handler(req, res) {
         if (unsafe) {
 
             console.error(
-                "Daily Brief blocked by safety filter."
+                "Daily Brief blocked by safety filter: direct advice or promised result detected."
             );
 
 
