@@ -5,15 +5,15 @@ EDGEBREAK — DAILY BRIEF AI RESEARCH
 FLOW:
 1. Check Supabase cache
 2. Clean candidates
-3. Split candidates into 2 batches
-4. Research Batch 1
-5. Short pause
-6. Research Batch 2
-7. Recover valid Gemini results if outer JSON is malformed
-8. Combine + validate + deduplicate
-9. Save ONE Daily Brief to Supabase
+3. Split candidates into batches of max 20
+4. Research each batch sequentially
+5. Short pause between batches
+6. Recover valid Gemini results if outer JSON is malformed
+7. Combine + validate + deduplicate
+8. Save ONE Daily Brief to Supabase
 
 RELIABILITY:
+- Maximum 20 companies per Gemini batch
 - Batches run sequentially, NOT in parallel
 - 3 Gemini attempts per batch
 - Retry waits increase after temporary errors
@@ -240,38 +240,62 @@ export default async function handler(req, res) {
 
 
         /* =====================================
-        SPLIT INTO TWO GROUPS
+        SPLIT INTO MAXIMUM 20-COMPANY BATCHES
 
-        Example:
-        69 stocks = 35 + 34
+        Examples:
+
+        20 stocks
+        = 20
+
+        39 stocks
+        = 20 + 19
+
+        67 stocks
+        = 20 + 20 + 20 + 7
+
+        99 stocks
+        = 20 + 20 + 20 + 20 + 19
         ===================================== */
 
-        const midpoint =
-            Math.ceil(
-                cleanCandidates.length / 2
+        const BATCH_SIZE = 20;
+
+        const batches = [];
+
+
+        for (
+            let i = 0;
+            i < cleanCandidates.length;
+            i += BATCH_SIZE
+        ) {
+
+            batches.push(
+                cleanCandidates.slice(
+                    i,
+                    i + BATCH_SIZE
+                )
             );
 
-
-        const batchOne =
-            cleanCandidates.slice(
-                0,
-                midpoint
-            );
-
-
-        const batchTwo =
-            cleanCandidates.slice(
-                midpoint
-            );
+        }
 
 
         console.log(
-            `Daily Brief Batch 1: ${batchOne.length} companies`
+            `Daily Brief candidates: ${cleanCandidates.length}`
         );
 
 
         console.log(
-            `Daily Brief Batch 2: ${batchTwo.length} companies`
+            `Daily Brief batches required: ${batches.length}`
+        );
+
+
+        batches.forEach(
+            (batch, index) => {
+
+                console.log(
+                    `Daily Brief Batch ${index + 1}: ${batch.length} companies`
+                );
+
+            }
         );
 
 
@@ -279,91 +303,80 @@ export default async function handler(req, res) {
         RESEARCH BATCHES SEQUENTIALLY
 
         IMPORTANT:
+
         We deliberately DO NOT use Promise.all().
 
-        Large Google-grounded Gemini requests
-        running simultaneously were producing
-        temporary 503 responses.
+        Google-grounded Gemini requests are
+        processed one batch at a time.
 
-        Batch 1 finishes first.
-        Then we pause briefly.
-        Then Batch 2 begins.
+        Each batch contains a maximum of
+        20 companies.
+
+        After one batch finishes, EdgeBreak
+        waits briefly before starting the next.
         ===================================== */
 
         const batchResearch = [];
 
 
-        if (batchOne.length > 0) {
-
-            console.log(
-                "Daily Brief starting Batch 1..."
-            );
-
-
-            const batchOneResearch =
-                await researchBatch(
-                    batchOne,
-                    briefDate,
-                    1
-                );
-
-
-            batchResearch.push(
-                batchOneResearch
-            );
-
-
-            console.log(
-                "Daily Brief Batch 1 finished."
-            );
-
-        }
-
-
-        /* =====================================
-        SHORT PAUSE BETWEEN BATCHES
-        ===================================== */
-
-        if (
-            batchOne.length > 0 &&
-            batchTwo.length > 0
+        for (
+            let index = 0;
+            index < batches.length;
+            index++
         ) {
 
-            console.log(
-                "Daily Brief waiting 3 seconds before Batch 2..."
-            );
+            const batch =
+                batches[index];
 
 
-            await sleep(
-                3000
-            );
+            const batchNumber =
+                index + 1;
 
-        }
-
-
-        if (batchTwo.length > 0) {
 
             console.log(
-                "Daily Brief starting Batch 2..."
+                `Daily Brief starting Batch ${batchNumber}/${batches.length}...`
             );
 
 
-            const batchTwoResearch =
+            const research =
                 await researchBatch(
-                    batchTwo,
+                    batch,
                     briefDate,
-                    2
+                    batchNumber
                 );
 
 
             batchResearch.push(
-                batchTwoResearch
+                research
             );
 
 
             console.log(
-                "Daily Brief Batch 2 finished."
+                `Daily Brief Batch ${batchNumber}/${batches.length} finished.`
             );
+
+
+            /* =================================
+            SHORT PAUSE BEFORE NEXT BATCH
+            ================================= */
+
+            const hasAnotherBatch =
+                index <
+                batches.length - 1;
+
+
+            if (hasAnotherBatch) {
+
+                console.log(
+                    `Daily Brief waiting 3 seconds before Batch ${batchNumber + 1}...`
+                );
+
+
+                await sleep(
+                    3000
+                );
+
+            }
 
         }
 
@@ -1583,11 +1596,6 @@ function recoverGeminiResults(
 
             }
 
-
-            /*
-            End of one complete top-level
-            result object.
-            */
 
             if (
                 braceDepth === 0 &&
