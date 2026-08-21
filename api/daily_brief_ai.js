@@ -6,10 +6,18 @@ FLOW:
 1. Check Supabase cache
 2. Clean candidates
 3. Split candidates into 2 batches
-4. Research both batches in parallel
-5. Recover valid Gemini results if outer JSON is malformed
-6. Combine + validate + deduplicate
-7. Save ONE Daily Brief to Supabase
+4. Research Batch 1
+5. Short pause
+6. Research Batch 2
+7. Recover valid Gemini results if outer JSON is malformed
+8. Combine + validate + deduplicate
+9. Save ONE Daily Brief to Supabase
+
+RELIABILITY:
+- Batches run sequentially, NOT in parallel
+- 3 Gemini attempts per batch
+- Retry waits increase after temporary errors
+- Retries 429 / 500 / 502 / 503 / 504
 ========================================= */
 
 export default async function handler(req, res) {
@@ -268,20 +276,66 @@ export default async function handler(req, res) {
 
 
         /* =====================================
-        RESEARCH BOTH BATCHES IN PARALLEL
+        RESEARCH BATCHES SEQUENTIALLY
+
+        IMPORTANT:
+        We deliberately DO NOT use Promise.all().
+
+        Large Google-grounded Gemini requests
+        running simultaneously were producing
+        temporary 503 responses.
+
+        Batch 1 finishes first.
+        Then we pause briefly.
+        Then Batch 2 begins.
         ===================================== */
 
-        const researchPromises = [];
+        const batchResearch = [];
 
 
         if (batchOne.length > 0) {
 
-            researchPromises.push(
-                researchBatch(
+            console.log(
+                "Daily Brief starting Batch 1..."
+            );
+
+
+            const batchOneResearch =
+                await researchBatch(
                     batchOne,
                     briefDate,
                     1
-                )
+                );
+
+
+            batchResearch.push(
+                batchOneResearch
+            );
+
+
+            console.log(
+                "Daily Brief Batch 1 finished."
+            );
+
+        }
+
+
+        /* =====================================
+        SHORT PAUSE BETWEEN BATCHES
+        ===================================== */
+
+        if (
+            batchOne.length > 0 &&
+            batchTwo.length > 0
+        ) {
+
+            console.log(
+                "Daily Brief waiting 3 seconds before Batch 2..."
+            );
+
+
+            await sleep(
+                3000
             );
 
         }
@@ -289,21 +343,29 @@ export default async function handler(req, res) {
 
         if (batchTwo.length > 0) {
 
-            researchPromises.push(
-                researchBatch(
+            console.log(
+                "Daily Brief starting Batch 2..."
+            );
+
+
+            const batchTwoResearch =
+                await researchBatch(
                     batchTwo,
                     briefDate,
                     2
-                )
+                );
+
+
+            batchResearch.push(
+                batchTwoResearch
+            );
+
+
+            console.log(
+                "Daily Brief Batch 2 finished."
             );
 
         }
-
-
-        const batchResearch =
-            await Promise.all(
-                researchPromises
-            );
 
 
         /* =====================================
@@ -525,7 +587,7 @@ export default async function handler(req, res) {
                 cleanCandidates.length,
 
             companiesIncluded:
-                deduplicatedResults.length,
+                finalResults.length,
 
             aiResults
 
@@ -550,10 +612,10 @@ export default async function handler(req, res) {
                 cleanCandidates.length,
 
             companiesIncluded:
-                deduplicatedResults.length,
+                finalResults.length,
 
             results:
-                deduplicatedResults,
+                finalResults,
 
             nasdaqToday:
                 null,
@@ -587,10 +649,6 @@ export default async function handler(req, res) {
 
 }
 
-
-/* =========================================
-RESEARCH ONE BATCH
-========================================= */
 
 /* =========================================
 RESEARCH ONE BATCH
@@ -988,12 +1046,39 @@ Return JSON only.
 
     /* =====================================
     GEMINI REQUEST
-    SHORT RETRY FOR TEMPORARY 503
+
+    RETRY POLICY:
+
+    Attempt 1
+        ↓ temporary error
+    wait 8 seconds
+
+    Attempt 2
+        ↓ temporary error
+    wait 15 seconds
+
+    Attempt 3
+
+    Temporary errors:
+    429
+    500
+    502
+    503
+    504
     ===================================== */
 
     let geminiResponse = null;
 
-    const maxAttempts = 2;
+    const maxAttempts = 3;
+
+    const retryableStatuses =
+        new Set([
+            429,
+            500,
+            502,
+            503,
+            504
+        ]);
 
 
     for (
@@ -1007,33 +1092,73 @@ Return JSON only.
         );
 
 
-        geminiResponse =
-            await fetch(
+        try {
 
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+            geminiResponse =
+                await fetch(
 
-                {
+                    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
 
-                    method: "POST",
+                    {
 
-                    headers: {
+                        method: "POST",
 
-                        "Content-Type":
-                            "application/json",
+                        headers: {
 
-                        "x-goog-api-key":
-                            process.env.GEMINI_API_KEY
+                            "Content-Type":
+                                "application/json",
 
-                    },
+                            "x-goog-api-key":
+                                process.env.GEMINI_API_KEY
 
-                    body:
-                        JSON.stringify(
-                            requestBody
-                        )
+                        },
 
-                }
+                        body:
+                            JSON.stringify(
+                                requestBody
+                            )
 
+                    }
+
+                );
+
+        }
+        catch (fetchError) {
+
+            console.error(
+                `Gemini Daily Brief Batch ${batchNumber} network error on attempt ${attempt}:`,
+                fetchError
             );
+
+
+            if (
+                attempt < maxAttempts
+            ) {
+
+                const delay =
+                    attempt === 1
+                        ? 8000
+                        : 15000;
+
+
+                console.log(
+                    `Daily Brief Batch ${batchNumber} retrying after network error in ${delay / 1000} seconds...`
+                );
+
+
+                await sleep(
+                    delay
+                );
+
+
+                continue;
+
+            }
+
+
+            throw fetchError;
+
+        }
 
 
         /* =================================
@@ -1043,6 +1168,11 @@ Return JSON only.
         if (
             geminiResponse.ok
         ) {
+
+            console.log(
+                `Daily Brief Batch ${batchNumber} Gemini request succeeded on attempt ${attempt}.`
+            );
+
 
             break;
 
@@ -1065,25 +1195,31 @@ Return JSON only.
 
 
         /* =================================
-        RETRY ONE TEMPORARY 503
+        RETRY TEMPORARY ERRORS
         ================================= */
 
-        if (
-            geminiResponse.status === 503 &&
-            attempt < maxAttempts
-        ) {
+        const canRetry =
+            retryableStatuses.has(
+                geminiResponse.status
+            ) &&
+            attempt < maxAttempts;
+
+
+        if (canRetry) {
+
+            const delay =
+                attempt === 1
+                    ? 8000
+                    : 15000;
+
 
             console.log(
-                `Daily Brief Batch ${batchNumber} received temporary Gemini 503. Retrying in 6 seconds...`
+                `Daily Brief Batch ${batchNumber} received temporary Gemini ${geminiResponse.status}. Retrying in ${delay / 1000} seconds...`
             );
 
 
-            await new Promise(
-                resolve =>
-                    setTimeout(
-                        resolve,
-                        6000
-                    )
+            await sleep(
+                delay
             );
 
 
@@ -2066,6 +2202,25 @@ function getNewYorkDate() {
         `${values.year}-` +
         `${values.month}-` +
         `${values.day}`
+    );
+
+}
+
+
+/* =========================================
+SLEEP / DELAY
+========================================= */
+
+function sleep(
+    milliseconds
+) {
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                milliseconds
+            )
     );
 
 }
