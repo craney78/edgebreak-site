@@ -766,6 +766,388 @@ HERO SECONDARY CTA
     background:rgba(34,197,94,.06) !important;
 }
 
+/* ===================================
+   INDEX HERO - COMPLETELY ISOLATED
+=================================== */
+
+.index-hero-wrap{
+    position:relative;
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(2,6,23,.97) 0%,
+            rgba(2,6,23,.92) 38%,
+            rgba(2,6,23,.70) 62%,
+            rgba(2,6,23,.42) 100%
+        ),
+        url("/images/your-current-background-image.webp");
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    border-bottom:1px solid #1e293b;
+}
+
+
+/* MAIN HERO */
+
+.index-hero{
+    max-width:1500px;
+    min-height:690px;
+
+    margin:0 auto;
+    padding:90px 40px 60px;
+
+    display:grid;
+    grid-template-columns:minmax(0, 1fr) 420px;
+    align-items:center;
+    gap:70px;
+}
+
+
+/* LEFT CONTENT */
+
+.index-hero-content{
+    max-width:760px;
+}
+
+
+.index-hero-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+
+    margin-bottom:26px;
+
+    color:#22c55e;
+
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+
+
+.index-hero-tag::before{
+    content:"";
+
+    width:48px;
+    height:2px;
+
+    background:#22c55e;
+}
+
+
+.index-hero-title{
+    margin:0;
+
+    color:#ffffff;
+
+    font-size:clamp(48px, 5vw, 76px);
+    line-height:1.03;
+    letter-spacing:-2px;
+    font-weight:800;
+}
+
+
+.index-hero-title span{
+    color:#22c55e;
+}
+
+
+.index-hero-desc{
+    max-width:680px;
+
+    margin:28px 0 0;
+
+    color:#e2e8f0;
+
+    font-size:22px;
+    line-height:1.6;
+    font-weight:500;
+}
+
+
+.index-hero-support{
+    max-width:720px;
+
+    margin:18px 0 0;
+
+    color:#94a3b8;
+
+    font-size:17px;
+    line-height:1.8;
+}
+
+
+/* BUTTONS */
+
+.index-hero-actions{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+
+    margin-top:34px;
+}
+
+
+.index-hero-primary-btn,
+.index-hero-secondary-btn{
+    min-height:54px;
+
+    padding:0 28px;
+
+    border-radius:10px;
+
+    font-size:16px;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        background .2s ease;
+}
+
+
+.index-hero-primary-btn{
+    border:1px solid #22c55e;
+
+    background:#22c55e;
+    color:#020617;
+}
+
+
+.index-hero-primary-btn:hover{
+    transform:translateY(-2px);
+
+    background:#16a34a;
+    border-color:#16a34a;
+}
+
+
+.index-hero-secondary-btn{
+    border:1px solid #475569;
+
+    background:rgba(2,6,23,.58);
+    color:#ffffff;
+}
+
+
+.index-hero-secondary-btn:hover{
+    transform:translateY(-2px);
+
+    border-color:#22c55e;
+}
+
+
+/* TRUST ITEMS */
+
+.index-hero-trust{
+    display:flex;
+    flex-wrap:wrap;
+    gap:28px;
+
+    margin-top:28px;
+}
+
+
+.index-hero-trust-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    color:#cbd5e1;
+
+    font-size:14px;
+    font-weight:600;
+}
+
+
+.index-hero-trust-item span{
+    color:#22c55e;
+}
+
+
+/* RIGHT LOGO */
+
+.index-hero-visual{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+
+.index-hero-logo{
+    width:100%;
+    max-width:320px;
+    height:auto;
+
+    object-fit:contain;
+
+    filter:
+        drop-shadow(0 0 18px rgba(34,197,94,.18))
+        drop-shadow(0 18px 40px rgba(0,0,0,.35));
+}
+
+
+/* ===================================
+   FEATURE STRIP
+=================================== */
+
+.index-hero-features{
+    max-width:1500px;
+
+    margin:0 auto;
+    padding:0 40px 44px;
+
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:0;
+}
+
+
+.index-hero-feature{
+    display:flex;
+    gap:18px;
+
+    min-height:135px;
+
+    padding:26px 28px;
+
+    background:rgba(2,6,23,.76);
+
+    border-top:1px solid rgba(148,163,184,.18);
+    border-right:1px solid rgba(148,163,184,.14);
+
+    backdrop-filter:blur(8px);
+}
+
+
+.index-hero-feature:first-child{
+    border-left:1px solid rgba(148,163,184,.14);
+}
+
+
+.index-hero-feature-icon{
+    flex:0 0 auto;
+
+    color:#22c55e;
+
+    font-size:30px;
+    line-height:1;
+}
+
+
+.index-hero-feature h3{
+    margin:0 0 8px;
+
+    color:#ffffff;
+
+    font-size:15px;
+    font-weight:800;
+    letter-spacing:.4px;
+    text-transform:uppercase;
+}
+
+
+.index-hero-feature p{
+    margin:0;
+
+    color:#94a3b8;
+
+    font-size:14px;
+    line-height:1.65;
+}
+
+
+/* ===================================
+   TABLET
+=================================== */
+
+@media (max-width:1100px){
+
+    .index-hero{
+        grid-template-columns:1fr 300px;
+        gap:40px;
+
+        padding-top:70px;
+    }
+
+    .index-hero-features{
+        grid-template-columns:repeat(2, 1fr);
+    }
+
+}
+
+
+/* ===================================
+   MOBILE
+=================================== */
+
+@media (max-width:760px){
+
+    .index-hero-wrap{
+        background-position:70% center;
+    }
+
+    .index-hero{
+        min-height:auto;
+
+        grid-template-columns:1fr;
+
+        padding:70px 22px 40px;
+
+        text-align:left;
+    }
+
+    .index-hero-title{
+        font-size:clamp(42px, 12vw, 58px);
+        letter-spacing:-1px;
+    }
+
+    .index-hero-desc{
+        font-size:19px;
+    }
+
+    .index-hero-support{
+        font-size:16px;
+    }
+
+    .index-hero-visual{
+        display:none;
+    }
+
+    .index-hero-actions{
+        flex-direction:column;
+    }
+
+    .index-hero-primary-btn,
+    .index-hero-secondary-btn{
+        width:100%;
+    }
+
+    .index-hero-trust{
+        gap:14px 20px;
+    }
+
+    .index-hero-features{
+        grid-template-columns:1fr;
+
+        padding:0 22px 30px;
+    }
+
+    .index-hero-feature{
+        border-left:1px solid rgba(148,163,184,.14);
+        border-right:1px solid rgba(148,163,184,.14);
+    }
+
+}
+
 </style>
 </head>
 
@@ -777,102 +1159,170 @@ HERO SECONDARY CTA
 
 <main>
 
+<!-- ===================================
+INDEX HERO
+=================================== -->
 
-<!-- ===================================  
-HERO  
-=================================== -->  
-  
-<div class="login-hero">  
-  
-    <div class="hero">  
-  
-        <!-- LOGO -->  
-  
-        <div class="hero-logo-wrap">  
-  
-            <img  
-                src="/images/logo.webp"  
-                class="hero-logo"  
-                alt="EdgeBreak AI NASDAQ Stock Research"  
-                width="150"  
-                height="150"  
-                loading="eager"  
-                fetchpriority="high"  
-                decoding="async"  
-            >  
-  
-        </div>  
-  
-        <!-- CONTENT -->  
-  
-        <div class="hero-content">  
-  
-            <div class="hero-tag">  
-                NASDAQ SCANNING • AI STOCK RESEARCH
-            </div>  
-  
-            <h1 class="hero-title">  
-                EdgeBreak AI
-            </h1>  
-  
-            <h2 class="hero-sub">  
-                Automated NASDAQ scanning and AI stock research.
-            </h2>  
-  
-            <p class="hero-desc">  
-                EdgeBreak scans thousands of NASDAQ stocks, identifies technical setups and uses AI research to surface companies worth investigating.
-            </p>  
-  
-            <div class="hero-highlight">  
-                We Scan. We Research. You Trade.
-            </div>  
-  
-            <p style="  
-                color:#22c55e;  
-                font-weight:600;  
-                margin-top:20px;  
-                line-height:1.8;  
-            ">  
-                ✓ Automated NASDAQ Scanning<br>
-                ✓ AI Stock Research<br>
-                ✓ Breakout & Pre-Breakout Discovery<br>
-                ✓ AI Chart Analysis<br>
-                ✓ Manual Scanners When You Want Them
-            </p>  
-  
-            <div style=" 
-                display:flex; 
-                gap:15px; 
-                justify-content:center; 
-                flex-wrap:wrap; 
-                margin-top:25px; 
-            "> 
- 
-                <!-- TRY FREE --> 
- 
-                <button 
-                    onclick="window.location.href='/edgebreak-free.html'" 
-                    class="nav-cta" 
-                > 
-                    Try EdgeBreak AI Free
-                </button> 
- 
- 
-                <!-- FULL ACCESS --> 
- 
-                <button 
-                    onclick="window.location.href='/pricing.html'" 
-                    class="nav-cta hero-secondary-cta" 
-                > 
-                    View Full Access 
-                </button> 
- 
-            </div>  
-  
-        </div>  
-  
-    </div>  
-  
+<div class="index-hero-wrap">
+
+    <section class="index-hero">
+
+        <!-- CONTENT -->
+
+        <div class="index-hero-content">
+
+            <div class="index-hero-tag">
+                NASDAQ MARKET INTELLIGENCE
+            </div>
+
+            <h1 class="index-hero-title">
+                Scan the NASDAQ.<br>
+                <span>Research What You Find.</span>
+            </h1>
+
+            <p class="index-hero-desc">
+                Automated stock discovery and AI-powered research built for the NASDAQ market.
+            </p>
+
+            <p class="index-hero-support">
+                EdgeBreak scans thousands of NASDAQ-listed stocks for breakouts,
+                pre-breakouts and developing market structures, then helps you
+                investigate the companies and charts behind them.
+            </p>
+
+            <div class="index-hero-actions">
+
+                <button
+                    onclick="window.location.href='/edgebreak-free.html'"
+                    class="index-hero-primary-btn"
+                >
+                    Try EdgeBreak Free
+                </button>
+
+                <button
+                    onclick="window.location.href='/pricing.html'"
+                    class="index-hero-secondary-btn"
+                >
+                    Explore EdgeBreak
+                </button>
+
+            </div>
+
+            <div class="index-hero-trust">
+
+                <div class="index-hero-trust-item">
+                    <span>✓</span>
+                    NASDAQ Focused
+                </div>
+
+                <div class="index-hero-trust-item">
+                    <span>✓</span>
+                    AI Research
+                </div>
+
+                <div class="index-hero-trust-item">
+                    <span>✓</span>
+                    Chart Analysis
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOGO / VISUAL -->
+
+        <div class="index-hero-visual">
+
+            <img
+                src="/images/logo.webp"
+                class="index-hero-logo"
+                alt="EdgeBreak NASDAQ Market Intelligence"
+                width="220"
+                height="220"
+                loading="eager"
+                fetchpriority="high"
+                decoding="async"
+            >
+
+        </div>
+
+    </section>
+
+
+    <!-- FEATURE STRIP -->
+
+    <div class="index-hero-features">
+
+        <div class="index-hero-feature">
+
+            <div class="index-hero-feature-icon">
+                ◎
+            </div>
+
+            <div>
+                <h3>Breakout Scanner</h3>
+
+                <p>
+                    Find NASDAQ stocks approaching or breaking key resistance levels.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="index-hero-feature">
+
+            <div class="index-hero-feature-icon">
+                ↗
+            </div>
+
+            <div>
+                <h3>Pre-Breakout Scanner</h3>
+
+                <p>
+                    Discover developing structures before a confirmed breakout occurs.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="index-hero-feature">
+
+            <div class="index-hero-feature-icon">
+                ✦
+            </div>
+
+            <div>
+                <h3>AI Stock Research</h3>
+
+                <p>
+                    Research companies, market attention, news and financial context with AI.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="index-hero-feature">
+
+            <div class="index-hero-feature-icon">
+                ◇
+            </div>
+
+            <div>
+                <h3>AI Chart Analysis</h3>
+
+                <p>
+                    Upload a chart and investigate structure, support, resistance and volume.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 <!-- =================================== 
