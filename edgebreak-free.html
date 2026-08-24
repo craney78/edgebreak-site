@@ -9174,6 +9174,202 @@ EDGEBREAK AI AUTOMATED NASDAQ SCANNING
 
 </div>
 
+<!-- ===================================
+EDGEBREAK AI CHART ANALYSIS
+=================================== -->
+
+<section class="chart-ai-tool" id="chartAITool">
+
+    <div class="chart-ai-header">
+
+        <div class="chart-ai-eyebrow">
+            ✦ AI CHART ANALYSIS
+        </div>
+
+        <h2>
+            Analyse Any Stock Chart
+        </h2>
+
+        <p>
+            Paste or drag a stock chart below to analyse the
+            technical structure visible in the chart.
+        </p>
+
+    </div>
+
+
+    <!-- DROP / PASTE AREA -->
+
+    <div
+        class="chart-ai-dropzone"
+        id="chartAIDropzone"
+        tabindex="0"
+    >
+
+        <input
+            type="file"
+            id="chartAIFileInput"
+            accept="image/png,image/jpeg,image/webp"
+            hidden
+        >
+
+        <div
+            class="chart-ai-empty"
+            id="chartAIEmpty"
+        >
+
+            <div class="chart-ai-upload-icon">
+                ✦
+            </div>
+
+            <h3>
+                Drop or Paste Stock Chart
+            </h3>
+
+            <p>
+                Drag a chart here or press
+                <strong>Ctrl+V</strong>
+            </p>
+
+            <button
+                type="button"
+                class="chart-ai-choose-btn"
+                id="chartAIChooseBtn"
+            >
+                Choose Image
+            </button>
+
+            <span class="chart-ai-file-note">
+                PNG • JPG • WEBP
+            </span>
+
+        </div>
+
+
+        <!-- IMAGE PREVIEW -->
+
+        <div
+            class="chart-ai-preview"
+            id="chartAIPreview"
+            hidden
+        >
+
+            <img
+                id="chartAIPreviewImage"
+                alt="Stock chart selected for AI analysis"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div
+        class="chart-ai-actions"
+        id="chartAIActions"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="chart-ai-analyse-btn"
+            id="chartAIAnalyseBtn"
+        >
+            ✦ Analyse Chart
+        </button>
+
+        <button
+            type="button"
+            class="chart-ai-remove-btn"
+            id="chartAIRemoveBtn"
+        >
+            Remove
+        </button>
+
+    </div>
+
+
+    <!-- FUTURE RESULTS AREA -->
+
+    <div
+        class="chart-ai-results"
+        id="chartAIResults"
+        hidden
+    >
+
+        <div class="chart-ai-results-heading">
+
+            <span>
+                ✦ AI TECHNICAL ANALYSIS
+            </span>
+
+            <h3>
+                Chart Analysis
+            </h3>
+
+        </div>
+
+
+        <div class="chart-ai-results-grid">
+
+            <div class="chart-ai-result-card">
+                <span>MARKET STRUCTURE</span>
+                <p id="chartAIMarketStructure"></p>
+            </div>
+
+            <div class="chart-ai-result-card">
+                <span>RESISTANCE</span>
+                <p id="chartAIResistance"></p>
+            </div>
+
+            <div class="chart-ai-result-card">
+                <span>SUPPORT / PRICE STRUCTURE</span>
+                <p id="chartAISupport"></p>
+            </div>
+
+            <div class="chart-ai-result-card">
+                <span>VOLUME BEHAVIOUR</span>
+                <p id="chartAIVolume"></p>
+            </div>
+
+            <div class="chart-ai-result-card">
+                <span>BASE / CONSOLIDATION</span>
+                <p id="chartAIBase"></p>
+            </div>
+
+            <div class="chart-ai-result-card">
+                <span>BREAKOUT STRUCTURE</span>
+                <p id="chartAIBreakout"></p>
+            </div>
+
+        </div>
+
+
+        <div class="chart-ai-summary">
+
+            <span>
+                ✦ CHART SUMMARY
+            </span>
+
+            <p id="chartAISummary"></p>
+
+        </div>
+
+
+        <div class="chart-ai-notice">
+
+            AI-generated chart analysis may contain errors.
+            Technical observations are provided for research
+            and educational purposes only and do not constitute
+            investment advice or a recommendation.
+
+        </div>
+
+    </div>
+
+</section>
 
 <!-- =========================================
 SCANNER SELECTOR
@@ -9954,202 +10150,7 @@ SCANNER SELECTOR
 </div>
 </div>
 
-<!-- ===================================
-EDGEBREAK AI CHART ANALYSIS
-=================================== -->
 
-<section class="chart-ai-tool" id="chartAITool">
-
-    <div class="chart-ai-header">
-
-        <div class="chart-ai-eyebrow">
-            ✦ AI CHART ANALYSIS
-        </div>
-
-        <h2>
-            Analyse Any Stock Chart
-        </h2>
-
-        <p>
-            Paste or drag a stock chart below to analyse the
-            technical structure visible in the chart.
-        </p>
-
-    </div>
-
-
-    <!-- DROP / PASTE AREA -->
-
-    <div
-        class="chart-ai-dropzone"
-        id="chartAIDropzone"
-        tabindex="0"
-    >
-
-        <input
-            type="file"
-            id="chartAIFileInput"
-            accept="image/png,image/jpeg,image/webp"
-            hidden
-        >
-
-        <div
-            class="chart-ai-empty"
-            id="chartAIEmpty"
-        >
-
-            <div class="chart-ai-upload-icon">
-                ✦
-            </div>
-
-            <h3>
-                Drop or Paste Stock Chart
-            </h3>
-
-            <p>
-                Drag a chart here or press
-                <strong>Ctrl+V</strong>
-            </p>
-
-            <button
-                type="button"
-                class="chart-ai-choose-btn"
-                id="chartAIChooseBtn"
-            >
-                Choose Image
-            </button>
-
-            <span class="chart-ai-file-note">
-                PNG • JPG • WEBP
-            </span>
-
-        </div>
-
-
-        <!-- IMAGE PREVIEW -->
-
-        <div
-            class="chart-ai-preview"
-            id="chartAIPreview"
-            hidden
-        >
-
-            <img
-                id="chartAIPreviewImage"
-                alt="Stock chart selected for AI analysis"
-            >
-
-        </div>
-
-    </div>
-
-
-    <!-- ACTIONS -->
-
-    <div
-        class="chart-ai-actions"
-        id="chartAIActions"
-        hidden
-    >
-
-        <button
-            type="button"
-            class="chart-ai-analyse-btn"
-            id="chartAIAnalyseBtn"
-        >
-            ✦ Analyse Chart
-        </button>
-
-        <button
-            type="button"
-            class="chart-ai-remove-btn"
-            id="chartAIRemoveBtn"
-        >
-            Remove
-        </button>
-
-    </div>
-
-
-    <!-- FUTURE RESULTS AREA -->
-
-    <div
-        class="chart-ai-results"
-        id="chartAIResults"
-        hidden
-    >
-
-        <div class="chart-ai-results-heading">
-
-            <span>
-                ✦ AI TECHNICAL ANALYSIS
-            </span>
-
-            <h3>
-                Chart Analysis
-            </h3>
-
-        </div>
-
-
-        <div class="chart-ai-results-grid">
-
-            <div class="chart-ai-result-card">
-                <span>MARKET STRUCTURE</span>
-                <p id="chartAIMarketStructure"></p>
-            </div>
-
-            <div class="chart-ai-result-card">
-                <span>RESISTANCE</span>
-                <p id="chartAIResistance"></p>
-            </div>
-
-            <div class="chart-ai-result-card">
-                <span>SUPPORT / PRICE STRUCTURE</span>
-                <p id="chartAISupport"></p>
-            </div>
-
-            <div class="chart-ai-result-card">
-                <span>VOLUME BEHAVIOUR</span>
-                <p id="chartAIVolume"></p>
-            </div>
-
-            <div class="chart-ai-result-card">
-                <span>BASE / CONSOLIDATION</span>
-                <p id="chartAIBase"></p>
-            </div>
-
-            <div class="chart-ai-result-card">
-                <span>BREAKOUT STRUCTURE</span>
-                <p id="chartAIBreakout"></p>
-            </div>
-
-        </div>
-
-
-        <div class="chart-ai-summary">
-
-            <span>
-                ✦ CHART SUMMARY
-            </span>
-
-            <p id="chartAISummary"></p>
-
-        </div>
-
-
-        <div class="chart-ai-notice">
-
-            AI-generated chart analysis may contain errors.
-            Technical observations are provided for research
-            and educational purposes only and do not constitute
-            investment advice or a recommendation.
-
-        </div>
-
-    </div>
-
-</section>
 
 <!-- =========================================
 ⭐ MY WATCHLIST
