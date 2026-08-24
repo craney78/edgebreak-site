@@ -67,6 +67,29 @@ for name, script in SCANNERS:
         break
 
 # ==========================================
+# DAILY BRIEF CULL
+# ==========================================
+
+if overall_status == "SUCCESS":
+
+    print("\n▶ Running Daily Brief Cull...")
+
+    try:
+
+        subprocess.run(
+            ["python", "daily_brief_cull.py"],
+            check=True
+        )
+
+        print("✅ Daily Brief Cull Complete")
+
+    except subprocess.CalledProcessError:
+
+        print("❌ Daily Brief Cull FAILED")
+
+        overall_status = "FAILED"        
+
+# ==========================================
 # GIT
 # ==========================================
 
