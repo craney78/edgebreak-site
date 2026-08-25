@@ -28,24 +28,41 @@ PROFILE_CACHE_FILE = "daily_brief_profile_cache.json"
 MIN_AVERAGE_VOLUME = 100_000
 MIN_AVERAGE_DOLLAR_VOLUME = 1_000_000
 
-# Pre-Breakout must be within 5%
-# BELOW resistance to qualify for
-# Daily Brief AI research.
-
 MAX_PREBREAKOUT_DISTANCE = 5.0
 
-# Any stock already more than 15%
-# ABOVE resistance is considered stale.
-
 MAX_ABOVE_RESISTANCE = 15.0
-
-# If genuine relative-volume data exists,
-# >= 2x normal volume overrides the
-# >15% stale breakout removal.
 
 HIGH_VOLUME_EXCEPTION = 2.0
 
 PROFILE_SLEEP_TIME = 0.5
+
+
+# ===================================
+# RANKING SETTINGS
+# ===================================
+#
+# Rank every stock surviving the hard
+# culls.
+#
+# Normally save TOP 20.
+#
+# IMPORTANT:
+# If multiple stocks tie with the score
+# of stock #20, ALL stocks with that
+# score are retained.
+#
+# Example:
+#
+# #19 = 72
+# #20 = 70
+# #21 = 70
+# #22 = 70
+# #23 = 68
+#
+# Output = 22 stocks.
+# ===================================
+
+TARGET_TOP_CANDIDATES = 20
 
 
 # ===================================
@@ -68,54 +85,18 @@ PROPERTY_KEYWORDS = [
 # ===================================
 # SPECIAL NASDAQ SECURITY SUFFIXES
 # ===================================
-#
-# IMPORTANT:
-#
-# We DO NOT remove every ticker longer
-# than 4 characters.
-#
-# Legitimate share classes can have
-# 5-character NASDAQ symbols.
-#
-# Examples we want to KEEP:
-#
-# FWONK
-# FWONA
-# LBTYK
-# LLYVK
-# DGICA
-#
-# Instead, only selected fifth-character
-# suffixes associated with special
-# securities are removed from the
-# Daily Brief research pool.
-# ===================================
 
 SPECIAL_SECURITY_SUFFIXES = {
 
-    # Warrants
     "W": "Warrant",
-
-    # Rights
     "R": "Rights",
-
-    # Units
     "U": "Units",
-
-    # Preferred
     "P": "Preferred",
-
-    # Convertible bond
     "C": "Convertible",
-
-    # Bankruptcy / reorganisation
     "Q": "Bankruptcy",
-
-    # When issued
     "V": "When Issued",
-
-    # Mutual fund / special fund
     "X": "Fund / Special Security"
+
 }
 
 
@@ -347,9 +328,6 @@ def check_prebreakout_proximity(stock):
     )
 
 
-    # Cannot calculate safely.
-    # Keep rather than delete blindly.
-
     if (
         price <= 0
         or
@@ -372,9 +350,6 @@ def check_prebreakout_proximity(stock):
 
         }
 
-
-    # Already at / above resistance.
-    # Stale breakout rule handles this.
 
     if price >= resistance:
 
@@ -441,9 +416,6 @@ def check_stale_breakout(stock):
     )
 
 
-    # Cannot establish price/resistance.
-    # Keep rather than delete blindly.
-
     if (
         price <= 0
         or
@@ -492,8 +464,6 @@ def check_stale_breakout(stock):
     ) * 100
 
 
-    # Still below resistance.
-
     if distance_above_resistance <= 0:
 
         return {
@@ -536,9 +506,6 @@ def check_stale_breakout(stock):
     )
 
 
-    # <=15% above resistance.
-    # Keep.
-
     if (
         distance_above_resistance <=
         MAX_ABOVE_RESISTANCE
@@ -578,11 +545,6 @@ def check_stale_breakout(stock):
 
         }
 
-
-    # More than 15% above resistance.
-    #
-    # Keep only if genuine relative
-    # volume data exists AND >=2x.
 
     high_volume_exception = (
 
@@ -760,9 +722,6 @@ def get_special_security_reason(symbol):
     ).strip().upper()
 
 
-    # Normal 1-4 character ticker.
-    # Keep.
-
     if len(symbol) <= 4:
         return None
 
@@ -777,30 +736,11 @@ def get_special_security_reason(symbol):
         ]
 
 
-    # Longer ticker, but not one of
-    # our explicitly excluded special
-    # security suffixes.
-    #
-    # Keep legitimate share classes.
-
     return None
 
 
 # ===================================
 # LOAD SCANNER RESULTS
-# ===================================
-#
-# DAILY BRIEF NOW USES ONLY:
-#
-# 1. BREAKOUT
-# 2. PRE-BREAKOUT
-#
-# LAUNCH PAD IS INTENTIONALLY EXCLUDED.
-#
-# Launch Pad remains available as a
-# normal EdgeBreak scanner/watchlist
-# tool, but it is no longer part of
-# Daily Brief candidate generation.
 # ===================================
 
 breakouts = load_json(
@@ -853,12 +793,6 @@ print(
 
 # ===================================
 # BREAKOUT LIQUIDITY
-# ===================================
-#
-# Breakout JSON does not currently
-# contain the liquidity fields.
-#
-# Do not remove Breakouts blindly.
 # ===================================
 
 breakout_liquidity_survivors = list(
@@ -1043,15 +977,7 @@ if prebreakout_proximity_removed:
 
 
 # ===================================
-# UNIVERSAL STALE BREAKOUT CULL
-# ===================================
-#
-# Applied to:
-#
-# BREAKOUT
-# PRE-BREAKOUT
-#
-# Launch Pad is no longer present.
+# STALE BREAKOUT CULL
 # ===================================
 
 (
@@ -1445,41 +1371,6 @@ print(
 
 
 # ===================================
-# MULTI-SCANNER STOCKS
-# ===================================
-
-multi_scanner_candidates = [
-
-    stock
-
-    for stock in merged_candidates
-
-    if len(
-        stock.get(
-            "scanners",
-            []
-        )
-    ) > 1
-
-]
-
-
-if multi_scanner_candidates:
-
-    print()
-    print("MULTI-SCANNER CANDIDATES")
-    print("-----------------------------------")
-
-
-    for stock in multi_scanner_candidates:
-
-        print(
-            f"{stock['symbol']} | "
-            f"{', '.join(stock['scanners'])}"
-        )
-
-
-# ===================================
 # LOAD PROFILE CACHE
 # ===================================
 
@@ -1640,15 +1531,11 @@ def get_exclusion_reason(profile):
     )
 
 
-    # BANKS
-
     for keyword in BANK_KEYWORDS:
 
         if keyword in industry:
             return "BANK"
 
-
-    # PROPERTY / REIT
 
     for keyword in PROPERTY_KEYWORDS:
 
@@ -1670,7 +1557,7 @@ print("-----------------------------------")
 print()
 
 
-final_candidates = []
+qualified_candidates = []
 
 bank_removed = []
 
@@ -1701,16 +1588,13 @@ for index, stock in enumerate(
     )
 
 
-    # Profile failed:
-    # KEEP rather than delete blindly.
-
     if profile is None:
 
         profile_failures.append(
             symbol
         )
 
-        final_candidates.append(
+        qualified_candidates.append(
             stock
         )
 
@@ -1749,8 +1633,6 @@ for index, stock in enumerate(
     )
 
 
-    # REMOVE BANK
-
     if reason == "BANK":
 
         bank_removed.append({
@@ -1778,8 +1660,6 @@ for index, stock in enumerate(
 
         continue
 
-
-    # REMOVE PROPERTY / REIT
 
     if reason == "PROPERTY":
 
@@ -1809,13 +1689,888 @@ for index, stock in enumerate(
         continue
 
 
-    final_candidates.append(
+    qualified_candidates.append(
         stock
     )
 
 
 # ===================================
-# SAVE FINAL CANDIDATES
+# RANKING HELPERS
+# ===================================
+
+def get_primary_stock(candidate):
+
+    if candidate.get(
+        "breakout"
+    ):
+
+        return (
+            candidate["breakout"],
+            "BREAKOUT"
+        )
+
+
+    if candidate.get(
+        "pre_breakout"
+    ):
+
+        return (
+            candidate["pre_breakout"],
+            "PRE_BREAKOUT"
+        )
+
+
+    return (
+        {},
+        "UNKNOWN"
+    )
+
+
+# ===================================
+# GRADE SCORE
+# ===================================
+#
+# Maximum = 25
+# ===================================
+
+def score_grade(stock):
+
+    grade = str(
+        stock.get(
+            "grade",
+            ""
+        )
+    ).strip().upper()
+
+
+    grade_scores = {
+
+        "A+": 25,
+        "A": 22,
+        "A-": 20,
+
+        "B+": 18,
+        "B": 15,
+        "B-": 12,
+
+        "C+": 9,
+        "C": 6,
+        "C-": 3
+
+    }
+
+
+    return grade_scores.get(
+        grade,
+        0
+    )
+
+
+# ===================================
+# RESISTANCE TOUCH SCORE
+# ===================================
+#
+# Maximum = 20
+#
+# More established resistance receives
+# more points, but the score is capped
+# so one metric cannot dominate.
+# ===================================
+
+def score_touches(stock):
+
+    touches = safe_number(
+        stock.get(
+            "touches",
+            stock.get(
+                "resistance_touches",
+                0
+            )
+        )
+    )
+
+
+    if touches >= 6:
+        return 20
+
+    if touches == 5:
+        return 18
+
+    if touches == 4:
+        return 16
+
+    if touches == 3:
+        return 13
+
+    if touches == 2:
+        return 9
+
+    if touches == 1:
+        return 4
+
+    return 0
+
+
+# ===================================
+# HIGHER LOW SCORE
+# ===================================
+#
+# Maximum = 20
+# ===================================
+
+def score_higher_lows(stock):
+
+    higher_lows = safe_number(
+        stock.get(
+            "higher_lows",
+            0
+        )
+    )
+
+
+    if higher_lows >= 4:
+        return 20
+
+    if higher_lows == 3:
+        return 18
+
+    if higher_lows == 2:
+        return 15
+
+    if higher_lows == 1:
+        return 8
+
+    return 0
+
+
+# ===================================
+# PRICE POSITION SCORE
+# ===================================
+#
+# Maximum = 25
+#
+# BREAKOUT:
+# Reward a fresh breakout close to
+# resistance.
+#
+# PRE-BREAKOUT:
+# Reward a stock approaching resistance.
+#
+# This means both scanner types can
+# compete fairly without simply giving
+# every Breakout a huge fixed bonus.
+# ===================================
+
+def score_price_position(
+    stock,
+    scanner_type
+):
+
+    price = get_current_price(
+        stock
+    )
+
+    resistance = get_resistance(
+        stock
+    )
+
+
+    if (
+        price <= 0
+        or
+        resistance <= 0
+    ):
+
+        return (
+            0,
+            None
+        )
+
+
+    distance_percent = (
+        (
+            price -
+            resistance
+        )
+        /
+        resistance
+    ) * 100
+
+
+    # ===================================
+    # BREAKOUT
+    # ===================================
+
+    if scanner_type == "BREAKOUT":
+
+        distance_above = max(
+            distance_percent,
+            0
+        )
+
+
+        # Sweet spot:
+        # freshly through resistance.
+
+        if (
+            distance_above >= 0
+            and
+            distance_above <= 2
+        ):
+
+            return (
+                25,
+                round(
+                    distance_percent,
+                    2
+                )
+            )
+
+
+        if distance_above <= 4:
+
+            return (
+                22,
+                round(
+                    distance_percent,
+                    2
+                )
+            )
+
+
+        if distance_above <= 6:
+
+            return (
+                18,
+                round(
+                    distance_percent,
+                    2
+                )
+            )
+
+
+        if distance_above <= 10:
+
+            return (
+                13,
+                round(
+                    distance_percent,
+                    2
+                )
+            )
+
+
+        if distance_above <= 15:
+
+            return (
+                7,
+                round(
+                    distance_percent,
+                    2
+                )
+            )
+
+
+        return (
+            0,
+            round(
+                distance_percent,
+                2
+            )
+        )
+
+
+    # ===================================
+    # PRE-BREAKOUT
+    # ===================================
+
+    distance_below = abs(
+        min(
+            distance_percent,
+            0
+        )
+    )
+
+
+    # If scanner still calls it
+    # Pre-Breakout but it has crossed
+    # resistance slightly, treat it as
+    # extremely close.
+
+    if distance_percent >= 0:
+
+        if distance_percent <= 2:
+
+            return (
+                25,
+                round(
+                    distance_percent,
+                    2
+                )
+            )
+
+        if distance_percent <= 5:
+
+            return (
+                20,
+                round(
+                    distance_percent,
+                    2
+                )
+            )
+
+        return (
+            10,
+            round(
+                distance_percent,
+                2
+            )
+        )
+
+
+    if distance_below <= 1:
+
+        return (
+            25,
+            round(
+                distance_percent,
+                2
+            )
+        )
+
+
+    if distance_below <= 2:
+
+        return (
+            22,
+            round(
+                distance_percent,
+                2
+            )
+        )
+
+
+    if distance_below <= 3:
+
+        return (
+            18,
+            round(
+                distance_percent,
+                2
+            )
+        )
+
+
+    if distance_below <= 4:
+
+        return (
+            14,
+            round(
+                distance_percent,
+                2
+            )
+        )
+
+
+    if distance_below <= 5:
+
+        return (
+            10,
+            round(
+                distance_percent,
+                2
+            )
+        )
+
+
+    return (
+        0,
+        round(
+            distance_percent,
+            2
+        )
+    )
+
+
+# ===================================
+# VOLUME SCORE
+# ===================================
+#
+# Maximum = 10
+#
+# Only score volume when genuine
+# relative-volume information exists.
+#
+# Missing volume data receives zero,
+# but is NOT otherwise penalised.
+# ===================================
+
+def score_volume(stock):
+
+    volume = get_relative_volume(
+        stock
+    )
+
+
+    if not volume[
+        "available"
+    ]:
+
+        return (
+            0,
+            None
+        )
+
+
+    ratio = volume[
+        "value"
+    ]
+
+
+    if ratio >= 2.0:
+
+        return (
+            10,
+            ratio
+        )
+
+
+    if ratio >= 1.5:
+
+        return (
+            8,
+            ratio
+        )
+
+
+    if ratio >= 1.0:
+
+        return (
+            6,
+            ratio
+        )
+
+
+    if ratio >= 0.75:
+
+        return (
+            4,
+            ratio
+        )
+
+
+    if ratio >= 0.5:
+
+        return (
+            2,
+            ratio
+        )
+
+
+    return (
+        0,
+        ratio
+    )
+
+
+# ===================================
+# CALCULATE DAILY BRIEF SCORE
+# ===================================
+#
+# TOTAL POSSIBLE = 100
+#
+# Grade             25
+# Resistance Touch  20
+# Higher Lows       20
+# Price Position    25
+# Volume            10
+# --------------------
+# TOTAL             100
+# ===================================
+
+def calculate_daily_brief_score(
+    candidate
+):
+
+    stock, scanner_type = (
+        get_primary_stock(
+            candidate
+        )
+    )
+
+
+    grade_points = score_grade(
+        stock
+    )
+
+
+    touch_points = score_touches(
+        stock
+    )
+
+
+    higher_low_points = (
+        score_higher_lows(
+            stock
+        )
+    )
+
+
+    (
+        position_points,
+        distance_percent
+    ) = score_price_position(
+        stock,
+        scanner_type
+    )
+
+
+    (
+        volume_points,
+        relative_volume
+    ) = score_volume(
+        stock
+    )
+
+
+    total_score = (
+        grade_points
+        +
+        touch_points
+        +
+        higher_low_points
+        +
+        position_points
+        +
+        volume_points
+    )
+
+
+    return {
+
+        "total_score":
+            int(
+                total_score
+            ),
+
+        "scanner_type":
+            scanner_type,
+
+        "grade_points":
+            grade_points,
+
+        "touch_points":
+            touch_points,
+
+        "higher_low_points":
+            higher_low_points,
+
+        "position_points":
+            position_points,
+
+        "volume_points":
+            volume_points,
+
+        "distance_from_resistance_percent":
+            distance_percent,
+
+        "relative_volume":
+            relative_volume
+
+    }
+
+
+# ===================================
+# RANK ALL QUALIFIED CANDIDATES
+# ===================================
+
+ranked_candidates = []
+
+
+for candidate in qualified_candidates:
+
+    ranking = (
+        calculate_daily_brief_score(
+            candidate
+        )
+    )
+
+
+    candidate[
+        "daily_brief_ranking"
+    ] = ranking
+
+
+    ranked_candidates.append(
+        candidate
+    )
+
+
+# ===================================
+# SORT
+# ===================================
+#
+# Primary sort:
+# Highest total score.
+#
+# Tie sorting only determines display
+# order inside the tied score group.
+#
+# It DOES NOT remove tied stocks.
+# ===================================
+
+ranked_candidates.sort(
+
+    key=lambda stock: (
+
+        -stock[
+            "daily_brief_ranking"
+        ][
+            "total_score"
+        ],
+
+        0
+        if stock[
+            "daily_brief_ranking"
+        ][
+            "scanner_type"
+        ] == "BREAKOUT"
+        else 1,
+
+        stock.get(
+            "symbol",
+            ""
+        )
+
+    )
+
+)
+
+
+# ===================================
+# ASSIGN RANK NUMBERS
+# ===================================
+#
+# Stocks with the same score receive
+# the same ranking number.
+#
+# Example:
+#
+# 1 = 90
+# 2 = 88
+# 2 = 88
+# 4 = 85
+# ===================================
+
+previous_score = None
+current_rank = 0
+
+
+for index, candidate in enumerate(
+    ranked_candidates,
+    start=1
+):
+
+    score = candidate[
+        "daily_brief_ranking"
+    ][
+        "total_score"
+    ]
+
+
+    if score != previous_score:
+
+        current_rank = index
+
+
+    candidate[
+        "daily_brief_rank"
+    ] = current_rank
+
+
+    previous_score = score
+
+
+# ===================================
+# TOP 20 + TIES
+# ===================================
+
+if (
+    len(ranked_candidates) <=
+    TARGET_TOP_CANDIDATES
+):
+
+    final_candidates = (
+        ranked_candidates
+    )
+
+    cutoff_score = None
+
+
+else:
+
+    cutoff_score = (
+        ranked_candidates[
+            TARGET_TOP_CANDIDATES - 1
+        ][
+            "daily_brief_ranking"
+        ][
+            "total_score"
+        ]
+    )
+
+
+    final_candidates = [
+
+        candidate
+
+        for candidate
+        in ranked_candidates
+
+        if candidate[
+            "daily_brief_ranking"
+        ][
+            "total_score"
+        ] >= cutoff_score
+
+    ]
+
+
+# ===================================
+# PRINT FULL RANKING
+# ===================================
+
+print()
+print("===================================")
+print("DAILY BRIEF TECHNICAL RANKING")
+print("===================================")
+print()
+
+print(
+    f"Qualified candidates    : "
+    f"{len(qualified_candidates)}"
+)
+
+print(
+    f"Target top candidates   : "
+    f"{TARGET_TOP_CANDIDATES}"
+)
+
+
+if cutoff_score is not None:
+
+    print(
+        f"Cutoff score            : "
+        f"{cutoff_score}"
+    )
+
+
+print(
+    f"Selected including ties : "
+    f"{len(final_candidates)}"
+)
+
+print()
+
+print(
+    "RANK | SYMBOL | TYPE | SCORE | "
+    "GRADE | TOUCH | LOWS | POSITION | VOLUME"
+)
+
+print(
+    "------------------------------------------------"
+    "----------------------------"
+)
+
+
+for candidate in ranked_candidates:
+
+    ranking = candidate[
+        "daily_brief_ranking"
+    ]
+
+
+    print(
+        f"{candidate['daily_brief_rank']:>4} | "
+        f"{candidate['symbol']:<6} | "
+        f"{ranking['scanner_type']:<12} | "
+        f"{ranking['total_score']:>3} | "
+        f"{ranking['grade_points']:>2} | "
+        f"{ranking['touch_points']:>2} | "
+        f"{ranking['higher_low_points']:>2} | "
+        f"{ranking['position_points']:>2} | "
+        f"{ranking['volume_points']:>2}"
+    )
+
+
+# ===================================
+# PRINT SELECTED GROUP
+# ===================================
+
+print()
+print("===================================")
+print("SELECTED FOR DAILY BRIEF RESEARCH")
+print("===================================")
+print()
+
+
+for candidate in final_candidates:
+
+    ranking = candidate[
+        "daily_brief_ranking"
+    ]
+
+
+    distance = ranking[
+        "distance_from_resistance_percent"
+    ]
+
+
+    relative_volume = ranking[
+        "relative_volume"
+    ]
+
+
+    if distance is None:
+
+        distance_text = "N/A"
+
+    elif distance >= 0:
+
+        distance_text = (
+            f"{distance:.2f}% above"
+        )
+
+    else:
+
+        distance_text = (
+            f"{abs(distance):.2f}% below"
+        )
+
+
+    if relative_volume is None:
+
+        volume_text = "N/A"
+
+    else:
+
+        volume_text = (
+            f"{relative_volume:.2f}x"
+        )
+
+
+    print(
+        f"#{candidate['daily_brief_rank']} "
+        f"{candidate['symbol']} | "
+        f"{ranking['scanner_type']} | "
+        f"Score {ranking['total_score']}/100 | "
+        f"{distance_text} resistance | "
+        f"Volume {volume_text}"
+    )
+
+
+# ===================================
+# SAVE ONLY TOP-RANKED GROUP
 # ===================================
 
 save_json(
@@ -1882,11 +2637,6 @@ print(
     f"{len(prebreakout_proximity_removed)}"
 )
 
-print(
-    f"Within 5% remaining      : "
-    f"{len(prebreakout_proximity_survivors)}"
-)
-
 
 print()
 print("STALE BREAKOUTS")
@@ -1940,6 +2690,43 @@ print(
 print(
     f"Profile failures         : "
     f"{len(profile_failures)}"
+)
+
+
+print()
+print("RANKING")
+print("-----------------------------------")
+
+print(
+    f"Qualified before ranking : "
+    f"{len(qualified_candidates)}"
+)
+
+print(
+    f"Target                   : "
+    f"{TARGET_TOP_CANDIDATES}"
+)
+
+
+if cutoff_score is not None:
+
+    print(
+        f"20th-place score         : "
+        f"{cutoff_score}"
+    )
+
+
+tie_extras = max(
+    0,
+    len(final_candidates)
+    -
+    TARGET_TOP_CANDIDATES
+)
+
+
+print(
+    f"Extra stocks from tie    : "
+    f"{tie_extras}"
 )
 
 
@@ -2043,7 +2830,7 @@ if profile_failures:
 print()
 
 print(
-    f"Saved final candidates to "
+    f"Saved TOP RANKED candidates to "
     f"{OUTPUT_FILE}"
 )
 
