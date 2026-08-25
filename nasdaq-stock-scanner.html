@@ -18808,6 +18808,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         updateScannerCounts();
 
+        loadDailyBriefStats();
+
 
         /* SHOW RESULTS */
 
@@ -19124,6 +19126,131 @@ document.addEventListener("DOMContentLoaded", () => {
                 baseForming: baseCount
             }
         );
+
+    }
+
+    /* =========================================
+    DAILY BRIEF STATS
+    ========================================= */
+
+    async function loadDailyBriefStats() {
+
+        try {
+
+            const response = await fetch(
+                `/daily_brief_stats.json?v=${Date.now()}`,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `Daily Brief stats HTTP ${response.status}`
+                );
+
+            }
+
+
+            const stats = await response.json();
+
+
+            console.log(
+                "Daily Brief Stats:",
+                stats
+            );
+
+
+            /* =================================
+            TECHNICAL SETUPS FOUND
+            ================================= */
+
+            if (
+                Number.isFinite(
+                    Number(stats.technical_setups_found)
+                )
+            ) {
+
+                setText(
+                    "dailyBriefCandidates",
+                    Number(
+                        stats.technical_setups_found
+                    ).toLocaleString()
+                );
+
+            }
+
+
+            /* =================================
+            FORWARDED FOR AI RESEARCH
+            ================================= */
+
+            if (
+                Number.isFinite(
+                    Number(stats.forwarded_for_ai_research)
+                )
+            ) {
+
+                setText(
+                    "dailyBriefResearched",
+                    Number(
+                        stats.forwarded_for_ai_research
+                    ).toLocaleString()
+                );
+
+            }
+
+
+            /* =================================
+            BREAKOUT SETUPS
+            ================================= */
+
+            if (
+                Number.isFinite(
+                    Number(stats.breakout_setups_found)
+                )
+            ) {
+
+                setText(
+                    "nasdaqBreakoutCount",
+                    Number(
+                        stats.breakout_setups_found
+                    ).toLocaleString()
+                );
+
+            }
+
+
+            /* =================================
+            PRE-BREAKOUT SETUPS
+            ================================= */
+
+            if (
+                Number.isFinite(
+                    Number(stats.pre_breakout_setups_found)
+                )
+            ) {
+
+                setText(
+                    "nasdaqPreBreakoutCount",
+                    Number(
+                        stats.pre_breakout_setups_found
+                    ).toLocaleString()
+                );
+
+            }
+
+        }
+        catch (error) {
+
+            console.error(
+                "Daily Brief stats failed to load:",
+                error
+            );
+
+        }
 
     }
 
