@@ -80,12 +80,10 @@ def load_json(filename, default=None):
             return json.load(f)
 
     except FileNotFoundError:
-
         print(f"File not found: {filename}")
         return default
 
     except Exception as e:
-
         print(f"Could not load {filename}: {e}")
         return default
 
@@ -97,7 +95,6 @@ def load_json(filename, default=None):
 def save_json(filename, data):
 
     with open(filename, "w") as f:
-
         json.dump(
             data,
             f,
@@ -186,8 +183,8 @@ def get_current_price(stock):
 
 def get_resistance(stock):
 
-    # Launch Pad
-    # Use TOP of resistance zone.
+    # Launch Pad:
+    # use TOP of resistance zone.
 
     resistance_zone_high = safe_number(
         stock.get(
@@ -199,8 +196,6 @@ def get_resistance(stock):
     if resistance_zone_high > 0:
         return resistance_zone_high
 
-
-    # Other possible format
 
     resistance_high = safe_number(
         stock.get(
@@ -249,12 +244,10 @@ def get_relative_volume(stock):
         if field not in stock:
             continue
 
-
         value = safe_number(
             stock.get(field),
             0
         )
-
 
         return {
             "available": True,
@@ -272,26 +265,6 @@ def get_relative_volume(stock):
 
 # ===================================
 # PRE-BREAKOUT PROXIMITY CHECK
-# ===================================
-#
-# Daily Brief only:
-#
-# If price is BELOW resistance and
-# more than 5% away, remove it.
-#
-# Example:
-#
-# resistance = $100
-#
-# price $96 = 4% below
-# KEEP
-#
-# price $92 = 8% below
-# REMOVE
-#
-# If stock is already above resistance,
-# this rule does NOT remove it.
-# The stale breakout rule handles that.
 # ===================================
 
 def check_prebreakout_proximity(stock):
@@ -323,8 +296,7 @@ def check_prebreakout_proximity(stock):
 
 
     # Already at / above resistance.
-    # Do not apply Pre-Breakout
-    # proximity removal.
+    # Stale breakout rule handles this.
 
     if price >= resistance:
 
@@ -447,8 +419,6 @@ def check_stale_breakout(stock):
         }
 
 
-    # Stock is above resistance.
-
     volume = get_relative_volume(
         stock
     )
@@ -563,8 +533,6 @@ def apply_stale_breakout_cull(
         )
 
 
-        # REMOVE STALE
-
         if result["stale"]:
 
             removed.append({
@@ -605,8 +573,6 @@ def apply_stale_breakout_cull(
 
             continue
 
-
-        # 2X VOLUME EXCEPTION
 
         if result[
             "high_volume_exception"
@@ -749,7 +715,6 @@ print(
 # ===================================
 
 prebreakout_liquidity_survivors = []
-
 prebreakout_liquidity_removed = []
 
 
@@ -822,7 +787,6 @@ print(
 # ===================================
 
 prebreakout_proximity_survivors = []
-
 prebreakout_proximity_removed = []
 
 
@@ -884,10 +848,6 @@ print(
 )
 
 
-# ===================================
-# SHOW PRE-BREAKOUTS TOO FAR AWAY
-# ===================================
-
 if prebreakout_proximity_removed:
 
     print()
@@ -907,13 +867,6 @@ if prebreakout_proximity_removed:
 
 # ===================================
 # LAUNCH PAD LIQUIDITY
-# ===================================
-#
-# Launch Pad currently has no
-# average_volume_20 /
-# average_dollar_volume_20.
-#
-# Do NOT liquidity cull it.
 # ===================================
 
 launchpad_liquidity_survivors = list(
@@ -951,10 +904,8 @@ print(
     breakout_stale_removed,
     breakout_volume_exceptions
 ) = apply_stale_breakout_cull(
-
     breakout_liquidity_survivors,
     "BREAKOUT"
-
 )
 
 
@@ -963,10 +914,8 @@ print(
     prebreakout_stale_removed,
     prebreakout_volume_exceptions
 ) = apply_stale_breakout_cull(
-
     prebreakout_proximity_survivors,
     "PRE_BREAKOUT"
-
 )
 
 
@@ -975,10 +924,8 @@ print(
     launchpad_stale_removed,
     launchpad_volume_exceptions
 ) = apply_stale_breakout_cull(
-
     launchpad_liquidity_survivors,
     "LAUNCH_PAD"
-
 )
 
 
@@ -999,10 +946,6 @@ all_volume_exceptions = (
     launchpad_volume_exceptions
 )
 
-
-# ===================================
-# STALE CULL SUMMARY
-# ===================================
 
 print()
 print("-----------------------------------")
@@ -1181,29 +1124,28 @@ print(
     f"{len(combined)}"
 )
 
+
 # ===================================
-# WEIRD / SPECIAL SECURITY CULL
+# SPECIAL SECURITY CULL
 # ===================================
 #
 # DAILY BRIEF ONLY
 #
-# Standard NASDAQ common-stock tickers
-# are normally 1-4 characters.
+# Remove tickers longer than four
+# characters before profile lookups
+# and before Gemini research.
 #
-# Tickers longer than 4 characters are
-# excluded from Daily Brief AI research.
+# This is deliberately a conservative
+# Daily Brief cleanup rule designed to
+# remove many units, warrants, rights,
+# preferred/debt securities and other
+# special NASDAQ instruments.
 #
-# This helps remove units, warrants,
-# rights, preferred/debt securities and
-# other special instruments.
-#
-# IMPORTANT:
-# This does NOT alter the actual
-# EdgeBreak scanners.
+# The underlying scanners are NOT
+# changed.
 # ===================================
 
 normal_security_candidates = []
-
 weird_security_removed = []
 
 
@@ -1284,7 +1226,6 @@ if weird_security_removed:
         )
 
 
-
 # ===================================
 # MERGE DUPLICATE SYMBOLS
 # ===================================
@@ -1292,7 +1233,12 @@ if weird_security_removed:
 merged = {}
 
 
-for stock in combined:
+# IMPORTANT:
+# Merge NORMAL securities only.
+# Do not use "combined" here or the
+# special securities get added back.
+
+for stock in normal_security_candidates:
 
     symbol = stock.get(
         "symbol"
@@ -1375,7 +1321,7 @@ merged_candidates = list(
 
 
 duplicates_removed = (
-    len(combined)
+    len(normal_security_candidates)
     -
     len(merged_candidates)
 )
@@ -1388,7 +1334,7 @@ print("-----------------------------------")
 
 print(
     f"Before merge         : "
-    f"{len(combined)}"
+    f"{len(normal_security_candidates)}"
 )
 
 print(
@@ -1602,7 +1548,6 @@ def get_exclusion_reason(profile):
     for keyword in BANK_KEYWORDS:
 
         if keyword in industry:
-
             return "BANK"
 
 
@@ -1611,7 +1556,6 @@ def get_exclusion_reason(profile):
     for keyword in PROPERTY_KEYWORDS:
 
         if keyword in combined_text:
-
             return "PROPERTY"
 
 
@@ -1866,6 +1810,11 @@ print("OTHER CULLS")
 print("-----------------------------------")
 
 print(
+    f"Special securities       : "
+    f"{len(weird_security_removed)}"
+)
+
+print(
     f"Duplicates merged        : "
     f"{duplicates_removed}"
 )
@@ -1898,7 +1847,33 @@ print("-----------------------------------")
 
 
 # ===================================
-# SHOW BANKS REMOVED
+# SPECIAL SECURITIES REMOVED
+# ===================================
+
+if weird_security_removed:
+
+    print()
+    print("SPECIAL SECURITIES REMOVED")
+    print("-----------------------------------")
+
+
+    for stock in weird_security_removed:
+
+        scanner_text = ", ".join(
+            stock.get(
+                "scanners",
+                []
+            )
+        )
+
+        print(
+            f"{stock['symbol']} | "
+            f"{scanner_text}"
+        )
+
+
+# ===================================
+# BANKS REMOVED
 # ===================================
 
 if bank_removed:
@@ -1918,7 +1893,7 @@ if bank_removed:
 
 
 # ===================================
-# SHOW PROPERTY REMOVED
+# PROPERTY REMOVED
 # ===================================
 
 if property_removed:
