@@ -7640,6 +7640,22 @@ html {
     }
 
 }
+
+.daily-brief-action-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    max-width: 320px;
+}
+
+.daily-brief-ai-warning {
+    font-size: 12px;
+    line-height: 1.55;
+    color: #64748b;
+    text-align: center;
+    max-width: 310px;
+}
 </style>  
 
 
@@ -8031,14 +8047,24 @@ EDGEBREAK AI AUTOMATED NASDAQ SCANNING
         </div>
 
 
-        <button
-            type="button"
-            class="daily-brief-open-btn"
-            id="openDailyBriefBtn"
-        >
-            <span>✦</span>
-            View Today's AI Results
-        </button>
+        <div class="daily-brief-action-wrap">
+
+            <button 
+                type="button" 
+                class="daily-brief-open-btn" 
+                id="openDailyBriefBtn" 
+            > 
+                <span>✦</span> 
+                View Today's AI Results 
+            </button>
+
+            <div class="daily-brief-ai-warning">
+                AI-generated research may contain errors or miss relevant information.
+                Always review the scanner results below and apply your own preferred
+                conditions and research before making any trading decision.
+            </div>
+
+        </div>
 
     </div>
 
