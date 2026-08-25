@@ -38,6 +38,26 @@
 // overview.takeaway
 //
 // Scanner counts remain FRONT-END controlled for now.
+//
+// ============================================================
+// IMPORTANT RELIABILITY CHANGE
+// ============================================================
+//
+// Gemini is OPTIONAL enhancement data.
+//
+// The deterministic Yahoo market data is the core report.
+//
+// Gemini is now protected by a hard request timeout.
+// If Gemini / Google Search grounding is slow or unavailable:
+//
+// - the Gemini request is aborted
+// - the deterministic overview continues
+// - fallback AI fields are used
+// - the overview is still cached
+// - the endpoint still returns successfully
+//
+// This prevents a Gemini request from holding the Vercel
+// function open until Vercel's 300-second runtime timeout.
 // ============================================================
 
 
@@ -52,6 +72,42 @@ const SUPABASE_URL =
 const SUPABASE_SERVICE_ROLE_KEY =
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
     process.env.SUPABASE_SERVICE_KEY;
+
+
+// ============================================================
+// REQUEST TIMEOUTS
+// ============================================================
+
+const YAHOO_TIMEOUT_MS =
+    8000;
+
+
+// Gemini market overview is deliberately short.
+//
+// If Google Search grounding cannot complete within this
+// window, EdgeBreak continues with deterministic data.
+
+const GEMINI_TIMEOUT_MS =
+    25000;
+
+
+// Only one retry is allowed.
+//
+// Therefore maximum Gemini waiting time is approximately:
+//
+// 25 sec attempt
+// + 2 sec retry delay
+// + 25 sec attempt
+//
+// rather than allowing the whole function to hang for
+// 300 seconds.
+
+const GEMINI_MAX_ATTEMPTS =
+    2;
+
+
+const GEMINI_RETRY_DELAY_MS =
+    2000;
 
 
 // ============================================================
@@ -127,11 +183,9 @@ export default async function handler(
 
                     cached: true,
 
-                    // Existing test page expects this:
                     marketDate:
                         reportDate,
 
-                    // Also keep date for compatibility elsewhere.
                     date:
                         reportDate,
 
@@ -150,7 +204,7 @@ export default async function handler(
 
 
         // ====================================================
-        // GET DETERMINISTIC MARKET DATA
+        // DETERMINISTIC MARKET DATA
         // ====================================================
 
         console.log(
@@ -192,15 +246,7 @@ export default async function handler(
 
 
         // ====================================================
-        // GEMINI RESEARCH
-        //
-        // Narrow job only:
-        //
-        // 1. 3 NASDAQ-100 notable gainers
-        // 2. 3 NASDAQ-100 notable losers
-        // 3. Very short reason for each
-        // 4. Major events within next 7 days
-        // 5. Short EOD takeaway
+        // OPTIONAL GEMINI RESEARCH
         // ====================================================
 
         let aiResearch =
@@ -236,21 +282,45 @@ export default async function handler(
 
                 console.warn(
                     "NASDAQ Market Overview Gemini research unavailable:",
-                    error.message
+                    error?.message ||
+                    error
                 );
 
+
+                /*
+                 * IMPORTANT:
+                 *
+                 * Gemini failure must NEVER kill the
+                 * deterministic market overview.
+                 */
+
+                aiResearch =
+                    null;
+
             }
+
+        }
+        else {
+
+            console.warn(
+                "NASDAQ Market Overview Gemini disabled: GEMINI_API_KEY missing."
+            );
 
         }
 
 
         // ====================================================
-        // FALLBACK IF GEMINI FAILS
+        // GEMINI FALLBACK
         // ====================================================
 
         if (
             !aiResearch
         ) {
+
+            console.log(
+                "NASDAQ Market Overview using deterministic fallback."
+            );
+
 
             aiResearch =
                 createAiFallback();
@@ -276,12 +346,6 @@ export default async function handler(
 
             // =================================================
             // NASDAQ COMPOSITE
-            //
-            // Existing JS expects:
-            //
-            // changePercent
-            // close
-            // summary
             // =================================================
 
             nasdaqComposite: {
@@ -342,20 +406,6 @@ export default async function handler(
 
             // =================================================
             // STRONGER AREAS
-            //
-            // Existing JS renderAreas() expects:
-            //
-            // [
-            //   {
-            //      name: "",
-            //      summary: ""
-            //   }
-            // ]
-            //
-            // User wants this minimal.
-            //
-            // Therefore we return ONE display item containing
-            // the two strongest areas.
             // =================================================
 
             strongAreas:
@@ -379,24 +429,7 @@ export default async function handler(
             // =================================================
             // TODAY'S NOTABLE MOVERS
             //
-            // IMPORTANT:
-            //
-            // The existing test page still calls this:
-            // marketDrivers
-            //
-            // We deliberately reuse that existing field so
-            // the test-page JS does NOT need to change.
-            //
-            // Existing renderDrivers() expects:
-            //
-            // [
-            //   {
-            //      headline: "",
-            //      summary: ""
-            //   }
-            // ]
-            //
-            // We put the 3 gainers + 3 losers here.
+            // Existing front-end calls this marketDrivers.
             // =================================================
 
             marketDrivers:
@@ -407,16 +440,6 @@ export default async function handler(
 
             // =================================================
             // IMPORTANT EVENTS AHEAD
-            //
-            // Existing JS expects:
-            //
-            // upcomingEvents
-            //
-            // Each:
-            //
-            // date
-            // event
-            // whyItMatters
             // =================================================
 
             upcomingEvents:
@@ -439,10 +462,7 @@ export default async function handler(
 
 
             // =================================================
-            // EXTRA RAW DATA
-            //
-            // Not required by current front-end, but useful
-            // for debugging / later development.
+            // RAW MARKET DATA
             // =================================================
 
             rawMarketData: {
@@ -501,11 +521,9 @@ export default async function handler(
 
                 cached: false,
 
-                // Existing test page:
                 marketDate:
                     reportDate,
 
-                // Compatibility:
                 date:
                     reportDate,
 
@@ -609,13 +627,6 @@ function getNewYorkReportDate() {
 
 // ============================================================
 // YAHOO FINANCE HISTORY
-//
-// We request 1 month of daily data.
-//
-// Used for:
-//
-// - latest completed daily index move
-// - approximate one-month sector performance
 // ============================================================
 
 async function getYahooHistory(
@@ -641,7 +652,7 @@ async function getYahooHistory(
         setTimeout(
             () =>
                 controller.abort(),
-            8000
+            YAHOO_TIMEOUT_MS
         );
 
 
@@ -918,10 +929,6 @@ async function getYahooHistory(
 
 async function getNasdaqMarketData() {
 
-    // ========================================================
-    // INDEXES
-    // ========================================================
-
     const compositePromise =
         getYahooHistory(
             "^IXIC"
@@ -933,14 +940,6 @@ async function getNasdaqMarketData() {
             "^NDX"
         );
 
-
-    // ========================================================
-    // MARKET AREA ETF PROXIES
-    //
-    // We calculate these directly.
-    //
-    // Gemini does NOT determine sector performance.
-    // ========================================================
 
     const sectorDefinitions = [
 
@@ -1104,10 +1103,6 @@ async function getNasdaqMarketData() {
         ]);
 
 
-    // ========================================================
-    // CLEAN / SORT SECTORS
-    // ========================================================
-
     const sectors =
         sectorResults
             .filter(
@@ -1167,18 +1162,6 @@ async function getNasdaqMarketData() {
 
 // ============================================================
 // GEMINI MARKET RESEARCH
-//
-// Uses same proven basic setup as the working
-// Daily Brief stock research:
-//
-// - gemini-3.5-flash
-// - Google Search grounding
-// - JSON output
-// - retry one temporary 503
-//
-// IMPORTANT:
-//
-// Gemini is NOT calculating index or sector performance.
 // ============================================================
 
 async function createMarketResearch(
@@ -1221,7 +1204,7 @@ Using current Google Search grounding, identify:
 - 3 notable gainers from the NASDAQ-100 in the completed session
 - 3 notable losers from the NASDAQ-100 in the completed session
 
-For each:
+For each return:
 
 - ticker
 - company name
@@ -1461,8 +1444,15 @@ Return JSON only.
 
         generationConfig: {
 
+            /*
+             * This report is deliberately tiny.
+             *
+             * 4000 output tokens was unnecessary and can
+             * encourage a much larger generation than needed.
+             */
+
             maxOutputTokens:
-                4000,
+                1800,
 
             responseMimeType:
                 "application/json",
@@ -1476,56 +1466,170 @@ Return JSON only.
 
 
     // ========================================================
-    // GEMINI REQUEST
+    // GEMINI REQUEST WITH HARD TIMEOUT
     // ========================================================
-
-    let geminiResponse =
-        null;
-
-
-    const maxAttempts =
-        2;
-
 
     for (
         let attempt = 1;
-        attempt <= maxAttempts;
+        attempt <= GEMINI_MAX_ATTEMPTS;
         attempt++
     ) {
 
         console.log(
-            `NASDAQ Market Overview Gemini attempt ${attempt}/${maxAttempts}`
+            `NASDAQ Market Overview Gemini attempt ${attempt}/${GEMINI_MAX_ATTEMPTS}`
         );
 
 
-        geminiResponse =
-            await fetch(
+        const controller =
+            new AbortController();
 
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
 
-                {
+        const timeout =
+            setTimeout(
+                () => {
 
-                    method:
-                        "POST",
+                    console.warn(
+                        `NASDAQ Market Overview Gemini attempt ${attempt} exceeded ${GEMINI_TIMEOUT_MS}ms. Aborting.`
+                    );
 
-                    headers: {
 
-                        "Content-Type":
-                            "application/json",
+                    controller.abort();
 
-                        "x-goog-api-key":
-                            GEMINI_API_KEY
+                },
+                GEMINI_TIMEOUT_MS
+            );
 
-                    },
 
-                    body:
-                        JSON.stringify(
-                            requestBody
-                        )
+        let geminiResponse;
+
+
+        try {
+
+            const startedAt =
+                Date.now();
+
+
+            geminiResponse =
+                await fetch(
+
+                    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "x-goog-api-key":
+                                GEMINI_API_KEY
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                requestBody
+                            ),
+
+                        signal:
+                            controller.signal
+
+                    }
+
+                );
+
+
+            console.log(
+                `NASDAQ Market Overview Gemini attempt ${attempt} HTTP response after ${Date.now() - startedAt}ms:`,
+                geminiResponse.status
+            );
+
+        }
+        catch (
+            error
+        ) {
+
+            // =================================================
+            // REQUEST TIMED OUT
+            // =================================================
+
+            if (
+                error?.name ===
+                "AbortError"
+            ) {
+
+                console.warn(
+                    `NASDAQ Market Overview Gemini attempt ${attempt} timed out.`
+                );
+
+
+                if (
+                    attempt <
+                    GEMINI_MAX_ATTEMPTS
+                ) {
+
+                    console.log(
+                        `NASDAQ Market Overview retrying Gemini in ${GEMINI_RETRY_DELAY_MS}ms...`
+                    );
+
+
+                    await sleep(
+                        GEMINI_RETRY_DELAY_MS
+                    );
+
+
+                    continue;
 
                 }
 
+
+                throw new Error(
+                    "Gemini market research timed out."
+                );
+
+            }
+
+
+            // =================================================
+            // NETWORK / FETCH ERROR
+            // =================================================
+
+            console.error(
+                `NASDAQ Market Overview Gemini fetch failed on attempt ${attempt}:`,
+                error
             );
+
+
+            if (
+                attempt <
+                GEMINI_MAX_ATTEMPTS
+            ) {
+
+                await sleep(
+                    GEMINI_RETRY_DELAY_MS
+                );
+
+
+                continue;
+
+            }
+
+
+            throw new Error(
+                `Gemini market research request failed: ${error?.message || "Unknown fetch error."}`
+            );
+
+        }
+        finally {
+
+            clearTimeout(
+                timeout
+            );
+
+        }
 
 
         // ====================================================
@@ -1536,17 +1640,129 @@ Return JSON only.
             geminiResponse.ok
         ) {
 
-            break;
+            const geminiData =
+                await geminiResponse.json();
+
+
+            const rawText =
+                geminiData
+                    ?.candidates?.[0]
+                    ?.content
+                    ?.parts
+                    ?.map(
+                        part =>
+                            part.text ||
+                            ""
+                    )
+                    ?.join("")
+                    ?.trim();
+
+
+            if (
+                !rawText
+            ) {
+
+                console.error(
+                    "NASDAQ Market Overview Gemini returned no text."
+                );
+
+
+                if (
+                    attempt <
+                    GEMINI_MAX_ATTEMPTS
+                ) {
+
+                    await sleep(
+                        GEMINI_RETRY_DELAY_MS
+                    );
+
+
+                    continue;
+
+                }
+
+
+                throw new Error(
+                    "Gemini returned no market research text."
+                );
+
+            }
+
+
+            // =================================================
+            // PARSE JSON
+            // =================================================
+
+            let parsed;
+
+
+            try {
+
+                parsed =
+                    JSON.parse(
+                        cleanJsonText(
+                            rawText
+                        )
+                    );
+
+            }
+            catch (
+                error
+            ) {
+
+                console.error(
+                    "NASDAQ Market Overview Gemini JSON parse failed:"
+                );
+
+
+                console.error(
+                    rawText
+                );
+
+
+                if (
+                    attempt <
+                    GEMINI_MAX_ATTEMPTS
+                ) {
+
+                    console.log(
+                        "NASDAQ Market Overview retrying after invalid Gemini JSON..."
+                    );
+
+
+                    await sleep(
+                        GEMINI_RETRY_DELAY_MS
+                    );
+
+
+                    continue;
+
+                }
+
+
+                throw new Error(
+                    "Gemini returned invalid market research JSON."
+                );
+
+            }
+
+
+            return normalizeMarketResearch(
+                parsed,
+                reportDate
+            );
 
         }
 
 
         // ====================================================
-        // ERROR
+        // NON-200 GEMINI RESPONSE
         // ====================================================
 
         const errorText =
-            await geminiResponse.text();
+            await safeReadResponseText(
+                geminiResponse
+            );
 
 
         console.error(
@@ -1557,23 +1773,32 @@ Return JSON only.
 
 
         // ====================================================
-        // RETRY TEMPORARY 503
+        // RETRY TEMPORARY GEMINI ERRORS
         // ====================================================
 
+        const retryable =
+            (
+                geminiResponse.status === 429 ||
+                geminiResponse.status === 500 ||
+                geminiResponse.status === 502 ||
+                geminiResponse.status === 503 ||
+                geminiResponse.status === 504
+            );
+
+
         if (
-            geminiResponse.status ===
-                503 &&
+            retryable &&
             attempt <
-                maxAttempts
+            GEMINI_MAX_ATTEMPTS
         ) {
 
             console.log(
-                "NASDAQ Market Overview temporary Gemini 503. Retrying in 6 seconds..."
+                `NASDAQ Market Overview temporary Gemini ${geminiResponse.status}. Retrying in ${GEMINI_RETRY_DELAY_MS}ms...`
             );
 
 
             await sleep(
-                6000
+                GEMINI_RETRY_DELAY_MS
             );
 
 
@@ -1589,97 +1814,35 @@ Return JSON only.
     }
 
 
-    // ========================================================
-    // FINAL CHECK
-    // ========================================================
+    throw new Error(
+        "Gemini market research failed."
+    );
 
-    if (
-        !geminiResponse ||
-        !geminiResponse.ok
-    ) {
-
-        throw new Error(
-            "Gemini market research failed."
-        );
-
-    }
+}
 
 
-    // ========================================================
-    // READ GEMINI RESPONSE
-    // ========================================================
+// ============================================================
+// SAFE RESPONSE TEXT
+// ============================================================
 
-    const geminiData =
-        await geminiResponse.json();
-
-
-    const rawText =
-        geminiData
-            ?.candidates?.[0]
-            ?.content
-            ?.parts
-            ?.map(
-                part =>
-                    part.text ||
-                    ""
-            )
-            ?.join("")
-            ?.trim();
-
-
-    if (
-        !rawText
-    ) {
-
-        throw new Error(
-            "Gemini returned no market research text."
-        );
-
-    }
-
-
-    // ========================================================
-    // PARSE JSON
-    // ========================================================
-
-    let parsed;
-
+async function safeReadResponseText(
+    response
+) {
 
     try {
 
-        parsed =
-            JSON.parse(
-                cleanJsonText(
-                    rawText
-                )
-            );
+        return await response.text();
 
     }
     catch (
         error
     ) {
 
-        console.error(
-            "NASDAQ Market Overview Gemini JSON parse failed:"
-        );
-
-
-        console.error(
-            rawText
-        );
-
-
-        throw new Error(
-            "Gemini returned invalid market research JSON."
+        return (
+            "Unable to read Gemini error response."
         );
 
     }
-
-
-    return normalizeMarketResearch(
-        parsed,
-        reportDate
-    );
 
 }
 
@@ -1835,9 +1998,6 @@ function normalizeMovers(
 
 // ============================================================
 // NORMALISE EVENTS
-//
-// Server enforces the 7-day window even if Gemini
-// accidentally returns something outside it.
 // ============================================================
 
 function normalizeEvents(
@@ -2033,13 +2193,6 @@ function createIndexSummary(
 
 // ============================================================
 // STRONG AREA DISPLAY
-//
-// Existing renderAreas() expects:
-//
-// area.name
-// area.summary
-//
-// User wants ONE minimal sentence.
 // ============================================================
 
 function createStrongAreaDisplay(
@@ -2148,16 +2301,6 @@ function createWeakAreaDisplay(
 
 // ============================================================
 // MOVER DISPLAY
-//
-// Existing test page thinks these are "market drivers".
-//
-// We intentionally shape our NEW mover information into
-// the OLD structure:
-//
-// driver.headline
-// driver.summary
-//
-// This avoids changing the page JS.
 // ============================================================
 
 function createMoverDisplay(
@@ -2192,10 +2335,6 @@ function createMoverDisplay(
         [];
 
 
-    // ========================================================
-    // GAINERS
-    // ========================================================
-
     for (
         const mover of
         gainers
@@ -2217,10 +2356,6 @@ function createMoverDisplay(
 
     }
 
-
-    // ========================================================
-    // LOSERS
-    // ========================================================
 
     for (
         const mover of
@@ -2315,14 +2450,6 @@ function buildMoverHeadline(
 
 // ============================================================
 // UPCOMING EVENT DISPLAY
-//
-// Existing page expects:
-//
-// date
-// event
-// whyItMatters
-//
-// User wants it very short, so whyItMatters is empty.
 // ============================================================
 
 function createUpcomingEventDisplay(
@@ -2453,12 +2580,6 @@ function createFallbackTakeaway(
 
 // ============================================================
 // CACHE LOOKUP
-//
-// TABLE:
-// nasdaq_market_overviews
-//
-// COLUMN:
-// market_date
 // ============================================================
 
 async function getCachedOverview(
