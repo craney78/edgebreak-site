@@ -20292,7 +20292,158 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+<script>
+/* =========================================================
+   EDGEBREAK AI CHAT
+   PANEL OPEN / CLOSE
+========================================================= */
 
+(function initEdgeBreakAIChat() {
+
+    const chatButton =
+        document.getElementById("edgeBreakChatButton");
+
+    const chatPanel =
+        document.getElementById("edgeBreakChatPanel");
+
+    const chatOverlay =
+        document.getElementById("edgeBreakChatOverlay");
+
+    const chatClose =
+        document.getElementById("edgeBreakChatClose");
+
+
+    /* -----------------------------------------------------
+       SAFETY CHECK
+    ----------------------------------------------------- */
+
+    if (
+        !chatButton ||
+        !chatPanel ||
+        !chatOverlay ||
+        !chatClose
+    ) {
+
+        console.warn(
+            "EdgeBreak AI Chat elements not found."
+        );
+
+        return;
+    }
+
+
+    /* -----------------------------------------------------
+       OPEN CHAT
+    ----------------------------------------------------- */
+
+    function openEdgeBreakChat() {
+
+        chatPanel.classList.add("is-open");
+        chatOverlay.classList.add("is-open");
+
+        chatPanel.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+        chatOverlay.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+        chatButton.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+
+        document.body.style.overflow = "hidden";
+
+    }
+
+
+    /* -----------------------------------------------------
+       CLOSE CHAT
+    ----------------------------------------------------- */
+
+    function closeEdgeBreakChat() {
+
+        chatPanel.classList.remove("is-open");
+        chatOverlay.classList.remove("is-open");
+
+        chatPanel.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        chatOverlay.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        chatButton.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        document.body.style.overflow = "";
+
+    }
+
+
+    /* -----------------------------------------------------
+       OPEN BUTTON
+    ----------------------------------------------------- */
+
+    chatButton.addEventListener(
+        "click",
+        openEdgeBreakChat
+    );
+
+
+    /* -----------------------------------------------------
+       CLOSE BUTTON
+    ----------------------------------------------------- */
+
+    chatClose.addEventListener(
+        "click",
+        closeEdgeBreakChat
+    );
+
+
+    /* -----------------------------------------------------
+       CLICK OUTSIDE PANEL
+    ----------------------------------------------------- */
+
+    chatOverlay.addEventListener(
+        "click",
+        closeEdgeBreakChat
+    );
+
+
+    /* -----------------------------------------------------
+       ESC KEY
+    ----------------------------------------------------- */
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Escape" &&
+                chatPanel.classList.contains("is-open")
+            ) {
+
+                closeEdgeBreakChat();
+
+            }
+
+        }
+    );
+
+
+})();
+
+</script>
 <!-- COMPONENTS -->
 
 <script src="/js/components.js"></script>
