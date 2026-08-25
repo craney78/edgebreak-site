@@ -16,7 +16,6 @@ API_KEY = "c0c94a09b4e242e0805cf8261b5bda67"
 
 BREAKOUT_FILE = "breakout_scanner.json"
 PREBREAKOUT_FILE = "scanner_database.json"
-LAUNCHPAD_FILE = "launchpad_database.json"
 
 OUTPUT_FILE = "daily_brief_candidates.json"
 PROFILE_CACHE_FILE = "daily_brief_profile_cache.json"
@@ -90,9 +89,6 @@ PROPERTY_KEYWORDS = [
 # suffixes associated with special
 # securities are removed from the
 # Daily Brief research pool.
-#
-# These stocks can still exist in the
-# normal EdgeBreak scanners.
 # ===================================
 
 SPECIAL_SECURITY_SUFFIXES = {
@@ -235,8 +231,6 @@ def passes_liquidity(stock):
 
 def get_current_price(stock):
 
-    # Breakout / Pre-Breakout
-
     price = safe_number(
         stock.get(
             "price",
@@ -247,20 +241,6 @@ def get_current_price(stock):
     if price > 0:
         return price
 
-
-    # Launch Pad
-
-    current_price = safe_number(
-        stock.get(
-            "current_price",
-            0
-        )
-    )
-
-    if current_price > 0:
-        return current_price
-
-
     return 0
 
 
@@ -269,20 +249,6 @@ def get_current_price(stock):
 # ===================================
 
 def get_resistance(stock):
-
-    # Launch Pad:
-    # use TOP of resistance zone.
-
-    resistance_zone_high = safe_number(
-        stock.get(
-            "resistance_zone_high",
-            0
-        )
-    )
-
-    if resistance_zone_high > 0:
-        return resistance_zone_high
-
 
     resistance_high = safe_number(
         stock.get(
@@ -294,8 +260,6 @@ def get_resistance(stock):
     if resistance_high > 0:
         return resistance_high
 
-
-    # Breakout / Pre-Breakout
 
     resistance = safe_number(
         stock.get(
@@ -803,10 +767,6 @@ def get_special_security_reason(symbol):
         return None
 
 
-    # We are only using the special
-    # NASDAQ fifth-character suffix
-    # rule here.
-
     suffix = symbol[-1]
 
 
@@ -817,26 +777,30 @@ def get_special_security_reason(symbol):
         ]
 
 
-    # Longer ticker, but fifth character
-    # is not one of the special suffixes
-    # we explicitly want to remove.
+    # Longer ticker, but not one of
+    # our explicitly excluded special
+    # security suffixes.
     #
-    # KEEP.
-    #
-    # This protects legitimate share
-    # classes such as:
-    #
-    # FWONK
-    # FWONA
-    # LBTYK
-    # LLYVK
-    # DGICA
+    # Keep legitimate share classes.
 
     return None
 
 
 # ===================================
 # LOAD SCANNER RESULTS
+# ===================================
+#
+# DAILY BRIEF NOW USES ONLY:
+#
+# 1. BREAKOUT
+# 2. PRE-BREAKOUT
+#
+# LAUNCH PAD IS INTENTIONALLY EXCLUDED.
+#
+# Launch Pad remains available as a
+# normal EdgeBreak scanner/watchlist
+# tool, but it is no longer part of
+# Daily Brief candidate generation.
 # ===================================
 
 breakouts = load_json(
@@ -846,11 +810,6 @@ breakouts = load_json(
 
 prebreakouts = load_json(
     PREBREAKOUT_FILE,
-    []
-)
-
-launchpads = load_json(
-    LAUNCHPAD_FILE,
     []
 )
 
@@ -872,8 +831,8 @@ print(
 )
 
 print(
-    f"Launch Pads loaded   : "
-    f"{len(launchpads)}"
+    "Launch Pads          : "
+    "EXCLUDED FROM DAILY BRIEF"
 )
 
 
@@ -881,8 +840,6 @@ starting_total = (
     len(breakouts)
     +
     len(prebreakouts)
-    +
-    len(launchpads)
 )
 
 
@@ -896,6 +853,12 @@ print(
 
 # ===================================
 # BREAKOUT LIQUIDITY
+# ===================================
+#
+# Breakout JSON does not currently
+# contain the liquidity fields.
+#
+# Do not remove Breakouts blindly.
 # ===================================
 
 breakout_liquidity_survivors = list(
@@ -1080,37 +1043,15 @@ if prebreakout_proximity_removed:
 
 
 # ===================================
-# LAUNCH PAD LIQUIDITY
-# ===================================
-
-launchpad_liquidity_survivors = list(
-    launchpads
-)
-
-
-print()
-print("-----------------------------------")
-print("LAUNCH PAD LIQUIDITY")
-print("-----------------------------------")
-
-print(
-    f"Before               : "
-    f"{len(launchpads)}"
-)
-
-print(
-    "Liquidity cull       : "
-    "NOT AVAILABLE IN JSON"
-)
-
-print(
-    f"Remaining            : "
-    f"{len(launchpad_liquidity_survivors)}"
-)
-
-
-# ===================================
 # UNIVERSAL STALE BREAKOUT CULL
+# ===================================
+#
+# Applied to:
+#
+# BREAKOUT
+# PRE-BREAKOUT
+#
+# Launch Pad is no longer present.
 # ===================================
 
 (
@@ -1133,22 +1074,10 @@ print(
 )
 
 
-(
-    launchpad_survivors,
-    launchpad_stale_removed,
-    launchpad_volume_exceptions
-) = apply_stale_breakout_cull(
-    launchpad_liquidity_survivors,
-    "LAUNCH_PAD"
-)
-
-
 total_stale_removed = (
     len(breakout_stale_removed)
     +
     len(prebreakout_stale_removed)
-    +
-    len(launchpad_stale_removed)
 )
 
 
@@ -1156,8 +1085,6 @@ all_volume_exceptions = (
     breakout_volume_exceptions
     +
     prebreakout_volume_exceptions
-    +
-    launchpad_volume_exceptions
 )
 
 
@@ -1174,11 +1101,6 @@ print(
 print(
     f"Pre-Breakout removed : "
     f"{len(prebreakout_stale_removed)}"
-)
-
-print(
-    f"Launch Pad removed   : "
-    f"{len(launchpad_stale_removed)}"
 )
 
 print(
@@ -1200,8 +1122,6 @@ all_stale_removed = (
     breakout_stale_removed
     +
     prebreakout_stale_removed
-    +
-    launchpad_stale_removed
 )
 
 
@@ -1301,24 +1221,6 @@ for stock in prebreakout_survivors:
     })
 
 
-for stock in launchpad_survivors:
-
-    combined.append({
-
-        "symbol":
-            stock.get(
-                "symbol"
-            ),
-
-        "scanners":
-            ["LAUNCH_PAD"],
-
-        "launchpad":
-            stock
-
-    })
-
-
 print()
 print("-----------------------------------")
 print("AFTER SCANNER-SPECIFIC CULLS")
@@ -1335,11 +1237,6 @@ print(
 )
 
 print(
-    f"Launch Pads          : "
-    f"{len(launchpad_survivors)}"
-)
-
-print(
     f"Combined appearances : "
     f"{len(combined)}"
 )
@@ -1347,21 +1244,6 @@ print(
 
 # ===================================
 # SPECIAL SECURITY CULL
-# ===================================
-#
-# This replaces the old:
-#
-# if len(symbol) > 4:
-#     remove
-#
-# rule.
-#
-# Legitimate 5-character share-class
-# tickers are now allowed through.
-#
-# We only remove tickers whose extra
-# NASDAQ suffix identifies one of the
-# special security types listed above.
 # ===================================
 
 normal_security_candidates = []
@@ -1526,15 +1408,6 @@ for stock in normal_security_candidates:
             "pre_breakout"
         ] = stock[
             "pre_breakout"
-        ]
-
-
-    if "launchpad" in stock:
-
-        record[
-            "launchpad"
-        ] = stock[
-            "launchpad"
         ]
 
 
@@ -1968,6 +1841,25 @@ print(
 
 
 print()
+print("SCANNERS")
+print("-----------------------------------")
+
+print(
+    f"Breakouts loaded         : "
+    f"{len(breakouts)}"
+)
+
+print(
+    f"Pre-Breakouts loaded     : "
+    f"{len(prebreakouts)}"
+)
+
+print(
+    "Launch Pad               : EXCLUDED"
+)
+
+
+print()
 print("LIQUIDITY")
 print("-----------------------------------")
 
@@ -1978,10 +1870,6 @@ print(
 
 print(
     "Breakout liquidity       : N/A"
-)
-
-print(
-    "Launch Pad liquidity      : N/A"
 )
 
 
@@ -2012,11 +1900,6 @@ print(
 print(
     f"Pre-Breakout stale       : "
     f"{len(prebreakout_stale_removed)}"
-)
-
-print(
-    f"Launch Pad stale         : "
-    f"{len(launchpad_stale_removed)}"
 )
 
 print(
