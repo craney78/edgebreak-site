@@ -8610,6 +8610,253 @@ html {
     outline: 2px solid #4ade80;
     outline-offset: 2px;
 }
+
+/* =========================================================
+   EDGEBREAK AI CHAT
+   STOCK SELECTION
+========================================================= */
+
+.edge-chat-selected-question {
+    margin-bottom: 16px;
+    padding: 11px 13px;
+
+    background: rgba(34, 197, 94, 0.055);
+
+    border: 1px solid rgba(34, 197, 94, 0.16);
+    border-radius: 11px;
+}
+
+
+.edge-chat-selected-question span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #64748b;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 0.08em;
+
+    text-transform: uppercase;
+}
+
+
+.edge-chat-selected-question strong {
+    color: #d1fae5;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    line-height: 1.4;
+}
+
+
+/* ---------------------------------------------------------
+   TICKER FORM
+--------------------------------------------------------- */
+
+.edge-chat-ticker-form {
+    margin-bottom: 20px;
+}
+
+
+.edge-chat-ticker-form label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+.edge-chat-ticker-row {
+    display: flex;
+    align-items: stretch;
+
+    gap: 8px;
+}
+
+
+.edge-chat-ticker-input {
+    flex: 1;
+
+    min-width: 0;
+    height: 46px;
+
+    padding: 0 13px;
+
+    background: #0f172a;
+
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 11px;
+
+    color: #f8fafc;
+
+    font-size: 16px;
+    font-weight: 750;
+
+    letter-spacing: 0.06em;
+
+    text-transform: uppercase;
+
+    outline: none;
+}
+
+
+.edge-chat-ticker-input::placeholder {
+    color: #475569;
+
+    font-weight: 600;
+}
+
+
+.edge-chat-ticker-input:focus {
+    border-color: rgba(34, 197, 94, 0.55);
+
+    box-shadow:
+        0 0 0 3px rgba(34, 197, 94, 0.07);
+}
+
+
+.edge-chat-ticker-submit {
+    min-height: 46px;
+
+    padding: 0 15px;
+
+    background: #16a34a;
+
+    border: 1px solid rgba(134, 239, 172, 0.25);
+    border-radius: 11px;
+
+    color: #ffffff;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.18s ease,
+        transform 0.18s ease;
+}
+
+
+.edge-chat-ticker-submit:hover {
+    background: #22c55e;
+
+    transform: translateY(-1px);
+}
+
+
+.edge-chat-ticker-message {
+    min-height: 16px;
+
+    margin: 6px 0 0;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+    line-height: 1.4;
+}
+
+
+/* ---------------------------------------------------------
+   FUTURE STOCK OPTIONS
+--------------------------------------------------------- */
+
+.edge-chat-stock-options {
+    padding-top: 3px;
+}
+
+
+.edge-chat-stock-options-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #475569;
+
+    font-size: 8px;
+    font-weight: 800;
+
+    letter-spacing: 0.12em;
+
+    text-transform: uppercase;
+}
+
+
+.edge-chat-stock-option-disabled {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 8px;
+    padding: 11px 12px;
+
+    background: rgba(15, 23, 42, 0.45);
+
+    border: 1px solid rgba(148, 163, 184, 0.08);
+    border-radius: 10px;
+
+    opacity: 0.48;
+}
+
+
+.edge-chat-stock-option-disabled > span {
+    width: 26px;
+
+    text-align: center;
+
+    font-size: 13px;
+}
+
+
+.edge-chat-stock-option-disabled div {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+}
+
+
+.edge-chat-stock-option-disabled strong {
+    color: #94a3b8;
+
+    font-size: 9px;
+}
+
+
+.edge-chat-stock-option-disabled small {
+    margin-top: 2px;
+
+    color: #475569;
+
+    font-size: 8px;
+
+    line-height: 1.35;
+}
+
+
+@media (max-width: 420px) {
+
+    .edge-chat-ticker-row {
+        flex-direction: column;
+    }
+
+
+    .edge-chat-ticker-submit {
+        width: 100%;
+    }
+
+}
 </style>  
 
 
@@ -11155,7 +11402,153 @@ PANEL 1  watchlist seo
         </div>
 
     </div>
+
+    <!-- =========================================
+    STOCK SELECT SCREEN
+    ========================================= -->
+
+    <div
+        id="edgeBreakStockScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <!-- BACK -->
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="quick"
+        >
+            ← Back
+        </button>
+
+
+        <!-- HEADING -->
+
+        <div class="edge-chat-screen-heading">
+
+            <span class="edge-chat-screen-icon">
+                🔍
+            </span>
+
+            <div>
+
+                <span class="edge-chat-screen-label">
+                    SELECT A STOCK
+                </span>
+
+                <h3>
+                    Which stock would you like to check?
+                </h3>
+
+                <p>
+                    Enter the NASDAQ ticker symbol.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SELECTED QUESTION -->
+
+        <div class="edge-chat-selected-question">
+
+            <span>
+                Your question
+            </span>
+
+            <strong id="edgeBreakSelectedQuestionText">
+                Quick Answer
+            </strong>
+
+        </div>
+
+
+        <!-- TICKER FORM -->
+
+        <form
+            id="edgeBreakTickerForm"
+            class="edge-chat-ticker-form"
+        >
+
+            <label for="edgeBreakTickerInput">
+                Stock ticker
+            </label>
+
+            <div class="edge-chat-ticker-row">
+
+                <input
+                    type="text"
+                    id="edgeBreakTickerInput"
+                    class="edge-chat-ticker-input"
+                    placeholder="e.g. NVDA"
+                    maxlength="10"
+                    autocomplete="off"
+                    spellcheck="false"
+                    required
+                >
+
+                <button
+                    type="submit"
+                    class="edge-chat-ticker-submit"
+                >
+                    Check Stock
+                </button>
+
+            </div>
+
+            <p
+                id="edgeBreakTickerMessage"
+                class="edge-chat-ticker-message"
+                aria-live="polite"
+            ></p>
+
+        </form>
+
+
+        <!-- FUTURE DATA SOURCES -->
+
+        <div class="edge-chat-stock-options">
+
+            <span class="edge-chat-stock-options-label">
+                Coming next
+            </span>
+
+            <div class="edge-chat-stock-option-disabled">
+                <span>📊</span>
+
+                <div>
+                    <strong>
+                        Today's EdgeBreak Stocks
+                    </strong>
+
+                    <small>
+                        Select directly from today's scanner results
+                    </small>
+                </div>
+            </div>
+
+
+            <div class="edge-chat-stock-option-disabled">
+                <span>★</span>
+
+                <div>
+                    <strong>
+                        My Watchlist
+                    </strong>
+
+                    <small>
+                        Select a stock from your EdgeBreak Watchlist
+                    </small>
+                </div>
+            </div>
+
+        </div>
+
     </div>
+</div>
 
 
     <!-- =====================================
@@ -20977,6 +21370,235 @@ document.addEventListener("DOMContentLoaded", () => {
             if (conversation) {
                 conversation.scrollTop = 0;
             }
+
+        }
+    );
+
+
+})();
+
+/* =========================================================
+   EDGEBREAK AI CHAT
+   QUICK QUESTION -> STOCK SELECT
+========================================================= */
+
+(function initEdgeBreakStockSelection() {
+
+    const quickScreen =
+        document.getElementById(
+            "edgeBreakQuickScreen"
+        );
+
+    const stockScreen =
+        document.getElementById(
+            "edgeBreakStockScreen"
+        );
+
+    const selectedQuestionText =
+        document.getElementById(
+            "edgeBreakSelectedQuestionText"
+        );
+
+    const tickerForm =
+        document.getElementById(
+            "edgeBreakTickerForm"
+        );
+
+    const tickerInput =
+        document.getElementById(
+            "edgeBreakTickerInput"
+        );
+
+    const tickerMessage =
+        document.getElementById(
+            "edgeBreakTickerMessage"
+        );
+
+    const backButton =
+        stockScreen?.querySelector(
+            '[data-chat-back="quick"]'
+        );
+
+
+    /* -----------------------------------------------------
+       SAFETY
+    ----------------------------------------------------- */
+
+    if (
+        !quickScreen ||
+        !stockScreen ||
+        !selectedQuestionText ||
+        !tickerForm ||
+        !tickerInput ||
+        !tickerMessage ||
+        !backButton
+    ) {
+
+        console.warn(
+            "EdgeBreak stock selection elements not found."
+        );
+
+        return;
+
+    }
+
+
+    /* -----------------------------------------------------
+       CURRENT QUESTION
+    ----------------------------------------------------- */
+
+    let selectedQuestion = null;
+
+    let selectedQuestionLabel = "";
+
+
+    /* -----------------------------------------------------
+       QUICK QUESTION BUTTONS
+    ----------------------------------------------------- */
+
+    const questionButtons =
+        quickScreen.querySelectorAll(
+            "[data-chat-question]"
+        );
+
+
+    questionButtons.forEach(
+        function(button) {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    selectedQuestion =
+                        button.dataset.chatQuestion;
+
+                    const label =
+                        button.querySelector(
+                            "span:first-child"
+                        );
+
+                    selectedQuestionLabel =
+                        label
+                            ? label.textContent.trim()
+                            : "Quick Answer";
+
+
+                    selectedQuestionText.textContent =
+                        selectedQuestionLabel;
+
+
+                    quickScreen.hidden = true;
+
+                    stockScreen.hidden = false;
+
+
+                    tickerInput.value = "";
+
+                    tickerMessage.textContent = "";
+
+
+                    setTimeout(
+                        function() {
+                            tickerInput.focus();
+                        },
+                        50
+                    );
+
+
+                    const conversation =
+                        document.getElementById(
+                            "edgeBreakChatConversation"
+                        );
+
+                    if (conversation) {
+                        conversation.scrollTop = 0;
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       BACK TO QUICK ANSWERS
+    ----------------------------------------------------- */
+
+    backButton.addEventListener(
+        "click",
+        function() {
+
+            stockScreen.hidden = true;
+
+            quickScreen.hidden = false;
+
+            tickerMessage.textContent = "";
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       TICKER INPUT CLEANUP
+    ----------------------------------------------------- */
+
+    tickerInput.addEventListener(
+        "input",
+        function() {
+
+            tickerInput.value =
+                tickerInput.value
+                    .toUpperCase()
+                    .replace(
+                        /[^A-Z0-9.-]/g,
+                        ""
+                    );
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       FORM SUBMIT
+       TEMPORARY TEST ONLY
+    ----------------------------------------------------- */
+
+    tickerForm.addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+
+            const ticker =
+                tickerInput.value
+                    .trim()
+                    .toUpperCase();
+
+
+            if (!ticker) {
+
+                tickerMessage.textContent =
+                    "Enter a stock ticker first.";
+
+                return;
+
+            }
+
+
+            /*
+             * TEMPORARY.
+             *
+             * Next step we will replace this
+             * with an actual lookup against
+             * EdgeBreak scanner data.
+             */
+
+            tickerMessage.textContent =
+                ticker +
+                " selected — " +
+                selectedQuestionLabel;
 
         }
     );
