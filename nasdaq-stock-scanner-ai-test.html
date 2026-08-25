@@ -8365,6 +8365,251 @@ html {
     }
 
 }
+
+/* =========================================================
+   EDGEBREAK AI CHAT
+   INTERNAL SCREENS
+========================================================= */
+
+.edge-chat-screen[hidden] {
+    display: none !important;
+}
+
+
+/* ---------------------------------------------------------
+   BACK BUTTON
+--------------------------------------------------------- */
+
+.edge-chat-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 34px;
+
+    margin: 0 0 14px;
+    padding: 6px 10px;
+
+    background: rgba(148, 163, 184, 0.06);
+
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 9px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.18s ease,
+        border-color 0.18s ease,
+        color 0.18s ease;
+}
+
+
+.edge-chat-back:hover {
+    background: rgba(34, 197, 94, 0.07);
+
+    border-color: rgba(34, 197, 94, 0.22);
+
+    color: #4ade80;
+}
+
+
+/* ---------------------------------------------------------
+   SCREEN HEADING
+--------------------------------------------------------- */
+
+.edge-chat-screen-heading {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 12px;
+
+    margin-bottom: 14px;
+}
+
+
+.edge-chat-screen-icon {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: rgba(34, 197, 94, 0.08);
+
+    border: 1px solid rgba(34, 197, 94, 0.18);
+    border-radius: 11px;
+
+    font-size: 17px;
+}
+
+
+.edge-chat-screen-heading > div {
+    min-width: 0;
+}
+
+
+.edge-chat-screen-label {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #4ade80;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 0.14em;
+}
+
+
+.edge-chat-screen-heading h3 {
+    margin: 0;
+
+    color: #f8fafc;
+
+    font-size: 17px;
+    font-weight: 800;
+
+    line-height: 1.25;
+}
+
+
+.edge-chat-screen-heading p {
+    margin: 5px 0 0;
+
+    color: #64748b;
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* ---------------------------------------------------------
+   STOCK NOTICE
+--------------------------------------------------------- */
+
+.edge-chat-stock-notice {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-bottom: 14px;
+    padding: 11px 12px;
+
+    background: rgba(15, 23, 42, 0.72);
+
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 11px;
+}
+
+
+.edge-chat-stock-notice > span {
+    font-size: 13px;
+}
+
+
+.edge-chat-stock-notice strong {
+    display: block;
+
+    color: #cbd5e1;
+
+    font-size: 10px;
+    font-weight: 750;
+}
+
+
+.edge-chat-stock-notice p {
+    margin: 3px 0 0;
+
+    color: #64748b;
+
+    font-size: 9px;
+    line-height: 1.45;
+}
+
+
+/* ---------------------------------------------------------
+   QUESTION LIST
+--------------------------------------------------------- */
+
+.edge-chat-question-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+.edge-chat-question {
+    width: 100%;
+    min-height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 11px 13px;
+
+    text-align: left;
+
+    background: rgba(15, 23, 42, 0.7);
+
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 11px;
+
+    color: #cbd5e1;
+
+    font-size: 11px;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        background 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease;
+}
+
+
+.edge-chat-question:hover {
+    transform: translateX(2px);
+
+    background: rgba(34, 197, 94, 0.06);
+
+    border-color: rgba(34, 197, 94, 0.25);
+
+    color: #f8fafc;
+}
+
+
+.edge-chat-question-arrow {
+    flex-shrink: 0;
+
+    color: #4ade80;
+
+    font-size: 20px;
+    font-weight: 300;
+
+    line-height: 1;
+}
+
+
+.edge-chat-back:focus-visible,
+.edge-chat-question:focus-visible {
+    outline: 2px solid #4ade80;
+    outline-offset: 2px;
+}
 </style>  
 
 
@@ -10711,7 +10956,205 @@ PANEL 1  watchlist seo
 
 
         </div>
+    <!-- =========================================
+    QUICK ANSWERS SCREEN
+    ========================================= -->
 
+    <div
+        id="edgeBreakQuickScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <!-- BACK -->
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+
+        <!-- TITLE -->
+
+        <div class="edge-chat-screen-heading">
+
+            <span class="edge-chat-screen-icon">
+                ⚡
+            </span>
+
+            <div>
+
+                <span class="edge-chat-screen-label">
+                    QUICK ANSWERS
+                </span>
+
+                <h3>
+                    What do you want to know?
+                </h3>
+
+                <p>
+                    Choose a quick question and EdgeBreak
+                    will give you the short version.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- STOCK NOTICE -->
+
+        <div class="edge-chat-stock-notice">
+
+            <span>🔍</span>
+
+            <div>
+
+                <strong>
+                    Stock questions
+                </strong>
+
+                <p>
+                    We'll ask you which NASDAQ stock you
+                    want to check when required.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUESTIONS -->
+
+        <div class="edge-chat-question-list">
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="quick-rundown"
+            >
+                <span>
+                    Give me the 30-second rundown
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="why-scanned"
+            >
+                <span>
+                    Why did this stock scan up?
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="resistance"
+            >
+                <span>
+                    Where is resistance?
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="support"
+            >
+                <span>
+                    Where is support?
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="chart-doing"
+            >
+                <span>
+                    What's the chart doing?
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="volume"
+            >
+                <span>
+                    What's volume doing?
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="distance-resistance"
+            >
+                <span>
+                    How close is it to resistance?
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="anything-important"
+            >
+                <span>
+                    Anything I should know quickly?
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+        </div>
+
+    </div>
     </div>
 
 
@@ -20435,6 +20878,104 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 closeEdgeBreakChat();
 
+            }
+
+        }
+    );
+
+
+})();
+
+/* =========================================================
+   EDGEBREAK AI CHAT
+   QUICK ANSWERS NAVIGATION
+========================================================= */
+
+(function initEdgeBreakQuickAnswers() {
+
+    const categories =
+        document.getElementById(
+            "edgeBreakChatCategories"
+        );
+
+    const quickScreen =
+        document.getElementById(
+            "edgeBreakQuickScreen"
+        );
+
+    const quickButton =
+        document.querySelector(
+            '[data-chat-category="quick"]'
+        );
+
+    const backButton =
+        quickScreen?.querySelector(
+            '[data-chat-back="main"]'
+        );
+
+
+    /* -----------------------------------------------------
+       SAFETY CHECK
+    ----------------------------------------------------- */
+
+    if (
+        !categories ||
+        !quickScreen ||
+        !quickButton ||
+        !backButton
+    ) {
+
+        console.warn(
+            "EdgeBreak Quick Answers elements not found."
+        );
+
+        return;
+
+    }
+
+
+    /* -----------------------------------------------------
+       OPEN QUICK ANSWERS
+    ----------------------------------------------------- */
+
+    quickButton.addEventListener(
+        "click",
+        function() {
+
+            categories.hidden = true;
+            quickScreen.hidden = false;
+
+            const conversation =
+                document.getElementById(
+                    "edgeBreakChatConversation"
+                );
+
+            if (conversation) {
+                conversation.scrollTop = 0;
+            }
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       RETURN TO MAIN CATEGORIES
+    ----------------------------------------------------- */
+
+    backButton.addEventListener(
+        "click",
+        function() {
+
+            quickScreen.hidden = true;
+            categories.hidden = false;
+
+            const conversation =
+                document.getElementById(
+                    "edgeBreakChatConversation"
+                );
+
+            if (conversation) {
+                conversation.scrollTop = 0;
             }
 
         }
