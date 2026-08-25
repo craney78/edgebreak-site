@@ -29,7 +29,18 @@ PROFILE_CACHE_FILE = "daily_brief_profile_cache.json"
 # ===================================
 
 MIN_AVERAGE_VOLUME = 100_000
+
 MIN_AVERAGE_DOLLAR_VOLUME = 1_000_000
+
+
+# Launch Pad stocks that have already
+# moved more than this percentage above
+# the top of their resistance zone are
+# considered stale for Daily Brief AI
+# research.
+
+MAX_LAUNCHPAD_ABOVE_RESISTANCE = 15.0
+
 
 PROFILE_SLEEP_TIME = 0.5
 
@@ -63,9 +74,11 @@ def load_json(filename, default=None):
     try:
 
         with open(filename, "r") as f:
+
             return json.load(f)
 
     except FileNotFoundError:
+
         return default
 
     except Exception as e:
@@ -90,6 +103,53 @@ def save_json(filename, data):
             f,
             indent=4
         )
+
+
+# ===================================
+# SAFE NUMBER
+# ===================================
+
+def safe_number(value, default=0):
+
+    try:
+
+        number = float(value)
+
+        return number
+
+    except (TypeError, ValueError):
+
+        return default
+
+
+# ===================================
+# LIQUIDITY CHECK
+# ===================================
+
+def passes_liquidity(stock):
+
+    average_volume = safe_number(
+        stock.get(
+            "average_volume_20",
+            0
+        )
+    )
+
+    average_dollar_volume = safe_number(
+        stock.get(
+            "average_dollar_volume_20",
+            0
+        )
+    )
+
+
+    return (
+        average_volume >=
+        MIN_AVERAGE_VOLUME
+        and
+        average_dollar_volume >=
+        MIN_AVERAGE_DOLLAR_VOLUME
+    )
 
 
 # ===================================
@@ -149,30 +209,78 @@ print(
 
 
 # ===================================
+# BREAKOUT STATUS
+# ===================================
+#
+# IMPORTANT:
+#
+# The current breakout_scanner.json
+# does NOT contain:
+#
+# average_volume_20
+# average_dollar_volume_20
+#
+# Therefore Breakouts temporarily pass
+# directly into the Daily Brief pool.
+#
+# We will add those fields to the
+# Breakout scanner separately.
+# ===================================
+
+breakout_survivors = list(
+    breakouts
+)
+
+
+print()
+print("-----------------------------------")
+print("BREAKOUT LIQUIDITY")
+print("-----------------------------------")
+
+print(
+    f"Breakouts loaded      : "
+    f"{len(breakouts)}"
+)
+
+print(
+    "Liquidity cull        : "
+    "NOT YET AVAILABLE"
+)
+
+print(
+    f"Remaining             : "
+    f"{len(breakout_survivors)}"
+)
+
+
+# ===================================
 # PRE-BREAKOUT LIQUIDITY CULL
 # ===================================
 
 prebreakout_survivors = []
-liquidity_removed = []
+
+prebreakout_liquidity_removed = []
 
 
 for stock in prebreakouts:
 
-    volume = stock.get(
-        "average_volume_20",
-        0
+    average_volume = safe_number(
+        stock.get(
+            "average_volume_20",
+            0
+        )
     )
 
-    dollar_volume = stock.get(
-        "average_dollar_volume_20",
-        0
+    average_dollar_volume = safe_number(
+        stock.get(
+            "average_dollar_volume_20",
+            0
+        )
     )
 
-    if (
-        volume >= MIN_AVERAGE_VOLUME
-        and
-        dollar_volume >=
-        MIN_AVERAGE_DOLLAR_VOLUME
+
+    if passes_liquidity(
+        stock
     ):
 
         prebreakout_survivors.append(
@@ -181,31 +289,35 @@ for stock in prebreakouts:
 
     else:
 
-        liquidity_removed.append({
+        prebreakout_liquidity_removed.append({
+
             "symbol":
-                stock.get("symbol"),
+                stock.get(
+                    "symbol"
+                ),
 
             "average_volume_20":
-                volume,
+                average_volume,
 
             "average_dollar_volume_20":
-                dollar_volume
+                average_dollar_volume
+
         })
 
 
 print()
 print("-----------------------------------")
-print("LIQUIDITY CULL")
+print("PRE-BREAKOUT LIQUIDITY CULL")
 print("-----------------------------------")
 
 print(
-    f"Pre-Breakouts before : "
+    f"Before               : "
     f"{len(prebreakouts)}"
 )
 
 print(
     f"Removed              : "
-    f"{len(liquidity_removed)}"
+    f"{len(prebreakout_liquidity_removed)}"
 )
 
 print(
@@ -215,55 +327,353 @@ print(
 
 
 # ===================================
+# LAUNCH PAD LIQUIDITY CULL
+# ===================================
+
+launchpad_liquidity_survivors = []
+
+launchpad_liquidity_removed = []
+
+
+for stock in launchpads:
+
+    average_volume = safe_number(
+        stock.get(
+            "average_volume_20",
+            0
+        )
+    )
+
+    average_dollar_volume = safe_number(
+        stock.get(
+            "average_dollar_volume_20",
+            0
+        )
+    )
+
+
+    if passes_liquidity(
+        stock
+    ):
+
+        launchpad_liquidity_survivors.append(
+            stock
+        )
+
+    else:
+
+        launchpad_liquidity_removed.append({
+
+            "symbol":
+                stock.get(
+                    "symbol"
+                ),
+
+            "average_volume_20":
+                average_volume,
+
+            "average_dollar_volume_20":
+                average_dollar_volume
+
+        })
+
+
+print()
+print("-----------------------------------")
+print("LAUNCH PAD LIQUIDITY CULL")
+print("-----------------------------------")
+
+print(
+    f"Before               : "
+    f"{len(launchpads)}"
+)
+
+print(
+    f"Removed              : "
+    f"{len(launchpad_liquidity_removed)}"
+)
+
+print(
+    f"Remaining            : "
+    f"{len(launchpad_liquidity_survivors)}"
+)
+
+
+# ===================================
+# LAUNCH PAD STALE CULL
+# ===================================
+#
+# Remove a Launch Pad stock when:
+#
+# current price is more than 15%
+# above the TOP of the resistance
+# zone.
+#
+# Example:
+#
+# resistance_high = 100
+# maximum allowed = 115
+#
+# price > 115
+# => stale for Daily Brief research
+#
+# ===================================
+
+launchpad_survivors = []
+
+launchpad_stale_removed = []
+
+
+for stock in launchpad_liquidity_survivors:
+
+    price = safe_number(
+        stock.get(
+            "price",
+            0
+        )
+    )
+
+
+    resistance_high = safe_number(
+        stock.get(
+            "resistance_high",
+            0
+        )
+    )
+
+
+    # ---------------------------------
+    # FALLBACK
+    # ---------------------------------
+    #
+    # If resistance_high is not present
+    # for some reason, try resistance.
+    #
+    # If neither exists, keep the stock
+    # rather than deleting it blindly.
+    # ---------------------------------
+
+    if resistance_high <= 0:
+
+        resistance_high = safe_number(
+            stock.get(
+                "resistance",
+                0
+            )
+        )
+
+
+    if (
+        price <= 0
+        or
+        resistance_high <= 0
+    ):
+
+        launchpad_survivors.append(
+            stock
+        )
+
+        continue
+
+
+    distance_above_resistance = (
+        (
+            price -
+            resistance_high
+        )
+        /
+        resistance_high
+    ) * 100
+
+
+    # ---------------------------------
+    # REMOVE STALE LAUNCH PAD
+    # ---------------------------------
+
+    if (
+        distance_above_resistance >
+        MAX_LAUNCHPAD_ABOVE_RESISTANCE
+    ):
+
+        launchpad_stale_removed.append({
+
+            "symbol":
+                stock.get(
+                    "symbol"
+                ),
+
+            "price":
+                round(
+                    price,
+                    2
+                ),
+
+            "resistance_high":
+                round(
+                    resistance_high,
+                    2
+                ),
+
+            "distance_above_resistance":
+                round(
+                    distance_above_resistance,
+                    2
+                )
+
+        })
+
+
+        continue
+
+
+    # ---------------------------------
+    # SURVIVES
+    # ---------------------------------
+
+    launchpad_survivors.append(
+        stock
+    )
+
+
+print()
+print("-----------------------------------")
+print("LAUNCH PAD STALE CULL")
+print("-----------------------------------")
+
+print(
+    f"Before               : "
+    f"{len(launchpad_liquidity_survivors)}"
+)
+
+print(
+    f"Removed >15%         : "
+    f"{len(launchpad_stale_removed)}"
+)
+
+print(
+    f"Remaining            : "
+    f"{len(launchpad_survivors)}"
+)
+
+
+# ===================================
+# SHOW STALE LAUNCH PADS
+# ===================================
+
+if launchpad_stale_removed:
+
+    print()
+    print("STALE LAUNCH PADS REMOVED")
+    print("-----------------------------------")
+
+
+    for stock in launchpad_stale_removed:
+
+        print(
+            f"{stock['symbol']} | "
+            f"Price ${stock['price']} | "
+            f"Resistance ${stock['resistance_high']} | "
+            f"{stock['distance_above_resistance']}% above"
+        )
+
+
+# ===================================
 # COMBINE ALL SURVIVORS
 # ===================================
 
 combined = []
 
 
-for stock in breakouts:
+# -----------------------------------
+# BREAKOUTS
+# -----------------------------------
+
+for stock in breakout_survivors:
 
     combined.append({
 
         "symbol":
-            stock.get("symbol"),
+            stock.get(
+                "symbol"
+            ),
 
         "scanners":
             ["BREAKOUT"],
 
         "breakout":
             stock
+
     })
 
+
+# -----------------------------------
+# PRE-BREAKOUTS
+# -----------------------------------
 
 for stock in prebreakout_survivors:
 
     combined.append({
 
         "symbol":
-            stock.get("symbol"),
+            stock.get(
+                "symbol"
+            ),
 
         "scanners":
             ["PRE_BREAKOUT"],
 
         "pre_breakout":
             stock
+
     })
 
 
-for stock in launchpads:
+# -----------------------------------
+# LAUNCH PADS
+# -----------------------------------
+
+for stock in launchpad_survivors:
 
     combined.append({
 
         "symbol":
-            stock.get("symbol"),
+            stock.get(
+                "symbol"
+            ),
 
         "scanners":
             ["LAUNCH_PAD"],
 
         "launchpad":
             stock
+
     })
+
+
+print()
+print("-----------------------------------")
+print("AFTER SCANNER-SPECIFIC CULLS")
+print("-----------------------------------")
+
+print(
+    f"Breakouts            : "
+    f"{len(breakout_survivors)}"
+)
+
+print(
+    f"Pre-Breakouts        : "
+    f"{len(prebreakout_survivors)}"
+)
+
+print(
+    f"Launch Pads          : "
+    f"{len(launchpad_survivors)}"
+)
+
+print(
+    f"Combined appearances : "
+    f"{len(combined)}"
+)
 
 
 # ===================================
@@ -275,12 +685,20 @@ merged = {}
 
 for stock in combined:
 
-    symbol = stock.get("symbol")
+    symbol = stock.get(
+        "symbol"
+    )
+
 
     if not symbol:
+
         continue
 
-    symbol = symbol.upper()
+
+    symbol = str(
+        symbol
+    ).upper()
+
 
     if symbol not in merged:
 
@@ -291,10 +709,13 @@ for stock in combined:
 
             "scanners":
                 []
+
         }
 
 
-    record = merged[symbol]
+    record = merged[
+        symbol
+    ]
 
 
     for scanner in stock.get(
@@ -302,32 +723,42 @@ for stock in combined:
         []
     ):
 
-        if scanner not in record["scanners"]:
+        if scanner not in record[
+            "scanners"
+        ]:
 
             record[
                 "scanners"
-            ].append(scanner)
+            ].append(
+                scanner
+            )
 
 
     if "breakout" in stock:
 
         record[
             "breakout"
-        ] = stock["breakout"]
+        ] = stock[
+            "breakout"
+        ]
 
 
     if "pre_breakout" in stock:
 
         record[
             "pre_breakout"
-        ] = stock["pre_breakout"]
+        ] = stock[
+            "pre_breakout"
+        ]
 
 
     if "launchpad" in stock:
 
         record[
             "launchpad"
-        ] = stock["launchpad"]
+        ] = stock[
+            "launchpad"
+        ]
 
 
 merged_candidates = list(
@@ -337,7 +768,8 @@ merged_candidates = list(
 
 duplicates_removed = (
     len(combined)
-    - len(merged_candidates)
+    -
+    len(merged_candidates)
 )
 
 
@@ -363,6 +795,41 @@ print(
 
 
 # ===================================
+# SHOW MULTI-SCANNER STOCKS
+# ===================================
+
+multi_scanner_candidates = [
+
+    stock
+
+    for stock in merged_candidates
+
+    if len(
+        stock.get(
+            "scanners",
+            []
+        )
+    ) > 1
+
+]
+
+
+if multi_scanner_candidates:
+
+    print()
+    print("MULTI-SCANNER CANDIDATES")
+    print("-----------------------------------")
+
+
+    for stock in multi_scanner_candidates:
+
+        print(
+            f"{stock['symbol']} | "
+            f"{', '.join(stock['scanners'])}"
+        )
+
+
+# ===================================
 # LOAD PROFILE CACHE
 # ===================================
 
@@ -384,7 +851,9 @@ def fetch_profile(symbol):
 
     if symbol in profile_cache:
 
-        return profile_cache[symbol]
+        return profile_cache[
+            symbol
+        ]
 
 
     # -------------------------------
@@ -405,6 +874,7 @@ def fetch_profile(symbol):
             timeout=20
         )
 
+
         data = response.json()
 
 
@@ -413,9 +883,14 @@ def fetch_profile(symbol):
         # ---------------------------
 
         if (
-            not isinstance(data, dict)
+            not isinstance(
+                data,
+                dict
+            )
             or
-            data.get("status") == "error"
+            data.get(
+                "status"
+            ) == "error"
         ):
 
             print(
@@ -429,16 +904,25 @@ def fetch_profile(symbol):
         profile = {
 
             "name":
-                data.get("name"),
+                data.get(
+                    "name"
+                ),
 
             "sector":
-                data.get("sector"),
+                data.get(
+                    "sector"
+                ),
 
             "industry":
-                data.get("industry"),
+                data.get(
+                    "industry"
+                ),
 
             "type":
-                data.get("type")
+                data.get(
+                    "type"
+                )
+
         }
 
 
@@ -488,6 +972,7 @@ def fetch_profile(symbol):
 def get_exclusion_reason(profile):
 
     if not profile:
+
         return None
 
 
@@ -563,6 +1048,7 @@ print()
 final_candidates = []
 
 bank_removed = []
+
 property_removed = []
 
 profile_failures = []
@@ -573,7 +1059,9 @@ for index, stock in enumerate(
     start=1
 ):
 
-    symbol = stock["symbol"]
+    symbol = stock[
+        "symbol"
+    ]
 
 
     print(
@@ -599,9 +1087,11 @@ for index, stock in enumerate(
             symbol
         )
 
+
         final_candidates.append(
             stock
         )
+
 
         continue
 
@@ -610,19 +1100,30 @@ for index, stock in enumerate(
     # ADD PROFILE TO CANDIDATE
     # -------------------------------
 
-    stock["company"] = {
+    stock[
+        "company"
+    ] = {
 
         "name":
-            profile.get("name"),
+            profile.get(
+                "name"
+            ),
 
         "sector":
-            profile.get("sector"),
+            profile.get(
+                "sector"
+            ),
 
         "industry":
-            profile.get("industry"),
+            profile.get(
+                "industry"
+            ),
 
         "type":
-            profile.get("type")
+            profile.get(
+                "type"
+            )
+
     }
 
 
@@ -643,16 +1144,23 @@ for index, stock in enumerate(
                 symbol,
 
             "name":
-                profile.get("name"),
+                profile.get(
+                    "name"
+                ),
 
             "industry":
-                profile.get("industry")
+                profile.get(
+                    "industry"
+                )
+
         })
+
 
         print(
             f"   REMOVED BANK: "
             f"{profile.get('industry')}"
         )
+
 
         continue
 
@@ -669,16 +1177,23 @@ for index, stock in enumerate(
                 symbol,
 
             "name":
-                profile.get("name"),
+                profile.get(
+                    "name"
+                ),
 
             "industry":
-                profile.get("industry")
+                profile.get(
+                    "industry"
+                )
+
         })
+
 
         print(
             f"   REMOVED PROPERTY: "
             f"{profile.get('industry')}"
         )
+
 
         continue
 
@@ -703,6 +1218,21 @@ save_json(
 
 
 # ===================================
+# TOTAL LIQUIDITY REMOVED
+# ===================================
+
+total_liquidity_removed = (
+    len(
+        prebreakout_liquidity_removed
+    )
+    +
+    len(
+        launchpad_liquidity_removed
+    )
+)
+
+
+# ===================================
 # FINAL RESULTS
 # ===================================
 
@@ -717,10 +1247,33 @@ print(
     f"{starting_total}"
 )
 
+print()
+print("SCANNER CULLS")
+print("-----------------------------------")
+
 print(
-    f"Liquidity removed     : "
-    f"{len(liquidity_removed)}"
+    f"Pre-Breakout liquidity: "
+    f"{len(prebreakout_liquidity_removed)} removed"
 )
+
+print(
+    f"Launch Pad liquidity  : "
+    f"{len(launchpad_liquidity_removed)} removed"
+)
+
+print(
+    f"Launch Pad stale >15% : "
+    f"{len(launchpad_stale_removed)} removed"
+)
+
+print(
+    f"Total liquidity removed: "
+    f"{total_liquidity_removed}"
+)
+
+print()
+print("MERGE / PROFILE CULLS")
+print("-----------------------------------")
 
 print(
     f"Duplicates merged     : "
@@ -742,6 +1295,7 @@ print(
     f"{len(profile_failures)}"
 )
 
+print()
 print("-----------------------------------")
 
 print(
@@ -753,6 +1307,46 @@ print("-----------------------------------")
 
 
 # ===================================
+# SHOW LIQUIDITY REMOVALS
+# ===================================
+
+if prebreakout_liquidity_removed:
+
+    print()
+    print("PRE-BREAKOUT LIQUIDITY REMOVED")
+    print("-----------------------------------")
+
+
+    for stock in prebreakout_liquidity_removed:
+
+        print(
+            f"{stock['symbol']} | "
+            f"Avg Vol "
+            f"{stock['average_volume_20']:,.0f} | "
+            f"Avg $ Vol "
+            f"${stock['average_dollar_volume_20']:,.0f}"
+        )
+
+
+if launchpad_liquidity_removed:
+
+    print()
+    print("LAUNCH PAD LIQUIDITY REMOVED")
+    print("-----------------------------------")
+
+
+    for stock in launchpad_liquidity_removed:
+
+        print(
+            f"{stock['symbol']} | "
+            f"Avg Vol "
+            f"{stock['average_volume_20']:,.0f} | "
+            f"Avg $ Vol "
+            f"${stock['average_dollar_volume_20']:,.0f}"
+        )
+
+
+# ===================================
 # SHOW REMOVED BANKS
 # ===================================
 
@@ -761,6 +1355,7 @@ if bank_removed:
     print()
     print("BANKS REMOVED")
     print("-----------------------------------")
+
 
     for stock in bank_removed:
 
@@ -781,6 +1376,7 @@ if property_removed:
     print("PROPERTY / REIT REMOVED")
     print("-----------------------------------")
 
+
     for stock in property_removed:
 
         print(
@@ -800,12 +1396,16 @@ if profile_failures:
     print("PROFILE LOOKUPS FAILED")
     print("-----------------------------------")
 
+
     for symbol in profile_failures:
 
-        print(symbol)
+        print(
+            symbol
+        )
 
 
 print()
+
 print(
     f"Saved final candidates to "
     f"{OUTPUT_FILE}"
