@@ -67,6 +67,63 @@ PROPERTY_KEYWORDS = [
 
 
 # ===================================
+# SPECIAL NASDAQ SECURITY SUFFIXES
+# ===================================
+#
+# IMPORTANT:
+#
+# We DO NOT remove every ticker longer
+# than 4 characters.
+#
+# Legitimate share classes can have
+# 5-character NASDAQ symbols.
+#
+# Examples we want to KEEP:
+#
+# FWONK
+# FWONA
+# LBTYK
+# LLYVK
+# DGICA
+#
+# Instead, only selected fifth-character
+# suffixes associated with special
+# securities are removed from the
+# Daily Brief research pool.
+#
+# These stocks can still exist in the
+# normal EdgeBreak scanners.
+# ===================================
+
+SPECIAL_SECURITY_SUFFIXES = {
+
+    # Warrants
+    "W": "Warrant",
+
+    # Rights
+    "R": "Rights",
+
+    # Units
+    "U": "Units",
+
+    # Preferred
+    "P": "Preferred",
+
+    # Convertible bond
+    "C": "Convertible",
+
+    # Bankruptcy / reorganisation
+    "Q": "Bankruptcy",
+
+    # When issued
+    "V": "When Issued",
+
+    # Mutual fund / special fund
+    "X": "Fund / Special Security"
+}
+
+
+# ===================================
 # LOAD JSON
 # ===================================
 
@@ -76,15 +133,29 @@ def load_json(filename, default=None):
         default = []
 
     try:
-        with open(filename, "r") as f:
+
+        with open(
+            filename,
+            "r"
+        ) as f:
+
             return json.load(f)
 
     except FileNotFoundError:
-        print(f"File not found: {filename}")
+
+        print(
+            f"File not found: {filename}"
+        )
+
         return default
 
     except Exception as e:
-        print(f"Could not load {filename}: {e}")
+
+        print(
+            f"Could not load "
+            f"{filename}: {e}"
+        )
+
         return default
 
 
@@ -94,7 +165,11 @@ def load_json(filename, default=None):
 
 def save_json(filename, data):
 
-    with open(filename, "w") as f:
+    with open(
+        filename,
+        "w"
+    ) as f:
+
         json.dump(
             data,
             f,
@@ -106,12 +181,20 @@ def save_json(filename, data):
 # SAFE NUMBER
 # ===================================
 
-def safe_number(value, default=0):
+def safe_number(
+    value,
+    default=0
+):
 
     try:
+
         return float(value)
 
-    except (TypeError, ValueError):
+    except (
+        TypeError,
+        ValueError
+    ):
+
         return default
 
 
@@ -136,9 +219,13 @@ def passes_liquidity(stock):
     )
 
     return (
-        average_volume >= MIN_AVERAGE_VOLUME
+        average_volume >=
+        MIN_AVERAGE_VOLUME
+
         and
-        average_dollar_volume >= MIN_AVERAGE_DOLLAR_VOLUME
+
+        average_dollar_volume >=
+        MIN_AVERAGE_DOLLAR_VOLUME
     )
 
 
@@ -231,11 +318,13 @@ def get_resistance(stock):
 def get_relative_volume(stock):
 
     possible_fields = [
+
         "volume_ratio",
         "relative_volume",
         "relative_volume_20",
         "relativeVolume",
         "relativeVolume20"
+
     ]
 
 
@@ -244,22 +333,38 @@ def get_relative_volume(stock):
         if field not in stock:
             continue
 
+
         value = safe_number(
             stock.get(field),
             0
         )
 
+
         return {
-            "available": True,
-            "value": value,
-            "field": field
+
+            "available":
+                True,
+
+            "value":
+                value,
+
+            "field":
+                field
+
         }
 
 
     return {
-        "available": False,
-        "value": 0,
-        "field": None
+
+        "available":
+            False,
+
+        "value":
+            0,
+
+        "field":
+            None
+
     }
 
 
@@ -288,10 +393,19 @@ def check_prebreakout_proximity(stock):
     ):
 
         return {
-            "remove": False,
-            "price": price,
-            "resistance": resistance,
-            "distance_below_resistance": None
+
+            "remove":
+                False,
+
+            "price":
+                price,
+
+            "resistance":
+                resistance,
+
+            "distance_below_resistance":
+                None
+
         }
 
 
@@ -301,10 +415,19 @@ def check_prebreakout_proximity(stock):
     if price >= resistance:
 
         return {
-            "remove": False,
-            "price": price,
-            "resistance": resistance,
-            "distance_below_resistance": 0
+
+            "remove":
+                False,
+
+            "price":
+                price,
+
+            "resistance":
+                resistance,
+
+            "distance_below_resistance":
+                0
+
         }
 
 
@@ -365,19 +488,32 @@ def check_stale_breakout(stock):
 
         return {
 
-            "stale": False,
-            "is_breakout": False,
+            "stale":
+                False,
 
-            "price": price,
-            "resistance": resistance,
+            "is_breakout":
+                False,
 
-            "distance_above_resistance": None,
+            "price":
+                price,
 
-            "volume_available": False,
-            "relative_volume": 0,
-            "relative_volume_field": None,
+            "resistance":
+                resistance,
 
-            "high_volume_exception": False
+            "distance_above_resistance":
+                None,
+
+            "volume_available":
+                False,
+
+            "relative_volume":
+                0,
+
+            "relative_volume_field":
+                None,
+
+            "high_volume_exception":
+                False
 
         }
 
@@ -398,11 +534,17 @@ def check_stale_breakout(stock):
 
         return {
 
-            "stale": False,
-            "is_breakout": False,
+            "stale":
+                False,
 
-            "price": price,
-            "resistance": resistance,
+            "is_breakout":
+                False,
+
+            "price":
+                price,
+
+            "resistance":
+                resistance,
 
             "distance_above_resistance":
                 round(
@@ -410,11 +552,17 @@ def check_stale_breakout(stock):
                     2
                 ),
 
-            "volume_available": False,
-            "relative_volume": 0,
-            "relative_volume_field": None,
+            "volume_available":
+                False,
 
-            "high_volume_exception": False
+            "relative_volume":
+                0,
+
+            "relative_volume_field":
+                None,
+
+            "high_volume_exception":
+                False
 
         }
 
@@ -434,11 +582,17 @@ def check_stale_breakout(stock):
 
         return {
 
-            "stale": False,
-            "is_breakout": True,
+            "stale":
+                False,
 
-            "price": price,
-            "resistance": resistance,
+            "is_breakout":
+                True,
+
+            "price":
+                price,
+
+            "resistance":
+                resistance,
 
             "distance_above_resistance":
                 round(
@@ -455,7 +609,8 @@ def check_stale_breakout(stock):
             "relative_volume_field":
                 volume["field"],
 
-            "high_volume_exception": False
+            "high_volume_exception":
+                False
 
         }
 
@@ -466,10 +621,14 @@ def check_stale_breakout(stock):
     # volume data exists AND >=2x.
 
     high_volume_exception = (
+
         volume["available"]
+
         and
+
         volume["value"] >=
         HIGH_VOLUME_EXCEPTION
+
     )
 
 
@@ -623,6 +782,60 @@ def apply_stale_breakout_cull(
 
 
 # ===================================
+# SPECIAL SECURITY CHECK
+# ===================================
+
+def get_special_security_reason(symbol):
+
+    if not symbol:
+        return None
+
+
+    symbol = str(
+        symbol
+    ).strip().upper()
+
+
+    # Normal 1-4 character ticker.
+    # Keep.
+
+    if len(symbol) <= 4:
+        return None
+
+
+    # We are only using the special
+    # NASDAQ fifth-character suffix
+    # rule here.
+
+    suffix = symbol[-1]
+
+
+    if suffix in SPECIAL_SECURITY_SUFFIXES:
+
+        return SPECIAL_SECURITY_SUFFIXES[
+            suffix
+        ]
+
+
+    # Longer ticker, but fifth character
+    # is not one of the special suffixes
+    # we explicitly want to remove.
+    #
+    # KEEP.
+    #
+    # This protects legitimate share
+    # classes such as:
+    #
+    # FWONK
+    # FWONA
+    # LBTYK
+    # LLYVK
+    # DGICA
+
+    return None
+
+
+# ===================================
 # LOAD SCANNER RESULTS
 # ===================================
 
@@ -674,6 +887,7 @@ starting_total = (
 
 
 print()
+
 print(
     f"Starting results     : "
     f"{starting_total}"
@@ -1056,7 +1270,9 @@ for stock in breakout_survivors:
     combined.append({
 
         "symbol":
-            stock.get("symbol"),
+            stock.get(
+                "symbol"
+            ),
 
         "scanners":
             ["BREAKOUT"],
@@ -1072,7 +1288,9 @@ for stock in prebreakout_survivors:
     combined.append({
 
         "symbol":
-            stock.get("symbol"),
+            stock.get(
+                "symbol"
+            ),
 
         "scanners":
             ["PRE_BREAKOUT"],
@@ -1088,7 +1306,9 @@ for stock in launchpad_survivors:
     combined.append({
 
         "symbol":
-            stock.get("symbol"),
+            stock.get(
+                "symbol"
+            ),
 
         "scanners":
             ["LAUNCH_PAD"],
@@ -1129,20 +1349,19 @@ print(
 # SPECIAL SECURITY CULL
 # ===================================
 #
-# DAILY BRIEF ONLY
+# This replaces the old:
 #
-# Remove tickers longer than four
-# characters before profile lookups
-# and before Gemini research.
+# if len(symbol) > 4:
+#     remove
 #
-# This is deliberately a conservative
-# Daily Brief cleanup rule designed to
-# remove many units, warrants, rights,
-# preferred/debt securities and other
-# special NASDAQ instruments.
+# rule.
 #
-# The underlying scanners are NOT
-# changed.
+# Legitimate 5-character share-class
+# tickers are now allowed through.
+#
+# We only remove tickers whose extra
+# NASDAQ suffix identifies one of the
+# special security types listed above.
 # ===================================
 
 normal_security_candidates = []
@@ -1159,12 +1378,20 @@ for stock in combined:
     ).strip().upper()
 
 
-    if len(symbol) > 4:
+    reason = get_special_security_reason(
+        symbol
+    )
+
+
+    if reason:
 
         weird_security_removed.append({
 
             "symbol":
                 symbol,
+
+            "reason":
+                reason,
 
             "scanners":
                 stock.get(
@@ -1193,7 +1420,7 @@ print(
 )
 
 print(
-    f"Ticker >4 removed    : "
+    f"Special removed      : "
     f"{len(weird_security_removed)}"
 )
 
@@ -1222,6 +1449,7 @@ if weird_security_removed:
 
         print(
             f"{stock['symbol']} | "
+            f"{stock['reason']} | "
             f"{scanner_text}"
         )
 
@@ -1232,11 +1460,6 @@ if weird_security_removed:
 
 merged = {}
 
-
-# IMPORTANT:
-# Merge NORMAL securities only.
-# Do not use "combined" here or the
-# special securities get added back.
 
 for stock in normal_security_candidates:
 
@@ -1494,7 +1717,8 @@ def fetch_profile(symbol):
     except Exception as e:
 
         print(
-            f"Profile error {symbol}: {e}"
+            f"Profile error "
+            f"{symbol}: {e}"
         )
 
         return None
@@ -1742,6 +1966,7 @@ print(
     f"{starting_total}"
 )
 
+
 print()
 print("LIQUIDITY")
 print("-----------------------------------")
@@ -1866,8 +2091,10 @@ if weird_security_removed:
             )
         )
 
+
         print(
             f"{stock['symbol']} | "
+            f"{stock['reason']} | "
             f"{scanner_text}"
         )
 
