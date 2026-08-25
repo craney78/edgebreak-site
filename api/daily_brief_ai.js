@@ -5,32 +5,117 @@ EDGEBREAK — DAILY BRIEF AI RESEARCH
 FLOW:
 1. Check Supabase cache
 2. Clean candidates
-3. Split candidates into batches of max 20
-4. Research each batch sequentially
-5. Short pause between batches
-6. Recover valid Gemini results if outer JSON is malformed
-7. Combine + validate + deduplicate
-8. Save ONE Daily Brief to Supabase
+3. Split candidates into smaller batches
+4. Research batches sequentially
+5. Hard timeout each Gemini request
+6. Stop before Vercel runtime limit
+7. Preserve successful batch results
+8. Combine + validate + deduplicate
+9. Rank results
+10. Cap final Daily Brief at 12 stocks
+11. Save ONE completed Daily Brief to Supabase
 
 RELIABILITY:
-- Maximum 20 companies per Gemini batch
-- Batches run sequentially, NOT in parallel
-- 3 Gemini attempts per batch
-- Retry waits increase after temporary errors
-- Retries 429 / 500 / 502 / 503 / 504
+- Maximum 10 companies per Gemini batch
+- Batches run sequentially
+- Maximum 2 Gemini attempts per batch
+- 55-second hard timeout per Gemini request
+- 2-second retry delay
+- 240-second overall AI research budget
+- Timed-out batches do NOT destroy the Daily Brief
+- Successfully completed batches are preserved
+- Stops early when enough strong candidates exist
 ========================================= */
 
-export default async function handler(req, res) {
+
+/* =========================================
+CONFIGURATION
+========================================= */
+
+const BATCH_SIZE =
+    10;
+
+
+const GEMINI_TIMEOUT_MS =
+    55000;
+
+
+const GEMINI_MAX_ATTEMPTS =
+    2;
+
+
+const GEMINI_RETRY_DELAY_MS =
+    2000;
+
+
+/*
+IMPORTANT:
+
+Vercel currently kills this function at
+approximately 300 seconds.
+
+We deliberately stop AI research well before
+that point so there is still time to:
+
+- clean results
+- rank results
+- run safety checks
+- save Supabase cache
+- send the HTTP response
+*/
+
+const MAX_RESEARCH_TIME_MS =
+    240000;
+
+
+/*
+Once we have this many valid researched
+companies, we may stop researching additional
+batches.
+
+The final Daily Brief only displays 12.
+
+18 gives us a reasonable ranking pool while
+avoiding unnecessary Gemini requests.
+*/
+
+const EARLY_STOP_RESULT_COUNT =
+    18;
+
+
+
+/* =========================================
+MAIN HANDLER
+========================================= */
+
+export default async function handler(
+    req,
+    res
+) {
+
+    res.setHeader(
+        "Cache-Control",
+        "no-store"
+    );
+
 
     /* =====================================
     POST ONLY
     ===================================== */
 
-    if (req.method !== "POST") {
+    if (
+        req.method !==
+        "POST"
+    ) {
 
-        return res.status(405).json({
-            error: "Method not allowed."
-        });
+        return res
+            .status(405)
+            .json({
+
+                error:
+                    "Method not allowed."
+
+            });
 
     }
 
@@ -39,12 +124,18 @@ export default async function handler(req, res) {
     ENVIRONMENT VARIABLES
     ===================================== */
 
-    if (!process.env.GEMINI_API_KEY) {
+    if (
+        !process.env.GEMINI_API_KEY
+    ) {
 
-        return res.status(500).json({
-            error:
-                "Daily Brief AI is not configured."
-        });
+        return res
+            .status(500)
+            .json({
+
+                error:
+                    "Daily Brief AI is not configured."
+
+            });
 
     }
 
@@ -54,12 +145,27 @@ export default async function handler(req, res) {
         !process.env.SUPABASE_SERVICE_KEY
     ) {
 
-        return res.status(500).json({
-            error:
-                "Daily Brief cache is not configured."
-        });
+        return res
+            .status(500)
+            .json({
+
+                error:
+                    "Daily Brief cache is not configured."
+
+            });
 
     }
+
+
+    /*
+    Start runtime clock immediately.
+
+    This allows us to stop AI work before
+    Vercel reaches its hard runtime limit.
+    */
+
+    const functionStartedAt =
+        Date.now();
 
 
     try {
@@ -87,48 +193,66 @@ export default async function handler(req, res) {
             );
 
 
-        if (cachedBrief) {
+        if (
+            cachedBrief
+        ) {
 
             console.log(
                 `EdgeBreak Daily Brief CACHE HIT: ${briefDate}`
             );
 
 
-            return res.status(200).json({
+            return res
+                .status(200)
+                .json({
 
-                success: true,
+                    success:
+                        true,
 
-                cached: true,
+                    cached:
+                        true,
 
-                briefDate:
-                    cachedBrief.brief_date,
+                    briefDate:
+                        cachedBrief.brief_date,
 
-                generatedAt:
-                    cachedBrief.generated_at,
+                    generatedAt:
+                        cachedBrief.generated_at,
 
-                companiesReviewed:
-                    cachedBrief.companies_reviewed,
+                    companiesReviewed:
+                        cachedBrief.companies_reviewed,
 
-                companiesIncluded:
-                    cachedBrief.companies_included,
+                    companiesIncluded:
+                        cachedBrief.companies_included,
 
-                results:
-                    Array.isArray(
-                        cachedBrief.ai_results?.results
-                    )
-                        ? cachedBrief.ai_results.results
-                        : [],
+                    results:
+                        Array.isArray(
+                            cachedBrief
+                                .ai_results
+                                ?.results
+                        )
+                            ?
+                            cachedBrief
+                                .ai_results
+                                .results
+                            :
+                            [],
 
-                nasdaqToday:
-                    cachedBrief.nasdaq_today || null,
+                    nasdaqToday:
+                        cachedBrief
+                            .nasdaq_today ||
+                        null,
 
-                marketConditions:
-                    cachedBrief.market_conditions || null,
+                    marketConditions:
+                        cachedBrief
+                            .market_conditions ||
+                        null,
 
-                scannerActivity:
-                    cachedBrief.scanner_activity || null
+                    scannerActivity:
+                        cachedBrief
+                            .scanner_activity ||
+                        null
 
-            });
+                });
 
         }
 
@@ -142,29 +266,45 @@ export default async function handler(req, res) {
         GET CANDIDATES
         ===================================== */
 
-        const { candidates } =
-            req.body || {};
+        const {
+            candidates
+        } =
+            req.body ||
+            {};
 
 
         if (
-            !Array.isArray(candidates) ||
+            !Array.isArray(
+                candidates
+            ) ||
             candidates.length === 0
         ) {
 
-            return res.status(400).json({
-                error:
-                    "No Daily Brief candidates were provided."
-            });
+            return res
+                .status(400)
+                .json({
+
+                    error:
+                        "No Daily Brief candidates were provided."
+
+                });
 
         }
 
 
-        if (candidates.length > 150) {
+        if (
+            candidates.length >
+            150
+        ) {
 
-            return res.status(400).json({
-                error:
-                    "Too many Daily Brief candidates were provided."
-            });
+            return res
+                .status(400)
+                .json({
+
+                    error:
+                        "Too many Daily Brief candidates were provided."
+
+                });
 
         }
 
@@ -175,91 +315,97 @@ export default async function handler(req, res) {
 
         const cleanCandidates =
             candidates
+
                 .filter(
                     stock =>
                         stock &&
                         stock.symbol
                 )
-                .map(stock => ({
 
-                    symbol:
-                        String(
-                            stock.symbol
-                        )
-                            .trim()
-                            .toUpperCase(),
+                .map(
+                    stock => ({
 
-                    scanners:
-                        Array.isArray(
-                            stock.scanners
-                        )
-                            ? stock.scanners
-                                .map(
-                                    scanner =>
-                                        String(scanner)
-                                            .trim()
-                                )
-                                .filter(Boolean)
-                            : [],
-
-                    company: {
-
-                        name:
-                            cleanField(
-                                stock.company?.name,
-                                200
-                            ),
-
-                        sector:
-                            cleanField(
-                                stock.company?.sector,
-                                150
-                            ),
-
-                        industry:
-                            cleanField(
-                                stock.company?.industry,
-                                150
+                        symbol:
+                            String(
+                                stock.symbol
                             )
+                                .trim()
+                                .toUpperCase(),
 
-                    }
+                        scanners:
+                            Array.isArray(
+                                stock.scanners
+                            )
+                                ?
+                                stock.scanners
+                                    .map(
+                                        scanner =>
+                                            String(
+                                                scanner
+                                            )
+                                                .trim()
+                                    )
+                                    .filter(
+                                        Boolean
+                                    )
+                                :
+                                [],
 
-                }));
+                        company: {
+
+                            name:
+                                cleanField(
+                                    stock
+                                        .company
+                                        ?.name,
+                                    200
+                                ),
+
+                            sector:
+                                cleanField(
+                                    stock
+                                        .company
+                                        ?.sector,
+                                    150
+                                ),
+
+                            industry:
+                                cleanField(
+                                    stock
+                                        .company
+                                        ?.industry,
+                                    150
+                                )
+
+                        }
+
+                    })
+                );
 
 
         if (
-            cleanCandidates.length === 0
+            cleanCandidates.length ===
+            0
         ) {
 
-            return res.status(400).json({
-                error:
-                    "No valid Daily Brief candidates were provided."
-            });
+            return res
+                .status(400)
+                .json({
+
+                    error:
+                        "No valid Daily Brief candidates were provided."
+
+                });
 
         }
 
 
         /* =====================================
-        SPLIT INTO MAXIMUM 20-COMPANY BATCHES
-
-        Examples:
-
-        20 stocks
-        = 20
-
-        39 stocks
-        = 20 + 19
-
-        67 stocks
-        = 20 + 20 + 20 + 7
-
-        99 stocks
-        = 20 + 20 + 20 + 20 + 19
+        SPLIT INTO SMALLER BATCHES
         ===================================== */
 
-        const BATCH_SIZE = 20;
-
-        const batches = [];
+        const batches =
+            [];
 
 
         for (
@@ -269,10 +415,12 @@ export default async function handler(req, res) {
         ) {
 
             batches.push(
+
                 cleanCandidates.slice(
                     i,
                     i + BATCH_SIZE
                 )
+
             );
 
         }
@@ -284,12 +432,20 @@ export default async function handler(req, res) {
 
 
         console.log(
+            `Daily Brief batch size: ${BATCH_SIZE}`
+        );
+
+
+        console.log(
             `Daily Brief batches required: ${batches.length}`
         );
 
 
         batches.forEach(
-            (batch, index) => {
+            (
+                batch,
+                index
+            ) => {
 
                 console.log(
                     `Daily Brief Batch ${index + 1}: ${batch.length} companies`
@@ -300,23 +456,23 @@ export default async function handler(req, res) {
 
 
         /* =====================================
-        RESEARCH BATCHES SEQUENTIALLY
-
-        IMPORTANT:
-
-        We deliberately DO NOT use Promise.all().
-
-        Google-grounded Gemini requests are
-        processed one batch at a time.
-
-        Each batch contains a maximum of
-        20 companies.
-
-        After one batch finishes, EdgeBreak
-        waits briefly before starting the next.
+        RESEARCH BATCHES
         ===================================== */
 
-        const batchResearch = [];
+        const batchResearch =
+            [];
+
+
+        let completedBatches =
+            0;
+
+
+        let failedBatches =
+            0;
+
+
+        let stoppedEarly =
+            false;
 
 
         for (
@@ -333,31 +489,177 @@ export default async function handler(req, res) {
                 index + 1;
 
 
+            /* =================================
+            CHECK OVERALL RUNTIME
+            ================================= */
+
+            const elapsed =
+                Date.now() -
+                functionStartedAt;
+
+
+            const remainingBudget =
+                MAX_RESEARCH_TIME_MS -
+                elapsed;
+
+
+            console.log(
+                `Daily Brief elapsed time before Batch ${batchNumber}: ${Math.round(elapsed / 1000)}s`
+            );
+
+
+            /*
+            Do not launch another Gemini request
+            unless there is enough time remaining
+            for a useful attempt plus cleanup.
+            */
+
+            if (
+                remainingBudget <
+                65000
+            ) {
+
+                console.warn(
+                    `Daily Brief stopping before Batch ${batchNumber}. Runtime safety limit approaching.`
+                );
+
+
+                stoppedEarly =
+                    true;
+
+
+                break;
+
+            }
+
+
+            /* =================================
+            EARLY STOP IF ENOUGH RESULTS
+            ================================= */
+
+            const currentRawResults =
+                batchResearch.flatMap(
+                    research =>
+                        Array.isArray(
+                            research?.results
+                        )
+                            ?
+                            research.results
+                            :
+                            []
+                );
+
+
+            const currentCleanResults =
+                cleanResearchResults(
+                    currentRawResults,
+                    cleanCandidates
+                );
+
+
+            const currentDeduplicated =
+                deduplicateResults(
+                    currentCleanResults
+                );
+
+
+            if (
+                currentDeduplicated.length >=
+                EARLY_STOP_RESULT_COUNT
+            ) {
+
+                console.log(
+                    `Daily Brief early-stop threshold reached: ${currentDeduplicated.length} qualified companies.`
+                );
+
+
+                stoppedEarly =
+                    true;
+
+
+                break;
+
+            }
+
+
+            /* =================================
+            START BATCH
+            ================================= */
+
             console.log(
                 `Daily Brief starting Batch ${batchNumber}/${batches.length}...`
             );
 
 
-            const research =
-                await researchBatch(
-                    batch,
-                    briefDate,
-                    batchNumber
+            try {
+
+                const research =
+                    await researchBatch(
+
+                        batch,
+
+                        briefDate,
+
+                        batchNumber,
+
+                        functionStartedAt
+
+                    );
+
+
+                batchResearch.push(
+                    research
                 );
 
 
-            batchResearch.push(
-                research
-            );
+                completedBatches++;
 
 
-            console.log(
-                `Daily Brief Batch ${batchNumber}/${batches.length} finished.`
-            );
+                console.log(
+                    `Daily Brief Batch ${batchNumber}/${batches.length} finished successfully.`
+                );
+
+            }
+            catch (
+                batchError
+            ) {
+
+                failedBatches++;
+
+
+                console.error(
+                    `Daily Brief Batch ${batchNumber}/${batches.length} failed but Daily Brief will continue:`,
+                    batchError?.message ||
+                    batchError
+                );
+
+
+                /*
+                Preserve the workflow.
+
+                A failed Gemini batch contributes
+                zero results rather than killing
+                all previously completed batches.
+                */
+
+                batchResearch.push({
+
+                    companiesReviewed:
+                        batch.length,
+
+                    companiesIncluded:
+                        0,
+
+                    results:
+                        []
+
+                });
+
+            }
 
 
             /* =================================
-            SHORT PAUSE BEFORE NEXT BATCH
+            SMALL PAUSE
             ================================= */
 
             const hasAnotherBatch =
@@ -365,15 +667,20 @@ export default async function handler(req, res) {
                 batches.length - 1;
 
 
-            if (hasAnotherBatch) {
+            if (
+                hasAnotherBatch
+            ) {
 
-                console.log(
-                    `Daily Brief waiting 3 seconds before Batch ${batchNumber + 1}...`
-                );
+                /*
+                Only pause for one second.
 
+                The previous three-second delay
+                provided little value while
+                consuming Vercel runtime.
+                */
 
                 await sleep(
-                    3000
+                    1000
                 );
 
             }
@@ -391,8 +698,10 @@ export default async function handler(req, res) {
                     Array.isArray(
                         research?.results
                     )
-                        ? research.results
-                        : []
+                        ?
+                        research.results
+                        :
+                        []
             );
 
 
@@ -407,8 +716,11 @@ export default async function handler(req, res) {
 
         const cleanResults =
             cleanResearchResults(
+
                 combinedRawResults,
+
                 cleanCandidates
+
             );
 
 
@@ -428,37 +740,51 @@ export default async function handler(req, res) {
 
 
         /* =====================================
-        RANK + CAP FINAL RESULTS
-
-        HIGH first
-        ELEVATED second
-        NOTABLE third
-
-        12 is a MAXIMUM only.
-        If fewer than 12 qualify, keep them all.
+        RANK RESULTS
         ===================================== */
 
         const attentionPriority = {
 
-            HIGH: 3,
-            ELEVATED: 2,
-            NOTABLE: 1
+            HIGH:
+                3,
+
+            ELEVATED:
+                2,
+
+            NOTABLE:
+                1
 
         };
 
 
         const rankedResults =
-            [...deduplicatedResults]
+            [
+                ...deduplicatedResults
+            ]
                 .sort(
-                    (a, b) =>
+                    (
+                        a,
+                        b
+                    ) =>
                         (
-                            attentionPriority[b.attentionLevel] || 0
-                        ) -
+                            attentionPriority[
+                                b.attentionLevel
+                            ] ||
+                            0
+                        )
+                        -
                         (
-                            attentionPriority[a.attentionLevel] || 0
+                            attentionPriority[
+                                a.attentionLevel
+                            ] ||
+                            0
                         )
                 );
 
+
+        /* =====================================
+        FINAL 12 STOCK CAP
+        ===================================== */
 
         const finalResults =
             rankedResults.slice(
@@ -472,6 +798,37 @@ export default async function handler(req, res) {
         );
 
 
+        console.log(
+            `Daily Brief batches completed: ${completedBatches}`
+        );
+
+
+        console.log(
+            `Daily Brief batches failed: ${failedBatches}`
+        );
+
+
+        console.log(
+            `Daily Brief stopped early: ${stoppedEarly}`
+        );
+
+
+        /* =====================================
+        IMPORTANT:
+        REQUIRE AT LEAST SOME RESEARCH
+        ===================================== */
+
+        if (
+            completedBatches === 0
+        ) {
+
+            throw new Error(
+                "No Daily Brief research batches completed successfully."
+            );
+
+        }
+
+
         /* =====================================
         BUILD FINAL AI DATA
         ===================================== */
@@ -479,22 +836,32 @@ export default async function handler(req, res) {
         const aiResults = {
 
             results:
-                finalResults
+                finalResults,
+
+            researchMeta: {
+
+                candidatesSupplied:
+                    cleanCandidates.length,
+
+                batchesPlanned:
+                    batches.length,
+
+                batchesCompleted:
+                    completedBatches,
+
+                batchesFailed:
+                    failedBatches,
+
+                stoppedEarly:
+                    stoppedEarly
+
+            }
 
         };
 
 
         /* =====================================
         SERVER-SIDE SAFETY FILTER
-
-        EdgeBreak may report factual financial
-        information, including analyst actions,
-        ratings and price targets.
-
-        Block only language where the generated
-        research itself gives investment advice,
-        a trading instruction, or promises a
-        financial result.
         ===================================== */
 
         const combinedText =
@@ -566,17 +933,23 @@ export default async function handler(req, res) {
             );
 
 
-        if (unsafe) {
+        if (
+            unsafe
+        ) {
 
             console.error(
                 "Daily Brief blocked by safety filter: direct advice or promised result detected."
             );
 
 
-            return res.status(422).json({
-                error:
-                    "The Daily Brief research could not be displayed."
-            });
+            return res
+                .status(422)
+                .json({
+
+                    error:
+                        "The Daily Brief research could not be displayed."
+
+                });
 
         }
 
@@ -608,42 +981,84 @@ export default async function handler(req, res) {
 
 
         /* =====================================
+        FINAL RUNTIME
+        ===================================== */
+
+        const totalRuntime =
+            Date.now() -
+            functionStartedAt;
+
+
+        console.log(
+            `EdgeBreak Daily Brief completed in ${Math.round(totalRuntime / 1000)} seconds.`
+        );
+
+
+        /* =====================================
         SUCCESS
         ===================================== */
 
-        return res.status(200).json({
+        return res
+            .status(200)
+            .json({
 
-            success: true,
+                success:
+                    true,
 
-            cached: false,
+                cached:
+                    false,
 
-            briefDate,
+                briefDate,
 
-            generatedAt,
+                generatedAt,
 
-            companiesReviewed:
-                cleanCandidates.length,
+                companiesReviewed:
+                    cleanCandidates.length,
 
-            companiesIncluded:
-                finalResults.length,
+                companiesIncluded:
+                    finalResults.length,
 
-            results:
-                finalResults,
+                results:
+                    finalResults,
 
-            nasdaqToday:
-                null,
+                researchMeta: {
 
-            marketConditions:
-                null,
+                    batchesPlanned:
+                        batches.length,
 
-            scannerActivity:
-                null
+                    batchesCompleted:
+                        completedBatches,
 
-        });
+                    batchesFailed:
+                        failedBatches,
+
+                    stoppedEarly:
+                        stoppedEarly,
+
+                    runtimeSeconds:
+                        Math.round(
+                            totalRuntime /
+                            1000
+                        )
+
+                },
+
+                nasdaqToday:
+                    null,
+
+                marketConditions:
+                    null,
+
+                scannerActivity:
+                    null
+
+            });
 
 
     }
-    catch (error) {
+    catch (
+        error
+    ) {
 
         console.error(
             "EdgeBreak Daily Brief Error:",
@@ -651,16 +1066,19 @@ export default async function handler(req, res) {
         );
 
 
-        return res.status(500).json({
+        return res
+            .status(500)
+            .json({
 
-            error:
-                "Daily Brief research is temporarily unavailable."
+                error:
+                    "Daily Brief research is temporarily unavailable."
 
-        });
+            });
 
     }
 
 }
+
 
 
 /* =========================================
@@ -668,9 +1086,15 @@ RESEARCH ONE BATCH
 ========================================= */
 
 async function researchBatch(
+
     candidates,
+
     briefDate,
-    batchNumber
+
+    batchNumber,
+
+    functionStartedAt
+
 ) {
 
     console.log(
@@ -852,6 +1276,8 @@ this company noteworthy?"
 
 If the answer is NO, omit the company.
 
+Keep every returned field concise.
+
 Return JSON only.
 
 `;
@@ -933,40 +1359,27 @@ ELEVATED
 NOTABLE
 
 headline:
-Short factual headline describing the current reason for
-attention.
-
-No promotional language.
-
-No prediction.
+One short factual headline.
 
 summary:
-One or two concise factual sentences explaining the current
-situation.
-
-This may appear directly in the EdgeBreak Daily Brief.
-
-No investment advice.
+Maximum two concise factual sentences.
 
 currentDevelopment:
-State the specific current event, catalyst, filing,
-announcement, unusual activity or material development that
-justifies inclusion.
+One concise factual sentence describing the current event,
+catalyst, filing, announcement, unusual activity or material
+development.
 
 whyIncluded:
-Briefly explain why the CURRENT attention or development is
-noteworthy enough for further research.
-
-Technical chart quality must not be the primary reason.
+One concise sentence explaining why the CURRENT attention
+or development is noteworthy.
 
 developmentDate:
-Use YYYY-MM-DD when the date can reliably be established.
+Use YYYY-MM-DD when reliably established.
 
 Otherwise return an empty string.
 
 sourceNames:
-Return a short array of the principal credible sources that
-support inclusion.
+Return only the principal credible source names.
 
 Do not invent sources.
 
@@ -1005,10 +1418,12 @@ Return JSON only.
         systemInstruction: {
 
             parts: [
+
                 {
                     text:
                         systemInstruction
                 }
+
             ]
 
         },
@@ -1018,13 +1433,16 @@ Return JSON only.
 
             {
 
-                role: "user",
+                role:
+                    "user",
 
                 parts: [
+
                     {
                         text:
                             userInstruction
                     }
+
                 ]
 
             }
@@ -1043,14 +1461,21 @@ Return JSON only.
 
         generationConfig: {
 
+            /*
+            Previous version allowed 16,000
+            output tokens.
+
+            This research should be concise.
+            */
+
             maxOutputTokens:
-                16000,
+                6000,
 
             responseMimeType:
                 "application/json",
 
             temperature:
-                0.2
+                0.15
 
         }
 
@@ -1059,50 +1484,111 @@ Return JSON only.
 
     /* =====================================
     GEMINI REQUEST
-
-    RETRY POLICY:
-
-    Attempt 1
-        ↓ temporary error
-    wait 8 seconds
-
-    Attempt 2
-        ↓ temporary error
-    wait 15 seconds
-
-    Attempt 3
-
-    Temporary errors:
-    429
-    500
-    502
-    503
-    504
     ===================================== */
-
-    let geminiResponse = null;
-
-    const maxAttempts = 3;
 
     const retryableStatuses =
         new Set([
+
             429,
             500,
             502,
             503,
             504
+
         ]);
 
 
     for (
         let attempt = 1;
-        attempt <= maxAttempts;
+        attempt <= GEMINI_MAX_ATTEMPTS;
         attempt++
     ) {
 
+        /* =================================
+        OVERALL TIME CHECK
+        ================================= */
+
+        const overallElapsed =
+            Date.now() -
+            functionStartedAt;
+
+
+        const overallRemaining =
+            MAX_RESEARCH_TIME_MS -
+            overallElapsed;
+
+
+        if (
+            overallRemaining <
+            15000
+        ) {
+
+            throw new Error(
+                `Daily Brief Batch ${batchNumber} cancelled because runtime safety limit was reached.`
+            );
+
+        }
+
+
         console.log(
-            `Daily Brief Batch ${batchNumber} Gemini attempt ${attempt}/${maxAttempts}`
+            `Daily Brief Batch ${batchNumber} Gemini attempt ${attempt}/${GEMINI_MAX_ATTEMPTS}`
         );
+
+
+        /* =================================
+        HARD REQUEST TIMEOUT
+        ================================= */
+
+        const controller =
+            new AbortController();
+
+
+        /*
+        Never let an individual request exceed
+        the configured Gemini timeout.
+
+        Also respect whatever remains of the
+        overall research budget.
+        */
+
+        const allowedTimeout =
+            Math.max(
+
+                5000,
+
+                Math.min(
+
+                    GEMINI_TIMEOUT_MS,
+
+                    overallRemaining -
+                    10000
+
+                )
+
+            );
+
+
+        const requestStartedAt =
+            Date.now();
+
+
+        const timeout =
+            setTimeout(
+                () => {
+
+                    console.warn(
+                        `Daily Brief Batch ${batchNumber} Gemini attempt ${attempt} exceeded ${allowedTimeout}ms. Aborting.`
+                    );
+
+
+                    controller.abort();
+
+                },
+                allowedTimeout
+            );
+
+
+        let geminiResponse;
 
 
         try {
@@ -1114,7 +1600,8 @@ Return JSON only.
 
                     {
 
-                        method: "POST",
+                        method:
+                            "POST",
 
                         headers: {
 
@@ -1122,21 +1609,88 @@ Return JSON only.
                                 "application/json",
 
                             "x-goog-api-key":
-                                process.env.GEMINI_API_KEY
+                                process.env
+                                    .GEMINI_API_KEY
 
                         },
 
                         body:
                             JSON.stringify(
                                 requestBody
-                            )
+                            ),
+
+                        signal:
+                            controller.signal
 
                     }
 
                 );
 
+
+            console.log(
+                `Daily Brief Batch ${batchNumber} Gemini attempt ${attempt} responded in ${Math.round((Date.now() - requestStartedAt) / 1000)}s with HTTP ${geminiResponse.status}.`
+            );
+
         }
-        catch (fetchError) {
+        catch (
+            fetchError
+        ) {
+
+            if (
+                fetchError?.name ===
+                "AbortError"
+            ) {
+
+                console.warn(
+                    `Daily Brief Batch ${batchNumber} Gemini attempt ${attempt} timed out.`
+                );
+
+
+                if (
+                    attempt <
+                    GEMINI_MAX_ATTEMPTS
+                ) {
+
+                    const elapsedNow =
+                        Date.now() -
+                        functionStartedAt;
+
+
+                    if (
+                        elapsedNow +
+                        GEMINI_RETRY_DELAY_MS +
+                        15000 >=
+                        MAX_RESEARCH_TIME_MS
+                    ) {
+
+                        throw new Error(
+                            `Daily Brief Batch ${batchNumber} timed out and there is insufficient runtime for another attempt.`
+                        );
+
+                    }
+
+
+                    console.log(
+                        `Daily Brief Batch ${batchNumber} retrying in ${GEMINI_RETRY_DELAY_MS / 1000} seconds...`
+                    );
+
+
+                    await sleep(
+                        GEMINI_RETRY_DELAY_MS
+                    );
+
+
+                    continue;
+
+                }
+
+
+                throw new Error(
+                    `Daily Brief Batch ${batchNumber} Gemini request timed out.`
+                );
+
+            }
+
 
             console.error(
                 `Gemini Daily Brief Batch ${batchNumber} network error on attempt ${attempt}:`,
@@ -1145,22 +1699,12 @@ Return JSON only.
 
 
             if (
-                attempt < maxAttempts
+                attempt <
+                GEMINI_MAX_ATTEMPTS
             ) {
 
-                const delay =
-                    attempt === 1
-                        ? 8000
-                        : 15000;
-
-
-                console.log(
-                    `Daily Brief Batch ${batchNumber} retrying after network error in ${delay / 1000} seconds...`
-                );
-
-
                 await sleep(
-                    delay
+                    GEMINI_RETRY_DELAY_MS
                 );
 
 
@@ -1172,10 +1716,17 @@ Return JSON only.
             throw fetchError;
 
         }
+        finally {
+
+            clearTimeout(
+                timeout
+            );
+
+        }
 
 
         /* =================================
-        SUCCESS
+        GEMINI SUCCESS
         ================================= */
 
         if (
@@ -1187,17 +1738,196 @@ Return JSON only.
             );
 
 
-            break;
+            const geminiData =
+                await geminiResponse.json();
+
+
+            /* =============================
+            EXTRACT OUTPUT
+            ============================= */
+
+            const rawText =
+                geminiData
+                    ?.candidates?.[0]
+                    ?.content
+                    ?.parts
+                    ?.map(
+                        part =>
+                            part.text ||
+                            ""
+                    )
+                    ?.join("")
+                    ?.trim();
+
+
+            if (
+                !rawText
+            ) {
+
+                console.warn(
+                    `Gemini Daily Brief Batch ${batchNumber} returned no text.`
+                );
+
+
+                if (
+                    attempt <
+                    GEMINI_MAX_ATTEMPTS
+                ) {
+
+                    await sleep(
+                        GEMINI_RETRY_DELAY_MS
+                    );
+
+
+                    continue;
+
+                }
+
+
+                throw new Error(
+                    `Daily Brief Batch ${batchNumber} returned no research.`
+                );
+
+            }
+
+
+            /* =============================
+            PARSE / RECOVER JSON
+            ============================= */
+
+            let research;
+
+
+            try {
+
+                research =
+                    JSON.parse(
+                        cleanJsonText(
+                            rawText
+                        )
+                    );
+
+            }
+            catch (
+                error
+            ) {
+
+                console.warn(
+                    `Daily Brief Batch ${batchNumber} normal JSON parse failed. Attempting recovery...`
+                );
+
+
+                const recoveredResults =
+                    recoverGeminiResults(
+                        rawText
+                    );
+
+
+                if (
+                    recoveredResults.length ===
+                    0
+                ) {
+
+                    console.error(
+                        `Daily Brief Batch ${batchNumber} JSON recovery failed.`
+                    );
+
+
+                    if (
+                        attempt <
+                        GEMINI_MAX_ATTEMPTS
+                    ) {
+
+                        console.log(
+                            `Daily Brief Batch ${batchNumber} retrying after invalid JSON...`
+                        );
+
+
+                        await sleep(
+                            GEMINI_RETRY_DELAY_MS
+                        );
+
+
+                        continue;
+
+                    }
+
+
+                    throw new Error(
+                        `Daily Brief Batch ${batchNumber} returned invalid JSON.`
+                    );
+
+                }
+
+
+                console.log(
+                    `Daily Brief Batch ${batchNumber} recovered ${recoveredResults.length} complete results.`
+                );
+
+
+                research = {
+
+                    companiesReviewed:
+                        candidates.length,
+
+                    companiesIncluded:
+                        recoveredResults.length,
+
+                    results:
+                        recoveredResults
+
+                };
+
+            }
+
+
+            if (
+                !research ||
+                !Array.isArray(
+                    research.results
+                )
+            ) {
+
+                if (
+                    attempt <
+                    GEMINI_MAX_ATTEMPTS
+                ) {
+
+                    await sleep(
+                        GEMINI_RETRY_DELAY_MS
+                    );
+
+
+                    continue;
+
+                }
+
+
+                throw new Error(
+                    `Daily Brief Batch ${batchNumber} returned an invalid result.`
+                );
+
+            }
+
+
+            console.log(
+                `Daily Brief Batch ${batchNumber} complete: ${research.results.length} included`
+            );
+
+
+            return research;
 
         }
 
 
         /* =================================
-        READ GEMINI ERROR
+        GEMINI NON-200
         ================================= */
 
         const errorText =
-            await geminiResponse.text();
+            await safeReadResponseText(
+                geminiResponse
+            );
 
 
         console.error(
@@ -1207,32 +1937,26 @@ Return JSON only.
         );
 
 
-        /* =================================
-        RETRY TEMPORARY ERRORS
-        ================================= */
-
         const canRetry =
             retryableStatuses.has(
                 geminiResponse.status
-            ) &&
-            attempt < maxAttempts;
+            )
+            &&
+            attempt <
+            GEMINI_MAX_ATTEMPTS;
 
 
-        if (canRetry) {
-
-            const delay =
-                attempt === 1
-                    ? 8000
-                    : 15000;
-
+        if (
+            canRetry
+        ) {
 
             console.log(
-                `Daily Brief Batch ${batchNumber} received temporary Gemini ${geminiResponse.status}. Retrying in ${delay / 1000} seconds...`
+                `Daily Brief Batch ${batchNumber} received temporary Gemini ${geminiResponse.status}. Retrying in ${GEMINI_RETRY_DELAY_MS / 1000} seconds...`
             );
 
 
             await sleep(
-                delay
+                GEMINI_RETRY_DELAY_MS
             );
 
 
@@ -1241,175 +1965,121 @@ Return JSON only.
         }
 
 
-        /* =================================
-        NO MORE RETRIES
-        ================================= */
-
         throw new Error(
-            `Daily Brief batch ${batchNumber} failed. Gemini returned ${geminiResponse.status}.`
+            `Daily Brief Batch ${batchNumber} failed. Gemini returned ${geminiResponse.status}.`
         );
 
     }
 
 
-    /* =====================================
-    FINAL RESPONSE CHECK
-    ===================================== */
-
-    if (
-        !geminiResponse ||
-        !geminiResponse.ok
-    ) {
-
-        throw new Error(
-            `Daily Brief batch ${batchNumber} failed.`
-        );
-
-    }
-
-
-    const geminiData =
-        await geminiResponse.json();
-
-
-    /* =====================================
-    EXTRACT OUTPUT
-    ===================================== */
-
-    const rawText =
-        geminiData
-            ?.candidates?.[0]
-            ?.content
-            ?.parts
-            ?.map(
-                part =>
-                    part.text || ""
-            )
-            ?.join("")
-            ?.trim();
-
-
-    if (!rawText) {
-
-        console.error(
-            `Gemini Daily Brief Batch ${batchNumber} returned no text.`
-        );
-
-
-        throw new Error(
-            `Daily Brief batch ${batchNumber} returned no research.`
-        );
-
-    }
-
-
-    /* =====================================
-    PARSE / RECOVER JSON
-    ===================================== */
-
-    let research;
-
-
-    try {
-
-        research =
-            JSON.parse(
-                rawText
-            );
-
-    }
-    catch (error) {
-
-        console.warn(
-            `Daily Brief Batch ${batchNumber} normal JSON parse failed. Attempting recovery...`
-        );
-
-
-        const recoveredResults =
-            recoverGeminiResults(
-                rawText
-            );
-
-
-        if (
-            recoveredResults.length === 0
-        ) {
-
-            console.error(
-                `Daily Brief Batch ${batchNumber} JSON recovery failed.`
-            );
-
-
-            console.error(
-                rawText
-            );
-
-
-            throw new Error(
-                `Daily Brief batch ${batchNumber} returned invalid JSON.`
-            );
-
-        }
-
-
-        console.log(
-            `Daily Brief Batch ${batchNumber} recovered ` +
-            `${recoveredResults.length} complete results.`
-        );
-
-
-        research = {
-
-            companiesReviewed:
-                candidates.length,
-
-            companiesIncluded:
-                recoveredResults.length,
-
-            results:
-                recoveredResults
-
-        };
-
-    }
-
-
-    if (
-        !research ||
-        !Array.isArray(
-            research.results
-        )
-    ) {
-
-        throw new Error(
-            `Daily Brief batch ${batchNumber} returned an invalid result.`
-        );
-
-    }
-
-
-    console.log(
-        `Daily Brief Batch ${batchNumber} complete: ` +
-        `${research.results.length} included`
+    throw new Error(
+        `Daily Brief Batch ${batchNumber} failed.`
     );
-
-
-    return research;
 
 }
 
 
+
+/* =========================================
+SAFE RESPONSE TEXT
+========================================= */
+
+async function safeReadResponseText(
+    response
+) {
+
+    try {
+
+        return await response.text();
+
+    }
+    catch (
+        error
+    ) {
+
+        return (
+            "Unable to read Gemini error response."
+        );
+
+    }
+
+}
+
+
+
+/* =========================================
+CLEAN JSON TEXT
+========================================= */
+
+function cleanJsonText(
+    text
+) {
+
+    let cleaned =
+        String(
+            text ||
+            ""
+        )
+            .trim();
+
+
+    cleaned =
+        cleaned.replace(
+            /^```json\s*/i,
+            ""
+        );
+
+
+    cleaned =
+        cleaned.replace(
+            /^```\s*/i,
+            ""
+        );
+
+
+    cleaned =
+        cleaned.replace(
+            /\s*```$/,
+            ""
+        );
+
+
+    const firstBrace =
+        cleaned.indexOf(
+            "{"
+        );
+
+
+    const lastBrace =
+        cleaned.lastIndexOf(
+            "}"
+        );
+
+
+    if (
+        firstBrace !== -1 &&
+        lastBrace !== -1 &&
+        lastBrace >
+            firstBrace
+    ) {
+
+        cleaned =
+            cleaned.slice(
+                firstBrace,
+                lastBrace + 1
+            );
+
+    }
+
+
+    return cleaned;
+
+}
+
+
+
 /* =========================================
 RECOVER GEMINI RESULT OBJECTS
-
-Used only when Gemini's complete response
-cannot be parsed normally.
-
-Find the "results" array and recover each
-complete JSON object independently.
-
-If the final object is truncated, the
-complete earlier objects are preserved.
 ========================================= */
 
 function recoverGeminiResults(
@@ -1417,7 +2087,8 @@ function recoverGeminiResults(
 ) {
 
     if (
-        typeof rawText !== "string" ||
+        typeof rawText !==
+            "string" ||
         !rawText.trim()
     ) {
 
@@ -1426,10 +2097,6 @@ function recoverGeminiResults(
     }
 
 
-    /* =====================================
-    FIND RESULTS ARRAY
-    ===================================== */
-
     const resultsKeyIndex =
         rawText.indexOf(
             '"results"'
@@ -1437,7 +2104,8 @@ function recoverGeminiResults(
 
 
     if (
-        resultsKeyIndex === -1
+        resultsKeyIndex ===
+        -1
     ) {
 
         return [];
@@ -1453,7 +2121,8 @@ function recoverGeminiResults(
 
 
     if (
-        arrayStart === -1
+        arrayStart ===
+        -1
     ) {
 
         return [];
@@ -1468,33 +2137,30 @@ function recoverGeminiResults(
     let objectStart =
         -1;
 
+
     let braceDepth =
         0;
 
+
     let insideString =
         false;
+
 
     let escaping =
         false;
 
 
-    /* =====================================
-    WALK THROUGH RESULTS ARRAY
-    ===================================== */
-
     for (
-        let i = arrayStart + 1;
-        i < rawText.length;
+        let i =
+            arrayStart + 1;
+        i <
+            rawText.length;
         i++
     ) {
 
         const char =
             rawText[i];
 
-
-        /* =================================
-        CURRENTLY INSIDE STRING
-        ================================= */
 
         if (
             insideString
@@ -1513,7 +2179,8 @@ function recoverGeminiResults(
 
 
             if (
-                char === "\\"
+                char ===
+                "\\"
             ) {
 
                 escaping =
@@ -1525,7 +2192,8 @@ function recoverGeminiResults(
 
 
             if (
-                char === '"'
+                char ===
+                '"'
             ) {
 
                 insideString =
@@ -1539,12 +2207,9 @@ function recoverGeminiResults(
         }
 
 
-        /* =================================
-        STRING START
-        ================================= */
-
         if (
-            char === '"'
+            char ===
+            '"'
         ) {
 
             insideString =
@@ -1555,16 +2220,14 @@ function recoverGeminiResults(
         }
 
 
-        /* =================================
-        OBJECT START
-        ================================= */
-
         if (
-            char === "{"
+            char ===
+            "{"
         ) {
 
             if (
-                braceDepth === 0
+                braceDepth ===
+                0
             ) {
 
                 objectStart =
@@ -1575,21 +2238,20 @@ function recoverGeminiResults(
 
             braceDepth++;
 
+
             continue;
 
         }
 
 
-        /* =================================
-        OBJECT END
-        ================================= */
-
         if (
-            char === "}"
+            char ===
+            "}"
         ) {
 
             if (
-                braceDepth > 0
+                braceDepth >
+                0
             ) {
 
                 braceDepth--;
@@ -1598,8 +2260,10 @@ function recoverGeminiResults(
 
 
             if (
-                braceDepth === 0 &&
-                objectStart !== -1
+                braceDepth ===
+                    0 &&
+                objectStart !==
+                    -1
             ) {
 
                 const objectText =
@@ -1633,7 +2297,9 @@ function recoverGeminiResults(
                     }
 
                 }
-                catch (objectError) {
+                catch (
+                    objectError
+                ) {
 
                     console.warn(
                         "Skipped one malformed Daily Brief result object during recovery."
@@ -1657,33 +2323,42 @@ function recoverGeminiResults(
 }
 
 
+
 /* =========================================
 CLEAN + VALIDATE RESEARCH RESULTS
 ========================================= */
 
 function cleanResearchResults(
+
     rawResults,
+
     cleanCandidates
+
 ) {
 
     const allowedLevels =
         new Set([
+
             "HIGH",
             "ELEVATED",
             "NOTABLE"
+
         ]);
 
 
     const suppliedSymbols =
         new Set(
+
             cleanCandidates.map(
                 stock =>
                     stock.symbol
             )
+
         );
 
 
-    const cleanResults = [];
+    const cleanResults =
+        [];
 
 
     for (
@@ -1693,7 +2368,8 @@ function cleanResearchResults(
 
         if (
             !item ||
-            typeof item !== "object"
+            typeof item !==
+                "object"
         ) {
 
             continue;
@@ -1705,28 +2381,37 @@ function cleanResearchResults(
             Array.isArray(
                 item.symbols
             )
-                ? [
+                ?
+                [
                     ...new Set(
+
                         item.symbols
+
                             .map(
                                 symbol =>
-                                    String(symbol)
+                                    String(
+                                        symbol
+                                    )
                                         .trim()
                                         .toUpperCase()
                             )
+
                             .filter(
                                 symbol =>
                                     suppliedSymbols.has(
                                         symbol
                                     )
                             )
+
                     )
                 ]
-                : [];
+                :
+                [];
 
 
         if (
-            symbols.length === 0
+            symbols.length ===
+            0
         ) {
 
             continue;
@@ -1798,9 +2483,12 @@ function cleanResearchResults(
             Array.isArray(
                 item.scanners
             )
-                ? [
+                ?
+                [
                     ...new Set(
+
                         item.scanners
+
                             .map(
                                 scanner =>
                                     cleanField(
@@ -1808,19 +2496,27 @@ function cleanResearchResults(
                                         80
                                     )
                             )
-                            .filter(Boolean)
+
+                            .filter(
+                                Boolean
+                            )
+
                     )
                 ]
-                : [];
+                :
+                [];
 
 
         const sourceNames =
             Array.isArray(
                 item.sourceNames
             )
-                ? [
+                ?
+                [
                     ...new Set(
+
                         item.sourceNames
+
                             .map(
                                 source =>
                                     cleanField(
@@ -1828,10 +2524,15 @@ function cleanResearchResults(
                                         150
                                     )
                             )
-                            .filter(Boolean)
+
+                            .filter(
+                                Boolean
+                            )
+
                     )
                 ]
-                : [];
+                :
+                [];
 
 
         cleanResults.push({
@@ -1874,6 +2575,7 @@ function cleanResearchResults(
 }
 
 
+
 /* =========================================
 DEDUPLICATE RESULTS
 ========================================= */
@@ -1886,7 +2588,8 @@ function deduplicateResults(
         new Set();
 
 
-    const finalResults = [];
+    const finalResults =
+        [];
 
 
     for (
@@ -1904,7 +2607,8 @@ function deduplicateResults(
 
 
         if (
-            newSymbols.length === 0
+            newSymbols.length ===
+            0
         ) {
 
             continue;
@@ -1937,6 +2641,7 @@ function deduplicateResults(
 }
 
 
+
 /* =========================================
 GET CACHED DAILY BRIEF
 ========================================= */
@@ -1961,12 +2666,14 @@ async function getCachedBrief(
                 cacheUrl,
                 {
 
-                    method: "GET",
+                    method:
+                        "GET",
 
                     headers: {
 
                         "apikey":
-                            process.env.SUPABASE_SERVICE_KEY,
+                            process.env
+                                .SUPABASE_SERVICE_KEY,
 
                         "Authorization":
                             `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
@@ -1980,7 +2687,9 @@ async function getCachedBrief(
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             const errorText =
                 await response.text();
@@ -2002,8 +2711,11 @@ async function getCachedBrief(
 
 
         if (
-            Array.isArray(rows) &&
-            rows.length > 0 &&
+            Array.isArray(
+                rows
+            ) &&
+            rows.length >
+                0 &&
             rows[0].ai_results
         ) {
 
@@ -2015,7 +2727,9 @@ async function getCachedBrief(
         return null;
 
     }
-    catch (error) {
+    catch (
+        error
+    ) {
 
         console.error(
             "Daily Brief Cache Read Error:",
@@ -2028,6 +2742,7 @@ async function getCachedBrief(
     }
 
 }
+
 
 
 /* =========================================
@@ -2061,12 +2776,14 @@ async function saveDailyBrief({
                 saveUrl,
                 {
 
-                    method: "POST",
+                    method:
+                        "POST",
 
                     headers: {
 
                         "apikey":
-                            process.env.SUPABASE_SERVICE_KEY,
+                            process.env
+                                .SUPABASE_SERVICE_KEY,
 
                         "Authorization":
                             `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
@@ -2079,36 +2796,39 @@ async function saveDailyBrief({
 
                     },
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify({
 
-                        brief_date:
-                            briefDate,
+                            brief_date:
+                                briefDate,
 
-                        status:
-                            "complete",
+                            status:
+                                "complete",
 
-                        companies_reviewed:
-                            companiesReviewed,
+                            companies_reviewed:
+                                companiesReviewed,
 
-                        companies_included:
-                            companiesIncluded,
+                            companies_included:
+                                companiesIncluded,
 
-                        ai_results:
-                            aiResults,
+                            ai_results:
+                                aiResults,
 
-                        generated_at:
-                            generatedAt,
+                            generated_at:
+                                generatedAt,
 
-                        updated_at:
-                            generatedAt
+                            updated_at:
+                                generatedAt
 
-                    })
+                        })
 
                 }
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             const errorText =
                 await response.text();
@@ -2123,8 +2843,8 @@ async function saveDailyBrief({
             /*
             AI research succeeded.
 
-            Do not fail the user request just
-            because caching failed.
+            Do not fail the user request because
+            caching failed.
             */
 
             return false;
@@ -2140,7 +2860,9 @@ async function saveDailyBrief({
         return true;
 
     }
-    catch (error) {
+    catch (
+        error
+    ) {
 
         console.error(
             "Daily Brief Cache Save Error:",
@@ -2153,6 +2875,7 @@ async function saveDailyBrief({
     }
 
 }
+
 
 
 /* =========================================
@@ -2185,7 +2908,8 @@ function getNewYorkDate() {
             );
 
 
-    const values = {};
+    const values =
+        {};
 
 
     for (
@@ -2194,12 +2918,14 @@ function getNewYorkDate() {
     ) {
 
         if (
-            part.type !== "literal"
+            part.type !==
+            "literal"
         ) {
 
             values[
                 part.type
-            ] = part.value;
+            ] =
+                part.value;
 
         }
 
@@ -2213,6 +2939,7 @@ function getNewYorkDate() {
     );
 
 }
+
 
 
 /* =========================================
@@ -2234,6 +2961,7 @@ function sleep(
 }
 
 
+
 /* =========================================
 CLEAN OUTPUT
 ========================================= */
@@ -2244,7 +2972,8 @@ function cleanField(
 ) {
 
     if (
-        typeof value !== "string"
+        typeof value !==
+        "string"
     ) {
 
         return "";
@@ -2253,8 +2982,14 @@ function cleanField(
 
 
     return value
-        .replace(/\s+/g, " ")
+
+        .replace(
+            /\s+/g,
+            " "
+        )
+
         .trim()
+
         .slice(
             0,
             maxLength
