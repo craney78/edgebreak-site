@@ -47,6 +47,7 @@ BREAKOUT_FILE = "breakout_scanner.json"
 PREBREAKOUT_FILE = "scanner_database.json"
 
 OUTPUT_FILE = "daily_brief_candidates.json"
+STATS_OUTPUT_FILE = "daily_brief_stats.json"
 PROFILE_CACHE_FILE = "daily_brief_profile_cache.json"
 
 
@@ -2313,6 +2314,51 @@ for candidate in final_candidates:
 save_json(
     OUTPUT_FILE,
     final_candidates
+)
+
+
+# ============================================================
+# SAVE DAILY BRIEF STATS
+# ============================================================
+#
+# These values are used by the website to display the
+# automated Daily Brief funnel.
+#
+# Example:
+#
+# 3,253 NASDAQ Stocks Scanned
+#       ↓
+# 122 Technical Setups Found
+#       ↓
+# 21 Companies Forwarded for AI Research
+#
+# Stocks to Investigate is populated separately from the
+# completed AI Daily Brief results.
+#
+# ============================================================
+
+daily_brief_stats = {
+
+    "technical_setups_found":
+        starting_total,
+
+    "breakout_setups_found":
+        len(breakouts),
+
+    "pre_breakout_setups_found":
+        len(prebreakouts),
+
+    "forwarded_for_ai_research":
+        len(final_candidates),
+
+    "launch_pad_included":
+        False
+}
+
+
+save_json(
+    STATS_OUTPUT_FILE,
+    daily_brief_stats
 )
 
 

@@ -19052,109 +19052,78 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateScannerCounts() {
 
         /*
-        Your scanner page already loads these
-        datasets.
-
-        We try the common EdgeBreak variable
-        names first.
-
-        If one is unavailable we leave "—"
-        rather than breaking the market overview.
+        Use the actual EdgeBreak scanner
+        datasets loaded on this page.
         */
 
-
         const breakoutCount =
-            getArrayLength([
-                "breakoutStocks",
-                "breakoutResults",
-                "breakouts"
-            ]);
+            Array.isArray(window.breakoutData)
+                ? window.breakoutData.length
+                : null;
 
 
         const preBreakoutCount =
-            getArrayLength([
-                "preBreakoutStocks",
-                "preBreakoutResults",
-                "preBreakouts"
-            ]);
+            Array.isArray(window.scannerData)
+                ? window.scannerData.length
+                : null;
 
 
         const baseCount =
-            getArrayLength([
-                "launchPadStocks",
-                "launchpadStocks",
-                "launchPadResults"
-            ]);
+            Array.isArray(window.launchPadData)
+                ? window.launchPadData.length
+                : null;
 
+
+        /* =================================
+        BREAKOUT SETUPS
+        ================================= */
 
         if (breakoutCount !== null) {
 
             setText(
                 "nasdaqBreakoutCount",
-                breakoutCount
+                breakoutCount.toLocaleString()
             );
 
         }
 
+
+        /* =================================
+        PRE-BREAKOUT SETUPS
+        ================================= */
 
         if (preBreakoutCount !== null) {
 
             setText(
                 "nasdaqPreBreakoutCount",
-                preBreakoutCount
+                preBreakoutCount.toLocaleString()
             );
 
         }
 
+
+        /* =================================
+        BASE FORMING SETUPS
+        ================================= */
 
         if (baseCount !== null) {
 
             setText(
                 "nasdaqBaseCount",
-                baseCount
+                baseCount.toLocaleString()
             );
 
         }
 
-    }
 
-
-    function getArrayLength(
-        variableNames
-    ) {
-
-        for (
-            const variableName of
-            variableNames
-        ) {
-
-            try {
-
-                const value =
-                    window[
-                        variableName
-                    ];
-
-
-                if (
-                    Array.isArray(value)
-                ) {
-
-                    return value.length;
-
-                }
-
+        console.log(
+            "EdgeBreak Scanner Activity:",
+            {
+                breakout: breakoutCount,
+                preBreakout: preBreakoutCount,
+                baseForming: baseCount
             }
-            catch (error) {
-
-                // Ignore and try next name.
-
-            }
-
-        }
-
-
-        return null;
+        );
 
     }
 
