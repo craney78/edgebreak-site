@@ -1181,6 +1181,109 @@ print(
     f"{len(combined)}"
 )
 
+# ===================================
+# WEIRD / SPECIAL SECURITY CULL
+# ===================================
+#
+# DAILY BRIEF ONLY
+#
+# Standard NASDAQ common-stock tickers
+# are normally 1-4 characters.
+#
+# Tickers longer than 4 characters are
+# excluded from Daily Brief AI research.
+#
+# This helps remove units, warrants,
+# rights, preferred/debt securities and
+# other special instruments.
+#
+# IMPORTANT:
+# This does NOT alter the actual
+# EdgeBreak scanners.
+# ===================================
+
+normal_security_candidates = []
+
+weird_security_removed = []
+
+
+for stock in combined:
+
+    symbol = str(
+        stock.get(
+            "symbol",
+            ""
+        )
+    ).strip().upper()
+
+
+    if len(symbol) > 4:
+
+        weird_security_removed.append({
+
+            "symbol":
+                symbol,
+
+            "scanners":
+                stock.get(
+                    "scanners",
+                    []
+                )
+
+        })
+
+        continue
+
+
+    normal_security_candidates.append(
+        stock
+    )
+
+
+print()
+print("-----------------------------------")
+print("SPECIAL SECURITY CULL")
+print("-----------------------------------")
+
+print(
+    f"Before               : "
+    f"{len(combined)}"
+)
+
+print(
+    f"Ticker >4 removed    : "
+    f"{len(weird_security_removed)}"
+)
+
+print(
+    f"Remaining            : "
+    f"{len(normal_security_candidates)}"
+)
+
+
+if weird_security_removed:
+
+    print()
+    print("SPECIAL SECURITIES REMOVED")
+    print("-----------------------------------")
+
+
+    for stock in weird_security_removed:
+
+        scanner_text = ", ".join(
+            stock.get(
+                "scanners",
+                []
+            )
+        )
+
+
+        print(
+            f"{stock['symbol']} | "
+            f"{scanner_text}"
+        )
+
+
 
 # ===================================
 # MERGE DUPLICATE SYMBOLS
