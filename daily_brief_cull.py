@@ -33,13 +33,33 @@ MIN_AVERAGE_VOLUME = 100_000
 MIN_AVERAGE_DOLLAR_VOLUME = 1_000_000
 
 
-# Launch Pad stocks that have already
-# moved more than this percentage above
-# the top of their resistance zone are
-# considered stale for Daily Brief AI
-# research.
+# -----------------------------------
+# STALE BREAKOUT RULE
+# -----------------------------------
+#
+# Any stock already trading more than
+# 15% above identified resistance is
+# considered stale for the Daily Brief.
+#
+# EXCEPTION:
+#
+# If relative/current volume is at
+# least 2x normal volume, keep it.
+#
+# This rule is applied wherever we
+# have enough data to establish:
+#
+# 1. current price
+# 2. resistance
+# 3. distance above resistance
+#
+# It does NOT remove genuine
+# Pre-Breakouts still below resistance.
+# -----------------------------------
 
-MAX_LAUNCHPAD_ABOVE_RESISTANCE = 15.0
+MAX_ABOVE_RESISTANCE = 15.0
+
+HIGH_VOLUME_EXCEPTION = 2.0
 
 
 PROFILE_SLEEP_TIME = 0.5
@@ -113,9 +133,7 @@ def safe_number(value, default=0):
 
     try:
 
-        number = float(value)
-
-        return number
+        return float(value)
 
     except (TypeError, ValueError):
 
@@ -142,13 +160,388 @@ def passes_liquidity(stock):
         )
     )
 
-
     return (
         average_volume >=
         MIN_AVERAGE_VOLUME
         and
         average_dollar_volume >=
         MIN_AVERAGE_DOLLAR_VOLUME
+    )
+
+
+# ===================================
+# GET RELATIVE VOLUME
+# ===================================
+#
+# Different scanner files may use
+# different field names.
+#
+# We only use fields that actually
+# represent a relative/current-volume
+# comparison.
+#
+# IMPORTANT:
+# average_volume_20 is NOT used here.
+# It is liquidity, not relative volume.
+# ===================================
+
+def get_relative_volume(stock):
+
+    possible_fields = [
+        "volume_ratio",
+        "relative_volume",
+        "relative_volume_20",
+        "relativeVolume",
+        "relativeVolume20"
+    ]
+
+    for field in possible_fields:
+
+        if field not in stock:
+            continue
+
+        value = safe_number(
+            stock.get(field),
+            0
+        )
+
+        if value > 0:
+
+            return value, field
+
+    return 0, None
+
+
+# ===================================
+# GET RESISTANCE
+# ===================================
+
+def get_resistance(stock):
+
+    # --------------------------------
+    # Launch Pad resistance zone
+    # --------------------------------
+
+    resistance_high = safe_number(
+        stock.get(
+            "resistance_high",
+            0
+        )
+    )
+
+    if resistance_high > 0:
+
+        return resistance_high
+
+
+    # --------------------------------
+    # Breakout / other scanners
+    # --------------------------------
+
+    resistance = safe_number(
+        stock.get(
+            "resistance",
+            0
+        )
+    )
+
+    if resistance > 0:
+
+        return resistance
+
+
+    return 0
+
+
+# ===================================
+# STALE BREAKOUT CHECK
+# ===================================
+#
+# RETURNS:
+#
+# stale = True
+#   >15% above resistance
+#   AND volume <2x
+#
+# stale = False
+#   <=15% above resistance
+#
+# OR
+#
+#   >15% above resistance
+#   BUT volume >=2x
+#
+# If required price/resistance data
+# is unavailable, keep the stock.
+# ===================================
+
+def check_stale_breakout(stock):
+
+    price = safe_number(
+        stock.get(
+            "price",
+            0
+        )
+    )
+
+    resistance = get_resistance(
+        stock
+    )
+
+
+    # --------------------------------
+    # Cannot establish breakout
+    # --------------------------------
+
+    if (
+        price <= 0
+        or
+        resistance <= 0
+    ):
+
+        return {
+            "stale": False,
+            "is_breakout": False,
+            "distance_above_resistance": None,
+            "relative_volume": 0,
+            "relative_volume_field": None,
+            "high_volume_exception": False
+        }
+
+
+    distance_above_resistance = (
+        (
+            price -
+            resistance
+        )
+        /
+        resistance
+    ) * 100
+
+
+    # --------------------------------
+    # Stock has NOT broken resistance
+    # --------------------------------
+
+    if distance_above_resistance <= 0:
+
+        return {
+            "stale": False,
+            "is_breakout": False,
+            "distance_above_resistance":
+                round(
+                    distance_above_resistance,
+                    2
+                ),
+            "relative_volume": 0,
+            "relative_volume_field": None,
+            "high_volume_exception": False
+        }
+
+
+    # --------------------------------
+    # Stock HAS broken resistance
+    # --------------------------------
+
+    relative_volume, volume_field = (
+        get_relative_volume(
+            stock
+        )
+    )
+
+
+    # --------------------------------
+    # Within acceptable breakout range
+    # --------------------------------
+
+    if (
+        distance_above_resistance <=
+        MAX_ABOVE_RESISTANCE
+    ):
+
+        return {
+            "stale": False,
+            "is_breakout": True,
+            "distance_above_resistance":
+                round(
+                    distance_above_resistance,
+                    2
+                ),
+            "relative_volume":
+                relative_volume,
+            "relative_volume_field":
+                volume_field,
+            "high_volume_exception": False
+        }
+
+
+    # --------------------------------
+    # More than 15% above resistance
+    #
+    # Check 2x volume exception.
+    # --------------------------------
+
+    high_volume_exception = (
+        relative_volume >=
+        HIGH_VOLUME_EXCEPTION
+    )
+
+
+    return {
+        "stale":
+            not high_volume_exception,
+
+        "is_breakout":
+            True,
+
+        "distance_above_resistance":
+            round(
+                distance_above_resistance,
+                2
+            ),
+
+        "relative_volume":
+            relative_volume,
+
+        "relative_volume_field":
+            volume_field,
+
+        "high_volume_exception":
+            high_volume_exception
+    }
+
+
+# ===================================
+# APPLY STALE BREAKOUT CULL
+# ===================================
+
+def apply_stale_breakout_cull(
+    stocks,
+    scanner_name
+):
+
+    survivors = []
+
+    removed = []
+
+    volume_exceptions = []
+
+
+    for stock in stocks:
+
+        result = check_stale_breakout(
+            stock
+        )
+
+
+        symbol = stock.get(
+            "symbol"
+        )
+
+
+        # -----------------------------
+        # REMOVE STALE BREAKOUT
+        # -----------------------------
+
+        if result["stale"]:
+
+            removed.append({
+
+                "symbol":
+                    symbol,
+
+                "scanner":
+                    scanner_name,
+
+                "price":
+                    safe_number(
+                        stock.get(
+                            "price",
+                            0
+                        )
+                    ),
+
+                "resistance":
+                    get_resistance(
+                        stock
+                    ),
+
+                "distance_above_resistance":
+                    result[
+                        "distance_above_resistance"
+                    ],
+
+                "relative_volume":
+                    result[
+                        "relative_volume"
+                    ],
+
+                "relative_volume_field":
+                    result[
+                        "relative_volume_field"
+                    ]
+
+            })
+
+            continue
+
+
+        # -----------------------------
+        # HIGH VOLUME EXCEPTION
+        # -----------------------------
+
+        if result[
+            "high_volume_exception"
+        ]:
+
+            volume_exceptions.append({
+
+                "symbol":
+                    symbol,
+
+                "scanner":
+                    scanner_name,
+
+                "price":
+                    safe_number(
+                        stock.get(
+                            "price",
+                            0
+                        )
+                    ),
+
+                "resistance":
+                    get_resistance(
+                        stock
+                    ),
+
+                "distance_above_resistance":
+                    result[
+                        "distance_above_resistance"
+                    ],
+
+                "relative_volume":
+                    result[
+                        "relative_volume"
+                    ],
+
+                "relative_volume_field":
+                    result[
+                        "relative_volume_field"
+                    ]
+
+            })
+
+
+        survivors.append(
+            stock
+        )
+
+
+    return (
+        survivors,
+        removed,
+        volume_exceptions
     )
 
 
@@ -196,8 +589,10 @@ print(
 
 starting_total = (
     len(breakouts)
-    + len(prebreakouts)
-    + len(launchpads)
+    +
+    len(prebreakouts)
+    +
+    len(launchpads)
 )
 
 
@@ -209,25 +604,20 @@ print(
 
 
 # ===================================
-# BREAKOUT STATUS
+# BREAKOUT LIQUIDITY
 # ===================================
 #
-# IMPORTANT:
+# Current Breakout JSON does not
+# contain average_volume_20 and
+# average_dollar_volume_20.
 #
-# The current breakout_scanner.json
-# does NOT contain:
+# Therefore Breakouts still bypass
+# the liquidity cull for now.
 #
-# average_volume_20
-# average_dollar_volume_20
-#
-# Therefore Breakouts temporarily pass
-# directly into the Daily Brief pool.
-#
-# We will add those fields to the
-# Breakout scanner separately.
+# The stale breakout rule DOES apply.
 # ===================================
 
-breakout_survivors = list(
+breakout_liquidity_survivors = list(
     breakouts
 )
 
@@ -249,7 +639,7 @@ print(
 
 print(
     f"Remaining             : "
-    f"{len(breakout_survivors)}"
+    f"{len(breakout_liquidity_survivors)}"
 )
 
 
@@ -257,7 +647,7 @@ print(
 # PRE-BREAKOUT LIQUIDITY CULL
 # ===================================
 
-prebreakout_survivors = []
+prebreakout_liquidity_survivors = []
 
 prebreakout_liquidity_removed = []
 
@@ -283,7 +673,7 @@ for stock in prebreakouts:
         stock
     ):
 
-        prebreakout_survivors.append(
+        prebreakout_liquidity_survivors.append(
             stock
         )
 
@@ -322,7 +712,7 @@ print(
 
 print(
     f"Remaining            : "
-    f"{len(prebreakout_survivors)}"
+    f"{len(prebreakout_liquidity_survivors)}"
 )
 
 
@@ -400,180 +790,180 @@ print(
 
 
 # ===================================
-# LAUNCH PAD STALE CULL
+# UNIVERSAL STALE BREAKOUT CULL
 # ===================================
 #
-# Remove a Launch Pad stock when:
+# Apply the same rule to:
 #
-# current price is more than 15%
-# above the TOP of the resistance
-# zone.
+# BREAKOUT
+# PRE-BREAKOUT
+# LAUNCH PAD
 #
-# Example:
-#
-# resistance_high = 100
-# maximum allowed = 115
-#
-# price > 115
-# => stale for Daily Brief research
-#
+# A genuine Pre-Breakout below
+# resistance automatically survives.
 # ===================================
 
-launchpad_survivors = []
+(
+    breakout_survivors,
+    breakout_stale_removed,
+    breakout_volume_exceptions
+) = apply_stale_breakout_cull(
 
-launchpad_stale_removed = []
+    breakout_liquidity_survivors,
+    "BREAKOUT"
 
-
-for stock in launchpad_liquidity_survivors:
-
-    price = safe_number(
-        stock.get(
-            "price",
-            0
-        )
-    )
+)
 
 
-    resistance_high = safe_number(
-        stock.get(
-            "resistance_high",
-            0
-        )
-    )
+(
+    prebreakout_survivors,
+    prebreakout_stale_removed,
+    prebreakout_volume_exceptions
+) = apply_stale_breakout_cull(
+
+    prebreakout_liquidity_survivors,
+    "PRE_BREAKOUT"
+
+)
 
 
-    # ---------------------------------
-    # FALLBACK
-    # ---------------------------------
-    #
-    # If resistance_high is not present
-    # for some reason, try resistance.
-    #
-    # If neither exists, keep the stock
-    # rather than deleting it blindly.
-    # ---------------------------------
+(
+    launchpad_survivors,
+    launchpad_stale_removed,
+    launchpad_volume_exceptions
+) = apply_stale_breakout_cull(
 
-    if resistance_high <= 0:
+    launchpad_liquidity_survivors,
+    "LAUNCH_PAD"
 
-        resistance_high = safe_number(
-            stock.get(
-                "resistance",
-                0
-            )
-        )
+)
 
 
-    if (
-        price <= 0
-        or
-        resistance_high <= 0
-    ):
-
-        launchpad_survivors.append(
-            stock
-        )
-
-        continue
-
-
-    distance_above_resistance = (
-        (
-            price -
-            resistance_high
-        )
-        /
-        resistance_high
-    ) * 100
-
-
-    # ---------------------------------
-    # REMOVE STALE LAUNCH PAD
-    # ---------------------------------
-
-    if (
-        distance_above_resistance >
-        MAX_LAUNCHPAD_ABOVE_RESISTANCE
-    ):
-
-        launchpad_stale_removed.append({
-
-            "symbol":
-                stock.get(
-                    "symbol"
-                ),
-
-            "price":
-                round(
-                    price,
-                    2
-                ),
-
-            "resistance_high":
-                round(
-                    resistance_high,
-                    2
-                ),
-
-            "distance_above_resistance":
-                round(
-                    distance_above_resistance,
-                    2
-                )
-
-        })
-
-
-        continue
-
-
-    # ---------------------------------
-    # SURVIVES
-    # ---------------------------------
-
-    launchpad_survivors.append(
-        stock
-    )
-
+# ===================================
+# STALE CULL SUMMARY
+# ===================================
 
 print()
 print("-----------------------------------")
-print("LAUNCH PAD STALE CULL")
+print("STALE BREAKOUT CULL")
 print("-----------------------------------")
 
 print(
-    f"Before               : "
-    f"{len(launchpad_liquidity_survivors)}"
+    f"Breakout removed     : "
+    f"{len(breakout_stale_removed)}"
 )
 
 print(
-    f"Removed >15%         : "
+    f"Pre-Breakout removed : "
+    f"{len(prebreakout_stale_removed)}"
+)
+
+print(
+    f"Launch Pad removed   : "
     f"{len(launchpad_stale_removed)}"
 )
 
+
+total_stale_removed = (
+    len(
+        breakout_stale_removed
+    )
+    +
+    len(
+        prebreakout_stale_removed
+    )
+    +
+    len(
+        launchpad_stale_removed
+    )
+)
+
+
 print(
-    f"Remaining            : "
-    f"{len(launchpad_survivors)}"
+    f"Total stale removed  : "
+    f"{total_stale_removed}"
 )
 
 
 # ===================================
-# SHOW STALE LAUNCH PADS
+# HIGH VOLUME EXCEPTIONS
 # ===================================
 
-if launchpad_stale_removed:
+all_volume_exceptions = (
+    breakout_volume_exceptions
+    +
+    prebreakout_volume_exceptions
+    +
+    launchpad_volume_exceptions
+)
+
+
+print(
+    f"2x volume exceptions : "
+    f"{len(all_volume_exceptions)}"
+)
+
+
+# ===================================
+# SHOW STALE STOCKS REMOVED
+# ===================================
+
+all_stale_removed = (
+    breakout_stale_removed
+    +
+    prebreakout_stale_removed
+    +
+    launchpad_stale_removed
+)
+
+
+if all_stale_removed:
 
     print()
-    print("STALE LAUNCH PADS REMOVED")
+    print("STALE BREAKOUTS REMOVED")
     print("-----------------------------------")
 
 
-    for stock in launchpad_stale_removed:
+    for stock in all_stale_removed:
+
+        volume_text = (
+            f"{stock['relative_volume']:.2f}x"
+            if stock[
+                "relative_volume"
+            ] > 0
+            else "N/A"
+        )
+
 
         print(
             f"{stock['symbol']} | "
-            f"Price ${stock['price']} | "
-            f"Resistance ${stock['resistance_high']} | "
-            f"{stock['distance_above_resistance']}% above"
+            f"{stock['scanner']} | "
+            f"{stock['distance_above_resistance']:.2f}% "
+            f"above resistance | "
+            f"Volume {volume_text}"
+        )
+
+
+# ===================================
+# SHOW 2X VOLUME EXCEPTIONS
+# ===================================
+
+if all_volume_exceptions:
+
+    print()
+    print("STALE DISTANCE BUT KEPT — 2X VOLUME")
+    print("-----------------------------------")
+
+
+    for stock in all_volume_exceptions:
+
+        print(
+            f"{stock['symbol']} | "
+            f"{stock['scanner']} | "
+            f"{stock['distance_above_resistance']:.2f}% "
+            f"above resistance | "
+            f"Volume "
+            f"{stock['relative_volume']:.2f}x"
         )
 
 
@@ -1243,55 +1633,79 @@ print("===================================")
 print()
 
 print(
-    f"Started with          : "
+    f"Started with             : "
     f"{starting_total}"
 )
 
 print()
-print("SCANNER CULLS")
+print("LIQUIDITY")
 print("-----------------------------------")
 
 print(
-    f"Pre-Breakout liquidity: "
-    f"{len(prebreakout_liquidity_removed)} removed"
+    f"Pre-Breakout removed     : "
+    f"{len(prebreakout_liquidity_removed)}"
 )
 
 print(
-    f"Launch Pad liquidity  : "
-    f"{len(launchpad_liquidity_removed)} removed"
+    f"Launch Pad removed       : "
+    f"{len(launchpad_liquidity_removed)}"
 )
 
 print(
-    f"Launch Pad stale >15% : "
-    f"{len(launchpad_stale_removed)} removed"
-)
-
-print(
-    f"Total liquidity removed: "
+    f"Total liquidity removed  : "
     f"{total_liquidity_removed}"
 )
 
 print()
-print("MERGE / PROFILE CULLS")
+print("STALE BREAKOUTS")
 print("-----------------------------------")
 
 print(
-    f"Duplicates merged     : "
+    f"Breakout stale removed   : "
+    f"{len(breakout_stale_removed)}"
+)
+
+print(
+    f"Pre-Breakout stale       : "
+    f"{len(prebreakout_stale_removed)}"
+)
+
+print(
+    f"Launch Pad stale         : "
+    f"{len(launchpad_stale_removed)}"
+)
+
+print(
+    f"Total stale removed      : "
+    f"{total_stale_removed}"
+)
+
+print(
+    f"Saved by 2x volume       : "
+    f"{len(all_volume_exceptions)}"
+)
+
+print()
+print("OTHER CULLS")
+print("-----------------------------------")
+
+print(
+    f"Duplicates merged        : "
     f"{duplicates_removed}"
 )
 
 print(
-    f"Banks removed         : "
+    f"Banks removed            : "
     f"{len(bank_removed)}"
 )
 
 print(
-    f"Property/REIT removed : "
+    f"Property/REIT removed    : "
     f"{len(property_removed)}"
 )
 
 print(
-    f"Profile failures      : "
+    f"Profile failures         : "
     f"{len(profile_failures)}"
 )
 
@@ -1299,7 +1713,7 @@ print()
 print("-----------------------------------")
 
 print(
-    f"FINAL CANDIDATES      : "
+    f"FINAL CANDIDATES         : "
     f"{len(final_candidates)}"
 )
 
