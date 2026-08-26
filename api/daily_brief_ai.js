@@ -171,11 +171,32 @@ export default async function handler(
     try {
 
         /* =====================================
-        US MARKET DATE
+        DAILY BRIEF SESSION DATE
+
+        Use the completed scanner session date
+        when supplied.
+
+        This means a new Daily Brief becomes active
+        as soon as the post-market scanner has
+        completed — there is no need to wait until
+        midnight in New York.
+
+        New York date remains a safe fallback.
         ===================================== */
 
+        const suppliedScanDate =
+            String(
+                req.body?.scanDate || ""
+            )
+                .trim();
+
+
         const briefDate =
-            getNewYorkDate();
+            /^\d{4}-\d{2}-\d{2}$/.test(
+                suppliedScanDate
+            )
+                ? suppliedScanDate
+                : getNewYorkDate();
 
 
         console.log(
