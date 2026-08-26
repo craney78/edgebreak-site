@@ -18559,6 +18559,109 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
+            /* =================================
+            GET TODAY'S ACTUAL SCANNER DATE
+
+            Use the date embedded in the scanner
+            data rather than the New York calendar
+            date.
+
+            This means the Market Overview follows
+            the completed EdgeBreak trading session.
+            ================================= */
+
+            let marketDate = "";
+
+
+            /* PRE-BREAKOUT */
+
+            if (
+                Array.isArray(window.scannerData) &&
+                window.scannerData.length
+            ) {
+
+                marketDate =
+                    window.scannerData.find(
+                        stock =>
+                            stock.scan_date ||
+                            stock.last_updated
+                    )?.scan_date ||
+                    window.scannerData.find(
+                        stock =>
+                            stock.scan_date ||
+                            stock.last_updated
+                    )?.last_updated ||
+                    "";
+
+            }
+
+
+            /* BREAKOUT FALLBACK */
+
+            if (
+                !marketDate &&
+                Array.isArray(window.breakoutData) &&
+                window.breakoutData.length
+            ) {
+
+                marketDate =
+                    window.breakoutData.find(
+                        stock =>
+                            stock.scan_date ||
+                            stock.last_updated
+                    )?.scan_date ||
+                    window.breakoutData.find(
+                        stock =>
+                            stock.scan_date ||
+                            stock.last_updated
+                    )?.last_updated ||
+                    "";
+
+            }
+
+
+            /* LAUNCH PAD FALLBACK */
+
+            if (
+                !marketDate &&
+                Array.isArray(window.launchPadData) &&
+                window.launchPadData.length
+            ) {
+
+                marketDate =
+                    window.launchPadData.find(
+                        stock =>
+                            stock.scan_date ||
+                            stock.last_updated
+                    )?.scan_date ||
+                    window.launchPadData.find(
+                        stock =>
+                            stock.scan_date ||
+                            stock.last_updated
+                    )?.last_updated ||
+                    "";
+
+            }
+
+
+            /* NORMALISE DATE */
+
+            marketDate =
+                String(marketDate || "")
+                    .trim()
+                    .slice(0, 10);
+
+
+            console.log(
+                "NASDAQ Market Overview scanner date:",
+                marketDate || "NOT FOUND"
+            );
+
+
+            /* =================================
+            REQUEST MARKET OVERVIEW
+            ================================= */
+
             const response =
                 await fetch(
                     "/api/nasdaq_market_overview",
@@ -18571,7 +18674,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         },
 
                         body:
-                            JSON.stringify({})
+                            JSON.stringify({
+
+                                marketDate:
+                                    marketDate
+
+                            })
                     }
                 );
 
