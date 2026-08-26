@@ -3,21 +3,30 @@ EDGEBREAK — DAILY BRIEF AI RESEARCH
 /api/daily_brief_ai.js
 
 FLOW:
-1. Check Supabase cache
-2. Clean ranked candidates
-3. Preserve candidate ranking order
-4. Split candidates into batches of 5
-5. Research batches sequentially
-6. ONE Gemini attempt per batch
-7. 40-second hard timeout per Gemini request
-8. Failed/timed-out batches are skipped
-9. Preserve every successful batch
-10. Stop before Vercel runtime limit
-11. Stop early once enough researched stocks exist
-12. Combine + validate + deduplicate
-13. Rank AI results by current market attention
-14. Cap final Daily Brief at 12 stocks
-15. Save ONE completed Daily Brief to Supabase
+1. Read completed scanner session date
+2. Check Supabase cache for that scanner session
+3. Clean ranked candidates
+4. Preserve candidate ranking order
+5. Split candidates into batches of 5
+6. Research batches sequentially
+7. ONE Gemini attempt per batch
+8. 40-second hard timeout per Gemini request
+9. Failed/timed-out batches are skipped
+10. Preserve every successful batch
+11. Stop before Vercel runtime limit
+12. Stop early once enough researched stocks exist
+13. Combine + validate + deduplicate
+14. Rank AI results by current market attention
+15. Cap final Daily Brief at 12 stocks
+16. Save ONE completed Daily Brief to Supabase
+
+IMPORTANT DATE BEHAVIOUR:
+- The Daily Brief belongs to the completed scanner session.
+- candidates[0].scan_date is used as the Daily Brief date.
+- A new Daily Brief can therefore become active immediately
+  after the post-market scanner completes.
+- There is NO need to wait until midnight in New York.
+- New York calendar date is only a fallback.
 
 RELIABILITY:
 - Maximum 5 companies per Gemini batch
@@ -47,37 +56,9 @@ const GEMINI_MAX_ATTEMPTS =
     1;
 
 
-/*
-Vercel currently allows considerably more
-runtime than an individual Gemini request.
-
-We stop research before the hard runtime limit
-so there is still time to:
-
-- clean results
-- rank results
-- run safety checks
-- save Supabase cache
-- send the response
-*/
-
 const MAX_RESEARCH_TIME_MS =
     240000;
 
-
-/*
-The final Daily Brief displays a maximum of 12.
-
-Once 12 valid researched companies have been
-returned, additional Gemini batches are not
-necessary.
-
-This is intentionally checked BETWEEN batches,
-so a completed batch may result in slightly
-more than 12 raw qualified companies.
-
-Those results are then ranked and capped at 12.
-*/
 
 const EARLY_STOP_RESULT_COUNT =
     12;
@@ -171,42 +152,165 @@ export default async function handler(
     try {
 
         /* =====================================
-        DAILY BRIEF SESSION DATE
-
-        Use the completed scanner session date
-        when supplied.
-
-        This means a new Daily Brief becomes active
-        as soon as the post-market scanner has
-        completed — there is no need to wait until
-        midnight in New York.
-
-        New York date remains a safe fallback.
+        GET CANDIDATES
         ===================================== */
 
-        const suppliedScanDate =
+        const {
+            candidates
+        } =
+            req.body ||
+            {};
+
+
+        if (
+            !Array.isArray(
+                candidates
+            ) ||
+            candidates.length === 0
+        ) {
+
+            return res
+                .status(400)
+                .json({
+
+                    error:
+                        "No Daily Brief candidates were provided."
+
+                });
+
+        }
+
+
+        if (
+            candidates.length >
+            150
+        ) {
+
+            return res
+                .status(400)
+                .json({
+
+                    error:
+                        "Too many Daily Brief candidates were provided."
+
+                });
+
+        }
+
+
+        /* =====================================
+        GET COMPLETED SCANNER SESSION DATE
+        ===================================== */
+
+        /*
+        IMPORTANT:
+
+        The Daily Brief belongs to the completed
+        scanner session — NOT simply the current
+        New York calendar date.
+
+        daily_brief_cull.py candidates already
+        contain:
+
+            "scan_date": "YYYY-MM-DD"
+
+        We use that date as the Daily Brief date.
+
+        This means that once the new post-market
+        scanner completes and today's candidate
+        file is loaded by the website, the API
+        immediately looks for today's Daily Brief.
+
+        It does NOT need to wait for midnight.
+
+        req.body.scanDate is also accepted for
+        compatibility.
+
+        New York date is only used as the final
+        fallback.
+        */
+
+
+        const candidateScanDate =
             String(
-                req.body?.scanDate || ""
+                candidates[0]?.scan_date ||
+                candidates[0]?.scanDate ||
+                ""
             )
                 .trim();
 
 
-        const briefDate =
+        const suppliedScanDate =
+            String(
+                req.body?.scanDate ||
+                ""
+            )
+                .trim();
+
+
+        let briefDate;
+
+
+        if (
+            /^\d{4}-\d{2}-\d{2}$/.test(
+                candidateScanDate
+            )
+        ) {
+
+            briefDate =
+                candidateScanDate;
+
+
+            console.log(
+                `EdgeBreak Daily Brief using candidate scanner date: ${briefDate}`
+            );
+
+        }
+        else if (
             /^\d{4}-\d{2}-\d{2}$/.test(
                 suppliedScanDate
             )
-                ? suppliedScanDate
-                : getNewYorkDate();
+        ) {
+
+            briefDate =
+                suppliedScanDate;
+
+
+            console.log(
+                `EdgeBreak Daily Brief using supplied scanner date: ${briefDate}`
+            );
+
+        }
+        else {
+
+            briefDate =
+                getNewYorkDate();
+
+
+            console.warn(
+                `EdgeBreak Daily Brief scanner date unavailable. Falling back to New York date: ${briefDate}`
+            );
+
+        }
 
 
         console.log(
-            `EdgeBreak Daily Brief date: ${briefDate}`
+            `EdgeBreak Daily Brief session date: ${briefDate}`
         );
 
 
         /* =====================================
-        CHECK SUPABASE CACHE FIRST
+        CHECK SUPABASE CACHE
         ===================================== */
+
+        /*
+        Cache lookup now happens AFTER we know
+        the scanner session date.
+
+        This prevents yesterday's completed
+        Daily Brief from being returned simply
+        because New York has not reached midnight.
+        */
 
         const cachedBrief =
             await getCachedBrief(
@@ -284,53 +388,6 @@ export default async function handler(
 
 
         /* =====================================
-        GET CANDIDATES
-        ===================================== */
-
-        const {
-            candidates
-        } =
-            req.body ||
-            {};
-
-
-        if (
-            !Array.isArray(
-                candidates
-            ) ||
-            candidates.length === 0
-        ) {
-
-            return res
-                .status(400)
-                .json({
-
-                    error:
-                        "No Daily Brief candidates were provided."
-
-                });
-
-        }
-
-
-        if (
-            candidates.length >
-            150
-        ) {
-
-            return res
-                .status(400)
-                .json({
-
-                    error:
-                        "Too many Daily Brief candidates were provided."
-
-                });
-
-        }
-
-
-        /* =====================================
         CLEAN INPUT
         ===================================== */
 
@@ -368,18 +425,6 @@ export default async function handler(
                             )
                                 .trim()
                                 .toUpperCase(),
-
-                        /*
-                        Preserve the supplied technical
-                        ranking where available.
-
-                        This is NOT sent to Gemini as an
-                        investment recommendation.
-
-                        It simply records the order
-                        established by the deterministic
-                        EdgeBreak cull.
-                        */
 
                         technicalRank:
                             Number.isFinite(
@@ -673,19 +718,6 @@ export default async function handler(
             );
 
 
-            /*
-            We need enough time for:
-
-            - one 40-second Gemini request
-            - parsing
-            - ranking
-            - Supabase save
-            - HTTP response
-
-            Do not start another batch if less
-            than 50 seconds remain.
-            */
-
             if (
                 remainingBudget <
                 50000
@@ -765,18 +797,6 @@ export default async function handler(
                     batchError
                 );
 
-
-                /*
-                IMPORTANT:
-
-                A failed Gemini batch contributes
-                zero results.
-
-                It does NOT destroy results from
-                previously successful batches.
-
-                There is deliberately NO retry.
-                */
 
                 batchResearch.push({
 
@@ -884,18 +904,6 @@ export default async function handler(
 
         };
 
-
-        /*
-        AI attention level is the primary final
-        ranking.
-
-        When two companies have the same AI
-        attention level, preserve the stronger
-        original EdgeBreak technical ranking.
-
-        This avoids random Gemini output order
-        deciding ties.
-        */
 
         const candidateRankMap =
             new Map();
@@ -1104,8 +1112,6 @@ export default async function handler(
 
         const prohibitedPatterns = [
 
-            /* DIRECT BUY / SELL / HOLD ADVICE */
-
             /\byou should buy\b/i,
             /\byou should sell\b/i,
             /\byou should hold\b/i,
@@ -1124,9 +1130,6 @@ export default async function handler(
             /\bthis is a buy opportunity\b/i,
             /\bthis is a sell opportunity\b/i,
 
-
-            /* DIRECT TRADING INSTRUCTIONS */
-
             /\byou should enter\b/i,
             /\byou should exit\b/i,
 
@@ -1135,9 +1138,6 @@ export default async function handler(
 
             /\bbuy this stock\b/i,
             /\bsell this stock\b/i,
-
-
-            /* PROMISED / GUARANTEED RESULTS */
 
             /\bguaranteed return\b/i,
             /\bguaranteed profit\b/i,
@@ -1532,15 +1532,6 @@ Return JSON only.
     USER INSTRUCTION
     ===================================== */
 
-    /*
-    Do not send technicalRank to Gemini.
-
-    Candidate order is sufficient.
-
-    Gemini's job is current factual research,
-    not technical ranking.
-    */
-
     const candidatesForGemini =
         candidates.map(
             stock => ({
@@ -1732,14 +1723,6 @@ Return JSON only.
 
         generationConfig: {
 
-            /*
-            Batch size is now only five companies.
-
-            4,000 output tokens is ample for
-            concise Daily Brief research and
-            reduces unnecessary generation.
-            */
-
             maxOutputTokens:
                 4000,
 
@@ -1792,15 +1775,6 @@ Return JSON only.
     const controller =
         new AbortController();
 
-
-    /*
-    Individual Gemini request:
-
-    Maximum 40 seconds.
-
-    Also respect the remaining overall
-    research budget.
-    */
 
     const allowedTimeout =
         Math.max(
@@ -2952,13 +2926,6 @@ async function saveDailyBrief({
             );
 
 
-            /*
-            AI research succeeded.
-
-            Do not fail the user request because
-            caching failed.
-            */
-
             return false;
 
         }
@@ -2992,6 +2959,7 @@ async function saveDailyBrief({
 
 /* =========================================
 NEW YORK MARKET DATE
+FALLBACK ONLY
 ========================================= */
 
 function getNewYorkDate() {
