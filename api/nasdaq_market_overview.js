@@ -144,13 +144,48 @@ export default async function handler(
         // ====================================================
         // REPORT DATE
         // ====================================================
+        //
+        // IMPORTANT:
+        //
+        // After the US market closes, today's EdgeBreak scanner
+        // run may already be complete even though New York has
+        // not yet reached midnight.
+        //
+        // Prefer the scanner / market date supplied by the
+        // front-end.
+        //
+        // Only fall back to the current New York calendar date
+        // when no valid date was supplied.
+        // ====================================================
+
+        const requestedReportDate =
+            String(
+                req.body?.marketDate ||
+                req.body?.scanDate ||
+                req.body?.date ||
+                ""
+            )
+                .trim();
+
 
         const reportDate =
-            getNewYorkReportDate();
+            /^\d{4}-\d{2}-\d{2}$/.test(
+                requestedReportDate
+            )
+                ?
+                requestedReportDate
+                :
+                getNewYorkReportDate();
 
 
         console.log(
-            "NASDAQ Market Overview date:",
+            "NASDAQ Market Overview requested date:",
+            requestedReportDate || "NONE"
+        );
+
+
+        console.log(
+            "NASDAQ Market Overview using date:",
             reportDate
         );
 
