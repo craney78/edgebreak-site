@@ -235,6 +235,10 @@ export default async function handler(
             String(
                 candidates[0]?.scan_date ||
                 candidates[0]?.scanDate ||
+                candidates[0]?.pre_breakout?.scan_date ||
+                candidates[0]?.pre_breakout?.scanDate ||
+                candidates[0]?.breakout?.scan_date ||
+                candidates[0]?.breakout?.scanDate ||
                 ""
             )
                 .trim();
