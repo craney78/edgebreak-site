@@ -7,18 +7,19 @@ FLOW:
 2. Check Supabase cache for that scanner session
 3. Clean ranked candidates
 4. Preserve candidate ranking order
-5. Split candidates into batches of 5
+5. Split candidates into batches of 3
 6. Research batches sequentially
-7. ONE Gemini attempt per batch
-8. 40-second hard timeout per Gemini request
-9. Failed/timed-out batches are skipped
+7. Maximum 2 Gemini attempts per batch
+8. 45-second hard timeout per Gemini request
+9. Retry failed/timed-out batch once when runtime allows
 10. Preserve every successful batch
-11. Stop before Vercel runtime limit
-12. Stop early once enough researched stocks exist
-13. Combine + validate + deduplicate
-14. Rank AI results by current market attention
-15. Cap final Daily Brief at 12 stocks
-16. Save ONE completed Daily Brief to Supabase
+11. Failed batches are NOT counted as researched
+12. Stop before Vercel runtime limit
+13. Stop early once enough qualified stocks exist
+14. Combine + validate + deduplicate
+15. Rank AI results by current market attention
+16. Cap final Daily Brief at 12 stocks
+17. Save ONE completed Daily Brief to Supabase
 
 IMPORTANT DATE BEHAVIOUR:
 - The Daily Brief belongs to the completed scanner session.
@@ -29,13 +30,13 @@ IMPORTANT DATE BEHAVIOUR:
 - New York calendar date is only a fallback.
 
 RELIABILITY:
-- Maximum 5 companies per Gemini batch
+- Maximum 3 companies per Gemini batch
 - Ranked candidates researched in supplied order
-- Maximum 1 Gemini attempt per batch
-- 40-second hard timeout per Gemini request
-- NO retry loop
-- 240-second overall research budget
-- Timed-out batches do NOT destroy successful results
+- Maximum 2 Gemini attempts per batch
+- 45-second hard timeout per Gemini request
+- Failed first attempt may retry once
+- Failed batches do NOT count as researched
+- Successful batches are always preserved
 - Strongest technical candidates are researched first
 ========================================= */
 
@@ -45,23 +46,42 @@ CONFIGURATION
 ========================================= */
 
 const BATCH_SIZE =
-    5;
+    3;
 
 
 const GEMINI_TIMEOUT_MS =
-    40000;
+    45000;
 
 
 const GEMINI_MAX_ATTEMPTS =
-    1;
+    2;
 
+
+/*
+Allow enough room for the smaller batches and
+occasional controlled retry.
+
+The runtime checks below will still stop new
+requests before the function reaches this limit.
+*/
 
 const MAX_RESEARCH_TIME_MS =
-    240000;
+    270000;
 
 
 const EARLY_STOP_RESULT_COUNT =
     12;
+
+
+/*
+Minimum amount of runtime we want available
+before beginning another Gemini attempt.
+
+This includes request time plus safety margin.
+*/
+
+const MIN_TIME_FOR_NEW_ATTEMPT_MS =
+    55000;
 
 
 
@@ -307,15 +327,6 @@ export default async function handler(
         CHECK SUPABASE CACHE
         ===================================== */
 
-        /*
-        Cache lookup now happens AFTER we know
-        the scanner session date.
-
-        This prevents yesterday's completed
-        Daily Brief from being returned simply
-        because New York has not reached midnight.
-        */
-
         const cachedBrief =
             await getCachedBrief(
                 briefDate
@@ -365,6 +376,12 @@ export default async function handler(
                                 .results
                             :
                             [],
+
+                    researchMeta:
+                        cachedBrief
+                            .ai_results
+                            ?.researchMeta ||
+                        null,
 
                     nasdaqToday:
                         cachedBrief
@@ -567,7 +584,7 @@ export default async function handler(
 
 
         /* =====================================
-        SPLIT INTO BATCHES OF 5
+        SPLIT INTO BATCHES OF 3
         ===================================== */
 
         const batches =
@@ -636,7 +653,25 @@ export default async function handler(
             false;
 
 
+        /*
+        IMPORTANT:
+
+        This now counts ONLY candidates whose
+        Gemini batch completed successfully.
+
+        A timed-out or failed batch does NOT
+        increase this number.
+        */
+
         let candidatesActuallyResearched =
+            0;
+
+
+        let totalGeminiAttempts =
+            0;
+
+
+        let retriedBatches =
             0;
 
 
@@ -724,7 +759,7 @@ export default async function handler(
 
             if (
                 remainingBudget <
-                50000
+                MIN_TIME_FOR_NEW_ATTEMPT_MS
             ) {
 
                 console.warn(
@@ -755,57 +790,206 @@ export default async function handler(
             );
 
 
-            candidatesActuallyResearched +=
-                batch.length;
+            let batchSucceeded =
+                false;
 
 
-            try {
+            let successfulResearch =
+                null;
 
-                const research =
-                    await researchBatch(
 
-                        batch,
+            let attemptsUsed =
+                0;
 
-                        briefDate,
 
-                        batchNumber,
+            for (
+                let attempt = 1;
+                attempt <= GEMINI_MAX_ATTEMPTS;
+                attempt++
+            ) {
 
-                        functionStartedAt
+                /* =============================
+                CHECK TIME BEFORE ATTEMPT
+                ============================= */
 
+                const attemptElapsed =
+                    Date.now() -
+                    functionStartedAt;
+
+
+                const attemptRemaining =
+                    MAX_RESEARCH_TIME_MS -
+                    attemptElapsed;
+
+
+                if (
+                    attemptRemaining <
+                    MIN_TIME_FOR_NEW_ATTEMPT_MS
+                ) {
+
+                    console.warn(
+                        `Daily Brief Batch ${batchNumber} Attempt ${attempt} not started because runtime safety limit is approaching.`
                     );
 
 
+                    break;
+
+                }
+
+
+                attemptsUsed++;
+
+
+                totalGeminiAttempts++;
+
+
+                if (
+                    attempt >
+                    1
+                ) {
+
+                    console.warn(
+                        `Daily Brief Batch ${batchNumber} retrying with Gemini. Attempt ${attempt}/${GEMINI_MAX_ATTEMPTS}.`
+                    );
+
+                }
+
+
+                try {
+
+                    const research =
+                        await researchBatch(
+
+                            batch,
+
+                            briefDate,
+
+                            batchNumber,
+
+                            functionStartedAt,
+
+                            attempt
+
+                        );
+
+
+                    successfulResearch =
+                        research;
+
+
+                    batchSucceeded =
+                        true;
+
+
+                    break;
+
+                }
+                catch (
+                    batchError
+                ) {
+
+                    console.error(
+                        `Daily Brief Batch ${batchNumber} Attempt ${attempt}/${GEMINI_MAX_ATTEMPTS} failed:`,
+                        batchError?.message ||
+                        batchError
+                    );
+
+
+                    /*
+                    If this was the first attempt,
+                    pause very briefly before a retry.
+                    */
+
+                    if (
+                        attempt <
+                        GEMINI_MAX_ATTEMPTS
+                    ) {
+
+                        const retryElapsed =
+                            Date.now() -
+                            functionStartedAt;
+
+
+                        const retryRemaining =
+                            MAX_RESEARCH_TIME_MS -
+                            retryElapsed;
+
+
+                        if (
+                            retryRemaining >=
+                            MIN_TIME_FOR_NEW_ATTEMPT_MS
+                        ) {
+
+                            await sleep(
+                                750
+                            );
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+
+            /* =================================
+            SAVE SUCCESSFUL BATCH
+            ================================= */
+
+            if (
+                batchSucceeded &&
+                successfulResearch
+            ) {
+
                 batchResearch.push(
-                    research
+                    successfulResearch
                 );
 
 
                 completedBatches++;
 
 
+                candidatesActuallyResearched +=
+                    batch.length;
+
+
+                if (
+                    attemptsUsed >
+                    1
+                ) {
+
+                    retriedBatches++;
+
+                }
+
+
                 console.log(
-                    `Daily Brief Batch ${batchNumber}/${batches.length} finished successfully.`
+                    `Daily Brief Batch ${batchNumber}/${batches.length} finished successfully after ${attemptsUsed} attempt(s).`
+                );
+
+
+                console.log(
+                    `Daily Brief successfully researched candidates so far: ${candidatesActuallyResearched}`
                 );
 
             }
-            catch (
-                batchError
-            ) {
+            else {
 
                 failedBatches++;
 
 
-                console.error(
-                    `Daily Brief Batch ${batchNumber}/${batches.length} failed. Skipping batch and continuing:`,
-                    batchError?.message ||
-                    batchError
-                );
-
+                /*
+                Preserve the batch position in our
+                internal research collection, but
+                DO NOT count these companies as
+                successfully researched.
+                */
 
                 batchResearch.push({
 
                     companiesReviewed:
-                        batch.length,
+                        0,
 
                     companiesIncluded:
                         0,
@@ -814,6 +998,11 @@ export default async function handler(
                         []
 
                 });
+
+
+                console.error(
+                    `Daily Brief Batch ${batchNumber}/${batches.length} failed after ${attemptsUsed} attempt(s). ${batch.length} candidates were NOT counted as researched.`
+                );
 
             }
 
@@ -1034,12 +1223,22 @@ export default async function handler(
 
 
         console.log(
+            `Daily Brief batches retried successfully: ${retriedBatches}`
+        );
+
+
+        console.log(
+            `Daily Brief total Gemini attempts: ${totalGeminiAttempts}`
+        );
+
+
+        console.log(
             `Daily Brief stopped early: ${stoppedEarly}`
         );
 
 
         console.log(
-            `Daily Brief candidates actually sent to Gemini: ${candidatesActuallyResearched}`
+            `Daily Brief candidates successfully researched: ${candidatesActuallyResearched}/${rankedCandidates.length}`
         );
 
 
@@ -1075,6 +1274,13 @@ export default async function handler(
                 candidatesActuallyResearched:
                     candidatesActuallyResearched,
 
+                candidatesNotResearched:
+                    Math.max(
+                        0,
+                        rankedCandidates.length -
+                        candidatesActuallyResearched
+                    ),
+
                 batchesPlanned:
                     batches.length,
 
@@ -1083,6 +1289,12 @@ export default async function handler(
 
                 batchesFailed:
                     failedBatches,
+
+                retriedBatches:
+                    retriedBatches,
+
+                totalGeminiAttempts:
+                    totalGeminiAttempts,
 
                 stoppedEarly:
                     stoppedEarly,
@@ -1265,6 +1477,13 @@ export default async function handler(
                     candidatesActuallyResearched:
                         candidatesActuallyResearched,
 
+                    candidatesNotResearched:
+                        Math.max(
+                            0,
+                            rankedCandidates.length -
+                            candidatesActuallyResearched
+                        ),
+
                     batchesPlanned:
                         batches.length,
 
@@ -1273,6 +1492,12 @@ export default async function handler(
 
                     batchesFailed:
                         failedBatches,
+
+                    retriedBatches:
+                        retriedBatches,
+
+                    totalGeminiAttempts:
+                        totalGeminiAttempts,
 
                     stoppedEarly:
                         stoppedEarly,
@@ -1338,12 +1563,14 @@ async function researchBatch(
 
     batchNumber,
 
-    functionStartedAt
+    functionStartedAt,
+
+    attemptNumber
 
 ) {
 
     console.log(
-        `Daily Brief Batch ${batchNumber} research starting...`
+        `Daily Brief Batch ${batchNumber} research starting — Attempt ${attemptNumber}/${GEMINI_MAX_ATTEMPTS}...`
     );
 
 
@@ -1768,7 +1995,7 @@ Return JSON only.
 
 
     console.log(
-        `Daily Brief Batch ${batchNumber} Gemini attempt 1/1`
+        `Daily Brief Batch ${batchNumber} Gemini attempt ${attemptNumber}/${GEMINI_MAX_ATTEMPTS}`
     );
 
 
@@ -1806,7 +2033,7 @@ Return JSON only.
             () => {
 
                 console.warn(
-                    `Daily Brief Batch ${batchNumber} Gemini request exceeded ${allowedTimeout}ms. Aborting.`
+                    `Daily Brief Batch ${batchNumber} Attempt ${attemptNumber} Gemini request exceeded ${allowedTimeout}ms. Aborting.`
                 );
 
 
@@ -1857,7 +2084,7 @@ Return JSON only.
 
 
         console.log(
-            `Daily Brief Batch ${batchNumber} Gemini responded in ${Math.round((Date.now() - requestStartedAt) / 1000)}s with HTTP ${geminiResponse.status}.`
+            `Daily Brief Batch ${batchNumber} Attempt ${attemptNumber} Gemini responded in ${Math.round((Date.now() - requestStartedAt) / 1000)}s with HTTP ${geminiResponse.status}.`
         );
 
     }
@@ -1871,7 +2098,7 @@ Return JSON only.
         ) {
 
             console.warn(
-                `Daily Brief Batch ${batchNumber} Gemini request timed out after ${Math.round(allowedTimeout / 1000)} seconds. Batch will be skipped.`
+                `Daily Brief Batch ${batchNumber} Attempt ${attemptNumber} timed out after ${Math.round(allowedTimeout / 1000)} seconds.`
             );
 
 
@@ -1883,7 +2110,7 @@ Return JSON only.
 
 
         console.error(
-            `Gemini Daily Brief Batch ${batchNumber} network error:`,
+            `Gemini Daily Brief Batch ${batchNumber} Attempt ${attemptNumber} network error:`,
             fetchError
         );
 
@@ -1915,7 +2142,7 @@ Return JSON only.
 
 
         console.error(
-            `Gemini Daily Brief Batch ${batchNumber} Error:`,
+            `Gemini Daily Brief Batch ${batchNumber} Attempt ${attemptNumber} Error:`,
             geminiResponse.status,
             errorText
         );
@@ -1933,7 +2160,7 @@ Return JSON only.
     ===================================== */
 
     console.log(
-        `Daily Brief Batch ${batchNumber} Gemini request succeeded.`
+        `Daily Brief Batch ${batchNumber} Attempt ${attemptNumber} Gemini request succeeded.`
     );
 
 
@@ -1964,7 +2191,7 @@ Return JSON only.
     ) {
 
         console.warn(
-            `Gemini Daily Brief Batch ${batchNumber} returned no text.`
+            `Gemini Daily Brief Batch ${batchNumber} Attempt ${attemptNumber} returned no text.`
         );
 
 
