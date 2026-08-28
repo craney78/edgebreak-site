@@ -8865,6 +8865,7 @@ html {
 
 #edgeBreakChatCategories[hidden],
 #edgeBreakQuickScreen[hidden],
+#edgeBreakTechnicalScreen[hidden],
 #edgeBreakStockScreen[hidden] {
     display: none !important;
 }
@@ -11446,6 +11447,171 @@ PANEL 1  watchlist seo
                 data-chat-question="scanner-found"
             >
                 <span>Which scanner found this stock?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+        </div>
+
+    </div>
+
+    <!-- =========================================================
+    EDGEBREAK AI CHAT
+    TECHNICAL SETUP SCREEN
+    ========================================================= -->
+
+    <div
+        id="edgeBreakTechnicalScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+
+        <div class="edge-chat-screen-heading">
+
+            <div class="edge-chat-screen-icon">
+                ◇
+            </div>
+
+            <div>
+                <h3>Technical Setup</h3>
+
+                <p>
+                    Explore the technical structure EdgeBreak
+                    has identified for a stock.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-question-list">
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="technical-resistance"
+            >
+                <span>What resistance level did EdgeBreak identify?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="technical-support"
+            >
+                <span>What support level did EdgeBreak identify?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="resistance-tests"
+            >
+                <span>How many times has resistance been tested?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="support-tests"
+            >
+                <span>How many times has support been tested?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="higher-lows"
+            >
+                <span>How many higher lows has the stock formed?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="resistance-position"
+            >
+                <span>Is price above or below resistance?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="range-position"
+            >
+                <span>Where is price within the trading range?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="outside-setup"
+            >
+                <span>Has price moved outside the original setup?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="range-width"
+            >
+                <span>How wide is the trading range?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="base-length"
+            >
+                <span>How long is the base?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="explain-setup"
+            >
+                <span>Explain this technical setup in simple terms</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="technical-numbers"
+            >
+                <span>Show me the key technical numbers</span>
                 <span class="edge-chat-question-arrow">›</span>
             </button>
 
@@ -21430,6 +21596,264 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* =========================================================
    EDGEBREAK AI CHAT
+   TECHNICAL SETUP NAVIGATION
+========================================================= */
+
+(function initEdgeBreakTechnicalSetup() {
+
+    const categories =
+        document.getElementById(
+            "edgeBreakChatCategories"
+        );
+
+    const technicalScreen =
+        document.getElementById(
+            "edgeBreakTechnicalScreen"
+        );
+
+    const technicalButton =
+        document.querySelector(
+            '[data-chat-category="stock"]'
+        );
+
+    const backButton =
+        technicalScreen?.querySelector(
+            '[data-chat-back="main"]'
+        );
+
+
+    /* -----------------------------------------------------
+       SAFETY CHECK
+    ----------------------------------------------------- */
+
+    if (
+        !categories ||
+        !technicalScreen ||
+        !technicalButton ||
+        !backButton
+    ) {
+
+        console.warn(
+            "EdgeBreak Technical Setup elements not found."
+        );
+
+        return;
+
+    }
+
+
+    /* -----------------------------------------------------
+       OPEN TECHNICAL SETUP
+    ----------------------------------------------------- */
+
+    technicalButton.addEventListener(
+        "click",
+        function() {
+
+            categories.hidden = true;
+            technicalScreen.hidden = false;
+
+            const conversation =
+                document.getElementById(
+                    "edgeBreakChatConversation"
+                );
+
+            if (conversation) {
+                conversation.scrollTop = 0;
+            }
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       RETURN TO MAIN CATEGORIES
+    ----------------------------------------------------- */
+
+    backButton.addEventListener(
+        "click",
+        function() {
+
+            technicalScreen.hidden = true;
+            categories.hidden = false;
+
+            const conversation =
+                document.getElementById(
+                    "edgeBreakChatConversation"
+                );
+
+            if (conversation) {
+                conversation.scrollTop = 0;
+            }
+
+        }
+    );
+
+
+})();
+
+/* =========================================================
+   EDGEBREAK AI CHAT
+   TECHNICAL QUESTION -> STOCK SELECT
+========================================================= */
+
+(function initEdgeBreakTechnicalQuestionSelection() {
+
+    const technicalScreen =
+        document.getElementById(
+            "edgeBreakTechnicalScreen"
+        );
+
+    const stockScreen =
+        document.getElementById(
+            "edgeBreakStockScreen"
+        );
+
+    const selectedQuestionText =
+        document.getElementById(
+            "edgeBreakSelectedQuestionText"
+        );
+
+    const tickerInput =
+        document.getElementById(
+            "edgeBreakTickerInput"
+        );
+
+    const tickerMessage =
+        document.getElementById(
+            "edgeBreakTickerMessage"
+        );
+
+
+    /* -----------------------------------------------------
+       SAFETY CHECK
+    ----------------------------------------------------- */
+
+    if (
+        !technicalScreen ||
+        !stockScreen ||
+        !selectedQuestionText ||
+        !tickerInput ||
+        !tickerMessage
+    ) {
+
+        console.warn(
+            "EdgeBreak Technical Question elements not found."
+        );
+
+        return;
+
+    }
+
+
+    const questionButtons =
+        technicalScreen.querySelectorAll(
+            "[data-chat-technical-question]"
+        );
+
+
+    /* -----------------------------------------------------
+       TECHNICAL QUESTION SELECT
+    ----------------------------------------------------- */
+
+    questionButtons.forEach(
+        function(button) {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    const question =
+                        button.dataset.chatTechnicalQuestion;
+
+                    const label =
+                        button.querySelector(
+                            "span:first-child"
+                        );
+
+                    const questionLabel =
+                        label
+                            ? label.textContent.trim()
+                            : "Technical Setup";
+
+
+                    /* -----------------------------------------
+                       STORE QUESTION FOR STOCK ROUTER
+                    ----------------------------------------- */
+
+                    window.edgeBreakTechnicalQuestion =
+                        question;
+
+                    window.edgeBreakTechnicalQuestionLabel =
+                        questionLabel;
+
+                    window.edgeBreakQuestionMode =
+                        "technical";
+
+
+                    /* -----------------------------------------
+                       UPDATE STOCK SCREEN
+                    ----------------------------------------- */
+
+                    selectedQuestionText.textContent =
+                        questionLabel;
+
+                    technicalScreen.hidden = true;
+                    stockScreen.hidden = false;
+
+                    tickerInput.value = "";
+                    tickerMessage.textContent = "";
+
+
+                    /* -----------------------------------------
+                       CHANGE STOCK BACK DESTINATION
+                    ----------------------------------------- */
+
+                    const stockBackButton =
+                        stockScreen.querySelector(
+                            ".edge-chat-back"
+                        );
+
+                    if (stockBackButton) {
+
+                        stockBackButton.dataset.chatBack =
+                            "technical";
+
+                    }
+
+
+                    /* -----------------------------------------
+                       FOCUS TICKER
+                    ----------------------------------------- */
+
+                    setTimeout(
+                        function() {
+                            tickerInput.focus();
+                        },
+                        50
+                    );
+
+
+                    const conversation =
+                        document.getElementById(
+                            "edgeBreakChatConversation"
+                        );
+
+                    if (conversation) {
+                        conversation.scrollTop = 0;
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+})();
+
+/* =========================================================
+   EDGEBREAK AI CHAT
    QUICK QUESTION -> STOCK SELECT
 ========================================================= */
 
@@ -21523,6 +21947,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     selectedQuestion =
                         button.dataset.chatQuestion;
 
+                    window.edgeBreakQuestionMode =
+                        "quick";
+
                     const label =
                         button.querySelector(
                             "span:first-child"
@@ -21537,6 +21964,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     selectedQuestionText.textContent =
                         selectedQuestionLabel;
 
+                    const stockBackButton =
+                        stockScreen.querySelector(
+                            ".edge-chat-back"
+                        );
+
+                    if (stockBackButton) {
+                        stockBackButton.dataset.chatBack =
+                            "quick";
+                    }
 
                     quickScreen.hidden = true;
 
@@ -21779,11 +22215,649 @@ document.addEventListener("DOMContentLoaded", () => {
             let answer = "";
 
             /* =================================================
+            TECHNICAL SETUP ANSWERS
+            ================================================= */
+
+            if (
+                window.edgeBreakQuestionMode === "technical"
+            ) {
+
+                const technicalQuestion =
+                    window.edgeBreakTechnicalQuestion;
+
+
+                /* =================================================
+                TECHNICAL #1
+                WHAT RESISTANCE LEVEL DID EDGEBREAK IDENTIFY?
+                ================================================= */
+
+                if (
+                    technicalQuestion === "technical-resistance"
+                ) {
+
+                    let technicalText = "";
+
+
+                    if (breakoutStock) {
+
+                        technicalText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <div style="
+                                    font-weight:800;
+                                    color:#22c55e;
+                                    margin-bottom:8px;
+                                ">
+                                    Breakout Scanner
+                                </div>
+
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+
+                                    EdgeBreak identified resistance for
+                                    ${ticker} around
+
+                                    <strong>
+                                        ${money(breakoutStock.resistance)}
+                                    </strong>.
+
+                                    Current price is
+                                    <strong>${money(breakoutStock.price)}</strong>.
+
+                                    Price is currently approximately
+                                    <strong>
+                                        ${number(breakoutStock.distance_above_resistance)}%
+                                        above that resistance level
+                                    </strong>.
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+
+                    if (preBreakoutStock) {
+
+                        technicalText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <div style="
+                                    font-weight:800;
+                                    color:#22c55e;
+                                    margin-bottom:8px;
+                                ">
+                                    Pre-Breakout Scanner
+                                </div>
+
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+
+                                    EdgeBreak identified resistance for
+                                    ${ticker} around
+
+                                    <strong>
+                                        ${money(preBreakoutStock.resistance_price)}
+                                    </strong>.
+
+                                    Current price is
+                                    <strong>
+                                        ${money(preBreakoutStock.current_price)}
+                                    </strong>.
+
+                                    Price is approximately
+                                    <strong>
+                                        ${number(preBreakoutStock.distance_to_resistance)}%
+                                        below resistance
+                                    </strong>.
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+
+                    if (launchPadStock) {
+
+                        technicalText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <div style="
+                                    font-weight:800;
+                                    color:#22c55e;
+                                    margin-bottom:8px;
+                                ">
+                                    Launch Pad Scanner
+                                </div>
+
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+
+                                    EdgeBreak identified a resistance zone
+                                    between
+
+                                    <strong>
+                                        ${money(launchPadStock.resistance_zone_low)}
+                                        –
+                                        ${money(launchPadStock.resistance_zone_high)}
+                                    </strong>.
+
+                                    Current price is
+                                    <strong>
+                                        ${money(launchPadStock.current_price)}
+                                    </strong>.
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+
+                    answer = `
+
+                        <div class="edge-ai-rundown">
+
+                            <div style="
+                                font-size:18px;
+                                font-weight:800;
+                                color:#f8fafc;
+                                margin-bottom:12px;
+                            ">
+                                ${ticker} — Resistance
+                            </div>
+
+                            ${technicalText}
+
+                            <div style="
+                                margin-top:12px;
+                                padding-top:12px;
+                                border-top:1px solid rgba(148,163,184,.16);
+                                color:#64748b;
+                                font-size:12px;
+                                line-height:1.6;
+                            ">
+                                Resistance is an area where price has
+                                previously encountered repeated selling
+                                pressure. EdgeBreak reports the technical
+                                levels detected by its scanners.
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* =================================================
+                TECHNICAL #2
+                WHAT SUPPORT LEVEL DID EDGEBREAK IDENTIFY?
+                ================================================= */
+
+                else if (
+                    technicalQuestion === "technical-support"
+                ) {
+
+                    let technicalText = "";
+
+
+                    if (launchPadStock) {
+
+                        technicalText = `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <div style="
+                                    font-weight:800;
+                                    color:#22c55e;
+                                    margin-bottom:8px;
+                                ">
+                                    Launch Pad Scanner
+                                </div>
+
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+
+                                    EdgeBreak identified a support zone
+                                    for ${ticker} between
+
+                                    <strong>
+                                        ${money(launchPadStock.support_zone_low)}
+                                        –
+                                        ${money(launchPadStock.support_zone_high)}
+                                    </strong>.
+
+                                    Current price is
+                                    <strong>
+                                        ${money(launchPadStock.current_price)}
+                                    </strong>.
+
+                                    The base has recorded
+                                    <strong>
+                                        ${launchPadStock.support_tests}
+                                        support tests
+                                    </strong>.
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    } else {
+
+                        technicalText = `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak does not currently have a
+                                separately stored support level for
+                                ${ticker} in this scanner setup.
+
+                                <div style="
+                                    margin-top:10px;
+                                    color:#94a3b8;
+                                ">
+                                    The Breakout and Pre-Breakout datasets
+                                    currently store resistance structure,
+                                    but not a separate support level.
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+
+                    answer = `
+
+                        <div class="edge-ai-rundown">
+
+                            <div style="
+                                font-size:18px;
+                                font-weight:800;
+                                color:#f8fafc;
+                                margin-bottom:12px;
+                            ">
+                                ${ticker} — Support
+                            </div>
+
+                            ${technicalText}
+
+                            <div style="
+                                margin-top:12px;
+                                padding-top:12px;
+                                border-top:1px solid rgba(148,163,184,.16);
+                                color:#64748b;
+                                font-size:12px;
+                                line-height:1.6;
+                            ">
+                                EdgeBreak only reports a support level
+                                when that level exists in the available
+                                scanner data.
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* =================================================
+                TECHNICAL #3
+                HOW MANY TIMES HAS RESISTANCE BEEN TESTED?
+                ================================================= */
+
+                else if (
+                    technicalQuestion === "resistance-tests"
+                ) {
+
+                    let technicalText = "";
+
+
+                    if (breakoutStock) {
+
+                        technicalText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <strong style="color:#22c55e;">
+                                    Breakout Scanner
+                                </strong>
+
+                                <div style="
+                                    margin-top:8px;
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+
+                                    EdgeBreak recorded
+                                    <strong>
+                                        ${breakoutStock.touches}
+                                        resistance tests
+                                    </strong>
+                                    around
+                                    <strong>
+                                        ${money(breakoutStock.resistance)}
+                                    </strong>
+                                    before the breakout.
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+
+                    if (preBreakoutStock) {
+
+                        technicalText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <strong style="color:#22c55e;">
+                                    Pre-Breakout Scanner
+                                </strong>
+
+                                <div style="
+                                    margin-top:8px;
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+
+                                    EdgeBreak has recorded
+                                    <strong>
+                                        ${preBreakoutStock.resistance_touches}
+                                        resistance tests
+                                    </strong>
+                                    around
+                                    <strong>
+                                        ${money(preBreakoutStock.resistance_price)}
+                                    </strong>.
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+
+                    if (launchPadStock) {
+
+                        technicalText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <strong style="color:#22c55e;">
+                                    Launch Pad Scanner
+                                </strong>
+
+                                <div style="
+                                    margin-top:8px;
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+
+                                    The Launch Pad base has recorded
+                                    <strong>
+                                        ${launchPadStock.resistance_tests}
+                                        resistance tests
+                                    </strong>
+                                    around the
+                                    <strong>
+                                        ${money(launchPadStock.resistance_zone_low)}
+                                        –
+                                        ${money(launchPadStock.resistance_zone_high)}
+                                    </strong>
+                                    resistance zone.
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+
+                    answer = `
+
+                        <div class="edge-ai-rundown">
+
+                            <div style="
+                                font-size:18px;
+                                font-weight:800;
+                                color:#f8fafc;
+                                margin-bottom:12px;
+                            ">
+                                ${ticker} — Resistance Tests
+                            </div>
+
+                            ${technicalText}
+
+                            <div style="
+                                margin-top:12px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+                                Repeated tests help show how often price
+                                has interacted with the resistance area.
+                                They do not guarantee that resistance will
+                                eventually break.
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* =================================================
+                TECHNICAL #4
+                HOW MANY TIMES HAS SUPPORT BEEN TESTED?
+                ================================================= */
+
+                else if (
+                    technicalQuestion === "support-tests"
+                ) {
+
+                    let technicalText = "";
+
+
+                    if (launchPadStock) {
+
+                        technicalText = `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+
+                                    EdgeBreak recorded
+                                    <strong>
+                                        ${launchPadStock.support_tests}
+                                        support tests
+                                    </strong>
+                                    within the Launch Pad base.
+
+                                    The identified support zone is
+
+                                    <strong>
+                                        ${money(launchPadStock.support_zone_low)}
+                                        –
+                                        ${money(launchPadStock.support_zone_high)}
+                                    </strong>.
+
+                                </div>
+
+                                <div style="
+                                    margin-top:10px;
+                                    color:#94a3b8;
+                                    line-height:1.7;
+                                ">
+
+                                    Repeated support tests show how often
+                                    price interacted with the lower area
+                                    of the identified trading range.
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    } else {
+
+                        technicalText = `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak does not currently store a
+                                separate support-test count for ${ticker}
+                                in this scanner setup.
+
+                                <div style="
+                                    margin-top:10px;
+                                    color:#94a3b8;
+                                ">
+                                    Support-test data is currently available
+                                    when EdgeBreak identifies a Launch Pad
+                                    base.
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+
+                    answer = `
+
+                        <div class="edge-ai-rundown">
+
+                            <div style="
+                                font-size:18px;
+                                font-weight:800;
+                                color:#f8fafc;
+                                margin-bottom:12px;
+                            ">
+                                ${ticker} — Support Tests
+                            </div>
+
+                            ${technicalText}
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* =================================================
+                TECHNICAL QUESTION NOT YET BUILT
+                ================================================= */
+
+                else {
+
+                    answer = `
+
+                        <div class="edge-ai-rundown">
+
+                            <div style="
+                                font-size:18px;
+                                font-weight:800;
+                                color:#f8fafc;
+                                margin-bottom:12px;
+                            ">
+                                ${ticker} — Technical Setup
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+                                This Technical Setup answer is being
+                                added to EdgeBreak AI.
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+            }
+
+            /* =================================================
             QUICK ANSWER #12
             WHICH SCANNER FOUND THIS STOCK?
             ================================================= */
 
-            if (
+            else if (
+                window.edgeBreakQuestionMode === "quick" &&
                 selectedQuestion === "scanner-found"
             ) {
 
