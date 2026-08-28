@@ -21739,11 +21739,437 @@ document.addEventListener("DOMContentLoaded", () => {
             let answer = "";
 
             /* =================================================
+            QUICK ANSWER #8
+            ANYTHING I SHOULD KNOW QUICKLY?
+            ================================================= */
+
+            if (
+                selectedQuestion === "anything-important"
+            ) {
+
+                let importantText = "";
+
+
+                /* ---------------------------------------------
+                BREAKOUT
+                --------------------------------------------- */
+
+                if (breakoutStock) {
+
+                    const distance =
+                        Number(
+                            breakoutStock.distance_above_resistance
+                        );
+
+                    const volumeRatio =
+                        Number(
+                            breakoutStock.volume_ratio
+                        );
+
+
+                    importantText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Breakout
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                ${ticker} has already moved above the
+                                resistance level EdgeBreak identified around
+                                <strong>${money(breakoutStock.resistance)}</strong>.
+
+                                ${
+                                    Number.isFinite(distance)
+                                        ? `
+                                            Price is currently
+                                            <strong>${number(distance)}% above that level</strong>.
+                                        `
+                                        : ""
+                                }
+
+                                ${
+                                    Number.isFinite(volumeRatio)
+                                        ? `
+                                            Recorded breakout volume was approximately
+                                            <strong>${number(volumeRatio)}× normal volume</strong>.
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                            ${
+                                Number.isFinite(distance) &&
+                                distance > 5
+                                    ? `
+                                        <div style="
+                                            margin-top:10px;
+                                            color:#94a3b8;
+                                            line-height:1.7;
+                                        ">
+                                            <strong style="color:#e2e8f0;">
+                                                Worth noting:
+                                            </strong>
+
+                                            Price has already moved more than
+                                            <strong>5% beyond the identified resistance level</strong>,
+                                            so the stock is no longer sitting close
+                                            to the original breakout area.
+                                        </div>
+                                    `
+                                    : ""
+                            }
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                PRE-BREAKOUT
+                --------------------------------------------- */
+
+                if (preBreakoutStock) {
+
+                    const distance =
+                        Number(
+                            preBreakoutStock.distance_to_resistance
+                        );
+
+
+                    importantText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Pre-Breakout
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                ${ticker} is approximately
+                                <strong>${number(distance)}% below resistance</strong>
+                                around
+                                <strong>${money(preBreakoutStock.resistance_price)}</strong>.
+
+                                EdgeBreak has recorded
+                                <strong>${preBreakoutStock.resistance_touches} resistance touches</strong>
+                                and
+                                <strong>${preBreakoutStock.higher_lows} higher lows</strong>.
+
+                            </div>
+
+                            ${
+                                Number.isFinite(distance) &&
+                                distance <= 1
+                                    ? `
+                                        <div style="
+                                            margin-top:10px;
+                                            color:#94a3b8;
+                                            line-height:1.7;
+                                        ">
+                                            <strong style="color:#e2e8f0;">
+                                                Worth noting:
+                                            </strong>
+
+                                            Price is currently within
+                                            <strong>1% of the resistance level</strong>
+                                            identified by EdgeBreak.
+                                        </div>
+                                    `
+                                    : ""
+                            }
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                LAUNCH PAD
+                --------------------------------------------- */
+
+                if (launchPadStock) {
+
+                    const currentPrice =
+                        Number(
+                            launchPadStock.current_price
+                        );
+
+                    const supportLow =
+                        Number(
+                            launchPadStock.support_zone_low
+                        );
+
+                    const supportHigh =
+                        Number(
+                            launchPadStock.support_zone_high
+                        );
+
+                    const resistanceLow =
+                        Number(
+                            launchPadStock.resistance_zone_low
+                        );
+
+                    const resistanceHigh =
+                        Number(
+                            launchPadStock.resistance_zone_high
+                        );
+
+
+                    let launchPosition = "";
+
+
+                    if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(resistanceHigh) &&
+                        currentPrice > resistanceHigh
+                    ) {
+
+                        const above =
+                            (
+                                (
+                                    currentPrice -
+                                    resistanceHigh
+                                ) /
+                                resistanceHigh
+                            ) * 100;
+
+
+                        launchPosition = `
+                            Price is now
+                            <strong>${number(above)}% above the top of the original resistance zone</strong>.
+                        `;
+
+                    } else if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(supportLow) &&
+                        currentPrice < supportLow
+                    ) {
+
+                        const below =
+                            (
+                                (
+                                    supportLow -
+                                    currentPrice
+                                ) /
+                                supportLow
+                            ) * 100;
+
+
+                        launchPosition = `
+                            Price is now
+                            <strong>${number(below)}% below the bottom of the original support zone</strong>.
+                        `;
+
+                    } else if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(resistanceLow) &&
+                        currentPrice >= resistanceLow
+                    ) {
+
+                        launchPosition = `
+                            Price is currently
+                            <strong>inside the identified resistance zone</strong>.
+                        `;
+
+                    } else if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(supportHigh) &&
+                        currentPrice <= supportHigh
+                    ) {
+
+                        launchPosition = `
+                            Price is currently
+                            <strong>around the identified support zone</strong>.
+                        `;
+
+                    } else {
+
+                        launchPosition = `
+                            Price remains
+                            <strong>inside the broader base structure</strong>.
+                        `;
+
+                    }
+
+
+                    importantText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Launch Pad
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak identified a
+                                <strong>${launchPadStock.launchpad_days}-day base</strong>
+                                with a range of approximately
+                                <strong>${number(launchPadStock.range_percent)}%</strong>.
+
+                                ${launchPosition}
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                SMART MONEY
+                --------------------------------------------- */
+
+                if (smartMoneyStock) {
+
+                    importantText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Smart Money Filter
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                ${ticker} has appeared in the Smart Money
+                                Filter
+                                <strong>${smartMoneyStock.count}
+                                ${
+                                    Number(smartMoneyStock.count) === 1
+                                        ? "time"
+                                        : "times"
+                                }</strong>.
+
+                                ${
+                                    smartMoneyStock.last_seen
+                                        ? `
+                                            The most recent appearance was
+                                            <strong>${formatDate(smartMoneyStock.last_seen)}</strong>.
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                ANSWER
+                --------------------------------------------- */
+
+                answer = `
+
+                    <div class="edge-ai-rundown">
+
+                        <div style="
+                            font-size:18px;
+                            font-weight:800;
+                            color:#f8fafc;
+                            margin-bottom:12px;
+                        ">
+                            ${ticker} — Quick Things to Know
+                        </div>
+
+                        ${importantText}
+
+                        <div style="
+                            margin-top:10px;
+                            color:#94a3b8;
+                            line-height:1.7;
+                        ">
+
+                            <strong style="color:#e2e8f0;">
+                                Bottom line:
+                            </strong>
+
+                            These are the main technical details currently
+                            standing out in EdgeBreak's scanner data for
+                            ${ticker}.
+
+                        </div>
+
+                        <div style="
+                            margin-top:12px;
+                            padding-top:12px;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#64748b;
+                            font-size:12px;
+                            line-height:1.6;
+                        ">
+                            EdgeBreak provides technical research and market
+                            information only. It does not provide financial advice
+                            or buy, sell or hold recommendations.
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+            /* =================================================
             QUICK ANSWER #7
             HOW CLOSE IS IT TO RESISTANCE?
             ================================================= */
 
-            if (
+            else if (
                 selectedQuestion === "distance-resistance"
             ) {
 
