@@ -21946,6 +21946,332 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* =========================================================
    EDGEBREAK AI CHAT
+   HELP ME UNDERSTAND ANSWERS
+========================================================= */
+
+(function initEdgeBreakLearnAnswers() {
+
+    const learnScreen =
+        document.getElementById(
+            "edgeBreakLearnScreen"
+        );
+
+    const conversation =
+        document.getElementById(
+            "edgeBreakChatConversation"
+        );
+
+    if (
+        !learnScreen ||
+        !conversation
+    ) {
+        console.warn(
+            "EdgeBreak Help Me Understand answer elements not found."
+        );
+        return;
+    }
+
+
+    const answers = {
+
+        "resistance": `
+            <strong>Resistance</strong> is a price area where a stock
+            has previously had difficulty moving higher.
+            <br><br>
+            Traders watch resistance because repeated reactions around
+            the same area can show where selling pressure has appeared.
+            If price approaches resistance again, that area becomes an
+            important part of the chart to watch.
+        `,
+
+
+        "support": `
+            <strong>Support</strong> is a price area where a stock
+            has previously found enough buying interest to stop or slow
+            a decline.
+            <br><br>
+            When price repeatedly holds around a similar level, that
+            area may become an important part of the stock's technical
+            structure.
+        `,
+
+
+        "breakout": `
+            A <strong>breakout</strong> occurs when price moves above
+            an established resistance area.
+            <br><br>
+            Traders often look at the strength of the move, trading
+            volume and whether price can remain above the previous
+            resistance area.
+            <br><br>
+            A breakout does not guarantee that price will continue
+            higher.
+        `,
+
+
+        "pre-breakout": `
+            A <strong>pre-breakout setup</strong> is a stock trading
+            close to an established resistance area before a confirmed
+            breakout has occurred.
+            <br><br>
+            EdgeBreak looks for technical structure such as repeated
+            resistance tests and higher lows that may show price
+            tightening beneath resistance.
+        `,
+
+
+        "higher-lows": `
+            <strong>Higher lows</strong> occur when each important
+            pullback stops at a higher price than the previous one.
+            <br><br>
+            This can show that buyers are becoming willing to support
+            the stock at progressively higher prices.
+            <br><br>
+            When higher lows form beneath resistance, the available
+            trading range can gradually become tighter.
+        `,
+
+
+        "volume": `
+            <strong>Volume</strong> shows how many shares of a stock
+            are being traded.
+            <br><br>
+            Higher volume means more shares are changing hands, while
+            lower volume means less trading activity.
+            <br><br>
+            Volume can provide useful context when examining price
+            movements because a move occurring with unusually strong
+            trading activity may attract more attention than the same
+            move occurring on very low volume.
+        `,
+
+
+        "relative-volume": `
+            <strong>Relative volume</strong> compares a stock's current
+            trading volume with its normal or average volume.
+            <br><br>
+            For example, relative volume of <strong>2.0×</strong>
+            means the stock is trading at roughly twice its usual
+            volume for the comparison being used.
+            <br><br>
+            It helps show whether current market participation is
+            unusually high or low.
+        `,
+
+
+        "trading-range": `
+            A <strong>trading range</strong> forms when price moves
+            between an identifiable support area and resistance area
+            for a period of time.
+            <br><br>
+            Instead of trending strongly higher or lower, price
+            repeatedly moves within that range.
+            <br><br>
+            EdgeBreak uses established ranges when analysing some
+            consolidation and Launch Pad structures.
+        `,
+
+
+        "launch-pad": `
+            An EdgeBreak <strong>Launch Pad</strong> is a stock that
+            has formed an established technical base or trading range.
+            <br><br>
+            EdgeBreak looks for features including identifiable support
+            and resistance zones, repeated tests of those areas and a
+            relatively controlled trading range.
+            <br><br>
+            The name describes the technical structure EdgeBreak has
+            detected. It does not mean the stock will break out or move
+            higher.
+        `,
+
+
+        "smart-money": `
+            <strong>Smart Money</strong> is EdgeBreak's filter for
+            highlighting stocks showing activity that may be worth
+            investigating more closely.
+            <br><br>
+            EdgeBreak records when a stock appears in the Smart Money
+            Filter and can track repeated appearances over time.
+            <br><br>
+            A Smart Money appearance should not be interpreted as proof
+            that institutions are buying the stock.
+            <br><br>
+            The EdgeBreak Smart Money Filter has also had limited
+            operating time and is still gathering historical data for
+            analysis.
+        `,
+
+
+        "liquidity": `
+            <strong>Liquidity</strong> describes how easily shares can
+            generally be traded without causing a large change in
+            price.
+            <br><br>
+            Stocks with high trading activity are usually more liquid
+            than stocks that trade very few shares.
+            <br><br>
+            EdgeBreak uses measures such as average share volume and
+            average dollar volume when assessing trading activity.
+        `,
+
+
+        "market-cap": `
+            <strong>Market capitalisation</strong>, or market cap, is
+            the approximate total market value of a company's
+            outstanding shares.
+            <br><br>
+            It is commonly calculated as:
+            <br><br>
+            <strong>Share Price × Shares Outstanding = Market Cap</strong>
+            <br><br>
+            Market cap is commonly used to describe the relative size
+            of a publicly traded company.
+        `
+
+    };
+
+
+    const questionButtons =
+        learnScreen.querySelectorAll(
+            "[data-chat-learn-question]"
+        );
+
+
+    questionButtons.forEach(
+        function(button) {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    const question =
+                        button.dataset.chatLearnQuestion;
+
+                    const questionText =
+                        button.querySelector(
+                            "span:first-child"
+                        )?.textContent.trim() ||
+                        "Help Me Understand";
+
+                    const answer =
+                        answers[question];
+
+                    if (!answer) {
+                        return;
+                    }
+
+
+                    /* USER QUESTION */
+
+                    const userMessage =
+                        document.createElement("div");
+
+                    userMessage.className =
+                        "edge-chat-message edge-chat-message-user";
+
+                    userMessage.innerHTML = `
+                        <div class="edge-chat-message-bubble">
+                            <strong>
+                                ${questionText}
+                            </strong>
+                        </div>
+                    `;
+
+
+                    /* AI ANSWER */
+
+                    const aiMessage =
+                        document.createElement("div");
+
+                    aiMessage.className =
+                        "edge-chat-message edge-chat-message-ai";
+
+                    aiMessage.innerHTML = `
+                        <div class="edge-chat-message-bubble">
+                            ${answer}
+                        </div>
+                    `;
+
+
+                    /* BACK BUTTON */
+
+                    const answerBackRow =
+                        document.createElement("div");
+
+                    answerBackRow.className =
+                        "edge-chat-answer-back-row";
+
+                    const answerBackButton =
+                        document.createElement("button");
+
+                    answerBackButton.type =
+                        "button";
+
+                    answerBackButton.className =
+                        "edge-chat-back";
+
+                    answerBackButton.textContent =
+                        "← Back to Help Me Understand";
+
+                    answerBackRow.appendChild(
+                        answerBackButton
+                    );
+
+
+                    /* HIDE QUESTION SCREEN */
+
+                    learnScreen.hidden = true;
+
+
+                    /* SHOW ANSWER */
+
+                    conversation.appendChild(
+                        userMessage
+                    );
+
+                    conversation.appendChild(
+                        aiMessage
+                    );
+
+                    conversation.appendChild(
+                        answerBackRow
+                    );
+
+
+                    /* BACK TO QUESTIONS */
+
+                    answerBackButton.addEventListener(
+                        "click",
+                        function() {
+
+                            userMessage.remove();
+                            aiMessage.remove();
+                            answerBackRow.remove();
+
+                            learnScreen.hidden =
+                                false;
+
+                            conversation.scrollTop =
+                                0;
+
+                        }
+                    );
+
+
+                    conversation.scrollTop =
+                        conversation.scrollHeight;
+
+                }
+            );
+
+        }
+    );
+
+})();
+
+/* =========================================================
+   EDGEBREAK AI CHAT
    TECHNICAL QUESTION -> STOCK SELECT
 ========================================================= */
 
