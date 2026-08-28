@@ -21739,11 +21739,338 @@ document.addEventListener("DOMContentLoaded", () => {
             let answer = "";
 
             /* =================================================
+            QUICK ANSWER #5
+            WHAT'S THE CHART DOING?
+            ================================================= */
+
+            if (
+                selectedQuestion === "chart-doing"
+            ) {
+
+                let chartText = "";
+
+
+                /* ---------------------------------------------
+                BREAKOUT STRUCTURE
+                --------------------------------------------- */
+
+                if (breakoutStock) {
+
+                    const distance =
+                        Number(
+                            breakoutStock.distance_above_resistance
+                        );
+
+                    chartText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Breakout Structure
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                ${ticker} has moved through the resistance
+                                level EdgeBreak identified around
+                                <strong>${money(breakoutStock.resistance)}</strong>.
+
+                                Price is now
+                                <strong>${number(distance)}% above that level</strong>.
+
+                                Before the breakout, EdgeBreak recorded
+                                <strong>${breakoutStock.touches} resistance touches</strong>
+                                and
+                                <strong>${breakoutStock.higher_lows} higher lows</strong>.
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+                                <strong style="color:#e2e8f0;">
+                                    Short version:
+                                </strong>
+
+                                ${
+                                    Number.isFinite(distance) &&
+                                    distance <= 2
+                                        ? `The chart has recently moved above resistance and is still relatively close to the breakout area.`
+                                        : Number.isFinite(distance) &&
+                                          distance <= 5
+                                            ? `The chart has broken resistance and moved moderately beyond the original breakout area.`
+                                            : `The chart has broken through the identified resistance area and has already moved some distance beyond it.`
+                                }
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                PRE-BREAKOUT STRUCTURE
+                --------------------------------------------- */
+
+                if (preBreakoutStock) {
+
+                    const distance =
+                        Number(
+                            preBreakoutStock.distance_to_resistance
+                        );
+
+                    chartText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Pre-Breakout Structure
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                ${ticker} is trading beneath resistance
+                                around
+                                <strong>${money(preBreakoutStock.resistance_price)}</strong>.
+
+                                Price is approximately
+                                <strong>${number(distance)}% below resistance</strong>.
+
+                                EdgeBreak has recorded
+                                <strong>${preBreakoutStock.resistance_touches} resistance touches</strong>
+                                and
+                                <strong>${preBreakoutStock.higher_lows} higher lows</strong>.
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+                                <strong style="color:#e2e8f0;">
+                                    Short version:
+                                </strong>
+
+                                ${
+                                    Number.isFinite(distance) &&
+                                    distance <= 1
+                                        ? `The chart is pressing very close to resistance while maintaining the higher-low structure detected by EdgeBreak.`
+                                        : Number.isFinite(distance) &&
+                                          distance <= 3
+                                            ? `The chart is approaching resistance while maintaining a developing higher-low structure.`
+                                            : `The chart remains beneath resistance, with EdgeBreak tracking the repeated resistance tests and higher-low structure.`
+                                }
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                LAUNCH PAD STRUCTURE
+                --------------------------------------------- */
+
+                if (launchPadStock) {
+
+                    const currentPrice =
+                        Number(
+                            launchPadStock.current_price
+                        );
+
+                    const supportLow =
+                        Number(
+                            launchPadStock.support_zone_low
+                        );
+
+                    const supportHigh =
+                        Number(
+                            launchPadStock.support_zone_high
+                        );
+
+                    const resistanceLow =
+                        Number(
+                            launchPadStock.resistance_zone_low
+                        );
+
+                    const resistanceHigh =
+                        Number(
+                            launchPadStock.resistance_zone_high
+                        );
+
+
+                    let positionText = "";
+
+
+                    if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(resistanceHigh) &&
+                        currentPrice > resistanceHigh
+                    ) {
+
+                        positionText =
+                            `Price has moved above the resistance zone that originally defined the base.`;
+
+                    } else if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(supportLow) &&
+                        currentPrice < supportLow
+                    ) {
+
+                        positionText =
+                            `Price is currently below the support zone that originally defined the base.`;
+
+                    } else if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(resistanceLow) &&
+                        currentPrice >= resistanceLow
+                    ) {
+
+                        positionText =
+                            `Price is currently trading in the resistance area of the base.`;
+
+                    } else if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(supportHigh) &&
+                        currentPrice <= supportHigh
+                    ) {
+
+                        positionText =
+                            `Price is currently trading around the support area of the base.`;
+
+                    } else {
+
+                        positionText =
+                            `Price is currently trading between the support and resistance areas of the base.`;
+
+                    }
+
+
+                    chartText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Launch Pad Structure
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak identified a
+                                <strong>${launchPadStock.launchpad_days}-day base</strong>
+                                between support around
+                                <strong>${money(supportLow)}–${money(supportHigh)}</strong>
+                                and resistance around
+                                <strong>${money(resistanceLow)}–${money(resistanceHigh)}</strong>.
+
+                                ${positionText}
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+                                <strong style="color:#e2e8f0;">
+                                    Short version:
+                                </strong>
+
+                                The chart formed a defined trading range
+                                with repeated interaction around support
+                                and resistance. The stored base spans
+                                approximately
+                                <strong>${number(launchPadStock.range_percent)}%</strong>.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                answer = `
+
+                    <div class="edge-ai-rundown">
+
+                        <div style="
+                            font-size:18px;
+                            font-weight:800;
+                            color:#f8fafc;
+                            margin-bottom:12px;
+                        ">
+                            ${ticker} — What's the Chart Doing?
+                        </div>
+
+                        ${chartText}
+
+                        <div style="
+                            margin-top:12px;
+                            padding-top:12px;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#64748b;
+                            font-size:12px;
+                            line-height:1.6;
+                        ">
+                            This summary describes the technical structure
+                            detected by EdgeBreak's scanners. EdgeBreak does
+                            not provide financial advice or buy, sell or hold
+                            recommendations.
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+            /* =================================================
             QUICK ANSWER #4
             WHERE IS SUPPORT?
             ================================================= */
 
-            if (
+            else if (
                 selectedQuestion === "support"
             ) {
 
