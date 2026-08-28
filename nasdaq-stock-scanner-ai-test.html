@@ -21739,11 +21739,271 @@ document.addEventListener("DOMContentLoaded", () => {
             let answer = "";
 
             /* =================================================
+            QUICK ANSWER #6
+            WHAT'S VOLUME DOING?
+            ================================================= */
+
+            if (
+                selectedQuestion === "volume"
+            ) {
+
+                let volumeText = "";
+
+
+                /* ---------------------------------------------
+                BREAKOUT VOLUME
+                --------------------------------------------- */
+
+                if (breakoutStock) {
+
+                    const volumeRatio =
+                        Number(
+                            breakoutStock.volume_ratio
+                        );
+
+
+                    let volumeExplanation = "";
+
+
+                    if (Number.isFinite(volumeRatio)) {
+
+                        if (volumeRatio >= 2) {
+
+                            volumeExplanation =
+                                `Volume was running at approximately <strong>${number(volumeRatio)}× normal volume</strong>, which represents a substantial increase in trading activity around the breakout.`;
+
+                        } else if (volumeRatio >= 1.25) {
+
+                            volumeExplanation =
+                                `Volume was approximately <strong>${number(volumeRatio)}× normal volume</strong>, showing elevated trading activity around the breakout.`;
+
+                        } else if (volumeRatio >= 1) {
+
+                            volumeExplanation =
+                                `Volume was approximately <strong>${number(volumeRatio)}× normal volume</strong>, putting activity around its normal level to slightly above normal.`;
+
+                        } else {
+
+                            volumeExplanation =
+                                `Volume was approximately <strong>${number(volumeRatio)}× normal volume</strong>, meaning the recorded breakout volume was below its normal comparison level.`;
+
+                        }
+
+                    } else {
+
+                        volumeExplanation =
+                            `A usable breakout volume comparison is not available in the current EdgeBreak data for this setup.`;
+
+                    }
+
+
+                    volumeText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Breakout Volume
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                ${volumeExplanation}
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    Why this matters:
+                                </strong>
+
+                                Volume shows how much trading activity
+                                accompanied the price move. EdgeBreak
+                                reports the recorded volume comparison
+                                here without treating it as a buy or
+                                sell signal.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                PRE-BREAKOUT VOLUME
+                --------------------------------------------- */
+
+                if (preBreakoutStock) {
+
+                    const averageVolume =
+                        Number(
+                            preBreakoutStock.average_volume_20
+                        );
+
+                    const averageDollarVolume =
+                        Number(
+                            preBreakoutStock.average_dollar_volume_20
+                        );
+
+
+                    volumeText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Pre-Breakout Volume
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                ${
+                                    Number.isFinite(averageVolume)
+                                        ? `
+                                            ${ticker}'s 20-day average volume
+                                            is approximately
+                                            <strong>${Math.round(averageVolume).toLocaleString("en-US")} shares per day</strong>.
+                                        `
+                                        : ""
+                                }
+
+                                ${
+                                    Number.isFinite(averageDollarVolume)
+                                        ? `
+                                            Its 20-day average dollar volume
+                                            is approximately
+                                            <strong>$${Math.round(averageDollarVolume).toLocaleString("en-US")}</strong>
+                                            per day.
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    What we can tell:
+                                </strong>
+
+                                These figures describe the stock's recent
+                                average trading activity. The current
+                                Pre-Breakout data does not contain a
+                                day-by-day volume comparison, so EdgeBreak
+                                will not label current volume as rising or
+                                falling from this data alone.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                LAUNCH PAD ONLY
+                --------------------------------------------- */
+
+                if (
+                    launchPadStock &&
+                    !breakoutStock &&
+                    !preBreakoutStock
+                ) {
+
+                    volumeText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#cbd5e1;
+                            line-height:1.7;
+                        ">
+
+                            ${ticker} is appearing in the
+                            <strong>Launch Pad Scanner</strong>, but the
+                            current Launch Pad data does not contain a
+                            volume comparison that can reliably describe
+                            whether volume is increasing or decreasing.
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                answer = `
+
+                    <div class="edge-ai-rundown">
+
+                        <div style="
+                            font-size:18px;
+                            font-weight:800;
+                            color:#f8fafc;
+                            margin-bottom:12px;
+                        ">
+                            ${ticker} — What's Volume Doing?
+                        </div>
+
+                        ${volumeText}
+
+                        <div style="
+                            margin-top:12px;
+                            padding-top:12px;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#64748b;
+                            font-size:12px;
+                            line-height:1.6;
+                        ">
+                            EdgeBreak provides technical research and market
+                            information only. It does not provide financial advice
+                            or buy, sell or hold recommendations.
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+            /* =================================================
             QUICK ANSWER #5
             WHAT'S THE CHART DOING?
             ================================================= */
 
-            if (
+            else if (
                 selectedQuestion === "chart-doing"
             ) {
 
