@@ -21736,20 +21736,350 @@ document.addEventListener("DOMContentLoaded", () => {
             BUILD ANSWER
             ------------------------------------------------- */
 
-            let answer = `
+            let answer = "";
 
-                <div class="edge-ai-rundown">
 
-                    <div style="
-                        font-size:18px;
-                        font-weight:800;
-                        color:#f8fafc;
-                        margin-bottom:12px;
-                    ">
-                        ${ticker} — Quick Rundown
+            /* =================================================
+            QUICK ANSWER #2
+            WHY DID THIS STOCK SCAN UP?
+            ================================================= */
+
+            if (
+                selectedQuestion === "why-scanned"
+            ) {
+
+                answer = `
+
+                    <div class="edge-ai-rundown">
+
+                        <div style="
+                            font-size:18px;
+                            font-weight:800;
+                            color:#f8fafc;
+                            margin-bottom:12px;
+                        ">
+                            Why EdgeBreak Found ${ticker}
+                        </div>
+
+                `;
+
+
+                /* ---------------------------------------------
+                BREAKOUT REASON
+                --------------------------------------------- */
+
+                if (breakoutStock) {
+
+                    answer += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Breakout Scanner
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                ${ticker} scanned up because price
+                                <strong>moved above the resistance level</strong>
+                                identified by EdgeBreak at approximately
+                                <strong>${money(breakoutStock.resistance)}</strong>.
+
+                                The setup recorded
+                                <strong>${breakoutStock.touches} resistance touches</strong>
+                                and
+                                <strong>${breakoutStock.higher_lows} higher lows</strong>
+                                before the breakout.
+
+                                Price is currently
+                                <strong>${number(breakoutStock.distance_above_resistance)}% above resistance</strong>.
+
+                                ${
+                                    Number.isFinite(
+                                        Number(breakoutStock.volume_ratio)
+                                    )
+                                        ? `
+                                            Breakout volume was approximately
+                                            <strong>${number(breakoutStock.volume_ratio)}× normal volume</strong>.
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    Why it qualified:
+                                </strong>
+
+                                EdgeBreak detected a tested resistance
+                                level followed by price moving through
+                                that level. The resistance tests and
+                                higher-low structure are the technical
+                                features that caused the stock to appear
+                                in the Breakout Scanner.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                PRE-BREAKOUT REASON
+                --------------------------------------------- */
+
+                if (preBreakoutStock) {
+
+                    answer += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Pre-Breakout Scanner
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                ${ticker} scanned up because EdgeBreak
+                                detected a developing structure beneath
+                                resistance around
+                                <strong>${money(preBreakoutStock.resistance_price)}</strong>.
+
+                                The structure has recorded
+                                <strong>${preBreakoutStock.resistance_touches} resistance touches</strong>
+                                together with
+                                <strong>${preBreakoutStock.higher_lows} higher lows</strong>.
+
+                                Price is currently approximately
+                                <strong>${number(preBreakoutStock.distance_to_resistance)}% below resistance</strong>.
+
+                            </div>
+
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    Why it qualified:
+                                </strong>
+
+                                EdgeBreak found repeated testing of an
+                                identified resistance level while the
+                                stock continued forming higher lows.
+                                That combination is the technical
+                                structure the Pre-Breakout Scanner is
+                                designed to detect.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                LAUNCH PAD REASON
+                --------------------------------------------- */
+
+                if (launchPadStock) {
+
+                    answer += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Launch Pad Scanner
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                ${ticker} scanned up because EdgeBreak
+                                identified an established
+                                <strong>${launchPadStock.launchpad_days}-day trading base</strong>.
+
+                                Support was identified around
+                                <strong>${money(launchPadStock.support_zone_low)}–${money(launchPadStock.support_zone_high)}</strong>,
+                                while resistance was identified around
+                                <strong>${money(launchPadStock.resistance_zone_low)}–${money(launchPadStock.resistance_zone_high)}</strong>.
+
+                                The base recorded
+                                <strong>${launchPadStock.support_tests} support tests</strong>
+                                and
+                                <strong>${launchPadStock.resistance_tests} resistance tests</strong>.
+
+                                The total range was approximately
+                                <strong>${number(launchPadStock.range_percent)}%</strong>.
+
+                            </div>
+
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    Why it qualified:
+                                </strong>
+
+                                EdgeBreak detected a defined trading
+                                range with repeated interaction around
+                                both support and resistance. That
+                                established base structure caused the
+                                stock to appear in the Launch Pad
+                                Scanner.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                SMART MONEY CONTEXT
+                --------------------------------------------- */
+
+                if (smartMoneyStock) {
+
+                    answer += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Additional EdgeBreak Context
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                ${ticker} has also appeared in the
+                                <strong>EdgeBreak Smart Money Filter
+                                ${smartMoneyStock.count}
+                                ${
+                                    Number(smartMoneyStock.count) === 1
+                                        ? "time"
+                                        : "times"
+                                }</strong>.
+
+                                ${
+                                    smartMoneyStock.last_seen
+                                        ? `
+                                            Its most recent appearance was
+                                            <strong>${formatDate(smartMoneyStock.last_seen)}</strong>.
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                answer += `
+
+                        <div style="
+                            margin-top:4px;
+                            padding-top:12px;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#64748b;
+                            font-size:12px;
+                            line-height:1.6;
+                        ">
+                            EdgeBreak provides technical research and market
+                            information only. It does not provide financial advice
+                            or buy, sell or hold recommendations.
+                        </div>
+
                     </div>
 
-            `;
+                `;
+
+            }
+
+
+            /* =================================================
+            QUICK ANSWER #1
+            30-SECOND RUNDOWN
+            ================================================= */
+
+            else {
+
+                answer = `
+
+                    <div class="edge-ai-rundown">
+
+                        <div style="
+                            font-size:18px;
+                            font-weight:800;
+                            color:#f8fafc;
+                            margin-bottom:12px;
+                        ">
+                            ${ticker} — Quick Rundown
+                        </div>
+
+                `;
 
 
             /* -------------------------------------------------
@@ -22177,6 +22507,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
             `;
+
+            }
 
 
             /* -------------------------------------------------
