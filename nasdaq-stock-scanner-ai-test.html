@@ -26848,7 +26848,45 @@ document.addEventListener("DOMContentLoaded", () => {
                     answerBackRow.remove();
 
                     stockScreen.hidden = true;
-                    quickScreen.hidden = false;
+
+                    const technicalScreen =
+                        document.getElementById(
+                            "edgeBreakTechnicalScreen"
+                        );
+
+
+                    /* -----------------------------------------
+                    RETURN TO TECHNICAL SETUP
+                    ----------------------------------------- */
+
+                    if (
+                        window.edgeBreakQuestionMode ===
+                        "technical"
+                    ) {
+
+                        quickScreen.hidden = true;
+
+                        if (technicalScreen) {
+                            technicalScreen.hidden = false;
+                        }
+
+                    }
+
+
+                    /* -----------------------------------------
+                    RETURN TO QUICK ANSWERS
+                    ----------------------------------------- */
+
+                    else {
+
+                        if (technicalScreen) {
+                            technicalScreen.hidden = true;
+                        }
+
+                        quickScreen.hidden = false;
+
+                    }
+
 
                     tickerInput.value = "";
                     tickerMessage.textContent = "";
