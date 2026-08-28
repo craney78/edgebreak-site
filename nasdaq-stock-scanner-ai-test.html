@@ -21560,8 +21560,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* -----------------------------------------------------
-       FORM SUBMIT
-       TEMPORARY TEST ONLY
+    FORM SUBMIT
+    EDGEBREAK AI — QUICK ANSWER #1
+    QUICK RUNDOWN
     ----------------------------------------------------- */
 
     tickerForm.addEventListener(
@@ -21587,24 +21588,711 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            /*
-             * TEMPORARY.
-             *
-             * Next step we will replace this
-             * with an actual lookup against
-             * EdgeBreak scanner data.
-             */
-
-            tickerMessage.textContent =
-                ticker +
-                " selected — " +
-                selectedQuestionLabel;
-
-        }
-    );
+            tickerMessage.textContent = "";
 
 
-})();
+            /* -------------------------------------------------
+            FIND STOCK ACROSS EDGEBREAK DATA
+            ------------------------------------------------- */
+
+            const breakoutStock =
+                Array.isArray(window.breakoutData)
+                    ? window.breakoutData.find(
+                        stock =>
+                            String(stock.symbol || "")
+                                .toUpperCase() === ticker
+                    )
+                    : null;
+
+
+            const preBreakoutStock =
+                Array.isArray(window.scannerData)
+                    ? window.scannerData.find(
+                        stock =>
+                            String(stock.symbol || "")
+                                .toUpperCase() === ticker
+                    )
+                    : null;
+
+
+            const launchPadStock =
+                Array.isArray(window.launchPadData)
+                    ? window.launchPadData.find(
+                        stock =>
+                            String(stock.symbol || "")
+                                .toUpperCase() === ticker
+                    )
+                    : null;
+
+
+            const smartMoneyStock =
+                Array.isArray(window.smartMoneyData)
+                    ? window.smartMoneyData.find(
+                        stock =>
+                            String(stock.symbol || "")
+                                .toUpperCase() === ticker
+                    )
+                    : null;
+
+
+            /* -------------------------------------------------
+            STOCK NOT FOUND
+            ------------------------------------------------- */
+
+            if (
+                !breakoutStock &&
+                !preBreakoutStock &&
+                !launchPadStock
+            ) {
+
+                tickerMessage.textContent =
+                    ticker +
+                    " is not currently appearing in the EdgeBreak Breakout, Pre-Breakout or Launch Pad scanners.";
+
+                return;
+
+            }
+
+
+            /* -------------------------------------------------
+            HELPERS
+            ------------------------------------------------- */
+
+            function money(value) {
+
+                const number = Number(value);
+
+                if (!Number.isFinite(number)) {
+                    return "—";
+                }
+
+                if (number < 1) {
+                    return "$" + number.toFixed(2);
+                }
+
+                return "$" + number.toFixed(2);
+
+            }
+
+
+            function number(value, decimals = 2) {
+
+                const parsed = Number(value);
+
+                if (!Number.isFinite(parsed)) {
+                    return "—";
+                }
+
+                return parsed.toFixed(decimals);
+
+            }
+
+
+            function formatDate(value) {
+
+                if (!value) {
+                    return "";
+                }
+
+                const parts =
+                    String(value).split("-");
+
+                if (parts.length !== 3) {
+                    return String(value);
+                }
+
+                const date =
+                    new Date(
+                        Number(parts[0]),
+                        Number(parts[1]) - 1,
+                        Number(parts[2])
+                    );
+
+
+                return date.toLocaleDateString(
+                    "en-US",
+                    {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric"
+                    }
+                );
+
+            }
+
+
+            /* -------------------------------------------------
+            BUILD ANSWER
+            ------------------------------------------------- */
+
+            let answer = `
+
+                <div class="edge-ai-rundown">
+
+                    <div style="
+                        font-size:18px;
+                        font-weight:800;
+                        color:#f8fafc;
+                        margin-bottom:12px;
+                    ">
+                        ${ticker} — Quick Rundown
+                    </div>
+
+            `;
+
+
+            /* -------------------------------------------------
+            BREAKOUT
+            ------------------------------------------------- */
+
+            if (breakoutStock) {
+
+                const distance =
+                    Number(
+                        breakoutStock.distance_above_resistance
+                    );
+
+
+                let breakoutExplanation = "";
+
+                if (Number.isFinite(distance)) {
+
+                    if (distance <= 2) {
+
+                        breakoutExplanation =
+                            `${ticker} has moved above the resistance level identified by EdgeBreak and remains relatively close to the original breakout area.`;
+
+                    } else if (distance <= 5) {
+
+                        breakoutExplanation =
+                            `${ticker} has cleared the resistance level identified by EdgeBreak and is now trading moderately above the original breakout area.`;
+
+                    } else {
+
+                        breakoutExplanation =
+                            `${ticker} has cleared the resistance level identified by EdgeBreak and is now ${number(distance)}% above that level, meaning price has already moved some distance beyond the original breakout area.`;
+
+                    }
+
+                }
+
+
+                answer += `
+
+                    <div style="
+                        padding:14px 0;
+                        border-top:1px solid rgba(148,163,184,.16);
+                    ">
+
+                        <div style="
+                            font-weight:800;
+                            color:#22c55e;
+                            margin-bottom:8px;
+                        ">
+                            Breakout Scanner
+                        </div>
+
+                        <div style="
+                            color:#cbd5e1;
+                            line-height:1.7;
+                        ">
+
+                            ${ticker} is currently appearing in the
+                            <strong>EdgeBreak Breakout Scanner</strong>
+                            at <strong>${money(breakoutStock.price)}</strong>.
+
+                            EdgeBreak identified resistance around
+                            <strong>${money(breakoutStock.resistance)}</strong>,
+                            with price currently
+                            <strong>${number(breakoutStock.distance_above_resistance)}% above resistance</strong>.
+
+                            The structure recorded
+                            <strong>${breakoutStock.touches} resistance touches</strong>
+                            and
+                            <strong>${breakoutStock.higher_lows} higher lows</strong>.
+
+                            ${
+                                breakoutStock.grade
+                                    ? `The setup received an EdgeBreak grade of <strong>${breakoutStock.grade}</strong>.`
+                                    : ""
+                            }
+
+                        </div>
+
+                        ${
+                            breakoutExplanation
+                                ? `
+                                    <div style="
+                                        margin-top:10px;
+                                        color:#94a3b8;
+                                        line-height:1.7;
+                                    ">
+                                        <strong style="color:#e2e8f0;">
+                                            What EdgeBreak found:
+                                        </strong>
+                                        ${breakoutExplanation}
+                                    </div>
+                                `
+                                : ""
+                        }
+
+                    </div>
+
+                `;
+
+            }
+
+
+            /* -------------------------------------------------
+            PRE-BREAKOUT
+            ------------------------------------------------- */
+
+            if (preBreakoutStock) {
+
+                const distance =
+                    Number(
+                        preBreakoutStock.distance_to_resistance
+                    );
+
+
+                let preBreakoutExplanation = "";
+
+                if (Number.isFinite(distance)) {
+
+                    if (distance <= 1) {
+
+                        preBreakoutExplanation =
+                            `${ticker} is trading very close to the resistance level identified by EdgeBreak while maintaining a pattern of higher lows.`;
+
+                    } else if (distance <= 3) {
+
+                        preBreakoutExplanation =
+                            `${ticker} is trading close to the identified resistance level, with the higher-low structure keeping the setup active.`;
+
+                    } else {
+
+                        preBreakoutExplanation =
+                            `${ticker} remains below the identified resistance level, with EdgeBreak continuing to track the developing higher-low structure.`;
+
+                    }
+
+                }
+
+
+                answer += `
+
+                    <div style="
+                        padding:14px 0;
+                        border-top:1px solid rgba(148,163,184,.16);
+                    ">
+
+                        <div style="
+                            font-weight:800;
+                            color:#22c55e;
+                            margin-bottom:8px;
+                        ">
+                            Pre-Breakout Scanner
+                        </div>
+
+                        <div style="
+                            color:#cbd5e1;
+                            line-height:1.7;
+                        ">
+
+                            ${ticker} is currently appearing in the
+                            <strong>EdgeBreak Pre-Breakout Scanner</strong>
+                            at
+                            <strong>${money(preBreakoutStock.current_price)}</strong>.
+
+                            EdgeBreak has identified resistance around
+                            <strong>${money(preBreakoutStock.resistance_price)}</strong>.
+
+                            Price is currently approximately
+                            <strong>${number(preBreakoutStock.distance_to_resistance)}% below resistance</strong>,
+                            with
+                            <strong>${preBreakoutStock.resistance_touches} resistance touches</strong>
+                            and
+                            <strong>${preBreakoutStock.higher_lows} higher lows</strong>.
+
+                        </div>
+
+                        <div style="
+                            margin-top:10px;
+                            color:#94a3b8;
+                            line-height:1.7;
+                        ">
+                            <strong style="color:#e2e8f0;">
+                                What EdgeBreak found:
+                            </strong>
+
+                            ${preBreakoutExplanation}
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            /* -------------------------------------------------
+            LAUNCH PAD
+            ------------------------------------------------- */
+
+            if (launchPadStock) {
+
+                const currentPrice =
+                    Number(
+                        launchPadStock.current_price
+                    );
+
+                const supportLow =
+                    Number(
+                        launchPadStock.support_zone_low
+                    );
+
+                const supportHigh =
+                    Number(
+                        launchPadStock.support_zone_high
+                    );
+
+                const resistanceLow =
+                    Number(
+                        launchPadStock.resistance_zone_low
+                    );
+
+                const resistanceHigh =
+                    Number(
+                        launchPadStock.resistance_zone_high
+                    );
+
+
+                let launchPadExplanation = "";
+
+
+                if (
+                    Number.isFinite(currentPrice) &&
+                    Number.isFinite(resistanceHigh) &&
+                    currentPrice > resistanceHigh
+                ) {
+
+                    const aboveResistance =
+                        (
+                            (
+                                currentPrice -
+                                resistanceHigh
+                            ) /
+                            resistanceHigh
+                        ) * 100;
+
+
+                    launchPadExplanation =
+                        `${ticker} is now trading ${number(aboveResistance)}% above the top of the resistance zone originally identified by the Launch Pad Scanner. The stored base remains useful as historical technical context, but price has already moved beyond that range.`;
+
+                } else if (
+                    Number.isFinite(currentPrice) &&
+                    Number.isFinite(supportLow) &&
+                    currentPrice < supportLow
+                ) {
+
+                    const belowSupport =
+                        (
+                            (
+                                supportLow -
+                                currentPrice
+                            ) /
+                            supportLow
+                        ) * 100;
+
+
+                    launchPadExplanation =
+                        `${ticker} is currently trading ${number(belowSupport)}% below the bottom of the support zone identified in the stored Launch Pad structure.`;
+
+                } else if (
+                    Number.isFinite(currentPrice) &&
+                    Number.isFinite(resistanceLow) &&
+                    currentPrice >= resistanceLow
+                ) {
+
+                    launchPadExplanation =
+                        `${ticker} is currently trading inside the resistance area identified by the Launch Pad Scanner.`;
+
+                } else if (
+                    Number.isFinite(currentPrice) &&
+                    Number.isFinite(supportHigh) &&
+                    currentPrice <= supportHigh
+                ) {
+
+                    launchPadExplanation =
+                        `${ticker} is currently trading around the support area identified by the Launch Pad Scanner.`;
+
+                } else {
+
+                    launchPadExplanation =
+                        `${ticker} is currently trading within the broader support and resistance structure identified by the Launch Pad Scanner.`;
+
+                }
+
+
+                answer += `
+
+                    <div style="
+                        padding:14px 0;
+                        border-top:1px solid rgba(148,163,184,.16);
+                    ">
+
+                        <div style="
+                            font-weight:800;
+                            color:#22c55e;
+                            margin-bottom:8px;
+                        ">
+                            Launch Pad Scanner
+                        </div>
+
+                        <div style="
+                            color:#cbd5e1;
+                            line-height:1.7;
+                        ">
+
+                            ${ticker} is currently recorded in the
+                            <strong>EdgeBreak Launch Pad Scanner</strong>
+                            at
+                            <strong>${money(launchPadStock.current_price)}</strong>.
+
+                            EdgeBreak identified a
+                            <strong>${launchPadStock.launchpad_days}-day base</strong>
+                            with support around
+                            <strong>${money(launchPadStock.support_zone_low)}–${money(launchPadStock.support_zone_high)}</strong>
+                            and resistance around
+                            <strong>${money(launchPadStock.resistance_zone_low)}–${money(launchPadStock.resistance_zone_high)}</strong>.
+
+                            The structure recorded
+                            <strong>${launchPadStock.support_tests} support tests</strong>
+                            and
+                            <strong>${launchPadStock.resistance_tests} resistance tests</strong>,
+                            with an overall range of approximately
+                            <strong>${number(launchPadStock.range_percent)}%</strong>.
+
+                        </div>
+
+                        <div style="
+                            margin-top:10px;
+                            color:#94a3b8;
+                            line-height:1.7;
+                        ">
+                            <strong style="color:#e2e8f0;">
+                                What EdgeBreak found:
+                            </strong>
+
+                            ${launchPadExplanation}
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            /* -------------------------------------------------
+            SMART MONEY
+            ------------------------------------------------- */
+
+            if (smartMoneyStock) {
+
+                answer += `
+
+                    <div style="
+                        padding:14px 0;
+                        border-top:1px solid rgba(148,163,184,.16);
+                    ">
+
+                        <div style="
+                            font-weight:800;
+                            color:#22c55e;
+                            margin-bottom:8px;
+                        ">
+                            Smart Money Filter
+                        </div>
+
+                        <div style="
+                            color:#cbd5e1;
+                            line-height:1.7;
+                        ">
+
+                            ${ticker} has appeared in the
+                            <strong>EdgeBreak Smart Money Filter ${smartMoneyStock.count} ${
+                                Number(smartMoneyStock.count) === 1
+                                    ? "time"
+                                    : "times"
+                            }</strong>.
+
+                            ${
+                                smartMoneyStock.last_seen
+                                    ? `The most recent appearance was <strong>${formatDate(smartMoneyStock.last_seen)}</strong>.`
+                                    : ""
+                            }
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            /* -------------------------------------------------
+            DISCLAIMER
+            ------------------------------------------------- */
+
+            answer += `
+
+                    <div style="
+                        margin-top:4px;
+                        padding-top:12px;
+                        border-top:1px solid rgba(148,163,184,.16);
+                        color:#64748b;
+                        font-size:12px;
+                        line-height:1.6;
+                    ">
+                        EdgeBreak provides technical research and market
+                        information only. It does not provide financial advice
+                        or buy, sell or hold recommendations.
+                    </div>
+
+                </div>
+
+            `;
+
+
+            /* -------------------------------------------------
+            DISPLAY ANSWER
+            ------------------------------------------------- */
+
+            const conversation =
+                document.getElementById(
+                    "edgeBreakChatConversation"
+                );
+
+            if (!conversation) {
+
+                tickerMessage.textContent =
+                    "Unable to display the Quick Rundown.";
+
+                return;
+
+            }
+
+
+            /* -------------------------------------------------
+            USER MESSAGE
+            ------------------------------------------------- */
+
+            const userMessage =
+                document.createElement("div");
+
+            userMessage.className =
+                "edge-chat-message edge-chat-message-user";
+
+            userMessage.innerHTML = `
+
+                <div class="edge-chat-message-bubble">
+                    <strong>
+                        ${ticker} — ${selectedQuestionLabel}
+                    </strong>
+                </div>
+
+            `;
+
+
+            /* -------------------------------------------------
+            AI MESSAGE
+            ------------------------------------------------- */
+
+            const aiMessage =
+                document.createElement("div");
+
+            aiMessage.className =
+                "edge-chat-message edge-chat-message-ai";
+
+            aiMessage.innerHTML = `
+
+                <div class="edge-chat-message-icon">
+                    ✦
+                </div>
+
+                <div class="edge-chat-message-bubble">
+                    ${answer}
+                </div>
+
+            `;
+
+
+            /* -------------------------------------------------
+            CHANGE SCREEN
+            ------------------------------------------------- */
+
+            stockScreen.hidden = true;
+
+            quickScreen.hidden = true;
+
+
+            /* -------------------------------------------------
+            ADD TO CHAT
+            ------------------------------------------------- */
+
+            conversation.appendChild(
+                userMessage
+            );
+
+            conversation.appendChild(
+                aiMessage
+            );
+
+
+            /* -------------------------------------------------
+            SCROLL TO ANSWER
+            ------------------------------------------------- */
+
+            setTimeout(
+                function() {
+
+                    conversation.scrollTop =
+                        conversation.scrollHeight;
+
+                },
+                50
+            );
+
+
+            /* -------------------------------------------------
+            SET ACTIVE STOCK
+            ------------------------------------------------- */
+
+            window.edgeBreakAIActiveSymbol =
+                ticker;
+
+
+            /* -------------------------------------------------
+            SYNC MAIN CHART
+            ------------------------------------------------- */
+
+            if (
+                typeof loadChart === "function"
+            ) {
+
+                loadChart(ticker);
+
+            }
+
+            }
+
+            );
+
+            })();
 
 </script>
 <!-- COMPONENTS -->
