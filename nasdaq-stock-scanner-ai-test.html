@@ -21738,6 +21738,327 @@ document.addEventListener("DOMContentLoaded", () => {
 
             let answer = "";
 
+            /* =================================================
+            QUICK ANSWER #3
+            WHERE IS RESISTANCE?
+            ================================================= */
+
+            if (
+                selectedQuestion === "resistance"
+            ) {
+
+                let currentPrice = null;
+                let resistanceText = "";
+                let resistanceExplanation = "";
+
+
+                /* ---------------------------------------------
+                BREAKOUT RESISTANCE
+                --------------------------------------------- */
+
+                if (breakoutStock) {
+
+                    currentPrice =
+                        Number(breakoutStock.price);
+
+                    const resistance =
+                        Number(breakoutStock.resistance);
+
+                    const distance =
+                        Number(
+                            breakoutStock.distance_above_resistance
+                        );
+
+
+                    resistanceText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Breakout Scanner
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak identified resistance for
+                                <strong>${ticker}</strong> around
+                                <strong>${money(resistance)}</strong>.
+
+                                Current price is
+                                <strong>${money(currentPrice)}</strong>.
+
+                                ${
+                                    Number.isFinite(distance)
+                                        ? `
+                                            Price is currently
+                                            <strong>${number(distance)}% above that resistance level</strong>.
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                PRE-BREAKOUT RESISTANCE
+                --------------------------------------------- */
+
+                if (preBreakoutStock) {
+
+                    currentPrice =
+                        Number(
+                            preBreakoutStock.current_price
+                        );
+
+                    const resistance =
+                        Number(
+                            preBreakoutStock.resistance_price
+                        );
+
+                    const distance =
+                        Number(
+                            preBreakoutStock.distance_to_resistance
+                        );
+
+
+                    resistanceText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Pre-Breakout Scanner
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak identified resistance for
+                                <strong>${ticker}</strong> around
+                                <strong>${money(resistance)}</strong>.
+
+                                Current price is
+                                <strong>${money(currentPrice)}</strong>.
+
+                                ${
+                                    Number.isFinite(distance)
+                                        ? `
+                                            Price is currently approximately
+                                            <strong>${number(distance)}% below resistance</strong>.
+                                        `
+                                        : ""
+                                }
+
+                                The level has recorded
+                                <strong>${preBreakoutStock.resistance_touches} resistance touches</strong>.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                LAUNCH PAD RESISTANCE
+                --------------------------------------------- */
+
+                if (launchPadStock) {
+
+                    currentPrice =
+                        Number(
+                            launchPadStock.current_price
+                        );
+
+                    const resistanceLow =
+                        Number(
+                            launchPadStock.resistance_zone_low
+                        );
+
+                    const resistanceHigh =
+                        Number(
+                            launchPadStock.resistance_zone_high
+                        );
+
+
+                    let positionText = "";
+
+
+                    if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(resistanceHigh) &&
+                        currentPrice > resistanceHigh
+                    ) {
+
+                        const distanceAbove =
+                            (
+                                (
+                                    currentPrice -
+                                    resistanceHigh
+                                ) /
+                                resistanceHigh
+                            ) * 100;
+
+                        positionText =
+                            `Price is currently <strong>${number(distanceAbove)}% above the top of that resistance zone</strong>.`;
+
+                    } else if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(resistanceLow) &&
+                        currentPrice >= resistanceLow
+                    ) {
+
+                        positionText =
+                            `Price is currently <strong>inside the identified resistance zone</strong>.`;
+
+                    } else if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(resistanceLow)
+                    ) {
+
+                        const distanceBelow =
+                            (
+                                (
+                                    resistanceLow -
+                                    currentPrice
+                                ) /
+                                currentPrice
+                            ) * 100;
+
+                        positionText =
+                            `Price is currently approximately <strong>${number(distanceBelow)}% below the bottom of that resistance zone</strong>.`;
+
+                    }
+
+
+                    resistanceText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Launch Pad Scanner
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak identified a resistance zone for
+                                <strong>${ticker}</strong> around
+                                <strong>${money(resistanceLow)}–${money(resistanceHigh)}</strong>.
+
+                                Current price is
+                                <strong>${money(currentPrice)}</strong>.
+
+                                ${positionText}
+
+                                The zone has recorded
+                                <strong>${launchPadStock.resistance_tests} resistance tests</strong>.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                SUMMARY
+                --------------------------------------------- */
+
+                resistanceExplanation = `
+
+                    <div style="
+                        margin-top:10px;
+                        color:#94a3b8;
+                        line-height:1.7;
+                    ">
+
+                        <strong style="color:#e2e8f0;">
+                            What resistance means:
+                        </strong>
+
+                        Resistance is an area where price has previously
+                        had difficulty moving higher. EdgeBreak identifies
+                        these levels from the technical structure detected
+                        by its scanners.
+
+                    </div>
+
+                `;
+
+
+                answer = `
+
+                    <div class="edge-ai-rundown">
+
+                        <div style="
+                            font-size:18px;
+                            font-weight:800;
+                            color:#f8fafc;
+                            margin-bottom:12px;
+                        ">
+                            ${ticker} — Resistance
+                        </div>
+
+                        ${resistanceText}
+
+                        ${resistanceExplanation}
+
+                        <div style="
+                            margin-top:12px;
+                            padding-top:12px;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#64748b;
+                            font-size:12px;
+                            line-height:1.6;
+                        ">
+                            EdgeBreak provides technical research and market
+                            information only. It does not provide financial advice
+                            or buy, sell or hold recommendations.
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
 
             /* =================================================
             QUICK ANSWER #2
