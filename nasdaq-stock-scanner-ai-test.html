@@ -11410,6 +11410,46 @@ PANEL 1  watchlist seo
             </button>
 
 
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="setup-strength"
+            >
+                <span>How strong is this setup?</span>
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="setup-age"
+            >
+                <span>How long has this setup been forming?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="smart-money-status"
+            >
+                <span>Has Smart Money identified this stock?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="scanner-found"
+            >
+                <span>Which scanner found this stock?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
         </div>
 
     </div>
@@ -21739,11 +21779,1094 @@ document.addEventListener("DOMContentLoaded", () => {
             let answer = "";
 
             /* =================================================
+            QUICK ANSWER #12
+            WHICH SCANNER FOUND THIS STOCK?
+            ================================================= */
+
+            if (
+                selectedQuestion === "scanner-found"
+            ) {
+
+                const scanners = [];
+
+                if (breakoutStock) {
+                    scanners.push("Breakout Scanner");
+                }
+
+                if (preBreakoutStock) {
+                    scanners.push("Pre-Breakout Scanner");
+                }
+
+                if (launchPadStock) {
+                    scanners.push("Launch Pad Scanner");
+                }
+
+
+                let scannerText = "";
+
+
+                /* ---------------------------------------------
+                SUMMARY
+                --------------------------------------------- */
+
+                if (scanners.length === 1) {
+
+                    scannerText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#cbd5e1;
+                            line-height:1.7;
+                        ">
+
+                            <strong>${ticker}</strong> is currently
+                            appearing in the
+                            <strong>${scanners[0]}</strong>.
+
+                        </div>
+
+                    `;
+
+                } else {
+
+                    scannerText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#cbd5e1;
+                            line-height:1.7;
+                        ">
+
+                            <strong>${ticker}</strong> is currently
+                            appearing in
+                            <strong>${scanners.length} EdgeBreak scanners</strong>:
+
+                            <strong>${scanners.join(", ")}</strong>.
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                BREAKOUT
+                --------------------------------------------- */
+
+                if (breakoutStock) {
+
+                    scannerText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Breakout Scanner
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak found ${ticker} because price
+                                moved above resistance around
+                                <strong>${money(breakoutStock.resistance)}</strong>.
+
+                                The structure recorded
+                                <strong>${breakoutStock.touches} resistance touches</strong>
+                                and
+                                <strong>${breakoutStock.higher_lows} higher lows</strong>
+                                before the breakout.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                PRE-BREAKOUT
+                --------------------------------------------- */
+
+                if (preBreakoutStock) {
+
+                    scannerText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Pre-Breakout Scanner
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak found ${ticker} because it is
+                                forming technical structure beneath
+                                resistance around
+                                <strong>${money(preBreakoutStock.resistance_price)}</strong>.
+
+                                The scanner recorded
+                                <strong>${preBreakoutStock.resistance_touches} resistance touches</strong>
+                                and
+                                <strong>${preBreakoutStock.higher_lows} higher lows</strong>.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                LAUNCH PAD
+                --------------------------------------------- */
+
+                if (launchPadStock) {
+
+                    scannerText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Launch Pad Scanner
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak found ${ticker} because it
+                                identified a
+                                <strong>${launchPadStock.launchpad_days}-day base</strong>
+                                with repeated interaction around
+                                support and resistance.
+
+                                The structure recorded
+                                <strong>${launchPadStock.support_tests} support tests</strong>
+                                and
+                                <strong>${launchPadStock.resistance_tests} resistance tests</strong>.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                answer = `
+
+                    <div class="edge-ai-rundown">
+
+                        <div style="
+                            font-size:18px;
+                            font-weight:800;
+                            color:#f8fafc;
+                            margin-bottom:12px;
+                        ">
+                            ${ticker} — Scanner Identification
+                        </div>
+
+                        ${scannerText}
+
+                        <div style="
+                            margin-top:12px;
+                            padding-top:12px;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#64748b;
+                            font-size:12px;
+                            line-height:1.6;
+                        ">
+                            EdgeBreak provides technical research and market
+                            information only. It does not provide financial advice
+                            or buy, sell or hold recommendations.
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            /* =================================================
+            QUICK ANSWER #11
+            HAS SMART MONEY IDENTIFIED THIS STOCK?
+            ================================================= */
+
+            else if (
+                selectedQuestion === "smart-money-status"
+            ) {
+
+                let smartMoneyText = "";
+
+
+                /* ---------------------------------------------
+                FOUND IN SMART MONEY DATA
+                --------------------------------------------- */
+
+                if (smartMoneyStock) {
+
+                    const count =
+                        Number(
+                            smartMoneyStock.count
+                        );
+
+
+                    smartMoneyText = `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Smart Money Filter
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                <strong>Yes.</strong>
+
+                                ${ticker} has appeared in the
+                                <strong>EdgeBreak Smart Money Filter
+                                ${count}
+                                ${
+                                    count === 1
+                                        ? "time"
+                                        : "times"
+                                }</strong>.
+
+                                ${
+                                    smartMoneyStock.last_seen
+                                        ? `
+                                            Its most recent recorded appearance was
+                                            <strong>${formatDate(smartMoneyStock.last_seen)}</strong>.
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                The Smart Money Filter tracks stocks
+                                appearing within EdgeBreak's institutional
+                                activity criteria. Repeated appearances
+                                provide additional historical context within
+                                EdgeBreak's own dataset.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                NOT FOUND
+                --------------------------------------------- */
+
+                else {
+
+                    smartMoneyText = `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#94a3b8;
+                                margin-bottom:8px;
+                            ">
+                                Smart Money Filter
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                <strong>Not yet.</strong>
+
+                                EdgeBreak has not recorded ${ticker}
+                                in the available Smart Money Filter data.
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    Important context:
+                                </strong>
+
+                                The EdgeBreak Smart Money Filter has had
+                                <strong>limited operating time and is still
+                                gathering data to analyse</strong>.
+
+                                No recorded appearance should therefore
+                                not be interpreted as evidence that
+                                institutional activity is absent.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                answer = `
+
+                    <div class="edge-ai-rundown">
+
+                        <div style="
+                            font-size:18px;
+                            font-weight:800;
+                            color:#f8fafc;
+                            margin-bottom:12px;
+                        ">
+                            ${ticker} — Smart Money
+                        </div>
+
+                        ${smartMoneyText}
+
+                        <div style="
+                            margin-top:12px;
+                            padding-top:12px;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#64748b;
+                            font-size:12px;
+                            line-height:1.6;
+                        ">
+                            EdgeBreak provides technical research and market
+                            information only. It does not provide financial advice
+                            or buy, sell or hold recommendations.
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            /* =================================================
+            QUICK ANSWER #10
+            HOW LONG HAS THIS SETUP BEEN FORMING?
+            ================================================= */
+
+            else if (
+                selectedQuestion === "setup-age"
+            ) {
+
+                let ageText = "";
+
+
+                /* ---------------------------------------------
+                LAUNCH PAD
+                --------------------------------------------- */
+
+                if (launchPadStock) {
+
+                    const baseDays =
+                        Number(
+                            launchPadStock.launchpad_days
+                        );
+
+
+                    let baseDescription = "";
+
+
+                    if (
+                        Number.isFinite(baseDays) &&
+                        baseDays >= 105
+                    ) {
+
+                        baseDescription =
+                            `This is one of the longer base structures tracked by the Launch Pad Scanner.`;
+
+                    } else if (
+                        Number.isFinite(baseDays) &&
+                        baseDays >= 84
+                    ) {
+
+                        baseDescription =
+                            `This represents an established multi-month base structure.`;
+
+                    } else {
+
+                        baseDescription =
+                            `EdgeBreak has identified an established trading base over this period.`;
+
+                    }
+
+
+                    ageText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Launch Pad Structure
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak identified a
+                                <strong>${baseDays}-day base</strong>
+                                for ${ticker}.
+
+                                During that structure, the scanner recorded
+                                <strong>${launchPadStock.support_tests} support tests</strong>
+                                and
+                                <strong>${launchPadStock.resistance_tests} resistance tests</strong>.
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    In plain English:
+                                </strong>
+
+                                ${baseDescription}
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                PRE-BREAKOUT
+                --------------------------------------------- */
+
+                if (preBreakoutStock) {
+
+                    ageText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Pre-Breakout Structure
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                ${ticker} currently has an active
+                                Pre-Breakout structure with
+                                <strong>${preBreakoutStock.resistance_touches} resistance touches</strong>
+                                and
+                                <strong>${preBreakoutStock.higher_lows} higher lows</strong>.
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak has stored structure dates for
+                                this scanner, but the current dataset is
+                                not being used here to calculate an exact
+                                formation period. This avoids reporting
+                                an unreliable duration.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                BREAKOUT
+                --------------------------------------------- */
+
+                if (breakoutStock) {
+
+                    ageText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Breakout Structure
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                ${ticker} is currently appearing as a
+                                completed breakout structure.
+
+                                Before price moved through resistance,
+                                EdgeBreak recorded
+                                <strong>${breakoutStock.touches} resistance touches</strong>
+                                and
+                                <strong>${breakoutStock.higher_lows} higher lows</strong>.
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                The current Breakout Scanner data does not
+                                store a reliable formation duration, so
+                                EdgeBreak will not estimate one.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                answer = `
+
+                    <div class="edge-ai-rundown">
+
+                        <div style="
+                            font-size:18px;
+                            font-weight:800;
+                            color:#f8fafc;
+                            margin-bottom:12px;
+                        ">
+                            ${ticker} — Setup Age
+                        </div>
+
+                        ${ageText}
+
+                        <div style="
+                            margin-top:12px;
+                            padding-top:12px;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#64748b;
+                            font-size:12px;
+                            line-height:1.6;
+                        ">
+                            EdgeBreak reports setup duration only when
+                            it can be determined reliably from the
+                            available scanner data.
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+            /* =================================================
+            QUICK ANSWER #9
+            HOW STRONG IS THIS SETUP?
+            ================================================= */
+
+            else if (
+                selectedQuestion === "setup-strength"
+            ) {
+
+                let strengthText = "";
+
+
+                /* ---------------------------------------------
+                BREAKOUT
+                --------------------------------------------- */
+
+                if (breakoutStock) {
+
+                    const touches =
+                        Number(
+                            breakoutStock.touches
+                        );
+
+                    const higherLows =
+                        Number(
+                            breakoutStock.higher_lows
+                        );
+
+                    const volumeRatio =
+                        Number(
+                            breakoutStock.volume_ratio
+                        );
+
+                    const distance =
+                        Number(
+                            breakoutStock.distance_above_resistance
+                        );
+
+
+                    strengthText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Breakout Structure
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak recorded
+                                <strong>${touches} resistance touches</strong>
+                                and
+                                <strong>${higherLows} higher lows</strong>
+                                before price moved through resistance around
+                                <strong>${money(breakoutStock.resistance)}</strong>.
+
+                                ${
+                                    breakoutStock.grade
+                                        ? `
+                                            The setup received an EdgeBreak
+                                            grade of
+                                            <strong>${breakoutStock.grade}</strong>.
+                                        `
+                                        : ""
+                                }
+
+                                ${
+                                    Number.isFinite(volumeRatio)
+                                        ? `
+                                            Recorded breakout volume was approximately
+                                            <strong>${number(volumeRatio)}× normal volume</strong>.
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    Structure assessment:
+                                </strong>
+
+                                ${
+                                    touches >= 3 &&
+                                    higherLows >= 3
+                                        ? `
+                                            The setup contains several repeated
+                                            resistance tests together with multiple
+                                            higher lows, giving EdgeBreak
+                                            <strong>well-established technical structure</strong>
+                                            to analyse.
+                                        `
+                                        : touches >= 2 &&
+                                          higherLows >= 1
+                                            ? `
+                                                The setup contains repeated interaction
+                                                with resistance together with a developing
+                                                higher-low structure.
+                                            `
+                                            : `
+                                                EdgeBreak detected enough technical
+                                                structure for the stock to qualify for
+                                                the Breakout Scanner, although fewer
+                                                structural confirmations are present
+                                                in the stored scanner data.
+                                            `
+                                }
+
+                                ${
+                                    Number.isFinite(distance) &&
+                                    distance > 5
+                                        ? `
+                                            Price is now
+                                            <strong>${number(distance)}% above resistance</strong>,
+                                            so it has already moved some distance beyond
+                                            the original breakout area.
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                PRE-BREAKOUT
+                --------------------------------------------- */
+
+                if (preBreakoutStock) {
+
+                    const touches =
+                        Number(
+                            preBreakoutStock.resistance_touches
+                        );
+
+                    const higherLows =
+                        Number(
+                            preBreakoutStock.higher_lows
+                        );
+
+                    const distance =
+                        Number(
+                            preBreakoutStock.distance_to_resistance
+                        );
+
+
+                    strengthText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Pre-Breakout Structure
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak has recorded
+                                <strong>${touches} resistance touches</strong>
+                                and
+                                <strong>${higherLows} higher lows</strong>.
+
+                                Resistance is around
+                                <strong>${money(preBreakoutStock.resistance_price)}</strong>,
+                                with price currently approximately
+                                <strong>${number(distance)}% below that level</strong>.
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    Structure assessment:
+                                </strong>
+
+                                ${
+                                    touches >= 3 &&
+                                    higherLows >= 3
+                                        ? `
+                                            The scanner has identified
+                                            <strong>well-established technical structure</strong>,
+                                            with repeated testing of resistance and
+                                            multiple higher lows.
+                                        `
+                                        : touches >= 2 &&
+                                          higherLows >= 1
+                                            ? `
+                                                The stock has a
+                                                <strong>developing technical structure</strong>,
+                                                with repeated resistance interaction
+                                                and higher lows present.
+                                            `
+                                            : `
+                                                The structure currently contains fewer
+                                                confirmations, but it still meets the
+                                                conditions required to appear in the
+                                                Pre-Breakout Scanner.
+                                            `
+                                }
+
+                                ${
+                                    Number.isFinite(distance) &&
+                                    distance <= 1
+                                        ? `
+                                            Price is also currently
+                                            <strong>within 1% of resistance</strong>.
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                LAUNCH PAD
+                --------------------------------------------- */
+
+                if (launchPadStock) {
+
+                    const supportTests =
+                        Number(
+                            launchPadStock.support_tests
+                        );
+
+                    const resistanceTests =
+                        Number(
+                            launchPadStock.resistance_tests
+                        );
+
+                    const baseDays =
+                        Number(
+                            launchPadStock.launchpad_days
+                        );
+
+                    const rangePercent =
+                        Number(
+                            launchPadStock.range_percent
+                        );
+
+
+                    strengthText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Launch Pad Structure
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak identified a
+                                <strong>${baseDays}-day base</strong>
+                                with
+                                <strong>${supportTests} support tests</strong>
+                                and
+                                <strong>${resistanceTests} resistance tests</strong>.
+
+                                The distance between the identified support
+                                and resistance areas is approximately
+                                <strong>${number(rangePercent)}%</strong>.
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    Structure assessment:
+                                </strong>
+
+                                ${
+                                    supportTests >= 3 &&
+                                    resistanceTests >= 3 &&
+                                    baseDays >= 84
+                                        ? `
+                                            EdgeBreak has identified a
+                                            <strong>well-established base structure</strong>,
+                                            with repeated testing on both sides of
+                                            the range over an extended period.
+                                        `
+                                        : supportTests >= 2 &&
+                                          resistanceTests >= 2
+                                            ? `
+                                                The stock has an
+                                                <strong>established trading base</strong>
+                                                with repeated interaction around both
+                                                support and resistance.
+                                            `
+                                            : `
+                                                EdgeBreak has identified a defined
+                                                base, although the stored structure
+                                                currently contains fewer repeated tests
+                                                of its boundaries.
+                                            `
+                                }
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                answer = `
+
+                    <div class="edge-ai-rundown">
+
+                        <div style="
+                            font-size:18px;
+                            font-weight:800;
+                            color:#f8fafc;
+                            margin-bottom:12px;
+                        ">
+                            ${ticker} — Setup Strength
+                        </div>
+
+                        ${strengthText}
+
+                        <div style="
+                            margin-top:10px;
+                            color:#94a3b8;
+                            line-height:1.7;
+                        ">
+
+                            <strong style="color:#e2e8f0;">
+                                Important:
+                            </strong>
+
+                            Setup strength describes the amount of
+                            technical structure detected by EdgeBreak.
+                            It does not predict whether price will move
+                            higher or lower.
+
+                        </div>
+
+                        <div style="
+                            margin-top:12px;
+                            padding-top:12px;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#64748b;
+                            font-size:12px;
+                            line-height:1.6;
+                        ">
+                            EdgeBreak provides technical research and market
+                            information only. It does not provide financial advice
+                            or buy, sell or hold recommendations.
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+            /* =================================================
             QUICK ANSWER #8
             ANYTHING I SHOULD KNOW QUICKLY?
             ================================================= */
 
-            if (
+            else if (
                 selectedQuestion === "anything-important"
             ) {
 
