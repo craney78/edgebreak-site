@@ -8871,6 +8871,7 @@ html {
 #edgeBreakAccountScreen[hidden],
 #edgeBreakTradeScreen[hidden],
 #edgeBreakNasdaqScreen[hidden],
+#edgeBreakSectorScreen[hidden],
 #edgeBreakStockScreen[hidden] {
     display: none !important;
 }
@@ -12490,6 +12491,175 @@ PANEL 1  watchlist seo
                 data-chat-nasdaq-question="big-picture"
             >
                 <span>Give me the NASDAQ big picture.</span>
+                <span>›</span>
+            </button>
+
+
+        </div>
+
+    </div>
+
+    <!-- =========================================================
+    EDGEBREAK AI CHAT
+    SECTORS & TRENDS
+    ========================================================= -->
+
+    <div
+        id="edgeBreakSectorScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+
+        <div class="edge-chat-screen-heading">
+
+            <div class="edge-chat-screen-icon">
+                🏭
+            </div>
+
+            <div>
+
+                <h3>
+                    Sectors & Trends
+                </h3>
+
+                <p>
+                    Understand sector strength, weakness,
+                    leadership and rotation across the market.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-question-list">
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="strongest-sectors"
+            >
+                <span>Which sectors were strongest today?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="weakest-sectors"
+            >
+                <span>Which sectors were weakest today?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="why-sector-strength"
+            >
+                <span>Why does sector strength matter when researching a stock?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="stock-rise-weak-sector"
+            >
+                <span>Can a stock rise when its sector is weak?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="strong-sector-help"
+            >
+                <span>Can a strong sector help a stock?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="sector-rotation"
+            >
+                <span>What is sector rotation?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="rotation-into-sector"
+            >
+                <span>How can I tell if money is rotating into a sector?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="compare-sector"
+            >
+                <span>Should I compare a stock with others in its sector?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="stronger-than-sector"
+            >
+                <span>What does it mean if my stock is stronger than its sector?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="weaker-than-sector"
+            >
+                <span>What does it mean if my stock is weaker than its sector?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="technology-leading"
+            >
+                <span>Are technology stocks leading the NASDAQ right now?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="sector-picture"
+            >
+                <span>Give me today's sector picture.</span>
                 <span>›</span>
             </button>
 
@@ -25926,6 +26096,1182 @@ document.addEventListener("DOMContentLoaded", () => {
                                 errorBackRow.remove();
 
                                 nasdaqScreen.hidden =
+                                    false;
+
+                            }
+                        );
+
+                    }
+                    finally {
+
+                        questionButtons.forEach(
+                            item =>
+                                item.disabled = false
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+})();
+
+/* =========================================================
+   EDGEBREAK AI CHAT
+   SECTORS & TRENDS
+========================================================= */
+
+(function initEdgeBreakSectorSection() {
+
+    const categories =
+        document.getElementById(
+            "edgeBreakChatCategories"
+        );
+
+    const sectorScreen =
+        document.getElementById(
+            "edgeBreakSectorScreen"
+        );
+
+    const sectorButton =
+        document.querySelector(
+            '[data-chat-category="sector"]'
+        );
+
+    const conversation =
+        document.getElementById(
+            "edgeBreakChatConversation"
+        );
+
+    const backButton =
+        sectorScreen?.querySelector(
+            '[data-chat-back="main"]'
+        );
+
+
+    /* =====================================================
+       SAFETY CHECK
+    ===================================================== */
+
+    if (
+        !categories ||
+        !sectorScreen ||
+        !sectorButton ||
+        !conversation ||
+        !backButton
+    ) {
+
+        console.warn(
+            "EdgeBreak Sector elements not found."
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       SAFE HTML
+    ===================================================== */
+
+    function safe(value) {
+
+        return String(
+            value ?? ""
+        )
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+
+    }
+
+
+    /* =====================================================
+       CURRENT MARKET DATA
+
+       Reuses the NASDAQ Market Overview already loaded
+       by EdgeBreak AI where possible.
+    ===================================================== */
+
+    async function getSectorMarketData() {
+
+        if (
+            window.edgeBreakNasdaqOverview?.overview
+        ) {
+
+            return window.edgeBreakNasdaqOverview;
+
+        }
+
+
+        const response =
+            await fetch(
+                "/api/nasdaq_market_overview",
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({})
+
+                }
+            );
+
+
+        const raw =
+            await response.text();
+
+
+        let data = {};
+
+
+        try {
+
+            data =
+                JSON.parse(
+                    raw
+                );
+
+        }
+        catch (error) {
+
+            throw new Error(
+                "EdgeBreak market intelligence returned an invalid response."
+            );
+
+        }
+
+
+        if (
+            !response.ok ||
+            !data.success ||
+            !data.overview
+        ) {
+
+            throw new Error(
+                data?.error ||
+                "Today's sector intelligence is unavailable."
+            );
+
+        }
+
+
+        window.edgeBreakNasdaqOverview =
+            data;
+
+
+        return data;
+
+    }
+
+
+    /* =====================================================
+       FORMAT STRONG / WEAK AREAS
+    ===================================================== */
+
+    function formatAreas(areas) {
+
+        if (
+            !Array.isArray(areas) ||
+            !areas.length
+        ) {
+
+            return `
+                No notable sector or industry
+                leadership was identified.
+            `;
+
+        }
+
+
+        return areas
+            .map(
+                area => `
+
+                    <strong>
+                        ${safe(area.name)}
+                    </strong>
+                    <br>
+
+                    ${safe(area.summary)}
+
+                `
+            )
+            .join("<br><br>");
+
+    }
+
+
+    /* =====================================================
+       FIND TECHNOLOGY AREA
+
+       We do NOT assume technology was strong.
+       We only report what today's overview actually says.
+    ===================================================== */
+
+    function findTechnologyAreas(
+        strongAreas,
+        weakAreas
+    ) {
+
+        const technologyTerms = [
+            "technology",
+            "tech",
+            "software",
+            "semiconductor",
+            "semiconductors",
+            "chip",
+            "chips",
+            "hardware"
+        ];
+
+
+        function matches(area) {
+
+            const text =
+                `${area?.name || ""} ${area?.summary || ""}`
+                    .toLowerCase();
+
+
+            return technologyTerms.some(
+                term =>
+                    text.includes(term)
+            );
+
+        }
+
+
+        const strongTech =
+            Array.isArray(strongAreas)
+                ? strongAreas.filter(matches)
+                : [];
+
+
+        const weakTech =
+            Array.isArray(weakAreas)
+                ? weakAreas.filter(matches)
+                : [];
+
+
+        return {
+            strongTech,
+            weakTech
+        };
+
+    }
+
+
+    /* =====================================================
+       STATIC EDUCATIONAL ANSWERS
+    ===================================================== */
+
+    const answers = {
+
+
+        /* -------------------------------------------------
+           #3 WHY SECTOR STRENGTH MATTERS
+        ------------------------------------------------- */
+
+        "why-sector-strength": `
+
+            Sector conditions provide useful
+            <strong>context</strong> when researching an
+            individual stock.
+            <br><br>
+            Companies within the same sector can be influenced
+            by similar factors such as demand, interest rates,
+            commodity prices, regulation, technology trends or
+            investor sentiment.
+            <br><br>
+            If several companies from the same area are
+            strengthening together, the move may reflect
+            broader sector participation rather than one
+            company acting alone.
+            <br><br>
+            Sector strength does not guarantee that an
+            individual stock will rise. It simply gives you
+            another piece of information when evaluating the
+            stock's technical and market environment.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #4 STOCK RISING IN WEAK SECTOR
+        ------------------------------------------------- */
+
+        "stock-rise-weak-sector": `
+
+            <strong>Yes.</strong> An individual stock can rise
+            while its broader sector is weak.
+            <br><br>
+            Company-specific factors such as earnings, new
+            products, contracts, regulatory developments or
+            unusually strong demand for the shares can cause
+            a stock to behave differently from its peers.
+            <br><br>
+            When a stock remains strong while many companies
+            around it are weak, traders sometimes describe
+            that as <strong>relative strength</strong>.
+            <br><br>
+            That does not mean the stock is immune from broader
+            sector weakness, but the difference can be useful
+            research information.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #5 STRONG SECTOR HELP
+        ------------------------------------------------- */
+
+        "strong-sector-help": `
+
+            A strong sector can provide a
+            <strong>supportive market environment</strong> for
+            companies within that area.
+            <br><br>
+            When investors are increasing exposure to a
+            particular industry or theme, several related
+            stocks may experience stronger demand at the same
+            time.
+            <br><br>
+            This can help explain why technical setups
+            sometimes appear across multiple stocks from the
+            same area.
+            <br><br>
+            But sector strength does not make every company
+            within the sector equally strong. The individual
+            company's price structure, volume, liquidity and
+            company-specific developments still matter.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #6 SECTOR ROTATION
+        ------------------------------------------------- */
+
+        "sector-rotation": `
+
+            <strong>Sector rotation</strong> describes capital
+            moving between different areas of the market.
+            <br><br>
+            For example, investors may reduce exposure to one
+            group of companies while increasing exposure to
+            another because of changing economic expectations,
+            interest rates, earnings trends or market
+            sentiment.
+            <br><br>
+            This can cause previously strong sectors to weaken
+            while other sectors begin showing stronger price
+            performance.
+            <br><br>
+            Rotation is usually better viewed as a developing
+            pattern across groups of stocks rather than a
+            single day's movement.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #7 ROTATION INTO SECTOR
+        ------------------------------------------------- */
+
+        "rotation-into-sector": `
+
+            There is no single measurement that proves money
+            is rotating into a sector.
+            <br><br>
+            Traders may look for several pieces of evidence,
+            including:
+            <br><br>
+            • Multiple stocks in the sector strengthening
+            together.<br>
+            • Improving trading volume.<br>
+            • More stocks forming or completing technical
+            breakouts.<br>
+            • The sector outperforming the broader market.<br>
+            • Strength continuing across multiple trading
+            sessions rather than appearing for only one day.
+            <br><br>
+            EdgeBreak's scanner activity can also provide
+            useful context if technical setups begin appearing
+            across several companies from the same area.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #8 COMPARE WITH SECTOR
+        ------------------------------------------------- */
+
+        "compare-sector": `
+
+            Comparing a stock with other companies in the same
+            sector can provide useful context.
+            <br><br>
+            You might ask:
+            <br><br>
+            • Are several related stocks moving higher?<br>
+            • Is this stock outperforming its peers?<br>
+            • Is the entire sector weak while this stock
+            remains strong?<br>
+            • Are technical breakouts appearing across the
+            group?<br>
+            • Is the movement company-specific or part of a
+            broader sector trend?
+            <br><br>
+            The comparison does not determine whether a stock
+            is a good trade. It helps explain the environment
+            in which the stock is moving.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #9 STRONGER THAN SECTOR
+        ------------------------------------------------- */
+
+        "stronger-than-sector": `
+
+            If a stock is performing better than its broader
+            sector, it is showing
+            <strong>relative strength</strong> compared with
+            that group.
+            <br><br>
+            For example, the sector may be falling while the
+            stock remains stable, or the sector may be rising
+            while the individual stock rises more strongly.
+            <br><br>
+            That difference can indicate that stock-specific
+            demand or company developments are having a
+            stronger influence than the broader sector.
+            <br><br>
+            Relative strength is useful context, but it does
+            not guarantee that the stock will continue to
+            outperform.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #10 WEAKER THAN SECTOR
+        ------------------------------------------------- */
+
+        "weaker-than-sector": `
+
+            If a stock is underperforming while its broader
+            sector is strong, it is showing
+            <strong>relative weakness</strong>.
+            <br><br>
+            That can be worth investigating because the stock
+            is not participating in the same way as many of
+            its peers.
+            <br><br>
+            Possible explanations can include company-specific
+            news, earnings, valuation concerns, technical
+            resistance or simply weaker demand for that
+            particular stock.
+            <br><br>
+            Relative weakness does not explain the cause by
+            itself. It identifies a difference that may deserve
+            further research.
+
+        `
+
+    };
+
+
+    /* =====================================================
+       BUILD CURRENT MARKET ANSWER
+    ===================================================== */
+
+    function buildCurrentAnswer(
+        question,
+        data
+    ) {
+
+        const overview =
+            data?.overview || {};
+
+
+        switch (question) {
+
+
+            /* ---------------------------------------------
+               #1 STRONGEST SECTORS
+            --------------------------------------------- */
+
+            case "strongest-sectors":
+
+                return `
+
+                    <strong>
+                        Stronger areas from the completed
+                        NASDAQ session:
+                    </strong>
+
+                    <br><br>
+
+                    ${formatAreas(
+                        overview.strongAreas
+                    )}
+
+                `;
+
+
+            /* ---------------------------------------------
+               #2 WEAKEST SECTORS
+            --------------------------------------------- */
+
+            case "weakest-sectors":
+
+                return `
+
+                    <strong>
+                        Weaker areas from the completed
+                        NASDAQ session:
+                    </strong>
+
+                    <br><br>
+
+                    ${formatAreas(
+                        overview.weakAreas
+                    )}
+
+                `;
+
+
+            /* ---------------------------------------------
+               #11 TECHNOLOGY LEADERSHIP
+            --------------------------------------------- */
+
+            case "technology-leading": {
+
+                const tech =
+                    findTechnologyAreas(
+                        overview.strongAreas,
+                        overview.weakAreas
+                    );
+
+
+                if (
+                    tech.strongTech.length &&
+                    !tech.weakTech.length
+                ) {
+
+                    return `
+
+                        Technology-related areas appeared among
+                        the <strong>stronger areas</strong>
+                        identified by EdgeBreak for the
+                        completed session.
+                        <br><br>
+
+                        ${formatAreas(
+                            tech.strongTech
+                        )}
+
+                        <br><br>
+
+                        This describes today's market
+                        leadership. It does not mean every
+                        technology stock was strong.
+
+                    `;
+
+                }
+
+
+                if (
+                    tech.weakTech.length &&
+                    !tech.strongTech.length
+                ) {
+
+                    return `
+
+                        Technology-related areas appeared among
+                        the <strong>weaker areas</strong>
+                        identified by EdgeBreak for the
+                        completed session.
+                        <br><br>
+
+                        ${formatAreas(
+                            tech.weakTech
+                        )}
+
+                        <br><br>
+
+                        Individual technology stocks may still
+                        have performed differently from the
+                        broader group.
+
+                    `;
+
+                }
+
+
+                if (
+                    tech.strongTech.length &&
+                    tech.weakTech.length
+                ) {
+
+                    return `
+
+                        Today's technology picture was
+                        <strong>mixed</strong>.
+                        <br><br>
+
+                        Some technology-related areas appeared
+                        among EdgeBreak's stronger groups:
+                        <br><br>
+
+                        ${formatAreas(
+                            tech.strongTech
+                        )}
+
+                        <br><br>
+
+                        Other technology-related areas appeared
+                        among the weaker groups:
+                        <br><br>
+
+                        ${formatAreas(
+                            tech.weakTech
+                        )}
+
+                    `;
+
+                }
+
+
+                return `
+
+                    EdgeBreak's current market overview did not
+                    identify a technology-related group clearly
+                    enough among today's strongest or weakest
+                    areas to call technology the market leader.
+                    <br><br>
+
+                    That does not mean technology was unchanged.
+                    It means the current EdgeBreak overview does
+                    not provide enough evidence to label it as
+                    today's clear leader.
+
+                `;
+
+            }
+
+
+            /* ---------------------------------------------
+               #12 SECTOR PICTURE
+            --------------------------------------------- */
+
+            case "sector-picture":
+
+                return `
+
+                    <strong>
+                        Today's Sector Picture
+                    </strong>
+
+                    <br><br>
+
+                    <strong>Stronger areas</strong>
+                    <br><br>
+
+                    ${formatAreas(
+                        overview.strongAreas
+                    )}
+
+                    <br><br>
+
+                    <strong>Weaker areas</strong>
+                    <br><br>
+
+                    ${formatAreas(
+                        overview.weakAreas
+                    )}
+
+                    ${
+                        overview.marketSummary
+                            ? `
+
+                                <br><br>
+
+                                <strong>
+                                    Broader market context
+                                </strong>
+                                <br><br>
+
+                                ${safe(
+                                    overview.marketSummary
+                                )}
+
+                            `
+                            : ""
+                    }
+
+                `;
+
+
+            default:
+
+                return `
+                    Today's sector information is
+                    unavailable for this question.
+                `;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       WHICH QUESTIONS REQUIRE CURRENT DATA?
+    ===================================================== */
+
+    const currentDataQuestions =
+        new Set([
+
+            "strongest-sectors",
+            "weakest-sectors",
+            "technology-leading",
+            "sector-picture"
+
+        ]);
+
+
+    /* =====================================================
+       OPEN SECTOR SCREEN
+    ===================================================== */
+
+    sectorButton.addEventListener(
+        "click",
+        function() {
+
+            categories.hidden =
+                true;
+
+            sectorScreen.hidden =
+                false;
+
+            conversation.scrollTop =
+                0;
+
+        }
+    );
+
+
+    /* =====================================================
+       BACK TO MAIN MENU
+    ===================================================== */
+
+    backButton.addEventListener(
+        "click",
+        function() {
+
+            sectorScreen.hidden =
+                true;
+
+            categories.hidden =
+                false;
+
+            conversation.scrollTop =
+                0;
+
+        }
+    );
+
+
+    /* =====================================================
+       QUESTION BUTTONS
+    ===================================================== */
+
+    const questionButtons =
+        sectorScreen.querySelectorAll(
+            "[data-chat-sector-question]"
+        );
+
+
+    questionButtons.forEach(
+        function(button) {
+
+            button.addEventListener(
+                "click",
+                async function() {
+
+                    const question =
+                        button.dataset
+                            .chatSectorQuestion;
+
+
+                    const questionText =
+                        button.querySelector(
+                            "span:first-child"
+                        )?.textContent.trim() ||
+                        "Sectors & Trends";
+
+
+                    /* =====================================
+                       USER MESSAGE
+                    ===================================== */
+
+                    const userMessage =
+                        document.createElement(
+                            "div"
+                        );
+
+                    userMessage.className =
+                        "edge-chat-message edge-chat-message-user";
+
+                    userMessage.innerHTML = `
+
+                        <div class="edge-chat-message-bubble">
+
+                            <strong>
+                                ${safe(
+                                    questionText
+                                )}
+                            </strong>
+
+                        </div>
+
+                    `;
+
+
+                    sectorScreen.hidden =
+                        true;
+
+
+                    conversation.appendChild(
+                        userMessage
+                    );
+
+
+                    let aiMessage =
+                        null;
+
+
+                    let loadingMessage =
+                        null;
+
+
+                    try {
+
+
+                        /* =================================
+                           CURRENT DATA QUESTION
+                        ================================= */
+
+                        if (
+                            currentDataQuestions.has(
+                                question
+                            )
+                        ) {
+
+                            questionButtons.forEach(
+                                item =>
+                                    item.disabled = true
+                            );
+
+
+                            loadingMessage =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            loadingMessage.className =
+                                "edge-chat-message edge-chat-message-ai";
+
+
+                            loadingMessage.innerHTML = `
+
+                                <div class="edge-chat-message-icon">
+                                    ✦
+                                </div>
+
+                                <div class="edge-chat-message-bubble">
+
+                                    Loading today's EdgeBreak
+                                    sector intelligence...
+
+                                </div>
+
+                            `;
+
+
+                            conversation.appendChild(
+                                loadingMessage
+                            );
+
+
+                            conversation.scrollTop =
+                                conversation.scrollHeight;
+
+
+                            const data =
+                                await getSectorMarketData();
+
+
+                            loadingMessage.remove();
+
+
+                            aiMessage =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            aiMessage.className =
+                                "edge-chat-message edge-chat-message-ai";
+
+
+                            aiMessage.innerHTML = `
+
+                                <div class="edge-chat-message-icon">
+                                    ✦
+                                </div>
+
+                                <div class="edge-chat-message-bubble">
+
+                                    ${buildCurrentAnswer(
+                                        question,
+                                        data
+                                    )}
+
+                                </div>
+
+                            `;
+
+                        }
+
+
+                        /* =================================
+                           EDUCATIONAL QUESTION
+                        ================================= */
+
+                        else {
+
+                            const answer =
+                                answers[
+                                    question
+                                ];
+
+
+                            if (!answer) {
+
+                                throw new Error(
+                                    "Sector answer not found."
+                                );
+
+                            }
+
+
+                            aiMessage =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            aiMessage.className =
+                                "edge-chat-message edge-chat-message-ai";
+
+
+                            aiMessage.innerHTML = `
+
+                                <div class="edge-chat-message-icon">
+                                    ✦
+                                </div>
+
+                                <div class="edge-chat-message-bubble">
+
+                                    ${answer}
+
+                                </div>
+
+                            `;
+
+                        }
+
+
+                        /* =================================
+                           BACK BUTTON
+                        ================================= */
+
+                        const answerBackRow =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        answerBackRow.className =
+                            "edge-chat-answer-back-row";
+
+
+                        const answerBackButton =
+                            document.createElement(
+                                "button"
+                            );
+
+
+                        answerBackButton.type =
+                            "button";
+
+
+                        answerBackButton.className =
+                            "edge-chat-back";
+
+
+                        answerBackButton.textContent =
+                            "← Back to Sectors & Trends";
+
+
+                        answerBackRow.appendChild(
+                            answerBackButton
+                        );
+
+
+                        conversation.appendChild(
+                            aiMessage
+                        );
+
+
+                        conversation.appendChild(
+                            answerBackRow
+                        );
+
+
+                        answerBackButton.addEventListener(
+                            "click",
+                            function() {
+
+                                userMessage.remove();
+                                aiMessage.remove();
+                                answerBackRow.remove();
+
+                                sectorScreen.hidden =
+                                    false;
+
+                                conversation.scrollTop =
+                                    0;
+
+                            }
+                        );
+
+
+                        conversation.scrollTop =
+                            conversation.scrollHeight;
+
+                    }
+                    catch (error) {
+
+                        console.error(
+                            "EdgeBreak Sector Chat Error:",
+                            error
+                        );
+
+
+                        if (loadingMessage) {
+
+                            loadingMessage.remove();
+
+                        }
+
+
+                        const errorMessage =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        errorMessage.className =
+                            "edge-chat-message edge-chat-message-ai";
+
+
+                        errorMessage.innerHTML = `
+
+                            <div class="edge-chat-message-icon">
+                                ✦
+                            </div>
+
+                            <div class="edge-chat-message-bubble">
+
+                                Today's EdgeBreak sector
+                                intelligence is temporarily
+                                unavailable.
+
+                            </div>
+
+                        `;
+
+
+                        const errorBackRow =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        errorBackRow.className =
+                            "edge-chat-answer-back-row";
+
+
+                        const errorBackButton =
+                            document.createElement(
+                                "button"
+                            );
+
+
+                        errorBackButton.type =
+                            "button";
+
+
+                        errorBackButton.className =
+                            "edge-chat-back";
+
+
+                        errorBackButton.textContent =
+                            "← Back to Sectors & Trends";
+
+
+                        errorBackRow.appendChild(
+                            errorBackButton
+                        );
+
+
+                        conversation.appendChild(
+                            errorMessage
+                        );
+
+
+                        conversation.appendChild(
+                            errorBackRow
+                        );
+
+
+                        errorBackButton.addEventListener(
+                            "click",
+                            function() {
+
+                                userMessage.remove();
+                                errorMessage.remove();
+                                errorBackRow.remove();
+
+                                sectorScreen.hidden =
                                     false;
 
                             }
