@@ -26793,7 +26793,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 "button";
 
             answerBackButton.textContent =
-                "← Back to Quick Answers";
+                window.edgeBreakQuestionMode === "technical"
+                    ? "← Back to Technical Setup"
+                    : "← Back to Quick Answers";
 
             answerBackButton.style.cssText = `
                 appearance:none;
