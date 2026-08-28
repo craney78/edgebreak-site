@@ -21739,6 +21739,240 @@ document.addEventListener("DOMContentLoaded", () => {
             let answer = "";
 
             /* =================================================
+            QUICK ANSWER #4
+            WHERE IS SUPPORT?
+            ================================================= */
+
+            if (
+                selectedQuestion === "support"
+            ) {
+
+                let supportText = "";
+
+
+                /* ---------------------------------------------
+                LAUNCH PAD SUPPORT
+                --------------------------------------------- */
+
+                if (launchPadStock) {
+
+                    const currentPrice =
+                        Number(
+                            launchPadStock.current_price
+                        );
+
+                    const supportLow =
+                        Number(
+                            launchPadStock.support_zone_low
+                        );
+
+                    const supportHigh =
+                        Number(
+                            launchPadStock.support_zone_high
+                        );
+
+
+                    let positionText = "";
+
+
+                    if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(supportLow) &&
+                        currentPrice < supportLow
+                    ) {
+
+                        const distanceBelow =
+                            (
+                                (
+                                    supportLow -
+                                    currentPrice
+                                ) /
+                                supportLow
+                            ) * 100;
+
+
+                        positionText = `
+                            Price is currently
+                            <strong>${number(distanceBelow)}% below the bottom of that support zone</strong>.
+                        `;
+
+                    } else if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(supportHigh) &&
+                        currentPrice <= supportHigh
+                    ) {
+
+                        positionText = `
+                            Price is currently
+                            <strong>inside the identified support zone</strong>.
+                        `;
+
+                    } else if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(supportHigh)
+                    ) {
+
+                        const distanceAbove =
+                            (
+                                (
+                                    currentPrice -
+                                    supportHigh
+                                ) /
+                                supportHigh
+                            ) * 100;
+
+
+                        positionText = `
+                            Price is currently approximately
+                            <strong>${number(distanceAbove)}% above the top of that support zone</strong>.
+                        `;
+
+                    }
+
+
+                    supportText = `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Launch Pad Support
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak identified a support zone for
+                                <strong>${ticker}</strong> around
+                                <strong>${money(supportLow)}–${money(supportHigh)}</strong>.
+
+                                Current price is
+                                <strong>${money(currentPrice)}</strong>.
+
+                                ${positionText}
+
+                                The zone has recorded
+                                <strong>${launchPadStock.support_tests} support tests</strong>.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                NO STORED SUPPORT LEVEL
+                --------------------------------------------- */
+
+                else {
+
+                    supportText = `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#cbd5e1;
+                            line-height:1.7;
+                        ">
+
+                            EdgeBreak does not currently have a stored
+                            support zone for <strong>${ticker}</strong>
+                            in today's scanner data.
+
+                            ${
+                                breakoutStock
+                                    ? `
+                                        The Breakout Scanner has identified
+                                        resistance around
+                                        <strong>${money(breakoutStock.resistance)}</strong>,
+                                        but it does not store a separate
+                                        support level for this setup.
+                                    `
+                                    : ""
+                            }
+
+                            ${
+                                preBreakoutStock
+                                    ? `
+                                        The Pre-Breakout Scanner has identified
+                                        resistance around
+                                        <strong>${money(preBreakoutStock.resistance_price)}</strong>,
+                                        but it does not store a separate
+                                        support level for this setup.
+                                    `
+                                    : ""
+                            }
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                answer = `
+
+                    <div class="edge-ai-rundown">
+
+                        <div style="
+                            font-size:18px;
+                            font-weight:800;
+                            color:#f8fafc;
+                            margin-bottom:12px;
+                        ">
+                            ${ticker} — Support
+                        </div>
+
+                        ${supportText}
+
+                        <div style="
+                            margin-top:10px;
+                            color:#94a3b8;
+                            line-height:1.7;
+                        ">
+
+                            <strong style="color:#e2e8f0;">
+                                What support means:
+                            </strong>
+
+                            Support is an area where price has previously
+                            found buying interest or had difficulty moving
+                            lower. EdgeBreak only reports a support level
+                            here when that level exists in the scanner data.
+
+                        </div>
+
+                        <div style="
+                            margin-top:12px;
+                            padding-top:12px;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#64748b;
+                            font-size:12px;
+                            line-height:1.6;
+                        ">
+                            EdgeBreak provides technical research and market
+                            information only. It does not provide financial advice
+                            or buy, sell or hold recommendations.
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+            /* =================================================
             QUICK ANSWER #3
             WHERE IS RESISTANCE?
             ================================================= */
