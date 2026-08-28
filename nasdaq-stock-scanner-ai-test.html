@@ -8869,6 +8869,7 @@ html {
 #edgeBreakLearnScreen[hidden],
 #edgeBreakMarginScreen[hidden],
 #edgeBreakAccountScreen[hidden],
+#edgeBreakTradeScreen[hidden],
 #edgeBreakStockScreen[hidden] {
     display: none !important;
 }
@@ -11102,7 +11103,7 @@ PANEL 1  watchlist seo
 
                 <span>
                     <strong>
-                        I'm In A Trade
+                        Entering & Exiting Trades
                     </strong>
 
                     <small>
@@ -12150,6 +12151,175 @@ PANEL 1  watchlist seo
                 data-chat-account-question="financial-advice"
             >
                 <span>Does EdgeBreak give financial advice?</span>
+                <span>›</span>
+            </button>
+
+
+        </div>
+
+    </div>
+
+    <!-- =========================================================
+    EDGEBREAK AI CHAT
+    ENTERING & EXITING TRADES
+    ========================================================= -->
+
+    <div
+        id="edgeBreakTradeScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+
+        <div class="edge-chat-screen-heading">
+
+            <div class="edge-chat-screen-icon">
+                📈
+            </div>
+
+            <div>
+
+                <h3>
+                    Entering & Exiting Trades
+                </h3>
+
+                <p>
+                    Learn how traders think about entries,
+                    exits and managing a trade.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-question-list">
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="before-entry"
+            >
+                <span>What should I check before entering a trade?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="entry-point"
+            >
+                <span>How do traders decide where to enter?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="before-after-breakout"
+            >
+                <span>Should I enter before or after a breakout?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="chasing"
+            >
+                <span>Why can chasing a stock after a big move be risky?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="support-resistance-entry"
+            >
+                <span>How can support and resistance help with an entry?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="position-size"
+            >
+                <span>What should I think about before deciding my position size?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="plan-exit"
+            >
+                <span>How do traders plan an exit before entering a trade?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="stop-loss"
+            >
+                <span>What is a stop-loss and how does it work?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="trailing-stop"
+            >
+                <span>What is a trailing stop?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="partial-profits"
+            >
+                <span>Why might traders take partial profits?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="setup-weakened"
+            >
+                <span>What can indicate that a technical setup has weakened?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="emotional-decisions"
+            >
+                <span>How do I avoid making emotional entry and exit decisions?</span>
                 <span>›</span>
             </button>
 
@@ -23869,6 +24039,607 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
     );
+
+})();
+
+/* =========================================================
+   EDGEBREAK AI CHAT
+   ENTERING & EXITING TRADES
+========================================================= */
+
+(function initEdgeBreakTradeSection() {
+
+    const categories =
+        document.getElementById(
+            "edgeBreakChatCategories"
+        );
+
+    const tradeScreen =
+        document.getElementById(
+            "edgeBreakTradeScreen"
+        );
+
+    const tradeButton =
+        document.querySelector(
+            '[data-chat-category="trade"]'
+        );
+
+    const conversation =
+        document.getElementById(
+            "edgeBreakChatConversation"
+        );
+
+    const backButton =
+        tradeScreen?.querySelector(
+            '[data-chat-back="main"]'
+        );
+
+
+    /* -----------------------------------------------------
+       SAFETY CHECK
+    ----------------------------------------------------- */
+
+    if (
+        !categories ||
+        !tradeScreen ||
+        !tradeButton ||
+        !conversation ||
+        !backButton
+    ) {
+
+        console.warn(
+            "EdgeBreak Trade elements not found."
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       ANSWERS
+    ===================================================== */
+
+    const answers = {
+
+
+        /* -------------------------------------------------
+           #1 BEFORE ENTERING
+        ------------------------------------------------- */
+
+        "before-entry": `
+
+            Before entering a trade, it helps to understand
+            <strong>why you are considering the trade</strong>
+            and what would make that idea no longer valid.
+            <br><br>
+            Traders commonly check:
+            <br><br>
+            • The current price structure.<br>
+            • Nearby support and resistance.<br>
+            • Whether price is inside, below or above a
+            trading range.<br>
+            • Recent volume and relative volume.<br>
+            • How far price has already moved.<br>
+            • Upcoming company or market events.<br>
+            • The amount of capital they are prepared to risk.
+            <br><br>
+            Planning these things before entering can reduce
+            the temptation to make decisions emotionally once
+            money is involved.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #2 ENTRY POINT
+        ------------------------------------------------- */
+
+        "entry-point": `
+
+            Traders use different methods to decide where to
+            enter a position.
+            <br><br>
+            Some wait for price to move through an identified
+            <strong>resistance level</strong>. Others look for
+            entries near support or after price pulls back
+            following a breakout.
+            <br><br>
+            The important part is that an entry normally has
+            a reason behind it.
+            <br><br>
+            Instead of simply entering because a stock is
+            rising, a trader may define the technical level
+            they are watching, what confirmation they want to
+            see and what would invalidate the setup.
+            <br><br>
+            There is no single entry method that is correct
+            for every trader or every stock.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #3 BEFORE OR AFTER BREAKOUT
+        ------------------------------------------------- */
+
+        "before-after-breakout": `
+
+            Entering <strong>before</strong> and
+            <strong>after</strong> a breakout involve
+            different trade-offs.
+            <br><br>
+            <strong>Before a breakout:</strong><br>
+            Price has not yet confirmed that it can move
+            through resistance. An entry may be closer to the
+            trading range, but the breakout may never occur.
+            <br><br>
+            <strong>After a breakout:</strong><br>
+            Price has moved through the identified resistance
+            area, but the entry may be further from the
+            original setup and the breakout can still fail.
+            <br><br>
+            Some traders also wait for a breakout followed by
+            a pullback or retest.
+            <br><br>
+            EdgeBreak can show you where a stock is relative
+            to its identified technical structure, but it
+            does not decide which entry approach you should
+            use.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #4 CHASING PRICE
+        ------------------------------------------------- */
+
+        "chasing": `
+
+            Chasing occurs when a trader enters after price
+            has already made a substantial move, often because
+            they are worried about missing it.
+            <br><br>
+            The further price moves away from the original
+            technical setup, the more the characteristics of
+            the trade can change.
+            <br><br>
+            For example:
+            <br><br>
+            • The distance to nearby support may increase.<br>
+            • A logical exit level may become much further
+            away.<br>
+            • Short-term traders may begin taking profits.<br>
+            • Price may pull back toward the breakout area.<br>
+            • The entry may be driven by FOMO rather than the
+            original setup.
+            <br><br>
+            A strong price move does not automatically mean
+            the stock will continue moving in the same
+            direction.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #5 SUPPORT / RESISTANCE ENTRY
+        ------------------------------------------------- */
+
+        "support-resistance-entry": `
+
+            Support and resistance can give a trader
+            <strong>reference points</strong> when planning an
+            entry.
+            <br><br>
+            <strong>Resistance</strong> is an area where price
+            has previously struggled to move higher.
+            <br><br>
+            <strong>Support</strong> is an area where buying
+            interest has previously been strong enough to
+            interrupt or reverse a decline.
+            <br><br>
+            A trader might watch how price behaves near one of
+            these areas rather than entering at an arbitrary
+            price.
+            <br><br>
+            These are zones rather than guaranteed barriers.
+            Price can move through either support or
+            resistance.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #6 POSITION SIZE
+        ------------------------------------------------- */
+
+        "position-size": `
+
+            Position size determines how much of your capital
+            is exposed to a particular trade.
+            <br><br>
+            Before choosing a position size, traders often
+            consider:
+            <br><br>
+            • Their total account size.<br>
+            • How much they are prepared to lose if the trade
+            fails.<br>
+            • The distance between the entry and their planned
+            exit level.<br>
+            • The stock's volatility.<br>
+            • Liquidity.<br>
+            • Other positions already held.
+            <br><br>
+            A larger position increases both potential gains
+            and potential losses.
+            <br><br>
+            Position sizing is therefore usually considered
+            together with risk rather than simply asking how
+            many shares a trader can afford to buy.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #7 PLAN AN EXIT
+        ------------------------------------------------- */
+
+        "plan-exit": `
+
+            Many traders think about their exit
+            <strong>before entering the trade</strong>.
+            <br><br>
+            This can include considering:
+            <br><br>
+            • What would show that the original setup has
+            failed.<br>
+            • Whether there is a technical level they are
+            using to control risk.<br>
+            • How they would respond if price moves strongly
+            in their favour.<br>
+            • Whether they intend to exit the entire position
+            or reduce it gradually.<br>
+            • Upcoming events that could materially change
+            the stock.
+            <br><br>
+            Having a plan does not mean it can never change.
+            It gives the trader a framework for making
+            decisions instead of reacting only to short-term
+            price movement.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #8 STOP LOSS
+        ------------------------------------------------- */
+
+        "stop-loss": `
+
+            A <strong>stop-loss</strong> is an instruction
+            designed to trigger an exit when a security
+            reaches a specified price.
+            <br><br>
+            Traders use stop orders as one method of limiting
+            the amount of capital exposed if a trade moves
+            against them.
+            <br><br>
+            However, a stop price does not guarantee the exact
+            execution price.
+            <br><br>
+            If a stock moves rapidly or gaps through the stop
+            level, the eventual execution price can be
+            different from the stop price.
+            <br><br>
+            The exact behaviour can also depend on the type of
+            stop order and the broker being used.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #9 TRAILING STOP
+        ------------------------------------------------- */
+
+        "trailing-stop": `
+
+            A <strong>trailing stop</strong> is a type of stop
+            designed to move as the price moves favourably.
+            <br><br>
+            Instead of remaining at one fixed price, the stop
+            follows price according to a specified dollar
+            amount or percentage.
+            <br><br>
+            If price reverses far enough to reach the trailing
+            stop, the order can be triggered.
+            <br><br>
+            Traders sometimes use trailing stops to protect
+            part of an existing gain while allowing a position
+            room to continue moving.
+            <br><br>
+            Like other stop orders, a trailing stop does not
+            guarantee the final execution price.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #10 PARTIAL PROFITS
+        ------------------------------------------------- */
+
+        "partial-profits": `
+
+            Taking partial profits means selling
+            <strong>part of a position</strong> while keeping
+            the remainder open.
+            <br><br>
+            Some traders use this approach after a favourable
+            move because it allows them to reduce their
+            exposure while still participating if the stock
+            continues higher.
+            <br><br>
+            For example, a trader may reduce part of a
+            position and continue managing the remaining
+            shares separately.
+            <br><br>
+            The trade-off is that reducing a position also
+            means there are fewer shares participating if
+            price continues to rise.
+            <br><br>
+            Partial profit-taking is a trading technique, not
+            a requirement.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #11 WEAKENING SETUP
+        ------------------------------------------------- */
+
+        "setup-weakened": `
+
+            A technical setup can change as new price and
+            volume data develops.
+            <br><br>
+            Depending on the original setup, traders may watch
+            for changes such as:
+            <br><br>
+            • Price failing to remain above a breakout area.<br>
+            • Previously established support being broken.<br>
+            • Higher lows no longer developing.<br>
+            • Repeated rejection around resistance.<br>
+            • A trading range losing its previous structure.<br>
+            • Significant price movement occurring on unusual
+            volume.
+            <br><br>
+            No single event automatically means a trade has
+            failed.
+            <br><br>
+            The important question is whether the conditions
+            that formed the trader's original idea still
+            exist.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #12 EMOTIONAL DECISIONS
+        ------------------------------------------------- */
+
+        "emotional-decisions": `
+
+            One way traders try to reduce emotional decisions
+            is by making important decisions
+            <strong>before entering a position</strong>.
+            <br><br>
+            A trading plan can define:
+            <br><br>
+            • Why the trade is being considered.<br>
+            • The intended entry approach.<br>
+            • How much capital is being exposed.<br>
+            • What would invalidate the setup.<br>
+            • How an exit will be handled.<br>
+            • What circumstances would justify changing the
+            original plan.
+            <br><br>
+            This can help reduce decisions driven by
+            <strong>FOMO, fear, panic or greed</strong>.
+            <br><br>
+            The goal is not to remove emotion completely. It
+            is to have a process in place before those
+            emotions become stronger.
+
+        `
+
+    };
+
+
+    /* =====================================================
+       OPEN TRADE SCREEN
+    ===================================================== */
+
+    tradeButton.addEventListener(
+        "click",
+        function() {
+
+            categories.hidden = true;
+            tradeScreen.hidden = false;
+
+            conversation.scrollTop = 0;
+
+        }
+    );
+
+
+    /* =====================================================
+       BACK TO MAIN MENU
+    ===================================================== */
+
+    backButton.addEventListener(
+        "click",
+        function() {
+
+            tradeScreen.hidden = true;
+            categories.hidden = false;
+
+            conversation.scrollTop = 0;
+
+        }
+    );
+
+
+    /* =====================================================
+       QUESTION BUTTONS
+    ===================================================== */
+
+    const questionButtons =
+        tradeScreen.querySelectorAll(
+            "[data-chat-trade-question]"
+        );
+
+
+    questionButtons.forEach(
+        function(button) {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    const question =
+                        button.dataset.chatTradeQuestion;
+
+                    const questionText =
+                        button.querySelector(
+                            "span:first-child"
+                        )?.textContent.trim() ||
+                        "Entering & Exiting Trades";
+
+                    const answer =
+                        answers[question];
+
+                    if (!answer) {
+                        return;
+                    }
+
+
+                    /* USER MESSAGE */
+
+                    const userMessage =
+                        document.createElement("div");
+
+                    userMessage.className =
+                        "edge-chat-message edge-chat-message-user";
+
+                    userMessage.innerHTML = `
+
+                        <div class="edge-chat-message-bubble">
+
+                            <strong>
+                                ${questionText}
+                            </strong>
+
+                        </div>
+
+                    `;
+
+
+                    /* EDGEBREAK ANSWER */
+
+                    const aiMessage =
+                        document.createElement("div");
+
+                    aiMessage.className =
+                        "edge-chat-message edge-chat-message-ai";
+
+                    aiMessage.innerHTML = `
+
+                        <div class="edge-chat-message-icon">
+                            ✦
+                        </div>
+
+                        <div class="edge-chat-message-bubble">
+                            ${answer}
+                        </div>
+
+                    `;
+
+
+                    /* BACK BUTTON */
+
+                    const answerBackRow =
+                        document.createElement("div");
+
+                    answerBackRow.className =
+                        "edge-chat-answer-back-row";
+
+
+                    const answerBackButton =
+                        document.createElement("button");
+
+                    answerBackButton.type =
+                        "button";
+
+                    answerBackButton.className =
+                        "edge-chat-back";
+
+                    answerBackButton.textContent =
+                        "← Back to Entering & Exiting Trades";
+
+
+                    answerBackRow.appendChild(
+                        answerBackButton
+                    );
+
+
+                    /* HIDE QUESTIONS */
+
+                    tradeScreen.hidden = true;
+
+
+                    /* DISPLAY ANSWER */
+
+                    conversation.appendChild(
+                        userMessage
+                    );
+
+                    conversation.appendChild(
+                        aiMessage
+                    );
+
+                    conversation.appendChild(
+                        answerBackRow
+                    );
+
+
+                    /* RETURN TO QUESTIONS */
+
+                    answerBackButton.addEventListener(
+                        "click",
+                        function() {
+
+                            userMessage.remove();
+                            aiMessage.remove();
+                            answerBackRow.remove();
+
+                            tradeScreen.hidden =
+                                false;
+
+                            conversation.scrollTop =
+                                0;
+
+                        }
+                    );
+
+
+                    conversation.scrollTop =
+                        conversation.scrollHeight;
+
+                }
+            );
+
+        }
+    );
+
 
 })();
 
