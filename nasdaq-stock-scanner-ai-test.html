@@ -8868,6 +8868,7 @@ html {
 #edgeBreakTechnicalScreen[hidden],
 #edgeBreakLearnScreen[hidden],
 #edgeBreakMarginScreen[hidden],
+#edgeBreakAccountScreen[hidden],
 #edgeBreakStockScreen[hidden] {
     display: none !important;
 }
@@ -11970,6 +11971,185 @@ PANEL 1  watchlist seo
                 data-chat-margin-question="settlement"
             >
                 <span>Why does trade settlement matter?</span>
+                <span>›</span>
+            </button>
+
+
+        </div>
+
+    </div>
+
+    <!-- =========================================================
+    EDGEBREAK AI CHAT
+    EDGEBREAK & MY ACCOUNT
+    ========================================================= -->
+
+    <div
+        id="edgeBreakAccountScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+
+        <div class="edge-chat-screen-heading">
+
+            <div class="edge-chat-screen-icon">
+                ⚙️
+            </div>
+
+            <div>
+
+                <h3>
+                    EdgeBreak & My Account
+                </h3>
+
+                <p>
+                    Learn how EdgeBreak works, explore its
+                    features and get help with your account.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-question-list">
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="what-is-edgebreak"
+            >
+                <span>What does EdgeBreak do?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="scanners"
+            >
+                <span>What are the EdgeBreak scanners?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="scanner-difference"
+            >
+                <span>What's the difference between the scanners?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="daily-brief"
+            >
+                <span>What is the EdgeBreak Daily Brief?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="ai-research"
+            >
+                <span>What is AI Stock Research?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="ai-chart"
+            >
+                <span>What is AI Chart Analysis?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="smart-money"
+            >
+                <span>What is the Smart Money Filter?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="academy"
+            >
+                <span>What is the EdgeBreak Academy?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="scanner-updates"
+            >
+                <span>When are the EdgeBreak scanners updated?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="stock-disappeared"
+            >
+                <span>Why might a stock disappear from a scanner?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="free-trial"
+            >
+                <span>How does the 7-day free trial work?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="manage-account"
+            >
+                <span>How do I manage or cancel my subscription?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="financial-advice"
+            >
+                <span>Does EdgeBreak give financial advice?</span>
                 <span>›</span>
             </button>
 
@@ -22458,6 +22638,657 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
     );
+
+})();
+
+/* =========================================================
+   EDGEBREAK AI CHAT
+   EDGEBREAK & MY ACCOUNT
+========================================================= */
+
+(function initEdgeBreakAccountSection() {
+
+    const categories =
+        document.getElementById(
+            "edgeBreakChatCategories"
+        );
+
+    const accountScreen =
+        document.getElementById(
+            "edgeBreakAccountScreen"
+        );
+
+    const accountButton =
+        document.querySelector(
+            '[data-chat-category="account"]'
+        );
+
+    const conversation =
+        document.getElementById(
+            "edgeBreakChatConversation"
+        );
+
+    const backButton =
+        accountScreen?.querySelector(
+            '[data-chat-back="main"]'
+        );
+
+
+    /* -----------------------------------------------------
+       SAFETY CHECK
+    ----------------------------------------------------- */
+
+    if (
+        !categories ||
+        !accountScreen ||
+        !accountButton ||
+        !conversation ||
+        !backButton
+    ) {
+
+        console.warn(
+            "EdgeBreak Account elements not found."
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       ANSWERS
+    ===================================================== */
+
+    const answers = {
+
+
+        /* -------------------------------------------------
+           #1 WHAT DOES EDGEBREAK DO?
+        ------------------------------------------------- */
+
+        "what-is-edgebreak": `
+
+            <strong>EdgeBreak</strong> is a NASDAQ stock
+            discovery and research platform.
+            <br><br>
+            Each trading day, EdgeBreak scans more than
+            <strong>3,200 NASDAQ-listed stocks</strong> looking
+            for technical structures identified by its
+            Breakout, Pre-Breakout and Launch Pad scanners.
+            <br><br>
+            The setups found are then filtered, graded and
+            ranked before selected stocks are passed through
+            EdgeBreak's AI research process.
+            <br><br>
+            EdgeBreak also provides AI Stock Research,
+            AI Chart Analysis, market intelligence and
+            educational tools to help users investigate
+            stocks and better understand what the scanners
+            have found.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #2 WHAT ARE THE EDGEBREAK SCANNERS?
+        ------------------------------------------------- */
+
+        "scanners": `
+
+            EdgeBreak currently uses
+            <strong>three main NASDAQ stock scanners</strong>:
+            <br><br>
+
+            <strong>Breakout Scanner</strong><br>
+            Finds stocks that have moved above an identified
+            resistance level after forming qualifying
+            technical structure.
+            <br><br>
+
+            <strong>Pre-Breakout Scanner</strong><br>
+            Looks for stocks developing technical structure
+            beneath resistance, including repeated resistance
+            tests and higher lows.
+            <br><br>
+
+            <strong>Launch Pad Scanner</strong><br>
+            Searches for established trading bases with
+            identifiable support and resistance zones and
+            repeated interaction around those areas.
+            <br><br>
+            The scanners are designed to identify different
+            stages and types of technical structure rather
+            than predict what a stock will do next.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #3 DIFFERENCE BETWEEN THE SCANNERS
+        ------------------------------------------------- */
+
+        "scanner-difference": `
+
+            The easiest way to understand the three EdgeBreak
+            scanners is by looking at
+            <strong>where the stock is within its technical
+            structure</strong>.
+            <br><br>
+
+            <strong>Launch Pad</strong><br>
+            The stock has formed an established trading base
+            between identifiable support and resistance areas.
+            <br><br>
+
+            <strong>Pre-Breakout</strong><br>
+            The stock is developing structure beneath an
+            identified resistance level. EdgeBreak looks for
+            features such as repeated resistance tests and
+            higher lows.
+            <br><br>
+
+            <strong>Breakout</strong><br>
+            Price has moved above the resistance level
+            identified by EdgeBreak.
+            <br><br>
+            A stock can sometimes appear in more than one
+            EdgeBreak dataset because each scanner examines
+            the stock from a different technical perspective.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #4 DAILY BRIEF
+        ------------------------------------------------- */
+
+        "daily-brief": `
+
+            The <strong>EdgeBreak Daily Brief</strong> brings
+            together EdgeBreak's daily NASDAQ scanning and
+            research process into a simpler market summary.
+            <br><br>
+            EdgeBreak first scans the NASDAQ for technical
+            setups. Those results are then filtered, graded
+            and ranked before selected companies are forwarded
+            for AI research.
+            <br><br>
+            The Daily Brief combines this with broader NASDAQ
+            market intelligence to help users quickly see
+            what EdgeBreak found during the completed trading
+            session and which researched stocks may be worth
+            investigating further.
+            <br><br>
+            It is designed to reduce the amount of scanner
+            data a user needs to work through manually.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #5 AI STOCK RESEARCH
+        ------------------------------------------------- */
+
+        "ai-research": `
+
+            <strong>AI Stock Research</strong> helps users
+            investigate companies found through EdgeBreak.
+            <br><br>
+            Instead of relying only on a technical scanner
+            result, users can access additional company and
+            market research to better understand the stock
+            they are investigating.
+            <br><br>
+            EdgeBreak's AI research can examine areas such as
+            company information, recent developments, market
+            attention and other research context available
+            through the platform.
+            <br><br>
+            AI Stock Research is a research tool. It does
+            <strong>not</strong> provide a buy, sell or hold
+            recommendation.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #6 AI CHART ANALYSIS
+        ------------------------------------------------- */
+
+        "ai-chart": `
+
+            <strong>AI Chart Analysis</strong> allows you to
+            provide a stock chart for EdgeBreak AI to analyse.
+            <br><br>
+            The analysis focuses on technical features visible
+            in the chart, such as support, resistance, trading
+            ranges, higher lows, consolidation, price
+            structure and volume.
+            <br><br>
+            It is designed to help explain what may be
+            happening technically on a chart in straightforward
+            language.
+            <br><br>
+            AI Chart Analysis does not predict the future
+            price of a stock or provide buy, sell or hold
+            recommendations.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #7 SMART MONEY FILTER
+        ------------------------------------------------- */
+
+        "smart-money": `
+
+            The <strong>EdgeBreak Smart Money Filter</strong>
+            records stocks that meet EdgeBreak's activity
+            criteria and tracks their appearances over time.
+            <br><br>
+            This allows EdgeBreak to identify whether a stock
+            has appeared in the filter previously and how many
+            recorded appearances it has accumulated.
+            <br><br>
+            A Smart Money appearance provides additional
+            research context. It should not be interpreted as
+            proof that institutions are buying a stock.
+            <br><br>
+            <strong>Important:</strong> the Smart Money Filter
+            has had limited operating time and is still
+            gathering historical data for analysis.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #8 EDGEBREAK ACADEMY
+        ------------------------------------------------- */
+
+        "academy": `
+
+            <strong>EdgeBreak Academy</strong> is the
+            educational section of EdgeBreak.
+            <br><br>
+            It provides structured learning material to help
+            users better understand stock-market and technical
+            analysis concepts used throughout the platform.
+            <br><br>
+            The Academy is designed to help users build their
+            knowledge so they can better understand scanner
+            results, technical structures and the information
+            presented by EdgeBreak.
+            <br><br>
+            It is particularly useful for users who are still
+            learning the terminology and concepts they
+            encounter while researching stocks.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #9 SCANNER UPDATE TIME
+        ------------------------------------------------- */
+
+        "scanner-updates": `
+
+            EdgeBreak updates its scanner results
+            <strong>daily after the NASDAQ closes</strong>.
+            <br><br>
+            The process begins after the regular NASDAQ
+            trading session closes at approximately
+            <strong>4:00 PM Eastern Time in the United
+            States</strong>.
+            <br><br>
+            EdgeBreak then scans more than
+            <strong>3,200 NASDAQ-listed stocks</strong> using
+            the Breakout, Pre-Breakout and Launch Pad
+            scanners.
+            <br><br>
+            The technical setups found are filtered,
+            <strong>graded and ranked</strong>. Selected
+            stocks are then passed through EdgeBreak's AI
+            research process.
+            <br><br>
+            The complete daily process takes approximately
+            <strong>two hours</strong> and is normally
+            completed by around
+            <strong>6:00 PM Eastern Time</strong>.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #10 WHY DID A STOCK DISAPPEAR?
+        ------------------------------------------------- */
+
+        "stock-disappeared": `
+
+            EdgeBreak scanner results are
+            <strong>recalculated as market data changes</strong>.
+            <br><br>
+            A stock can disappear from a scanner when it no
+            longer satisfies the technical conditions required
+            for that particular setup.
+            <br><br>
+            For example, price may move away from an identified
+            resistance area, a previously detected structure
+            may no longer remain active, or updated market
+            data may cause the stock to no longer qualify
+            under the scanner's rules.
+            <br><br>
+            This is normal. Scanner inclusion describes the
+            technical conditions EdgeBreak identified at that
+            time — it is not a permanent classification of
+            the stock.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #11 7-DAY FREE TRIAL
+        ------------------------------------------------- */
+
+        "free-trial": `
+
+            The <strong>7-day EdgeBreak free trial</strong>
+            gives you access to the full version of EdgeBreak
+            for seven days.
+            <br><br>
+            During the trial you can access the
+            <strong>three EdgeBreak scanners</strong>, market
+            intelligence and stock AI intelligence available
+            through the full platform.
+            <br><br>
+            After the seven-day trial, you will be charged
+            <strong>$20 USD per month</strong> to continue
+            accessing the full version of EdgeBreak.
+            <br><br>
+            If you are not a subscriber, you can still access
+            <strong>EdgeBreak Free</strong>.
+            <br><br>
+            The free version provides restricted access,
+            including the first
+            <strong>two stocks on each scanner</strong> and
+            <strong>two of the final AI-researched stocks</strong>.
+            AI Deep Research on individual stocks is not
+            available in the free version.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #12 MANAGE / CANCEL ACCOUNT
+        ------------------------------------------------- */
+
+        "manage-account": `
+
+            You can manage your EdgeBreak account from your
+            <strong>EdgeBreak Workspace</strong>.
+            <br><br>
+
+            <strong>How to get there:</strong>
+            <br><br>
+            1. Open the EdgeBreak navigation.
+            <br>
+            2. Go to <strong>EdgeBreak AI Hub</strong>, the
+            main scanner page.
+            <br>
+            3. Scroll to <strong>EdgeBreak Tools</strong>.
+            <br>
+            4. Select <strong>Open Workspace</strong>.
+            <br>
+            5. Scroll to <strong>Manage My Account</strong>
+            and select it.
+            <br><br>
+
+            From Manage My Account you can access account
+            security information, change your password,
+            verify your email and manage your notification
+            preferences, including email alerts and marketing
+            preferences.
+            <br><br>
+            You can also view EdgeBreak policies.
+            <br><br>
+            <strong>Two-factor authentication (2FA) is coming
+            soon.</strong>
+            <br><br>
+            If you choose
+            <strong>Delete Account</strong>, your EdgeBreak
+            account will be closed and billing will stop.
+
+        `,
+
+
+        /* -------------------------------------------------
+           #13 FINANCIAL ADVICE
+        ------------------------------------------------- */
+
+        "financial-advice": `
+
+            <strong>No.</strong> EdgeBreak does not provide
+            financial advice.
+            <br><br>
+            EdgeBreak is designed for stock discovery,
+            technical research, market intelligence and
+            education.
+            <br><br>
+            Scanner results, AI research, chart analysis and
+            other information provided by EdgeBreak are
+            intended to help users conduct their own research.
+            <br><br>
+            EdgeBreak does not tell you to
+            <strong>buy, sell or hold</strong> a security and
+            does not make investment decisions on your
+            behalf.
+            <br><br>
+            Users should independently verify important
+            information and make their own investment
+            decisions.
+
+        `
+
+    };
+
+
+    /* =====================================================
+       OPEN ACCOUNT SCREEN
+    ===================================================== */
+
+    accountButton.addEventListener(
+        "click",
+        function() {
+
+            categories.hidden = true;
+            accountScreen.hidden = false;
+
+            conversation.scrollTop = 0;
+
+        }
+    );
+
+
+    /* =====================================================
+       BACK TO MAIN MENU
+    ===================================================== */
+
+    backButton.addEventListener(
+        "click",
+        function() {
+
+            accountScreen.hidden = true;
+            categories.hidden = false;
+
+            conversation.scrollTop = 0;
+
+        }
+    );
+
+
+    /* =====================================================
+       QUESTION BUTTONS
+    ===================================================== */
+
+    const questionButtons =
+        accountScreen.querySelectorAll(
+            "[data-chat-account-question]"
+        );
+
+
+    questionButtons.forEach(
+        function(button) {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    const question =
+                        button.dataset.chatAccountQuestion;
+
+                    const questionText =
+                        button.querySelector(
+                            "span:first-child"
+                        )?.textContent.trim() ||
+                        "EdgeBreak & My Account";
+
+                    const answer =
+                        answers[question];
+
+                    if (!answer) {
+                        return;
+                    }
+
+
+                    /* -----------------------------------------
+                       USER MESSAGE
+                    ----------------------------------------- */
+
+                    const userMessage =
+                        document.createElement("div");
+
+                    userMessage.className =
+                        "edge-chat-message edge-chat-message-user";
+
+                    userMessage.innerHTML = `
+
+                        <div class="edge-chat-message-bubble">
+
+                            <strong>
+                                ${questionText}
+                            </strong>
+
+                        </div>
+
+                    `;
+
+
+                    /* -----------------------------------------
+                       EDGEBREAK ANSWER
+                    ----------------------------------------- */
+
+                    const aiMessage =
+                        document.createElement("div");
+
+                    aiMessage.className =
+                        "edge-chat-message edge-chat-message-ai";
+
+                    aiMessage.innerHTML = `
+
+                        <div class="edge-chat-message-icon">
+                            ✦
+                        </div>
+
+                        <div class="edge-chat-message-bubble">
+                            ${answer}
+                        </div>
+
+                    `;
+
+
+                    /* -----------------------------------------
+                       BACK BUTTON
+                    ----------------------------------------- */
+
+                    const answerBackRow =
+                        document.createElement("div");
+
+                    answerBackRow.className =
+                        "edge-chat-answer-back-row";
+
+
+                    const answerBackButton =
+                        document.createElement("button");
+
+                    answerBackButton.type =
+                        "button";
+
+                    answerBackButton.className =
+                        "edge-chat-back";
+
+                    answerBackButton.textContent =
+                        "← Back to EdgeBreak & My Account";
+
+
+                    answerBackRow.appendChild(
+                        answerBackButton
+                    );
+
+
+                    /* -----------------------------------------
+                       HIDE ACCOUNT QUESTIONS
+                    ----------------------------------------- */
+
+                    accountScreen.hidden = true;
+
+
+                    /* -----------------------------------------
+                       DISPLAY ANSWER
+                    ----------------------------------------- */
+
+                    conversation.appendChild(
+                        userMessage
+                    );
+
+                    conversation.appendChild(
+                        aiMessage
+                    );
+
+                    conversation.appendChild(
+                        answerBackRow
+                    );
+
+
+                    /* -----------------------------------------
+                       RETURN TO ACCOUNT QUESTIONS
+                    ----------------------------------------- */
+
+                    answerBackButton.addEventListener(
+                        "click",
+                        function() {
+
+                            userMessage.remove();
+                            aiMessage.remove();
+                            answerBackRow.remove();
+
+                            accountScreen.hidden =
+                                false;
+
+                            conversation.scrollTop =
+                                0;
+
+                        }
+                    );
+
+
+                    conversation.scrollTop =
+                        conversation.scrollHeight;
+
+                }
+            );
+
+        }
+    );
+
 
 })();
 
