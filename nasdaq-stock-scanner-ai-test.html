@@ -22247,7 +22247,6 @@ document.addEventListener("DOMContentLoaded", () => {
             ------------------------------------------------- */
 
             stockScreen.hidden = true;
-
             quickScreen.hidden = true;
 
 
@@ -22261,6 +22260,100 @@ document.addEventListener("DOMContentLoaded", () => {
 
             conversation.appendChild(
                 aiMessage
+            );
+
+
+            /* -------------------------------------------------
+            BACK TO QUICK ANSWERS BUTTON
+            ------------------------------------------------- */
+
+            const answerBackRow =
+                document.createElement("div");
+
+            answerBackRow.style.cssText = `
+                display:flex;
+                justify-content:flex-start;
+                margin:16px 0 8px 45px;
+            `;
+
+
+            const answerBackButton =
+                document.createElement("button");
+
+            answerBackButton.type =
+                "button";
+
+            answerBackButton.textContent =
+                "← Back to Quick Answers";
+
+            answerBackButton.style.cssText = `
+                appearance:none;
+                border:1px solid rgba(148,163,184,.22);
+                background:#0f172a;
+                color:#cbd5e1;
+                border-radius:10px;
+                padding:10px 14px;
+                font-size:13px;
+                font-weight:700;
+                cursor:pointer;
+                transition:.2s ease;
+            `;
+
+
+            answerBackButton.addEventListener(
+                "mouseenter",
+                function() {
+
+                    answerBackButton.style.borderColor =
+                        "rgba(34,197,94,.55)";
+
+                    answerBackButton.style.color =
+                        "#f8fafc";
+
+                }
+            );
+
+
+            answerBackButton.addEventListener(
+                "mouseleave",
+                function() {
+
+                    answerBackButton.style.borderColor =
+                        "rgba(148,163,184,.22)";
+
+                    answerBackButton.style.color =
+                        "#cbd5e1";
+
+                }
+            );
+
+
+            answerBackButton.addEventListener(
+                "click",
+                function() {
+
+                    userMessage.remove();
+                    aiMessage.remove();
+                    answerBackRow.remove();
+
+                    stockScreen.hidden = true;
+                    quickScreen.hidden = false;
+
+                    tickerInput.value = "";
+                    tickerMessage.textContent = "";
+
+                    conversation.scrollTop = 0;
+
+                }
+            );
+
+
+            answerBackRow.appendChild(
+                answerBackButton
+            );
+
+            conversation.appendChild(
+                answerBackRow
             );
 
 
@@ -22299,11 +22392,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             }
 
-            }
+        }
+    );
 
-            );
-
-            })();
+})();
 
 </script>
 <!-- COMPONENTS -->
