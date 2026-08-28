@@ -8867,6 +8867,7 @@ html {
 #edgeBreakQuickScreen[hidden],
 #edgeBreakTechnicalScreen[hidden],
 #edgeBreakLearnScreen[hidden],
+#edgeBreakMarginScreen[hidden],
 #edgeBreakStockScreen[hidden] {
     display: none !important;
 }
@@ -11782,6 +11783,196 @@ PANEL 1  watchlist seo
                 <span>What is market capitalisation?</span>
                 <span>›</span>
             </button>
+
+        </div>
+
+    </div>
+
+    <!-- =========================================================
+    EDGEBREAK AI CHAT
+    MARGIN & MY TRADING ACCOUNT
+    ========================================================= -->
+
+    <div
+        id="edgeBreakMarginScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+
+        <div class="edge-chat-screen-heading">
+
+            <div class="edge-chat-screen-icon">
+                💰
+            </div>
+
+            <div>
+
+                <h3>
+                    Margin & My Trading Account
+                </h3>
+
+                <p>
+                    Simple explanations of margin, leverage,
+                    orders and common trading account mechanics.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-stock-notice">
+
+            <span>ℹ️</span>
+
+            <div>
+
+                <strong>
+                    Broker rules can vary
+                </strong>
+
+                <p>
+                    EdgeBreak explains general trading concepts.
+                    Always check the specific rules, fees and
+                    requirements of your own broker.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-question-list">
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="margin-account"
+            >
+                <span>What is a margin account?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="leverage"
+            >
+                <span>What is leverage?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="buying-power"
+            >
+                <span>What is buying power?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="margin-call"
+            >
+                <span>What is a margin call?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="maintenance-margin"
+            >
+                <span>What is maintenance margin?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="cash-vs-margin"
+            >
+                <span>Cash account vs margin account?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="market-order"
+            >
+                <span>What is a market order?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="limit-order"
+            >
+                <span>What is a limit order?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="stop-order"
+            >
+                <span>What is a stop order?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="short-selling"
+            >
+                <span>What does short selling mean?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="position-sizing"
+            >
+                <span>What is position sizing?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="settlement"
+            >
+                <span>Why does trade settlement matter?</span>
+                <span>›</span>
+            </button>
+
 
         </div>
 
@@ -22427,6 +22618,426 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     );
 
+
+})();
+
+/* =========================================================
+   EDGEBREAK AI CHAT
+   MARGIN & MY TRADING ACCOUNT
+========================================================= */
+
+(function initEdgeBreakMarginSection() {
+
+    const categories =
+        document.getElementById(
+            "edgeBreakChatCategories"
+        );
+
+    const marginScreen =
+        document.getElementById(
+            "edgeBreakMarginScreen"
+        );
+
+    const marginButton =
+        document.querySelector(
+            '[data-chat-category="margin"]'
+        );
+
+    const conversation =
+        document.getElementById(
+            "edgeBreakChatConversation"
+        );
+
+    const backButton =
+        marginScreen?.querySelector(
+            '[data-chat-back="main"]'
+        );
+
+
+    if (
+        !categories ||
+        !marginScreen ||
+        !marginButton ||
+        !conversation ||
+        !backButton
+    ) {
+        console.warn(
+            "EdgeBreak Margin elements not found."
+        );
+        return;
+    }
+
+
+    /* =====================================================
+       ANSWERS
+    ===================================================== */
+
+    const answers = {
+
+
+        "margin-account": `
+            A <strong>margin account</strong> allows an eligible
+            investor to borrow money from their broker to help
+            purchase securities.
+            <br><br>
+            The securities and cash in the account generally act
+            as collateral for the loan.
+            <br><br>
+            Using borrowed money increases market exposure, but it
+            also increases risk. Losses can be larger than they
+            would have been when using only your own cash, and
+            brokers may charge interest on borrowed funds.
+            <br><br>
+            Margin availability, borrowing limits and requirements
+            vary between brokers and accounts.
+        `,
+
+
+        "leverage": `
+            <strong>Leverage</strong> means using borrowed money
+            or other financial exposure to control a position
+            larger than the amount of your own cash being used.
+            <br><br>
+            For example, if your own capital represents only part
+            of the total position, movements in the stock can have
+            a larger effect on your capital.
+            <br><br>
+            Leverage magnifies both gains <strong>and losses</strong>.
+            It does not improve the quality of a trade or make a
+            stock more likely to move in your favour.
+        `,
+
+
+        "buying-power": `
+            <strong>Buying power</strong> is the amount your account
+            is currently permitted to use to purchase securities.
+            <br><br>
+            In a cash account, this is largely determined by
+            available cash and settled funds.
+            <br><br>
+            In an eligible margin account, buying power may also
+            include borrowing capacity provided by the broker.
+            <br><br>
+            Your displayed buying power can change as positions,
+            cash balances and margin requirements change.
+        `,
+
+
+        "margin-call": `
+            A <strong>margin call</strong> can occur when the equity
+            in a margin account falls below a required level.
+            <br><br>
+            This can happen when securities held in the account
+            decline in value or when margin requirements change.
+            <br><br>
+            The account holder may be required to deposit additional
+            funds or securities, or reduce positions.
+            <br><br>
+            Depending on the broker and circumstances, positions
+            may also be liquidated without waiting for the investor
+            to take action.
+        `,
+
+
+        "maintenance-margin": `
+            <strong>Maintenance margin</strong> is the minimum amount
+            of equity that generally must be maintained in a margin
+            account relative to its positions.
+            <br><br>
+            If account equity falls below the required level, the
+            account may become subject to a margin call or other
+            broker action.
+            <br><br>
+            Maintenance requirements can vary by broker, security
+            and market conditions, and brokers may impose requirements
+            above regulatory minimums.
+        `,
+
+
+        "cash-vs-margin": `
+            A <strong>cash account</strong> generally requires
+            purchases to be paid for using the investor's own
+            available funds.
+            <br><br>
+            A <strong>margin account</strong> may allow eligible
+            investors to borrow against assets in the account,
+            providing additional buying power.
+            <br><br>
+            Margin accounts therefore introduce additional factors
+            including borrowing costs, margin requirements and the
+            possibility of forced liquidation.
+            <br><br>
+            Exact features and rules depend on the broker.
+        `,
+
+
+        "market-order": `
+            A <strong>market order</strong> instructs a broker to
+            execute an order at the best available market price.
+            <br><br>
+            It generally prioritises execution rather than a specific
+            price.
+            <br><br>
+            The final execution price is not guaranteed and can differ
+            from the price visible when the order was submitted,
+            particularly in fast-moving or less liquid stocks.
+        `,
+
+
+        "limit-order": `
+            A <strong>limit order</strong> specifies the maximum price
+            you are willing to pay when buying, or the minimum price
+            you are willing to accept when selling.
+            <br><br>
+            It gives you more control over execution price than a
+            market order.
+            <br><br>
+            However, reaching the limit price does not guarantee that
+            the order will execute. There may not be enough shares
+            available to fill the order.
+        `,
+
+
+        "stop-order": `
+            A <strong>stop order</strong> becomes active after a
+            specified stop price is reached.
+            <br><br>
+            A standard stop order typically becomes a market order
+            once triggered, which means the final execution price is
+            not guaranteed.
+            <br><br>
+            During fast price movements or price gaps, execution can
+            occur significantly away from the stop price.
+            <br><br>
+            Brokers may offer several different types of stop orders,
+            so their exact behaviour should always be checked.
+        `,
+
+
+        "short-selling": `
+            <strong>Short selling</strong> generally involves selling
+            borrowed shares with the expectation of later buying shares
+            back to return to the lender.
+            <br><br>
+            Unlike owning a stock, where the share price cannot fall
+            below zero, a rising share price creates increasing losses
+            for a short position.
+            <br><br>
+            Short selling can involve borrowing costs, margin
+            requirements and restrictions on whether shares are
+            available to borrow.
+            <br><br>
+            Broker rules and availability vary.
+        `,
+
+
+        "position-sizing": `
+            <strong>Position sizing</strong> is the process of deciding
+            how much capital or how many shares are allocated to a
+            particular trade.
+            <br><br>
+            It is an important part of risk management because the
+            same percentage price movement has a very different effect
+            on an account depending on the size of the position.
+            <br><br>
+            EdgeBreak can explain position-sizing concepts, but it
+            does not determine how much an individual should invest
+            or recommend a position size.
+        `,
+
+
+        "settlement": `
+            <strong>Trade settlement</strong> is the process that
+            completes a securities transaction after the trade has
+            executed.
+            <br><br>
+            Settlement determines when securities and funds officially
+            transfer between the parties involved in the transaction.
+            <br><br>
+            This can affect when funds are considered settled and
+            available for certain transactions, particularly in cash
+            accounts.
+            <br><br>
+            Settlement rules can vary by market and security, so
+            current requirements should be confirmed with your broker.
+        `
+
+    };
+
+
+    /* =====================================================
+       OPEN MARGIN SCREEN
+    ===================================================== */
+
+    marginButton.addEventListener(
+        "click",
+        function() {
+
+            categories.hidden = true;
+            marginScreen.hidden = false;
+
+            conversation.scrollTop = 0;
+
+        }
+    );
+
+
+    /* =====================================================
+       BACK TO MAIN MENU
+    ===================================================== */
+
+    backButton.addEventListener(
+        "click",
+        function() {
+
+            marginScreen.hidden = true;
+            categories.hidden = false;
+
+            conversation.scrollTop = 0;
+
+        }
+    );
+
+
+    /* =====================================================
+       QUESTION BUTTONS
+    ===================================================== */
+
+    const questionButtons =
+        marginScreen.querySelectorAll(
+            "[data-chat-margin-question]"
+        );
+
+
+    questionButtons.forEach(
+        function(button) {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    const question =
+                        button.dataset.chatMarginQuestion;
+
+                    const questionText =
+                        button.querySelector(
+                            "span:first-child"
+                        )?.textContent.trim() ||
+                        "Margin & My Trading Account";
+
+                    const answer =
+                        answers[question];
+
+                    if (!answer) {
+                        return;
+                    }
+
+
+                    /* USER MESSAGE */
+
+                    const userMessage =
+                        document.createElement("div");
+
+                    userMessage.className =
+                        "edge-chat-message edge-chat-message-user";
+
+                    userMessage.innerHTML = `
+                        <div class="edge-chat-message-bubble">
+                            <strong>
+                                ${questionText}
+                            </strong>
+                        </div>
+                    `;
+
+
+                    /* EDGEBREAK ANSWER */
+
+                    const aiMessage =
+                        document.createElement("div");
+
+                    aiMessage.className =
+                        "edge-chat-message edge-chat-message-ai";
+
+                    aiMessage.innerHTML = `
+                        <div class="edge-chat-message-bubble">
+                            ${answer}
+                        </div>
+                    `;
+
+
+                    /* BACK BUTTON */
+
+                    const answerBackRow =
+                        document.createElement("div");
+
+                    answerBackRow.className =
+                        "edge-chat-answer-back-row";
+
+                    const answerBackButton =
+                        document.createElement("button");
+
+                    answerBackButton.type =
+                        "button";
+
+                    answerBackButton.className =
+                        "edge-chat-back";
+
+                    answerBackButton.textContent =
+                        "← Back to Margin & My Trading Account";
+
+                    answerBackRow.appendChild(
+                        answerBackButton
+                    );
+
+
+                    /* HIDE QUESTION SCREEN */
+
+                    marginScreen.hidden = true;
+
+
+                    /* DISPLAY ANSWER */
+
+                    conversation.appendChild(
+                        userMessage
+                    );
+
+                    conversation.appendChild(
+                        aiMessage
+                    );
+
+                    conversation.appendChild(
+                        answerBackRow
+                    );
+
+
+                    /* BACK TO MARGIN QUESTIONS */
+
+                    answerBackButton.addEventListener(
+                        "click",
+                        function() {
+
+                            userMessage.remove();
+                            aiMessage.remove();
+                            answerBackRow.remove();
+
+                            marginScreen.hidden =
+                                false;
+
+                            conversation.scrollTop =
+                                0;
+
+                        }
+                    );
+
+
+                    conversation.scrollTop =
+                        conversation.scrollHeight;
+
+                }
+            );
+
+        }
+    );
 
 })();
 
