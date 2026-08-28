@@ -8866,6 +8866,7 @@ html {
 #edgeBreakChatCategories[hidden],
 #edgeBreakQuickScreen[hidden],
 #edgeBreakTechnicalScreen[hidden],
+#edgeBreakLearnScreen[hidden],
 #edgeBreakStockScreen[hidden] {
     display: none !important;
 }
@@ -11615,6 +11616,172 @@ PANEL 1  watchlist seo
                 <span class="edge-chat-question-arrow">›</span>
             </button>
 
+
+        </div>
+
+    </div>
+
+    <!-- =========================================================
+    EDGEBREAK AI CHAT
+    HELP ME UNDERSTAND
+    ========================================================= -->
+
+    <div
+        id="edgeBreakLearnScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+        <div class="edge-chat-screen-heading">
+
+            <div class="edge-chat-screen-icon">
+                🎓
+            </div>
+
+            <div>
+
+                <h3>
+                    Help Me Understand
+                </h3>
+
+                <p>
+                    Simple explanations of common stock market
+                    and EdgeBreak concepts.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-question-list">
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="resistance"
+            >
+                <span>What is resistance?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="support"
+            >
+                <span>What is support?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="breakout"
+            >
+                <span>What is a breakout?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="pre-breakout"
+            >
+                <span>What is a pre-breakout setup?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="higher-lows"
+            >
+                <span>What are higher lows?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="volume"
+            >
+                <span>What does volume tell me?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="relative-volume"
+            >
+                <span>What is relative volume?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="trading-range"
+            >
+                <span>What is a trading range?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="launch-pad"
+            >
+                <span>What is a Launch Pad?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="smart-money"
+            >
+                <span>What does Smart Money mean in EdgeBreak?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="liquidity"
+            >
+                <span>What is liquidity?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="market-cap"
+            >
+                <span>What is market capitalisation?</span>
+                <span>›</span>
+            </button>
 
         </div>
 
@@ -21689,6 +21856,91 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     );
 
+
+})();
+
+/* =========================================================
+   EDGEBREAK AI CHAT
+   HELP ME UNDERSTAND NAVIGATION
+========================================================= */
+
+(function initEdgeBreakLearnNavigation() {
+
+    const categories =
+        document.getElementById(
+            "edgeBreakChatCategories"
+        );
+
+    const learnScreen =
+        document.getElementById(
+            "edgeBreakLearnScreen"
+        );
+
+    const learnButton =
+        document.querySelector(
+            '[data-chat-category="learn"]'
+        );
+
+    const backButton =
+        learnScreen?.querySelector(
+            '[data-chat-back="main"]'
+        );
+
+    if (
+        !categories ||
+        !learnScreen ||
+        !learnButton ||
+        !backButton
+    ) {
+        console.warn(
+            "EdgeBreak Help Me Understand elements not found."
+        );
+        return;
+    }
+
+
+    /* OPEN HELP ME UNDERSTAND */
+
+    learnButton.addEventListener(
+        "click",
+        function() {
+
+            categories.hidden = true;
+            learnScreen.hidden = false;
+
+            const conversation =
+                document.getElementById(
+                    "edgeBreakChatConversation"
+                );
+
+            if (conversation) {
+                conversation.scrollTop = 0;
+            }
+
+        }
+    );
+
+
+    /* BACK TO MAIN MENU */
+
+    backButton.addEventListener(
+        "click",
+        function() {
+
+            learnScreen.hidden = true;
+            categories.hidden = false;
+
+            const conversation =
+                document.getElementById(
+                    "edgeBreakChatConversation"
+                );
+
+            if (conversation) {
+                conversation.scrollTop = 0;
+            }
+
+        }
+    );
 
 })();
 
