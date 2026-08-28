@@ -21739,11 +21739,378 @@ document.addEventListener("DOMContentLoaded", () => {
             let answer = "";
 
             /* =================================================
+            QUICK ANSWER #7
+            HOW CLOSE IS IT TO RESISTANCE?
+            ================================================= */
+
+            if (
+                selectedQuestion === "distance-resistance"
+            ) {
+
+                let distanceText = "";
+
+
+                /* ---------------------------------------------
+                BREAKOUT
+                --------------------------------------------- */
+
+                if (breakoutStock) {
+
+                    const currentPrice =
+                        Number(
+                            breakoutStock.price
+                        );
+
+                    const resistance =
+                        Number(
+                            breakoutStock.resistance
+                        );
+
+                    const distance =
+                        Number(
+                            breakoutStock.distance_above_resistance
+                        );
+
+
+                    let positionText = "";
+
+
+                    if (Number.isFinite(distance)) {
+
+                        if (distance <= 2) {
+
+                            positionText =
+                                `${ticker} has already moved through resistance and is still relatively close to the original breakout level.`;
+
+                        } else if (distance <= 5) {
+
+                            positionText =
+                                `${ticker} has already moved through resistance and is now moderately above the original breakout level.`;
+
+                        } else {
+
+                            positionText =
+                                `${ticker} has already moved through resistance and is now some distance beyond the original breakout level.`;
+
+                        }
+
+                    }
+
+
+                    distanceText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Breakout Scanner
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                Current price:
+                                <strong>${money(currentPrice)}</strong>.
+
+                                Identified resistance:
+                                <strong>${money(resistance)}</strong>.
+
+                                Price is currently
+                                <strong>${number(distance)}% above resistance</strong>.
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    Short version:
+                                </strong>
+
+                                ${positionText}
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                PRE-BREAKOUT
+                --------------------------------------------- */
+
+                if (preBreakoutStock) {
+
+                    const currentPrice =
+                        Number(
+                            preBreakoutStock.current_price
+                        );
+
+                    const resistance =
+                        Number(
+                            preBreakoutStock.resistance_price
+                        );
+
+                    const distance =
+                        Number(
+                            preBreakoutStock.distance_to_resistance
+                        );
+
+
+                    let positionText = "";
+
+
+                    if (Number.isFinite(distance)) {
+
+                        if (distance <= 0.5) {
+
+                            positionText =
+                                `${ticker} is sitting very close to the resistance level identified by EdgeBreak.`;
+
+                        } else if (distance <= 2) {
+
+                            positionText =
+                                `${ticker} is trading close to the resistance level identified by EdgeBreak.`;
+
+                        } else {
+
+                            positionText =
+                                `${ticker} remains below the identified resistance level with more distance between current price and resistance.`;
+
+                        }
+
+                    }
+
+
+                    distanceText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Pre-Breakout Scanner
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                Current price:
+                                <strong>${money(currentPrice)}</strong>.
+
+                                Identified resistance:
+                                <strong>${money(resistance)}</strong>.
+
+                                Price is currently approximately
+                                <strong>${number(distance)}% below resistance</strong>.
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    Short version:
+                                </strong>
+
+                                ${positionText}
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* ---------------------------------------------
+                LAUNCH PAD
+                --------------------------------------------- */
+
+                if (launchPadStock) {
+
+                    const currentPrice =
+                        Number(
+                            launchPadStock.current_price
+                        );
+
+                    const resistanceLow =
+                        Number(
+                            launchPadStock.resistance_zone_low
+                        );
+
+                    const resistanceHigh =
+                        Number(
+                            launchPadStock.resistance_zone_high
+                        );
+
+
+                    let positionText = "";
+
+
+                    if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(resistanceHigh) &&
+                        currentPrice > resistanceHigh
+                    ) {
+
+                        const distanceAbove =
+                            (
+                                (
+                                    currentPrice -
+                                    resistanceHigh
+                                ) /
+                                resistanceHigh
+                            ) * 100;
+
+
+                        positionText =
+                            `${ticker} is currently <strong>${number(distanceAbove)}% above the top of the resistance zone</strong>.`;
+
+                    } else if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(resistanceLow) &&
+                        currentPrice >= resistanceLow
+                    ) {
+
+                        positionText =
+                            `${ticker} is currently <strong>inside the resistance zone</strong>.`;
+
+                    } else if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(resistanceLow)
+                    ) {
+
+                        const distanceBelow =
+                            (
+                                (
+                                    resistanceLow -
+                                    currentPrice
+                                ) /
+                                currentPrice
+                            ) * 100;
+
+
+                        positionText =
+                            `${ticker} is approximately <strong>${number(distanceBelow)}% below the bottom of the resistance zone</strong>.`;
+
+                    }
+
+
+                    distanceText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#22c55e;
+                                margin-bottom:8px;
+                            ">
+                                Launch Pad Scanner
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                Current price:
+                                <strong>${money(currentPrice)}</strong>.
+
+                                EdgeBreak identified resistance around
+                                <strong>${money(resistanceLow)}–${money(resistanceHigh)}</strong>.
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    Current position:
+                                </strong>
+
+                                ${positionText}
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                answer = `
+
+                    <div class="edge-ai-rundown">
+
+                        <div style="
+                            font-size:18px;
+                            font-weight:800;
+                            color:#f8fafc;
+                            margin-bottom:12px;
+                        ">
+                            ${ticker} — Distance to Resistance
+                        </div>
+
+                        ${distanceText}
+
+                        <div style="
+                            margin-top:12px;
+                            padding-top:12px;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#64748b;
+                            font-size:12px;
+                            line-height:1.6;
+                        ">
+                            EdgeBreak provides technical research and market
+                            information only. It does not provide financial advice
+                            or buy, sell or hold recommendations.
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+            /* =================================================
             QUICK ANSWER #6
             WHAT'S VOLUME DOING?
             ================================================= */
 
-            if (
+            else if (
                 selectedQuestion === "volume"
             ) {
 
