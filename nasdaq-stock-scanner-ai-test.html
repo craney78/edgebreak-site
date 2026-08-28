@@ -8870,6 +8870,7 @@ html {
 #edgeBreakMarginScreen[hidden],
 #edgeBreakAccountScreen[hidden],
 #edgeBreakTradeScreen[hidden],
+#edgeBreakNasdaqScreen[hidden],
 #edgeBreakStockScreen[hidden] {
     display: none !important;
 }
@@ -12320,6 +12321,175 @@ PANEL 1  watchlist seo
                 data-chat-trade-question="emotional-decisions"
             >
                 <span>How do I avoid making emotional entry and exit decisions?</span>
+                <span>›</span>
+            </button>
+
+
+        </div>
+
+    </div>
+
+    <!-- =========================================================
+    EDGEBREAK AI CHAT
+    NASDAQ & THE MARKET
+    ========================================================= -->
+
+    <div
+        id="edgeBreakNasdaqScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+
+        <div class="edge-chat-screen-heading">
+
+            <div class="edge-chat-screen-icon">
+                🌐
+            </div>
+
+            <div>
+
+                <h3>
+                    NASDAQ & The Market
+                </h3>
+
+                <p>
+                    Understand the broader NASDAQ market,
+                    today's activity and what EdgeBreak is finding.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-question-list">
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="nasdaq-today"
+            >
+                <span>How is the NASDAQ doing today?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="session-strength"
+            >
+                <span>Was today's NASDAQ session strong or weak?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="market-breadth"
+            >
+                <span>Was the market broadly strong or driven by a few large stocks?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="strongest-areas"
+            >
+                <span>What were the strongest areas of the NASDAQ today?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="weakest-areas"
+            >
+                <span>What were the weakest areas of the NASDAQ today?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="market-drivers"
+            >
+                <span>What moved the NASDAQ today?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="major-movers"
+            >
+                <span>Which major NASDAQ stocks moved the most today?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="scanner-activity"
+            >
+                <span>Are EdgeBreak scanners finding many setups right now?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="scanner-market"
+            >
+                <span>What does scanner activity tell me about the market?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="stocks-vs-nasdaq"
+            >
+                <span>Can stocks still rise when the NASDAQ is falling?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="upcoming-events"
+            >
+                <span>What important market events are coming up?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="big-picture"
+            >
+                <span>Give me the NASDAQ big picture.</span>
                 <span>›</span>
             </button>
 
@@ -21467,6 +21637,18 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
+            /* =================================
+            SHARE MARKET DATA WITH EDGEBREAK AI
+            ================================= */
+
+            window.edgeBreakNasdaqOverview =
+                data;
+
+
+            /* =================================
+            RENDER MARKET OVERVIEW
+            ================================= */
+
             renderNasdaqOverview(
                 data
             );
@@ -24633,6 +24815,1131 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     conversation.scrollTop =
                         conversation.scrollHeight;
+
+                }
+            );
+
+        }
+    );
+
+
+})();
+
+/* =========================================================
+   EDGEBREAK AI CHAT
+   NASDAQ & THE MARKET
+========================================================= */
+
+(function initEdgeBreakNasdaqSection() {
+
+    const categories =
+        document.getElementById(
+            "edgeBreakChatCategories"
+        );
+
+    const nasdaqScreen =
+        document.getElementById(
+            "edgeBreakNasdaqScreen"
+        );
+
+    const nasdaqButton =
+        document.querySelector(
+            '[data-chat-category="nasdaq"]'
+        );
+
+    const conversation =
+        document.getElementById(
+            "edgeBreakChatConversation"
+        );
+
+    const backButton =
+        nasdaqScreen?.querySelector(
+            '[data-chat-back="main"]'
+        );
+
+
+    if (
+        !categories ||
+        !nasdaqScreen ||
+        !nasdaqButton ||
+        !conversation ||
+        !backButton
+    ) {
+
+        console.warn(
+            "EdgeBreak NASDAQ elements not found."
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       MARKET DATA
+    ===================================================== */
+
+    async function getNasdaqData() {
+
+        /*
+        If the user already opened the NASDAQ Market
+        Overview, use the data already loaded on the page.
+        */
+
+        if (
+            window.edgeBreakNasdaqOverview?.overview
+        ) {
+
+            return window.edgeBreakNasdaqOverview;
+
+        }
+
+
+        /*
+        Otherwise request the same cached EdgeBreak
+        NASDAQ Market Overview used by the page.
+        */
+
+        const response =
+            await fetch(
+                "/api/nasdaq_market_overview",
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({})
+
+                }
+            );
+
+
+        const raw =
+            await response.text();
+
+
+        let data = {};
+
+
+        try {
+
+            data =
+                JSON.parse(
+                    raw
+                );
+
+        }
+        catch (error) {
+
+            throw new Error(
+                "EdgeBreak market intelligence returned an invalid response."
+            );
+
+        }
+
+
+        if (
+            !response.ok ||
+            !data.success ||
+            !data.overview
+        ) {
+
+            throw new Error(
+                data?.error ||
+                "Today's NASDAQ market intelligence is unavailable."
+            );
+
+        }
+
+
+        /*
+        Keep it available for every other NASDAQ
+        chatbot question during this page session.
+        */
+
+        window.edgeBreakNasdaqOverview =
+            data;
+
+
+        return data;
+
+    }
+
+
+    /* =====================================================
+       HELPERS
+    ===================================================== */
+
+    function safe(value) {
+
+        return String(
+            value ?? ""
+        )
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+
+    }
+
+
+    function formatAreas(areas) {
+
+        if (
+            !Array.isArray(areas) ||
+            !areas.length
+        ) {
+
+            return "No notable areas were identified.";
+
+        }
+
+
+        return areas
+            .map(
+                area => `
+
+                    <strong>
+                        ${safe(area.name)}
+                    </strong>
+                    <br>
+
+                    ${safe(area.summary)}
+
+                `
+            )
+            .join("<br><br>");
+
+    }
+
+
+    function formatDrivers(drivers) {
+
+        if (
+            !Array.isArray(drivers) ||
+            !drivers.length
+        ) {
+
+            return "No major market drivers were identified.";
+
+        }
+
+
+        return drivers
+            .map(
+                driver => `
+
+                    <strong>
+                        ${safe(driver.headline)}
+                    </strong>
+                    <br>
+
+                    ${safe(driver.summary)}
+
+                `
+            )
+            .join("<br><br>");
+
+    }
+
+
+    function formatEvents(events) {
+
+        if (
+            !Array.isArray(events) ||
+            !events.length
+        ) {
+
+            return "No major scheduled events were identified.";
+
+        }
+
+
+        return events
+            .map(
+                event => `
+
+                    <strong>
+                        ${safe(event.date)}
+                        ${event.event
+                            ? ` — ${safe(event.event)}`
+                            : ""
+                        }
+                    </strong>
+                    <br>
+
+                    ${safe(event.whyItMatters)}
+
+                `
+            )
+            .join("<br><br>");
+
+    }
+
+
+    function getScannerCount(names) {
+
+        for (const name of names) {
+
+            const value =
+                window[name];
+
+
+            if (
+                Array.isArray(value)
+            ) {
+
+                return value.length;
+
+            }
+
+        }
+
+
+        return null;
+
+    }
+
+
+    function getScannerCounts() {
+
+        return {
+
+            breakout:
+                getScannerCount([
+                    "breakoutData",
+                    "breakoutStocks",
+                    "breakoutResults",
+                    "breakouts"
+                ]),
+
+            preBreakout:
+                getScannerCount([
+                    "preBreakoutData",
+                    "preBreakoutStocks",
+                    "preBreakoutResults",
+                    "preBreakouts"
+                ]),
+
+            launchPad:
+                getScannerCount([
+                    "launchPadData",
+                    "launchpadData",
+                    "launchPadStocks",
+                    "launchpadStocks",
+                    "launchPadResults"
+                ])
+
+        };
+
+    }
+
+
+    function scannerCountAnswer() {
+
+        const counts =
+            getScannerCounts();
+
+
+        const parts = [];
+
+
+        if (
+            counts.breakout !== null
+        ) {
+
+            parts.push(
+                `<strong>${counts.breakout}</strong> Breakout setups`
+            );
+
+        }
+
+
+        if (
+            counts.preBreakout !== null
+        ) {
+
+            parts.push(
+                `<strong>${counts.preBreakout}</strong> Pre-Breakout setups`
+            );
+
+        }
+
+
+        if (
+            counts.launchPad !== null
+        ) {
+
+            parts.push(
+                `<strong>${counts.launchPad}</strong> Launch Pad setups`
+            );
+
+        }
+
+
+        if (!parts.length) {
+
+            return `
+                Today's scanner counts are not currently
+                available in this page session.
+            `;
+
+        }
+
+
+        const total =
+            [
+                counts.breakout,
+                counts.preBreakout,
+                counts.launchPad
+            ]
+                .filter(
+                    value =>
+                        Number.isFinite(value)
+                )
+                .reduce(
+                    (sum, value) =>
+                        sum + value,
+                    0
+                );
+
+
+        return `
+
+            EdgeBreak is currently displaying:
+            <br><br>
+
+            ${parts.join("<br>")}
+            <br><br>
+
+            That's
+            <strong>${total} technical setups</strong>
+            across the available scanner datasets.
+            <br><br>
+
+            Scanner counts describe how many stocks
+            currently meet EdgeBreak's technical rules.
+            They should be considered alongside the
+            broader NASDAQ market environment.
+
+        `;
+
+    }
+
+
+    /* =====================================================
+       BUILD ANSWER
+    ===================================================== */
+
+    function buildAnswer(
+        question,
+        data
+    ) {
+
+        const overview =
+            data.overview || {};
+
+
+        const composite =
+            overview.nasdaqComposite || {};
+
+
+        const nasdaq100 =
+            overview.nasdaq100 || {};
+
+
+        switch (question) {
+
+
+            /* ---------------------------------------------
+               #1 NASDAQ TODAY
+            --------------------------------------------- */
+
+            case "nasdaq-today":
+
+                return `
+
+                    <strong>NASDAQ Composite:</strong>
+                    ${safe(
+                        composite.changePercent || "—"
+                    )}
+                    <br><br>
+
+                    ${safe(
+                        composite.summary || ""
+                    )}
+
+                    <br><br>
+
+                    <strong>NASDAQ-100:</strong>
+                    ${safe(
+                        nasdaq100.changePercent || "—"
+                    )}
+                    <br><br>
+
+                    ${safe(
+                        nasdaq100.summary || ""
+                    )}
+
+                    <br><br>
+
+                    ${safe(
+                        overview.marketSummary || ""
+                    )}
+
+                `;
+
+
+            /* ---------------------------------------------
+               #2 SESSION STRENGTH
+            --------------------------------------------- */
+
+            case "session-strength":
+
+                return `
+
+                    ${safe(
+                        overview.marketSummary ||
+                        composite.summary ||
+                        "Today's market summary is unavailable."
+                    )}
+
+                    <br><br>
+
+                    <strong>NASDAQ Composite:</strong>
+                    ${safe(
+                        composite.changePercent || "—"
+                    )}
+
+                    <br>
+
+                    <strong>NASDAQ-100:</strong>
+                    ${safe(
+                        nasdaq100.changePercent || "—"
+                    )}
+
+                `;
+
+
+            /* ---------------------------------------------
+               #3 MARKET BREADTH
+            --------------------------------------------- */
+
+            case "market-breadth":
+
+                return `
+
+                    ${
+                        safe(
+                            overview.marketBreadth ||
+                            overview.breadth ||
+                            overview.marketSummary ||
+                            "EdgeBreak did not return a separate market-breadth summary for this session."
+                        )
+                    }
+
+                    <br><br>
+
+                    Market breadth matters because a
+                    headline index can sometimes be moved
+                    significantly by a relatively small
+                    number of very large companies.
+
+                `;
+
+
+            /* ---------------------------------------------
+               #4 STRONG AREAS
+            --------------------------------------------- */
+
+            case "strongest-areas":
+
+                return `
+
+                    <strong>
+                        Stronger NASDAQ areas from the
+                        completed session:
+                    </strong>
+
+                    <br><br>
+
+                    ${formatAreas(
+                        overview.strongAreas
+                    )}
+
+                `;
+
+
+            /* ---------------------------------------------
+               #5 WEAK AREAS
+            --------------------------------------------- */
+
+            case "weakest-areas":
+
+                return `
+
+                    <strong>
+                        Weaker NASDAQ areas from the
+                        completed session:
+                    </strong>
+
+                    <br><br>
+
+                    ${formatAreas(
+                        overview.weakAreas
+                    )}
+
+                `;
+
+
+            /* ---------------------------------------------
+               #6 MARKET DRIVERS
+            --------------------------------------------- */
+
+            case "market-drivers":
+
+                return `
+
+                    <strong>
+                        Important drivers EdgeBreak identified
+                        for the completed NASDAQ session:
+                    </strong>
+
+                    <br><br>
+
+                    ${formatDrivers(
+                        overview.marketDrivers
+                    )}
+
+                `;
+
+
+            /* ---------------------------------------------
+               #7 MAJOR MOVERS
+            --------------------------------------------- */
+
+            case "major-movers":
+
+                return `
+
+                    ${
+                        safe(
+                            overview.majorMovers ||
+                            overview.notableMovers ||
+                            overview.nasdaq100?.summary ||
+                            "A separate major-movers list was not returned in today's market overview."
+                        )
+                    }
+
+                    <br><br>
+
+                    For individual company research, you can
+                    also use EdgeBreak AI Stock Research from
+                    the scanner.
+
+                `;
+
+
+            /* ---------------------------------------------
+               #8 SCANNER ACTIVITY
+            --------------------------------------------- */
+
+            case "scanner-activity":
+
+                return scannerCountAnswer();
+
+
+            /* ---------------------------------------------
+               #9 WHAT SCANNER ACTIVITY MEANS
+            --------------------------------------------- */
+
+            case "scanner-market":
+
+                return `
+
+                    EdgeBreak scanner activity shows how many
+                    NASDAQ stocks are currently meeting the
+                    platform's technical setup rules.
+                    <br><br>
+
+                    A larger number of qualifying setups can
+                    indicate that technical structures are
+                    appearing across more stocks, while fewer
+                    qualifying setups can indicate a more
+                    limited opportunity set.
+                    <br><br>
+
+                    Scanner activity should not be interpreted
+                    by itself as proof that the overall market
+                    is bullish or bearish.
+                    <br><br>
+
+                    ${scannerCountAnswer()}
+
+                `;
+
+
+            /* ---------------------------------------------
+               #10 STOCKS VS NASDAQ
+            --------------------------------------------- */
+
+            case "stocks-vs-nasdaq":
+
+                return `
+
+                    <strong>Yes.</strong>
+                    Individual stocks can rise even when the
+                    NASDAQ is falling.
+                    <br><br>
+
+                    The NASDAQ contains thousands of companies
+                    across different industries. Individual
+                    stocks can respond to company news,
+                    earnings, sector strength, technical
+                    breakouts or other stock-specific factors
+                    even during a weaker overall market.
+                    <br><br>
+
+                    However, the broader market environment
+                    can still influence individual stocks,
+                    which is why EdgeBreak provides both
+                    stock-level scanner research and broader
+                    NASDAQ market intelligence.
+
+                `;
+
+
+            /* ---------------------------------------------
+               #11 UPCOMING EVENTS
+            --------------------------------------------- */
+
+            case "upcoming-events":
+
+                return `
+
+                    <strong>
+                        Important events ahead:
+                    </strong>
+
+                    <br><br>
+
+                    ${formatEvents(
+                        overview.upcomingEvents
+                    )}
+
+                    <br><br>
+
+                    These are upcoming events provided as
+                    context for the next trading session or
+                    sessions.
+
+                `;
+
+
+            /* ---------------------------------------------
+               #12 BIG PICTURE
+            --------------------------------------------- */
+
+            case "big-picture":
+
+                return `
+
+                    <strong>
+                        NASDAQ Big Picture
+                    </strong>
+
+                    <br><br>
+
+                    ${safe(
+                        overview.marketSummary || ""
+                    )}
+
+                    <br><br>
+
+                    <strong>NASDAQ Composite:</strong>
+                    ${safe(
+                        composite.changePercent || "—"
+                    )}
+
+                    <br>
+
+                    <strong>NASDAQ-100:</strong>
+                    ${safe(
+                        nasdaq100.changePercent || "—"
+                    )}
+
+                    <br><br>
+
+                    <strong>EdgeBreak takeaway:</strong>
+                    <br>
+
+                    ${safe(
+                        overview.takeaway || ""
+                    )}
+
+                `;
+
+
+            default:
+
+                return `
+                    Today's NASDAQ market information
+                    is unavailable for this question.
+                `;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       OPEN NASDAQ SCREEN
+    ===================================================== */
+
+    nasdaqButton.addEventListener(
+        "click",
+        function() {
+
+            categories.hidden =
+                true;
+
+            nasdaqScreen.hidden =
+                false;
+
+            conversation.scrollTop =
+                0;
+
+        }
+    );
+
+
+    /* =====================================================
+       BACK TO MAIN
+    ===================================================== */
+
+    backButton.addEventListener(
+        "click",
+        function() {
+
+            nasdaqScreen.hidden =
+                true;
+
+            categories.hidden =
+                false;
+
+            conversation.scrollTop =
+                0;
+
+        }
+    );
+
+
+    /* =====================================================
+       QUESTION BUTTONS
+    ===================================================== */
+
+    const questionButtons =
+        nasdaqScreen.querySelectorAll(
+            "[data-chat-nasdaq-question]"
+        );
+
+
+    questionButtons.forEach(
+        function(button) {
+
+            button.addEventListener(
+                "click",
+                async function() {
+
+                    const question =
+                        button.dataset
+                            .chatNasdaqQuestion;
+
+
+                    const questionText =
+                        button.querySelector(
+                            "span:first-child"
+                        )?.textContent.trim() ||
+                        "NASDAQ & The Market";
+
+
+                    /*
+                    Prevent double clicks while
+                    market data is loading.
+                    */
+
+                    questionButtons.forEach(
+                        item =>
+                            item.disabled = true
+                    );
+
+
+                    try {
+
+
+                        /* USER MESSAGE */
+
+                        const userMessage =
+                            document.createElement(
+                                "div"
+                            );
+
+                        userMessage.className =
+                            "edge-chat-message edge-chat-message-user";
+
+                        userMessage.innerHTML = `
+
+                            <div class="edge-chat-message-bubble">
+
+                                <strong>
+                                    ${safe(questionText)}
+                                </strong>
+
+                            </div>
+
+                        `;
+
+
+                        /* LOADING MESSAGE */
+
+                        const loadingMessage =
+                            document.createElement(
+                                "div"
+                            );
+
+                        loadingMessage.className =
+                            "edge-chat-message edge-chat-message-ai";
+
+                        loadingMessage.innerHTML = `
+
+                            <div class="edge-chat-message-icon">
+                                ✦
+                            </div>
+
+                            <div class="edge-chat-message-bubble">
+                                Loading today's EdgeBreak
+                                NASDAQ market intelligence...
+                            </div>
+
+                        `;
+
+
+                        nasdaqScreen.hidden =
+                            true;
+
+
+                        conversation.appendChild(
+                            userMessage
+                        );
+
+                        conversation.appendChild(
+                            loadingMessage
+                        );
+
+
+                        conversation.scrollTop =
+                            conversation.scrollHeight;
+
+
+                        /* GET CACHED / CURRENT DATA */
+
+                        const data =
+                            await getNasdaqData();
+
+
+                        loadingMessage.remove();
+
+
+                        /* ANSWER */
+
+                        const aiMessage =
+                            document.createElement(
+                                "div"
+                            );
+
+                        aiMessage.className =
+                            "edge-chat-message edge-chat-message-ai";
+
+                        aiMessage.innerHTML = `
+
+                            <div class="edge-chat-message-icon">
+                                ✦
+                            </div>
+
+                            <div class="edge-chat-message-bubble">
+
+                                ${buildAnswer(
+                                    question,
+                                    data
+                                )}
+
+                            </div>
+
+                        `;
+
+
+                        /* BACK */
+
+                        const answerBackRow =
+                            document.createElement(
+                                "div"
+                            );
+
+                        answerBackRow.className =
+                            "edge-chat-answer-back-row";
+
+
+                        const answerBackButton =
+                            document.createElement(
+                                "button"
+                            );
+
+                        answerBackButton.type =
+                            "button";
+
+                        answerBackButton.className =
+                            "edge-chat-back";
+
+                        answerBackButton.textContent =
+                            "← Back to NASDAQ & The Market";
+
+
+                        answerBackRow.appendChild(
+                            answerBackButton
+                        );
+
+
+                        conversation.appendChild(
+                            aiMessage
+                        );
+
+                        conversation.appendChild(
+                            answerBackRow
+                        );
+
+
+                        answerBackButton.addEventListener(
+                            "click",
+                            function() {
+
+                                userMessage.remove();
+                                aiMessage.remove();
+                                answerBackRow.remove();
+
+                                nasdaqScreen.hidden =
+                                    false;
+
+                                conversation.scrollTop =
+                                    0;
+
+                            }
+                        );
+
+
+                        conversation.scrollTop =
+                            conversation.scrollHeight;
+
+                    }
+                    catch (error) {
+
+                        console.error(
+                            "EdgeBreak NASDAQ Chat Error:",
+                            error
+                        );
+
+
+                        const errorMessage =
+                            document.createElement(
+                                "div"
+                            );
+
+                        errorMessage.className =
+                            "edge-chat-message edge-chat-message-ai";
+
+                        errorMessage.innerHTML = `
+
+                            <div class="edge-chat-message-icon">
+                                ✦
+                            </div>
+
+                            <div class="edge-chat-message-bubble">
+
+                                Today's EdgeBreak NASDAQ
+                                market intelligence is
+                                temporarily unavailable.
+
+                            </div>
+
+                        `;
+
+
+                        conversation.appendChild(
+                            errorMessage
+                        );
+
+
+                        const errorBackRow =
+                            document.createElement(
+                                "div"
+                            );
+
+                        errorBackRow.className =
+                            "edge-chat-answer-back-row";
+
+
+                        const errorBackButton =
+                            document.createElement(
+                                "button"
+                            );
+
+                        errorBackButton.type =
+                            "button";
+
+                        errorBackButton.className =
+                            "edge-chat-back";
+
+                        errorBackButton.textContent =
+                            "← Back to NASDAQ & The Market";
+
+
+                        errorBackRow.appendChild(
+                            errorBackButton
+                        );
+
+                        conversation.appendChild(
+                            errorBackRow
+                        );
+
+
+                        errorBackButton.addEventListener(
+                            "click",
+                            function() {
+
+                                errorMessage.remove();
+                                errorBackRow.remove();
+
+                                nasdaqScreen.hidden =
+                                    false;
+
+                            }
+                        );
+
+                    }
+                    finally {
+
+                        questionButtons.forEach(
+                            item =>
+                                item.disabled = false
+                        );
+
+                    }
 
                 }
             );
