@@ -32682,9 +32682,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 let chartText = "";
 
 
-                /* ---------------------------------------------
-                BREAKOUT STRUCTURE
-                --------------------------------------------- */
+                /* =================================================
+                SCANNER STRUCTURE
+                ================================================= */
 
                 if (breakoutStock) {
 
@@ -32693,6 +32693,32 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             breakoutStock.distance_above_resistance
                         );
 
+
+                    let positionText = "";
+
+
+                    if (Number.isFinite(distance)) {
+
+                        if (distance <= 2) {
+
+                            positionText =
+                                `Price has recently moved through resistance and remains relatively close to the breakout area.`;
+
+                        } else if (distance <= 5) {
+
+                            positionText =
+                                `Price has cleared resistance and moved moderately beyond the original breakout area.`;
+
+                        } else {
+
+                            positionText =
+                                `Price has cleared resistance and is now ${number(distance)}% above the level EdgeBreak identified, so the chart has already moved some distance beyond the original breakout area.`;
+
+                        }
+
+                    }
+
+
                     chartText += `
 
                         <div style="
@@ -32705,7 +32731,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 color:#22c55e;
                                 margin-bottom:8px;
                             ">
-                                Breakout Structure
+                                Chart Structure
                             </div>
 
                             <div style="
@@ -32713,38 +32739,17 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 line-height:1.7;
                             ">
 
-                                ${ticker} has moved through the resistance
-                                level EdgeBreak identified around
+                                EdgeBreak identified a
+                                <strong>breakout structure</strong>
+                                around resistance at
                                 <strong>${money(breakoutStock.resistance)}</strong>.
 
-                                Price is now
-                                <strong>${number(distance)}% above that level</strong>.
-
-                                Before the breakout, EdgeBreak recorded
+                                The setup formed with
                                 <strong>${breakoutStock.touches} resistance touches</strong>
                                 and
                                 <strong>${breakoutStock.higher_lows} higher lows</strong>.
 
-                            </div>
-
-                            <div style="
-                                margin-top:10px;
-                                color:#94a3b8;
-                                line-height:1.7;
-                            ">
-                                <strong style="color:#e2e8f0;">
-                                    Short version:
-                                </strong>
-
-                                ${
-                                    Number.isFinite(distance) &&
-                                    distance <= 2
-                                        ? `The chart has recently moved above resistance and is still relatively close to the breakout area.`
-                                        : Number.isFinite(distance) &&
-                                          distance <= 5
-                                            ? `The chart has broken resistance and moved moderately beyond the original breakout area.`
-                                            : `The chart has broken through the identified resistance area and has already moved some distance beyond it.`
-                                }
+                                ${positionText}
 
                             </div>
 
@@ -32755,17 +32760,39 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 }
 
 
-                /* ---------------------------------------------
-                PRE-BREAKOUT STRUCTURE
-                --------------------------------------------- */
-
-                if (preBreakoutStock) {
+                else if (preBreakoutStock) {
 
                     const distance =
                         Number(
                             preBreakoutStock.distance_to_resistance
                         );
 
+
+                    let positionText = "";
+
+
+                    if (Number.isFinite(distance)) {
+
+                        if (distance <= 1) {
+
+                            positionText =
+                                `Price is pressing very close to resistance while the higher-low structure remains active.`;
+
+                        } else if (distance <= 3) {
+
+                            positionText =
+                                `Price is approaching resistance while maintaining the developing higher-low structure.`;
+
+                        } else {
+
+                            positionText =
+                                `Price remains below resistance while EdgeBreak continues to track the repeated resistance tests and higher lows.`;
+
+                        }
+
+                    }
+
+
                     chartText += `
 
                         <div style="
@@ -32778,7 +32805,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 color:#22c55e;
                                 margin-bottom:8px;
                             ">
-                                Pre-Breakout Structure
+                                Chart Structure
                             </div>
 
                             <div style="
@@ -32786,38 +32813,20 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 line-height:1.7;
                             ">
 
-                                ${ticker} is trading beneath resistance
-                                around
+                                EdgeBreak identified a
+                                <strong>pre-breakout structure</strong>
+                                beneath resistance around
                                 <strong>${money(preBreakoutStock.resistance_price)}</strong>.
 
                                 Price is approximately
                                 <strong>${number(distance)}% below resistance</strong>.
 
-                                EdgeBreak has recorded
+                                The structure has recorded
                                 <strong>${preBreakoutStock.resistance_touches} resistance touches</strong>
                                 and
                                 <strong>${preBreakoutStock.higher_lows} higher lows</strong>.
 
-                            </div>
-
-                            <div style="
-                                margin-top:10px;
-                                color:#94a3b8;
-                                line-height:1.7;
-                            ">
-                                <strong style="color:#e2e8f0;">
-                                    Short version:
-                                </strong>
-
-                                ${
-                                    Number.isFinite(distance) &&
-                                    distance <= 1
-                                        ? `The chart is pressing very close to resistance while maintaining the higher-low structure detected by EdgeBreak.`
-                                        : Number.isFinite(distance) &&
-                                          distance <= 3
-                                            ? `The chart is approaching resistance while maintaining a developing higher-low structure.`
-                                            : `The chart remains beneath resistance, with EdgeBreak tracking the repeated resistance tests and higher-low structure.`
-                                }
+                                ${positionText}
 
                             </div>
 
@@ -32828,11 +32837,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 }
 
 
-                /* ---------------------------------------------
-                LAUNCH PAD STRUCTURE
-                --------------------------------------------- */
-
-                if (launchPadStock) {
+                else if (launchPadStock) {
 
                     const currentPrice =
                         Number(
@@ -32860,7 +32865,8 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                         );
 
 
-                    let positionText = "";
+                    let positionText =
+                        `Price is trading between the support and resistance areas of the base.`;
 
 
                     if (
@@ -32888,7 +32894,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                     ) {
 
                         positionText =
-                            `Price is currently trading in the resistance area of the base.`;
+                            `Price is currently trading around the resistance area of the base.`;
 
                     } else if (
                         Number.isFinite(currentPrice) &&
@@ -32898,11 +32904,6 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 
                         positionText =
                             `Price is currently trading around the support area of the base.`;
-
-                    } else {
-
-                        positionText =
-                            `Price is currently trading between the support and resistance areas of the base.`;
 
                     }
 
@@ -32919,7 +32920,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 color:#22c55e;
                                 margin-bottom:8px;
                             ">
-                                Launch Pad Structure
+                                Chart Structure
                             </div>
 
                             <div style="
@@ -32928,30 +32929,17 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             ">
 
                                 EdgeBreak identified a
-                                <strong>${launchPadStock.launchpad_days}-day base</strong>
-                                between support around
+                                <strong>${launchPadStock.launchpad_days}-day Launch Pad base</strong>.
+
+                                Support sits around
                                 <strong>${money(supportLow)}–${money(supportHigh)}</strong>
                                 and resistance around
                                 <strong>${money(resistanceLow)}–${money(resistanceHigh)}</strong>.
 
-                                ${positionText}
-
-                            </div>
-
-                            <div style="
-                                margin-top:10px;
-                                color:#94a3b8;
-                                line-height:1.7;
-                            ">
-                                <strong style="color:#e2e8f0;">
-                                    Short version:
-                                </strong>
-
-                                The chart formed a defined trading range
-                                with repeated interaction around support
-                                and resistance. The stored base spans
-                                approximately
+                                The overall range is approximately
                                 <strong>${number(launchPadStock.range_percent)}%</strong>.
+
+                                ${positionText}
 
                             </div>
 
@@ -32962,6 +32950,336 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 }
 
 
+                /* =================================================
+                TREND — MOVING AVERAGES
+                ================================================= */
+
+                if (latestIndicators) {
+
+                    const price =
+                        Number(
+                            latestIndicators.price
+                        );
+
+                    const sma20 =
+                        Number(
+                            latestIndicators.sma20
+                        );
+
+                    const sma50 =
+                        Number(
+                            latestIndicators.sma50
+                        );
+
+                    const sma200 =
+                        Number(
+                            latestIndicators.sma200
+                        );
+
+
+                    let trendText = "";
+
+
+                    if (
+                        Number.isFinite(price) &&
+                        Number.isFinite(sma20)
+                    ) {
+
+                        trendText +=
+                            `Price is <strong>${price >= sma20 ? "above" : "below"}</strong> the 20-day SMA at <strong>${money(sma20)}</strong>. `;
+
+                    }
+
+
+                    if (
+                        Number.isFinite(price) &&
+                        Number.isFinite(sma50)
+                    ) {
+
+                        trendText +=
+                            `It is <strong>${price >= sma50 ? "above" : "below"}</strong> the 50-day SMA at <strong>${money(sma50)}</strong>. `;
+
+                    }
+
+
+                    if (
+                        Number.isFinite(price) &&
+                        Number.isFinite(sma200)
+                    ) {
+
+                        trendText +=
+                            `Price is also <strong>${price >= sma200 ? "above" : "below"}</strong> the 200-day SMA at <strong>${money(sma200)}</strong>.`;
+
+                    } else if (
+                        latestIndicators.sma200 == null
+                    ) {
+
+                        trendText +=
+                            `A 200-day SMA is not yet available from the stored price history.`;
+
+                    }
+
+
+                    if (trendText) {
+
+                        chartText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <div style="
+                                    font-weight:800;
+                                    color:#38bdf8;
+                                    margin-bottom:8px;
+                                ">
+                                    Trend
+                                </div>
+
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+                                    ${trendText}
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+
+                    /* =================================================
+                    MOMENTUM — RSI + MACD
+                    ================================================= */
+
+                    const rsi =
+                        Number(
+                            latestIndicators.rsi14
+                        );
+
+                    const macd =
+                        Number(
+                            latestIndicators.macd
+                        );
+
+                    const macdSignal =
+                        Number(
+                            latestIndicators.macd_signal
+                        );
+
+                    const macdHistogram =
+                        Number(
+                            latestIndicators.macd_histogram
+                        );
+
+
+                    let momentumText = "";
+
+
+                    if (Number.isFinite(rsi)) {
+
+                        if (rsi >= 70) {
+
+                            momentumText +=
+                                `RSI is <strong>${number(rsi, 1)}</strong>, showing strong recent momentum with an elevated reading. `;
+
+                        } else if (rsi >= 55) {
+
+                            momentumText +=
+                                `RSI is <strong>${number(rsi, 1)}</strong>, showing positive recent momentum. `;
+
+                        } else if (rsi <= 30) {
+
+                            momentumText +=
+                                `RSI is <strong>${number(rsi, 1)}</strong>, which is a relatively low momentum reading. `;
+
+                        } else if (rsi < 45) {
+
+                            momentumText +=
+                                `RSI is <strong>${number(rsi, 1)}</strong>, showing softer recent momentum. `;
+
+                        } else {
+
+                            momentumText +=
+                                `RSI is <strong>${number(rsi, 1)}</strong>, sitting in a relatively neutral range. `;
+
+                        }
+
+                    }
+
+
+                    if (
+                        Number.isFinite(macd) &&
+                        Number.isFinite(macdSignal)
+                    ) {
+
+                        if (macd > macdSignal) {
+
+                            momentumText +=
+                                `MACD is above its signal line, which supports positive short-term momentum.`;
+
+                        } else if (macd < macdSignal) {
+
+                            momentumText +=
+                                `MACD is below its signal line, indicating softer short-term momentum.`;
+
+                        } else {
+
+                            momentumText +=
+                                `MACD is currently close to its signal line.`;
+
+                        }
+
+
+                        if (Number.isFinite(macdHistogram)) {
+
+                            momentumText +=
+                                ` The MACD histogram is <strong>${number(macdHistogram, 4)}</strong>.`;
+
+                        }
+
+                    }
+
+
+                    if (momentumText) {
+
+                        chartText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <div style="
+                                    font-weight:800;
+                                    color:#38bdf8;
+                                    margin-bottom:8px;
+                                ">
+                                    Momentum
+                                </div>
+
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+                                    ${momentumText}
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+
+                    /* =================================================
+                    BOLLINGER BANDS + ATR
+                    ================================================= */
+
+                    const bollingerUpper =
+                        Number(
+                            latestIndicators.bollinger_upper
+                        );
+
+                    const bollingerMiddle =
+                        Number(
+                            latestIndicators.bollinger_middle
+                        );
+
+                    const bollingerLower =
+                        Number(
+                            latestIndicators.bollinger_lower
+                        );
+
+                    const atr =
+                        Number(
+                            latestIndicators.atr14
+                        );
+
+
+                    let volatilityText = "";
+
+
+                    if (
+                        Number.isFinite(price) &&
+                        Number.isFinite(bollingerUpper) &&
+                        Number.isFinite(bollingerMiddle) &&
+                        Number.isFinite(bollingerLower)
+                    ) {
+
+                        if (price >= bollingerUpper) {
+
+                            volatilityText +=
+                                `Price is currently at or above the upper Bollinger Band at <strong>${money(bollingerUpper)}</strong>, placing it near the upper edge of its recent trading envelope. `;
+
+                        } else if (price <= bollingerLower) {
+
+                            volatilityText +=
+                                `Price is currently at or below the lower Bollinger Band at <strong>${money(bollingerLower)}</strong>, placing it near the lower edge of its recent trading envelope. `;
+
+                        } else if (price >= bollingerMiddle) {
+
+                            volatilityText +=
+                                `Price is trading in the upper half of the Bollinger Band range, between the middle band at <strong>${money(bollingerMiddle)}</strong> and upper band at <strong>${money(bollingerUpper)}</strong>. `;
+
+                        } else {
+
+                            volatilityText +=
+                                `Price is trading in the lower half of the Bollinger Band range, between the lower band at <strong>${money(bollingerLower)}</strong> and middle band at <strong>${money(bollingerMiddle)}</strong>. `;
+
+                        }
+
+                    }
+
+
+                    if (Number.isFinite(atr)) {
+
+                        volatilityText +=
+                            `ATR is approximately <strong>${money(atr)}</strong>, giving a measure of the stock's recent daily price movement.`;
+
+                    }
+
+
+                    if (volatilityText) {
+
+                        chartText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <div style="
+                                    font-weight:800;
+                                    color:#38bdf8;
+                                    margin-bottom:8px;
+                                ">
+                                    Price Position & Volatility
+                                </div>
+
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+                                    ${volatilityText}
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+                }
+
+
+                /* =================================================
+                BUILD FINAL ANSWER
+                ================================================= */
+
                 answer = `
 
                     <div class="edge-ai-rundown">
@@ -32970,10 +33288,27 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             font-size:18px;
                             font-weight:800;
                             color:#f8fafc;
-                            margin-bottom:12px;
+                            margin-bottom:6px;
                         ">
                             ${ticker} — What's the Chart Doing?
                         </div>
+
+                        ${
+                            indicatorDate
+                                ? `
+                                    <div style="
+                                        color:#64748b;
+                                        font-size:12px;
+                                        margin-bottom:14px;
+                                    ">
+                                        Technical data through
+                                        <strong style="color:#94a3b8;">
+                                            ${indicatorDate}
+                                        </strong>
+                                    </div>
+                                `
+                                : ""
+                        }
 
                         ${chartText}
 
@@ -32985,10 +33320,10 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             font-size:12px;
                             line-height:1.6;
                         ">
-                            This summary describes the technical structure
-                            detected by EdgeBreak's scanners. EdgeBreak does
-                            not provide financial advice or buy, sell or hold
-                            recommendations.
+                            This summary describes the current technical
+                            structure and indicator data available to
+                            EdgeBreak. It does not provide financial advice
+                            or buy, sell or hold recommendations.
                         </div>
 
                     </div>
