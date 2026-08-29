@@ -31627,11 +31627,12 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
             ) {
 
                 let importantText = "";
+                let flagCount = 0;
 
 
-                /* ---------------------------------------------
-                BREAKOUT
-                --------------------------------------------- */
+                /* =================================================
+                SCANNER POSITION
+                ================================================= */
 
                 if (breakoutStock) {
 
@@ -31646,82 +31647,113 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                         );
 
 
-                    importantText += `
+                    let breakoutFlags = "";
 
-                        <div style="
-                            padding:14px 0;
-                            border-top:1px solid rgba(148,163,184,.16);
-                        ">
 
-                            <div style="
-                                font-weight:800;
-                                color:#22c55e;
-                                margin-bottom:8px;
-                            ">
-                                Breakout
+                    if (Number.isFinite(distance)) {
+
+                        if (distance <= 2) {
+
+                            breakoutFlags += `
+
+                                <div style="margin-bottom:8px;">
+                                    <strong style="color:#f8fafc;">
+                                        • Close to breakout level:
+                                    </strong>
+
+                                    Price is only
+                                    <strong>${number(distance)}% above</strong>
+                                    resistance around
+                                    <strong>${money(breakoutStock.resistance)}</strong>.
+                                </div>
+
+                            `;
+
+                            flagCount++;
+
+                        } else if (distance > 5) {
+
+                            breakoutFlags += `
+
+                                <div style="margin-bottom:8px;">
+                                    <strong style="color:#f8fafc;">
+                                        • Extended from breakout area:
+                                    </strong>
+
+                                    Price is already
+                                    <strong>${number(distance)}% above</strong>
+                                    the resistance level around
+                                    <strong>${money(breakoutStock.resistance)}</strong>.
+                                </div>
+
+                            `;
+
+                            flagCount++;
+
+                        }
+
+                    }
+
+
+                    if (
+                        Number.isFinite(volumeRatio) &&
+                        volumeRatio >= 1.5
+                    ) {
+
+                        breakoutFlags += `
+
+                            <div style="margin-bottom:8px;">
+                                <strong style="color:#f8fafc;">
+                                    • Elevated breakout volume:
+                                </strong>
+
+                                The breakout was recorded with approximately
+                                <strong>${number(volumeRatio, 2)}× normal volume</strong>.
                             </div>
 
+                        `;
+
+                        flagCount++;
+
+                    }
+
+
+                    if (breakoutFlags) {
+
+                        importantText += `
+
                             <div style="
-                                color:#cbd5e1;
-                                line-height:1.7;
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
                             ">
 
-                                ${ticker} has already moved above the
-                                resistance level EdgeBreak identified around
-                                <strong>${money(breakoutStock.resistance)}</strong>.
+                                <div style="
+                                    font-weight:800;
+                                    color:#22c55e;
+                                    margin-bottom:10px;
+                                ">
+                                    Breakout Structure
+                                </div>
 
-                                ${
-                                    Number.isFinite(distance)
-                                        ? `
-                                            Price is currently
-                                            <strong>${number(distance)}% above that level</strong>.
-                                        `
-                                        : ""
-                                }
-
-                                ${
-                                    Number.isFinite(volumeRatio)
-                                        ? `
-                                            Recorded breakout volume was approximately
-                                            <strong>${number(volumeRatio)}× normal volume</strong>.
-                                        `
-                                        : ""
-                                }
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+                                    ${breakoutFlags}
+                                </div>
 
                             </div>
 
-                            ${
-                                Number.isFinite(distance) &&
-                                distance > 5
-                                    ? `
-                                        <div style="
-                                            margin-top:10px;
-                                            color:#94a3b8;
-                                            line-height:1.7;
-                                        ">
-                                            <strong style="color:#e2e8f0;">
-                                                Worth noting:
-                                            </strong>
+                        `;
 
-                                            Price has already moved more than
-                                            <strong>5% beyond the identified resistance level</strong>,
-                                            so the stock is no longer sitting close
-                                            to the original breakout area.
-                                        </div>
-                                    `
-                                    : ""
-                            }
-
-                        </div>
-
-                    `;
+                    }
 
                 }
 
 
-                /* ---------------------------------------------
-                PRE-BREAKOUT
-                --------------------------------------------- */
+                /* =================================================
+                PRE-BREAKOUT POSITION
+                ================================================= */
 
                 if (preBreakoutStock) {
 
@@ -31731,69 +31763,137 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                         );
 
 
-                    importantText += `
+                    let preBreakoutFlags = "";
 
-                        <div style="
-                            padding:14px 0;
-                            border-top:1px solid rgba(148,163,184,.16);
-                        ">
 
-                            <div style="
-                                font-weight:800;
-                                color:#22c55e;
-                                margin-bottom:8px;
-                            ">
-                                Pre-Breakout
+                    if (
+                        Number.isFinite(distance) &&
+                        distance <= 1
+                    ) {
+
+                        preBreakoutFlags += `
+
+                            <div style="margin-bottom:8px;">
+                                <strong style="color:#f8fafc;">
+                                    • Very close to resistance:
+                                </strong>
+
+                                Price is approximately
+                                <strong>${number(distance)}% below</strong>
+                                resistance around
+                                <strong>${money(preBreakoutStock.resistance_price)}</strong>.
                             </div>
 
-                            <div style="
-                                color:#cbd5e1;
-                                line-height:1.7;
-                            ">
+                        `;
 
-                                ${ticker} is approximately
-                                <strong>${number(distance)}% below resistance</strong>
-                                around
+                        flagCount++;
+
+                    } else if (
+                        Number.isFinite(distance) &&
+                        distance <= 3
+                    ) {
+
+                        preBreakoutFlags += `
+
+                            <div style="margin-bottom:8px;">
+                                <strong style="color:#f8fafc;">
+                                    • Approaching resistance:
+                                </strong>
+
+                                Price is approximately
+                                <strong>${number(distance)}% below</strong>
+                                resistance around
                                 <strong>${money(preBreakoutStock.resistance_price)}</strong>.
+                            </div>
+
+                        `;
+
+                        flagCount++;
+
+                    }
+
+
+                    if (
+                        Number(preBreakoutStock.resistance_touches) >= 3
+                    ) {
+
+                        preBreakoutFlags += `
+
+                            <div style="margin-bottom:8px;">
+                                <strong style="color:#f8fafc;">
+                                    • Repeated resistance testing:
+                                </strong>
 
                                 EdgeBreak has recorded
-                                <strong>${preBreakoutStock.resistance_touches} resistance touches</strong>
-                                and
-                                <strong>${preBreakoutStock.higher_lows} higher lows</strong>.
+                                <strong>${preBreakoutStock.resistance_touches} resistance touches</strong>.
+                            </div>
+
+                        `;
+
+                        flagCount++;
+
+                    }
+
+
+                    if (
+                        Number(preBreakoutStock.higher_lows) >= 3
+                    ) {
+
+                        preBreakoutFlags += `
+
+                            <div style="margin-bottom:8px;">
+                                <strong style="color:#f8fafc;">
+                                    • Higher-low structure:
+                                </strong>
+
+                                EdgeBreak has recorded
+                                <strong>${preBreakoutStock.higher_lows} higher lows</strong>
+                                within the current setup.
+                            </div>
+
+                        `;
+
+                        flagCount++;
+
+                    }
+
+
+                    if (preBreakoutFlags) {
+
+                        importantText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <div style="
+                                    font-weight:800;
+                                    color:#22c55e;
+                                    margin-bottom:10px;
+                                ">
+                                    Pre-Breakout Structure
+                                </div>
+
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+                                    ${preBreakoutFlags}
+                                </div>
 
                             </div>
 
-                            ${
-                                Number.isFinite(distance) &&
-                                distance <= 1
-                                    ? `
-                                        <div style="
-                                            margin-top:10px;
-                                            color:#94a3b8;
-                                            line-height:1.7;
-                                        ">
-                                            <strong style="color:#e2e8f0;">
-                                                Worth noting:
-                                            </strong>
+                        `;
 
-                                            Price is currently within
-                                            <strong>1% of the resistance level</strong>
-                                            identified by EdgeBreak.
-                                        </div>
-                                    `
-                                    : ""
-                            }
-
-                        </div>
-
-                    `;
+                    }
 
                 }
 
 
-                /* ---------------------------------------------
-                LAUNCH PAD
-                --------------------------------------------- */
+                /* =================================================
+                LAUNCH PAD POSITION
+                ================================================= */
 
                 if (launchPadStock) {
 
@@ -31823,7 +31923,59 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                         );
 
 
-                    let launchPosition = "";
+                    let launchFlags = "";
+
+
+                    if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(resistanceLow) &&
+                        Number.isFinite(resistanceHigh) &&
+                        currentPrice >= resistanceLow &&
+                        currentPrice <= resistanceHigh
+                    ) {
+
+                        launchFlags += `
+
+                            <div style="margin-bottom:8px;">
+                                <strong style="color:#f8fafc;">
+                                    • Price is in the resistance zone:
+                                </strong>
+
+                                The Launch Pad resistance area is approximately
+                                <strong>${money(resistanceLow)}–${money(resistanceHigh)}</strong>.
+                            </div>
+
+                        `;
+
+                        flagCount++;
+
+                    }
+
+
+                    if (
+                        Number.isFinite(currentPrice) &&
+                        Number.isFinite(supportLow) &&
+                        Number.isFinite(supportHigh) &&
+                        currentPrice >= supportLow &&
+                        currentPrice <= supportHigh
+                    ) {
+
+                        launchFlags += `
+
+                            <div style="margin-bottom:8px;">
+                                <strong style="color:#f8fafc;">
+                                    • Price is around support:
+                                </strong>
+
+                                The Launch Pad support area is approximately
+                                <strong>${money(supportLow)}–${money(supportHigh)}</strong>.
+                            </div>
+
+                        `;
+
+                        flagCount++;
+
+                    }
 
 
                     if (
@@ -31842,103 +31994,494 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             ) * 100;
 
 
-                        launchPosition = `
-                            Price is now
-                            <strong>${number(above)}% above the top of the original resistance zone</strong>.
+                        launchFlags += `
+
+                            <div style="margin-bottom:8px;">
+                                <strong style="color:#f8fafc;">
+                                    • Above the stored Launch Pad range:
+                                </strong>
+
+                                Price is approximately
+                                <strong>${number(above)}% above</strong>
+                                the top of the original resistance zone.
+                            </div>
+
                         `;
 
-                    } else if (
-                        Number.isFinite(currentPrice) &&
-                        Number.isFinite(supportLow) &&
-                        currentPrice < supportLow
-                    ) {
-
-                        const below =
-                            (
-                                (
-                                    supportLow -
-                                    currentPrice
-                                ) /
-                                supportLow
-                            ) * 100;
-
-
-                        launchPosition = `
-                            Price is now
-                            <strong>${number(below)}% below the bottom of the original support zone</strong>.
-                        `;
-
-                    } else if (
-                        Number.isFinite(currentPrice) &&
-                        Number.isFinite(resistanceLow) &&
-                        currentPrice >= resistanceLow
-                    ) {
-
-                        launchPosition = `
-                            Price is currently
-                            <strong>inside the identified resistance zone</strong>.
-                        `;
-
-                    } else if (
-                        Number.isFinite(currentPrice) &&
-                        Number.isFinite(supportHigh) &&
-                        currentPrice <= supportHigh
-                    ) {
-
-                        launchPosition = `
-                            Price is currently
-                            <strong>around the identified support zone</strong>.
-                        `;
-
-                    } else {
-
-                        launchPosition = `
-                            Price remains
-                            <strong>inside the broader base structure</strong>.
-                        `;
+                        flagCount++;
 
                     }
 
 
-                    importantText += `
+                    if (launchFlags) {
 
-                        <div style="
-                            padding:14px 0;
-                            border-top:1px solid rgba(148,163,184,.16);
-                        ">
+                        importantText += `
 
                             <div style="
-                                font-weight:800;
-                                color:#22c55e;
-                                margin-bottom:8px;
-                            ">
-                                Launch Pad
-                            </div>
-
-                            <div style="
-                                color:#cbd5e1;
-                                line-height:1.7;
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
                             ">
 
-                                EdgeBreak identified a
-                                <strong>${launchPadStock.launchpad_days}-day base</strong>
-                                with a range of approximately
-                                <strong>${number(launchPadStock.range_percent)}%</strong>.
+                                <div style="
+                                    font-weight:800;
+                                    color:#22c55e;
+                                    margin-bottom:10px;
+                                ">
+                                    Launch Pad Structure
+                                </div>
 
-                                ${launchPosition}
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+                                    ${launchFlags}
+                                </div>
 
                             </div>
 
-                        </div>
+                        `;
 
-                    `;
+                    }
 
                 }
 
 
-                /* ---------------------------------------------
+                /* =================================================
+                INDICATOR FLAGS
+                ================================================= */
+
+                if (latestIndicators) {
+
+                    const price =
+                        Number(
+                            latestIndicators.price
+                        );
+
+                    const rsi =
+                        Number(
+                            latestIndicators.rsi14
+                        );
+
+                    const macd =
+                        Number(
+                            latestIndicators.macd
+                        );
+
+                    const macdSignal =
+                        Number(
+                            latestIndicators.macd_signal
+                        );
+
+                    const sma20 =
+                        Number(
+                            latestIndicators.sma20
+                        );
+
+                    const sma50 =
+                        Number(
+                            latestIndicators.sma50
+                        );
+
+                    const sma200 =
+                        Number(
+                            latestIndicators.sma200
+                        );
+
+                    const bollingerUpper =
+                        Number(
+                            latestIndicators.bollinger_upper
+                        );
+
+                    const bollingerLower =
+                        Number(
+                            latestIndicators.bollinger_lower
+                        );
+
+                    const relativeVolume =
+                        Number(
+                            latestIndicators.relative_volume
+                        );
+
+                    const obvTrend =
+                        String(
+                            latestIndicators.obv_trend || ""
+                        ).toLowerCase();
+
+
+                    let indicatorFlags = "";
+
+
+                    /* ---------------------------------------------
+                    RSI
+                    --------------------------------------------- */
+
+                    if (
+                        Number.isFinite(rsi) &&
+                        rsi >= 70
+                    ) {
+
+                        indicatorFlags += `
+
+                            <div style="margin-bottom:8px;">
+                                <strong style="color:#f8fafc;">
+                                    • Elevated RSI:
+                                </strong>
+
+                                RSI is
+                                <strong>${number(rsi, 1)}</strong>,
+                                showing strong recent momentum with an
+                                elevated reading.
+                            </div>
+
+                        `;
+
+                        flagCount++;
+
+                    } else if (
+                        Number.isFinite(rsi) &&
+                        rsi <= 30
+                    ) {
+
+                        indicatorFlags += `
+
+                            <div style="margin-bottom:8px;">
+                                <strong style="color:#f8fafc;">
+                                    • Low RSI:
+                                </strong>
+
+                                RSI is
+                                <strong>${number(rsi, 1)}</strong>,
+                                reflecting weak recent momentum.
+                            </div>
+
+                        `;
+
+                        flagCount++;
+
+                    }
+
+
+                    /* ---------------------------------------------
+                    MOVING AVERAGE ALIGNMENT
+                    --------------------------------------------- */
+
+                    if (
+                        Number.isFinite(price) &&
+                        Number.isFinite(sma20) &&
+                        Number.isFinite(sma50)
+                    ) {
+
+                        if (
+                            price > sma20 &&
+                            price > sma50 &&
+                            sma20 > sma50
+                        ) {
+
+                            indicatorFlags += `
+
+                                <div style="margin-bottom:8px;">
+                                    <strong style="color:#f8fafc;">
+                                        • Positive short-term trend alignment:
+                                    </strong>
+
+                                    Price is above both the 20-day and
+                                    50-day moving averages, with the
+                                    20-day SMA also above the 50-day SMA.
+                                </div>
+
+                            `;
+
+                            flagCount++;
+
+                        } else if (
+                            price < sma20 &&
+                            price < sma50 &&
+                            sma20 < sma50
+                        ) {
+
+                            indicatorFlags += `
+
+                                <div style="margin-bottom:8px;">
+                                    <strong style="color:#f8fafc;">
+                                        • Weak short-term trend alignment:
+                                    </strong>
+
+                                    Price is below both the 20-day and
+                                    50-day moving averages, with the
+                                    20-day SMA below the 50-day SMA.
+                                </div>
+
+                            `;
+
+                            flagCount++;
+
+                        }
+
+                    }
+
+
+                    /* ---------------------------------------------
+                    LONG-TERM MOVING AVERAGE
+                    --------------------------------------------- */
+
+                    if (
+                        Number.isFinite(price) &&
+                        Number.isFinite(sma200)
+                    ) {
+
+                        if (price > sma200) {
+
+                            indicatorFlags += `
+
+                                <div style="margin-bottom:8px;">
+                                    <strong style="color:#f8fafc;">
+                                        • Above the 200-day average:
+                                    </strong>
+
+                                    Price is currently above the
+                                    200-day SMA at
+                                    <strong>${money(sma200)}</strong>.
+                                </div>
+
+                            `;
+
+                            flagCount++;
+
+                        } else {
+
+                            indicatorFlags += `
+
+                                <div style="margin-bottom:8px;">
+                                    <strong style="color:#f8fafc;">
+                                        • Below the 200-day average:
+                                    </strong>
+
+                                    Price is currently below the
+                                    200-day SMA at
+                                    <strong>${money(sma200)}</strong>.
+                                </div>
+
+                            `;
+
+                            flagCount++;
+
+                        }
+
+                    }
+
+
+                    /* ---------------------------------------------
+                    MACD
+                    --------------------------------------------- */
+
+                    if (
+                        Number.isFinite(macd) &&
+                        Number.isFinite(macdSignal)
+                    ) {
+
+                        if (macd > macdSignal) {
+
+                            indicatorFlags += `
+
+                                <div style="margin-bottom:8px;">
+                                    <strong style="color:#f8fafc;">
+                                        • MACD above signal:
+                                    </strong>
+
+                                    MACD is currently above its signal
+                                    line, supporting positive short-term
+                                    momentum.
+                                </div>
+
+                            `;
+
+                            flagCount++;
+
+                        } else if (macd < macdSignal) {
+
+                            indicatorFlags += `
+
+                                <div style="margin-bottom:8px;">
+                                    <strong style="color:#f8fafc;">
+                                        • MACD below signal:
+                                    </strong>
+
+                                    MACD is currently below its signal
+                                    line, showing softer short-term
+                                    momentum.
+                                </div>
+
+                            `;
+
+                            flagCount++;
+
+                        }
+
+                    }
+
+
+                    /* ---------------------------------------------
+                    BOLLINGER POSITION
+                    --------------------------------------------- */
+
+                    if (
+                        Number.isFinite(price) &&
+                        Number.isFinite(bollingerUpper) &&
+                        price >= bollingerUpper
+                    ) {
+
+                        indicatorFlags += `
+
+                            <div style="margin-bottom:8px;">
+                                <strong style="color:#f8fafc;">
+                                    • At the upper Bollinger Band:
+                                </strong>
+
+                                Price is at or above the upper band
+                                around
+                                <strong>${money(bollingerUpper)}</strong>,
+                                placing it near the upper edge of its
+                                recent trading envelope.
+                            </div>
+
+                        `;
+
+                        flagCount++;
+
+                    } else if (
+                        Number.isFinite(price) &&
+                        Number.isFinite(bollingerLower) &&
+                        price <= bollingerLower
+                    ) {
+
+                        indicatorFlags += `
+
+                            <div style="margin-bottom:8px;">
+                                <strong style="color:#f8fafc;">
+                                    • At the lower Bollinger Band:
+                                </strong>
+
+                                Price is at or below the lower band
+                                around
+                                <strong>${money(bollingerLower)}</strong>,
+                                placing it near the lower edge of its
+                                recent trading envelope.
+                            </div>
+
+                        `;
+
+                        flagCount++;
+
+                    }
+
+
+                    /* ---------------------------------------------
+                    RELATIVE VOLUME
+                    --------------------------------------------- */
+
+                    if (
+                        Number.isFinite(relativeVolume) &&
+                        relativeVolume >= 1.5
+                    ) {
+
+                        indicatorFlags += `
+
+                            <div style="margin-bottom:8px;">
+                                <strong style="color:#f8fafc;">
+                                    • Elevated recent volume:
+                                </strong>
+
+                                Latest recorded volume is approximately
+                                <strong>${number(relativeVolume, 2)}×</strong>
+                                the 20-day average.
+                            </div>
+
+                        `;
+
+                        flagCount++;
+
+                    }
+
+
+                    /* ---------------------------------------------
+                    OBV
+                    --------------------------------------------- */
+
+                    if (obvTrend === "rising") {
+
+                        indicatorFlags += `
+
+                            <div style="margin-bottom:8px;">
+                                <strong style="color:#f8fafc;">
+                                    • OBV is rising:
+                                </strong>
+
+                                Volume has generally accumulated more
+                                strongly on advancing days over the
+                                recent period.
+                            </div>
+
+                        `;
+
+                        flagCount++;
+
+                    } else if (obvTrend === "falling") {
+
+                        indicatorFlags += `
+
+                            <div style="margin-bottom:8px;">
+                                <strong style="color:#f8fafc;">
+                                    • OBV is falling:
+                                </strong>
+
+                                Volume has generally accumulated more
+                                heavily on declining days over the
+                                recent period.
+                            </div>
+
+                        `;
+
+                        flagCount++;
+
+                    }
+
+
+                    if (indicatorFlags) {
+
+                        importantText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <div style="
+                                    font-weight:800;
+                                    color:#38bdf8;
+                                    margin-bottom:10px;
+                                ">
+                                    Technical Flags
+                                </div>
+
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+                                    ${indicatorFlags}
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+                }
+
+
+                /* =================================================
                 SMART MONEY
-                --------------------------------------------- */
+                ================================================= */
 
                 if (smartMoneyStock) {
 
@@ -31951,7 +32494,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 
                             <div style="
                                 font-weight:800;
-                                color:#22c55e;
+                                color:#a78bfa;
                                 margin-bottom:8px;
                             ">
                                 Smart Money Filter
@@ -31962,14 +32505,17 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 line-height:1.7;
                             ">
 
-                                ${ticker} has appeared in the Smart Money
-                                Filter
-                                <strong>${smartMoneyStock.count}
-                                ${
-                                    Number(smartMoneyStock.count) === 1
-                                        ? "time"
-                                        : "times"
-                                }</strong>.
+                                ${ticker} has appeared in the
+                                Smart Money Filter
+
+                                <strong>
+                                    ${smartMoneyStock.count}
+                                    ${
+                                        Number(smartMoneyStock.count) === 1
+                                            ? "time"
+                                            : "times"
+                                    }
+                                </strong>.
 
                                 ${
                                     smartMoneyStock.last_seen
@@ -31989,9 +32535,42 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 }
 
 
-                /* ---------------------------------------------
+                /* =================================================
+                NO MAJOR FLAGS
+                ================================================= */
+
+                if (
+                    flagCount === 0 &&
+                    !smartMoneyStock
+                ) {
+
+                    importantText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                            color:#cbd5e1;
+                            line-height:1.7;
+                        ">
+
+                            Nothing unusually extreme is standing out
+                            in the technical measures EdgeBreak currently
+                            has stored for ${ticker}.
+
+                            The stock is still appearing because its
+                            scanner structure meets the relevant
+                            EdgeBreak criteria.
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* =================================================
                 ANSWER
-                --------------------------------------------- */
+                ================================================= */
 
                 answer = `
 
@@ -32001,28 +32580,29 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             font-size:18px;
                             font-weight:800;
                             color:#f8fafc;
-                            margin-bottom:12px;
+                            margin-bottom:6px;
                         ">
                             ${ticker} — Quick Things to Know
                         </div>
 
+                        ${
+                            indicatorDate
+                                ? `
+                                    <div style="
+                                        color:#64748b;
+                                        font-size:12px;
+                                        margin-bottom:14px;
+                                    ">
+                                        Technical data through
+                                        <strong style="color:#94a3b8;">
+                                            ${indicatorDate}
+                                        </strong>
+                                    </div>
+                                `
+                                : ""
+                        }
+
                         ${importantText}
-
-                        <div style="
-                            margin-top:10px;
-                            color:#94a3b8;
-                            line-height:1.7;
-                        ">
-
-                            <strong style="color:#e2e8f0;">
-                                Bottom line:
-                            </strong>
-
-                            These are the main technical details currently
-                            standing out in EdgeBreak's scanner data for
-                            ${ticker}.
-
-                        </div>
 
                         <div style="
                             margin-top:12px;
@@ -32032,9 +32612,11 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             font-size:12px;
                             line-height:1.6;
                         ">
-                            EdgeBreak provides technical research and market
-                            information only. It does not provide financial advice
-                            or buy, sell or hold recommendations.
+                            These flags highlight technical conditions
+                            currently standing out in EdgeBreak's stored
+                            scanner and indicator data. They are research
+                            observations, not buy, sell or hold
+                            recommendations.
                         </div>
 
                     </div>
