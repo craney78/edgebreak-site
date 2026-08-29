@@ -30973,15 +30973,64 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 let ageText = "";
 
 
-                /* ---------------------------------------------
+                /* =================================================
+                HISTORY OBSERVATION DATES
+                ================================================= */
+
+                let historyDates = [];
+
+
+                if (
+                    Array.isArray(indicatorHistory) &&
+                    indicatorHistory.length
+                ) {
+
+                    historyDates =
+                        indicatorHistory
+                            .map(
+                                item =>
+                                    item && item.date
+                                        ? String(item.date)
+                                        : ""
+                            )
+                            .filter(Boolean)
+                            .sort();
+
+                }
+
+
+                const firstHistoryDate =
+                    historyDates.length
+                        ? historyDates[0]
+                        : "";
+
+                const lastHistoryDate =
+                    historyDates.length
+                        ? historyDates[
+                            historyDates.length - 1
+                        ]
+                        : "";
+
+
+                /* =================================================
                 LAUNCH PAD
-                --------------------------------------------- */
+                ================================================= */
 
                 if (launchPadStock) {
 
                     const baseDays =
                         Number(
                             launchPadStock.launchpad_days
+                        );
+
+                    const supportTests =
+                        Number(
+                            launchPadStock.support_tests
+                        );
+
+                    const resistanceTests =
+                        Number(
+                            launchPadStock.resistance_tests
                         );
 
 
@@ -30994,7 +31043,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                     ) {
 
                         baseDescription =
-                            `This is one of the longer base structures tracked by the Launch Pad Scanner.`;
+                            `This is a relatively long base, representing roughly <strong>${number(baseDays / 21, 1)} months of trading sessions</strong>.`;
 
                     } else if (
                         Number.isFinite(baseDays) &&
@@ -31002,12 +31051,22 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                     ) {
 
                         baseDescription =
-                            `This represents an established multi-month base structure.`;
+                            `This is an established multi-month base, representing roughly <strong>${number(baseDays / 21, 1)} months of trading sessions</strong>.`;
 
-                    } else {
+                    } else if (
+                        Number.isFinite(baseDays) &&
+                        baseDays >= 63
+                    ) {
 
                         baseDescription =
-                            `EdgeBreak has identified an established trading base over this period.`;
+                            `This represents roughly <strong>${number(baseDays / 21, 1)} months of trading sessions</strong> inside the base structure.`;
+
+                    } else if (
+                        Number.isFinite(baseDays)
+                    ) {
+
+                        baseDescription =
+                            `EdgeBreak identified approximately <strong>${baseDays} trading days</strong> in the stored base structure.`;
 
                     }
 
@@ -31024,7 +31083,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 color:#22c55e;
                                 margin-bottom:8px;
                             ">
-                                Launch Pad Structure
+                                Launch Pad Formation
                             </div>
 
                             <div style="
@@ -31036,26 +31095,45 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 <strong>${baseDays}-day base</strong>
                                 for ${ticker}.
 
-                                During that structure, the scanner recorded
-                                <strong>${launchPadStock.support_tests} support tests</strong>
-                                and
-                                <strong>${launchPadStock.resistance_tests} resistance tests</strong>.
+                                ${
+                                    Number.isFinite(supportTests)
+                                        ? `
+                                            The structure contains
+                                            <strong>${supportTests} support tests</strong>
+                                        `
+                                        : ""
+                                }
+
+                                ${
+                                    Number.isFinite(resistanceTests)
+                                        ? `
+                                            and
+                                            <strong>${resistanceTests} resistance tests</strong>.
+                                        `
+                                        : "."
+                                }
 
                             </div>
 
-                            <div style="
-                                margin-top:10px;
-                                color:#94a3b8;
-                                line-height:1.7;
-                            ">
+                            ${
+                                baseDescription
+                                    ? `
+                                        <div style="
+                                            margin-top:10px;
+                                            color:#94a3b8;
+                                            line-height:1.7;
+                                        ">
 
-                                <strong style="color:#e2e8f0;">
-                                    In plain English:
-                                </strong>
+                                            <strong style="color:#e2e8f0;">
+                                                In plain English:
+                                            </strong>
 
-                                ${baseDescription}
+                                            ${baseDescription}
 
-                            </div>
+                                        </div>
+                                    `
+                                    : ""
+                            }
 
                         </div>
 
@@ -31064,11 +31142,58 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 }
 
 
-                /* ---------------------------------------------
+                /* =================================================
                 PRE-BREAKOUT
-                --------------------------------------------- */
+                ================================================= */
 
                 if (preBreakoutStock) {
+
+                    const structureStart =
+                        preBreakoutStock.structure_start
+                            ? new Date(
+                                preBreakoutStock.structure_start
+                            )
+                            : null;
+
+                    const structureEnd =
+                        preBreakoutStock.structure_end
+                            ? new Date(
+                                preBreakoutStock.structure_end
+                            )
+                            : null;
+
+
+                    let formationDays = null;
+
+
+                    if (
+                        structureStart &&
+                        structureEnd &&
+                        !Number.isNaN(
+                            structureStart.getTime()
+                        ) &&
+                        !Number.isNaN(
+                            structureEnd.getTime()
+                        ) &&
+                        structureEnd >= structureStart
+                    ) {
+
+                        formationDays =
+                            Math.round(
+                                (
+                                    structureEnd -
+                                    structureStart
+                                ) /
+                                (
+                                    1000 *
+                                    60 *
+                                    60 *
+                                    24
+                                )
+                            );
+
+                    }
+
 
                     ageText += `
 
@@ -31082,7 +31207,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 color:#22c55e;
                                 margin-bottom:8px;
                             ">
-                                Pre-Breakout Structure
+                                Pre-Breakout Formation
                             </div>
 
                             <div style="
@@ -31092,9 +31217,42 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 
                                 ${ticker} currently has an active
                                 Pre-Breakout structure with
-                                <strong>${preBreakoutStock.resistance_touches} resistance touches</strong>
+
+                                <strong>
+                                    ${preBreakoutStock.resistance_touches}
+                                    resistance touches
+                                </strong>
+
                                 and
-                                <strong>${preBreakoutStock.higher_lows} higher lows</strong>.
+
+                                <strong>
+                                    ${preBreakoutStock.higher_lows}
+                                    higher lows
+                                </strong>.
+
+                                ${
+                                    structureStart &&
+                                    !Number.isNaN(
+                                        structureStart.getTime()
+                                    )
+                                        ? `
+                                            The stored structure begins around
+                                            <strong>${formatDate(preBreakoutStock.structure_start)}</strong>.
+                                        `
+                                        : ""
+                                }
+
+                                ${
+                                    structureEnd &&
+                                    !Number.isNaN(
+                                        structureEnd.getTime()
+                                    )
+                                        ? `
+                                            The latest stored structure date is
+                                            <strong>${formatDate(preBreakoutStock.structure_end)}</strong>.
+                                        `
+                                        : ""
+                                }
 
                             </div>
 
@@ -31104,11 +31262,25 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 line-height:1.7;
                             ">
 
-                                EdgeBreak has stored structure dates for
-                                this scanner, but the current dataset is
-                                not being used here to calculate an exact
-                                formation period. This avoids reporting
-                                an unreliable duration.
+                                <strong style="color:#e2e8f0;">
+                                    Formation period:
+                                </strong>
+
+                                ${
+                                    Number.isFinite(formationDays)
+                                        ? `
+                                            The stored structure spans approximately
+                                            <strong>${formationDays} calendar days</strong>.
+                                            This is the period represented by the
+                                            scanner's structure dates rather than
+                                            an estimate made by the chatbot.
+                                        `
+                                        : `
+                                            EdgeBreak does not currently have two
+                                            reliable structure dates available to
+                                            calculate an exact formation period.
+                                        `
+                                }
 
                             </div>
 
@@ -31119,9 +31291,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 }
 
 
-                /* ---------------------------------------------
+                /* =================================================
                 BREAKOUT
-                --------------------------------------------- */
+                ================================================= */
 
                 if (breakoutStock) {
 
@@ -31137,7 +31309,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 color:#22c55e;
                                 margin-bottom:8px;
                             ">
-                                Breakout Structure
+                                Breakout Formation
                             </div>
 
                             <div style="
@@ -31150,9 +31322,18 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 
                                 Before price moved through resistance,
                                 EdgeBreak recorded
-                                <strong>${breakoutStock.touches} resistance touches</strong>
+
+                                <strong>
+                                    ${breakoutStock.touches}
+                                    resistance touches
+                                </strong>
+
                                 and
-                                <strong>${breakoutStock.higher_lows} higher lows</strong>.
+
+                                <strong>
+                                    ${breakoutStock.higher_lows}
+                                    higher lows
+                                </strong>.
 
                             </div>
 
@@ -31162,9 +31343,14 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 line-height:1.7;
                             ">
 
-                                The current Breakout Scanner data does not
-                                store a reliable formation duration, so
-                                EdgeBreak will not estimate one.
+                                <strong style="color:#e2e8f0;">
+                                    Formation period:
+                                </strong>
+
+                                The current Breakout Scanner record does
+                                not contain a reliable start date for the
+                                original structure, so EdgeBreak will not
+                                invent an exact formation duration.
 
                             </div>
 
@@ -31175,6 +31361,131 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 }
 
 
+                /* =================================================
+                EDGEBREAK OBSERVATION HISTORY
+                ================================================= */
+
+                if (
+                    firstHistoryDate &&
+                    lastHistoryDate
+                ) {
+
+                    const firstDate =
+                        new Date(
+                            firstHistoryDate
+                        );
+
+                    const lastDate =
+                        new Date(
+                            lastHistoryDate
+                        );
+
+
+                    let observationDays = null;
+
+
+                    if (
+                        !Number.isNaN(
+                            firstDate.getTime()
+                        ) &&
+                        !Number.isNaN(
+                            lastDate.getTime()
+                        )
+                    ) {
+
+                        observationDays =
+                            Math.round(
+                                (
+                                    lastDate -
+                                    firstDate
+                                ) /
+                                (
+                                    1000 *
+                                    60 *
+                                    60 *
+                                    24
+                                )
+                            );
+
+                    }
+
+
+                    ageText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#38bdf8;
+                                margin-bottom:8px;
+                            ">
+                                EdgeBreak Observation History
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                EdgeBreak's stored indicator history
+                                currently contains records for ${ticker}
+                                from
+
+                                <strong>
+                                    ${formatDate(firstHistoryDate)}
+                                </strong>
+
+                                through
+
+                                <strong>
+                                    ${formatDate(lastHistoryDate)}
+                                </strong>.
+
+                                ${
+                                    Number.isFinite(observationDays) &&
+                                    observationDays > 0
+                                        ? `
+                                            That represents approximately
+                                            <strong>${observationDays} calendar days</strong>
+                                            of stored EdgeBreak observations.
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    Important distinction:
+                                </strong>
+
+                                This tells us how long EdgeBreak has
+                                stored observations for the stock.
+                                It does <strong>not</strong> necessarily
+                                mean the current chart setup began on
+                                that first date.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* =================================================
+                ANSWER
+                ================================================= */
+
                 answer = `
 
                     <div class="edge-ai-rundown">
@@ -31183,10 +31494,27 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             font-size:18px;
                             font-weight:800;
                             color:#f8fafc;
-                            margin-bottom:12px;
+                            margin-bottom:6px;
                         ">
-                            ${ticker} — Setup Age
+                            ${ticker} — How Long Has the Setup Been Forming?
                         </div>
+
+                        ${
+                            indicatorDate
+                                ? `
+                                    <div style="
+                                        color:#64748b;
+                                        font-size:12px;
+                                        margin-bottom:14px;
+                                    ">
+                                        Technical data through
+                                        <strong style="color:#94a3b8;">
+                                            ${indicatorDate}
+                                        </strong>
+                                    </div>
+                                `
+                                : ""
+                        }
 
                         ${ageText}
 
@@ -31198,9 +31526,10 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             font-size:12px;
                             line-height:1.6;
                         ">
-                            EdgeBreak reports setup duration only when
-                            it can be determined reliably from the
-                            available scanner data.
+                            EdgeBreak reports setup duration only when it
+                            can be supported by stored scanner data.
+                            Observation history and actual pattern
+                            formation dates are treated separately.
                         </div>
 
                     </div>
