@@ -30791,9 +30791,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 let smartMoneyText = "";
 
 
-                /* ---------------------------------------------
+                /* =================================================
                 FOUND IN SMART MONEY DATA
-                --------------------------------------------- */
+                ================================================= */
 
                 if (smartMoneyStock) {
 
@@ -30801,6 +30801,59 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                         Number(
                             smartMoneyStock.count
                         );
+
+                    const lastSeen =
+                        smartMoneyStock.last_seen
+                            ? formatDate(
+                                smartMoneyStock.last_seen
+                            )
+                            : "";
+
+
+                    let appearanceDescription = "";
+
+
+                    if (
+                        Number.isFinite(count) &&
+                        count >= 10
+                    ) {
+
+                        appearanceDescription = `
+
+                            ${ticker} has appeared
+                            <strong>repeatedly</strong> in the Smart Money
+                            Filter during the period EdgeBreak has recorded.
+
+                        `;
+
+                    } else if (
+                        Number.isFinite(count) &&
+                        count >= 3
+                    ) {
+
+                        appearanceDescription = `
+
+                            ${ticker} has made
+                            <strong>multiple appearances</strong> in the
+                            Smart Money Filter during the period EdgeBreak
+                            has recorded.
+
+                        `;
+
+                    } else if (
+                        Number.isFinite(count) &&
+                        count >= 1
+                    ) {
+
+                        appearanceDescription = `
+
+                            ${ticker} has been identified by the
+                            Smart Money Filter during the period
+                            EdgeBreak has recorded.
+
+                        `;
+
+                    }
 
 
                     smartMoneyText = `
@@ -30812,7 +30865,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 
                             <div style="
                                 font-weight:800;
-                                color:#22c55e;
+                                color:#a78bfa;
                                 margin-bottom:8px;
                             ">
                                 Smart Money Filter
@@ -30823,25 +30876,91 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 line-height:1.7;
                             ">
 
-                                <strong>Yes.</strong>
-
-                                ${ticker} has appeared in the
-                                <strong>EdgeBreak Smart Money Filter
-                                ${count}
-                                ${
-                                    count === 1
-                                        ? "time"
-                                        : "times"
-                                }</strong>.
+                                <strong style="color:#f8fafc;">
+                                    Yes.
+                                </strong>
 
                                 ${
-                                    smartMoneyStock.last_seen
+                                    Number.isFinite(count)
                                         ? `
-                                            Its most recent recorded appearance was
-                                            <strong>${formatDate(smartMoneyStock.last_seen)}</strong>.
+                                            ${ticker} has appeared in the
+                                            EdgeBreak Smart Money Filter
+
+                                            <strong>
+                                                ${count}
+                                                ${
+                                                    count === 1
+                                                        ? "time"
+                                                        : "times"
+                                                }
+                                            </strong>.
+                                        `
+                                        : `
+                                            ${ticker} has appeared in the
+                                            EdgeBreak Smart Money Filter.
+                                        `
+                                }
+
+                                ${
+                                    lastSeen
+                                        ? `
+                                            The most recent recorded appearance was
+                                            <strong>${lastSeen}</strong>.
                                         `
                                         : ""
                                 }
+
+                            </div>
+
+                            ${
+                                appearanceDescription
+                                    ? `
+                                        <div style="
+                                            margin-top:10px;
+                                            color:#94a3b8;
+                                            line-height:1.7;
+                                        ">
+
+                                            <strong style="color:#e2e8f0;">
+                                                What that tells us:
+                                            </strong>
+
+                                            ${appearanceDescription}
+
+                                        </div>
+                                    `
+                                    : ""
+                            }
+
+                        </div>
+
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#38bdf8;
+                                margin-bottom:8px;
+                            ">
+                                How to Read This
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                The Smart Money Filter is an EdgeBreak
+                                research filter designed to highlight
+                                stocks meeting its defined market-activity
+                                criteria.
+
+                                Repeated appearances show that a stock
+                                has met those criteria on multiple
+                                occasions within EdgeBreak's stored data.
 
                             </div>
 
@@ -30851,11 +30970,11 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 line-height:1.7;
                             ">
 
-                                The Smart Money Filter tracks stocks
-                                appearing within EdgeBreak's institutional
-                                activity criteria. Repeated appearances
-                                provide additional historical context within
-                                EdgeBreak's own dataset.
+                                A Smart Money appearance does
+                                <strong>not prove that institutions are
+                                buying the stock</strong>, and it should
+                                not be interpreted as a prediction of
+                                future price movement.
 
                             </div>
 
@@ -30866,9 +30985,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 }
 
 
-                /* ---------------------------------------------
+                /* =================================================
                 NOT FOUND
-                --------------------------------------------- */
+                ================================================= */
 
                 else {
 
@@ -30892,10 +31011,44 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 line-height:1.7;
                             ">
 
-                                <strong>Not yet.</strong>
+                                <strong style="color:#f8fafc;">
+                                    No recorded appearance.
+                                </strong>
 
                                 EdgeBreak has not recorded ${ticker}
-                                in the available Smart Money Filter data.
+                                in the Smart Money Filter data currently
+                                available to the chatbot.
+
+                            </div>
+
+                        </div>
+
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#38bdf8;
+                                margin-bottom:8px;
+                            ">
+                                Important Context
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                The Smart Money Filter is still building
+                                its historical dataset.
+
+                                A stock having no recorded appearance
+                                simply means EdgeBreak has not recorded
+                                it meeting the filter criteria during
+                                the available observation period.
 
                             </div>
 
@@ -30905,16 +31058,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 line-height:1.7;
                             ">
 
-                                <strong style="color:#e2e8f0;">
-                                    Important context:
-                                </strong>
-
-                                The EdgeBreak Smart Money Filter has had
-                                <strong>limited operating time and is still
-                                gathering data to analyse</strong>.
-
-                                No recorded appearance should therefore
-                                not be interpreted as evidence that
+                                It does <strong>not</strong> mean that
                                 institutional activity is absent.
 
                             </div>
@@ -30925,6 +31069,10 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 
                 }
 
+
+                /* =================================================
+                ANSWER
+                ================================================= */
 
                 answer = `
 
@@ -30949,9 +31097,10 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             font-size:12px;
                             line-height:1.6;
                         ">
-                            EdgeBreak provides technical research and market
-                            information only. It does not provide financial advice
-                            or buy, sell or hold recommendations.
+                            Smart Money Filter appearances describe
+                            EdgeBreak's own screening results. They do
+                            not confirm institutional transactions and
+                            are not buy, sell or hold recommendations.
                         </div>
 
                     </div>
