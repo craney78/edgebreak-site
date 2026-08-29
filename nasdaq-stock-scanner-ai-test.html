@@ -29905,9 +29905,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                     let technicalText = "";
 
 
-                    /* ---------------------------------------------
+                    /* =================================================
                     BREAKOUT
-                    --------------------------------------------- */
+                    ================================================= */
 
                     if (breakoutStock) {
 
@@ -29975,9 +29975,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                     }
 
 
-                    /* ---------------------------------------------
+                    /* =================================================
                     PRE-BREAKOUT
-                    --------------------------------------------- */
+                    ================================================= */
 
                     if (preBreakoutStock) {
 
@@ -30052,9 +30052,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                     }
 
 
-                    /* ---------------------------------------------
+                    /* =================================================
                     LAUNCH PAD
-                    --------------------------------------------- */
+                    ================================================= */
 
                     if (launchPadStock) {
 
@@ -30119,6 +30119,417 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                     }
 
 
+                    /* =================================================
+                    INDICATOR EXPLANATION
+                    ================================================= */
+
+                    if (latestIndicators) {
+
+                        const price =
+                            latestIndicators.price == null
+                                ? null
+                                : Number(
+                                    latestIndicators.price
+                                );
+
+                        const rsi =
+                            latestIndicators.rsi14 == null
+                                ? null
+                                : Number(
+                                    latestIndicators.rsi14
+                                );
+
+                        const macd =
+                            latestIndicators.macd == null
+                                ? null
+                                : Number(
+                                    latestIndicators.macd
+                                );
+
+                        const macdSignal =
+                            latestIndicators.macd_signal == null
+                                ? null
+                                : Number(
+                                    latestIndicators.macd_signal
+                                );
+
+                        const sma20 =
+                            latestIndicators.sma20 == null
+                                ? null
+                                : Number(
+                                    latestIndicators.sma20
+                                );
+
+                        const sma50 =
+                            latestIndicators.sma50 == null
+                                ? null
+                                : Number(
+                                    latestIndicators.sma50
+                                );
+
+                        const sma200 =
+                            latestIndicators.sma200 == null
+                                ? null
+                                : Number(
+                                    latestIndicators.sma200
+                                );
+
+                        const relativeVolume =
+                            latestIndicators.relative_volume == null
+                                ? null
+                                : Number(
+                                    latestIndicators.relative_volume
+                                );
+
+                        const obvTrend =
+                            String(
+                                latestIndicators.obv_trend || ""
+                            ).toLowerCase();
+
+
+                        let trendExplanation = "";
+                        let momentumExplanation = "";
+                        let volumeExplanation = "";
+
+
+                        /* ---------------------------------------------
+                        TREND
+                        --------------------------------------------- */
+
+                        if (
+                            Number.isFinite(price) &&
+                            Number.isFinite(sma20) &&
+                            Number.isFinite(sma50)
+                        ) {
+
+                            if (
+                                price > sma20 &&
+                                price > sma50 &&
+                                sma20 > sma50
+                            ) {
+
+                                trendExplanation = `
+                                    Price is above both its
+                                    <strong>20-day and 50-day moving averages</strong>,
+                                    with the shorter 20-day average also above
+                                    the 50-day average. In simple terms, the
+                                    recent price trend has been stronger than
+                                    its medium-term trend.
+                                `;
+
+                            } else if (
+                                price < sma20 &&
+                                price < sma50
+                            ) {
+
+                                trendExplanation = `
+                                    Price is currently below both its
+                                    <strong>20-day and 50-day moving averages</strong>.
+                                    In simple terms, recent price action has
+                                    been softer than those short and
+                                    medium-term averages.
+                                `;
+
+                            } else {
+
+                                trendExplanation = `
+                                    Price is currently sitting around its
+                                    <strong>20-day and 50-day moving averages</strong>,
+                                    giving the short and medium-term trend
+                                    a more mixed appearance.
+                                `;
+
+                            }
+
+                        }
+
+
+                        if (
+                            Number.isFinite(price) &&
+                            Number.isFinite(sma200)
+                        ) {
+
+                            trendExplanation += `
+
+                                ${
+                                    price > sma200
+                                        ? `
+                                            Price is also above its
+                                            <strong>200-day moving average</strong>,
+                                            placing it above its longer-term
+                                            average price.
+                                        `
+                                        : `
+                                            Price is below its
+                                            <strong>200-day moving average</strong>,
+                                            placing it below its longer-term
+                                            average price.
+                                        `
+                                }
+
+                            `;
+
+                        }
+
+
+                        /* ---------------------------------------------
+                        MOMENTUM
+                        --------------------------------------------- */
+
+                        if (Number.isFinite(rsi)) {
+
+                            if (rsi >= 70) {
+
+                                momentumExplanation += `
+                                    RSI is
+                                    <strong>${number(rsi, 1)}</strong>,
+                                    showing strong recent momentum, although
+                                    the reading is elevated above 70.
+                                `;
+
+                            } else if (rsi >= 55) {
+
+                                momentumExplanation += `
+                                    RSI is
+                                    <strong>${number(rsi, 1)}</strong>,
+                                    showing positive recent momentum.
+                                `;
+
+                            } else if (rsi <= 30) {
+
+                                momentumExplanation += `
+                                    RSI is
+                                    <strong>${number(rsi, 1)}</strong>,
+                                    which is a relatively low momentum reading.
+                                `;
+
+                            } else if (rsi < 45) {
+
+                                momentumExplanation += `
+                                    RSI is
+                                    <strong>${number(rsi, 1)}</strong>,
+                                    showing softer recent momentum.
+                                `;
+
+                            } else {
+
+                                momentumExplanation += `
+                                    RSI is
+                                    <strong>${number(rsi, 1)}</strong>,
+                                    placing recent momentum in a relatively
+                                    neutral area.
+                                `;
+
+                            }
+
+                        }
+
+
+                        if (
+                            Number.isFinite(macd) &&
+                            Number.isFinite(macdSignal)
+                        ) {
+
+                            momentumExplanation += `
+
+                                ${
+                                    macd > macdSignal
+                                        ? `
+                                            MACD is currently
+                                            <strong>above its signal line</strong>,
+                                            providing another positive recent
+                                            momentum reading.
+                                        `
+                                        : macd < macdSignal
+                                            ? `
+                                                MACD is currently
+                                                <strong>below its signal line</strong>,
+                                                showing softer recent momentum.
+                                            `
+                                            : `
+                                                MACD is currently very close to
+                                                its signal line.
+                                            `
+                                }
+
+                            `;
+
+                        }
+
+
+                        /* ---------------------------------------------
+                        VOLUME
+                        --------------------------------------------- */
+
+                        if (
+                            Number.isFinite(relativeVolume) &&
+                            relativeVolume > 0
+                        ) {
+
+                            if (relativeVolume >= 1.5) {
+
+                                volumeExplanation += `
+                                    Latest recorded volume is approximately
+                                    <strong>${number(relativeVolume, 2)}×
+                                    the 20-day average</strong>, so trading
+                                    activity is elevated relative to its
+                                    recent average.
+                                `;
+
+                            } else if (relativeVolume >= 0.75) {
+
+                                volumeExplanation += `
+                                    Latest recorded volume is approximately
+                                    <strong>${number(relativeVolume, 2)}×
+                                    the 20-day average</strong>, placing
+                                    trading activity around its recent
+                                    normal range.
+                                `;
+
+                            } else {
+
+                                volumeExplanation += `
+                                    Latest recorded volume is approximately
+                                    <strong>${number(relativeVolume, 2)}×
+                                    the 20-day average</strong>, so recent
+                                    trading activity is lighter than its
+                                    recent average.
+                                `;
+
+                            }
+
+                        }
+
+
+                        if (obvTrend === "rising") {
+
+                            volumeExplanation += `
+                                On-Balance Volume is
+                                <strong>rising</strong>, meaning volume has
+                                generally accumulated more on advancing
+                                sessions over the recent period.
+                            `;
+
+                        } else if (
+                            obvTrend === "falling"
+                        ) {
+
+                            volumeExplanation += `
+                                On-Balance Volume is
+                                <strong>falling</strong>, meaning volume has
+                                generally accumulated more on declining
+                                sessions over the recent period.
+                            `;
+
+                        } else if (
+                            obvTrend === "neutral"
+                        ) {
+
+                            volumeExplanation += `
+                                On-Balance Volume is currently
+                                <strong>relatively neutral</strong>.
+                            `;
+
+                        }
+
+
+                        /* ---------------------------------------------
+                        DISPLAY INDICATORS
+                        --------------------------------------------- */
+
+                        if (
+                            trendExplanation ||
+                            momentumExplanation ||
+                            volumeExplanation
+                        ) {
+
+                            technicalText += `
+
+                                <div style="
+                                    padding:14px 0;
+                                    border-top:1px solid rgba(148,163,184,.16);
+                                ">
+
+                                    <div style="
+                                        font-weight:800;
+                                        color:#38bdf8;
+                                        margin-bottom:8px;
+                                    ">
+                                        What the Indicators Are Showing
+                                    </div>
+
+                                    ${
+                                        trendExplanation
+                                            ? `
+                                                <div style="
+                                                    margin-bottom:12px;
+                                                    color:#cbd5e1;
+                                                    line-height:1.7;
+                                                ">
+
+                                                    <strong style="color:#e2e8f0;">
+                                                        Trend:
+                                                    </strong>
+
+                                                    ${trendExplanation}
+
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        momentumExplanation
+                                            ? `
+                                                <div style="
+                                                    margin-bottom:12px;
+                                                    color:#cbd5e1;
+                                                    line-height:1.7;
+                                                ">
+
+                                                    <strong style="color:#e2e8f0;">
+                                                        Momentum:
+                                                    </strong>
+
+                                                    ${momentumExplanation}
+
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        volumeExplanation
+                                            ? `
+                                                <div style="
+                                                    color:#cbd5e1;
+                                                    line-height:1.7;
+                                                ">
+
+                                                    <strong style="color:#e2e8f0;">
+                                                        Volume:
+                                                    </strong>
+
+                                                    ${volumeExplanation}
+
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                </div>
+
+                            `;
+
+                        }
+
+                    }
+
+
+                    /* =================================================
+                    ANSWER
+                    ================================================= */
+
                     answer = `
 
                         <div class="edge-ai-rundown">
@@ -30127,10 +30538,27 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 font-size:18px;
                                 font-weight:800;
                                 color:#f8fafc;
-                                margin-bottom:12px;
+                                margin-bottom:6px;
                             ">
                                 ${ticker} — Technical Setup Explained
                             </div>
+
+                            ${
+                                indicatorDate
+                                    ? `
+                                        <div style="
+                                            color:#64748b;
+                                            font-size:12px;
+                                            margin-bottom:14px;
+                                        ">
+                                            Technical data through
+                                            <strong style="color:#94a3b8;">
+                                                ${indicatorDate}
+                                            </strong>
+                                        </div>
+                                    `
+                                    : ""
+                            }
 
                             ${technicalText}
 
@@ -30143,9 +30571,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 line-height:1.6;
                             ">
                                 EdgeBreak is describing the technical
-                                structure detected by its scanners.
-                                This does not predict what price will do
-                                next.
+                                structure and indicator data currently
+                                available. These conditions can change
+                                and do not predict what price will do next.
                             </div>
 
                         </div>
@@ -30167,9 +30595,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                     let technicalText = "";
 
 
-                    /* ---------------------------------------------
+                    /* =================================================
                     BREAKOUT
-                    --------------------------------------------- */
+                    ================================================= */
 
                     if (breakoutStock) {
 
@@ -30244,7 +30672,8 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                                     )
                                                 )
                                                     ? number(
-                                                        breakoutStock.volume_ratio
+                                                        breakoutStock.volume_ratio,
+                                                        2
                                                     ) + "×"
                                                     : "—"
                                             }
@@ -30255,9 +30684,30 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                         breakoutStock.grade
                                             ? `
                                                 <div>
-                                                    Grade:
+                                                    EdgeBreak Grade:
                                                     <strong>
                                                         ${breakoutStock.grade}
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        breakoutStock.score != null &&
+                                        Number.isFinite(
+                                            Number(
+                                                breakoutStock.score
+                                            )
+                                        )
+                                            ? `
+                                                <div>
+                                                    EdgeBreak Score:
+                                                    <strong>
+                                                        ${number(
+                                                            breakoutStock.score,
+                                                            1
+                                                        )}
                                                     </strong>
                                                 </div>
                                             `
@@ -30273,9 +30723,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                     }
 
 
-                    /* ---------------------------------------------
+                    /* =================================================
                     PRE-BREAKOUT
-                    --------------------------------------------- */
+                    ================================================= */
 
                     if (preBreakoutStock) {
 
@@ -30383,6 +30833,19 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                         </strong>
                                     </div>
 
+                                    ${
+                                        preBreakoutStock.liquidity_group
+                                            ? `
+                                                <div>
+                                                    Liquidity Group:
+                                                    <strong>
+                                                        ${preBreakoutStock.liquidity_group}
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
                                 </div>
 
                             </div>
@@ -30392,9 +30855,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                     }
 
 
-                    /* ---------------------------------------------
+                    /* =================================================
                     LAUNCH PAD
-                    --------------------------------------------- */
+                    ================================================= */
 
                     if (launchPadStock) {
 
@@ -30497,6 +30960,457 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                     }
 
 
+                    /* =================================================
+                    TECHNICAL INDICATORS
+                    ================================================= */
+
+                    if (latestIndicators) {
+
+                        const indicatorPrice =
+                            latestIndicators.price == null
+                                ? null
+                                : Number(
+                                    latestIndicators.price
+                                );
+
+                        const rsi =
+                            latestIndicators.rsi14 == null
+                                ? null
+                                : Number(
+                                    latestIndicators.rsi14
+                                );
+
+                        const macd =
+                            latestIndicators.macd == null
+                                ? null
+                                : Number(
+                                    latestIndicators.macd
+                                );
+
+                        const macdSignal =
+                            latestIndicators.macd_signal == null
+                                ? null
+                                : Number(
+                                    latestIndicators.macd_signal
+                                );
+
+                        const macdHistogram =
+                            latestIndicators.macd_histogram == null
+                                ? null
+                                : Number(
+                                    latestIndicators.macd_histogram
+                                );
+
+                        const sma20 =
+                            latestIndicators.sma20 == null
+                                ? null
+                                : Number(
+                                    latestIndicators.sma20
+                                );
+
+                        const sma50 =
+                            latestIndicators.sma50 == null
+                                ? null
+                                : Number(
+                                    latestIndicators.sma50
+                                );
+
+                        const sma200 =
+                            latestIndicators.sma200 == null
+                                ? null
+                                : Number(
+                                    latestIndicators.sma200
+                                );
+
+                        const ema20 =
+                            latestIndicators.ema20 == null
+                                ? null
+                                : Number(
+                                    latestIndicators.ema20
+                                );
+
+                        const ema50 =
+                            latestIndicators.ema50 == null
+                                ? null
+                                : Number(
+                                    latestIndicators.ema50
+                                );
+
+                        const bollingerUpper =
+                            latestIndicators.bollinger_upper == null
+                                ? null
+                                : Number(
+                                    latestIndicators.bollinger_upper
+                                );
+
+                        const bollingerMiddle =
+                            latestIndicators.bollinger_middle == null
+                                ? null
+                                : Number(
+                                    latestIndicators.bollinger_middle
+                                );
+
+                        const bollingerLower =
+                            latestIndicators.bollinger_lower == null
+                                ? null
+                                : Number(
+                                    latestIndicators.bollinger_lower
+                                );
+
+                        const atr =
+                            latestIndicators.atr14 == null
+                                ? null
+                                : Number(
+                                    latestIndicators.atr14
+                                );
+
+                        const averageVolume =
+                            latestIndicators.average_volume_20 == null
+                                ? null
+                                : Number(
+                                    latestIndicators.average_volume_20
+                                );
+
+                        const relativeVolume =
+                            latestIndicators.relative_volume == null
+                                ? null
+                                : Number(
+                                    latestIndicators.relative_volume
+                                );
+
+                        const obvTrend =
+                            String(
+                                latestIndicators.obv_trend || ""
+                            ).toLowerCase();
+
+
+                        technicalText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <div style="
+                                    font-weight:800;
+                                    color:#38bdf8;
+                                    margin-bottom:10px;
+                                ">
+                                    Technical Indicators
+                                </div>
+
+                                <div style="
+                                    display:grid;
+                                    grid-template-columns:
+                                        repeat(2, minmax(0, 1fr));
+                                    gap:8px 18px;
+                                    color:#cbd5e1;
+                                    line-height:1.6;
+                                ">
+
+                                    ${
+                                        Number.isFinite(indicatorPrice)
+                                            ? `
+                                                <div>
+                                                    Indicator Price:
+                                                    <strong>
+                                                        ${money(indicatorPrice)}
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        Number.isFinite(rsi)
+                                            ? `
+                                                <div>
+                                                    RSI (14):
+                                                    <strong>
+                                                        ${number(rsi, 1)}
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        Number.isFinite(sma20)
+                                            ? `
+                                                <div>
+                                                    SMA 20:
+                                                    <strong>
+                                                        ${money(sma20)}
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        Number.isFinite(sma50)
+                                            ? `
+                                                <div>
+                                                    SMA 50:
+                                                    <strong>
+                                                        ${money(sma50)}
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        Number.isFinite(sma200)
+                                            ? `
+                                                <div>
+                                                    SMA 200:
+                                                    <strong>
+                                                        ${money(sma200)}
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : `
+                                                <div>
+                                                    SMA 200:
+                                                    <strong>—</strong>
+                                                </div>
+                                            `
+                                    }
+
+                                    ${
+                                        Number.isFinite(ema20)
+                                            ? `
+                                                <div>
+                                                    EMA 20:
+                                                    <strong>
+                                                        ${money(ema20)}
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        Number.isFinite(ema50)
+                                            ? `
+                                                <div>
+                                                    EMA 50:
+                                                    <strong>
+                                                        ${money(ema50)}
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        Number.isFinite(macd)
+                                            ? `
+                                                <div>
+                                                    MACD:
+                                                    <strong>
+                                                        ${number(macd, 4)}
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        Number.isFinite(macdSignal)
+                                            ? `
+                                                <div>
+                                                    MACD Signal:
+                                                    <strong>
+                                                        ${number(macdSignal, 4)}
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        Number.isFinite(macdHistogram)
+                                            ? `
+                                                <div>
+                                                    MACD Histogram:
+                                                    <strong>
+                                                        ${number(
+                                                            macdHistogram,
+                                                            4
+                                                        )}
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        Number.isFinite(atr)
+                                            ? `
+                                                <div>
+                                                    ATR (14):
+                                                    <strong>
+                                                        ${money(atr)}
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        Number.isFinite(averageVolume)
+                                            ? `
+                                                <div>
+                                                    Avg Volume (20):
+                                                    <strong>
+                                                        ${Math.round(
+                                                            averageVolume
+                                                        ).toLocaleString("en-US")}
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        Number.isFinite(relativeVolume) &&
+                                        relativeVolume > 0
+                                            ? `
+                                                <div>
+                                                    Relative Volume:
+                                                    <strong>
+                                                        ${number(
+                                                            relativeVolume,
+                                                            2
+                                                        )}×
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                    ${
+                                        obvTrend
+                                            ? `
+                                                <div>
+                                                    OBV Trend:
+                                                    <strong>
+                                                        ${
+                                                            obvTrend === "rising"
+                                                                ? "Rising"
+                                                                : obvTrend === "falling"
+                                                                    ? "Falling"
+                                                                    : "Neutral"
+                                                        }
+                                                    </strong>
+                                                </div>
+                                            `
+                                            : ""
+                                    }
+
+                                </div>
+
+                            </div>
+
+
+                            ${
+                                Number.isFinite(bollingerUpper) ||
+                                Number.isFinite(bollingerMiddle) ||
+                                Number.isFinite(bollingerLower)
+                                    ? `
+
+                                        <div style="
+                                            padding:14px 0;
+                                            border-top:1px solid rgba(148,163,184,.16);
+                                        ">
+
+                                            <div style="
+                                                font-weight:800;
+                                                color:#38bdf8;
+                                                margin-bottom:10px;
+                                            ">
+                                                Bollinger Bands
+                                            </div>
+
+                                            <div style="
+                                                display:grid;
+                                                grid-template-columns:
+                                                    repeat(2, minmax(0, 1fr));
+                                                gap:8px 18px;
+                                                color:#cbd5e1;
+                                                line-height:1.6;
+                                            ">
+
+                                                ${
+                                                    Number.isFinite(
+                                                        bollingerUpper
+                                                    )
+                                                        ? `
+                                                            <div>
+                                                                Upper Band:
+                                                                <strong>
+                                                                    ${money(
+                                                                        bollingerUpper
+                                                                    )}
+                                                                </strong>
+                                                            </div>
+                                                        `
+                                                        : ""
+                                                }
+
+                                                ${
+                                                    Number.isFinite(
+                                                        bollingerMiddle
+                                                    )
+                                                        ? `
+                                                            <div>
+                                                                Middle Band:
+                                                                <strong>
+                                                                    ${money(
+                                                                        bollingerMiddle
+                                                                    )}
+                                                                </strong>
+                                                            </div>
+                                                        `
+                                                        : ""
+                                                }
+
+                                                ${
+                                                    Number.isFinite(
+                                                        bollingerLower
+                                                    )
+                                                        ? `
+                                                            <div>
+                                                                Lower Band:
+                                                                <strong>
+                                                                    ${money(
+                                                                        bollingerLower
+                                                                    )}
+                                                                </strong>
+                                                            </div>
+                                                        `
+                                                        : ""
+                                                }
+
+                                            </div>
+
+                                        </div>
+
+                                    `
+                                    : ""
+                            }
+
+                        `;
+
+                    }
+
+
+                    /* =================================================
+                    ANSWER
+                    ================================================= */
+
                     answer = `
 
                         <div class="edge-ai-rundown">
@@ -30505,10 +31419,27 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 font-size:18px;
                                 font-weight:800;
                                 color:#f8fafc;
-                                margin-bottom:12px;
+                                margin-bottom:6px;
                             ">
                                 ${ticker} — Key Technical Numbers
                             </div>
+
+                            ${
+                                indicatorDate
+                                    ? `
+                                        <div style="
+                                            color:#64748b;
+                                            font-size:12px;
+                                            margin-bottom:14px;
+                                        ">
+                                            Indicator data through
+                                            <strong style="color:#94a3b8;">
+                                                ${indicatorDate}
+                                            </strong>
+                                        </div>
+                                    `
+                                    : ""
+                            }
 
                             ${technicalText}
 
@@ -30520,9 +31451,13 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 font-size:12px;
                                 line-height:1.6;
                             ">
-                                These figures come directly from the
-                                current EdgeBreak scanner data for
-                                ${ticker}.
+                                Scanner figures come from the current
+                                EdgeBreak scanner data. Indicator figures
+                                come from EdgeBreak's latest stored
+                                technical snapshot for ${ticker}.
+                                Technical conditions can change and these
+                                figures are not buy, sell or hold
+                                recommendations.
                             </div>
 
                         </div>
