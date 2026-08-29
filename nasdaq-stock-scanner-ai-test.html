@@ -30561,9 +30561,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 let scannerText = "";
 
 
-                /* ---------------------------------------------
+                /* =================================================
                 SUMMARY
-                --------------------------------------------- */
+                ================================================= */
 
                 if (scanners.length === 1) {
 
@@ -30572,34 +30572,87 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                         <div style="
                             padding:14px 0;
                             border-top:1px solid rgba(148,163,184,.16);
-                            color:#cbd5e1;
-                            line-height:1.7;
                         ">
 
-                            <strong>${ticker}</strong> is currently
-                            appearing in the
-                            <strong>${scanners[0]}</strong>.
+                            <div style="
+                                font-weight:800;
+                                color:#38bdf8;
+                                margin-bottom:8px;
+                            ">
+                                Current Scanner
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                <strong>${ticker}</strong> is currently
+                                appearing in the
+
+                                <strong>
+                                    ${scanners[0]}
+                                </strong>.
+
+                                EdgeBreak found the stock because its
+                                current chart structure meets the
+                                conditions for that scanner.
+
+                            </div>
 
                         </div>
 
                     `;
 
-                } else {
+                } else if (scanners.length > 1) {
 
                     scannerText += `
 
                         <div style="
                             padding:14px 0;
                             border-top:1px solid rgba(148,163,184,.16);
-                            color:#cbd5e1;
-                            line-height:1.7;
                         ">
 
-                            <strong>${ticker}</strong> is currently
-                            appearing in
-                            <strong>${scanners.length} EdgeBreak scanners</strong>:
+                            <div style="
+                                font-weight:800;
+                                color:#38bdf8;
+                                margin-bottom:8px;
+                            ">
+                                Multiple Scanner Identification
+                            </div>
 
-                            <strong>${scanners.join(", ")}</strong>.
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.7;
+                            ">
+
+                                <strong>${ticker}</strong> is currently
+                                appearing in
+
+                                <strong>
+                                    ${scanners.length} EdgeBreak scanners
+                                </strong>:
+
+                                <strong>
+                                    ${scanners.join(", ")}
+                                </strong>.
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                This can happen because the EdgeBreak
+                                scanners examine different parts of a
+                                stock's technical structure.
+
+                                A stock can therefore meet more than one
+                                scanner's criteria at the same time.
+
+                            </div>
 
                         </div>
 
@@ -30608,11 +30661,42 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 }
 
 
-                /* ---------------------------------------------
-                BREAKOUT
-                --------------------------------------------- */
+                /* =================================================
+                BREAKOUT SCANNER
+                ================================================= */
 
                 if (breakoutStock) {
+
+                    const resistance =
+                        Number(
+                            breakoutStock.resistance
+                        );
+
+                    const currentPrice =
+                        Number(
+                            breakoutStock.price
+                        );
+
+                    const distance =
+                        Number(
+                            breakoutStock.distance_above_resistance
+                        );
+
+                    const touches =
+                        Number(
+                            breakoutStock.touches
+                        );
+
+                    const higherLows =
+                        Number(
+                            breakoutStock.higher_lows
+                        );
+
+                    const volumeRatio =
+                        Number(
+                            breakoutStock.volume_ratio
+                        );
+
 
                     scannerText += `
 
@@ -30634,15 +30718,73 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 line-height:1.7;
                             ">
 
-                                EdgeBreak found ${ticker} because price
-                                moved above resistance around
-                                <strong>${money(breakoutStock.resistance)}</strong>.
+                                EdgeBreak identified ${ticker} because
+                                price moved through resistance around
 
-                                The structure recorded
-                                <strong>${breakoutStock.touches} resistance touches</strong>
-                                and
-                                <strong>${breakoutStock.higher_lows} higher lows</strong>
-                                before the breakout.
+                                <strong>
+                                    ${money(resistance)}
+                                </strong>.
+
+                                ${
+                                    Number.isFinite(currentPrice)
+                                        ? `
+                                            The scanner recorded price around
+                                            <strong>${money(currentPrice)}</strong>.
+                                        `
+                                        : ""
+                                }
+
+                                ${
+                                    Number.isFinite(distance)
+                                        ? `
+                                            That places price approximately
+                                            <strong>${number(distance)}% above resistance</strong>.
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    What the scanner saw:
+                                </strong>
+
+                                ${
+                                    Number.isFinite(touches)
+                                        ? `
+                                            <strong>${touches} resistance touches</strong>
+                                        `
+                                        : ""
+                                }
+
+                                ${
+                                    Number.isFinite(higherLows)
+                                        ? `
+                                            ${
+                                                Number.isFinite(touches)
+                                                    ? "and"
+                                                    : ""
+                                            }
+                                            <strong>${higherLows} higher lows</strong>
+                                            before the breakout.
+                                        `
+                                        : ""
+                                }
+
+                                ${
+                                    Number.isFinite(volumeRatio)
+                                        ? `
+                                            Breakout volume was approximately
+                                            <strong>${number(volumeRatio, 2)}× normal volume</strong>.
+                                        `
+                                        : ""
+                                }
 
                             </div>
 
@@ -30653,11 +30795,37 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 }
 
 
-                /* ---------------------------------------------
-                PRE-BREAKOUT
-                --------------------------------------------- */
+                /* =================================================
+                PRE-BREAKOUT SCANNER
+                ================================================= */
 
                 if (preBreakoutStock) {
+
+                    const resistance =
+                        Number(
+                            preBreakoutStock.resistance_price
+                        );
+
+                    const currentPrice =
+                        Number(
+                            preBreakoutStock.current_price
+                        );
+
+                    const distance =
+                        Number(
+                            preBreakoutStock.distance_to_resistance
+                        );
+
+                    const touches =
+                        Number(
+                            preBreakoutStock.resistance_touches
+                        );
+
+                    const higherLows =
+                        Number(
+                            preBreakoutStock.higher_lows
+                        );
+
 
                     scannerText += `
 
@@ -30679,15 +30847,68 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 line-height:1.7;
                             ">
 
-                                EdgeBreak found ${ticker} because it is
-                                forming technical structure beneath
-                                resistance around
-                                <strong>${money(preBreakoutStock.resistance_price)}</strong>.
+                                EdgeBreak identified ${ticker} because
+                                price is forming technical structure
+                                beneath resistance around
 
-                                The scanner recorded
-                                <strong>${preBreakoutStock.resistance_touches} resistance touches</strong>
-                                and
-                                <strong>${preBreakoutStock.higher_lows} higher lows</strong>.
+                                <strong>
+                                    ${money(resistance)}
+                                </strong>.
+
+                                ${
+                                    Number.isFinite(currentPrice)
+                                        ? `
+                                            Current scanner price is approximately
+                                            <strong>${money(currentPrice)}</strong>.
+                                        `
+                                        : ""
+                                }
+
+                                ${
+                                    Number.isFinite(distance)
+                                        ? `
+                                            Price is approximately
+                                            <strong>${number(distance)}% below resistance</strong>.
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    What the scanner saw:
+                                </strong>
+
+                                ${
+                                    Number.isFinite(touches)
+                                        ? `
+                                            <strong>${touches} resistance touches</strong>
+                                        `
+                                        : ""
+                                }
+
+                                ${
+                                    Number.isFinite(higherLows)
+                                        ? `
+                                            ${
+                                                Number.isFinite(touches)
+                                                    ? "and"
+                                                    : ""
+                                            }
+                                            <strong>${higherLows} higher lows</strong>.
+                                        `
+                                        : ""
+                                }
+
+                                This combination is why the stock
+                                currently meets the Pre-Breakout
+                                Scanner's structural criteria.
 
                             </div>
 
@@ -30698,11 +30919,52 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 }
 
 
-                /* ---------------------------------------------
-                LAUNCH PAD
-                --------------------------------------------- */
+                /* =================================================
+                LAUNCH PAD SCANNER
+                ================================================= */
 
                 if (launchPadStock) {
+
+                    const baseDays =
+                        Number(
+                            launchPadStock.launchpad_days
+                        );
+
+                    const supportTests =
+                        Number(
+                            launchPadStock.support_tests
+                        );
+
+                    const resistanceTests =
+                        Number(
+                            launchPadStock.resistance_tests
+                        );
+
+                    const supportLow =
+                        Number(
+                            launchPadStock.support_zone_low
+                        );
+
+                    const supportHigh =
+                        Number(
+                            launchPadStock.support_zone_high
+                        );
+
+                    const resistanceLow =
+                        Number(
+                            launchPadStock.resistance_zone_low
+                        );
+
+                    const resistanceHigh =
+                        Number(
+                            launchPadStock.resistance_zone_high
+                        );
+
+                    const rangePercent =
+                        Number(
+                            launchPadStock.range_percent
+                        );
+
 
                     scannerText += `
 
@@ -30724,16 +30986,84 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 line-height:1.7;
                             ">
 
-                                EdgeBreak found ${ticker} because it
-                                identified a
-                                <strong>${launchPadStock.launchpad_days}-day base</strong>
-                                with repeated interaction around
-                                support and resistance.
+                                EdgeBreak identified ${ticker} because
+                                the stock formed a defined trading base
 
-                                The structure recorded
-                                <strong>${launchPadStock.support_tests} support tests</strong>
-                                and
-                                <strong>${launchPadStock.resistance_tests} resistance tests</strong>.
+                                ${
+                                    Number.isFinite(baseDays)
+                                        ? `
+                                            across approximately
+                                            <strong>${baseDays} trading days</strong>.
+                                        `
+                                        : "."
+                                }
+
+                                ${
+                                    Number.isFinite(rangePercent)
+                                        ? `
+                                            The stored base range is approximately
+                                            <strong>${number(rangePercent)}%</strong>.
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                            <div style="
+                                margin-top:10px;
+                                color:#94a3b8;
+                                line-height:1.7;
+                            ">
+
+                                <strong style="color:#e2e8f0;">
+                                    What the scanner saw:
+                                </strong>
+
+                                ${
+                                    Number.isFinite(supportLow) &&
+                                    Number.isFinite(supportHigh)
+                                        ? `
+                                            Support around
+                                            <strong>
+                                                ${money(supportLow)}–${money(supportHigh)}
+                                            </strong>
+                                        `
+                                        : ""
+                                }
+
+                                ${
+                                    Number.isFinite(resistanceLow) &&
+                                    Number.isFinite(resistanceHigh)
+                                        ? `
+                                            and resistance around
+                                            <strong>
+                                                ${money(resistanceLow)}–${money(resistanceHigh)}
+                                            </strong>.
+                                        `
+                                        : ""
+                                }
+
+                                ${
+                                    Number.isFinite(supportTests)
+                                        ? `
+                                            EdgeBreak recorded
+                                            <strong>${supportTests} support tests</strong>
+                                        `
+                                        : ""
+                                }
+
+                                ${
+                                    Number.isFinite(resistanceTests)
+                                        ? `
+                                            ${
+                                                Number.isFinite(supportTests)
+                                                    ? "and"
+                                                    : "EdgeBreak recorded"
+                                            }
+                                            <strong>${resistanceTests} resistance tests</strong>.
+                                        `
+                                        : ""
+                                }
 
                             </div>
 
@@ -30744,6 +31074,10 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 }
 
 
+                /* =================================================
+                ANSWER
+                ================================================= */
+
                 answer = `
 
                     <div class="edge-ai-rundown">
@@ -30752,10 +31086,27 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             font-size:18px;
                             font-weight:800;
                             color:#f8fafc;
-                            margin-bottom:12px;
+                            margin-bottom:6px;
                         ">
                             ${ticker} — Scanner Identification
                         </div>
+
+                        ${
+                            indicatorDate
+                                ? `
+                                    <div style="
+                                        color:#64748b;
+                                        font-size:12px;
+                                        margin-bottom:14px;
+                                    ">
+                                        Technical data through
+                                        <strong style="color:#94a3b8;">
+                                            ${indicatorDate}
+                                        </strong>
+                                    </div>
+                                `
+                                : ""
+                        }
 
                         ${scannerText}
 
@@ -30767,9 +31118,10 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             font-size:12px;
                             line-height:1.6;
                         ">
-                            EdgeBreak provides technical research and market
-                            information only. It does not provide financial advice
-                            or buy, sell or hold recommendations.
+                            Scanner identification means the stock met
+                            EdgeBreak's defined technical screening
+                            conditions. It does not represent a buy,
+                            sell or hold recommendation.
                         </div>
 
                     </div>
