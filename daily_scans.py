@@ -67,6 +67,29 @@ for name, script in SCANNERS:
         break
 
 # ==========================================
+# INDICATOR HISTORY
+# ==========================================
+
+if overall_status == "SUCCESS":
+
+    print("\n▶ Building Scanner Indicator History...")
+
+    try:
+
+        subprocess.run(
+            ["python", "build_indicator_history.py"],
+            check=True
+        )
+
+        print("✅ Scanner Indicator History Complete")
+
+    except subprocess.CalledProcessError:
+
+        print("❌ Scanner Indicator History FAILED")
+
+        overall_status = "FAILED"        
+
+# ==========================================
 # DAILY BRIEF CULL
 # ==========================================
 

@@ -1066,6 +1066,255 @@ def calculate_volume_metrics(df):
 
     }
 
+# ============================================================
+# ON-BALANCE VOLUME (OBV)
+# ============================================================
+
+def calculate_obv(df):
+
+    if "volume" not in df.columns:
+
+        return {
+            "obv": None,
+            "obv_change_5d_percent": None,
+            "obv_change_20d_percent": None,
+            "obv_trend": None
+        }
+
+
+    close = df["close"]
+
+    volume = df["volume"].fillna(0)
+
+
+    if len(df) < 2:
+
+        return {
+            "obv": None,
+            "obv_change_5d_percent": None,
+            "obv_change_20d_percent": None,
+            "obv_trend": None
+        }
+
+
+    # --------------------------------------------------------
+    # BUILD OBV SERIES
+    # --------------------------------------------------------
+
+    obv_values = [0.0]
+
+
+    for i in range(
+        1,
+        len(df)
+    ):
+
+        previous_obv = (
+            obv_values[-1]
+        )
+
+
+        if (
+            close.iloc[i]
+            > close.iloc[i - 1]
+        ):
+
+            current_obv = (
+                previous_obv
+                + volume.iloc[i]
+            )
+
+
+        elif (
+            close.iloc[i]
+            < close.iloc[i - 1]
+        ):
+
+            current_obv = (
+                previous_obv
+                - volume.iloc[i]
+            )
+
+
+        else:
+
+            current_obv = (
+                previous_obv
+            )
+
+
+        obv_values.append(
+            current_obv
+        )
+
+
+    obv = pd.Series(
+        obv_values,
+        index=df.index,
+        dtype="float64"
+    )
+
+
+    latest_obv = (
+        obv.iloc[-1]
+    )
+
+
+    # --------------------------------------------------------
+    # 5-DAY OBV CHANGE
+    # --------------------------------------------------------
+
+    obv_change_5d_percent = None
+
+
+    if len(obv) >= 6:
+
+        old_obv = (
+            obv.iloc[-6]
+        )
+
+
+        if old_obv != 0:
+
+            obv_change_5d_percent = (
+
+                (
+                    latest_obv
+                    - old_obv
+                )
+
+                / abs(
+                    old_obv
+                )
+
+            ) * 100
+
+
+    # --------------------------------------------------------
+    # 20-DAY OBV CHANGE
+    # --------------------------------------------------------
+
+    obv_change_20d_percent = None
+
+
+    if len(obv) >= 21:
+
+        old_obv = (
+            obv.iloc[-21]
+        )
+
+
+        if old_obv != 0:
+
+            obv_change_20d_percent = (
+
+                (
+                    latest_obv
+                    - old_obv
+                )
+
+                / abs(
+                    old_obv
+                )
+
+            ) * 100
+
+
+    # --------------------------------------------------------
+    # OBV TREND
+    # --------------------------------------------------------
+
+    obv_trend = "neutral"
+
+
+    if len(obv) >= 21:
+
+        recent_obv = (
+            obv.iloc[-20:]
+            .reset_index(
+                drop=True
+            )
+        )
+
+
+        x = pd.Series(
+            range(
+                len(recent_obv)
+            ),
+            dtype="float64"
+        )
+
+
+        # Linear slope of recent OBV.
+
+        denominator = (
+            x.var()
+        )
+
+
+        if denominator > 0:
+
+            slope = (
+                x.cov(
+                    recent_obv
+                )
+                / denominator
+            )
+
+
+            recent_average_volume = (
+                volume
+                .iloc[-20:]
+                .mean()
+            )
+
+
+            # Normalize the slope against typical volume.
+            # This prevents tiny OBV movements from being
+            # labelled as meaningful trends.
+
+            if recent_average_volume > 0:
+
+                normalized_slope = (
+                    slope
+                    / recent_average_volume
+                )
+
+
+                if normalized_slope > 0.05:
+
+                    obv_trend = "rising"
+
+
+                elif normalized_slope < -0.05:
+
+                    obv_trend = "falling"
+
+
+    return {
+
+        "obv":
+            clean_number(
+                latest_obv,
+                0
+            ),
+
+        "obv_change_5d_percent":
+            clean_number(
+                obv_change_5d_percent,
+                2
+            ),
+
+        "obv_change_20d_percent":
+            clean_number(
+                obv_change_20d_percent,
+                2
+            ),
+
+        "obv_trend":
+            obv_trend
+
+    }
 
 # ============================================================
 # PRICE VS MOVING AVERAGE
@@ -1209,6 +1458,14 @@ def build_indicator_snapshot(
         df
     )
 
+    # --------------------------------------------------------
+    # ON-BALANCE VOLUME
+    # --------------------------------------------------------
+
+    obv = calculate_obv(
+        df
+    )
+
 
     # --------------------------------------------------------
     # SNAPSHOT
@@ -1322,6 +1579,30 @@ def build_indicator_snapshot(
             volume[
                 "relative_volume"
             ],
+
+        # ========================
+        # ON-BALANCE VOLUME
+        # ========================
+
+        "obv":
+            obv[
+                "obv"
+            ],
+
+        "obv_change_5d_percent":
+            obv[
+                "obv_change_5d_percent"
+            ],
+
+        "obv_change_20d_percent":
+            obv[
+                "obv_change_20d_percent"
+            ],
+
+        "obv_trend":
+            obv[
+                "obv_trend"
+            ],    
 
         # ========================
         # DATA QUALITY

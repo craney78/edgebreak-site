@@ -27507,6 +27507,141 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })();
 
+// ============================================================
+// EDGEBREAK SCANNER INDICATOR HISTORY
+// ============================================================
+
+let edgeBreakIndicatorHistory = null;
+let edgeBreakIndicatorHistoryPromise = null;
+
+
+async function loadEdgeBreakIndicatorHistory() {
+
+    // Already loaded
+    if (edgeBreakIndicatorHistory) {
+        return edgeBreakIndicatorHistory;
+    }
+
+
+    // Already loading
+    if (edgeBreakIndicatorHistoryPromise) {
+        return edgeBreakIndicatorHistoryPromise;
+    }
+
+
+    edgeBreakIndicatorHistoryPromise = fetch(
+        "/scanner_indicator_history.json",
+        {
+            cache: "no-store"
+        }
+    )
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error(
+                    `Indicator history HTTP ${response.status}`
+                );
+            }
+
+            return response.json();
+
+        })
+        .then(data => {
+
+            edgeBreakIndicatorHistory = data;
+
+            console.log(
+                "EdgeBreak indicator history loaded:",
+                Object.keys(data || {}).length,
+                "stocks"
+            );
+
+            return data;
+
+        })
+        .catch(error => {
+
+            console.error(
+                "Could not load EdgeBreak indicator history:",
+                error
+            );
+
+            edgeBreakIndicatorHistoryPromise = null;
+
+            return null;
+
+        });
+
+
+    return edgeBreakIndicatorHistoryPromise;
+}
+
+
+// ============================================================
+// FIND INDICATOR HISTORY FOR A STOCK
+// ============================================================
+
+function getEdgeBreakIndicatorRecord(symbol) {
+
+    if (
+        !edgeBreakIndicatorHistory ||
+        !symbol
+    ) {
+        return null;
+    }
+
+
+    const ticker = String(symbol)
+        .trim()
+        .toUpperCase();
+
+
+    return (
+        edgeBreakIndicatorHistory[ticker]
+        || null
+    );
+}
+
+
+// ============================================================
+// GET LATEST SAVED INDICATOR SNAPSHOT
+// ============================================================
+
+function getLatestEdgeBreakIndicatorSnapshot(symbol) {
+
+    const record =
+        getEdgeBreakIndicatorRecord(symbol);
+
+
+    if (
+        !record ||
+        !Array.isArray(record.history) ||
+        !record.history.length
+    ) {
+        return null;
+    }
+
+
+    const sortedHistory = [
+        ...record.history
+    ].sort((a, b) => {
+
+        return String(a.date || "")
+            .localeCompare(
+                String(b.date || "")
+            );
+
+    });
+
+
+    return (
+        sortedHistory[
+            sortedHistory.length - 1
+        ]
+        || null
+    );
+}
+
 /* =========================================================
    EDGEBREAK AI CHAT
    QUICK QUESTION -> STOCK SELECT
