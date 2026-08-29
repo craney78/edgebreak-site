@@ -21733,6 +21733,109 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
+            /* =================================
+            GET TODAY'S ACTUAL SCANNER DATE
+
+            Use the date embedded in the scanner
+            data rather than the New York calendar
+            date.
+
+            This means the Market Overview follows
+            the completed EdgeBreak trading session.
+            ================================= */
+
+            let marketDate = "";
+
+
+            /* PRE-BREAKOUT */
+
+            if (
+                Array.isArray(window.scannerData) &&
+                window.scannerData.length
+            ) {
+
+                marketDate =
+                    window.scannerData.find(
+                        stock =>
+                            stock.scan_date ||
+                            stock.last_updated
+                    )?.scan_date ||
+                    window.scannerData.find(
+                        stock =>
+                            stock.scan_date ||
+                            stock.last_updated
+                    )?.last_updated ||
+                    "";
+
+            }
+
+
+            /* BREAKOUT FALLBACK */
+
+            if (
+                !marketDate &&
+                Array.isArray(window.breakoutData) &&
+                window.breakoutData.length
+            ) {
+
+                marketDate =
+                    window.breakoutData.find(
+                        stock =>
+                            stock.scan_date ||
+                            stock.last_updated
+                    )?.scan_date ||
+                    window.breakoutData.find(
+                        stock =>
+                            stock.scan_date ||
+                            stock.last_updated
+                    )?.last_updated ||
+                    "";
+
+            }
+
+
+            /* LAUNCH PAD FALLBACK */
+
+            if (
+                !marketDate &&
+                Array.isArray(window.launchPadData) &&
+                window.launchPadData.length
+            ) {
+
+                marketDate =
+                    window.launchPadData.find(
+                        stock =>
+                            stock.scan_date ||
+                            stock.last_updated
+                    )?.scan_date ||
+                    window.launchPadData.find(
+                        stock =>
+                            stock.scan_date ||
+                            stock.last_updated
+                    )?.last_updated ||
+                    "";
+
+            }
+
+
+            /* NORMALISE DATE */
+
+            marketDate =
+                String(marketDate || "")
+                    .trim()
+                    .slice(0, 10);
+
+
+            console.log(
+                "NASDAQ Market Overview scanner date:",
+                marketDate || "NOT FOUND"
+            );
+
+
+            /* =================================
+            REQUEST MARKET OVERVIEW
+            ================================= */
+
             const response =
                 await fetch(
                     "/api/nasdaq_market_overview",
@@ -21745,7 +21848,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         },
 
                         body:
-                            JSON.stringify({})
+                            JSON.stringify({
+
+                                marketDate:
+                                    marketDate
+
+                            })
                     }
                 );
 
@@ -21987,12 +22095,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         /* =====================================
         EDGEBREAK SCANNER COUNTS
-
-        Pull counts from the scanner data already
-        loaded on the scanner page.
         ===================================== */
 
         updateScannerCounts();
+
+
+        /* =====================================
+        DAILY BRIEF STATS
+        ===================================== */
+
+        loadDailyBriefStats();
 
 
         /* SHOW RESULTS */
@@ -22238,109 +22350,208 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateScannerCounts() {
 
         /*
-        Your scanner page already loads these
-        datasets.
-
-        We try the common EdgeBreak variable
-        names first.
-
-        If one is unavailable we leave "—"
-        rather than breaking the market overview.
+        Use the actual EdgeBreak scanner
+        datasets loaded on this page.
         */
 
-
         const breakoutCount =
-            getArrayLength([
-                "breakoutStocks",
-                "breakoutResults",
-                "breakouts"
-            ]);
+            Array.isArray(window.breakoutData)
+                ? window.breakoutData.length
+                : null;
 
 
         const preBreakoutCount =
-            getArrayLength([
-                "preBreakoutStocks",
-                "preBreakoutResults",
-                "preBreakouts"
-            ]);
+            Array.isArray(window.scannerData)
+                ? window.scannerData.length
+                : null;
 
 
         const baseCount =
-            getArrayLength([
-                "launchPadStocks",
-                "launchpadStocks",
-                "launchPadResults"
-            ]);
+            Array.isArray(window.launchPadData)
+                ? window.launchPadData.length
+                : null;
 
+
+        /* BREAKOUT */
 
         if (breakoutCount !== null) {
 
             setText(
                 "nasdaqBreakoutCount",
-                breakoutCount
+                breakoutCount.toLocaleString()
             );
 
         }
 
+
+        /* PRE-BREAKOUT */
 
         if (preBreakoutCount !== null) {
 
             setText(
                 "nasdaqPreBreakoutCount",
-                preBreakoutCount
+                preBreakoutCount.toLocaleString()
             );
 
         }
 
+
+        /* LAUNCH PAD */
 
         if (baseCount !== null) {
 
             setText(
                 "nasdaqBaseCount",
-                baseCount
+                baseCount.toLocaleString()
             );
 
         }
 
+
+        console.log(
+            "EdgeBreak Scanner Activity:",
+            {
+                breakout: breakoutCount,
+                preBreakout: preBreakoutCount,
+                baseForming: baseCount
+            }
+        );
+
     }
 
 
-    function getArrayLength(
-        variableNames
-    ) {
+    /* =========================================
+    DAILY BRIEF STATS
+    ========================================= */
 
-        for (
-            const variableName of
-            variableNames
-        ) {
+    async function loadDailyBriefStats() {
 
-            try {
+        try {
 
-                const value =
-                    window[
-                        variableName
-                    ];
+            const response =
+                await fetch(
+                    `/daily_brief_stats.json?v=${Date.now()}`,
+                    {
+                        cache: "no-store"
+                    }
+                );
 
 
-                if (
-                    Array.isArray(value)
-                ) {
+            if (!response.ok) {
 
-                    return value.length;
-
-                }
+                throw new Error(
+                    `Daily Brief stats HTTP ${response.status}`
+                );
 
             }
-            catch (error) {
 
-                // Ignore and try next name.
+
+            const stats =
+                await response.json();
+
+
+            console.log(
+                "Daily Brief Stats:",
+                stats
+            );
+
+
+            /* =================================
+            TECHNICAL SETUPS FOUND
+            ================================= */
+
+            if (
+                Number.isFinite(
+                    Number(
+                        stats.technical_setups_found
+                    )
+                )
+            ) {
+
+                setText(
+                    "dailyBriefCandidates",
+                    Number(
+                        stats.technical_setups_found
+                    ).toLocaleString()
+                );
+
+            }
+
+
+            /* =================================
+            FORWARDED FOR AI RESEARCH
+            ================================= */
+
+            if (
+                Number.isFinite(
+                    Number(
+                        stats.forwarded_for_ai_research
+                    )
+                )
+            ) {
+
+                setText(
+                    "dailyBriefResearched",
+                    Number(
+                        stats.forwarded_for_ai_research
+                    ).toLocaleString()
+                );
+
+            }
+
+
+            /* =================================
+            BREAKOUT SETUPS
+            ================================= */
+
+            if (
+                Number.isFinite(
+                    Number(
+                        stats.breakout_setups_found
+                    )
+                )
+            ) {
+
+                setText(
+                    "nasdaqBreakoutCount",
+                    Number(
+                        stats.breakout_setups_found
+                    ).toLocaleString()
+                );
+
+            }
+
+
+            /* =================================
+            PRE-BREAKOUT SETUPS
+            ================================= */
+
+            if (
+                Number.isFinite(
+                    Number(
+                        stats.pre_breakout_setups_found
+                    )
+                )
+            ) {
+
+                setText(
+                    "nasdaqPreBreakoutCount",
+                    Number(
+                        stats.pre_breakout_setups_found
+                    ).toLocaleString()
+                );
 
             }
 
         }
+        catch (error) {
 
+            console.error(
+                "Daily Brief stats failed to load:",
+                error
+            );
 
-        return null;
+        }
 
     }
 
