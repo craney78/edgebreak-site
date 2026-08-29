@@ -32422,9 +32422,373 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 let volumeText = "";
 
 
-                /* ---------------------------------------------
+                /* =================================================
+                CURRENT VOLUME SNAPSHOT
+                ================================================= */
+
+                if (latestIndicators) {
+
+                    const averageVolume =
+                        Number(
+                            latestIndicators.average_volume_20
+                        );
+
+                    const relativeVolume =
+                        Number(
+                            latestIndicators.relative_volume
+                        );
+
+                    const obv =
+                        Number(
+                            latestIndicators.obv
+                        );
+
+                    const obvChange5 =
+                        Number(
+                            latestIndicators.obv_change_5d_percent
+                        );
+
+                    const obvChange20 =
+                        Number(
+                            latestIndicators.obv_change_20d_percent
+                        );
+
+                    const obvTrend =
+                        String(
+                            latestIndicators.obv_trend || ""
+                        ).toLowerCase();
+
+
+                    /* ---------------------------------------------
+                    AVERAGE VOLUME
+                    --------------------------------------------- */
+
+                    let activityText = "";
+
+
+                    if (Number.isFinite(averageVolume)) {
+
+                        activityText += `
+
+                            ${ticker}'s 20-day average volume is approximately
+
+                            <strong>
+                                ${Math.round(averageVolume).toLocaleString("en-US")}
+                                shares per day
+                            </strong>.
+
+                        `;
+
+                    }
+
+
+                    /*
+                    IMPORTANT:
+                    Only interpret relative volume when it is
+                    greater than zero.
+
+                    We have seen zero values in the stored data
+                    and do not want to describe those as meaningful
+                    current trading activity until that calculation
+                    has been separately verified.
+                    */
+
+                    if (
+                        Number.isFinite(relativeVolume) &&
+                        relativeVolume > 0
+                    ) {
+
+                        if (relativeVolume >= 2) {
+
+                            activityText += `
+
+                                Latest recorded volume was approximately
+
+                                <strong>
+                                    ${number(relativeVolume, 2)}×
+                                    the 20-day average
+                                </strong>,
+
+                                showing substantially elevated trading
+                                activity.
+
+                            `;
+
+                        } else if (relativeVolume >= 1.25) {
+
+                            activityText += `
+
+                                Latest recorded volume was approximately
+
+                                <strong>
+                                    ${number(relativeVolume, 2)}×
+                                    the 20-day average
+                                </strong>,
+
+                                showing elevated trading activity.
+
+                            `;
+
+                        } else if (relativeVolume >= 0.75) {
+
+                            activityText += `
+
+                                Latest recorded volume was approximately
+
+                                <strong>
+                                    ${number(relativeVolume, 2)}×
+                                    the 20-day average
+                                </strong>,
+
+                                putting activity relatively close to its
+                                recent normal level.
+
+                            `;
+
+                        } else {
+
+                            activityText += `
+
+                                Latest recorded volume was approximately
+
+                                <strong>
+                                    ${number(relativeVolume, 2)}×
+                                    the 20-day average
+                                </strong>,
+
+                                showing lighter-than-average trading
+                                activity.
+
+                            `;
+
+                        }
+
+                    }
+
+
+                    if (activityText) {
+
+                        volumeText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <div style="
+                                    font-weight:800;
+                                    color:#38bdf8;
+                                    margin-bottom:8px;
+                                ">
+                                    Trading Activity
+                                </div>
+
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+                                    ${activityText}
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+
+                    /* =================================================
+                    OBV TREND
+                    ================================================= */
+
+                    let obvText = "";
+
+
+                    if (obvTrend === "rising") {
+
+                        obvText += `
+
+                            EdgeBreak's On-Balance Volume trend is currently
+                            <strong>rising</strong>.
+
+                            This means volume has generally accumulated
+                            more strongly on advancing days than declining
+                            days over the recent period.
+
+                        `;
+
+                    } else if (obvTrend === "falling") {
+
+                        obvText += `
+
+                            EdgeBreak's On-Balance Volume trend is currently
+                            <strong>falling</strong>.
+
+                            This means volume has generally accumulated
+                            more heavily on declining days than advancing
+                            days over the recent period.
+
+                        `;
+
+                    } else if (obvTrend === "neutral") {
+
+                        obvText += `
+
+                            EdgeBreak's On-Balance Volume trend is currently
+                            <strong>neutral</strong>.
+
+                            Recent volume flow is not showing a strong
+                            directional trend in either direction.
+
+                        `;
+
+                    }
+
+
+                    /*
+                    The absolute OBV number is intentionally NOT
+                    displayed as bullish/bearish.
+
+                    OBV begins from an arbitrary starting point,
+                    so the direction of the series is more useful
+                    than whether the raw value is positive or negative.
+                    */
+
+
+                    if (obvText) {
+
+                        volumeText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <div style="
+                                    font-weight:800;
+                                    color:#38bdf8;
+                                    margin-bottom:8px;
+                                ">
+                                    Volume Trend
+                                </div>
+
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+                                    ${obvText}
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+
+                    /* =================================================
+                    RECENT OBV CHANGE
+                    ================================================= */
+
+                    let recentChangeText = "";
+
+
+                    if (
+                        Number.isFinite(obvChange5) &&
+                        Math.abs(obvChange5) <= 1000
+                    ) {
+
+                        if (obvChange5 > 0) {
+
+                            recentChangeText += `
+
+                                Over the latest five trading days,
+                                OBV increased approximately
+                                <strong>${number(obvChange5, 2)}%</strong>.
+
+                            `;
+
+                        } else if (obvChange5 < 0) {
+
+                            recentChangeText += `
+
+                                Over the latest five trading days,
+                                OBV decreased approximately
+                                <strong>${number(Math.abs(obvChange5), 2)}%</strong>.
+
+                            `;
+
+                        }
+
+                    }
+
+
+                    if (
+                        Number.isFinite(obvChange20) &&
+                        Math.abs(obvChange20) <= 1000
+                    ) {
+
+                        if (obvChange20 > 0) {
+
+                            recentChangeText += `
+
+                                Across the latest 20 trading days,
+                                the stored OBV measure increased approximately
+                                <strong>${number(obvChange20, 2)}%</strong>.
+
+                            `;
+
+                        } else if (obvChange20 < 0) {
+
+                            recentChangeText += `
+
+                                Across the latest 20 trading days,
+                                the stored OBV measure decreased approximately
+                                <strong>${number(Math.abs(obvChange20), 2)}%</strong>.
+
+                            `;
+
+                        }
+
+                    }
+
+
+                    if (recentChangeText) {
+
+                        volumeText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <div style="
+                                    font-weight:800;
+                                    color:#38bdf8;
+                                    margin-bottom:8px;
+                                ">
+                                    Recent Volume Flow
+                                </div>
+
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+                                    ${recentChangeText}
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+                }
+
+
+                /* =================================================
                 BREAKOUT VOLUME
-                --------------------------------------------- */
+                ================================================= */
 
                 if (breakoutStock) {
 
@@ -32434,97 +32798,73 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                         );
 
 
-                    let volumeExplanation = "";
-
-
                     if (Number.isFinite(volumeRatio)) {
+
+                        let breakoutVolumeText = "";
+
 
                         if (volumeRatio >= 2) {
 
-                            volumeExplanation =
-                                `Volume was running at approximately <strong>${number(volumeRatio)}× normal volume</strong>, which represents a substantial increase in trading activity around the breakout.`;
+                            breakoutVolumeText =
+                                `The breakout was recorded with approximately <strong>${number(volumeRatio, 2)}× normal volume</strong>, representing a substantial increase in trading activity around the move through resistance.`;
 
                         } else if (volumeRatio >= 1.25) {
 
-                            volumeExplanation =
-                                `Volume was approximately <strong>${number(volumeRatio)}× normal volume</strong>, showing elevated trading activity around the breakout.`;
+                            breakoutVolumeText =
+                                `The breakout was recorded with approximately <strong>${number(volumeRatio, 2)}× normal volume</strong>, showing elevated trading activity around the move through resistance.`;
 
                         } else if (volumeRatio >= 1) {
 
-                            volumeExplanation =
-                                `Volume was approximately <strong>${number(volumeRatio)}× normal volume</strong>, putting activity around its normal level to slightly above normal.`;
+                            breakoutVolumeText =
+                                `The breakout was recorded with approximately <strong>${number(volumeRatio, 2)}× normal volume</strong>, putting activity around normal to slightly above normal levels.`;
 
                         } else {
 
-                            volumeExplanation =
-                                `Volume was approximately <strong>${number(volumeRatio)}× normal volume</strong>, meaning the recorded breakout volume was below its normal comparison level.`;
+                            breakoutVolumeText =
+                                `The breakout was recorded with approximately <strong>${number(volumeRatio, 2)}× normal volume</strong>, meaning activity was below its normal comparison level at the time of the breakout.`;
 
                         }
 
-                    } else {
 
-                        volumeExplanation =
-                            `A usable breakout volume comparison is not available in the current EdgeBreak data for this setup.`;
+                        volumeText += `
+
+                            <div style="
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
+                            ">
+
+                                <div style="
+                                    font-weight:800;
+                                    color:#22c55e;
+                                    margin-bottom:8px;
+                                ">
+                                    Breakout Volume
+                                </div>
+
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+                                    ${breakoutVolumeText}
+                                </div>
+
+                            </div>
+
+                        `;
 
                     }
-
-
-                    volumeText += `
-
-                        <div style="
-                            padding:14px 0;
-                            border-top:1px solid rgba(148,163,184,.16);
-                        ">
-
-                            <div style="
-                                font-weight:800;
-                                color:#22c55e;
-                                margin-bottom:8px;
-                            ">
-                                Breakout Volume
-                            </div>
-
-                            <div style="
-                                color:#cbd5e1;
-                                line-height:1.7;
-                            ">
-
-                                ${volumeExplanation}
-
-                            </div>
-
-                            <div style="
-                                margin-top:10px;
-                                color:#94a3b8;
-                                line-height:1.7;
-                            ">
-
-                                <strong style="color:#e2e8f0;">
-                                    Why this matters:
-                                </strong>
-
-                                Volume shows how much trading activity
-                                accompanied the price move. EdgeBreak
-                                reports the recorded volume comparison
-                                here without treating it as a buy or
-                                sell signal.
-
-                            </div>
-
-                        </div>
-
-                    `;
 
                 }
 
 
-                /* ---------------------------------------------
-                PRE-BREAKOUT VOLUME
-                --------------------------------------------- */
+                /* =================================================
+                LIQUIDITY CONTEXT
+                PRE-BREAKOUT DATA
+                ================================================= */
 
                 if (preBreakoutStock) {
 
-                    const averageVolume =
+                    const scannerAverageVolume =
                         Number(
                             preBreakoutStock.average_volume_20
                         );
@@ -32535,86 +32875,101 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                         );
 
 
-                    volumeText += `
+                    let liquidityText = "";
 
-                        <div style="
-                            padding:14px 0;
-                            border-top:1px solid rgba(148,163,184,.16);
-                        ">
+
+                    if (
+                        Number.isFinite(scannerAverageVolume)
+                    ) {
+
+                        liquidityText += `
+
+                            The Pre-Breakout Scanner records a 20-day
+                            average of approximately
+
+                            <strong>
+                                ${Math.round(scannerAverageVolume).toLocaleString("en-US")}
+                                shares per day
+                            </strong>.
+
+                        `;
+
+                    }
+
+
+                    if (
+                        Number.isFinite(averageDollarVolume)
+                    ) {
+
+                        liquidityText += `
+
+                            Average dollar volume is approximately
+
+                            <strong>
+                                $${Math.round(averageDollarVolume).toLocaleString("en-US")}
+                                per day
+                            </strong>.
+
+                        `;
+
+                    }
+
+
+                    if (
+                        preBreakoutStock.liquidity_group
+                    ) {
+
+                        liquidityText += `
+
+                            EdgeBreak currently places the stock in the
+                            <strong>${preBreakoutStock.liquidity_group}</strong>
+                            liquidity group.
+
+                        `;
+
+                    }
+
+
+                    if (liquidityText) {
+
+                        volumeText += `
 
                             <div style="
-                                font-weight:800;
-                                color:#22c55e;
-                                margin-bottom:8px;
-                            ">
-                                Pre-Breakout Volume
-                            </div>
-
-                            <div style="
-                                color:#cbd5e1;
-                                line-height:1.7;
+                                padding:14px 0;
+                                border-top:1px solid rgba(148,163,184,.16);
                             ">
 
-                                ${
-                                    Number.isFinite(averageVolume)
-                                        ? `
-                                            ${ticker}'s 20-day average volume
-                                            is approximately
-                                            <strong>${Math.round(averageVolume).toLocaleString("en-US")} shares per day</strong>.
-                                        `
-                                        : ""
-                                }
+                                <div style="
+                                    font-weight:800;
+                                    color:#22c55e;
+                                    margin-bottom:8px;
+                                ">
+                                    Liquidity
+                                </div>
 
-                                ${
-                                    Number.isFinite(averageDollarVolume)
-                                        ? `
-                                            Its 20-day average dollar volume
-                                            is approximately
-                                            <strong>$${Math.round(averageDollarVolume).toLocaleString("en-US")}</strong>
-                                            per day.
-                                        `
-                                        : ""
-                                }
+                                <div style="
+                                    color:#cbd5e1;
+                                    line-height:1.7;
+                                ">
+                                    ${liquidityText}
+                                </div>
 
                             </div>
 
-                            <div style="
-                                margin-top:10px;
-                                color:#94a3b8;
-                                line-height:1.7;
-                            ">
+                        `;
 
-                                <strong style="color:#e2e8f0;">
-                                    What we can tell:
-                                </strong>
-
-                                These figures describe the stock's recent
-                                average trading activity. The current
-                                Pre-Breakout data does not contain a
-                                day-by-day volume comparison, so EdgeBreak
-                                will not label current volume as rising or
-                                falling from this data alone.
-
-                            </div>
-
-                        </div>
-
-                    `;
+                    }
 
                 }
 
 
-                /* ---------------------------------------------
-                LAUNCH PAD ONLY
-                --------------------------------------------- */
+                /* =================================================
+                FALLBACK
+                ================================================= */
 
-                if (
-                    launchPadStock &&
-                    !breakoutStock &&
-                    !preBreakoutStock
-                ) {
+                if (!volumeText) {
 
-                    volumeText += `
+                    volumeText = `
 
                         <div style="
                             padding:14px 0;
@@ -32623,11 +32978,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             line-height:1.7;
                         ">
 
-                            ${ticker} is appearing in the
-                            <strong>Launch Pad Scanner</strong>, but the
-                            current Launch Pad data does not contain a
-                            volume comparison that can reliably describe
-                            whether volume is increasing or decreasing.
+                            EdgeBreak does not currently have enough
+                            stored volume information to describe
+                            ${ticker}'s recent volume behaviour reliably.
 
                         </div>
 
@@ -32635,6 +32988,10 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 
                 }
 
+
+                /* =================================================
+                FINAL ANSWER
+                ================================================= */
 
                 answer = `
 
@@ -32644,10 +33001,27 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             font-size:18px;
                             font-weight:800;
                             color:#f8fafc;
-                            margin-bottom:12px;
+                            margin-bottom:6px;
                         ">
                             ${ticker} — What's Volume Doing?
                         </div>
+
+                        ${
+                            indicatorDate
+                                ? `
+                                    <div style="
+                                        color:#64748b;
+                                        font-size:12px;
+                                        margin-bottom:14px;
+                                    ">
+                                        Technical data through
+                                        <strong style="color:#94a3b8;">
+                                            ${indicatorDate}
+                                        </strong>
+                                    </div>
+                                `
+                                : ""
+                        }
 
                         ${volumeText}
 
@@ -32659,9 +33033,11 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             font-size:12px;
                             line-height:1.6;
                         ">
-                            EdgeBreak provides technical research and market
-                            information only. It does not provide financial advice
-                            or buy, sell or hold recommendations.
+                            Volume measures trading activity, while
+                            On-Balance Volume tracks how that activity
+                            has accumulated across advancing and declining
+                            price days. These measures provide technical
+                            context and are not buy or sell signals.
                         </div>
 
                     </div>
