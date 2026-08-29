@@ -31219,11 +31219,13 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
             ) {
 
                 let strengthText = "";
+                let positiveFactors = [];
+                let cautionFactors = [];
 
 
-                /* ---------------------------------------------
-                BREAKOUT
-                --------------------------------------------- */
+                /* =================================================
+                BREAKOUT STRUCTURE
+                ================================================= */
 
                 if (breakoutStock) {
 
@@ -31246,6 +31248,74 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                         Number(
                             breakoutStock.distance_above_resistance
                         );
+
+
+                    let structureAssessment = "";
+
+
+                    if (
+                        touches >= 3 &&
+                        higherLows >= 3
+                    ) {
+
+                        structureAssessment =
+                            `The breakout formed from a <strong>well-established technical structure</strong>, with repeated resistance testing and multiple higher lows.`;
+
+                        positiveFactors.push(
+                            `${touches} resistance touches and ${higherLows} higher lows`
+                        );
+
+                    } else if (
+                        touches >= 2 &&
+                        higherLows >= 1
+                    ) {
+
+                        structureAssessment =
+                            `The breakout formed from an <strong>established technical structure</strong>, with repeated resistance interaction and a developing higher-low pattern.`;
+
+                    } else {
+
+                        structureAssessment =
+                            `The stock met EdgeBreak's Breakout Scanner conditions, although fewer structural confirmations are present in the stored setup data.`;
+
+                        cautionFactors.push(
+                            "Fewer structural confirmations in the stored breakout setup"
+                        );
+
+                    }
+
+
+                    if (
+                        Number.isFinite(volumeRatio) &&
+                        volumeRatio >= 1.5
+                    ) {
+
+                        positiveFactors.push(
+                            `Breakout volume was ${number(volumeRatio, 2)}× normal volume`
+                        );
+
+                    } else if (
+                        Number.isFinite(volumeRatio) &&
+                        volumeRatio < 1
+                    ) {
+
+                        cautionFactors.push(
+                            `Breakout volume was only ${number(volumeRatio, 2)}× normal volume`
+                        );
+
+                    }
+
+
+                    if (
+                        Number.isFinite(distance) &&
+                        distance > 5
+                    ) {
+
+                        cautionFactors.push(
+                            `Price is already ${number(distance)}% above the original resistance level`
+                        );
+
+                    }
 
 
                     strengthText += `
@@ -31278,8 +31348,8 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 ${
                                     breakoutStock.grade
                                         ? `
-                                            The setup received an EdgeBreak
-                                            grade of
+                                            The scanner assigned the setup an
+                                            EdgeBreak grade of
                                             <strong>${breakoutStock.grade}</strong>.
                                         `
                                         : ""
@@ -31288,8 +31358,8 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 ${
                                     Number.isFinite(volumeRatio)
                                         ? `
-                                            Recorded breakout volume was approximately
-                                            <strong>${number(volumeRatio)}× normal volume</strong>.
+                                            Breakout volume was approximately
+                                            <strong>${number(volumeRatio, 2)}× normal volume</strong>.
                                         `
                                         : ""
                                 }
@@ -31306,43 +31376,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                     Structure assessment:
                                 </strong>
 
-                                ${
-                                    touches >= 3 &&
-                                    higherLows >= 3
-                                        ? `
-                                            The setup contains several repeated
-                                            resistance tests together with multiple
-                                            higher lows, giving EdgeBreak
-                                            <strong>well-established technical structure</strong>
-                                            to analyse.
-                                        `
-                                        : touches >= 2 &&
-                                          higherLows >= 1
-                                            ? `
-                                                The setup contains repeated interaction
-                                                with resistance together with a developing
-                                                higher-low structure.
-                                            `
-                                            : `
-                                                EdgeBreak detected enough technical
-                                                structure for the stock to qualify for
-                                                the Breakout Scanner, although fewer
-                                                structural confirmations are present
-                                                in the stored scanner data.
-                                            `
-                                }
-
-                                ${
-                                    Number.isFinite(distance) &&
-                                    distance > 5
-                                        ? `
-                                            Price is now
-                                            <strong>${number(distance)}% above resistance</strong>,
-                                            so it has already moved some distance beyond
-                                            the original breakout area.
-                                        `
-                                        : ""
-                                }
+                                ${structureAssessment}
 
                             </div>
 
@@ -31353,9 +31387,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 }
 
 
-                /* ---------------------------------------------
-                PRE-BREAKOUT
-                --------------------------------------------- */
+                /* =================================================
+                PRE-BREAKOUT STRUCTURE
+                ================================================= */
 
                 if (preBreakoutStock) {
 
@@ -31373,6 +31407,53 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                         Number(
                             preBreakoutStock.distance_to_resistance
                         );
+
+
+                    let structureAssessment = "";
+
+
+                    if (
+                        touches >= 3 &&
+                        higherLows >= 3
+                    ) {
+
+                        structureAssessment =
+                            `The scanner has identified a <strong>well-established technical structure</strong>, with repeated resistance testing and multiple higher lows.`;
+
+                        positiveFactors.push(
+                            `${touches} resistance touches and ${higherLows} higher lows`
+                        );
+
+                    } else if (
+                        touches >= 2 &&
+                        higherLows >= 1
+                    ) {
+
+                        structureAssessment =
+                            `The stock has an <strong>established developing structure</strong>, with repeated resistance interaction and higher lows present.`;
+
+                    } else {
+
+                        structureAssessment =
+                            `The stock meets the Pre-Breakout Scanner conditions, although fewer structural confirmations are currently present.`;
+
+                        cautionFactors.push(
+                            "Fewer structural confirmations in the stored pre-breakout setup"
+                        );
+
+                    }
+
+
+                    if (
+                        Number.isFinite(distance) &&
+                        distance <= 1
+                    ) {
+
+                        positiveFactors.push(
+                            `Price is within ${number(distance)}% of resistance`
+                        );
+
+                    }
 
 
                     strengthText += `
@@ -31402,7 +31483,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 
                                 Resistance is around
                                 <strong>${money(preBreakoutStock.resistance_price)}</strong>,
-                                with price currently approximately
+                                with price approximately
                                 <strong>${number(distance)}% below that level</strong>.
 
                             </div>
@@ -31417,40 +31498,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                     Structure assessment:
                                 </strong>
 
-                                ${
-                                    touches >= 3 &&
-                                    higherLows >= 3
-                                        ? `
-                                            The scanner has identified
-                                            <strong>well-established technical structure</strong>,
-                                            with repeated testing of resistance and
-                                            multiple higher lows.
-                                        `
-                                        : touches >= 2 &&
-                                          higherLows >= 1
-                                            ? `
-                                                The stock has a
-                                                <strong>developing technical structure</strong>,
-                                                with repeated resistance interaction
-                                                and higher lows present.
-                                            `
-                                            : `
-                                                The structure currently contains fewer
-                                                confirmations, but it still meets the
-                                                conditions required to appear in the
-                                                Pre-Breakout Scanner.
-                                            `
-                                }
-
-                                ${
-                                    Number.isFinite(distance) &&
-                                    distance <= 1
-                                        ? `
-                                            Price is also currently
-                                            <strong>within 1% of resistance</strong>.
-                                        `
-                                        : ""
-                                }
+                                ${structureAssessment}
 
                             </div>
 
@@ -31461,9 +31509,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 }
 
 
-                /* ---------------------------------------------
-                LAUNCH PAD
-                --------------------------------------------- */
+                /* =================================================
+                LAUNCH PAD STRUCTURE
+                ================================================= */
 
                 if (launchPadStock) {
 
@@ -31486,6 +31534,42 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                         Number(
                             launchPadStock.range_percent
                         );
+
+
+                    let structureAssessment = "";
+
+
+                    if (
+                        supportTests >= 3 &&
+                        resistanceTests >= 3 &&
+                        baseDays >= 84
+                    ) {
+
+                        structureAssessment =
+                            `EdgeBreak has identified a <strong>well-established base</strong>, with repeated testing of both sides of the range over an extended period.`;
+
+                        positiveFactors.push(
+                            `${baseDays}-day base with ${supportTests} support tests and ${resistanceTests} resistance tests`
+                        );
+
+                    } else if (
+                        supportTests >= 2 &&
+                        resistanceTests >= 2
+                    ) {
+
+                        structureAssessment =
+                            `The stock has an <strong>established trading base</strong>, with repeated interaction around both support and resistance.`;
+
+                    } else {
+
+                        structureAssessment =
+                            `EdgeBreak has identified a defined base, although fewer repeated tests of the range boundaries are present.`;
+
+                        cautionFactors.push(
+                            "Fewer repeated tests of the Launch Pad range boundaries"
+                        );
+
+                    }
 
 
                     strengthText += `
@@ -31515,7 +31599,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                 and
                                 <strong>${resistanceTests} resistance tests</strong>.
 
-                                The distance between the identified support
+                                The range between the identified support
                                 and resistance areas is approximately
                                 <strong>${number(rangePercent)}%</strong>.
 
@@ -31531,31 +31615,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                                     Structure assessment:
                                 </strong>
 
-                                ${
-                                    supportTests >= 3 &&
-                                    resistanceTests >= 3 &&
-                                    baseDays >= 84
-                                        ? `
-                                            EdgeBreak has identified a
-                                            <strong>well-established base structure</strong>,
-                                            with repeated testing on both sides of
-                                            the range over an extended period.
-                                        `
-                                        : supportTests >= 2 &&
-                                          resistanceTests >= 2
-                                            ? `
-                                                The stock has an
-                                                <strong>established trading base</strong>
-                                                with repeated interaction around both
-                                                support and resistance.
-                                            `
-                                            : `
-                                                EdgeBreak has identified a defined
-                                                base, although the stored structure
-                                                currently contains fewer repeated tests
-                                                of its boundaries.
-                                            `
-                                }
+                                ${structureAssessment}
 
                             </div>
 
@@ -31566,6 +31626,398 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                 }
 
 
+                /* =================================================
+                INDICATOR CONFIRMATION
+                ================================================= */
+
+                if (latestIndicators) {
+
+                    const price =
+                        Number(
+                            latestIndicators.price
+                        );
+
+                    const rsi =
+                        Number(
+                            latestIndicators.rsi14
+                        );
+
+                    const macd =
+                        Number(
+                            latestIndicators.macd
+                        );
+
+                    const macdSignal =
+                        Number(
+                            latestIndicators.macd_signal
+                        );
+
+                    const sma20 =
+                        Number(
+                            latestIndicators.sma20
+                        );
+
+                    const sma50 =
+                        Number(
+                            latestIndicators.sma50
+                        );
+
+                    const sma200 =
+                        Number(
+                            latestIndicators.sma200
+                        );
+
+                    const relativeVolume =
+                        Number(
+                            latestIndicators.relative_volume
+                        );
+
+                    const obvTrend =
+                        String(
+                            latestIndicators.obv_trend || ""
+                        ).toLowerCase();
+
+
+                    /* ---------------------------------------------
+                    TREND
+                    --------------------------------------------- */
+
+                    if (
+                        Number.isFinite(price) &&
+                        Number.isFinite(sma20) &&
+                        Number.isFinite(sma50)
+                    ) {
+
+                        if (
+                            price > sma20 &&
+                            price > sma50 &&
+                            sma20 > sma50
+                        ) {
+
+                            positiveFactors.push(
+                                "Price is above the 20-day and 50-day SMAs, with the 20-day SMA above the 50-day SMA"
+                            );
+
+                        } else if (
+                            price < sma20 &&
+                            price < sma50
+                        ) {
+
+                            cautionFactors.push(
+                                "Price is below both the 20-day and 50-day SMAs"
+                            );
+
+                        }
+
+                    }
+
+
+                    if (
+                        Number.isFinite(price) &&
+                        Number.isFinite(sma200)
+                    ) {
+
+                        if (price > sma200) {
+
+                            positiveFactors.push(
+                                "Price is above the 200-day SMA"
+                            );
+
+                        } else {
+
+                            cautionFactors.push(
+                                "Price is below the 200-day SMA"
+                            );
+
+                        }
+
+                    }
+
+
+                    /* ---------------------------------------------
+                    RSI
+                    --------------------------------------------- */
+
+                    if (Number.isFinite(rsi)) {
+
+                        if (
+                            rsi >= 50 &&
+                            rsi < 70
+                        ) {
+
+                            positiveFactors.push(
+                                `RSI is ${number(rsi, 1)}, showing positive momentum without an elevated 70+ reading`
+                            );
+
+                        } else if (rsi >= 70) {
+
+                            positiveFactors.push(
+                                `RSI is ${number(rsi, 1)}, showing strong recent momentum`
+                            );
+
+                            cautionFactors.push(
+                                `RSI is also elevated above 70`
+                            );
+
+                        } else if (rsi < 40) {
+
+                            cautionFactors.push(
+                                `RSI is ${number(rsi, 1)}, showing softer recent momentum`
+                            );
+
+                        }
+
+                    }
+
+
+                    /* ---------------------------------------------
+                    MACD
+                    --------------------------------------------- */
+
+                    if (
+                        Number.isFinite(macd) &&
+                        Number.isFinite(macdSignal)
+                    ) {
+
+                        if (macd > macdSignal) {
+
+                            positiveFactors.push(
+                                "MACD is above its signal line"
+                            );
+
+                        } else if (macd < macdSignal) {
+
+                            cautionFactors.push(
+                                "MACD is below its signal line"
+                            );
+
+                        }
+
+                    }
+
+
+                    /* ---------------------------------------------
+                    RELATIVE VOLUME
+                    --------------------------------------------- */
+
+                    if (
+                        Number.isFinite(relativeVolume) &&
+                        relativeVolume >= 1.5
+                    ) {
+
+                        positiveFactors.push(
+                            `Latest recorded volume is ${number(relativeVolume, 2)}× the 20-day average`
+                        );
+
+                    }
+
+
+                    /* ---------------------------------------------
+                    OBV
+                    --------------------------------------------- */
+
+                    if (obvTrend === "rising") {
+
+                        positiveFactors.push(
+                            "On-Balance Volume is rising"
+                        );
+
+                    } else if (
+                        obvTrend === "falling"
+                    ) {
+
+                        cautionFactors.push(
+                            "On-Balance Volume is falling"
+                        );
+
+                    }
+
+                }
+
+
+                /* =================================================
+                REMOVE DUPLICATES
+                ================================================= */
+
+                positiveFactors = [
+                    ...new Set(
+                        positiveFactors
+                    )
+                ];
+
+                cautionFactors = [
+                    ...new Set(
+                        cautionFactors
+                    )
+                ];
+
+
+                /* =================================================
+                CONFIRMING FACTORS
+                ================================================= */
+
+                if (positiveFactors.length) {
+
+                    strengthText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#38bdf8;
+                                margin-bottom:10px;
+                            ">
+                                Confirming Factors
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.8;
+                            ">
+
+                                ${positiveFactors
+                                    .map(
+                                        factor => `
+                                            <div style="margin-bottom:7px;">
+                                                <strong style="color:#f8fafc;">
+                                                    •
+                                                </strong>
+                                                ${factor}
+                                            </div>
+                                        `
+                                    )
+                                    .join("")}
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* =================================================
+                MIXED / CAUTION FACTORS
+                ================================================= */
+
+                if (cautionFactors.length) {
+
+                    strengthText += `
+
+                        <div style="
+                            padding:14px 0;
+                            border-top:1px solid rgba(148,163,184,.16);
+                        ">
+
+                            <div style="
+                                font-weight:800;
+                                color:#f59e0b;
+                                margin-bottom:10px;
+                            ">
+                                Factors to Keep in Context
+                            </div>
+
+                            <div style="
+                                color:#cbd5e1;
+                                line-height:1.8;
+                            ">
+
+                                ${cautionFactors
+                                    .map(
+                                        factor => `
+                                            <div style="margin-bottom:7px;">
+                                                <strong style="color:#f8fafc;">
+                                                    •
+                                                </strong>
+                                                ${factor}
+                                            </div>
+                                        `
+                                    )
+                                    .join("")}
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* =================================================
+                PLAIN-ENGLISH ASSESSMENT
+                ================================================= */
+
+                let assessmentText = "";
+
+
+                if (
+                    positiveFactors.length >= 4 &&
+                    cautionFactors.length <= 1
+                ) {
+
+                    assessmentText =
+                        `The current EdgeBreak data shows <strong>multiple technical characteristics supporting the structure</strong>. The scanner pattern is being accompanied by several trend, momentum or volume confirmations.`;
+
+                } else if (
+                    positiveFactors.length >= 2
+                ) {
+
+                    assessmentText =
+                        `The setup has <strong>several supporting technical characteristics</strong>, although not every indicator is pointing in the same direction.`;
+
+                } else if (
+                    cautionFactors.length >= 3
+                ) {
+
+                    assessmentText =
+                        `The scanner structure is present, but the current indicator picture is <strong>more mixed</strong>, with several factors that should be kept in context.`;
+
+                } else {
+
+                    assessmentText =
+                        `EdgeBreak has identified enough structure for the stock to qualify for its scanner, while the additional indicator confirmation is currently <strong>mixed or limited</strong>.`;
+
+                }
+
+
+                strengthText += `
+
+                    <div style="
+                        padding:14px 0;
+                        border-top:1px solid rgba(148,163,184,.16);
+                    ">
+
+                        <div style="
+                            font-weight:800;
+                            color:#f8fafc;
+                            margin-bottom:8px;
+                        ">
+                            Overall Technical Picture
+                        </div>
+
+                        <div style="
+                            color:#cbd5e1;
+                            line-height:1.7;
+                        ">
+
+                            ${assessmentText}
+
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                /* =================================================
+                ANSWER
+                ================================================= */
+
                 answer = `
 
                     <div class="edge-ai-rundown">
@@ -31574,10 +32026,27 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             font-size:18px;
                             font-weight:800;
                             color:#f8fafc;
-                            margin-bottom:12px;
+                            margin-bottom:6px;
                         ">
                             ${ticker} — Setup Strength
                         </div>
+
+                        ${
+                            indicatorDate
+                                ? `
+                                    <div style="
+                                        color:#64748b;
+                                        font-size:12px;
+                                        margin-bottom:14px;
+                                    ">
+                                        Technical data through
+                                        <strong style="color:#94a3b8;">
+                                            ${indicatorDate}
+                                        </strong>
+                                    </div>
+                                `
+                                : ""
+                        }
 
                         ${strengthText}
 
@@ -31588,13 +32057,13 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                         ">
 
                             <strong style="color:#e2e8f0;">
-                                Important:
+                                What "strength" means here:
                             </strong>
 
-                            Setup strength describes the amount of
-                            technical structure detected by EdgeBreak.
-                            It does not predict whether price will move
-                            higher or lower.
+                            EdgeBreak is describing the amount of technical
+                            structure and indicator confirmation currently
+                            present. It is not estimating the probability
+                            that the stock will rise.
 
                         </div>
 
@@ -31606,9 +32075,10 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             font-size:12px;
                             line-height:1.6;
                         ">
-                            EdgeBreak provides technical research and market
-                            information only. It does not provide financial advice
-                            or buy, sell or hold recommendations.
+                            Technical conditions can change quickly.
+                            EdgeBreak provides research and market
+                            information only and does not provide buy,
+                            sell or hold recommendations.
                         </div>
 
                     </div>
