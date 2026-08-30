@@ -38863,811 +38863,293 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 
 <script>
 
-(function initEdgeUnlimitedTest(){
+/* =========================================================
+   EDGEBREAK AI UNLIMITED
+   SIDE PANEL INTEGRATION
+========================================================= */
 
-    /* =====================================================
-       ELEMENTS
-    ===================================================== */
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-    const input =
-        document.getElementById(
-            "edgeUnlimitedTestInput"
-        );
+        /* =================================================
+           MODE ELEMENTS
+        ================================================= */
 
-    const button =
-        document.getElementById(
-            "edgeUnlimitedTestSend"
-        );
+        const guidedBtn =
+            document.getElementById(
+                "edgeAIGuidedMode"
+            );
 
-    const answer =
-        document.getElementById(
-            "edgeUnlimitedTestAnswer"
-        );
+        const unlimitedBtn =
+            document.getElementById(
+                "edgeAIUnlimitedMode"
+            );
 
-    const status =
-        document.getElementById(
-            "edgeUnlimitedTestStatus"
-        );
-
-
-    if (
-        !input ||
-        !button ||
-        !answer ||
-        !status
-    ) {
-
-        console.warn(
-            "AI Unlimited test elements not found."
-        );
-
-        return;
-
-    }
-
-
-    /* =====================================================
-       EDGEBREAK DATA STORES
-    ===================================================== */
-
-    let unlimitedBreakoutData = [];
-
-    let unlimitedPreBreakoutData = [];
-
-    let unlimitedLaunchPadData = [];
-
-    let unlimitedSmartMoneyData = null;
-
-    let unlimitedIndicatorHistoryData = null;
-
-    let unlimitedDataReady = false;
-
-
-    /* =====================================================
-       LOAD JSON FILE
-    ===================================================== */
-
-    async function loadJsonFile(
-        url
-    ){
-
-        const response =
-            await fetch(
-                url,
-                {
-                    cache:
-                        "no-store"
-                }
+        const guidedContent =
+            document.querySelector(
+                ".edge-chat-intro"
             );
 
 
         if (
-            !response.ok
+            !guidedBtn ||
+            !unlimitedBtn ||
+            !guidedContent
         ) {
 
-            throw new Error(
-                `${url} returned ${response.status}`
+            console.warn(
+                "EdgeBreak AI mode switch elements not found."
             );
 
+            return;
+
         }
 
 
-        return await response.json();
+        /* =================================================
+           CREATE AI UNLIMITED PANEL
+        ================================================= */
 
-    }
+        const unlimitedContent =
+            document.createElement(
+                "div"
+            );
 
 
-    /* =====================================================
-       FIND ARRAY
+        unlimitedContent.id =
+            "edgeAIUnlimitedContent";
 
-       Used for the three scanner files.
 
-       Handles either:
+        unlimitedContent.style.display =
+            "none";
 
-       [
-           {...}
-       ]
 
-       OR
+        unlimitedContent.innerHTML = `
 
-       {
-           stocks:[...]
-       }
+            <div class="edge-ai-unlimited-intro">
 
-       OR similar wrappers.
-    ===================================================== */
+                <div class="edge-ai-unlimited-icon">
+                    ✦
+                </div>
 
-    function findArray(
-        data,
-        preferredKeys = []
-    ){
+                <h3>
+                    AI Unlimited
+                </h3>
 
-        if (
-            Array.isArray(
-                data
-            )
+                <p>
+                    Ask EdgeBreak anything about a NASDAQ stock,
+                    trading concept or market question.
+                </p>
+
+
+                <textarea
+                    id="edgeAIUnlimitedQuestion"
+                    placeholder="Example: What does EdgeBreak know about CTRM?"
+                    rows="4"
+                ></textarea>
+
+
+                <button
+                    type="button"
+                    id="edgeAIUnlimitedAsk"
+                    class="edge-ai-unlimited-ask"
+                >
+                    Ask EdgeBreak
+                </button>
+
+
+                <div
+                    id="edgeAIUnlimitedStatus"
+                    style="
+                        margin-top:12px;
+                        font-size:12px;
+                        line-height:1.5;
+                        color:#64748b;
+                    "
+                >
+                    Loading EdgeBreak data...
+                </div>
+
+
+                <div
+                    id="edgeAIUnlimitedAnswer"
+                    style="
+                        display:none;
+                        margin-top:16px;
+                        padding:16px;
+                        text-align:left;
+                        white-space:pre-wrap;
+                        background:#0b1220;
+                        border:1px solid #1e293b;
+                        border-radius:10px;
+                        color:#e2e8f0;
+                        font-size:13px;
+                        line-height:1.65;
+                    "
+                ></div>
+
+            </div>
+
+        `;
+
+
+        guidedContent.insertAdjacentElement(
+            "afterend",
+            unlimitedContent
+        );
+
+
+        /* =================================================
+           UNLIMITED ELEMENTS
+        ================================================= */
+
+        const input =
+            document.getElementById(
+                "edgeAIUnlimitedQuestion"
+            );
+
+
+        const button =
+            document.getElementById(
+                "edgeAIUnlimitedAsk"
+            );
+
+
+        const answer =
+            document.getElementById(
+                "edgeAIUnlimitedAnswer"
+            );
+
+
+        const status =
+            document.getElementById(
+                "edgeAIUnlimitedStatus"
+            );
+
+
+        /* =================================================
+           EDGEBREAK DATA STORES
+        ================================================= */
+
+        let unlimitedBreakoutData =
+            [];
+
+
+        let unlimitedPreBreakoutData =
+            [];
+
+
+        let unlimitedLaunchPadData =
+            [];
+
+
+        let unlimitedSmartMoneyData =
+            [];
+
+
+        let unlimitedIndicatorHistoryData =
+            null;
+
+
+        let unlimitedDataReady =
+            false;
+
+
+        /* =================================================
+           LOAD JSON
+        ================================================= */
+
+        async function loadJsonFile(
+            url
         ) {
 
-            return data;
+            const response =
+                await fetch(
+                    url,
+                    {
+                        cache:
+                            "no-store"
+                    }
+                );
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    `${url} returned ${response.status}`
+                );
+
+            }
+
+
+            return await response.json();
 
         }
 
 
-        if (
-            !data ||
-            typeof data !== "object"
-        ) {
+        /* =================================================
+           FIND ARRAY
+        ================================================= */
 
-            return [];
-
-        }
-
-
-        for (
-            const key of preferredKeys
+        function findArray(
+            data,
+            preferredKeys = []
         ) {
 
             if (
                 Array.isArray(
-                    data[key]
+                    data
                 )
             ) {
 
-                return data[key];
+                return data;
 
             }
 
-        }
-
-
-        for (
-            const value of Object.values(
-                data
-            )
-        ) {
 
             if (
-                Array.isArray(
-                    value
-                )
+                !data ||
+                typeof data !==
+                    "object"
             ) {
 
-                return value;
+                return [];
 
             }
 
-        }
 
+            for (
+                const key
+                of preferredKeys
+            ) {
 
-        return [];
-
-    }
-
-
-    /* =====================================================
-       LOAD ALL FIVE EDGEBREAK DATA SOURCES
-    ===================================================== */
-
-    async function loadUnlimitedData(){
-
-        try {
-
-            unlimitedDataReady =
-                false;
-
-
-            status.className =
-                "";
-
-
-            status.textContent =
-                "Loading all five EdgeBreak data sources...";
-
-
-            const [
-
-                breakoutRaw,
-
-                preBreakoutRaw,
-
-                launchPadRaw,
-
-                smartMoneyRaw,
-
-                indicatorHistoryRaw
-
-            ] =
-                await Promise.all([
-
-                    loadJsonFile(
-                        "/breakout_scanner.json"
-                    ),
-
-                    loadJsonFile(
-                        "/scanner_database.json"
-                    ),
-
-                    loadJsonFile(
-                        "/launchpad_database.json"
-                    ),
-
-                    loadJsonFile(
-                        "/smart_money_filter.json"
-                    ),
-
-                    loadJsonFile(
-                        "/scanner_indicator_history.json"
+                if (
+                    Array.isArray(
+                        data[key]
                     )
-
-                ]);
-
-
-            /* =============================================
-               CURRENT SCANNERS
-            ============================================= */
-
-            unlimitedBreakoutData =
-                findArray(
-                    breakoutRaw,
-                    [
-                        "stocks",
-                        "results",
-                        "scanner_data",
-                        "data"
-                    ]
-                );
-
-
-            unlimitedPreBreakoutData =
-                findArray(
-                    preBreakoutRaw,
-                    [
-                        "stocks",
-                        "results",
-                        "scanner_data",
-                        "data"
-                    ]
-                );
-
-
-            unlimitedLaunchPadData =
-                findArray(
-                    launchPadRaw,
-                    [
-                        "stocks",
-                        "results",
-                        "scanner_data",
-                        "data"
-                    ]
-                );
-
-
-            /* =============================================
-               SMART MONEY
-
-               Keep original structure intact for now.
-
-               We will extract the ticker record separately.
-            ============================================= */
-
-            unlimitedSmartMoneyData =
-                smartMoneyRaw;
-
-
-            /* =============================================
-               INDICATOR HISTORY
-
-               Keep original structure intact.
-
-               This is important because this file contains
-               current scanner data plus dated history.
-            ============================================= */
-
-            unlimitedIndicatorHistoryData =
-                indicatorHistoryRaw;
-
-
-            unlimitedDataReady =
-                true;
-
-
-            /* =============================================
-               STATUS
-            ============================================= */
-
-            const smartMoneyCount =
-                estimateSymbolCount(
-                    unlimitedSmartMoneyData
-                );
-
-
-            const indicatorCount =
-                estimateSymbolCount(
-                    unlimitedIndicatorHistoryData
-                );
-
-
-            status.className =
-                "ready";
-
-
-            status.textContent =
-                "EdgeBreak loaded — " +
-
-                `${unlimitedBreakoutData.length} Breakout · ` +
-
-                `${unlimitedPreBreakoutData.length} Pre-Breakout · ` +
-
-                `${unlimitedLaunchPadData.length} Launch Pad · ` +
-
-                `${smartMoneyCount} Smart Money · ` +
-
-                `${indicatorCount} Indicator records`;
-
-
-            console.log(
-                "AI Unlimited: all EdgeBreak data loaded.",
-                {
-
-                    breakout:
-                        unlimitedBreakoutData.length,
-
-                    preBreakout:
-                        unlimitedPreBreakoutData.length,
-
-                    launchPad:
-                        unlimitedLaunchPadData.length,
-
-                    smartMoney:
-                        smartMoneyCount,
-
-                    indicators:
-                        indicatorCount
-
-                }
-            );
-
-        }
-        catch (
-            error
-        ) {
-
-            unlimitedDataReady =
-                false;
-
-
-            status.className =
-                "error";
-
-
-            status.textContent =
-                "Could not load all EdgeBreak data.";
-
-
-            console.error(
-                "AI Unlimited data load error:",
-                error
-            );
-
-        }
-
-    }
-
-
-    /* =====================================================
-       ESTIMATE SYMBOL COUNT
-
-       Test display only.
-
-       This does NOT affect the AI context.
-    ===================================================== */
-
-    function estimateSymbolCount(
-        data
-    ){
-
-        if (
-            !data
-        ) {
-
-            return 0;
-
-        }
-
-
-        if (
-            Array.isArray(
-                data
-            )
-        ) {
-
-            return data.length;
-
-        }
-
-
-        if (
-            typeof data !== "object"
-        ) {
-
-            return 0;
-
-        }
-
-
-        /* =============================================
-           COMMON CONTAINER KEYS
-        ============================================= */
-
-        const possibleKeys = [
-
-            "stocks",
-            "symbols",
-            "results",
-            "data",
-            "scanner_data",
-            "latest",
-            "records"
-
-        ];
-
-
-        for (
-            const key of possibleKeys
-        ) {
-
-            const value =
-                data[key];
-
-
-            if (
-                Array.isArray(
-                    value
-                )
-            ) {
-
-                return value.length;
-
-            }
-
-
-            if (
-                value &&
-                typeof value === "object"
-            ) {
-
-                return Object.keys(
-                    value
-                ).length;
-
-            }
-
-        }
-
-
-        return Object.keys(
-            data
-        ).length;
-
-    }
-
-
-    /* =====================================================
-       TICKER CANDIDATES
-    ===================================================== */
-
-    function extractTickerCandidates(
-        message
-    ){
-
-        const words =
-            String(
-                message || ""
-            )
-                .toUpperCase()
-                .match(
-                    /\b[A-Z][A-Z0-9.-]{0,9}\b/g
-                ) || [];
-
-
-        const ignored =
-            new Set([
-
-                "A",
-                "I",
-                "AI",
-
-                "THE",
-                "WHAT",
-                "WHATS",
-                "DOES",
-                "KNOW",
-                "ABOUT",
-
-                "IS",
-                "ARE",
-                "WAS",
-                "WERE",
-
-                "WHY",
-                "HOW",
-                "WHEN",
-                "WHERE",
-
-                "DID",
-                "DO",
-                "HAS",
-                "HAVE",
-
-                "MY",
-                "ME",
-                "FOR",
-
-                "THIS",
-                "THAT",
-
-                "STOCK",
-                "STOCKS",
-
-                "PRICE",
-                "TODAY",
-
-                "EDGE",
-                "BREAK",
-                "EDGEBREAK",
-
-                "NASDAQ",
-
-                "RSI",
-                "MACD",
-                "SMA",
-                "EMA",
-                "ATR",
-                "OBV"
-
-            ]);
-
-
-        return [
-            ...new Set(
-
-                words.filter(
-                    word =>
-                        !ignored.has(
-                            word
-                        )
-                )
-
-            )
-        ];
-
-    }
-
-
-    /* =====================================================
-       SYMBOL HELPER
-    ===================================================== */
-
-    function normaliseSymbol(
-        value
-    ){
-
-        return String(
-            value || ""
-        )
-            .trim()
-            .toUpperCase();
-
-    }
-
-
-    /* =====================================================
-       FIND CURRENT SCANNER RECORD
-    ===================================================== */
-
-    function findCurrentScannerRecord(
-        data,
-        symbol
-    ){
-
-        if (
-            !Array.isArray(
-                data
-            )
-        ) {
-
-            return null;
-
-        }
-
-
-        const ticker =
-            normaliseSymbol(
-                symbol
-            );
-
-
-        return (
-            data.find(
-                record =>
-                    normaliseSymbol(
-                        record?.symbol
-                    ) === ticker
-            ) ||
-            null
-        );
-
-    }
-
-
-    /* =====================================================
-       DEEP SEARCH FOR SYMBOL
-
-       Used for Smart Money and Indicator History because
-       those JSON structures are more complex.
-
-       IMPORTANT:
-
-       We do NOT flatten or alter the source files.
-
-       We search for the requested ticker and return only
-       the matching branch/record.
-
-       This keeps the AI request small.
-    ===================================================== */
-
-    function deepFindSymbol(
-        data,
-        symbol,
-        depth = 0
-    ){
-
-        const ticker =
-            normaliseSymbol(
-                symbol
-            );
-
-
-        if (
-            !ticker ||
-            !data
-        ) {
-
-            return null;
-
-        }
-
-
-        /*
-        Prevent accidental traversal of an unexpectedly
-        deep object.
-        */
-
-        if (
-            depth > 12
-        ) {
-
-            return null;
-
-        }
-
-
-        /* =============================================
-           ARRAY
-        ============================================= */
-
-        if (
-            Array.isArray(
-                data
-            )
-        ) {
-
-            /*
-            First look for a direct record with
-            symbol/ticker matching.
-            */
-
-            for (
-                const item of data
-            ) {
-
-                if (
-                    item &&
-                    typeof item === "object"
                 ) {
 
-                    const itemSymbol =
-                        normaliseSymbol(
-
-                            item?.symbol ??
-                            item?.ticker ??
-                            item?.stock
-
-                        );
-
-
-                    if (
-                        itemSymbol === ticker
-                    ) {
-
-                        return item;
-
-                    }
+                    return data[key];
 
                 }
 
             }
 
 
-            /*
-            Then recursively inspect child objects.
-            */
-
             for (
-                const item of data
-            ) {
-
-                if (
-                    item &&
-                    typeof item === "object"
-                ) {
-
-                    const found =
-                        deepFindSymbol(
-                            item,
-                            ticker,
-                            depth + 1
-                        );
-
-
-                    if (
-                        found
-                    ) {
-
-                        return found;
-
-                    }
-
-                }
-
-            }
-
-
-            return null;
-
-        }
-
-
-        /* =============================================
-           OBJECT
-        ============================================= */
-
-        if (
-            typeof data === "object"
-        ) {
-
-            /*
-            The ticker itself may be the object key:
-
-            {
-                "CTRM": {...}
-            }
-            */
-
-            for (
-                const [
-                    key,
-                    value
-                ]
-                of Object.entries(
+                const value
+                of Object.values(
                     data
                 )
             ) {
 
                 if (
-                    normaliseSymbol(
-                        key
-                    ) === ticker
+                    Array.isArray(
+                        value
+                    )
                 ) {
 
                     return value;
@@ -39677,57 +39159,506 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
             }
 
 
-            /*
-            Or the object itself may be the stock record.
-            */
+            return [];
 
-            const objectSymbol =
-                normaliseSymbol(
+        }
 
-                    data?.symbol ??
-                    data?.ticker ??
-                    data?.stock
 
+        /* =================================================
+           NORMALISE SYMBOL
+        ================================================= */
+
+        function normaliseSymbol(
+            value
+        ) {
+
+            return String(
+                value || ""
+            )
+                .trim()
+                .toUpperCase();
+
+        }
+
+
+        /* =================================================
+           LOAD ALL FIVE EDGEBREAK SOURCES
+        ================================================= */
+
+        async function loadUnlimitedData() {
+
+            try {
+
+                unlimitedDataReady =
+                    false;
+
+
+                status.textContent =
+                    "Loading EdgeBreak data...";
+
+
+                status.style.color =
+                    "#64748b";
+
+
+                const [
+
+                    breakoutRaw,
+
+                    preBreakoutRaw,
+
+                    launchPadRaw,
+
+                    smartMoneyRaw,
+
+                    indicatorHistoryRaw
+
+                ] =
+                    await Promise.all([
+
+                        loadJsonFile(
+                            "/breakout_scanner.json"
+                        ),
+
+                        loadJsonFile(
+                            "/scanner_database.json"
+                        ),
+
+                        loadJsonFile(
+                            "/launchpad_database.json"
+                        ),
+
+                        loadJsonFile(
+                            "/smart_money_filter.json"
+                        ),
+
+                        loadJsonFile(
+                            "/scanner_indicator_history.json"
+                        )
+
+                    ]);
+
+
+                /* =========================================
+                   BREAKOUT
+                ========================================= */
+
+                unlimitedBreakoutData =
+                    findArray(
+                        breakoutRaw,
+                        [
+                            "stocks",
+                            "results",
+                            "scanner_data",
+                            "data"
+                        ]
+                    );
+
+
+                /* =========================================
+                   PRE-BREAKOUT
+                ========================================= */
+
+                unlimitedPreBreakoutData =
+                    findArray(
+                        preBreakoutRaw,
+                        [
+                            "stocks",
+                            "results",
+                            "scanner_data",
+                            "data"
+                        ]
+                    );
+
+
+                /* =========================================
+                   LAUNCH PAD
+                ========================================= */
+
+                unlimitedLaunchPadData =
+                    findArray(
+                        launchPadRaw,
+                        [
+                            "stocks",
+                            "results",
+                            "scanner_data",
+                            "data"
+                        ]
+                    );
+
+
+                /* =========================================
+                   SMART MONEY
+
+                   Actual file structure is a flat array:
+                   [
+                       {
+                           symbol,
+                           count,
+                           last_seen,
+                           appearances:[]
+                       }
+                   ]
+                ========================================= */
+
+                unlimitedSmartMoneyData =
+                    Array.isArray(
+                        smartMoneyRaw
+                    )
+                        ? smartMoneyRaw
+                        : findArray(
+                            smartMoneyRaw,
+                            [
+                                "stocks",
+                                "results",
+                                "data"
+                            ]
+                        );
+
+
+                /* =========================================
+                   INDICATOR HISTORY
+
+                   Keep the complete structure intact.
+                ========================================= */
+
+                unlimitedIndicatorHistoryData =
+                    indicatorHistoryRaw;
+
+
+                unlimitedDataReady =
+                    true;
+
+
+                status.textContent =
+                    "EdgeBreak data ready.";
+
+
+                status.style.color =
+                    "#22c55e";
+
+
+                console.log(
+                    "AI Unlimited EdgeBreak data loaded:",
+                    {
+
+                        breakout:
+                            unlimitedBreakoutData.length,
+
+                        preBreakout:
+                            unlimitedPreBreakoutData.length,
+
+                        launchPad:
+                            unlimitedLaunchPadData.length,
+
+                        smartMoney:
+                            unlimitedSmartMoneyData.length,
+
+                        indicatorHistory:
+                            Boolean(
+                                unlimitedIndicatorHistoryData
+                            )
+
+                    }
                 );
 
-
-            if (
-                objectSymbol === ticker
+            }
+            catch (
+                error
             ) {
 
-                return data;
+                unlimitedDataReady =
+                    false;
+
+
+                status.textContent =
+                    "EdgeBreak data could not be loaded.";
+
+
+                status.style.color =
+                    "#ef4444";
+
+
+                console.error(
+                    "AI Unlimited data load error:",
+                    error
+                );
 
             }
 
+        }
 
-            /*
-            Search child objects.
-            */
 
-            for (
-                const value of Object.values(
+        /* =================================================
+           CURRENT SCANNER LOOKUP
+        ================================================= */
+
+        function findCurrentScannerRecord(
+            data,
+            symbol
+        ) {
+
+            if (
+                !Array.isArray(
                     data
                 )
             ) {
 
-                if (
-                    value &&
-                    typeof value === "object"
+                return null;
+
+            }
+
+
+            const ticker =
+                normaliseSymbol(
+                    symbol
+                );
+
+
+            return (
+                data.find(
+                    record =>
+                        normaliseSymbol(
+                            record?.symbol
+                        ) === ticker
+                ) ||
+                null
+            );
+
+        }
+
+
+        /* =================================================
+           SMART MONEY LOOKUP
+
+           Exact lookup based on the actual Smart Money
+           JSON structure.
+        ================================================= */
+
+        function findSmartMoneyRecord(
+            symbol
+        ) {
+
+            const ticker =
+                normaliseSymbol(
+                    symbol
+                );
+
+
+            if (
+                !ticker ||
+                !Array.isArray(
+                    unlimitedSmartMoneyData
+                )
+            ) {
+
+                return null;
+
+            }
+
+
+            return (
+                unlimitedSmartMoneyData.find(
+                    record =>
+                        normaliseSymbol(
+                            record?.symbol
+                        ) === ticker
+                ) ||
+                null
+            );
+
+        }
+
+
+        /* =================================================
+           DEEP INDICATOR LOOKUP
+        ================================================= */
+
+        function deepFindSymbol(
+            data,
+            symbol,
+            depth = 0
+        ) {
+
+            const ticker =
+                normaliseSymbol(
+                    symbol
+                );
+
+
+            if (
+                !ticker ||
+                !data ||
+                depth > 12
+            ) {
+
+                return null;
+
+            }
+
+
+            /* =============================================
+               ARRAY
+            ============================================= */
+
+            if (
+                Array.isArray(
+                    data
+                )
+            ) {
+
+                for (
+                    const item
+                    of data
                 ) {
 
-                    const found =
-                        deepFindSymbol(
-                            value,
-                            ticker,
-                            depth + 1
-                        );
-
-
                     if (
-                        found
+                        item &&
+                        typeof item ===
+                            "object"
                     ) {
 
-                        return found;
+                        const itemSymbol =
+                            normaliseSymbol(
+
+                                item?.symbol ??
+                                item?.ticker ??
+                                item?.stock
+
+                            );
+
+
+                        if (
+                            itemSymbol ===
+                            ticker
+                        ) {
+
+                            return item;
+
+                        }
+
+                    }
+
+                }
+
+
+                for (
+                    const item
+                    of data
+                ) {
+
+                    if (
+                        item &&
+                        typeof item ===
+                            "object"
+                    ) {
+
+                        const found =
+                            deepFindSymbol(
+                                item,
+                                ticker,
+                                depth + 1
+                            );
+
+
+                        if (
+                            found
+                        ) {
+
+                            return found;
+
+                        }
+
+                    }
+
+                }
+
+
+                return null;
+
+            }
+
+
+            /* =============================================
+               OBJECT
+            ============================================= */
+
+            if (
+                typeof data ===
+                    "object"
+            ) {
+
+                for (
+                    const [
+                        key,
+                        value
+                    ]
+                    of Object.entries(
+                        data
+                    )
+                ) {
+
+                    if (
+                        normaliseSymbol(
+                            key
+                        ) === ticker
+                    ) {
+
+                        return value;
+
+                    }
+
+                }
+
+
+                const objectSymbol =
+                    normaliseSymbol(
+
+                        data?.symbol ??
+                        data?.ticker ??
+                        data?.stock
+
+                    );
+
+
+                if (
+                    objectSymbol ===
+                    ticker
+                ) {
+
+                    return data;
+
+                }
+
+
+                for (
+                    const value
+                    of Object.values(
+                        data
+                    )
+                ) {
+
+                    if (
+                        value &&
+                        typeof value ===
+                            "object"
+                    ) {
+
+                        const found =
+                            deepFindSymbol(
+                                value,
+                                ticker,
+                                depth + 1
+                            );
+
+
+                        if (
+                            found
+                        ) {
+
+                            return found;
+
+                        }
 
                     }
 
@@ -39735,696 +39666,673 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 
             }
 
+
+            return null;
+
         }
 
 
-        return null;
+        /* =================================================
+           INDICATOR LOOKUP
+        ================================================= */
 
-    }
-
-
-    /* =====================================================
-       INDICATOR RECORD SEARCH
-
-       Separate helper so we can make this smarter later
-       without touching Smart Money routing.
-    ===================================================== */
-
-    function findIndicatorRecord(
-        symbol
-    ){
-
-        return deepFindSymbol(
-            unlimitedIndicatorHistoryData,
+        function findIndicatorRecord(
             symbol
-        );
+        ) {
 
-    }
-
-
-    /* =====================================================
-       SMART MONEY RECORD SEARCH
-    ===================================================== */
-
-    function findSmartMoneyRecord(
-        symbol
-    ){
-
-        return deepFindSymbol(
-            unlimitedSmartMoneyData,
-            symbol
-        );
-
-    }
-
-
-    /* =====================================================
-       BUILD COMPLETE EDGEBREAK CONTEXT
-    ===================================================== */
-
-    function findEdgeBreakStock(
-        symbol
-    ){
-
-        const ticker =
-            normaliseSymbol(
+            return deepFindSymbol(
+                unlimitedIndicatorHistoryData,
                 symbol
             );
 
-
-        if (
-            !ticker
-        ) {
-
-            return null;
-
         }
 
 
-        /* =============================================
-           CURRENT SCANNER RECORDS
-        ============================================= */
+        /* =================================================
+           BUILD COMPLETE EDGEBREAK STOCK CONTEXT
+        ================================================= */
 
-        const breakout =
-            findCurrentScannerRecord(
-                unlimitedBreakoutData,
-                ticker
-            );
-
-
-        const preBreakout =
-            findCurrentScannerRecord(
-                unlimitedPreBreakoutData,
-                ticker
-            );
-
-
-        const launchPad =
-            findCurrentScannerRecord(
-                unlimitedLaunchPadData,
-                ticker
-            );
-
-
-        /* =============================================
-           SMART MONEY
-        ============================================= */
-
-        const smartMoney =
-            findSmartMoneyRecord(
-                ticker
-            );
-
-
-        /* =============================================
-           INDICATORS / HISTORY
-        ============================================= */
-
-        const indicators =
-            findIndicatorRecord(
-                ticker
-            );
-
-
-        /* =============================================
-           NOTHING FOUND
-        ============================================= */
-
-        if (
-            !breakout &&
-            !preBreakout &&
-            !launchPad &&
-            !smartMoney &&
-            !indicators
+        function findEdgeBreakStock(
+            symbol
         ) {
 
-            return null;
-
-        }
-
-
-        /* =============================================
-           ONE MERGED EDGEBREAK STOCK CONTEXT
-        ============================================= */
-
-        return {
-
-            symbol:
-                ticker,
-
-
-            scanners: {
-
-                breakout:
-                    breakout,
-
-                preBreakout:
-                    preBreakout,
-
-                launchPad:
-                    launchPad
-
-            },
-
-
-            smartMoney:
-                smartMoney,
-
-
-            indicators:
-                indicators
-
-        };
-
-    }
-
-
-    /* =====================================================
-       FIND FIRST CONFIRMED EDGEBREAK TICKER
-    ===================================================== */
-
-    function getEdgeBreakContext(
-        message
-    ){
-
-        if (
-            !unlimitedDataReady
-        ) {
-
-            return null;
-
-        }
-
-
-        const candidates =
-            extractTickerCandidates(
-                message
-            );
-
-
-        console.log(
-            "AI Unlimited ticker candidates:",
-            candidates
-        );
-
-
-        for (
-            const candidate of candidates
-        ) {
-
-            const match =
-                findEdgeBreakStock(
-                    candidate
+            const ticker =
+                normaliseSymbol(
+                    symbol
                 );
 
 
             if (
-                match
+                !ticker
             ) {
 
-                return match;
+                return null;
 
             }
 
+
+            const breakout =
+                findCurrentScannerRecord(
+                    unlimitedBreakoutData,
+                    ticker
+                );
+
+
+            const preBreakout =
+                findCurrentScannerRecord(
+                    unlimitedPreBreakoutData,
+                    ticker
+                );
+
+
+            const launchPad =
+                findCurrentScannerRecord(
+                    unlimitedLaunchPadData,
+                    ticker
+                );
+
+
+            const smartMoney =
+                findSmartMoneyRecord(
+                    ticker
+                );
+
+
+            const indicators =
+                findIndicatorRecord(
+                    ticker
+                );
+
+
+            if (
+                !breakout &&
+                !preBreakout &&
+                !launchPad &&
+                !smartMoney &&
+                !indicators
+            ) {
+
+                return null;
+
+            }
+
+
+            return {
+
+                symbol:
+                    ticker,
+
+
+                scanners: {
+
+                    breakout:
+                        breakout,
+
+                    preBreakout:
+                        preBreakout,
+
+                    launchPad:
+                        launchPad
+
+                },
+
+
+                smartMoney:
+                    smartMoney,
+
+
+                indicators:
+                    indicators
+
+            };
+
         }
 
 
-        return null;
+        /* =================================================
+           EXTRACT POSSIBLE TICKERS
+        ================================================= */
 
-    }
-
-
-    /* =====================================================
-       BUILD HUMAN-READABLE SOURCE LIST
-
-       TESTING ONLY
-    ===================================================== */
-
-    function getContextSources(
-        context
-    ){
-
-        if (
-            !context
+        function extractTickerCandidates(
+            message
         ) {
 
-            return [];
+            const words =
+                String(
+                    message || ""
+                )
+                    .toUpperCase()
+                    .match(
+                        /\b[A-Z][A-Z0-9.-]{0,9}\b/g
+                    ) || [];
+
+
+            const ignored =
+                new Set([
+
+                    "A",
+                    "I",
+                    "AI",
+
+                    "THE",
+                    "WHAT",
+                    "WHATS",
+                    "DOES",
+                    "KNOW",
+                    "ABOUT",
+
+                    "IS",
+                    "ARE",
+                    "WAS",
+                    "WERE",
+
+                    "WHY",
+                    "HOW",
+                    "WHEN",
+                    "WHERE",
+
+                    "DID",
+                    "DO",
+                    "HAS",
+                    "HAVE",
+
+                    "MY",
+                    "ME",
+                    "FOR",
+
+                    "THIS",
+                    "THAT",
+
+                    "STOCK",
+                    "STOCKS",
+
+                    "PRICE",
+                    "TODAY",
+
+                    "EDGE",
+                    "BREAK",
+                    "EDGEBREAK",
+
+                    "NASDAQ",
+
+                    "RSI",
+                    "MACD",
+                    "SMA",
+                    "EMA",
+                    "ATR",
+                    "OBV"
+
+                ]);
+
+
+            return [
+                ...new Set(
+
+                    words.filter(
+                        word =>
+                            !ignored.has(
+                                word
+                            )
+                    )
+
+                )
+            ];
 
         }
 
 
-        const sources = [];
+        /* =================================================
+           FIND FIRST CONFIRMED EDGEBREAK STOCK
+        ================================================= */
 
-
-        if (
-            context
-                ?.scanners
-                ?.breakout
+        function getEdgeBreakContext(
+            message
         ) {
 
-            sources.push(
-                "Breakout"
-            );
+            if (
+                !unlimitedDataReady
+            ) {
 
-        }
+                return null;
 
-
-        if (
-            context
-                ?.scanners
-                ?.preBreakout
-        ) {
-
-            sources.push(
-                "Pre-Breakout"
-            );
-
-        }
+            }
 
 
-        if (
-            context
-                ?.scanners
-                ?.launchPad
-        ) {
-
-            sources.push(
-                "Launch Pad"
-            );
-
-        }
-
-
-        if (
-            context?.smartMoney
-        ) {
-
-            sources.push(
-                "Smart Money"
-            );
-
-        }
-
-
-        if (
-            context?.indicators
-        ) {
-
-            sources.push(
-                "Indicators"
-            );
-
-        }
-
-
-        return sources;
-
-    }
-
-
-    /* =====================================================
-       ASK AI UNLIMITED
-    ===================================================== */
-
-    async function askUnlimited(){
-
-        const message =
-            input.value.trim();
-
-
-        if (
-            !message
-        ) {
-
-            return;
-
-        }
-
-
-        button.disabled =
-            true;
-
-
-        button.textContent =
-            "Thinking...";
-
-
-        answer.style.display =
-            "block";
-
-
-        answer.textContent =
-            "EdgeBreak AI is thinking...";
-
-
-        try {
-
-            /* =============================================
-               BUILD EDGEBREAK CONTEXT
-            ============================================= */
-
-            const edgeBreakContext =
-                getEdgeBreakContext(
+            const candidates =
+                extractTickerCandidates(
                     message
                 );
 
 
             console.log(
-                "AI Unlimited complete EdgeBreak context:",
-                edgeBreakContext
+                "AI Unlimited ticker candidates:",
+                candidates
             );
 
 
-            /* =============================================
-               TEST STATUS
-            ============================================= */
-
-            if (
-                edgeBreakContext?.symbol
+            for (
+                const candidate
+                of candidates
             ) {
 
-                const sources =
-                    getContextSources(
-                        edgeBreakContext
+                const match =
+                    findEdgeBreakStock(
+                        candidate
                     );
 
 
-                status.className =
-                    "ready";
+                if (
+                    match
+                ) {
 
+                    return match;
 
-                status.textContent =
-                    `${edgeBreakContext.symbol} EdgeBreak data: ` +
-                    (
-                        sources.length
-                            ? sources.join(
-                                " + "
-                            )
-                            : "record found"
-                    );
-
-            }
-            else {
-
-                status.className =
-                    "ready";
-
-
-                status.textContent =
-                    "No matching EdgeBreak stock data found — sending question without stock context.";
+                }
 
             }
 
 
-            /* =============================================
-               SEND TO AI UNLIMITED
-            ============================================= */
+            return null;
 
-            const response =
-                await fetch(
-                    "/api/ai-unlimited",
-                    {
+        }
 
-                        method:
-                            "POST",
 
-                        headers: {
+        /* =================================================
+           SOURCE LIST
+        ================================================= */
 
-                            "Content-Type":
-                                "application/json"
+        function getContextSources(
+            context
+        ) {
 
-                        },
+            if (
+                !context
+            ) {
 
-                        body:
-                            JSON.stringify({
+                return [];
 
-                                message:
-                                    message,
+            }
 
-                                edgeBreakContext:
-                                    edgeBreakContext
 
-                            })
+            const sources =
+                [];
 
-                    }
+
+            if (
+                context
+                    ?.scanners
+                    ?.breakout
+            ) {
+
+                sources.push(
+                    "Breakout"
                 );
 
+            }
 
-            let data;
+
+            if (
+                context
+                    ?.scanners
+                    ?.preBreakout
+            ) {
+
+                sources.push(
+                    "Pre-Breakout"
+                );
+
+            }
+
+
+            if (
+                context
+                    ?.scanners
+                    ?.launchPad
+            ) {
+
+                sources.push(
+                    "Launch Pad"
+                );
+
+            }
+
+
+            if (
+                context?.smartMoney
+            ) {
+
+                sources.push(
+                    "Smart Money"
+                );
+
+            }
+
+
+            if (
+                context?.indicators
+            ) {
+
+                sources.push(
+                    "Indicators"
+                );
+
+            }
+
+
+            return sources;
+
+        }
+
+
+        /* =================================================
+           ASK AI UNLIMITED
+        ================================================= */
+
+        async function askUnlimited() {
+
+            const message =
+                input.value.trim();
+
+
+            if (
+                !message
+            ) {
+
+                return;
+
+            }
+
+
+            button.disabled =
+                true;
+
+
+            button.textContent =
+                "Thinking...";
+
+
+            answer.style.display =
+                "block";
+
+
+            answer.textContent =
+                "EdgeBreak AI is thinking...";
 
 
             try {
 
-                data =
-                    await response.json();
+                /* =========================================
+                   EDGEBREAK CONTEXT
+                ========================================= */
 
-            }
-            catch {
+                const edgeBreakContext =
+                    getEdgeBreakContext(
+                        message
+                    );
 
-                throw new Error(
-                    "AI Unlimited returned an invalid response."
+
+                console.log(
+                    "AI Unlimited complete EdgeBreak context:",
+                    edgeBreakContext
                 );
 
+
+                /* =========================================
+                   STATUS
+                ========================================= */
+
+                if (
+                    edgeBreakContext
+                        ?.symbol
+                ) {
+
+                    const sources =
+                        getContextSources(
+                            edgeBreakContext
+                        );
+
+
+                    status.textContent =
+                        `${edgeBreakContext.symbol} · ` +
+                        (
+                            sources.length
+                                ? sources.join(
+                                    " + "
+                                )
+                                : "EdgeBreak data found"
+                        );
+
+
+                    status.style.color =
+                        "#22c55e";
+
+                }
+                else {
+
+                    status.textContent =
+                        "No matching EdgeBreak scanner data — AI research available.";
+
+
+                    status.style.color =
+                        "#64748b";
+
+                }
+
+
+                /* =========================================
+                   API
+                ========================================= */
+
+                const response =
+                    await fetch(
+                        "/api/ai-unlimited",
+                        {
+
+                            method:
+                                "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    message:
+                                        message,
+
+                                    edgeBreakContext:
+                                        edgeBreakContext
+
+                                })
+
+                        }
+                    );
+
+
+                let data;
+
+
+                try {
+
+                    data =
+                        await response.json();
+
+                }
+                catch {
+
+                    throw new Error(
+                        "AI Unlimited returned an invalid response."
+                    );
+
+                }
+
+
+                if (
+                    !response.ok
+                ) {
+
+                    throw new Error(
+                        data?.error ||
+                        "AI Unlimited request failed."
+                    );
+
+                }
+
+
+                if (
+                    !data?.answer
+                ) {
+
+                    throw new Error(
+                        "AI Unlimited returned no answer."
+                    );
+
+                }
+
+
+                answer.textContent =
+                    data.answer;
+
             }
-
-
-            if (
-                !response.ok
-            ) {
-
-                throw new Error(
-                    data?.error ||
-                    "AI Unlimited request failed."
-                );
-
-            }
-
-
-            if (
-                !data?.answer
-            ) {
-
-                throw new Error(
-                    "AI Unlimited returned no answer."
-                );
-
-            }
-
-
-            answer.textContent =
-                data.answer;
-
-        }
-        catch (
-            error
-        ) {
-
-            console.error(
-                "AI Unlimited Test Error:",
+            catch (
                 error
-            );
-
-
-            answer.textContent =
-                "Error: " +
-                (
-                    error?.message ||
-                    "Unable to reach AI Unlimited."
-                );
-
-        }
-        finally {
-
-            button.disabled =
-                false;
-
-
-            button.textContent =
-                "Ask";
-
-        }
-
-    }
-
-
-    /* =====================================================
-       EVENTS
-    ===================================================== */
-
-    button.addEventListener(
-        "click",
-        askUnlimited
-    );
-
-
-    input.addEventListener(
-        "keydown",
-        function(
-            event
-        ){
-
-            if (
-                event.key ===
-                "Enter"
             ) {
 
-                event.preventDefault();
+                console.error(
+                    "AI Unlimited Error:",
+                    error
+                );
 
-                askUnlimited();
+
+                answer.textContent =
+                    "Error: " +
+                    (
+                        error?.message ||
+                        "Unable to reach AI Unlimited."
+                    );
+
+            }
+            finally {
+
+                button.disabled =
+                    false;
+
+
+                button.textContent =
+                    "Ask EdgeBreak";
 
             }
 
         }
-    );
 
 
-    /* =====================================================
-       START
-    ===================================================== */
+        /* =================================================
+           MODE SWITCH — GUIDED AI
+        ================================================= */
 
-    loadUnlimitedData();
+        guidedBtn.addEventListener(
+            "click",
+            () => {
 
-})();
+                guidedBtn.classList.add(
+                    "active"
+                );
 
-</script>
 
-<script>
-/* =========================================
-   EDGEBREAK AI MODE SWITCH
-========================================= */
+                unlimitedBtn.classList.remove(
+                    "active"
+                );
 
-document.addEventListener("DOMContentLoaded", () => {
 
-    const guidedBtn =
-        document.getElementById("edgeAIGuidedMode");
+                guidedContent.style.display =
+                    "";
 
-    const unlimitedBtn =
-        document.getElementById("edgeAIUnlimitedMode");
 
-    const guidedContent =
-        document.querySelector(".edge-chat-intro");
+                unlimitedContent.style.display =
+                    "none";
 
-    if (
-        !guidedBtn ||
-        !unlimitedBtn ||
-        !guidedContent
-    ) {
-        console.warn(
-            "EdgeBreak AI mode switch elements not found."
+            }
         );
-        return;
+
+
+        /* =================================================
+           MODE SWITCH — AI UNLIMITED
+        ================================================= */
+
+        unlimitedBtn.addEventListener(
+            "click",
+            () => {
+
+                unlimitedBtn.classList.add(
+                    "active"
+                );
+
+
+                guidedBtn.classList.remove(
+                    "active"
+                );
+
+
+                guidedContent.style.display =
+                    "none";
+
+
+                unlimitedContent.style.display =
+                    "";
+
+            }
+        );
+
+
+        /* =================================================
+           ASK BUTTON
+        ================================================= */
+
+        button.addEventListener(
+            "click",
+            askUnlimited
+        );
+
+
+        /* =================================================
+           ENTER TO SEND
+
+           Shift + Enter still allows a new line.
+        ================================================= */
+
+        input.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key ===
+                        "Enter" &&
+                    !event.shiftKey
+                ) {
+
+                    event.preventDefault();
+
+                    askUnlimited();
+
+                }
+
+            }
+        );
+
+
+        /* =================================================
+           START
+        ================================================= */
+
+        loadUnlimitedData();
+
     }
+);
 
-
-    /* =====================================
-       UNLIMITED CONTENT
-    ====================================== */
-
-    const unlimitedContent =
-        document.createElement("div");
-
-    unlimitedContent.id =
-        "edgeAIUnlimitedContent";
-
-    unlimitedContent.style.display =
-        "none";
-
-    unlimitedContent.innerHTML = `
-
-        <div class="edge-ai-unlimited-intro">
-
-            <div class="edge-ai-unlimited-icon">
-                ✦
-            </div>
-
-            <h3>
-                AI Unlimited
-            </h3>
-
-            <p>
-                Ask EdgeBreak anything about a NASDAQ stock,
-                trading concept or market question.
-            </p>
-
-            <textarea
-                id="edgeAIUnlimitedQuestion"
-                placeholder="Example: What does EdgeBreak know about CTRM?"
-                rows="4"
-            ></textarea>
-
-            <button
-                type="button"
-                id="edgeAIUnlimitedAsk"
-                class="edge-ai-unlimited-ask"
-            >
-                Ask EdgeBreak
-            </button>
-
-        </div>
-
-    `;
-
-
-    /* Put Unlimited immediately after Guided content */
-
-    guidedContent.insertAdjacentElement(
-        "afterend",
-        unlimitedContent
-    );
-
-
-    /* =====================================
-       GUIDED MODE
-    ====================================== */
-
-    guidedBtn.addEventListener(
-        "click",
-        () => {
-
-            guidedBtn.classList.add(
-                "active"
-            );
-
-            unlimitedBtn.classList.remove(
-                "active"
-            );
-
-            guidedContent.style.display =
-                "";
-
-            unlimitedContent.style.display =
-                "none";
-
-        }
-    );
-
-
-    /* =====================================
-       UNLIMITED MODE
-    ====================================== */
-
-    unlimitedBtn.addEventListener(
-        "click",
-        () => {
-
-            unlimitedBtn.classList.add(
-                "active"
-            );
-
-            guidedBtn.classList.remove(
-                "active"
-            );
-
-            guidedContent.style.display =
-                "none";
-
-            unlimitedContent.style.display =
-                "";
-
-        }
-    );
-
-});
 </script>
 
 <!-- COMPONENTS -->
