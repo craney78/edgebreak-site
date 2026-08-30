@@ -38698,6 +38698,14 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 /* =========================================================
    EDGEBREAK AI UNLIMITED
    SIDE PANEL INTEGRATION
+
+   PHASE 6
+
+   - EdgeBreak stock context
+   - Rolling conversation memory
+   - Approx. 1,500 word memory budget
+   - Oldest complete exchanges removed first
+   - Safer EdgeBreak ticker matching
 ========================================================= */
 
 document.addEventListener(
@@ -38783,7 +38791,7 @@ document.addEventListener(
 
                 <textarea
                     id="edgeAIUnlimitedQuestion"
-                    placeholder="Example: What does EdgeBreak know about CTRM?"
+                    placeholder="Ask a stock, trading or market question..."
                     rows="4"
                 ></textarea>
 
@@ -38831,15 +38839,16 @@ document.addEventListener(
 
         `;
 
-        
+
         /* =================================================
-        PLACE AI UNLIMITED AS ITS OWN MODE
+           PLACE AI UNLIMITED AS ITS OWN MODE
         ================================================= */
 
         const chatConversation =
             document.getElementById(
                 "edgeBreakChatConversation"
             );
+
 
         if (
             !chatConversation
@@ -38852,6 +38861,7 @@ document.addEventListener(
             return;
 
         }
+
 
         chatConversation.insertAdjacentElement(
             "afterend",
@@ -38885,6 +38895,250 @@ document.addEventListener(
             document.getElementById(
                 "edgeAIUnlimitedStatus"
             );
+
+
+        /* =================================================
+           CONVERSATION MEMORY
+
+           Memory exists only while this page/session
+           remains open.
+
+           We retain recent user + assistant turns.
+
+           Once the memory grows beyond the approximate
+           word budget, the oldest COMPLETE exchange is
+           removed first.
+        ================================================= */
+
+        const UNLIMITED_MEMORY_WORD_LIMIT =
+            1500;
+
+
+        let unlimitedConversationMemory =
+            [];
+
+
+        /* =================================================
+           COUNT WORDS
+        ================================================= */
+
+        function countWords(
+            value
+        ) {
+
+            const text =
+                String(
+                    value || ""
+                )
+                    .trim();
+
+
+            if (
+                !text
+            ) {
+
+                return 0;
+
+            }
+
+
+            return text
+                .split(
+                    /\s+/
+                )
+                .filter(
+                    Boolean
+                )
+                .length;
+
+        }
+
+
+        /* =================================================
+           MEMORY WORD COUNT
+        ================================================= */
+
+        function getConversationMemoryWordCount() {
+
+            return unlimitedConversationMemory
+                .reduce(
+                    (
+                        total,
+                        turn
+                    ) => {
+
+                        return (
+                            total +
+                            countWords(
+                                turn?.text
+                            )
+                        );
+
+                    },
+                    0
+                );
+
+        }
+
+
+        /* =================================================
+           TRIM CONVERSATION MEMORY
+
+           Memory is stored as complete exchanges:
+
+           user
+           assistant
+           user
+           assistant
+
+           Remove the oldest user + assistant pair
+           whenever possible.
+        ================================================= */
+
+        function trimConversationMemory() {
+
+            while (
+                getConversationMemoryWordCount() >
+                    UNLIMITED_MEMORY_WORD_LIMIT &&
+                unlimitedConversationMemory.length >
+                    2
+            ) {
+
+                /* =========================================
+                   REMOVE OLDEST COMPLETE EXCHANGE
+                ========================================= */
+
+                if (
+                    unlimitedConversationMemory[0]
+                        ?.role === "user" &&
+                    unlimitedConversationMemory[1]
+                        ?.role === "assistant"
+                ) {
+
+                    unlimitedConversationMemory.splice(
+                        0,
+                        2
+                    );
+
+                }
+                else {
+
+                    /* =====================================
+                       SAFETY FALLBACK
+
+                       If memory ever becomes misaligned,
+                       remove the oldest turn.
+                    ===================================== */
+
+                    unlimitedConversationMemory.shift();
+
+                }
+
+            }
+
+
+            console.log(
+                "AI Unlimited memory:",
+                {
+
+                    turns:
+                        unlimitedConversationMemory.length,
+
+                    words:
+                        getConversationMemoryWordCount()
+
+                }
+            );
+
+        }
+
+
+        /* =================================================
+           ADD COMPLETE EXCHANGE TO MEMORY
+        ================================================= */
+
+        function rememberExchange(
+            userMessage,
+            assistantAnswer
+        ) {
+
+            const cleanUserMessage =
+                String(
+                    userMessage || ""
+                )
+                    .trim();
+
+
+            const cleanAssistantAnswer =
+                String(
+                    assistantAnswer || ""
+                )
+                    .trim();
+
+
+            if (
+                !cleanUserMessage ||
+                !cleanAssistantAnswer
+            ) {
+
+                return;
+
+            }
+
+
+            unlimitedConversationMemory.push({
+
+                role:
+                    "user",
+
+                text:
+                    cleanUserMessage
+
+            });
+
+
+            unlimitedConversationMemory.push({
+
+                role:
+                    "assistant",
+
+                text:
+                    cleanAssistantAnswer
+
+            });
+
+
+            trimConversationMemory();
+
+        }
+
+
+        /* =================================================
+           GET MEMORY FOR API
+
+           Return a fresh copy so the current memory
+           cannot be mutated accidentally by other code.
+        ================================================= */
+
+        function getConversationMemoryForApi() {
+
+            trimConversationMemory();
+
+
+            return unlimitedConversationMemory
+                .map(
+                    turn => ({
+
+                        role:
+                            turn.role,
+
+                        text:
+                            turn.text
+
+                    })
+                );
+
+        }
 
 
         /* =================================================
@@ -39148,16 +39402,6 @@ document.addEventListener(
 
                 /* =========================================
                    SMART MONEY
-
-                   Actual file structure is a flat array:
-                   [
-                       {
-                           symbol,
-                           count,
-                           last_seen,
-                           appearances:[]
-                       }
-                   ]
                 ========================================= */
 
                 unlimitedSmartMoneyData =
@@ -39177,8 +39421,6 @@ document.addEventListener(
 
                 /* =========================================
                    INDICATOR HISTORY
-
-                   Keep the complete structure intact.
                 ========================================= */
 
                 unlimitedIndicatorHistoryData =
@@ -39289,9 +39531,6 @@ document.addEventListener(
 
         /* =================================================
            SMART MONEY LOOKUP
-
-           Exact lookup based on the actual Smart Money
-           JSON structure.
         ================================================= */
 
         function findSmartMoneyRecord(
@@ -39649,7 +39888,82 @@ document.addEventListener(
 
 
         /* =================================================
-           EXTRACT POSSIBLE TICKERS
+           KNOWN EDGEBREAK SYMBOLS
+
+           Use actual symbols from EdgeBreak data rather
+           than allowing ordinary English words such as
+           RESISTANCE to be mistaken for tickers.
+        ================================================= */
+
+        function getKnownEdgeBreakSymbols() {
+
+            const symbols =
+                new Set();
+
+
+            [
+
+                unlimitedBreakoutData,
+
+                unlimitedPreBreakoutData,
+
+                unlimitedLaunchPadData,
+
+                unlimitedSmartMoneyData
+
+            ].forEach(
+                data => {
+
+                    if (
+                        !Array.isArray(
+                            data
+                        )
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    data.forEach(
+                        record => {
+
+                            const symbol =
+                                normaliseSymbol(
+                                    record?.symbol
+                                );
+
+
+                            if (
+                                symbol
+                            ) {
+
+                                symbols.add(
+                                    symbol
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+
+            return symbols;
+
+        }
+
+
+        /* =================================================
+           EXTRACT CONFIRMED EDGEBREAK TICKERS
+
+           This lookup is ONLY for deciding whether current
+           EdgeBreak scanner context should be attached.
+
+           Gemini can still research stocks that are not
+           present in EdgeBreak's current data.
         ================================================= */
 
         function extractTickerCandidates(
@@ -39666,62 +39980,8 @@ document.addEventListener(
                     ) || [];
 
 
-            const ignored =
-                new Set([
-
-                    "A",
-                    "I",
-                    "AI",
-
-                    "THE",
-                    "WHAT",
-                    "WHATS",
-                    "DOES",
-                    "KNOW",
-                    "ABOUT",
-
-                    "IS",
-                    "ARE",
-                    "WAS",
-                    "WERE",
-
-                    "WHY",
-                    "HOW",
-                    "WHEN",
-                    "WHERE",
-
-                    "DID",
-                    "DO",
-                    "HAS",
-                    "HAVE",
-
-                    "MY",
-                    "ME",
-                    "FOR",
-
-                    "THIS",
-                    "THAT",
-
-                    "STOCK",
-                    "STOCKS",
-
-                    "PRICE",
-                    "TODAY",
-
-                    "EDGE",
-                    "BREAK",
-                    "EDGEBREAK",
-
-                    "NASDAQ",
-
-                    "RSI",
-                    "MACD",
-                    "SMA",
-                    "EMA",
-                    "ATR",
-                    "OBV"
-
-                ]);
+            const knownSymbols =
+                getKnownEdgeBreakSymbols();
 
 
             return [
@@ -39729,8 +39989,10 @@ document.addEventListener(
 
                     words.filter(
                         word =>
-                            !ignored.has(
-                                word
+                            knownSymbols.has(
+                                normaliseSymbol(
+                                    word
+                                )
                             )
                     )
 
@@ -39764,7 +40026,7 @@ document.addEventListener(
 
 
             console.log(
-                "AI Unlimited ticker candidates:",
+                "AI Unlimited confirmed EdgeBreak ticker candidates:",
                 candidates
             );
 
@@ -39884,6 +40146,87 @@ document.addEventListener(
 
 
         /* =================================================
+           FORMAT AI ANSWER
+        ================================================= */
+
+        function escapeHtml(
+            value
+        ) {
+
+            return String(
+                value || ""
+            )
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        function formatUnlimitedAnswer(
+            value
+        ) {
+
+            let formatted =
+                escapeHtml(
+                    value
+                );
+
+
+            /* =============================================
+               **BOLD**
+            ============================================= */
+
+            formatted =
+                formatted.replace(
+                    /\*\*(.+?)\*\*/g,
+                    "<strong>$1</strong>"
+                );
+
+
+            /* =============================================
+               PARAGRAPH / LINE BREAKS
+            ============================================= */
+
+            formatted =
+                formatted.replace(
+                    /\n\n+/g,
+                    "</p><p>"
+                );
+
+
+            formatted =
+                formatted.replace(
+                    /\n/g,
+                    "<br>"
+                );
+
+
+            return (
+                `<p>${formatted}</p>`
+            );
+
+        }
+
+
+        /* =================================================
            ASK AI UNLIMITED
         ================================================= */
 
@@ -39979,6 +40322,17 @@ document.addEventListener(
 
 
                 /* =========================================
+                   GET MEMORY BEFORE ADDING CURRENT QUESTION
+
+                   The current question is sent separately,
+                   so it must NOT already be inside history.
+                ========================================= */
+
+                const conversationHistory =
+                    getConversationMemoryForApi();
+
+
+                /* =========================================
                    API
                 ========================================= */
 
@@ -40002,6 +40356,9 @@ document.addEventListener(
 
                                     message:
                                         message,
+
+                                    conversationHistory:
+                                        conversationHistory,
 
                                     edgeBreakContext:
                                         edgeBreakContext
@@ -40053,49 +40410,22 @@ document.addEventListener(
                 }
 
 
-                /* =================================================
-                FORMAT AI ANSWER
-                ================================================= */
+                /* =========================================
+                   REMEMBER SUCCESSFUL EXCHANGE
 
-                function escapeHtml(value) {
+                   Failed requests are deliberately NOT
+                   added to conversation memory.
+                ========================================= */
 
-                    return String(value || "")
-                        .replace(/&/g, "&amp;")
-                        .replace(/</g, "&lt;")
-                        .replace(/>/g, "&gt;")
-                        .replace(/"/g, "&quot;")
-                        .replace(/'/g, "&#039;");
+                rememberExchange(
+                    message,
+                    data.answer
+                );
 
-                }
 
-                function formatUnlimitedAnswer(value) {
-
-                    let formatted =
-                        escapeHtml(value);
-
-                    /* **bold** */
-                    formatted =
-                        formatted.replace(
-                            /\*\*(.+?)\*\*/g,
-                            "<strong>$1</strong>"
-                        );
-
-                    /* paragraph / line breaks */
-                    formatted =
-                        formatted.replace(
-                            /\n\n+/g,
-                            "</p><p>"
-                        );
-
-                    formatted =
-                        formatted.replace(
-                            /\n/g,
-                            "<br>"
-                        );
-
-                    return `<p>${formatted}</p>`;
-
-                }
+                /* =========================================
+                   DISPLAY ANSWER
+                ========================================= */
 
                 answer.innerHTML =
                     formatUnlimitedAnswer(
@@ -40103,14 +40433,29 @@ document.addEventListener(
                     );
 
 
-                /* Scroll the answer into view */
+                /* =========================================
+                   CLEAR INPUT AFTER SUCCESS
+                ========================================= */
+
+                input.value =
+                    "";
+
+
+                /* =========================================
+                   SCROLL ANSWER INTO VIEW
+                ========================================= */
 
                 requestAnimationFrame(
                     () => {
 
                         answer.scrollIntoView({
-                            behavior: "smooth",
-                            block: "nearest"
+
+                            behavior:
+                                "smooth",
+
+                            block:
+                                "nearest"
+
                         });
 
                     }
@@ -40150,7 +40495,7 @@ document.addEventListener(
 
 
         /* =================================================
-        MODE SWITCH — GUIDED AI
+           MODE SWITCH — GUIDED AI
         ================================================= */
 
         guidedBtn.addEventListener(
@@ -40161,15 +40506,19 @@ document.addEventListener(
                     "active"
                 );
 
+
                 unlimitedBtn.classList.remove(
                     "active"
                 );
 
+
                 guidedContent.style.display =
                     "";
 
+
                 guidedConversation.style.display =
                     "";
+
 
                 unlimitedContent.style.display =
                     "none";
@@ -40177,8 +40526,9 @@ document.addEventListener(
             }
         );
 
+
         /* =================================================
-        MODE SWITCH — AI UNLIMITED
+           MODE SWITCH — AI UNLIMITED
         ================================================= */
 
         unlimitedBtn.addEventListener(
@@ -40189,25 +40539,28 @@ document.addEventListener(
                     "active"
                 );
 
+
                 guidedBtn.classList.remove(
                     "active"
                 );
 
+
                 guidedContent.style.display =
                     "none";
+
 
                 guidedConversation.style.display =
                     "none";
 
+
                 unlimitedContent.style.display =
                     "";
+
 
                 input.focus();
 
             }
         );
-
-                           
 
 
         /* =================================================
@@ -40237,6 +40590,7 @@ document.addEventListener(
                 ) {
 
                     event.preventDefault();
+
 
                     askUnlimited();
 
