@@ -38481,7 +38481,8 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 
 <!-- =========================================================
      EDGEBREAK AI UNLIMITED
-     PHASE 1 TEST FRONTEND
+     PHASE 2 TEST FRONTEND
+     SCANNER DATA ROUTING TEST
 ========================================================= -->
 
 <style>
@@ -38567,6 +38568,23 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
     cursor:not-allowed;
 }
 
+#edgeUnlimitedTestStatus{
+    margin-top:10px;
+
+    color:#64748b;
+
+    font-size:11px;
+    line-height:1.4;
+}
+
+#edgeUnlimitedTestStatus.ready{
+    color:#22c55e;
+}
+
+#edgeUnlimitedTestStatus.error{
+    color:#f87171;
+}
+
 #edgeUnlimitedTestAnswer{
     display:none;
 
@@ -38583,6 +38601,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
     line-height:1.65;
 
     white-space:pre-wrap;
+
+    max-height:330px;
+    overflow-y:auto;
 }
 
 </style>
@@ -38595,7 +38616,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
     </h3>
 
     <p>
-        Phase 1 — direct Gemini connection test.
+        Phase 2 — EdgeBreak scanner routing test.
     </p>
 
     <div class="edge-unlimited-test-row">
@@ -38603,8 +38624,8 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
         <input
             id="edgeUnlimitedTestInput"
             type="text"
-            value="What is RSI?"
-            placeholder="Ask a question..."
+            value="What does EdgeBreak know about CTRM?"
+            placeholder="Ask about a NASDAQ stock..."
             autocomplete="off"
         >
 
@@ -38615,6 +38636,10 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
             Ask
         </button>
 
+    </div>
+
+    <div id="edgeUnlimitedTestStatus">
+        Loading EdgeBreak scanner data...
     </div>
 
     <div id="edgeUnlimitedTestAnswer"></div>
@@ -38641,11 +38666,17 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
             "edgeUnlimitedTestAnswer"
         );
 
+    const status =
+        document.getElementById(
+            "edgeUnlimitedTestStatus"
+        );
+
 
     if (
         !input ||
         !button ||
-        !answer
+        !answer ||
+        !status
     ) {
 
         console.warn(
@@ -38657,6 +38688,459 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
     }
 
 
+    /* =====================================================
+       SCANNER DATA
+    ===================================================== */
+
+    let unlimitedBreakoutData = [];
+    let unlimitedPreBreakoutData = [];
+    let unlimitedLaunchPadData = [];
+
+    let unlimitedScannerDataReady = false;
+
+
+    /* =====================================================
+       LOAD JSON
+    ===================================================== */
+
+    async function loadJsonFile(
+        url
+    ){
+
+        const response =
+            await fetch(
+                url,
+                {
+                    cache:
+                        "no-store"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `${url} returned ${response.status}`
+            );
+
+        }
+
+
+        return await response.json();
+
+    }
+
+
+    /* =====================================================
+       NORMALISE POSSIBLE JSON WRAPPERS
+
+       This keeps the test tolerant if a scanner file
+       contains an array directly OR wraps the array in
+       an object.
+    ===================================================== */
+
+    function findArray(
+        data,
+        preferredKeys = []
+    ){
+
+        if (
+            Array.isArray(data)
+        ) {
+
+            return data;
+
+        }
+
+
+        if (
+            !data ||
+            typeof data !== "object"
+        ) {
+
+            return [];
+
+        }
+
+
+        for (
+            const key of preferredKeys
+        ) {
+
+            if (
+                Array.isArray(
+                    data[key]
+                )
+            ) {
+
+                return data[key];
+
+            }
+
+        }
+
+
+        for (
+            const value of Object.values(
+                data
+            )
+        ) {
+
+            if (
+                Array.isArray(value)
+            ) {
+
+                return value;
+
+            }
+
+        }
+
+
+        return [];
+
+    }
+
+
+    /* =====================================================
+       LOAD ALL THREE CURRENT SCANNERS
+    ===================================================== */
+
+    async function loadUnlimitedScannerData(){
+
+        try {
+
+            status.className = "";
+
+            status.textContent =
+                "Loading EdgeBreak scanner data...";
+
+
+            const [
+                breakoutRaw,
+                preBreakoutRaw,
+                launchPadRaw
+            ] =
+                await Promise.all([
+
+                    loadJsonFile(
+                        "/breakout_scanner.json"
+                    ),
+
+                    loadJsonFile(
+                        "/scanner_database.json"
+                    ),
+
+                    loadJsonFile(
+                        "/launchpad_database.json"
+                    )
+
+                ]);
+
+
+            unlimitedBreakoutData =
+                findArray(
+                    breakoutRaw,
+                    [
+                        "stocks",
+                        "results",
+                        "scanner_data",
+                        "data"
+                    ]
+                );
+
+
+            unlimitedPreBreakoutData =
+                findArray(
+                    preBreakoutRaw,
+                    [
+                        "stocks",
+                        "results",
+                        "scanner_data",
+                        "data"
+                    ]
+                );
+
+
+            unlimitedLaunchPadData =
+                findArray(
+                    launchPadRaw,
+                    [
+                        "stocks",
+                        "results",
+                        "scanner_data",
+                        "data"
+                    ]
+                );
+
+
+            unlimitedScannerDataReady =
+                true;
+
+
+            status.className =
+                "ready";
+
+
+            status.textContent =
+                "EdgeBreak data loaded — " +
+
+                `${unlimitedBreakoutData.length} Breakout · ` +
+
+                `${unlimitedPreBreakoutData.length} Pre-Breakout · ` +
+
+                `${unlimitedLaunchPadData.length} Launch Pad`;
+
+
+            console.log(
+                "AI Unlimited scanner data loaded:",
+                {
+                    breakout:
+                        unlimitedBreakoutData.length,
+
+                    preBreakout:
+                        unlimitedPreBreakoutData.length,
+
+                    launchPad:
+                        unlimitedLaunchPadData.length
+                }
+            );
+
+        }
+        catch (
+            error
+        ) {
+
+            unlimitedScannerDataReady =
+                false;
+
+
+            status.className =
+                "error";
+
+
+            status.textContent =
+                "Could not load EdgeBreak scanner data.";
+
+
+            console.error(
+                "AI Unlimited scanner load error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       TICKER EXTRACTION
+
+       For this first test we look for ticker-like words
+       in the user's question and confirm them against
+       EdgeBreak's actual current scanner results.
+    ===================================================== */
+
+    function extractTickerCandidates(
+        message
+    ){
+
+        const words =
+            String(
+                message || ""
+            )
+                .toUpperCase()
+                .match(
+                    /\b[A-Z]{1,5}\b/g
+                ) || [];
+
+
+        const ignored =
+            new Set([
+
+                "A",
+                "I",
+                "AI",
+                "THE",
+                "WHAT",
+                "DOES",
+                "KNOW",
+                "ABOUT",
+                "IS",
+                "ARE",
+                "WHY",
+                "HOW",
+                "DID",
+                "DO",
+                "MY",
+                "ME",
+                "FOR",
+                "THIS",
+                "THAT",
+                "STOCK",
+                "PRICE",
+                "TODAY",
+                "EDGE",
+                "BREAK"
+
+            ]);
+
+
+        return [
+            ...new Set(
+                words.filter(
+                    word =>
+                        !ignored.has(
+                            word
+                        )
+                )
+            )
+        ];
+
+    }
+
+
+    /* =====================================================
+       FIND STOCK IN CURRENT EDGEBREAK SCANNERS
+    ===================================================== */
+
+    function findScannerStock(
+        symbol
+    ){
+
+        const ticker =
+            String(
+                symbol || ""
+            )
+                .trim()
+                .toUpperCase();
+
+
+        if (!ticker) {
+
+            return null;
+
+        }
+
+
+        const breakout =
+            unlimitedBreakoutData.find(
+                stock =>
+                    String(
+                        stock?.symbol || ""
+                    )
+                        .toUpperCase() ===
+                    ticker
+            ) || null;
+
+
+        const preBreakout =
+            unlimitedPreBreakoutData.find(
+                stock =>
+                    String(
+                        stock?.symbol || ""
+                    )
+                        .toUpperCase() ===
+                    ticker
+            ) || null;
+
+
+        const launchPad =
+            unlimitedLaunchPadData.find(
+                stock =>
+                    String(
+                        stock?.symbol || ""
+                    )
+                        .toUpperCase() ===
+                    ticker
+            ) || null;
+
+
+        if (
+            !breakout &&
+            !preBreakout &&
+            !launchPad
+        ) {
+
+            return null;
+
+        }
+
+
+        return {
+
+            symbol:
+                ticker,
+
+            scanners: {
+
+                breakout:
+                    breakout,
+
+                preBreakout:
+                    preBreakout,
+
+                launchPad:
+                    launchPad
+
+            }
+
+        };
+
+    }
+
+
+    /* =====================================================
+       FIND FIRST CONFIRMED EDGEBREAK TICKER
+    ===================================================== */
+
+    function getEdgeBreakContext(
+        message
+    ){
+
+        if (
+            !unlimitedScannerDataReady
+        ) {
+
+            return null;
+
+        }
+
+
+        const candidates =
+            extractTickerCandidates(
+                message
+            );
+
+
+        for (
+            const candidate of candidates
+        ) {
+
+            const match =
+                findScannerStock(
+                    candidate
+                );
+
+
+            if (match) {
+
+                return match;
+
+            }
+
+        }
+
+
+        return null;
+
+    }
+
+
+    /* =====================================================
+       ASK AI UNLIMITED
+    ===================================================== */
+
     async function askUnlimited(){
 
         const message =
@@ -38664,11 +39148,15 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 
 
         if (!message) {
+
             return;
+
         }
 
 
-        button.disabled = true;
+        button.disabled =
+            true;
+
 
         button.textContent =
             "Thinking...";
@@ -38677,11 +39165,32 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
         answer.style.display =
             "block";
 
+
         answer.textContent =
             "EdgeBreak AI is thinking...";
 
 
         try {
+
+            /* =============================================
+               FIND RELEVANT CURRENT EDGEBREAK DATA
+            ============================================= */
+
+            const edgeBreakContext =
+                getEdgeBreakContext(
+                    message
+                );
+
+
+            console.log(
+                "AI Unlimited EdgeBreak context:",
+                edgeBreakContext
+            );
+
+
+            /* =============================================
+               SEND QUESTION + MATCHING SCANNER RECORD
+            ============================================= */
 
             const response =
                 await fetch(
@@ -38702,7 +39211,10 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
                             JSON.stringify({
 
                                 message:
-                                    message
+                                    message,
+
+                                edgeBreakContext:
+                                    edgeBreakContext
 
                             })
 
@@ -38736,8 +39248,73 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
             answer.textContent =
                 data.answer;
 
+
+            /* =============================================
+               TEST STATUS
+            ============================================= */
+
+            if (
+                edgeBreakContext?.symbol
+            ) {
+
+                const foundIn = [];
+
+
+                if (
+                    edgeBreakContext
+                        .scanners
+                        .breakout
+                ) {
+
+                    foundIn.push(
+                        "Breakout"
+                    );
+
+                }
+
+
+                if (
+                    edgeBreakContext
+                        .scanners
+                        .preBreakout
+                ) {
+
+                    foundIn.push(
+                        "Pre-Breakout"
+                    );
+
+                }
+
+
+                if (
+                    edgeBreakContext
+                        .scanners
+                        .launchPad
+                ) {
+
+                    foundIn.push(
+                        "Launch Pad"
+                    );
+
+                }
+
+
+                status.className =
+                    "ready";
+
+
+                status.textContent =
+                    `${edgeBreakContext.symbol} found by EdgeBreak: ` +
+                    foundIn.join(
+                        " + "
+                    );
+
+            }
+
         }
-        catch (error) {
+        catch (
+            error
+        ) {
 
             console.error(
                 "AI Unlimited Test Error:",
@@ -38755,7 +39332,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
         }
         finally {
 
-            button.disabled = false;
+            button.disabled =
+                false;
+
 
             button.textContent =
                 "Ask";
@@ -38765,6 +39344,10 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
     }
 
 
+    /* =====================================================
+       EVENTS
+    ===================================================== */
+
     button.addEventListener(
         "click",
         askUnlimited
@@ -38773,10 +39356,13 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 
     input.addEventListener(
         "keydown",
-        function(event){
+        function(
+            event
+        ){
 
             if (
-                event.key === "Enter"
+                event.key ===
+                "Enter"
             ) {
 
                 event.preventDefault();
@@ -38788,9 +39374,18 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
         }
     );
 
+
+    /* =====================================================
+       START
+    ===================================================== */
+
+    loadUnlimitedScannerData();
+
 })();
 
 </script>
+
+
 
 <!-- COMPONENTS -->
 
