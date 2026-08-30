@@ -38478,6 +38478,320 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 })();
 
 </script>
+
+<!-- =========================================================
+     EDGEBREAK AI UNLIMITED
+     PHASE 1 TEST FRONTEND
+========================================================= -->
+
+<style>
+
+#edgeUnlimitedTest{
+    position:fixed;
+    right:24px;
+    bottom:24px;
+    z-index:99999;
+
+    width:420px;
+    max-width:calc(100vw - 32px);
+
+    padding:22px;
+
+    background:#0b1220;
+    border:1px solid #263548;
+    border-radius:18px;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.55);
+
+    font-family:inherit;
+}
+
+#edgeUnlimitedTest h3{
+    margin:0 0 5px;
+    color:#ffffff;
+    font-size:20px;
+}
+
+#edgeUnlimitedTest p{
+    margin:0 0 16px;
+    color:#94a3b8;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.edge-unlimited-test-row{
+    display:flex;
+    gap:8px;
+}
+
+#edgeUnlimitedTestInput{
+    flex:1;
+    min-width:0;
+
+    padding:12px 14px;
+
+    background:#08111f;
+    border:1px solid #273549;
+    border-radius:10px;
+
+    color:#ffffff;
+    font:inherit;
+    font-size:14px;
+
+    outline:none;
+}
+
+#edgeUnlimitedTestInput:focus{
+    border-color:#22c55e;
+}
+
+#edgeUnlimitedTestSend{
+    padding:0 18px;
+
+    border:0;
+    border-radius:10px;
+
+    background:#22c55e;
+    color:#ffffff;
+
+    font-weight:700;
+    cursor:pointer;
+}
+
+#edgeUnlimitedTestSend:hover{
+    background:#16a34a;
+}
+
+#edgeUnlimitedTestSend:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+}
+
+#edgeUnlimitedTestAnswer{
+    display:none;
+
+    margin-top:16px;
+    padding:14px;
+
+    background:#111827;
+    border:1px solid #1f2937;
+    border-radius:12px;
+
+    color:#e2e8f0;
+
+    font-size:14px;
+    line-height:1.65;
+
+    white-space:pre-wrap;
+}
+
+</style>
+
+
+<div id="edgeUnlimitedTest">
+
+    <h3>
+        ✦ AI Unlimited Test
+    </h3>
+
+    <p>
+        Phase 1 — direct Gemini connection test.
+    </p>
+
+    <div class="edge-unlimited-test-row">
+
+        <input
+            id="edgeUnlimitedTestInput"
+            type="text"
+            value="What is RSI?"
+            placeholder="Ask a question..."
+            autocomplete="off"
+        >
+
+        <button
+            id="edgeUnlimitedTestSend"
+            type="button"
+        >
+            Ask
+        </button>
+
+    </div>
+
+    <div id="edgeUnlimitedTestAnswer"></div>
+
+</div>
+
+
+<script>
+
+(function initEdgeUnlimitedTest(){
+
+    const input =
+        document.getElementById(
+            "edgeUnlimitedTestInput"
+        );
+
+    const button =
+        document.getElementById(
+            "edgeUnlimitedTestSend"
+        );
+
+    const answer =
+        document.getElementById(
+            "edgeUnlimitedTestAnswer"
+        );
+
+
+    if (
+        !input ||
+        !button ||
+        !answer
+    ) {
+
+        console.warn(
+            "AI Unlimited test elements not found."
+        );
+
+        return;
+
+    }
+
+
+    async function askUnlimited(){
+
+        const message =
+            input.value.trim();
+
+
+        if (!message) {
+            return;
+        }
+
+
+        button.disabled = true;
+
+        button.textContent =
+            "Thinking...";
+
+
+        answer.style.display =
+            "block";
+
+        answer.textContent =
+            "EdgeBreak AI is thinking...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/ai-unlimited",
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                message:
+                                    message
+
+                            })
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data?.error ||
+                    "AI Unlimited request failed."
+                );
+
+            }
+
+
+            if (!data?.answer) {
+
+                throw new Error(
+                    "AI Unlimited returned no answer."
+                );
+
+            }
+
+
+            answer.textContent =
+                data.answer;
+
+        }
+        catch (error) {
+
+            console.error(
+                "AI Unlimited Test Error:",
+                error
+            );
+
+
+            answer.textContent =
+                "Error: " +
+                (
+                    error?.message ||
+                    "Unable to reach AI Unlimited."
+                );
+
+        }
+        finally {
+
+            button.disabled = false;
+
+            button.textContent =
+                "Ask";
+
+        }
+
+    }
+
+
+    button.addEventListener(
+        "click",
+        askUnlimited
+    );
+
+
+    input.addEventListener(
+        "keydown",
+        function(event){
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                event.preventDefault();
+
+                askUnlimited();
+
+            }
+
+        }
+    );
+
+})();
+
+</script>
+
 <!-- COMPONENTS -->
 
 <script src="/js/components.js"></script>
