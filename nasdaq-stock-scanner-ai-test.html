@@ -8875,6 +8875,189 @@ html {
 #edgeBreakStockScreen[hidden] {
     display: none !important;
 }
+
+/* =========================================
+   EDGEBREAK AI MODE SWITCH
+========================================= */
+
+.edge-ai-mode-switch{
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    gap:8px;
+
+    margin:0 22px 18px;
+    padding:5px;
+
+    background:#0b1220;
+
+    border:1px solid #1e293b;
+    border-radius:12px;
+
+}
+
+.edge-ai-mode-btn{
+
+    appearance:none;
+
+    border:none;
+    border-radius:9px;
+
+    padding:11px 14px;
+
+    background:transparent;
+
+    color:#94a3b8;
+
+    font-size:13px;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+
+}
+
+.edge-ai-mode-btn:hover{
+
+    color:#ffffff;
+
+    background:rgba(255,255,255,.04);
+
+}
+
+.edge-ai-mode-btn.active{
+
+    background:#22c55e;
+
+    color:#ffffff;
+
+    box-shadow:
+        0 5px 16px rgba(34,197,94,.18);
+
+}
+
+/* =========================================
+   AI UNLIMITED PANEL
+========================================= */
+
+.edge-ai-unlimited-intro{
+
+    padding:10px 22px 24px;
+
+    text-align:center;
+
+}
+
+.edge-ai-unlimited-icon{
+
+    width:44px;
+    height:44px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    margin:4px auto 12px;
+
+    border-radius:50%;
+
+    background:rgba(34,197,94,.12);
+
+    color:#22c55e;
+
+    font-size:20px;
+
+}
+
+.edge-ai-unlimited-intro h3{
+
+    margin:0 0 8px;
+
+    color:#ffffff;
+
+    font-size:20px;
+
+}
+
+.edge-ai-unlimited-intro p{
+
+    margin:0 auto 18px;
+
+    max-width:330px;
+
+    color:#94a3b8;
+
+    font-size:13px;
+    line-height:1.6;
+
+}
+
+#edgeAIUnlimitedQuestion{
+
+    width:100%;
+    min-height:110px;
+
+    box-sizing:border-box;
+
+    resize:vertical;
+
+    padding:14px;
+
+    border:1px solid #334155;
+    border-radius:10px;
+
+    background:#0b1220;
+
+    color:#ffffff;
+
+    font-family:inherit;
+    font-size:14px;
+    line-height:1.5;
+
+    outline:none;
+
+}
+
+#edgeAIUnlimitedQuestion:focus{
+
+    border-color:#22c55e;
+
+}
+
+#edgeAIUnlimitedQuestion::placeholder{
+
+    color:#64748b;
+
+}
+
+.edge-ai-unlimited-ask{
+
+    width:100%;
+
+    margin-top:12px;
+    padding:13px 16px;
+
+    border:0;
+    border-radius:10px;
+
+    background:#22c55e;
+
+    color:#ffffff;
+
+    font-size:14px;
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+.edge-ai-unlimited-ask:hover{
+
+    filter:brightness(1.06);
+
+}
 </style>  
 
 
@@ -10981,6 +11164,29 @@ PANEL 1  watchlist seo
 
     </div>
 
+    <!-- =====================================
+    AI MODE SWITCH
+    ====================================== -->
+
+    <div class="edge-ai-mode-switch">
+
+        <button
+            type="button"
+            id="edgeAIGuidedMode"
+            class="edge-ai-mode-btn active"
+        >
+            ✦ Guided AI
+        </button>
+
+        <button
+            type="button"
+            id="edgeAIUnlimitedMode"
+            class="edge-ai-mode-btn"
+        >
+            AI Unlimited
+        </button>
+
+    </div>
 
     <!-- =====================================
     INTRO
@@ -10994,6 +11200,7 @@ PANEL 1  watchlist seo
             market conditions and common trading questions.
         </p>
 
+    
         <div class="edge-chat-learning">
 
             <span>✦</span>
@@ -40081,7 +40288,144 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
 
 </script>
 
+<script>
+/* =========================================
+   EDGEBREAK AI MODE SWITCH
+========================================= */
 
+document.addEventListener("DOMContentLoaded", () => {
+
+    const guidedBtn =
+        document.getElementById("edgeAIGuidedMode");
+
+    const unlimitedBtn =
+        document.getElementById("edgeAIUnlimitedMode");
+
+    const guidedContent =
+        document.querySelector(".edge-chat-intro");
+
+    if (
+        !guidedBtn ||
+        !unlimitedBtn ||
+        !guidedContent
+    ) {
+        console.warn(
+            "EdgeBreak AI mode switch elements not found."
+        );
+        return;
+    }
+
+
+    /* =====================================
+       UNLIMITED CONTENT
+    ====================================== */
+
+    const unlimitedContent =
+        document.createElement("div");
+
+    unlimitedContent.id =
+        "edgeAIUnlimitedContent";
+
+    unlimitedContent.style.display =
+        "none";
+
+    unlimitedContent.innerHTML = `
+
+        <div class="edge-ai-unlimited-intro">
+
+            <div class="edge-ai-unlimited-icon">
+                ✦
+            </div>
+
+            <h3>
+                AI Unlimited
+            </h3>
+
+            <p>
+                Ask EdgeBreak anything about a NASDAQ stock,
+                trading concept or market question.
+            </p>
+
+            <textarea
+                id="edgeAIUnlimitedQuestion"
+                placeholder="Example: What does EdgeBreak know about CTRM?"
+                rows="4"
+            ></textarea>
+
+            <button
+                type="button"
+                id="edgeAIUnlimitedAsk"
+                class="edge-ai-unlimited-ask"
+            >
+                Ask EdgeBreak
+            </button>
+
+        </div>
+
+    `;
+
+
+    /* Put Unlimited immediately after Guided content */
+
+    guidedContent.insertAdjacentElement(
+        "afterend",
+        unlimitedContent
+    );
+
+
+    /* =====================================
+       GUIDED MODE
+    ====================================== */
+
+    guidedBtn.addEventListener(
+        "click",
+        () => {
+
+            guidedBtn.classList.add(
+                "active"
+            );
+
+            unlimitedBtn.classList.remove(
+                "active"
+            );
+
+            guidedContent.style.display =
+                "";
+
+            unlimitedContent.style.display =
+                "none";
+
+        }
+    );
+
+
+    /* =====================================
+       UNLIMITED MODE
+    ====================================== */
+
+    unlimitedBtn.addEventListener(
+        "click",
+        () => {
+
+            unlimitedBtn.classList.add(
+                "active"
+            );
+
+            guidedBtn.classList.remove(
+                "active"
+            );
+
+            guidedContent.style.display =
+                "none";
+
+            unlimitedContent.style.display =
+                "";
+
+        }
+    );
+
+});
+</script>
 
 <!-- COMPONENTS -->
 
