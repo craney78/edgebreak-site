@@ -7809,6 +7809,44 @@ html {
     overflow: hidden;
 }
 
+/* ---------------------------------------------------------
+   AI UNLIMITED SCROLL AREA
+--------------------------------------------------------- */
+
+#edgeAIUnlimitedContent {
+    flex: 1;
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(148, 163, 184, 0.25)
+        transparent;
+}
+
+
+#edgeAIUnlimitedContent::-webkit-scrollbar {
+    width: 6px;
+}
+
+
+#edgeAIUnlimitedContent::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+#edgeAIUnlimitedContent::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.25);
+    border-radius: 999px;
+}
+
+
+#edgeAIUnlimitedContent::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.4);
+}
+
 
 .edge-chat-panel.is-open {
     transform: translateX(0);
