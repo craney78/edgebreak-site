@@ -40009,8 +40009,68 @@ document.addEventListener(
                 }
 
 
-                answer.textContent =
-                    data.answer;
+                /* =================================================
+                FORMAT AI ANSWER
+                ================================================= */
+
+                function escapeHtml(value) {
+
+                    return String(value || "")
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#039;");
+
+                }
+
+                function formatUnlimitedAnswer(value) {
+
+                    let formatted =
+                        escapeHtml(value);
+
+                    /* **bold** */
+                    formatted =
+                        formatted.replace(
+                            /\*\*(.+?)\*\*/g,
+                            "<strong>$1</strong>"
+                        );
+
+                    /* paragraph / line breaks */
+                    formatted =
+                        formatted.replace(
+                            /\n\n+/g,
+                            "</p><p>"
+                        );
+
+                    formatted =
+                        formatted.replace(
+                            /\n/g,
+                            "<br>"
+                        );
+
+                    return `<p>${formatted}</p>`;
+
+                }
+
+                answer.innerHTML =
+                    formatUnlimitedAnswer(
+                        data.answer
+                    );
+
+
+                /* Scroll the answer into view */
+
+                requestAnimationFrame(
+                    () => {
+
+                        answer.scrollIntoView({
+                            behavior: "smooth",
+                            block: "nearest"
+                        });
+
+                    }
+                );
 
             }
             catch (
