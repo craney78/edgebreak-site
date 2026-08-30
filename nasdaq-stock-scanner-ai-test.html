@@ -38788,8 +38788,29 @@ document.addEventListener(
         `;
 
 
-        guidedContent.insertAdjacentElement(
-            "afterend",
+        /* =================================================
+        PLACE AI UNLIMITED INSIDE SCROLLABLE CHAT AREA
+        ================================================= */
+
+        const chatConversation =
+            document.getElementById(
+                "edgeBreakChatConversation"
+            );
+
+        if (
+            !chatConversation
+        ) {
+
+            console.warn(
+                "EdgeBreak chat conversation area not found."
+            );
+
+            return;
+
+        }
+
+        chatConversation.insertAdjacentElement(
+            "beforeend",
             unlimitedContent
         );
 
