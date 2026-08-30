@@ -38685,11 +38685,17 @@ document.addEventListener(
                 ".edge-chat-intro"
             );
 
+        const guidedConversation =
+            document.getElementById(
+                "edgeBreakChatConversation"
+            );
+
 
         if (
             !guidedBtn ||
             !unlimitedBtn ||
-            !guidedContent
+            !guidedContent ||
+            !guidedConversation
         ) {
 
             console.warn(
@@ -40106,7 +40112,7 @@ document.addEventListener(
 
 
         /* =================================================
-           MODE SWITCH — GUIDED AI
+        MODE SWITCH — GUIDED AI
         ================================================= */
 
         guidedBtn.addEventListener(
@@ -40117,15 +40123,15 @@ document.addEventListener(
                     "active"
                 );
 
-
                 unlimitedBtn.classList.remove(
                     "active"
                 );
 
-
                 guidedContent.style.display =
                     "";
 
+                guidedConversation.style.display =
+                    "";
 
                 unlimitedContent.style.display =
                     "none";
@@ -40133,9 +40139,8 @@ document.addEventListener(
             }
         );
 
-
         /* =================================================
-           MODE SWITCH — AI UNLIMITED
+        MODE SWITCH — AI UNLIMITED
         ================================================= */
 
         unlimitedBtn.addEventListener(
@@ -40146,21 +40151,25 @@ document.addEventListener(
                     "active"
                 );
 
-
                 guidedBtn.classList.remove(
                     "active"
                 );
 
-
                 guidedContent.style.display =
                     "none";
 
+                guidedConversation.style.display =
+                    "none";
 
                 unlimitedContent.style.display =
                     "";
 
+                input.focus();
+
             }
         );
+
+                           
 
 
         /* =================================================
