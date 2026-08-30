@@ -386,7 +386,7 @@ async function runGemini(
             generationConfig: {
 
                 maxOutputTokens:
-                    650,
+                    1500,
 
                 temperature:
                     0.2
