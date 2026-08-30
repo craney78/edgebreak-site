@@ -498,6 +498,26 @@ async function runGemini(
                 ?.join("")
                 ?.trim();
 
+        console.log(
+            "AI Unlimited Gemini diagnostic:",
+            {
+                finishReason:
+                    data?.candidates?.[0]?.finishReason ||
+                    null,
+
+                textLength:
+                    rawText?.length ||
+                    0,
+
+                rawText:
+                    rawText ||
+                    null,
+
+                usageMetadata:
+                    data?.usageMetadata ||
+                    null
+            }
+        );        
 
         if (
             !rawText
