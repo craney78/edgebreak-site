@@ -4579,6 +4579,16 @@ async function loadSubscription() {
             "upgradeAIUnlimitedMessage"
         );
 
+    const membershipPlan =
+        document.getElementById(
+            "membershipPlan"
+        );
+
+    const membershipDescription =
+        document.getElementById(
+            "membershipDescription"
+        );
+
 
     try {
 
@@ -4676,19 +4686,30 @@ async function loadSubscription() {
         // AI UNLIMITED
         // =========================
 
-        if (membershipPlan) {
+        if (
+            aiData.accessLevel ===
+            "unlimited"
+        ) {
 
-            membershipPlan.innerText =
-                "AI Unlimited";
+            // ACCOUNT OVERVIEW
 
-        }
+            if (membershipPlan) {
 
-        if (membershipDescription) {
+                membershipPlan.innerText =
+                    "AI Unlimited";
 
-            membershipDescription.innerText =
-                "EdgeBreak $29.99 USD/month";
+            }
 
-        }
+
+            if (membershipDescription) {
+
+                membershipDescription.innerText =
+                    "EdgeBreak $29.99 USD/month";
+
+            }
+
+
+            // SUBSCRIPTION STATUS
 
             if (status) {
 
@@ -4857,12 +4878,14 @@ async function loadSubscription() {
 
         }
 
+
         if (membershipDescription) {
 
             membershipDescription.innerText =
                 "EdgeBreak $19.99 USD/month";
 
         }
+
 
         if (status) {
 
