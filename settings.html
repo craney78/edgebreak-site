@@ -4573,10 +4573,10 @@ async function loadSubscription() {
     try {
 
         // =========================
-        // GET CURRENT AI PLAN
+        // GET CURRENT AI ACCESS
         // =========================
 
-        const response =
+        const aiResponse =
             await fetch(
 
                 "/api/ai-unlimited",
@@ -4601,16 +4601,61 @@ async function loadSubscription() {
             );
 
 
-        const data =
-            await response.json();
+        const aiData =
+            await aiResponse.json();
 
 
-        if (!response.ok) {
+        if (!aiResponse.ok) {
 
             throw new Error(
 
-                data.error ||
-                "Unable to load subscription."
+                aiData.error ||
+                "Unable to load AI subscription."
+
+            );
+
+        }
+
+
+        // =========================
+        // GET STRIPE SUBSCRIPTION
+        // =========================
+
+        const stripeResponse =
+            await fetch(
+
+                "https://qmonyhukamuuunxxxdlk.supabase.co/functions/v1/subscription-status",
+
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        Authorization:
+                            `Bearer ${session.access_token}`,
+
+                        "Content-Type":
+                            "application/json"
+
+                    }
+
+                }
+
+            );
+
+
+        const stripeData =
+            await stripeResponse.json();
+
+
+        if (!stripeResponse.ok) {
+
+            throw new Error(
+
+                stripeData.error ||
+                "Unable to load Stripe subscription."
 
             );
 
@@ -4622,7 +4667,7 @@ async function loadSubscription() {
         // =========================
 
         if (
-            data.accessLevel ===
+            aiData.accessLevel ===
             "unlimited"
         ) {
 
@@ -4644,6 +4689,113 @@ async function loadSubscription() {
 
             }
 
+
+            // =========================
+            // DOWNGRADE ALREADY SCHEDULED
+            // =========================
+
+            if (
+                stripeData.downgradeScheduled
+            ) {
+
+                if (downgradeButton) {
+
+                    downgradeButton.style.display =
+                        "inline-flex";
+
+                    downgradeButton.disabled =
+                        true;
+
+                    downgradeButton.innerText =
+                        "Downgrade Scheduled";
+
+                }
+
+
+                if (message) {
+
+                    let effectiveText =
+                        "the end of your current billing period";
+
+
+                    if (
+                        stripeData.effectiveAt
+                    ) {
+
+                        const effectiveDate =
+                            new Date(
+                                stripeData.effectiveAt * 1000
+                            );
+
+
+                        effectiveText =
+                            effectiveDate.toLocaleDateString(
+                                undefined,
+                                {
+                                    day:
+                                        "numeric",
+
+                                    month:
+                                        "short",
+
+                                    year:
+                                        "numeric"
+                                }
+                            );
+
+                    }
+
+
+                    message.innerText =
+                        `AI Unlimited remains active until ${effectiveText}. ` +
+                        `Your subscription will then continue on EdgeBreak Standard at $19.99 USD/month.`;
+
+                    message.style.color =
+                        "#F59E0B";
+
+                }
+
+
+                return;
+
+            }
+
+
+            // =========================
+            // OWNER / NON-STRIPE ACCESS
+            // =========================
+
+            if (
+                !stripeData.hasStripeSubscription
+            ) {
+
+                if (downgradeButton) {
+
+                    downgradeButton.style.display =
+                        "none";
+
+                }
+
+
+                if (message) {
+
+                    message.innerText =
+                        "AI Unlimited is active on your account.";
+
+                    message.style.color =
+                        "#4ADE80";
+
+                }
+
+
+                return;
+
+            }
+
+
+            // =========================
+            // NORMAL UNLIMITED CUSTOMER
+            // =========================
 
             if (downgradeButton) {
 
