@@ -15858,9 +15858,9 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
     );
 
 })();
-</script>
 
-<script>
+
+
 
 /* =========================================================
    EDGEBREAK AI UNLIMITED
