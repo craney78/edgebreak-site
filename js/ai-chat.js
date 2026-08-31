@@ -15875,9 +15875,7 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
    - Safer EdgeBreak ticker matching
 ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+(function initEdgeBreakAIUnlimited() {
 
         /* =================================================
            MODE ELEMENTS
@@ -18108,6 +18106,6 @@ document.addEventListener(
 
         loadUnlimitedAllowance();
 
-    }
-);
+    
+})();
 
