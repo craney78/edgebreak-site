@@ -2,21 +2,30 @@
 /* =========================================================
    EDGEBREAK AI CHAT
    PANEL OPEN / CLOSE
+   + MEMBER ACCESS GATE
 ========================================================= */
 
 (function initEdgeBreakAIChat() {
 
     const chatButton =
-        document.getElementById("edgeBreakChatButton");
+        document.getElementById(
+            "edgeBreakChatButton"
+        );
 
     const chatPanel =
-        document.getElementById("edgeBreakChatPanel");
+        document.getElementById(
+            "edgeBreakChatPanel"
+        );
 
     const chatOverlay =
-        document.getElementById("edgeBreakChatOverlay");
+        document.getElementById(
+            "edgeBreakChatOverlay"
+        );
 
     const chatClose =
-        document.getElementById("edgeBreakChatClose");
+        document.getElementById(
+            "edgeBreakChatClose"
+        );
 
 
     /* -----------------------------------------------------
@@ -35,6 +44,594 @@
         );
 
         return;
+
+    }
+
+
+    /* =====================================================
+       CREATE MEMBER GATE
+    ===================================================== */
+
+    function createMemberGate() {
+
+        let gate =
+            document.getElementById(
+                "edgeBreakMemberGate"
+            );
+
+
+        if (gate) {
+            return gate;
+        }
+
+
+        gate =
+            document.createElement(
+                "div"
+            );
+
+
+        gate.id =
+            "edgeBreakMemberGate";
+
+
+        gate.style.position =
+            "absolute";
+
+        gate.style.top =
+            "88px";
+
+        gate.style.left =
+            "0";
+
+        gate.style.right =
+            "0";
+
+        gate.style.bottom =
+            "0";
+
+        gate.style.zIndex =
+            "10000";
+
+        gate.style.display =
+            "none";
+
+        gate.style.alignItems =
+            "center";
+
+        gate.style.justifyContent =
+            "center";
+
+        gate.style.padding =
+            "24px";
+
+        gate.style.background =
+            "rgba(2, 6, 23, 0.76)";
+
+        gate.style.backdropFilter =
+            "blur(7px)";
+
+        gate.style.webkitBackdropFilter =
+            "blur(7px)";
+
+        gate.style.overflowY =
+            "auto";
+
+
+        chatPanel.appendChild(
+            gate
+        );
+
+
+        return gate;
+
+    }
+
+
+    const memberGate =
+        createMemberGate();
+
+
+    /* =====================================================
+       SHOW LOCKED GATE
+    ===================================================== */
+
+    function showLockedGate(
+        loggedIn = false
+    ) {
+
+        memberGate.innerHTML = `
+
+            <div style="
+                width:100%;
+                max-width:390px;
+                padding:30px 24px;
+                border-radius:18px;
+                border:1px solid rgba(34,197,94,.28);
+                background:rgba(8,15,30,.96);
+                box-shadow:
+                    0 24px 70px rgba(0,0,0,.45);
+                text-align:center;
+            ">
+
+                <div style="
+                    width:54px;
+                    height:54px;
+                    margin:0 auto 18px;
+                    border-radius:16px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    background:rgba(34,197,94,.12);
+                    border:1px solid rgba(34,197,94,.28);
+                    color:#22c55e;
+                    font-size:25px;
+                    font-weight:900;
+                ">
+                    ✦
+                </div>
+
+
+                <div style="
+                    color:#22c55e;
+                    font-size:11px;
+                    font-weight:800;
+                    letter-spacing:.12em;
+                    text-transform:uppercase;
+                    margin-bottom:8px;
+                ">
+                    EDGEBREAK AI
+                </div>
+
+
+                <h3 style="
+                    margin:0 0 12px;
+                    color:#f8fafc;
+                    font-size:24px;
+                    line-height:1.2;
+                    font-weight:850;
+                ">
+                    Unlock EdgeBreak AI
+                </h3>
+
+
+                <p style="
+                    margin:0 auto 22px;
+                    max-width:320px;
+                    color:#94a3b8;
+                    font-size:14px;
+                    line-height:1.7;
+                ">
+
+                    ${
+                        loggedIn
+
+                            ? `
+                                EdgeBreak AI requires an active
+                                EdgeBreak membership.
+                                Choose a plan to unlock Guided AI
+                                and full AI conversations.
+                            `
+
+                            : `
+                                Start your 7-day free trial to unlock
+                                Guided AI, stock research and full
+                                AI conversations across EdgeBreak.
+                            `
+                    }
+
+                </p>
+
+
+                <button
+                    type="button"
+                    id="edgeBreakMemberGateTrial"
+                    style="
+                        width:100%;
+                        min-height:48px;
+                        border:0;
+                        border-radius:10px;
+                        background:#22c55e;
+                        color:#04110a;
+                        font-size:14px;
+                        font-weight:850;
+                        cursor:pointer;
+                        padding:12px 16px;
+                    "
+                >
+                    ${
+                        loggedIn
+                            ? "View EdgeBreak Plans"
+                            : "Start 7 Day Free Trial"
+                    }
+                </button>
+
+
+                ${
+                    !loggedIn
+
+                        ? `
+
+                            <div style="
+                                margin-top:16px;
+                                color:#64748b;
+                                font-size:13px;
+                            ">
+
+                                Already a member?
+
+                                <button
+                                    type="button"
+                                    id="edgeBreakMemberGateLogin"
+                                    style="
+                                        border:0;
+                                        background:none;
+                                        color:#22c55e;
+                                        font:inherit;
+                                        font-weight:800;
+                                        cursor:pointer;
+                                        padding:0 0 0 4px;
+                                    "
+                                >
+                                    Log In
+                                </button>
+
+                            </div>
+
+                        `
+
+                        : ""
+                }
+
+
+                <div style="
+                    margin-top:20px;
+                    padding-top:16px;
+                    border-top:
+                        1px solid rgba(148,163,184,.12);
+                    color:#475569;
+                    font-size:11px;
+                    line-height:1.6;
+                ">
+                    NASDAQ stock discovery, research,
+                    chart analysis and conversational AI.
+                </div>
+
+            </div>
+
+        `;
+
+
+        memberGate.style.display =
+            "flex";
+
+
+        const trialButton =
+            document.getElementById(
+                "edgeBreakMemberGateTrial"
+            );
+
+
+        if (trialButton) {
+
+            trialButton.addEventListener(
+                "click",
+                function() {
+
+                    window.location.href =
+                        "/pricing.html";
+
+                }
+            );
+
+        }
+
+
+        const loginButton =
+            document.getElementById(
+                "edgeBreakMemberGateLogin"
+            );
+
+
+        if (loginButton) {
+
+            loginButton.addEventListener(
+                "click",
+                function() {
+
+                    window.location.href =
+                        "/login.html";
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SHOW CHECKING STATE
+    ===================================================== */
+
+    function showCheckingGate() {
+
+        memberGate.innerHTML = `
+
+            <div style="
+                width:100%;
+                max-width:360px;
+                padding:28px 24px;
+                border-radius:18px;
+                border:
+                    1px solid rgba(148,163,184,.14);
+                background:rgba(8,15,30,.96);
+                text-align:center;
+            ">
+
+                <div style="
+                    color:#22c55e;
+                    font-size:24px;
+                    margin-bottom:12px;
+                ">
+                    ✦
+                </div>
+
+                <strong style="
+                    color:#f8fafc;
+                    font-size:16px;
+                ">
+                    Checking EdgeBreak access...
+                </strong>
+
+            </div>
+
+        `;
+
+
+        memberGate.style.display =
+            "flex";
+
+    }
+
+
+    /* =====================================================
+       SHOW ACCESS ERROR
+    ===================================================== */
+
+    function showAccessError() {
+
+        memberGate.innerHTML = `
+
+            <div style="
+                width:100%;
+                max-width:390px;
+                padding:30px 24px;
+                border-radius:18px;
+                border:
+                    1px solid rgba(148,163,184,.16);
+                background:rgba(8,15,30,.96);
+                text-align:center;
+            ">
+
+                <div style="
+                    color:#22c55e;
+                    font-size:24px;
+                    margin-bottom:12px;
+                ">
+                    ✦
+                </div>
+
+                <h3 style="
+                    color:#f8fafc;
+                    margin:0 0 10px;
+                    font-size:20px;
+                ">
+                    Unable To Verify Access
+                </h3>
+
+                <p style="
+                    color:#94a3b8;
+                    line-height:1.6;
+                    margin:0 0 20px;
+                    font-size:13px;
+                ">
+                    EdgeBreak could not verify your
+                    membership. Please try again.
+                </p>
+
+                <button
+                    type="button"
+                    id="edgeBreakMemberGateRetry"
+                    style="
+                        width:100%;
+                        min-height:46px;
+                        border:0;
+                        border-radius:10px;
+                        background:#22c55e;
+                        color:#04110a;
+                        font-weight:850;
+                        cursor:pointer;
+                    "
+                >
+                    Try Again
+                </button>
+
+            </div>
+
+        `;
+
+
+        memberGate.style.display =
+            "flex";
+
+
+        const retryButton =
+            document.getElementById(
+                "edgeBreakMemberGateRetry"
+            );
+
+
+        if (retryButton) {
+
+            retryButton.addEventListener(
+                "click",
+                checkEdgeBreakMembership
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       UNLOCK AI
+    ===================================================== */
+
+    function unlockAIChat() {
+
+        memberGate.style.display =
+            "none";
+
+
+        memberGate.innerHTML =
+            "";
+
+    }
+
+
+    /* =====================================================
+       CHECK MEMBERSHIP
+    ===================================================== */
+
+    async function checkEdgeBreakMembership() {
+
+        showCheckingGate();
+
+
+        try {
+
+            if (
+                typeof supabaseClient ===
+                "undefined"
+            ) {
+
+                throw new Error(
+                    "Supabase client unavailable."
+                );
+
+            }
+
+
+            const {
+                data: {
+                    session
+                },
+                error: sessionError
+            } =
+                await supabaseClient
+                    .auth
+                    .getSession();
+
+
+            if (sessionError) {
+
+                throw sessionError;
+
+            }
+
+
+            /* ---------------------------------------------
+               NOT LOGGED IN
+            --------------------------------------------- */
+
+            if (
+                !session ||
+                !session.user
+            ) {
+
+                showLockedGate(
+                    false
+                );
+
+                return false;
+
+            }
+
+
+            /* ---------------------------------------------
+               CHECK ACTIVE MEMBERSHIP
+            --------------------------------------------- */
+
+            const {
+                data: profile,
+                error: profileError
+            } =
+                await supabaseClient
+                    .from(
+                        "profiles"
+                    )
+                    .select(
+                        "is_active"
+                    )
+                    .eq(
+                        "id",
+                        session.user.id
+                    )
+                    .maybeSingle();
+
+
+            if (profileError) {
+
+                throw profileError;
+
+            }
+
+
+            /* ---------------------------------------------
+               ACTIVE MEMBER
+            --------------------------------------------- */
+
+            if (
+                profile &&
+                profile.is_active === true
+            ) {
+
+                unlockAIChat();
+
+                return true;
+
+            }
+
+
+            /* ---------------------------------------------
+               LOGGED IN BUT NOT ACTIVE
+            --------------------------------------------- */
+
+            showLockedGate(
+                true
+            );
+
+
+            return false;
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "EdgeBreak AI membership check failed:",
+                error
+            );
+
+
+            showAccessError();
+
+
+            return false;
+
+        }
+
     }
 
 
@@ -44,25 +641,45 @@
 
     function openEdgeBreakChat() {
 
-        chatPanel.classList.add("is-open");
-        chatOverlay.classList.add("is-open");
+        chatPanel.classList.add(
+            "is-open"
+        );
+
+        chatOverlay.classList.add(
+            "is-open"
+        );
+
 
         chatPanel.setAttribute(
             "aria-hidden",
             "false"
         );
 
+
         chatOverlay.setAttribute(
             "aria-hidden",
             "false"
         );
+
 
         chatButton.setAttribute(
             "aria-expanded",
             "true"
         );
 
-        document.body.style.overflow = "hidden";
+
+        document.body.style.overflow =
+            "hidden";
+
+
+        /*
+        Check access every time the panel opens.
+
+        This keeps the panel visible to everyone,
+        but only active members can interact with it.
+        */
+
+        checkEdgeBreakMembership();
 
     }
 
@@ -73,25 +690,35 @@
 
     function closeEdgeBreakChat() {
 
-        chatPanel.classList.remove("is-open");
-        chatOverlay.classList.remove("is-open");
+        chatPanel.classList.remove(
+            "is-open"
+        );
+
+        chatOverlay.classList.remove(
+            "is-open"
+        );
+
 
         chatPanel.setAttribute(
             "aria-hidden",
             "true"
         );
 
+
         chatOverlay.setAttribute(
             "aria-hidden",
             "true"
         );
+
 
         chatButton.setAttribute(
             "aria-expanded",
             "false"
         );
 
-        document.body.style.overflow = "";
+
+        document.body.style.overflow =
+            "";
 
     }
 
@@ -135,8 +762,11 @@
         function(event) {
 
             if (
-                event.key === "Escape" &&
-                chatPanel.classList.contains("is-open")
+                event.key ===
+                    "Escape" &&
+                chatPanel.classList.contains(
+                    "is-open"
+                )
             ) {
 
                 closeEdgeBreakChat();
