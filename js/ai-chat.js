@@ -18739,3 +18739,414 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
     
 })();
 
+// =========================================================
+// ✦ EDGEBREAK AI — UPGRADE TO AI UNLIMITED BUTTON
+// =========================================================
+
+(function initAIUnlimitedUpgradeButton() {
+
+    let attempts = 0;
+
+    const MAX_ATTEMPTS = 30;
+
+
+    /* =====================================================
+       WAIT FOR AI PANEL
+    ===================================================== */
+
+    async function setupUpgradeButton() {
+
+        const panel =
+            document.getElementById(
+                "edgeBreakChatPanel"
+            );
+
+        const modeSwitch =
+            document.querySelector(
+                ".edge-ai-mode-switch"
+            );
+
+
+        /*
+        Global AI may still be loading.
+        Try again briefly.
+        */
+
+        if (
+            !panel ||
+            !modeSwitch
+        ) {
+
+            attempts++;
+
+            if (
+                attempts <
+                MAX_ATTEMPTS
+            ) {
+
+                setTimeout(
+                    setupUpgradeButton,
+                    250
+                );
+
+            }
+
+            return;
+
+        }
+
+
+        /*
+        Prevent duplicate button.
+        */
+
+        if (
+            document.getElementById(
+                "edgeAIUpgradeBar"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        /* =================================================
+           GET EDGEBREAK SESSION
+        ================================================= */
+
+        try {
+
+            if (
+                !window.supabaseClient
+            ) {
+
+                return;
+
+            }
+
+
+            const {
+                data: {
+                    session
+                }
+            } =
+                await window
+                    .supabaseClient
+                    .auth
+                    .getSession();
+
+
+            /*
+            Logged-out visitors already get
+            the membership lock screen.
+            */
+
+            if (
+                !session?.access_token
+            ) {
+
+                return;
+
+            }
+
+
+            /* =================================================
+               CHECK CURRENT AI PLAN
+            ================================================= */
+
+            const response =
+                await fetch(
+                    "/api/ai-unlimited",
+                    {
+
+                        method:
+                            "GET",
+
+                        headers: {
+
+                            Authorization:
+                                `Bearer ${session.access_token}`
+
+                        },
+
+                        cache:
+                            "no-store"
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !response.ok
+            ) {
+
+                return;
+
+            }
+
+
+            /*
+            Only Standard members need
+            an upgrade button.
+            */
+
+            if (
+                data.accessLevel !==
+                "included"
+            ) {
+
+                return;
+
+            }
+
+
+            /* =================================================
+               CREATE UPGRADE BAR
+            ================================================= */
+
+            const upgradeBar =
+                document.createElement(
+                    "div"
+                );
+
+
+            upgradeBar.id =
+                "edgeAIUpgradeBar";
+
+
+            upgradeBar.style.cssText = `
+                margin:0 22px 14px;
+                padding:13px 14px;
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                gap:12px;
+                background:rgba(34,197,94,.07);
+                border:1px solid rgba(34,197,94,.20);
+                border-radius:10px;
+            `;
+
+
+            upgradeBar.innerHTML = `
+
+                <div style="
+                    min-width:0;
+                ">
+
+                    <strong style="
+                        display:block;
+                        color:#ffffff;
+                        font-size:12px;
+                        margin-bottom:3px;
+                    ">
+                        Want unlimited AI conversations?
+                    </strong>
+
+                    <span style="
+                        display:block;
+                        color:#94a3b8;
+                        font-size:11px;
+                        line-height:1.4;
+                    ">
+                        Upgrade to AI Unlimited · $29.99/month
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="edgeAIUpgradeButton"
+                    style="
+                        flex-shrink:0;
+                        padding:9px 13px;
+                        border:0;
+                        border-radius:8px;
+                        background:#22c55e;
+                        color:#04110a;
+                        font-family:inherit;
+                        font-size:11px;
+                        font-weight:800;
+                        cursor:pointer;
+                    "
+                >
+                    Upgrade
+                </button>
+
+            `;
+
+
+            modeSwitch.insertAdjacentElement(
+                "afterend",
+                upgradeBar
+            );
+
+
+            /* =================================================
+               UPGRADE CLICK
+            ================================================= */
+
+            const upgradeButton =
+                document.getElementById(
+                    "edgeAIUpgradeButton"
+                );
+
+
+            upgradeButton.addEventListener(
+                "click",
+                async function() {
+
+                    const originalText =
+                        upgradeButton.textContent;
+
+
+                    upgradeButton.disabled =
+                        true;
+
+
+                    upgradeButton.textContent =
+                        "Upgrading...";
+
+
+                    try {
+
+                        const {
+                            data: {
+                                session:
+                                    currentSession
+                            }
+                        } =
+                            await window
+                                .supabaseClient
+                                .auth
+                                .getSession();
+
+
+                        if (
+                            !currentSession
+                                ?.access_token
+                        ) {
+
+                            throw new Error(
+                                "Please log in again."
+                            );
+
+                        }
+
+
+                        const upgradeResponse =
+                            await fetch(
+
+                                "https://qmonyhukamuuunxxxdlk.supabase.co/functions/v1/upgrade-ai-unlimited",
+
+                                {
+
+                                    method:
+                                        "POST",
+
+                                    headers: {
+
+                                        Authorization:
+                                            `Bearer ${currentSession.access_token}`,
+
+                                        "Content-Type":
+                                            "application/json"
+
+                                    }
+
+                                }
+
+                            );
+
+
+                        const result =
+                            await upgradeResponse
+                                .json();
+
+
+                        if (
+                            !upgradeResponse.ok
+                        ) {
+
+                            throw new Error(
+
+                                result.error ||
+                                "Unable to upgrade."
+
+                            );
+
+                        }
+
+
+                        upgradeButton.textContent =
+                            "✓ AI Unlimited Active";
+
+
+                        upgradeButton.style.background =
+                            "#4ade80";
+
+
+                        setTimeout(
+                            () => {
+
+                                window.location.reload();
+
+                            },
+                            1200
+                        );
+
+                    }
+
+                    catch (
+                        error
+                    ) {
+
+                        console.error(
+                            "AI Unlimited upgrade:",
+                            error
+                        );
+
+
+                        upgradeButton.disabled =
+                            false;
+
+
+                        upgradeButton.textContent =
+                            originalText;
+
+
+                        alert(
+                            error.message ||
+                            "Unable to upgrade to AI Unlimited."
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+        catch (
+            error
+        ) {
+
+            console.error(
+                "AI upgrade button setup:",
+                error
+            );
+
+        }
+
+    }
+
+
+    setupUpgradeButton();
+
+
+})();
