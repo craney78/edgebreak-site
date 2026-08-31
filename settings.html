@@ -2919,6 +2919,9 @@ SUBSCRIPTION
 
                 </strong>
 
+
+                <!-- STANDARD → UNLIMITED -->
+
                 <button
                     id="upgradeAIUnlimitedBtn"
                     class="glass-btn"
@@ -2928,6 +2931,23 @@ SUBSCRIPTION
                     Upgrade to AI Unlimited
 
                 </button>
+
+
+                <!-- UNLIMITED → STANDARD -->
+
+                <button
+                    id="downgradeAIUnlimitedBtn"
+                    class="glass-btn"
+                    onclick="downgradeAIUnlimited()"
+                    style="
+                        margin-top:18px;
+                        display:none;
+                    ">
+
+                    Downgrade to Standard
+
+                </button>
+
 
                 <small
                     id="upgradeAIUnlimitedMessage"
@@ -2939,7 +2959,6 @@ SUBSCRIPTION
                 </small>
 
             </div>
-
         </div>
 
      </div>    
@@ -4335,6 +4354,186 @@ async function upgradeAIUnlimited() {
 }
 
 // =========================
+// DOWNGRADE TO STANDARD
+// =========================
+
+async function downgradeAIUnlimited() {
+
+    const button =
+        document.getElementById(
+            "downgradeAIUnlimitedBtn"
+        );
+
+    const message =
+        document.getElementById(
+            "upgradeAIUnlimitedMessage"
+        );
+
+    if (!button) return;
+
+
+    const confirmed =
+        confirm(
+            "Downgrade to EdgeBreak Standard?\n\n" +
+            "You will keep AI Unlimited until the end of your current billing period. " +
+            "After that, your subscription will continue at $19.99 USD per month with 15 AI Unlimited questions each month."
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.innerText =
+        "Scheduling Downgrade...";
+
+
+    if (message) {
+
+        message.innerText =
+            "";
+
+        message.style.color =
+            "#94a3b8";
+
+    }
+
+
+    try {
+
+        const {
+
+            data: { session }
+
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if (!session) {
+
+            throw new Error(
+                "Please log in again."
+            );
+
+        }
+
+
+        const response =
+            await fetch(
+
+                "https://qmonyhukamuuunxxxdlk.supabase.co/functions/v1/downgrade-ai-unlimited",
+
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        Authorization:
+                            `Bearer ${session.access_token}`,
+
+                        "Content-Type":
+                            "application/json"
+
+                    }
+
+                }
+
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                result.error ||
+                "Unable to schedule your downgrade."
+
+            );
+
+        }
+
+
+        if (message) {
+
+            if (
+                result.effectiveAt
+            ) {
+
+                const date =
+                    new Date(
+                        result.effectiveAt * 1000
+                    );
+
+
+                message.innerText =
+                    "Downgrade scheduled. AI Unlimited remains active until " +
+                    date.toLocaleDateString() +
+                    ", then your account will move to EdgeBreak Standard.";
+
+            }
+            else {
+
+                message.innerText =
+                    result.message ||
+                    "Your downgrade to EdgeBreak Standard has been scheduled.";
+
+            }
+
+
+            message.style.color =
+                "#F59E0B";
+
+        }
+
+
+        button.innerText =
+            "Downgrade Scheduled";
+
+        button.disabled =
+            true;
+
+    }
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        if (message) {
+
+            message.innerText =
+                error.message ||
+                "Unable to schedule your downgrade.";
+
+            message.style.color =
+                "#EF4444";
+
+        }
+
+
+        button.disabled =
+            false;
+
+        button.innerText =
+            "Downgrade to Standard";
+
+    }
+
+}
+
+// =========================
 // LOAD SUBSCRIPTION
 // =========================
 
@@ -4360,7 +4559,12 @@ async function loadSubscription() {
             "upgradeAIUnlimitedBtn"
         );
 
-    const upgradeMessage =
+    const downgradeButton =
+        document.getElementById(
+            "downgradeAIUnlimitedBtn"
+        );
+
+    const message =
         document.getElementById(
             "upgradeAIUnlimitedMessage"
         );
@@ -4369,7 +4573,7 @@ async function loadSubscription() {
     try {
 
         // =========================
-        // GET AI PLAN
+        // GET CURRENT AI PLAN
         // =========================
 
         const response =
@@ -4404,8 +4608,10 @@ async function loadSubscription() {
         if (!response.ok) {
 
             throw new Error(
+
                 data.error ||
                 "Unable to load subscription."
+
             );
 
         }
@@ -4439,12 +4645,26 @@ async function loadSubscription() {
             }
 
 
-            if (upgradeMessage) {
+            if (downgradeButton) {
 
-                upgradeMessage.innerText =
+                downgradeButton.style.display =
+                    "inline-flex";
+
+                downgradeButton.disabled =
+                    false;
+
+                downgradeButton.innerText =
+                    "Downgrade to Standard";
+
+            }
+
+
+            if (message) {
+
+                message.innerText =
                     "AI Unlimited is active on your account.";
 
-                upgradeMessage.style.color =
+                message.style.color =
                     "#4ADE80";
 
             }
@@ -4484,12 +4704,20 @@ async function loadSubscription() {
         }
 
 
-        if (upgradeMessage) {
+        if (downgradeButton) {
 
-            upgradeMessage.innerText =
+            downgradeButton.style.display =
+                "none";
+
+        }
+
+
+        if (message) {
+
+            message.innerText =
                 "Standard includes 15 AI Unlimited questions each month.";
 
-            upgradeMessage.style.color =
+            message.style.color =
                 "#94A3B8";
 
         }
@@ -4518,6 +4746,22 @@ async function loadSubscription() {
 
             upgradeButton.style.display =
                 "none";
+
+        }
+
+
+        if (downgradeButton) {
+
+            downgradeButton.style.display =
+                "none";
+
+        }
+
+
+        if (message) {
+
+            message.innerText =
+                "";
 
         }
 
