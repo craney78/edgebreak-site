@@ -1,0 +1,1958 @@
+<!-- =========================================
+✦ EDGEBREAK AI CHAT
+========================================= -->
+
+<!-- FLOATING AI CHAT BUTTON -->
+
+<button
+    type="button"
+    id="edgeBreakChatButton"
+    class="edge-chat-button"
+    aria-label="Open EdgeBreak AI Chat"
+    aria-expanded="false"
+    aria-controls="edgeBreakChatPanel"
+>
+    <span class="edge-chat-button-icon">
+        ✦
+    </span>
+
+    <span class="edge-chat-button-copy">
+        <strong>EdgeBreak AI</strong>
+        <small>Ask EdgeBreak</small>
+    </span>
+</button>
+
+
+<!-- CHAT OVERLAY -->
+
+<div
+    id="edgeBreakChatOverlay"
+    class="edge-chat-overlay"
+    aria-hidden="true"
+></div>
+
+
+<!-- CHAT PANEL -->
+
+<aside
+    id="edgeBreakChatPanel"
+    class="edge-chat-panel"
+    aria-hidden="true"
+>
+
+
+    <!-- =====================================
+    HEADER
+    ====================================== -->
+
+    <div class="edge-chat-header">
+
+        <div class="edge-chat-brand">
+
+            <div class="edge-chat-brand-icon">
+                ✦
+            </div>
+
+            <div>
+
+                <span class="edge-chat-eyebrow">
+                    EDGEBREAK AI
+                </span>
+
+                <h2>
+                    How Can I Help?
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="edgeBreakChatClose"
+            class="edge-chat-close"
+            aria-label="Close EdgeBreak AI Chat"
+        >
+            ×
+        </button>
+
+    </div>
+
+    <!-- =====================================
+    AI MODE SWITCH
+    ====================================== -->
+
+    <div class="edge-ai-mode-switch">
+
+        <button
+            type="button"
+            id="edgeAIGuidedMode"
+            class="edge-ai-mode-btn active"
+        >
+            ✦ Guided AI
+        </button>
+
+        <button
+            type="button"
+            id="edgeAIUnlimitedMode"
+            class="edge-ai-mode-btn"
+        >
+            AI Unlimited
+        </button>
+
+    </div>
+
+    <!-- =====================================
+    INTRO
+    ====================================== -->
+
+    <div class="edge-chat-intro">
+
+        <p>
+            Get quick answers about NASDAQ stocks,
+            EdgeBreak scanner results, trading scenarios,
+            market conditions and common trading questions.
+        </p>
+
+    
+        <div class="edge-chat-learning">
+
+            <span>✦</span>
+
+            <p>
+                <strong>EdgeBreak AI is still learning.</strong>
+                We're continually expanding its knowledge
+                and improving its answers as EdgeBreak evolves.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+    CHAT CONVERSATION AREA
+    ====================================== -->
+
+    <div
+        id="edgeBreakChatConversation"
+        class="edge-chat-conversation"
+        aria-live="polite"
+    >
+
+        <!-- INITIAL AI MESSAGE -->
+
+        <div class="edge-chat-message edge-chat-message-ai">
+
+            <div class="edge-chat-message-icon">
+                ✦
+            </div>
+
+            <div class="edge-chat-message-bubble">
+
+                <strong>
+                    What would you like help with?
+                </strong>
+
+                <p>
+                    Choose a topic below to get started.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================
+        MAIN QUESTION CATEGORIES
+        ================================== -->
+
+        <div
+            id="edgeBreakChatCategories"
+            class="edge-chat-categories"
+        >
+
+
+            <button
+                type="button"
+                class="edge-chat-category"
+                data-chat-category="quick"
+            >
+                <span class="edge-chat-category-icon">
+                    ⚡
+                </span>
+
+                <span>
+                    <strong>
+                        Quick Answers
+                    </strong>
+
+                    <small>
+                        Give me the short version
+                    </small>
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-category"
+                data-chat-category="stock"
+            >
+                <span class="edge-chat-category-icon">
+                    🔍
+                </span>
+
+                <span>
+                    <strong>
+                        A Stock I'm Researching
+                    </strong>
+
+                    <small>
+                        Scanner results, charts and stocks
+                    </small>
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-category"
+                data-chat-category="trade"
+            >
+                <span class="edge-chat-category-icon">
+                    📈
+                </span>
+
+                <span>
+                    <strong>
+                        Entering & Exiting Trades
+                    </strong>
+
+                    <small>
+                        Understand what's happening
+                    </small>
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-category"
+                data-chat-category="nasdaq"
+            >
+                <span class="edge-chat-category-icon">
+                    🌐
+                </span>
+
+                <span>
+                    <strong>
+                        NASDAQ &amp; The Market
+                    </strong>
+
+                    <small>
+                        Market conditions and the big picture
+                    </small>
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-category"
+                data-chat-category="sector"
+            >
+                <span class="edge-chat-category-icon">
+                    🏭
+                </span>
+
+                <span>
+                    <strong>
+                        Sectors &amp; Trends
+                    </strong>
+
+                    <small>
+                        Sector strength and weakness
+                    </small>
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-category"
+                data-chat-category="margin"
+            >
+                <span class="edge-chat-category-icon">
+                    💰
+                </span>
+
+                <span>
+                    <strong>
+                        Margin &amp; My Trading Account
+                    </strong>
+
+                    <small>
+                        Margin, leverage and trading mechanics
+                    </small>
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-category"
+                data-chat-category="learn"
+            >
+                <span class="edge-chat-category-icon">
+                    🎓
+                </span>
+
+                <span>
+                    <strong>
+                        Help Me Understand
+                    </strong>
+
+                    <small>
+                        Simple explanations for traders
+                    </small>
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-category"
+                data-chat-category="account"
+            >
+                <span class="edge-chat-category-icon">
+                    ⚙️
+                </span>
+
+                <span>
+                    <strong>
+                        EdgeBreak &amp; My Account
+                    </strong>
+
+                    <small>
+                        Using EdgeBreak and account help
+                    </small>
+                </span>
+            </button>
+
+
+        </div>
+    <!-- =========================================
+    QUICK ANSWERS SCREEN
+    ========================================= -->
+
+    <div
+        id="edgeBreakQuickScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <!-- BACK -->
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+
+        <!-- TITLE -->
+
+        <div class="edge-chat-screen-heading">
+
+            <span class="edge-chat-screen-icon">
+                ⚡
+            </span>
+
+            <div>
+
+                <span class="edge-chat-screen-label">
+                    QUICK ANSWERS
+                </span>
+
+                <h3>
+                    What do you want to know?
+                </h3>
+
+                <p>
+                    Choose a quick question and EdgeBreak
+                    will give you the short version.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- STOCK NOTICE -->
+
+        <div class="edge-chat-stock-notice">
+
+            <span>🔍</span>
+
+            <div>
+
+                <strong>
+                    Stock questions
+                </strong>
+
+                <p>
+                    We'll ask you which NASDAQ stock you
+                    want to check when required.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUESTIONS -->
+
+        <div class="edge-chat-question-list">
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="quick-rundown"
+            >
+                <span>
+                    Give me the 30-second rundown
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="why-scanned"
+            >
+                <span>
+                    Why did this stock scan up?
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="resistance"
+            >
+                <span>
+                    Where is resistance?
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="support"
+            >
+                <span>
+                    Where is support?
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="chart-doing"
+            >
+                <span>
+                    What's the chart doing?
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="volume"
+            >
+                <span>
+                    What's volume doing?
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="distance-resistance"
+            >
+                <span>
+                    How close is it to resistance?
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="anything-important"
+            >
+                <span>
+                    Anything I should know quickly?
+                </span>
+
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="setup-strength"
+            >
+                <span>How strong is this setup?</span>
+                <span class="edge-chat-question-arrow">
+                    ›
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="setup-age"
+            >
+                <span>How long has this setup been forming?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="smart-money-status"
+            >
+                <span>Has Smart Money identified this stock?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-question="scanner-found"
+            >
+                <span>Which scanner found this stock?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+        </div>
+
+    </div>
+
+    <!-- =========================================================
+    EDGEBREAK AI CHAT
+    TECHNICAL SETUP SCREEN
+    ========================================================= -->
+
+    <div
+        id="edgeBreakTechnicalScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+
+        <div class="edge-chat-screen-heading">
+
+            <div class="edge-chat-screen-icon">
+                ◇
+            </div>
+
+            <div>
+                <h3>Technical Setup</h3>
+
+                <p>
+                    Explore the technical structure EdgeBreak
+                    has identified for a stock.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-question-list">
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="technical-resistance"
+            >
+                <span>What resistance level did EdgeBreak identify?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="technical-support"
+            >
+                <span>What support level did EdgeBreak identify?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="resistance-tests"
+            >
+                <span>How many times has resistance been tested?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="support-tests"
+            >
+                <span>How many times has support been tested?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="higher-lows"
+            >
+                <span>How many higher lows has the stock formed?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="resistance-position"
+            >
+                <span>Is price above or below resistance?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="range-position"
+            >
+                <span>Where is price within the trading range?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="outside-setup"
+            >
+                <span>Has price moved outside the original setup?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="range-width"
+            >
+                <span>How wide is the trading range?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="base-length"
+            >
+                <span>How long is the base?</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="explain-setup"
+            >
+                <span>Explain this technical setup in simple terms</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-technical-question="technical-numbers"
+            >
+                <span>Show me the key technical numbers</span>
+                <span class="edge-chat-question-arrow">›</span>
+            </button>
+
+
+        </div>
+
+    </div>
+
+    <!-- =========================================================
+    EDGEBREAK AI CHAT
+    HELP ME UNDERSTAND
+    ========================================================= -->
+
+    <div
+        id="edgeBreakLearnScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+        <div class="edge-chat-screen-heading">
+
+            <div class="edge-chat-screen-icon">
+                🎓
+            </div>
+
+            <div>
+
+                <h3>
+                    Help Me Understand
+                </h3>
+
+                <p>
+                    Simple explanations of common stock market
+                    and EdgeBreak concepts.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-question-list">
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="resistance"
+            >
+                <span>What is resistance?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="support"
+            >
+                <span>What is support?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="breakout"
+            >
+                <span>What is a breakout?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="pre-breakout"
+            >
+                <span>What is a pre-breakout setup?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="higher-lows"
+            >
+                <span>What are higher lows?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="volume"
+            >
+                <span>What does volume tell me?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="relative-volume"
+            >
+                <span>What is relative volume?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="trading-range"
+            >
+                <span>What is a trading range?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="launch-pad"
+            >
+                <span>What is a Launch Pad?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="smart-money"
+            >
+                <span>What does Smart Money mean in EdgeBreak?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="liquidity"
+            >
+                <span>What is liquidity?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-learn-question="market-cap"
+            >
+                <span>What is market capitalisation?</span>
+                <span>›</span>
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- =========================================================
+    EDGEBREAK AI CHAT
+    MARGIN & MY TRADING ACCOUNT
+    ========================================================= -->
+
+    <div
+        id="edgeBreakMarginScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+
+        <div class="edge-chat-screen-heading">
+
+            <div class="edge-chat-screen-icon">
+                💰
+            </div>
+
+            <div>
+
+                <h3>
+                    Margin & My Trading Account
+                </h3>
+
+                <p>
+                    Simple explanations of margin, leverage,
+                    orders and common trading account mechanics.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-stock-notice">
+
+            <span>ℹ️</span>
+
+            <div>
+
+                <strong>
+                    Broker rules can vary
+                </strong>
+
+                <p>
+                    EdgeBreak explains general trading concepts.
+                    Always check the specific rules, fees and
+                    requirements of your own broker.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-question-list">
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="margin-account"
+            >
+                <span>What is a margin account?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="leverage"
+            >
+                <span>What is leverage?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="buying-power"
+            >
+                <span>What is buying power?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="margin-call"
+            >
+                <span>What is a margin call?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="maintenance-margin"
+            >
+                <span>What is maintenance margin?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="cash-vs-margin"
+            >
+                <span>Cash account vs margin account?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="market-order"
+            >
+                <span>What is a market order?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="limit-order"
+            >
+                <span>What is a limit order?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="stop-order"
+            >
+                <span>What is a stop order?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="short-selling"
+            >
+                <span>What does short selling mean?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="position-sizing"
+            >
+                <span>What is position sizing?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-margin-question="settlement"
+            >
+                <span>Why does trade settlement matter?</span>
+                <span>›</span>
+            </button>
+
+
+        </div>
+
+    </div>
+
+    <!-- =========================================================
+    EDGEBREAK AI CHAT
+    EDGEBREAK & MY ACCOUNT
+    ========================================================= -->
+
+    <div
+        id="edgeBreakAccountScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+
+        <div class="edge-chat-screen-heading">
+
+            <div class="edge-chat-screen-icon">
+                ⚙️
+            </div>
+
+            <div>
+
+                <h3>
+                    EdgeBreak & My Account
+                </h3>
+
+                <p>
+                    Learn how EdgeBreak works, explore its
+                    features and get help with your account.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-question-list">
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="what-is-edgebreak"
+            >
+                <span>What does EdgeBreak do?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="scanners"
+            >
+                <span>What are the EdgeBreak scanners?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="scanner-difference"
+            >
+                <span>What's the difference between the scanners?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="daily-brief"
+            >
+                <span>What is the EdgeBreak Daily Brief?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="ai-research"
+            >
+                <span>What is AI Stock Research?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="ai-chart"
+            >
+                <span>What is AI Chart Analysis?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="smart-money"
+            >
+                <span>What is the Smart Money Filter?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="academy"
+            >
+                <span>What is the EdgeBreak Academy?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="scanner-updates"
+            >
+                <span>When are the EdgeBreak scanners updated?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="stock-disappeared"
+            >
+                <span>Why might a stock disappear from a scanner?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="free-trial"
+            >
+                <span>How does the 7-day free trial work?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="manage-account"
+            >
+                <span>How do I manage or cancel my subscription?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-account-question="financial-advice"
+            >
+                <span>Does EdgeBreak give financial advice?</span>
+                <span>›</span>
+            </button>
+
+
+        </div>
+
+    </div>
+
+    <!-- =========================================================
+    EDGEBREAK AI CHAT
+    ENTERING & EXITING TRADES
+    ========================================================= -->
+
+    <div
+        id="edgeBreakTradeScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+
+        <div class="edge-chat-screen-heading">
+
+            <div class="edge-chat-screen-icon">
+                📈
+            </div>
+
+            <div>
+
+                <h3>
+                    Entering & Exiting Trades
+                </h3>
+
+                <p>
+                    Learn how traders think about entries,
+                    exits and managing a trade.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-question-list">
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="before-entry"
+            >
+                <span>What should I check before entering a trade?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="entry-point"
+            >
+                <span>How do traders decide where to enter?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="before-after-breakout"
+            >
+                <span>Should I enter before or after a breakout?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="chasing"
+            >
+                <span>Why can chasing a stock after a big move be risky?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="support-resistance-entry"
+            >
+                <span>How can support and resistance help with an entry?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="position-size"
+            >
+                <span>What should I think about before deciding my position size?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="plan-exit"
+            >
+                <span>How do traders plan an exit before entering a trade?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="stop-loss"
+            >
+                <span>What is a stop-loss and how does it work?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="trailing-stop"
+            >
+                <span>What is a trailing stop?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="partial-profits"
+            >
+                <span>Why might traders take partial profits?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="setup-weakened"
+            >
+                <span>What can indicate that a technical setup has weakened?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-trade-question="emotional-decisions"
+            >
+                <span>How do I avoid making emotional entry and exit decisions?</span>
+                <span>›</span>
+            </button>
+
+
+        </div>
+
+    </div>
+
+    <!-- =========================================================
+    EDGEBREAK AI CHAT
+    NASDAQ & THE MARKET
+    ========================================================= -->
+
+    <div
+        id="edgeBreakNasdaqScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+
+        <div class="edge-chat-screen-heading">
+
+            <div class="edge-chat-screen-icon">
+                🌐
+            </div>
+
+            <div>
+
+                <h3>
+                    NASDAQ & The Market
+                </h3>
+
+                <p>
+                    Understand the broader NASDAQ market,
+                    today's activity and what EdgeBreak is finding.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-question-list">
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="nasdaq-today"
+            >
+                <span>How is the NASDAQ doing today?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="session-strength"
+            >
+                <span>Was today's NASDAQ session strong or weak?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="market-breadth"
+            >
+                <span>Was the market broadly strong or driven by a few large stocks?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="strongest-areas"
+            >
+                <span>What were the strongest areas of the NASDAQ today?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="weakest-areas"
+            >
+                <span>What were the weakest areas of the NASDAQ today?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="market-drivers"
+            >
+                <span>What moved the NASDAQ today?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="major-movers"
+            >
+                <span>Which major NASDAQ stocks moved the most today?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="scanner-activity"
+            >
+                <span>Are EdgeBreak scanners finding many setups right now?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="scanner-market"
+            >
+                <span>What does scanner activity tell me about the market?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="stocks-vs-nasdaq"
+            >
+                <span>Can stocks still rise when the NASDAQ is falling?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="upcoming-events"
+            >
+                <span>What important market events are coming up?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-nasdaq-question="big-picture"
+            >
+                <span>Give me the NASDAQ big picture.</span>
+                <span>›</span>
+            </button>
+
+
+        </div>
+
+    </div>
+
+    <!-- =========================================================
+    EDGEBREAK AI CHAT
+    SECTORS & TRENDS
+    ========================================================= -->
+
+    <div
+        id="edgeBreakSectorScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="main"
+        >
+            ← Back
+        </button>
+
+
+        <div class="edge-chat-screen-heading">
+
+            <div class="edge-chat-screen-icon">
+                🏭
+            </div>
+
+            <div>
+
+                <h3>
+                    Sectors & Trends
+                </h3>
+
+                <p>
+                    Understand sector strength, weakness,
+                    leadership and rotation across the market.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="edge-chat-question-list">
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="strongest-sectors"
+            >
+                <span>Which sectors were strongest today?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="weakest-sectors"
+            >
+                <span>Which sectors were weakest today?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="why-sector-strength"
+            >
+                <span>Why does sector strength matter when researching a stock?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="stock-rise-weak-sector"
+            >
+                <span>Can a stock rise when its sector is weak?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="strong-sector-help"
+            >
+                <span>Can a strong sector help a stock?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="sector-rotation"
+            >
+                <span>What is sector rotation?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="rotation-into-sector"
+            >
+                <span>How can I tell if money is rotating into a sector?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="compare-sector"
+            >
+                <span>Should I compare a stock with others in its sector?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="stronger-than-sector"
+            >
+                <span>What does it mean if my stock is stronger than its sector?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="weaker-than-sector"
+            >
+                <span>What does it mean if my stock is weaker than its sector?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="technology-leading"
+            >
+                <span>Are technology stocks leading the NASDAQ right now?</span>
+                <span>›</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="edge-chat-question"
+                data-chat-sector-question="sector-picture"
+            >
+                <span>Give me today's sector picture.</span>
+                <span>›</span>
+            </button>
+
+
+        </div>
+
+    </div>
+
+    <!-- =========================================
+    STOCK SELECT SCREEN
+    ========================================= -->
+
+    <div
+        id="edgeBreakStockScreen"
+        class="edge-chat-screen"
+        hidden
+    >
+
+        <!-- BACK -->
+
+        <button
+            type="button"
+            class="edge-chat-back"
+            data-chat-back="quick"
+        >
+            ← Back
+        </button>
+
+
+        <!-- HEADING -->
+
+        <div class="edge-chat-screen-heading">
+
+            <span class="edge-chat-screen-icon">
+                🔍
+            </span>
+
+            <div>
+
+                <span class="edge-chat-screen-label">
+                    SELECT A STOCK
+                </span>
+
+                <h3>
+                    Which stock would you like to check?
+                </h3>
+
+                <p>
+                    Enter the NASDAQ ticker symbol.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SELECTED QUESTION -->
+
+        <div class="edge-chat-selected-question">
+
+            <span>
+                Your question
+            </span>
+
+            <strong id="edgeBreakSelectedQuestionText">
+                Quick Answer
+            </strong>
+
+        </div>
+
+
+        <!-- TICKER FORM -->
+
+        <form
+            id="edgeBreakTickerForm"
+            class="edge-chat-ticker-form"
+        >
+
+            <label for="edgeBreakTickerInput">
+                Stock ticker
+            </label>
+
+            <div class="edge-chat-ticker-row">
+
+                <input
+                    type="text"
+                    id="edgeBreakTickerInput"
+                    class="edge-chat-ticker-input"
+                    placeholder="e.g. NVDA"
+                    maxlength="10"
+                    autocomplete="off"
+                    spellcheck="false"
+                    required
+                >
+
+                <button
+                    type="submit"
+                    class="edge-chat-ticker-submit"
+                >
+                    Check Stock
+                </button>
+
+            </div>
+
+            <p
+                id="edgeBreakTickerMessage"
+                class="edge-chat-ticker-message"
+                aria-live="polite"
+            ></p>
+
+        </form>
+
+
+        <!-- FUTURE DATA SOURCES -->
+
+        <div class="edge-chat-stock-options">
+
+            <span class="edge-chat-stock-options-label">
+                Coming next
+            </span>
+
+            <div class="edge-chat-stock-option-disabled">
+                <span>📊</span>
+
+                <div>
+                    <strong>
+                        Today's EdgeBreak Stocks
+                    </strong>
+
+                    <small>
+                        Select directly from today's scanner results
+                    </small>
+                </div>
+            </div>
+
+
+            <div class="edge-chat-stock-option-disabled">
+                <span>★</span>
+
+                <div>
+                    <strong>
+                        My Watchlist
+                    </strong>
+
+                    <small>
+                        Select a stock from your EdgeBreak Watchlist
+                    </small>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+    
+    <!-- =====================================
+    DISCLAIMER
+    ====================================== -->
+
+    <div class="edge-chat-disclaimer">
+
+        EdgeBreak provides factual market research and
+        educational information only. EdgeBreak does not
+        provide financial advice or buy or sell
+        recommendations. AI-generated information may
+        contain errors and important information should
+        be independently verified.
+
+    </div>
+
+
+</aside>
