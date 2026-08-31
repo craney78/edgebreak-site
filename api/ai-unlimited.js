@@ -504,14 +504,137 @@ export default async function handler(
             );
 
 
-        /* =================================
-        FINAL OUTPUT SAFETY
-        ================================= */
+            /* =================================
+            OUT-OF-SCOPE CHECK
 
-        const safeAnswer =
-            validateOutput(
-                geminiResult.text
-            );
+            Out-of-scope questions receive the
+            normal short redirect response but do
+            NOT consume one of the user's included
+            AI Unlimited questions.
+            ================================= */
+
+            const outOfScope =
+                /^\s*\[\[OUT_OF_SCOPE\]\]/i
+                    .test(
+                        geminiResult.text
+                    );
+
+
+            let answerText =
+                geminiResult.text;
+
+
+            if (
+                outOfScope
+            ) {
+
+                /* =================================
+                REMOVE INTERNAL MARKER
+                ================================= */
+
+                answerText =
+                    answerText
+                        .replace(
+                            /^\s*\[\[OUT_OF_SCOPE\]\]\s*/i,
+                            ""
+                        )
+                        .trim();
+
+
+                /* =================================
+                RELEASE RESERVED QUESTION
+
+                Store the Gemini usage for our own
+                cost tracking, but mark the request
+                failed/non-counting so it does not
+                use the customer's monthly allowance.
+                ================================= */
+
+                await markRequestOutOfScope(
+                    reservedRequestId,
+                    geminiResult
+                );
+
+
+                reservedRequestId =
+                    null;
+
+
+                /* =================================
+                REFRESH ALLOWANCE
+
+                The pending reservation has now been
+                released, so return the corrected
+                remaining number to the frontend.
+                ================================= */
+
+                const refreshedUsage =
+                    await getUsageForAccount(
+                        user.id,
+                        accessLevel,
+                        monthStart
+                    );
+
+
+                const safeOutOfScopeAnswer =
+                    validateOutput(
+                        answerText
+                    );
+
+
+                return res
+                    .status(200)
+                    .json({
+
+                        success:
+                            true,
+
+                        answer:
+                            safeOutOfScopeAnswer,
+
+                        outOfScope:
+                            true,
+
+                        counted:
+                            false,
+
+                        edgeBreakDataUsed:
+                            false,
+
+                        symbol:
+                            null,
+
+                        accessLevel:
+                            accessLevel,
+
+                        monthlyLimit:
+                            accessLevel ===
+                                "unlimited"
+                                ? null
+                                : INCLUDED_MONTHLY_LIMIT,
+
+                        used:
+                            refreshedUsage.used,
+
+                        remaining:
+                            refreshedUsage.remaining,
+
+                        monthStart:
+                            monthStart
+
+                    });
+
+            }
+
+
+            /* =================================
+            FINAL OUTPUT SAFETY
+            ================================= */
+
+            const safeAnswer =
+                validateOutput(
+                    answerText
+                );
 
 
         /* =================================
@@ -574,7 +697,7 @@ export default async function handler(
     }
     catch (
         error
-    ) {
+    ) {    
 
         /* =================================
         FAILED GEMINI / PROCESSING REQUEST
@@ -1374,6 +1497,133 @@ async function markRequestSucceeded(
 
 }
 
+/* =========================================
+MARK REQUEST OUT OF SCOPE
+
+The AI request completed successfully,
+so we still store Gemini usage for cost
+tracking.
+
+However, status is recorded as "failed"
+so it does NOT count toward the user's
+monthly included allowance.
+========================================= */
+
+async function markRequestOutOfScope(
+    requestId,
+    geminiResult
+) {
+
+    if (
+        !requestId
+    ) {
+
+        throw createHttpError(
+            500,
+            "AI Unlimited usage could not be recorded."
+        );
+
+    }
+
+
+    const usage =
+        geminiResult
+            ?.usageMetadata &&
+        typeof geminiResult
+            .usageMetadata ===
+            "object"
+            ? geminiResult
+                .usageMetadata
+            : {};
+
+
+    const searchQueries =
+        Number.isFinite(
+            Number(
+                geminiResult
+                    ?.searchQueries
+            )
+        )
+            ? Number(
+                geminiResult
+                    .searchQueries
+            )
+            : 0;
+
+
+    const usageData = {
+
+        ...usage,
+
+        googleSearchQueries:
+            searchQueries,
+
+        outOfScope:
+            true
+
+    };
+
+
+    const success =
+        await updateRequestLog(
+            requestId,
+            {
+
+                status:
+                    "failed",
+
+                model:
+                    GEMINI_MODEL,
+
+                prompt_tokens:
+                    cleanDatabaseInteger(
+                        usage
+                            ?.promptTokenCount
+                    ),
+
+                output_tokens:
+                    cleanDatabaseInteger(
+                        usage
+                            ?.candidatesTokenCount
+                    ),
+
+                thinking_tokens:
+                    cleanDatabaseInteger(
+                        usage
+                            ?.thoughtsTokenCount
+                    ),
+
+                search_queries:
+                    cleanDatabaseInteger(
+                        searchQueries
+                    ),
+
+                usage_data:
+                    usageData,
+
+                error_message:
+                    "Out-of-scope question — not counted.",
+
+                completed_at:
+                    new Date()
+                        .toISOString()
+
+            }
+        );
+
+
+    if (
+        !success
+    ) {
+
+        throw createHttpError(
+            500,
+            "AI Unlimited usage could not be recorded."
+        );
+
+    }
+
+}
 
 /* =========================================
 MARK REQUEST FAILED
@@ -2472,6 +2722,24 @@ Preferred style:
 "I'm focused on stocks, trading and financial markets.
 Ask me anything about a stock, market news, trading
 concepts, calculations or what's happening in the markets."
+
+IMPORTANT INTERNAL ROUTING RULE:
+
+When the CURRENT user question is clearly out of scope,
+begin the response with this exact marker:
+
+[[OUT_OF_SCOPE]]
+
+Then immediately give the short natural redirect.
+
+Do not use this marker for:
+
+- legitimate market questions
+- reasonable market-related follow-ups
+- ordinary mathematics
+- questions with a reasonable trading or investing connection
+
+Never mention or explain the marker to the user.
 
 Do not be overly strict.
 
