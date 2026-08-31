@@ -2046,22 +2046,27 @@ DELETE ACCOUNT MODAL
 AI UNLIMITED UPGRADE
 =================================== */
 
+/* ===================================
+AI UNLIMITED UPGRADE
+=================================== */
+
 .subscription-content{
 
-    padding:24px 26px;
+    width:430px;
+    max-width:100%;
 
-    border-radius:16px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-start;
 
-    background:
-        linear-gradient(
-            180deg,
-            rgba(34,197,94,.06),
-            rgba(255,255,255,.02)
-        );
+    padding:0;
 
-    border:
-        1px solid
-        rgba(34,197,94,.16);
+    background:none;
+
+    border:none;
+
+    border-radius:0;
 
 }
 
@@ -2072,9 +2077,9 @@ AI UNLIMITED UPGRADE
 
     display:block;
 
-    margin-bottom:6px;
+    margin:0 0 8px;
 
-    font-size:1.15rem;
+    font-size:1.2rem;
 
     font-weight:700;
 
@@ -2087,13 +2092,13 @@ AI UNLIMITED UPGRADE
 
 #upgradeAIUnlimitedBtn{
 
-    width:100%;
+    width:auto;
 
-    max-width:280px;
+    min-width:260px;
 
-    margin-top:18px;
+    margin-top:14px;
 
-    padding:14px 22px;
+    padding:14px 24px;
 
     background:#22c55e;
 
@@ -2113,10 +2118,7 @@ AI UNLIMITED UPGRADE
         0 8px 22px
         rgba(34,197,94,.18);
 
-    transition:
-        transform .2s ease,
-        background .2s ease,
-        box-shadow .2s ease;
+    transition:.2s ease;
 
 }
 
@@ -2130,10 +2132,6 @@ AI UNLIMITED UPGRADE
     border-color:#4ade80;
 
     color:#020617;
-
-    box-shadow:
-        0 12px 28px
-        rgba(34,197,94,.28);
 
 }
 
@@ -2155,9 +2153,7 @@ AI UNLIMITED UPGRADE
 
     display:block;
 
-    max-width:300px;
-
-    margin-top:14px;
+    margin-top:12px;
 
     color:#94a3b8;
 
@@ -2168,17 +2164,13 @@ AI UNLIMITED UPGRADE
 }
 
 
-/* ===================================
-MOBILE
-=================================== */
+/* MOBILE */
 
 @media (max-width:900px){
 
     .subscription-content{
 
         width:100%;
-
-        box-sizing:border-box;
 
     }
 
@@ -2187,17 +2179,11 @@ MOBILE
 
 @media (max-width:768px){
 
-    .subscription-content{
-
-        padding:22px;
-
-    }
-
     #upgradeAIUnlimitedBtn{
 
         width:100%;
 
-        max-width:none;
+        min-width:0;
 
     }
 
