@@ -7809,6 +7809,44 @@ html {
     overflow: hidden;
 }
 
+/* ---------------------------------------------------------
+   AI UNLIMITED SCROLL AREA
+--------------------------------------------------------- */
+
+#edgeAIUnlimitedContent {
+    flex: 1;
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(148, 163, 184, 0.25)
+        transparent;
+}
+
+
+#edgeAIUnlimitedContent::-webkit-scrollbar {
+    width: 6px;
+}
+
+
+#edgeAIUnlimitedContent::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+#edgeAIUnlimitedContent::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.25);
+    border-radius: 999px;
+}
+
+
+#edgeAIUnlimitedContent::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.4);
+}
+
 
 .edge-chat-panel.is-open {
     transform: translateX(0);
@@ -8874,6 +8912,189 @@ html {
 #edgeBreakSectorScreen[hidden],
 #edgeBreakStockScreen[hidden] {
     display: none !important;
+}
+
+/* =========================================
+   EDGEBREAK AI MODE SWITCH
+========================================= */
+
+.edge-ai-mode-switch{
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    gap:8px;
+
+    margin:0 22px 18px;
+    padding:5px;
+
+    background:#0b1220;
+
+    border:1px solid #1e293b;
+    border-radius:12px;
+
+}
+
+.edge-ai-mode-btn{
+
+    appearance:none;
+
+    border:none;
+    border-radius:9px;
+
+    padding:11px 14px;
+
+    background:transparent;
+
+    color:#94a3b8;
+
+    font-size:13px;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+
+}
+
+.edge-ai-mode-btn:hover{
+
+    color:#ffffff;
+
+    background:rgba(255,255,255,.04);
+
+}
+
+.edge-ai-mode-btn.active{
+
+    background:#22c55e;
+
+    color:#ffffff;
+
+    box-shadow:
+        0 5px 16px rgba(34,197,94,.18);
+
+}
+
+/* =========================================
+   AI UNLIMITED PANEL
+========================================= */
+
+.edge-ai-unlimited-intro{
+
+    padding:10px 22px 24px;
+
+    text-align:center;
+
+}
+
+.edge-ai-unlimited-icon{
+
+    width:44px;
+    height:44px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    margin:4px auto 12px;
+
+    border-radius:50%;
+
+    background:rgba(34,197,94,.12);
+
+    color:#22c55e;
+
+    font-size:20px;
+
+}
+
+.edge-ai-unlimited-intro h3{
+
+    margin:0 0 8px;
+
+    color:#ffffff;
+
+    font-size:20px;
+
+}
+
+.edge-ai-unlimited-intro p{
+
+    margin:0 auto 18px;
+
+    max-width:330px;
+
+    color:#94a3b8;
+
+    font-size:13px;
+    line-height:1.6;
+
+}
+
+#edgeAIUnlimitedQuestion{
+
+    width:100%;
+    min-height:110px;
+
+    box-sizing:border-box;
+
+    resize:vertical;
+
+    padding:14px;
+
+    border:1px solid #334155;
+    border-radius:10px;
+
+    background:#0b1220;
+
+    color:#ffffff;
+
+    font-family:inherit;
+    font-size:14px;
+    line-height:1.5;
+
+    outline:none;
+
+}
+
+#edgeAIUnlimitedQuestion:focus{
+
+    border-color:#22c55e;
+
+}
+
+#edgeAIUnlimitedQuestion::placeholder{
+
+    color:#64748b;
+
+}
+
+.edge-ai-unlimited-ask{
+
+    width:100%;
+
+    margin-top:12px;
+    padding:13px 16px;
+
+    border:0;
+    border-radius:10px;
+
+    background:#22c55e;
+
+    color:#ffffff;
+
+    font-size:14px;
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+.edge-ai-unlimited-ask:hover{
+
+    filter:brightness(1.06);
+
 }
 </style>  
 
@@ -10981,6 +11202,29 @@ PANEL 1  watchlist seo
 
     </div>
 
+    <!-- =====================================
+    AI MODE SWITCH
+    ====================================== -->
+
+    <div class="edge-ai-mode-switch">
+
+        <button
+            type="button"
+            id="edgeAIGuidedMode"
+            class="edge-ai-mode-btn active"
+        >
+            ✦ Guided AI
+        </button>
+
+        <button
+            type="button"
+            id="edgeAIUnlimitedMode"
+            class="edge-ai-mode-btn"
+        >
+            AI Unlimited
+        </button>
+
+    </div>
 
     <!-- =====================================
     INTRO
@@ -10994,6 +11238,7 @@ PANEL 1  watchlist seo
             market conditions and common trading questions.
         </p>
 
+    
         <div class="edge-chat-learning">
 
             <span>✦</span>
@@ -12816,37 +13061,7 @@ PANEL 1  watchlist seo
 </div>
 
 
-    <!-- =====================================
-    FUTURE UNLIMITED CHAT
-    ====================================== -->
-
-    <div class="edge-chat-unlimited">
-
-        <div class="edge-chat-unlimited-icon">
-            ✦
-        </div>
-
-        <div>
-
-            <strong>
-                EdgeBreak Unlimited AI Chat
-            </strong>
-
-            <span>
-                Coming Soon
-            </span>
-
-            <p>
-                Open-ended AI stock research and trading
-                questions will be available with EdgeBreak
-                Unlimited AI Chat.
-            </p>
-
-        </div>
-
-    </div>
-
-
+    
     <!-- =====================================
     DISCLAIMER
     ====================================== -->
@@ -38476,8 +38691,2261 @@ function getLatestEdgeBreakIndicatorSnapshot(symbol) {
     );
 
 })();
+</script>
+
+<script>
+
+/* =========================================================
+   EDGEBREAK AI UNLIMITED
+   SIDE PANEL INTEGRATION
+
+   PHASE 6
+
+   - EdgeBreak stock context
+   - Rolling conversation memory
+   - Approx. 1,500 word memory budget
+   - Oldest complete exchanges removed first
+   - Safer EdgeBreak ticker matching
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        /* =================================================
+           MODE ELEMENTS
+        ================================================= */
+
+        const guidedBtn =
+            document.getElementById(
+                "edgeAIGuidedMode"
+            );
+
+        const unlimitedBtn =
+            document.getElementById(
+                "edgeAIUnlimitedMode"
+            );
+
+        const guidedContent =
+            document.querySelector(
+                ".edge-chat-intro"
+            );
+
+        const guidedConversation =
+            document.getElementById(
+                "edgeBreakChatConversation"
+            );
+
+
+        if (
+            !guidedBtn ||
+            !unlimitedBtn ||
+            !guidedContent ||
+            !guidedConversation
+        ) {
+
+            console.warn(
+                "EdgeBreak AI mode switch elements not found."
+            );
+
+            return;
+
+        }
+
+
+        /* =================================================
+           CREATE AI UNLIMITED PANEL
+        ================================================= */
+
+        const unlimitedContent =
+            document.createElement(
+                "div"
+            );
+
+
+        unlimitedContent.id =
+            "edgeAIUnlimitedContent";
+
+
+        unlimitedContent.style.display =
+            "none";
+
+
+        unlimitedContent.innerHTML = `
+
+            <div class="edge-ai-unlimited-intro">
+
+                <div class="edge-ai-unlimited-icon">
+                    ✦
+                </div>
+
+                <h3>
+                    AI Unlimited
+                </h3>
+
+                <p>
+                    Ask EdgeBreak anything about a NASDAQ stock,
+                    trading concept or market question.
+                </p>
+
+                <div
+                    id="edgeAIUnlimitedAllowance"
+                    style="
+                        margin:0 0 16px;
+                        padding:11px 14px;
+                        background:rgba(34,197,94,.06);
+                        border:1px solid rgba(34,197,94,.18);
+                        border-radius:10px;
+                        color:#94a3b8;
+                        font-size:12px;
+                        font-weight:700;
+                        line-height:1.5;
+                        text-align:center;
+                    "
+                >
+                    Checking your AI Unlimited allowance...
+                </div>
+
+                <textarea
+                    id="edgeAIUnlimitedQuestion"
+                    placeholder="Ask a stock, trading or market question..."
+                    rows="4"
+                ></textarea>
+
+
+                <button
+                    type="button"
+                    id="edgeAIUnlimitedAsk"
+                    class="edge-ai-unlimited-ask"
+                >
+                    Ask EdgeBreak
+                </button>
+
+
+                <div
+                    id="edgeAIUnlimitedStatus"
+                    style="
+                        margin-top:12px;
+                        font-size:12px;
+                        line-height:1.5;
+                        color:#64748b;
+                    "
+                >
+                    Loading EdgeBreak data...
+                </div>
+
+
+                <div
+                    id="edgeAIUnlimitedAnswer"
+                    style="
+                        display:none;
+                        margin-top:16px;
+                        padding:16px;
+                        text-align:left;
+                        white-space:pre-wrap;
+                        background:#0b1220;
+                        border:1px solid #1e293b;
+                        border-radius:10px;
+                        color:#e2e8f0;
+                        font-size:13px;
+                        line-height:1.65;
+                    "
+                ></div>
+
+            </div>
+
+        `;
+
+
+        /* =================================================
+           PLACE AI UNLIMITED AS ITS OWN MODE
+        ================================================= */
+
+        const chatConversation =
+            document.getElementById(
+                "edgeBreakChatConversation"
+            );
+
+
+        if (
+            !chatConversation
+        ) {
+
+            console.warn(
+                "EdgeBreak chat conversation area not found."
+            );
+
+            return;
+
+        }
+
+
+        chatConversation.insertAdjacentElement(
+            "afterend",
+            unlimitedContent
+        );
+
+
+        /* =================================================
+           UNLIMITED ELEMENTS
+        ================================================= */
+
+        const input =
+            document.getElementById(
+                "edgeAIUnlimitedQuestion"
+            );
+
+
+        const button =
+            document.getElementById(
+                "edgeAIUnlimitedAsk"
+            );
+
+
+        const answer =
+            document.getElementById(
+                "edgeAIUnlimitedAnswer"
+            );
+
+
+        const status =
+            document.getElementById(
+                "edgeAIUnlimitedStatus"
+            );
+
+
+        const allowanceStatus =
+            document.getElementById(
+                "edgeAIUnlimitedAllowance"
+            );
+
+
+        let unlimitedUsage =
+            null;
+
+        /* =================================================
+        AUTHENTICATED EDGEBREAK SESSION
+        ================================================= */
+
+        async function getEdgeBreakSession() {
+
+            const {
+                data: {
+                    session
+                },
+                error
+            } =
+                await window
+                    .supabaseClient
+                    .auth
+                    .getSession();
+
+
+            if (
+                error ||
+                !session?.access_token
+            ) {
+
+                throw new Error(
+                    "Your EdgeBreak session has expired. Please log in again."
+                );
+
+            }
+
+
+            return session;
+
+        }    
+
+        /* =================================================
+        DISPLAY AI UNLIMITED ALLOWANCE
+        ================================================= */
+
+        function renderUnlimitedAllowance(
+            data
+        ) {
+
+            if (
+                !data ||
+                !allowanceStatus
+            ) {
+
+                return;
+
+            }
+
+
+            unlimitedUsage = {
+
+                accessLevel:
+                    data.accessLevel,
+
+                monthlyLimit:
+                    data.monthlyLimit,
+
+                used:
+                    data.used,
+
+                remaining:
+                    data.remaining
+
+            };
+
+
+            /* =========================================
+            FULL AI UNLIMITED PLAN
+            ========================================= */
+
+            if (
+                data.accessLevel ===
+                "unlimited"
+            ) {
+
+                allowanceStatus.textContent =
+                    "AI Unlimited · Unlimited conversations";
+
+
+                allowanceStatus.style.color =
+                    "#4ade80";
+
+
+                input.disabled =
+                    false;
+
+
+                button.disabled =
+                    false;
+
+
+                return;
+
+            }
+
+
+            /* =========================================
+            INCLUDED 15 QUESTION PLAN
+            ========================================= */
+
+            const remaining =
+                Math.max(
+                    0,
+                    Number(
+                        data.remaining || 0
+                    )
+                );
+
+
+            if (
+                remaining === 0
+            ) {
+
+                allowanceStatus.textContent =
+                    "0 of 15 AI Unlimited questions remaining this month · Resets on the 1st";
+
+
+                allowanceStatus.style.color =
+                    "#fbbf24";
+
+
+                input.disabled =
+                    true;
+
+
+                button.disabled =
+                    true;
+
+
+                button.textContent =
+                    "Monthly Limit Reached";
+
+
+                return;
+
+            }
+
+
+            allowanceStatus.textContent =
+                `${remaining} of 15 AI Unlimited ` +
+                `${remaining === 1 ? "question" : "questions"} ` +
+                `remaining this month · Resets on the 1st`;
+
+
+            allowanceStatus.style.color =
+                remaining <= 3
+                    ? "#fbbf24"
+                    : "#94a3b8";
+
+
+            input.disabled =
+                false;
+
+
+            button.disabled =
+                false;
+
+
+            button.textContent =
+                "Ask EdgeBreak";
+
+        }
+
+        /* =================================================
+        LOAD ACCOUNT AI UNLIMITED ALLOWANCE
+        ================================================= */
+
+        async function loadUnlimitedAllowance() {
+
+            try {
+
+                allowanceStatus.textContent =
+                    "Checking your AI Unlimited allowance...";
+
+
+                const session =
+                    await getEdgeBreakSession();
+
+
+                const response =
+                    await fetch(
+                        "/api/ai-unlimited",
+                        {
+
+                            method:
+                                "GET",
+
+                            headers: {
+
+                                "Authorization":
+                                    `Bearer ${session.access_token}`
+
+                            },
+
+                            cache:
+                                "no-store"
+
+                        }
+                    );
+
+
+                let data;
+
+
+                try {
+
+                    data =
+                        await response.json();
+
+                }
+                catch {
+
+                    throw new Error(
+                        "AI Unlimited allowance returned an invalid response."
+                    );
+
+                }
+
+
+                if (
+                    !response.ok
+                ) {
+
+                    throw new Error(
+                        data?.error ||
+                        "Unable to check AI Unlimited allowance."
+                    );
+
+                }
+
+
+                renderUnlimitedAllowance(
+                    data
+                );
+
+            }
+            catch (
+                error
+            ) {
+
+                console.error(
+                    "AI Unlimited allowance error:",
+                    error
+                );
+
+
+                allowanceStatus.textContent =
+                    "AI Unlimited allowance could not be checked.";
+
+
+                allowanceStatus.style.color =
+                    "#ef4444";
+
+
+                input.disabled =
+                    true;
+
+
+                button.disabled =
+                    true;
+
+            }
+
+        }
+
+        /* =================================================
+           CONVERSATION MEMORY
+
+           Memory exists only while this page/session
+           remains open.
+
+           We retain recent user + assistant turns.
+
+           Once the memory grows beyond the approximate
+           word budget, the oldest COMPLETE exchange is
+           removed first.
+        ================================================= */
+
+        const UNLIMITED_MEMORY_WORD_LIMIT =
+            1500;
+
+
+        let unlimitedConversationMemory =
+            [];
+
+
+        /* =================================================
+           COUNT WORDS
+        ================================================= */
+
+        function countWords(
+            value
+        ) {
+
+            const text =
+                String(
+                    value || ""
+                )
+                    .trim();
+
+
+            if (
+                !text
+            ) {
+
+                return 0;
+
+            }
+
+
+            return text
+                .split(
+                    /\s+/
+                )
+                .filter(
+                    Boolean
+                )
+                .length;
+
+        }
+
+
+        /* =================================================
+           MEMORY WORD COUNT
+        ================================================= */
+
+        function getConversationMemoryWordCount() {
+
+            return unlimitedConversationMemory
+                .reduce(
+                    (
+                        total,
+                        turn
+                    ) => {
+
+                        return (
+                            total +
+                            countWords(
+                                turn?.text
+                            )
+                        );
+
+                    },
+                    0
+                );
+
+        }
+
+
+        /* =================================================
+           TRIM CONVERSATION MEMORY
+
+           Memory is stored as complete exchanges:
+
+           user
+           assistant
+           user
+           assistant
+
+           Remove the oldest user + assistant pair
+           whenever possible.
+        ================================================= */
+
+        function trimConversationMemory() {
+
+            while (
+                getConversationMemoryWordCount() >
+                    UNLIMITED_MEMORY_WORD_LIMIT &&
+                unlimitedConversationMemory.length >
+                    2
+            ) {
+
+                /* =========================================
+                   REMOVE OLDEST COMPLETE EXCHANGE
+                ========================================= */
+
+                if (
+                    unlimitedConversationMemory[0]
+                        ?.role === "user" &&
+                    unlimitedConversationMemory[1]
+                        ?.role === "assistant"
+                ) {
+
+                    unlimitedConversationMemory.splice(
+                        0,
+                        2
+                    );
+
+                }
+                else {
+
+                    /* =====================================
+                       SAFETY FALLBACK
+
+                       If memory ever becomes misaligned,
+                       remove the oldest turn.
+                    ===================================== */
+
+                    unlimitedConversationMemory.shift();
+
+                }
+
+            }
+
+
+            console.log(
+                "AI Unlimited memory:",
+                {
+
+                    turns:
+                        unlimitedConversationMemory.length,
+
+                    words:
+                        getConversationMemoryWordCount()
+
+                }
+            );
+
+        }
+
+
+        /* =================================================
+           ADD COMPLETE EXCHANGE TO MEMORY
+        ================================================= */
+
+        function rememberExchange(
+            userMessage,
+            assistantAnswer
+        ) {
+
+            const cleanUserMessage =
+                String(
+                    userMessage || ""
+                )
+                    .trim();
+
+
+            const cleanAssistantAnswer =
+                String(
+                    assistantAnswer || ""
+                )
+                    .trim();
+
+
+            if (
+                !cleanUserMessage ||
+                !cleanAssistantAnswer
+            ) {
+
+                return;
+
+            }
+
+
+            unlimitedConversationMemory.push({
+
+                role:
+                    "user",
+
+                text:
+                    cleanUserMessage
+
+            });
+
+
+            unlimitedConversationMemory.push({
+
+                role:
+                    "assistant",
+
+                text:
+                    cleanAssistantAnswer
+
+            });
+
+
+            trimConversationMemory();
+
+        }
+
+
+        /* =================================================
+           GET MEMORY FOR API
+
+           Return a fresh copy so the current memory
+           cannot be mutated accidentally by other code.
+        ================================================= */
+
+        function getConversationMemoryForApi() {
+
+            trimConversationMemory();
+
+
+            return unlimitedConversationMemory
+                .map(
+                    turn => ({
+
+                        role:
+                            turn.role,
+
+                        text:
+                            turn.text
+
+                    })
+                );
+
+        }
+
+
+        /* =================================================
+           EDGEBREAK DATA STORES
+        ================================================= */
+
+        let unlimitedBreakoutData =
+            [];
+
+
+        let unlimitedPreBreakoutData =
+            [];
+
+
+        let unlimitedLaunchPadData =
+            [];
+
+
+        let unlimitedSmartMoneyData =
+            [];
+
+
+        let unlimitedIndicatorHistoryData =
+            null;
+
+
+        let unlimitedDataReady =
+            false;
+
+
+        /* =================================================
+           LOAD JSON
+        ================================================= */
+
+        async function loadJsonFile(
+            url
+        ) {
+
+            const response =
+                await fetch(
+                    url,
+                    {
+                        cache:
+                            "no-store"
+                    }
+                );
+
+
+            if (
+                !response.ok
+            ) {
+
+                throw new Error(
+                    `${url} returned ${response.status}`
+                );
+
+            }
+
+
+            return await response.json();
+
+        }
+
+
+        /* =================================================
+           FIND ARRAY
+        ================================================= */
+
+        function findArray(
+            data,
+            preferredKeys = []
+        ) {
+
+            if (
+                Array.isArray(
+                    data
+                )
+            ) {
+
+                return data;
+
+            }
+
+
+            if (
+                !data ||
+                typeof data !==
+                    "object"
+            ) {
+
+                return [];
+
+            }
+
+
+            for (
+                const key
+                of preferredKeys
+            ) {
+
+                if (
+                    Array.isArray(
+                        data[key]
+                    )
+                ) {
+
+                    return data[key];
+
+                }
+
+            }
+
+
+            for (
+                const value
+                of Object.values(
+                    data
+                )
+            ) {
+
+                if (
+                    Array.isArray(
+                        value
+                    )
+                ) {
+
+                    return value;
+
+                }
+
+            }
+
+
+            return [];
+
+        }
+
+
+        /* =================================================
+           NORMALISE SYMBOL
+        ================================================= */
+
+        function normaliseSymbol(
+            value
+        ) {
+
+            return String(
+                value || ""
+            )
+                .trim()
+                .toUpperCase();
+
+        }
+
+
+        /* =================================================
+           LOAD ALL FIVE EDGEBREAK SOURCES
+        ================================================= */
+
+        async function loadUnlimitedData() {
+
+            try {
+
+                unlimitedDataReady =
+                    false;
+
+
+                status.textContent =
+                    "Loading EdgeBreak data...";
+
+
+                status.style.color =
+                    "#64748b";
+
+
+                const [
+
+                    breakoutRaw,
+
+                    preBreakoutRaw,
+
+                    launchPadRaw,
+
+                    smartMoneyRaw,
+
+                    indicatorHistoryRaw
+
+                ] =
+                    await Promise.all([
+
+                        loadJsonFile(
+                            "/breakout_scanner.json"
+                        ),
+
+                        loadJsonFile(
+                            "/scanner_database.json"
+                        ),
+
+                        loadJsonFile(
+                            "/launchpad_database.json"
+                        ),
+
+                        loadJsonFile(
+                            "/smart_money_filter.json"
+                        ),
+
+                        loadJsonFile(
+                            "/scanner_indicator_history.json"
+                        )
+
+                    ]);
+
+
+                /* =========================================
+                   BREAKOUT
+                ========================================= */
+
+                unlimitedBreakoutData =
+                    findArray(
+                        breakoutRaw,
+                        [
+                            "stocks",
+                            "results",
+                            "scanner_data",
+                            "data"
+                        ]
+                    );
+
+
+                /* =========================================
+                   PRE-BREAKOUT
+                ========================================= */
+
+                unlimitedPreBreakoutData =
+                    findArray(
+                        preBreakoutRaw,
+                        [
+                            "stocks",
+                            "results",
+                            "scanner_data",
+                            "data"
+                        ]
+                    );
+
+
+                /* =========================================
+                   LAUNCH PAD
+                ========================================= */
+
+                unlimitedLaunchPadData =
+                    findArray(
+                        launchPadRaw,
+                        [
+                            "stocks",
+                            "results",
+                            "scanner_data",
+                            "data"
+                        ]
+                    );
+
+
+                /* =========================================
+                   SMART MONEY
+                ========================================= */
+
+                unlimitedSmartMoneyData =
+                    Array.isArray(
+                        smartMoneyRaw
+                    )
+                        ? smartMoneyRaw
+                        : findArray(
+                            smartMoneyRaw,
+                            [
+                                "stocks",
+                                "results",
+                                "data"
+                            ]
+                        );
+
+
+                /* =========================================
+                   INDICATOR HISTORY
+                ========================================= */
+
+                unlimitedIndicatorHistoryData =
+                    indicatorHistoryRaw;
+
+
+                unlimitedDataReady =
+                    true;
+
+
+                status.textContent =
+                    "EdgeBreak data ready.";
+
+
+                status.style.color =
+                    "#22c55e";
+
+
+                console.log(
+                    "AI Unlimited EdgeBreak data loaded:",
+                    {
+
+                        breakout:
+                            unlimitedBreakoutData.length,
+
+                        preBreakout:
+                            unlimitedPreBreakoutData.length,
+
+                        launchPad:
+                            unlimitedLaunchPadData.length,
+
+                        smartMoney:
+                            unlimitedSmartMoneyData.length,
+
+                        indicatorHistory:
+                            Boolean(
+                                unlimitedIndicatorHistoryData
+                            )
+
+                    }
+                );
+
+            }
+            catch (
+                error
+            ) {
+
+                unlimitedDataReady =
+                    false;
+
+
+                status.textContent =
+                    "EdgeBreak data could not be loaded.";
+
+
+                status.style.color =
+                    "#ef4444";
+
+
+                console.error(
+                    "AI Unlimited data load error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =================================================
+           CURRENT SCANNER LOOKUP
+        ================================================= */
+
+        function findCurrentScannerRecord(
+            data,
+            symbol
+        ) {
+
+            if (
+                !Array.isArray(
+                    data
+                )
+            ) {
+
+                return null;
+
+            }
+
+
+            const ticker =
+                normaliseSymbol(
+                    symbol
+                );
+
+
+            return (
+                data.find(
+                    record =>
+                        normaliseSymbol(
+                            record?.symbol
+                        ) === ticker
+                ) ||
+                null
+            );
+
+        }
+
+
+        /* =================================================
+           SMART MONEY LOOKUP
+        ================================================= */
+
+        function findSmartMoneyRecord(
+            symbol
+        ) {
+
+            const ticker =
+                normaliseSymbol(
+                    symbol
+                );
+
+
+            if (
+                !ticker ||
+                !Array.isArray(
+                    unlimitedSmartMoneyData
+                )
+            ) {
+
+                return null;
+
+            }
+
+
+            return (
+                unlimitedSmartMoneyData.find(
+                    record =>
+                        normaliseSymbol(
+                            record?.symbol
+                        ) === ticker
+                ) ||
+                null
+            );
+
+        }
+
+
+        /* =================================================
+           DEEP INDICATOR LOOKUP
+        ================================================= */
+
+        function deepFindSymbol(
+            data,
+            symbol,
+            depth = 0
+        ) {
+
+            const ticker =
+                normaliseSymbol(
+                    symbol
+                );
+
+
+            if (
+                !ticker ||
+                !data ||
+                depth > 12
+            ) {
+
+                return null;
+
+            }
+
+
+            /* =============================================
+               ARRAY
+            ============================================= */
+
+            if (
+                Array.isArray(
+                    data
+                )
+            ) {
+
+                for (
+                    const item
+                    of data
+                ) {
+
+                    if (
+                        item &&
+                        typeof item ===
+                            "object"
+                    ) {
+
+                        const itemSymbol =
+                            normaliseSymbol(
+
+                                item?.symbol ??
+                                item?.ticker ??
+                                item?.stock
+
+                            );
+
+
+                        if (
+                            itemSymbol ===
+                            ticker
+                        ) {
+
+                            return item;
+
+                        }
+
+                    }
+
+                }
+
+
+                for (
+                    const item
+                    of data
+                ) {
+
+                    if (
+                        item &&
+                        typeof item ===
+                            "object"
+                    ) {
+
+                        const found =
+                            deepFindSymbol(
+                                item,
+                                ticker,
+                                depth + 1
+                            );
+
+
+                        if (
+                            found
+                        ) {
+
+                            return found;
+
+                        }
+
+                    }
+
+                }
+
+
+                return null;
+
+            }
+
+
+            /* =============================================
+               OBJECT
+            ============================================= */
+
+            if (
+                typeof data ===
+                    "object"
+            ) {
+
+                for (
+                    const [
+                        key,
+                        value
+                    ]
+                    of Object.entries(
+                        data
+                    )
+                ) {
+
+                    if (
+                        normaliseSymbol(
+                            key
+                        ) === ticker
+                    ) {
+
+                        return value;
+
+                    }
+
+                }
+
+
+                const objectSymbol =
+                    normaliseSymbol(
+
+                        data?.symbol ??
+                        data?.ticker ??
+                        data?.stock
+
+                    );
+
+
+                if (
+                    objectSymbol ===
+                    ticker
+                ) {
+
+                    return data;
+
+                }
+
+
+                for (
+                    const value
+                    of Object.values(
+                        data
+                    )
+                ) {
+
+                    if (
+                        value &&
+                        typeof value ===
+                            "object"
+                    ) {
+
+                        const found =
+                            deepFindSymbol(
+                                value,
+                                ticker,
+                                depth + 1
+                            );
+
+
+                        if (
+                            found
+                        ) {
+
+                            return found;
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+
+            return null;
+
+        }
+
+
+        /* =================================================
+           INDICATOR LOOKUP
+        ================================================= */
+
+        function findIndicatorRecord(
+            symbol
+        ) {
+
+            return deepFindSymbol(
+                unlimitedIndicatorHistoryData,
+                symbol
+            );
+
+        }
+
+
+        /* =================================================
+           BUILD COMPLETE EDGEBREAK STOCK CONTEXT
+        ================================================= */
+
+        function findEdgeBreakStock(
+            symbol
+        ) {
+
+            const ticker =
+                normaliseSymbol(
+                    symbol
+                );
+
+
+            if (
+                !ticker
+            ) {
+
+                return null;
+
+            }
+
+
+            const breakout =
+                findCurrentScannerRecord(
+                    unlimitedBreakoutData,
+                    ticker
+                );
+
+
+            const preBreakout =
+                findCurrentScannerRecord(
+                    unlimitedPreBreakoutData,
+                    ticker
+                );
+
+
+            const launchPad =
+                findCurrentScannerRecord(
+                    unlimitedLaunchPadData,
+                    ticker
+                );
+
+
+            const smartMoney =
+                findSmartMoneyRecord(
+                    ticker
+                );
+
+
+            const indicators =
+                findIndicatorRecord(
+                    ticker
+                );
+
+
+            if (
+                !breakout &&
+                !preBreakout &&
+                !launchPad &&
+                !smartMoney &&
+                !indicators
+            ) {
+
+                return null;
+
+            }
+
+
+            return {
+
+                symbol:
+                    ticker,
+
+
+                scanners: {
+
+                    breakout:
+                        breakout,
+
+                    preBreakout:
+                        preBreakout,
+
+                    launchPad:
+                        launchPad
+
+                },
+
+
+                smartMoney:
+                    smartMoney,
+
+
+                indicators:
+                    indicators
+
+            };
+
+        }
+
+
+        /* =================================================
+           KNOWN EDGEBREAK SYMBOLS
+
+           Use actual symbols from EdgeBreak data rather
+           than allowing ordinary English words such as
+           RESISTANCE to be mistaken for tickers.
+        ================================================= */
+
+        function getKnownEdgeBreakSymbols() {
+
+            const symbols =
+                new Set();
+
+
+            [
+
+                unlimitedBreakoutData,
+
+                unlimitedPreBreakoutData,
+
+                unlimitedLaunchPadData,
+
+                unlimitedSmartMoneyData
+
+            ].forEach(
+                data => {
+
+                    if (
+                        !Array.isArray(
+                            data
+                        )
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    data.forEach(
+                        record => {
+
+                            const symbol =
+                                normaliseSymbol(
+                                    record?.symbol
+                                );
+
+
+                            if (
+                                symbol
+                            ) {
+
+                                symbols.add(
+                                    symbol
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+
+            return symbols;
+
+        }
+
+
+        /* =================================================
+           EXTRACT CONFIRMED EDGEBREAK TICKERS
+
+           This lookup is ONLY for deciding whether current
+           EdgeBreak scanner context should be attached.
+
+           Gemini can still research stocks that are not
+           present in EdgeBreak's current data.
+        ================================================= */
+
+        function extractTickerCandidates(
+            message
+        ) {
+
+            const words =
+                String(
+                    message || ""
+                )
+                    .toUpperCase()
+                    .match(
+                        /\b[A-Z][A-Z0-9.-]{0,9}\b/g
+                    ) || [];
+
+
+            const knownSymbols =
+                getKnownEdgeBreakSymbols();
+
+
+            return [
+                ...new Set(
+
+                    words.filter(
+                        word =>
+                            knownSymbols.has(
+                                normaliseSymbol(
+                                    word
+                                )
+                            )
+                    )
+
+                )
+            ];
+
+        }
+
+
+        /* =================================================
+           FIND FIRST CONFIRMED EDGEBREAK STOCK
+        ================================================= */
+
+        function getEdgeBreakContext(
+            message
+        ) {
+
+            if (
+                !unlimitedDataReady
+            ) {
+
+                return null;
+
+            }
+
+
+            const candidates =
+                extractTickerCandidates(
+                    message
+                );
+
+
+            console.log(
+                "AI Unlimited confirmed EdgeBreak ticker candidates:",
+                candidates
+            );
+
+
+            for (
+                const candidate
+                of candidates
+            ) {
+
+                const match =
+                    findEdgeBreakStock(
+                        candidate
+                    );
+
+
+                if (
+                    match
+                ) {
+
+                    return match;
+
+                }
+
+            }
+
+
+            return null;
+
+        }
+
+
+        /* =================================================
+           SOURCE LIST
+        ================================================= */
+
+        function getContextSources(
+            context
+        ) {
+
+            if (
+                !context
+            ) {
+
+                return [];
+
+            }
+
+
+            const sources =
+                [];
+
+
+            if (
+                context
+                    ?.scanners
+                    ?.breakout
+            ) {
+
+                sources.push(
+                    "Breakout"
+                );
+
+            }
+
+
+            if (
+                context
+                    ?.scanners
+                    ?.preBreakout
+            ) {
+
+                sources.push(
+                    "Pre-Breakout"
+                );
+
+            }
+
+
+            if (
+                context
+                    ?.scanners
+                    ?.launchPad
+            ) {
+
+                sources.push(
+                    "Launch Pad"
+                );
+
+            }
+
+
+            if (
+                context?.smartMoney
+            ) {
+
+                sources.push(
+                    "Smart Money"
+                );
+
+            }
+
+
+            if (
+                context?.indicators
+            ) {
+
+                sources.push(
+                    "Indicators"
+                );
+
+            }
+
+
+            return sources;
+
+        }
+
+
+        /* =================================================
+           FORMAT AI ANSWER
+        ================================================= */
+
+        function escapeHtml(
+            value
+        ) {
+
+            return String(
+                value || ""
+            )
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        function formatUnlimitedAnswer(
+            value
+        ) {
+
+            let formatted =
+                escapeHtml(
+                    value
+                );
+
+
+            /* =============================================
+               **BOLD**
+            ============================================= */
+
+            formatted =
+                formatted.replace(
+                    /\*\*(.+?)\*\*/g,
+                    "<strong>$1</strong>"
+                );
+
+
+            /* =============================================
+               PARAGRAPH / LINE BREAKS
+            ============================================= */
+
+            formatted =
+                formatted.replace(
+                    /\n\n+/g,
+                    "</p><p>"
+                );
+
+
+            formatted =
+                formatted.replace(
+                    /\n/g,
+                    "<br>"
+                );
+
+
+            return (
+                `<p>${formatted}</p>`
+            );
+
+        }
+
+
+        /* =================================================
+           ASK AI UNLIMITED
+        ================================================= */
+
+        async function askUnlimited() {
+
+            const message =
+                input.value.trim();
+
+
+            if (
+                !message
+            ) {
+
+                return;
+
+            }
+
+
+            button.disabled =
+                true;
+
+
+            button.textContent =
+                "Thinking...";
+
+
+            answer.style.display =
+                "block";
+
+
+            answer.textContent =
+                "EdgeBreak AI is thinking...";
+
+
+            try {
+
+                /* =========================================
+                   EDGEBREAK CONTEXT
+                ========================================= */
+
+                const edgeBreakContext =
+                    getEdgeBreakContext(
+                        message
+                    );
+
+
+                console.log(
+                    "AI Unlimited complete EdgeBreak context:",
+                    edgeBreakContext
+                );
+
+
+                /* =========================================
+                   STATUS
+                ========================================= */
+
+                if (
+                    edgeBreakContext
+                        ?.symbol
+                ) {
+
+                    const sources =
+                        getContextSources(
+                            edgeBreakContext
+                        );
+
+
+                    status.textContent =
+                        `${edgeBreakContext.symbol} · ` +
+                        (
+                            sources.length
+                                ? sources.join(
+                                    " + "
+                                )
+                                : "EdgeBreak data found"
+                        );
+
+
+                    status.style.color =
+                        "#22c55e";
+
+                }
+                else {
+
+                    status.textContent =
+                        "No matching EdgeBreak scanner data — AI research available.";
+
+
+                    status.style.color =
+                        "#64748b";
+
+                }
+
+
+                /* =========================================
+                   GET MEMORY BEFORE ADDING CURRENT QUESTION
+
+                   The current question is sent separately,
+                   so it must NOT already be inside history.
+                ========================================= */
+
+                const conversationHistory =
+                    getConversationMemoryForApi();
+
+                
+                /* =========================================
+                AUTHENTICATED EDGEBREAK SESSION
+                ========================================= */
+
+                const session =
+                    await getEdgeBreakSession();
+
+
+                /* =========================================
+                API
+                ========================================= */
+
+                const response =
+                    await fetch(
+                        "/api/ai-unlimited",
+                        {
+
+                            method:
+                                "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json",
+
+                                "Authorization":
+                                    `Bearer ${session.access_token}`
+
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    message:
+                                        message,
+
+                                    conversationHistory:
+                                        conversationHistory,
+
+                                    edgeBreakContext:
+                                        edgeBreakContext
+
+                                })
+
+                        }
+                    );
+
+
+                let data;
+
+
+                try {
+
+                    data =
+                        await response.json();
+
+                }
+                catch {
+
+                    throw new Error(
+                        "AI Unlimited returned an invalid response."
+                    );
+
+                }
+
+
+                if (
+                    !response.ok
+                ) {
+
+                    throw new Error(
+                        data?.error ||
+                        "AI Unlimited request failed."
+                    );
+
+                }
+
+
+                if (
+                    !data?.answer
+                ) {
+
+                    throw new Error(
+                        "AI Unlimited returned no answer."
+                    );
+
+                }
+
+                /* =========================================
+                UPDATE MONTHLY ALLOWANCE
+                ========================================= */
+
+                renderUnlimitedAllowance(
+                    data
+                );
+
+
+                /* =========================================
+                   REMEMBER SUCCESSFUL EXCHANGE
+
+                   Failed requests are deliberately NOT
+                   added to conversation memory.
+                ========================================= */
+
+                rememberExchange(
+                    message,
+                    data.answer
+                );
+
+
+                /* =========================================
+                   DISPLAY ANSWER
+                ========================================= */
+
+                answer.innerHTML =
+                    formatUnlimitedAnswer(
+                        data.answer
+                    );
+
+
+                /* =========================================
+                   CLEAR INPUT AFTER SUCCESS
+                ========================================= */
+
+                input.value =
+                    "";
+
+
+                /* =========================================
+                   SCROLL ANSWER INTO VIEW
+                ========================================= */
+
+                requestAnimationFrame(
+                    () => {
+
+                        answer.scrollIntoView({
+
+                            behavior:
+                                "smooth",
+
+                            block:
+                                "nearest"
+
+                        });
+
+                    }
+                );
+
+            }
+            catch (
+                error
+            ) {
+
+                console.error(
+                    "AI Unlimited Error:",
+                    error
+                );
+
+
+                answer.textContent =
+                    "Error: " +
+                    (
+                        error?.message ||
+                        "Unable to reach AI Unlimited."
+                    );
+
+            }
+            finally {
+
+                if (
+                    unlimitedUsage?.accessLevel ===
+                        "included" &&
+                    Number(
+                        unlimitedUsage?.remaining
+                    ) <= 0
+                ) {
+
+                    button.disabled =
+                        true;
+
+
+                    button.textContent =
+                        "Monthly Limit Reached";
+
+                }
+                else {
+
+                    button.disabled =
+                        false;
+
+
+                    button.textContent =
+                        "Ask EdgeBreak";
+
+                }
+
+            }
+
+        }
+
+
+        /* =================================================
+           MODE SWITCH — GUIDED AI
+        ================================================= */
+
+        guidedBtn.addEventListener(
+            "click",
+            () => {
+
+                guidedBtn.classList.add(
+                    "active"
+                );
+
+
+                unlimitedBtn.classList.remove(
+                    "active"
+                );
+
+
+                guidedContent.style.display =
+                    "";
+
+
+                guidedConversation.style.display =
+                    "";
+
+
+                unlimitedContent.style.display =
+                    "none";
+
+            }
+        );
+
+
+        /* =================================================
+           MODE SWITCH — AI UNLIMITED
+        ================================================= */
+
+        unlimitedBtn.addEventListener(
+            "click",
+            () => {
+
+                unlimitedBtn.classList.add(
+                    "active"
+                );
+
+
+                guidedBtn.classList.remove(
+                    "active"
+                );
+
+
+                guidedContent.style.display =
+                    "none";
+
+
+                guidedConversation.style.display =
+                    "none";
+
+
+                unlimitedContent.style.display =
+                    "";
+
+
+                input.focus();
+
+            }
+        );
+
+
+        /* =================================================
+           ASK BUTTON
+        ================================================= */
+
+        button.addEventListener(
+            "click",
+            askUnlimited
+        );
+
+
+        /* =================================================
+           ENTER TO SEND
+
+           Shift + Enter still allows a new line.
+        ================================================= */
+
+        input.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key ===
+                        "Enter" &&
+                    !event.shiftKey
+                ) {
+
+                    event.preventDefault();
+
+
+                    askUnlimited();
+
+                }
+
+            }
+        );
+
+
+        /* =================================================
+           START
+        ================================================= */
+
+        loadUnlimitedData();
+
+        loadUnlimitedAllowance();
+
+    }
+);
 
 </script>
+
 <!-- COMPONENTS -->
 
 <script src="/js/components.js"></script>
