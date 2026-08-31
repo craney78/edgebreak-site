@@ -38788,6 +38788,23 @@ document.addEventListener(
                     trading concept or market question.
                 </p>
 
+                <div
+                    id="edgeAIUnlimitedAllowance"
+                    style="
+                        margin:0 0 16px;
+                        padding:11px 14px;
+                        background:rgba(34,197,94,.06);
+                        border:1px solid rgba(34,197,94,.18);
+                        border-radius:10px;
+                        color:#94a3b8;
+                        font-size:12px;
+                        font-weight:700;
+                        line-height:1.5;
+                        text-align:center;
+                    "
+                >
+                    Checking your AI Unlimited allowance...
+                </div>
 
                 <textarea
                     id="edgeAIUnlimitedQuestion"
@@ -38896,6 +38913,283 @@ document.addEventListener(
                 "edgeAIUnlimitedStatus"
             );
 
+
+        const allowanceStatus =
+            document.getElementById(
+                "edgeAIUnlimitedAllowance"
+            );
+
+
+        let unlimitedUsage =
+            null;
+
+        /* =================================================
+        AUTHENTICATED EDGEBREAK SESSION
+        ================================================= */
+
+        async function getEdgeBreakSession() {
+
+            const {
+                data: {
+                    session
+                },
+                error
+            } =
+                await window
+                    .supabaseClient
+                    .auth
+                    .getSession();
+
+
+            if (
+                error ||
+                !session?.access_token
+            ) {
+
+                throw new Error(
+                    "Your EdgeBreak session has expired. Please log in again."
+                );
+
+            }
+
+
+            return session;
+
+        }    
+
+        /* =================================================
+        DISPLAY AI UNLIMITED ALLOWANCE
+        ================================================= */
+
+        function renderUnlimitedAllowance(
+            data
+        ) {
+
+            if (
+                !data ||
+                !allowanceStatus
+            ) {
+
+                return;
+
+            }
+
+
+            unlimitedUsage = {
+
+                accessLevel:
+                    data.accessLevel,
+
+                monthlyLimit:
+                    data.monthlyLimit,
+
+                used:
+                    data.used,
+
+                remaining:
+                    data.remaining
+
+            };
+
+
+            /* =========================================
+            FULL AI UNLIMITED PLAN
+            ========================================= */
+
+            if (
+                data.accessLevel ===
+                "unlimited"
+            ) {
+
+                allowanceStatus.textContent =
+                    "AI Unlimited · Unlimited conversations";
+
+
+                allowanceStatus.style.color =
+                    "#4ade80";
+
+
+                input.disabled =
+                    false;
+
+
+                button.disabled =
+                    false;
+
+
+                return;
+
+            }
+
+
+            /* =========================================
+            INCLUDED 15 QUESTION PLAN
+            ========================================= */
+
+            const remaining =
+                Math.max(
+                    0,
+                    Number(
+                        data.remaining || 0
+                    )
+                );
+
+
+            if (
+                remaining === 0
+            ) {
+
+                allowanceStatus.textContent =
+                    "0 of 15 AI Unlimited questions remaining this month · Resets on the 1st";
+
+
+                allowanceStatus.style.color =
+                    "#fbbf24";
+
+
+                input.disabled =
+                    true;
+
+
+                button.disabled =
+                    true;
+
+
+                button.textContent =
+                    "Monthly Limit Reached";
+
+
+                return;
+
+            }
+
+
+            allowanceStatus.textContent =
+                `${remaining} of 15 AI Unlimited ` +
+                `${remaining === 1 ? "question" : "questions"} ` +
+                `remaining this month · Resets on the 1st`;
+
+
+            allowanceStatus.style.color =
+                remaining <= 3
+                    ? "#fbbf24"
+                    : "#94a3b8";
+
+
+            input.disabled =
+                false;
+
+
+            button.disabled =
+                false;
+
+
+            button.textContent =
+                "Ask EdgeBreak";
+
+        }
+
+        /* =================================================
+        LOAD ACCOUNT AI UNLIMITED ALLOWANCE
+        ================================================= */
+
+        async function loadUnlimitedAllowance() {
+
+            try {
+
+                allowanceStatus.textContent =
+                    "Checking your AI Unlimited allowance...";
+
+
+                const session =
+                    await getEdgeBreakSession();
+
+
+                const response =
+                    await fetch(
+                        "/api/ai-unlimited",
+                        {
+
+                            method:
+                                "GET",
+
+                            headers: {
+
+                                "Authorization":
+                                    `Bearer ${session.access_token}`
+
+                            },
+
+                            cache:
+                                "no-store"
+
+                        }
+                    );
+
+
+                let data;
+
+
+                try {
+
+                    data =
+                        await response.json();
+
+                }
+                catch {
+
+                    throw new Error(
+                        "AI Unlimited allowance returned an invalid response."
+                    );
+
+                }
+
+
+                if (
+                    !response.ok
+                ) {
+
+                    throw new Error(
+                        data?.error ||
+                        "Unable to check AI Unlimited allowance."
+                    );
+
+                }
+
+
+                renderUnlimitedAllowance(
+                    data
+                );
+
+            }
+            catch (
+                error
+            ) {
+
+                console.error(
+                    "AI Unlimited allowance error:",
+                    error
+                );
+
+
+                allowanceStatus.textContent =
+                    "AI Unlimited allowance could not be checked.";
+
+
+                allowanceStatus.style.color =
+                    "#ef4444";
+
+
+                input.disabled =
+                    true;
+
+
+                button.disabled =
+                    true;
+
+            }
+
+        }
 
         /* =================================================
            CONVERSATION MEMORY
@@ -40331,9 +40625,17 @@ document.addEventListener(
                 const conversationHistory =
                     getConversationMemoryForApi();
 
+                
+                /* =========================================
+                AUTHENTICATED EDGEBREAK SESSION
+                ========================================= */
+
+                const session =
+                    await getEdgeBreakSession();
+
 
                 /* =========================================
-                   API
+                API
                 ========================================= */
 
                 const response =
@@ -40347,7 +40649,10 @@ document.addEventListener(
                             headers: {
 
                                 "Content-Type":
-                                    "application/json"
+                                    "application/json",
+
+                                "Authorization":
+                                    `Bearer ${session.access_token}`
 
                             },
 
@@ -40408,6 +40713,14 @@ document.addEventListener(
                     );
 
                 }
+
+                /* =========================================
+                UPDATE MONTHLY ALLOWANCE
+                ========================================= */
+
+                renderUnlimitedAllowance(
+                    data
+                );
 
 
                 /* =========================================
@@ -40482,12 +40795,32 @@ document.addEventListener(
             }
             finally {
 
-                button.disabled =
-                    false;
+                if (
+                    unlimitedUsage?.accessLevel ===
+                        "included" &&
+                    Number(
+                        unlimitedUsage?.remaining
+                    ) <= 0
+                ) {
+
+                    button.disabled =
+                        true;
 
 
-                button.textContent =
-                    "Ask EdgeBreak";
+                    button.textContent =
+                        "Monthly Limit Reached";
+
+                }
+                else {
+
+                    button.disabled =
+                        false;
+
+
+                    button.textContent =
+                        "Ask EdgeBreak";
+
+                }
 
             }
 
@@ -40605,6 +40938,8 @@ document.addEventListener(
         ================================================= */
 
         loadUnlimitedData();
+
+        loadUnlimitedAllowance();
 
     }
 );

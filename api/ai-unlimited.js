@@ -2,7 +2,7 @@
 EDGEBREAK — AI UNLIMITED
 /api/ai-unlimited.js
 
-PHASE 6 — CONVERSATIONAL TRADER ASSISTANT
+PHASE 7 — ACCOUNT USAGE CONTROL
 
 PURPOSE:
 
@@ -12,52 +12,11 @@ PURPOSE:
 - Rolling conversation memory
 - EdgeBreak data first
 - Current Google Search research available
-- Uses all current EdgeBreak stock context
-- Short, direct answers by default
-- No investment advice
-- No predictions presented as fact
-- No coding assistance
-- Protect EdgeBreak private systems
-
-CURRENT EDGEBREAK DATA SUPPORTED:
-
-- Breakout Scanner
-- Pre-Breakout Scanner
-- Launch Pad Scanner
-- Smart Money Filter
-- Scanner Indicator History
-
-CURRENT RESEARCH SUPPORTED:
-
-- Company news
-- Earnings and company events
-- Market-moving headlines
-- Economic releases
-- Interest rates
-- Sector developments
-- Geopolitical events
-- Worldwide events affecting markets
-
-CONVERSATION MEMORY:
-
-- Frontend sends recent user / assistant turns
-- Backend sanitises memory
-- Approximate maximum: 1,500 words
-- Oldest complete exchanges removed first
-- Current question is sent separately
-
-IMPORTANT:
-
-EdgeBreak data is authoritative for
-EdgeBreak-specific questions.
-
-Scanner prices and indicator prices are
-stored observations. They must NOT be
-described as live prices.
-
-AI Unlimited should answer the question
-asked rather than dumping every available
-field.
+- Server-side user authentication
+- 15 included questions per calendar month
+- Cross-device usage tracking
+- Future unlimited paid tier support
+- Failed AI requests do not consume allowance
 ========================================= */
 
 
@@ -82,6 +41,27 @@ const MAX_HISTORY_TURN_LENGTH =
 
 
 /* =========================================
+AI UNLIMITED PLAN SETTINGS
+========================================= */
+
+const INCLUDED_MONTHLY_LIMIT =
+    15;
+
+
+/* =========================================
+SUPABASE
+========================================= */
+
+const SUPABASE_URL =
+    process.env.SUPABASE_URL;
+
+
+const SUPABASE_SERVICE_ROLE_KEY =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_KEY;
+
+
+/* =========================================
 MAIN HANDLER
 ========================================= */
 
@@ -97,10 +77,17 @@ export default async function handler(
 
 
     /* =====================================
-    POST ONLY
+    ALLOWED METHODS
+
+    GET:
+    Return current allowance.
+
+    POST:
+    Ask AI Unlimited.
     ===================================== */
 
     if (
+        req.method !== "GET" &&
         req.method !== "POST"
     ) {
 
@@ -117,10 +104,33 @@ export default async function handler(
 
 
     /* =====================================
-    GEMINI API KEY
+    BACKEND CONFIGURATION
     ===================================== */
 
     if (
+        !SUPABASE_URL ||
+        !SUPABASE_SERVICE_ROLE_KEY
+    ) {
+
+        console.error(
+            "AI Unlimited: Supabase backend configuration is missing."
+        );
+
+
+        return res
+            .status(500)
+            .json({
+
+                error:
+                    "AI Unlimited account access is temporarily unavailable."
+
+            });
+
+    }
+
+
+    if (
+        req.method === "POST" &&
         !process.env.GEMINI_API_KEY
     ) {
 
@@ -141,7 +151,115 @@ export default async function handler(
     }
 
 
+    let reservedRequestId =
+        null;
+
+
     try {
+
+        /* =================================
+        AUTHENTICATE USER
+
+        Never trust a user ID supplied by
+        the browser.
+
+        The account is identified only from
+        the verified Supabase access token.
+        ================================= */
+
+        const user =
+            await authenticateUser(
+                req
+            );
+
+
+        /* =================================
+        ACTIVE EDGEBREAK SUBSCRIPTION
+        ================================= */
+
+        await verifyActiveProfile(
+            user.id
+        );
+
+
+        /* =================================
+        AI ENTITLEMENT
+        ================================= */
+
+        const accessLevel =
+            await getAIUnlimitedAccessLevel(
+                user.id
+            );
+
+
+        if (
+            accessLevel === "none"
+        ) {
+
+            return res
+                .status(403)
+                .json({
+
+                    error:
+                        "AI Unlimited is not available for this account.",
+
+                    accessLevel:
+                        "none"
+
+                });
+
+        }
+
+
+        const monthStart =
+            getCurrentMonthStart();
+
+
+        /* =================================
+        GET — USAGE STATUS ONLY
+        ================================= */
+
+        if (
+            req.method === "GET"
+        ) {
+
+            const usage =
+                await getUsageForAccount(
+                    user.id,
+                    accessLevel,
+                    monthStart
+                );
+
+
+            return res
+                .status(200)
+                .json({
+
+                    success:
+                        true,
+
+                    accessLevel:
+                        accessLevel,
+
+                    monthlyLimit:
+                        accessLevel ===
+                            "unlimited"
+                            ? null
+                            : INCLUDED_MONTHLY_LIMIT,
+
+                    used:
+                        usage.used,
+
+                    remaining:
+                        usage.remaining,
+
+                    monthStart:
+                        monthStart
+
+                });
+
+        }
+
 
         /* =================================
         USER MESSAGE
@@ -166,6 +284,108 @@ export default async function handler(
                         "Please enter a question."
 
                 });
+
+        }
+
+
+        /* =================================
+        RESERVE REQUEST
+
+        INCLUDED PLAN:
+
+        Atomically reserve one of the user's
+        15 monthly questions BEFORE Gemini
+        runs.
+
+        This prevents two devices/tabs from
+        using the final question at the same
+        time.
+
+        UNLIMITED PLAN:
+
+        Still create a request log so we can
+        measure real usage and cost.
+        ================================= */
+
+        let allowance =
+            {
+
+                used:
+                    null,
+
+                remaining:
+                    null
+
+            };
+
+
+        if (
+            accessLevel === "included"
+        ) {
+
+            const reservation =
+                await reserveIncludedRequest(
+                    user.id,
+                    monthStart
+                );
+
+
+            if (
+                !reservation.allowed
+            ) {
+
+                return res
+                    .status(429)
+                    .json({
+
+                        error:
+                            "You've used your 15 included AI Unlimited questions for this month.",
+
+                        limitReached:
+                            true,
+
+                        accessLevel:
+                            "included",
+
+                        monthlyLimit:
+                            INCLUDED_MONTHLY_LIMIT,
+
+                        used:
+                            reservation.used,
+
+                        remaining:
+                            0,
+
+                        monthStart:
+                            monthStart
+
+                    });
+
+            }
+
+
+            reservedRequestId =
+                reservation.requestId;
+
+
+            allowance = {
+
+                used:
+                    reservation.used,
+
+                remaining:
+                    reservation.remaining
+
+            };
+
+        }
+        else {
+
+            reservedRequestId =
+                await createUnlimitedRequestLog(
+                    user.id,
+                    monthStart
+                );
 
         }
 
@@ -197,6 +417,18 @@ export default async function handler(
         console.log(
             "AI Unlimited request:",
             {
+
+                userId:
+                    user.id,
+
+                accessLevel:
+                    accessLevel,
+
+                requestId:
+                    reservedRequestId,
+
+                remaining:
+                    allowance.remaining,
 
                 messageLength:
                     message.length,
@@ -264,7 +496,7 @@ export default async function handler(
         RUN GEMINI
         ================================= */
 
-        const answer =
+        const geminiResult =
             await runGemini(
                 message,
                 edgeBreakFacts,
@@ -278,8 +510,21 @@ export default async function handler(
 
         const safeAnswer =
             validateOutput(
-                answer
+                geminiResult.text
             );
+
+
+        /* =================================
+        MARK REQUEST SUCCESSFUL
+
+        Only successful completed AI answers
+        become permanently counted usage.
+        ================================= */
+
+        await markRequestSucceeded(
+            reservedRequestId,
+            geminiResult
+        );
 
 
         /* =================================
@@ -304,7 +549,25 @@ export default async function handler(
                 symbol:
                     edgeBreakContext
                         ?.symbol ||
-                    null
+                    null,
+
+                accessLevel:
+                    accessLevel,
+
+                monthlyLimit:
+                    accessLevel ===
+                        "unlimited"
+                        ? null
+                        : INCLUDED_MONTHLY_LIMIT,
+
+                used:
+                    allowance.used,
+
+                remaining:
+                    allowance.remaining,
+
+                monthStart:
+                    monthStart
 
             });
 
@@ -313,10 +576,62 @@ export default async function handler(
         error
     ) {
 
+        /* =================================
+        FAILED GEMINI / PROCESSING REQUEST
+
+        If we reserved a question but the
+        request failed, change its status to
+        failed.
+
+        Failed requests do NOT count against
+        the monthly allowance.
+        ================================= */
+
+        if (
+            reservedRequestId
+        ) {
+
+            await markRequestFailed(
+                reservedRequestId,
+                error
+            );
+
+        }
+
+
         console.error(
             "AI Unlimited Error:",
             error
         );
+
+
+        const statusCode =
+            Number(
+                error?.statusCode
+            );
+
+
+        if (
+            Number.isFinite(
+                statusCode
+            ) &&
+            statusCode >= 400 &&
+            statusCode <= 599
+        ) {
+
+            return res
+                .status(
+                    statusCode
+                )
+                .json({
+
+                    error:
+                        error?.publicMessage ||
+                        "AI Unlimited could not complete that request."
+
+                });
+
+        }
 
 
         return res
@@ -329,6 +644,1154 @@ export default async function handler(
             });
 
     }
+
+}
+
+
+/* =========================================
+AUTHENTICATE SUPABASE USER
+========================================= */
+
+async function authenticateUser(
+    req
+) {
+
+    const authorization =
+        String(
+            req.headers?.authorization ||
+            ""
+        )
+            .trim();
+
+
+    if (
+        !authorization
+            .toLowerCase()
+            .startsWith(
+                "bearer "
+            )
+    ) {
+
+        throw createHttpError(
+            401,
+            "Please log in to use AI Unlimited."
+        );
+
+    }
+
+
+    const accessToken =
+        authorization
+            .slice(
+                7
+            )
+            .trim();
+
+
+    if (
+        !accessToken
+    ) {
+
+        throw createHttpError(
+            401,
+            "Please log in to use AI Unlimited."
+        );
+
+    }
+
+
+    const response =
+        await fetch(
+            `${SUPABASE_URL}/auth/v1/user`,
+            {
+
+                method:
+                    "GET",
+
+                headers: {
+
+                    apikey:
+                        SUPABASE_SERVICE_ROLE_KEY,
+
+                    Authorization:
+                        `Bearer ${accessToken}`
+
+                }
+
+            }
+        );
+
+
+    if (
+        !response.ok
+    ) {
+
+        console.warn(
+            "AI Unlimited authentication failed:",
+            response.status
+        );
+
+
+        throw createHttpError(
+            401,
+            "Your EdgeBreak session has expired. Please log in again."
+        );
+
+    }
+
+
+    const user =
+        await response.json();
+
+
+    if (
+        !user?.id
+    ) {
+
+        throw createHttpError(
+            401,
+            "Your EdgeBreak session has expired. Please log in again."
+        );
+
+    }
+
+
+    return user;
+
+}
+
+
+/* =========================================
+VERIFY ACTIVE PROFILE
+========================================= */
+
+async function verifyActiveProfile(
+    userId
+) {
+
+    const url =
+        `${SUPABASE_URL}` +
+        `/rest/v1/profiles` +
+        `?id=eq.${encodeURIComponent(
+            userId
+        )}` +
+        `&select=is_active` +
+        `&limit=1`;
+
+
+    const response =
+        await fetch(
+            url,
+            {
+
+                headers:
+                    getSupabaseServiceHeaders()
+
+            }
+        );
+
+
+    if (
+        !response.ok
+    ) {
+
+        const text =
+            await response.text();
+
+
+        console.error(
+            "AI Unlimited profile lookup failed:",
+            response.status,
+            text
+        );
+
+
+        throw createHttpError(
+            500,
+            "AI Unlimited account access is temporarily unavailable."
+        );
+
+    }
+
+
+    const rows =
+        await response.json();
+
+
+    const profile =
+        Array.isArray(
+            rows
+        )
+            ? rows[0]
+            : null;
+
+
+    if (
+        !profile?.is_active
+    ) {
+
+        throw createHttpError(
+            403,
+            "An active EdgeBreak subscription is required to use AI Unlimited."
+        );
+
+    }
+
+}
+
+
+/* =========================================
+GET AI ACCESS LEVEL
+========================================= */
+
+async function getAIUnlimitedAccessLevel(
+    userId
+) {
+
+    const url =
+        `${SUPABASE_URL}` +
+        `/rest/v1/ai_unlimited_entitlements` +
+        `?user_id=eq.${encodeURIComponent(
+            userId
+        )}` +
+        `&select=access_level` +
+        `&limit=1`;
+
+
+    const response =
+        await fetch(
+            url,
+            {
+
+                headers:
+                    getSupabaseServiceHeaders()
+
+            }
+        );
+
+
+    if (
+        !response.ok
+    ) {
+
+        const text =
+            await response.text();
+
+
+        console.error(
+            "AI Unlimited entitlement lookup failed:",
+            response.status,
+            text
+        );
+
+
+        throw createHttpError(
+            500,
+            "AI Unlimited account access is temporarily unavailable."
+        );
+
+    }
+
+
+    const rows =
+        await response.json();
+
+
+    const accessLevel =
+        Array.isArray(
+            rows
+        )
+            ? rows[0]
+                ?.access_level
+            : null;
+
+
+    /* =====================================
+    EXISTING ACTIVE EDGEBREAK CUSTOMERS
+
+    If an entitlement row has not yet been
+    created, an active EdgeBreak account
+    receives the normal included plan.
+
+    This prevents us needing to create a row
+    for every existing subscriber immediately.
+    ===================================== */
+
+    if (
+        !accessLevel
+    ) {
+
+        return "included";
+
+    }
+
+
+    if (
+        accessLevel === "none" ||
+        accessLevel === "included" ||
+        accessLevel === "unlimited"
+    ) {
+
+        return accessLevel;
+
+    }
+
+
+    return "included";
+
+}
+
+
+/* =========================================
+CURRENT CALENDAR MONTH
+
+Example:
+2026-08-01
+
+Usage is grouped by month_start.
+
+No manual monthly reset job is required.
+A new month automatically produces a new
+month_start value and therefore a fresh
+allowance.
+========================================= */
+
+function getCurrentMonthStart() {
+
+    const now =
+        new Date();
+
+
+    const year =
+        now.getUTCFullYear();
+
+
+    const month =
+        String(
+            now.getUTCMonth() + 1
+        )
+            .padStart(
+                2,
+                "0"
+            );
+
+
+    return (
+        `${year}-${month}-01`
+    );
+
+}
+
+
+/* =========================================
+GET USAGE FOR ACCOUNT
+========================================= */
+
+async function getUsageForAccount(
+    userId,
+    accessLevel,
+    monthStart
+) {
+
+    if (
+        accessLevel === "unlimited"
+    ) {
+
+        const used =
+            await countSuccessfulRequests(
+                userId,
+                monthStart
+            );
+
+
+        return {
+
+            used:
+                used,
+
+            remaining:
+                null
+
+        };
+
+    }
+
+
+    const response =
+        await callSupabaseRpc(
+            "get_ai_unlimited_usage",
+            {
+
+                p_user_id:
+                    userId,
+
+                p_month_start:
+                    monthStart,
+
+                p_limit:
+                    INCLUDED_MONTHLY_LIMIT
+
+            }
+        );
+
+
+    const row =
+        Array.isArray(
+            response
+        )
+            ? response[0]
+            : null;
+
+
+    return {
+
+        used:
+            Number(
+                row?.used_count ||
+                0
+            ),
+
+        remaining:
+            Number(
+                row?.remaining ??
+                INCLUDED_MONTHLY_LIMIT
+            )
+
+    };
+
+}
+
+
+/* =========================================
+RESERVE INCLUDED QUESTION
+========================================= */
+
+async function reserveIncludedRequest(
+    userId,
+    monthStart
+) {
+
+    const response =
+        await callSupabaseRpc(
+            "reserve_ai_unlimited_request",
+            {
+
+                p_user_id:
+                    userId,
+
+                p_month_start:
+                    monthStart,
+
+                p_limit:
+                    INCLUDED_MONTHLY_LIMIT
+
+            }
+        );
+
+
+    const row =
+        Array.isArray(
+            response
+        )
+            ? response[0]
+            : null;
+
+
+    if (
+        !row
+    ) {
+
+        throw createHttpError(
+            500,
+            "AI Unlimited usage could not be checked."
+        );
+
+    }
+
+
+    return {
+
+        requestId:
+            row?.request_id ||
+            null,
+
+        allowed:
+            row?.allowed === true,
+
+        used:
+            Number(
+                row?.used_count ||
+                0
+            ),
+
+        remaining:
+            Number(
+                row?.remaining ||
+                0
+            )
+
+    };
+
+}
+
+
+/* =========================================
+CREATE UNLIMITED REQUEST LOG
+========================================= */
+
+async function createUnlimitedRequestLog(
+    userId,
+    monthStart
+) {
+
+    const url =
+        `${SUPABASE_URL}` +
+        `/rest/v1/ai_unlimited_requests`;
+
+
+    const response =
+        await fetch(
+            url,
+            {
+
+                method:
+                    "POST",
+
+                headers: {
+
+                    ...getSupabaseServiceHeaders(),
+
+                    "Content-Type":
+                        "application/json",
+
+                    "Prefer":
+                        "return=representation"
+
+                },
+
+                body:
+                    JSON.stringify([
+
+                        {
+
+                            user_id:
+                                userId,
+
+                            month_start:
+                                monthStart,
+
+                            status:
+                                "pending"
+
+                        }
+
+                    ])
+
+            }
+        );
+
+
+    const text =
+        await response.text();
+
+
+    if (
+        !response.ok
+    ) {
+
+        console.error(
+            "AI Unlimited request log creation failed:",
+            response.status,
+            text
+        );
+
+
+        throw createHttpError(
+            500,
+            "AI Unlimited usage could not be recorded."
+        );
+
+    }
+
+
+    let rows;
+
+
+    try {
+
+        rows =
+            text
+                ? JSON.parse(
+                    text
+                )
+                : [];
+
+    }
+    catch {
+
+        rows =
+            [];
+
+    }
+
+
+    const requestId =
+        Array.isArray(
+            rows
+        )
+            ? rows[0]?.id
+            : null;
+
+
+    if (
+        !requestId
+    ) {
+
+        throw createHttpError(
+            500,
+            "AI Unlimited usage could not be recorded."
+        );
+
+    }
+
+
+    return requestId;
+
+}
+
+
+/* =========================================
+MARK REQUEST SUCCESSFUL
+========================================= */
+
+async function markRequestSucceeded(
+    requestId,
+    geminiResult
+) {
+
+    if (
+        !requestId
+    ) {
+
+        throw createHttpError(
+            500,
+            "AI Unlimited usage could not be recorded."
+        );
+
+    }
+
+
+    const usage =
+        geminiResult
+            ?.usageMetadata &&
+        typeof geminiResult
+            .usageMetadata ===
+            "object"
+            ? geminiResult
+                .usageMetadata
+            : {};
+
+
+    const searchQueries =
+        Number.isFinite(
+            Number(
+                geminiResult
+                    ?.searchQueries
+            )
+        )
+            ? Number(
+                geminiResult
+                    .searchQueries
+            )
+            : 0;
+
+
+    const usageData = {
+
+        ...usage,
+
+        googleSearchQueries:
+            searchQueries
+
+    };
+
+
+    const success =
+        await updateRequestLog(
+            requestId,
+            {
+
+                status:
+                    "succeeded",
+
+                model:
+                    GEMINI_MODEL,
+
+                prompt_tokens:
+                    cleanDatabaseInteger(
+                        usage
+                            ?.promptTokenCount
+                    ),
+
+                output_tokens:
+                    cleanDatabaseInteger(
+                        usage
+                            ?.candidatesTokenCount
+                    ),
+
+                thinking_tokens:
+                    cleanDatabaseInteger(
+                        usage
+                            ?.thoughtsTokenCount
+                    ),
+
+                search_queries:
+                    cleanDatabaseInteger(
+                        searchQueries
+                    ),
+
+                usage_data:
+                    usageData,
+
+                completed_at:
+                    new Date()
+                        .toISOString()
+
+            }
+        );
+
+
+    if (
+        !success
+    ) {
+
+        throw createHttpError(
+            500,
+            "AI Unlimited usage could not be recorded."
+        );
+
+    }
+
+}
+
+
+/* =========================================
+MARK REQUEST FAILED
+========================================= */
+
+async function markRequestFailed(
+    requestId,
+    error
+) {
+
+    if (
+        !requestId
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await updateRequestLog(
+            requestId,
+            {
+
+                status:
+                    "failed",
+
+                error_message:
+                    String(
+                        error?.message ||
+                        "AI Unlimited request failed."
+                    )
+                        .slice(
+                            0,
+                            500
+                        ),
+
+                completed_at:
+                    new Date()
+                        .toISOString()
+
+            }
+        );
+
+    }
+    catch (
+        logError
+    ) {
+
+        console.error(
+            "AI Unlimited failed request could not be recorded:",
+            logError
+        );
+
+    }
+
+}
+
+
+/* =========================================
+UPDATE REQUEST LOG
+========================================= */
+
+async function updateRequestLog(
+    requestId,
+    values
+) {
+
+    const url =
+        `${SUPABASE_URL}` +
+        `/rest/v1/ai_unlimited_requests` +
+        `?id=eq.${encodeURIComponent(
+            requestId
+        )}`;
+
+
+    const response =
+        await fetch(
+            url,
+            {
+
+                method:
+                    "PATCH",
+
+                headers: {
+
+                    ...getSupabaseServiceHeaders(),
+
+                    "Content-Type":
+                        "application/json",
+
+                    "Prefer":
+                        "return=minimal"
+
+                },
+
+                body:
+                    JSON.stringify(
+                        values
+                    )
+
+            }
+        );
+
+
+    if (
+        !response.ok
+    ) {
+
+        const text =
+            await response.text();
+
+
+        console.error(
+            "AI Unlimited request log update failed:",
+            response.status,
+            text
+        );
+
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================
+COUNT UNLIMITED USAGE
+
+Used for reporting only.
+
+Unlimited customers are not blocked by
+this number.
+========================================= */
+
+async function countSuccessfulRequests(
+    userId,
+    monthStart
+) {
+
+    const url =
+        `${SUPABASE_URL}` +
+        `/rest/v1/ai_unlimited_requests` +
+        `?user_id=eq.${encodeURIComponent(
+            userId
+        )}` +
+        `&month_start=eq.${encodeURIComponent(
+            monthStart
+        )}` +
+        `&status=eq.succeeded` +
+        `&select=id`;
+
+
+    const response =
+        await fetch(
+            url,
+            {
+
+                headers: {
+
+                    ...getSupabaseServiceHeaders(),
+
+                    "Prefer":
+                        "count=exact"
+
+                }
+
+            }
+        );
+
+
+    if (
+        !response.ok
+    ) {
+
+        return 0;
+
+    }
+
+
+    const contentRange =
+        response.headers.get(
+            "content-range"
+        ) ||
+        "";
+
+
+    const match =
+        contentRange.match(
+            /\/(\d+)$/
+        );
+
+
+    if (
+        match
+    ) {
+
+        return Number(
+            match[1]
+        );
+
+    }
+
+
+    const rows =
+        await response.json();
+
+
+    return Array.isArray(
+        rows
+    )
+        ? rows.length
+        : 0;
+
+}
+
+
+/* =========================================
+SUPABASE RPC
+========================================= */
+
+async function callSupabaseRpc(
+    functionName,
+    parameters
+) {
+
+    const url =
+        `${SUPABASE_URL}` +
+        `/rest/v1/rpc/` +
+        encodeURIComponent(
+            functionName
+        );
+
+
+    const response =
+        await fetch(
+            url,
+            {
+
+                method:
+                    "POST",
+
+                headers: {
+
+                    ...getSupabaseServiceHeaders(),
+
+                    "Content-Type":
+                        "application/json"
+
+                },
+
+                body:
+                    JSON.stringify(
+                        parameters
+                    )
+
+            }
+        );
+
+
+    const text =
+        await response.text();
+
+
+    if (
+        !response.ok
+    ) {
+
+        console.error(
+            `AI Unlimited Supabase RPC failed: ${functionName}`,
+            response.status,
+            text
+        );
+
+
+        throw createHttpError(
+            500,
+            "AI Unlimited usage could not be checked."
+        );
+
+    }
+
+
+    try {
+
+        return text
+            ? JSON.parse(
+                text
+            )
+            : [];
+
+    }
+    catch {
+
+        throw createHttpError(
+            500,
+            "AI Unlimited usage returned an invalid response."
+        );
+
+    }
+
+}
+
+
+/* =========================================
+SUPABASE SERVICE HEADERS
+========================================= */
+
+function getSupabaseServiceHeaders() {
+
+    return {
+
+        apikey:
+            SUPABASE_SERVICE_ROLE_KEY,
+
+        Authorization:
+            `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
+
+    };
+
+}
+
+
+/* =========================================
+HTTP ERROR
+========================================= */
+
+function createHttpError(
+    statusCode,
+    publicMessage
+) {
+
+    const error =
+        new Error(
+            publicMessage
+        );
+
+
+    error.statusCode =
+        statusCode;
+
+
+    error.publicMessage =
+        publicMessage;
+
+
+    return error;
+
+}
+
+
+/* =========================================
+DATABASE INTEGER
+========================================= */
+
+function cleanDatabaseInteger(
+    value
+) {
+
+    const number =
+        Number(
+            value
+        );
+
+
+    if (
+        !Number.isFinite(
+            number
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    return Math.max(
+        0,
+        Math.round(
+            number
+        )
+    );
+
+}
+
+
+/* =========================================
+COUNT GOOGLE SEARCH QUERIES
+========================================= */
+
+function countGoogleSearchQueries(
+    geminiData
+) {
+
+    const queries =
+        geminiData
+            ?.candidates?.[0]
+            ?.groundingMetadata
+            ?.webSearchQueries;
+
+
+    if (
+        !Array.isArray(
+            queries
+        )
+    ) {
+
+        return 0;
+
+    }
+
+
+    return queries.length;
 
 }
 
@@ -649,7 +2112,21 @@ async function runGemini(
         }
 
 
-        return rawText;
+        return {
+
+            text:
+                rawText,
+
+            usageMetadata:
+                data?.usageMetadata ||
+                null,
+
+            searchQueries:
+                countGoogleSearchQueries(
+                    data
+                )
+
+        };
 
     }
     catch (
