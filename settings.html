@@ -3978,7 +3978,7 @@ async function loadProfile() {
 
         membershipPlan.textContent =
             profile?.is_active
-                ? "EdgeBreak Pro"
+                ? "EdgeBreak"
                 : "Free";
 
     }
@@ -3987,7 +3987,7 @@ async function loadProfile() {
 
         membershipDescription.textContent =
             profile?.is_active
-                ? "Premium Membership"
+                ? "Loading membership..."
                 : "Free Membership";
 
     }
@@ -4221,6 +4221,16 @@ async function upgradeAIUnlimited() {
     const message =
         document.getElementById(
             "upgradeAIUnlimitedMessage"
+        );
+
+    const membershipPlan =
+        document.getElementById(
+            "membershipPlan"
+        );
+
+    const membershipDescription =
+        document.getElementById(
+            "membershipDescription"
         );
 
     if (!button) return;
@@ -4666,10 +4676,19 @@ async function loadSubscription() {
         // AI UNLIMITED
         // =========================
 
-        if (
-            aiData.accessLevel ===
-            "unlimited"
-        ) {
+        if (membershipPlan) {
+
+            membershipPlan.innerText =
+                "AI Unlimited";
+
+        }
+
+        if (membershipDescription) {
+
+            membershipDescription.innerText =
+                "EdgeBreak $29.99 USD/month";
+
+        }
 
             if (status) {
 
@@ -4830,6 +4849,20 @@ async function loadSubscription() {
         // =========================
         // STANDARD
         // =========================
+
+        if (membershipPlan) {
+
+            membershipPlan.innerText =
+                "Standard";
+
+        }
+
+        if (membershipDescription) {
+
+            membershipDescription.innerText =
+                "EdgeBreak $19.99 USD/month";
+
+        }
 
         if (status) {
 
