@@ -4,8 +4,8 @@
 #
 # PURPOSE
 # -------
-# Builds a small rolling technical-indicator history for stocks
-# currently found by any EdgeBreak scanner.
+# Builds a rolling technical-indicator and market-participation
+# history for stocks currently found by any EdgeBreak scanner.
 #
 # INPUT FILES
 # -----------
@@ -24,9 +24,52 @@
 # IMPORTANT
 # ---------
 # Twelve Data is used ONLY to retrieve daily OHLCV candles.
-# Indicators are calculated locally in Python.
+#
+# Indicators and EdgeBreak-derived intelligence are calculated
+# locally in Python.
 #
 # Stocks appearing in multiple scanners are fetched only once.
+#
+#
+# EDGEBREAK PARTICIPATION INTELLIGENCE
+# ------------------------------------
+#
+# This builder now analyses:
+#
+# - 5-day price behaviour
+# - 20-day price behaviour
+# - 60-day price behaviour
+#
+# - 5-day OBV direction
+# - 20-day OBV direction
+# - 60-day OBV direction
+#
+# - RSI short-term behaviour
+#
+# - price / OBV relationship
+#
+# - participation state
+#
+#
+# IMPORTANT:
+#
+# A short-term OBV decline DOES NOT automatically mean a
+# stock is weakening.
+#
+# Example:
+#
+# Price falls for 5 days
+# OBV falls modestly
+# 20-day OBV remains healthy
+# 60-day OBV remains healthy
+#
+# = NORMAL_PULLBACK
+#
+#
+# Nothing in this file automatically removes stocks.
+#
+# The derived fields are evidence that can later be used
+# as part of EdgeBreak ranking.
 #
 # ============================================================
 
@@ -46,43 +89,52 @@ import pandas as pd
 # TWELVE DATA
 # ============================================================
 
-# Uses the same API key environment if one exists.
-# Falls back to the key currently used by the EdgeBreak scanner.
-#
-# If you later move the scanner key into an environment variable,
-# this file will automatically use it.
-
 API_KEY = os.getenv(
     "TWELVE_DATA_API_KEY",
     "c0c94a09b4e242e0805cf8261b5bda67"
 )
 
-TWELVE_DATA_URL = "https://api.twelvedata.com/time_series"
+
+TWELVE_DATA_URL = (
+    "https://api.twelvedata.com/time_series"
+)
 
 
 # ============================================================
 # INPUT / OUTPUT FILES
 # ============================================================
 
-BREAKOUT_FILE = "breakout_scanner.json"
+BREAKOUT_FILE = (
+    "breakout_scanner.json"
+)
 
-PRE_BREAKOUT_FILE = "scanner_database.json"
+PRE_BREAKOUT_FILE = (
+    "scanner_database.json"
+)
 
-LAUNCHPAD_FILE = "launchpad_database.json"
+LAUNCHPAD_FILE = (
+    "launchpad_database.json"
+)
 
-OUTPUT_FILE = "scanner_indicator_history.json"
+OUTPUT_FILE = (
+    "scanner_indicator_history.json"
+)
 
 
 # ============================================================
 # SETTINGS
 # ============================================================
 
-# Enough daily bars for the 200-day SMA plus breathing room.
+# Enough daily bars for:
+#
+# SMA 200
+# 60-day participation analysis
+# historical breathing room
 
 HISTORY_BARS = 260
 
 
-# Keep snapshots for this many calendar days.
+# Keep saved scanner snapshots for this many calendar days.
 
 RETENTION_DAYS = 90
 
@@ -92,8 +144,7 @@ RETENTION_DAYS = 90
 BATCH_SIZE = 10
 
 
-# Twelve Data Grow plan has plenty of capacity, but we still
-# keep a small pause between batches.
+# Pause between Twelve Data batches.
 
 SLEEP_TIME = 2
 
@@ -112,17 +163,27 @@ MAX_RETRIES = 2
 # INDICATOR SETTINGS
 # ============================================================
 
-SMA_PERIODS = [20, 50, 200]
+SMA_PERIODS = [
+    20,
+    50,
+    200
+]
 
-EMA_PERIODS = [20, 50]
+EMA_PERIODS = [
+    20,
+    50
+]
 
 RSI_PERIOD = 14
 
 MACD_FAST = 12
+
 MACD_SLOW = 26
+
 MACD_SIGNAL = 9
 
 BOLLINGER_PERIOD = 20
+
 BOLLINGER_STD = 2
 
 ATR_PERIOD = 14
@@ -131,16 +192,35 @@ AVERAGE_VOLUME_PERIOD = 20
 
 
 # ============================================================
+# EDGEBREAK BEHAVIOUR WINDOWS
+# ============================================================
+
+SHORT_WINDOW = 5
+
+MEDIUM_WINDOW = 20
+
+LONG_WINDOW = 60
+
+
+# ============================================================
 # HELPERS
 # ============================================================
 
-def safe_float(value, default=None):
+def safe_float(
+    value,
+    default=None
+):
 
     try:
 
-        number = float(value)
+        number = float(
+            value
+        )
 
-        if math.isnan(number):
+        if math.isnan(
+            number
+        ):
+
             return default
 
         return number
@@ -150,19 +230,32 @@ def safe_float(value, default=None):
         return default
 
 
-def clean_number(value, decimals=4):
+def clean_number(
+    value,
+    decimals=4
+):
 
-    value = safe_float(value)
+    value = safe_float(
+        value
+    )
 
     if value is None:
+
         return None
 
-    return round(value, decimals)
+    return round(
+        value,
+        decimals
+    )
 
 
-def load_json_file(filename):
+def load_json_file(
+    filename
+):
 
-    if not os.path.exists(filename):
+    if not os.path.exists(
+        filename
+    ):
 
         print(
             f"⚠️ File not found: {filename}"
@@ -178,9 +271,15 @@ def load_json_file(filename):
             encoding="utf-8"
         ) as f:
 
-            data = json.load(f)
+            data = json.load(
+                f
+            )
 
-        if isinstance(data, list):
+        if isinstance(
+            data,
+            list
+        ):
+
             return data
 
         return []
@@ -200,7 +299,9 @@ def load_json_file(filename):
 
 def load_existing_history():
 
-    if not os.path.exists(OUTPUT_FILE):
+    if not os.path.exists(
+        OUTPUT_FILE
+    ):
 
         return {}
 
@@ -212,15 +313,22 @@ def load_existing_history():
             encoding="utf-8"
         ) as f:
 
-            data = json.load(f)
+            data = json.load(
+                f
+            )
 
-        if isinstance(data, dict):
+        if isinstance(
+            data,
+            dict
+        ):
+
             return data
 
     except Exception as e:
 
         print(
-            f"⚠️ Existing indicator history could not be read: {e}"
+            "⚠️ Existing indicator history "
+            f"could not be read: {e}"
         )
 
     return {}
@@ -243,56 +351,108 @@ def build_scanner_symbol_map():
         BREAKOUT_FILE
     )
 
+
     for row in breakout_data:
 
         symbol = str(
-            row.get("symbol", "")
+            row.get(
+                "symbol",
+                ""
+            )
         ).strip().upper()
 
+
         if not symbol:
+
             continue
+
 
         if symbol not in symbol_map:
 
-            symbol_map[symbol] = {
-                "scanners": [],
-                "scanner_data": {}
+            symbol_map[
+                symbol
+            ] = {
+
+                "scanners":
+                    [],
+
+                "scanner_data":
+                    {}
+
             }
 
-        if "breakout" not in symbol_map[symbol]["scanners"]:
 
-            symbol_map[symbol]["scanners"].append(
+        if (
+            "breakout"
+            not in
+            symbol_map[
+                symbol
+            ][
+                "scanners"
+            ]
+        ):
+
+            symbol_map[
+                symbol
+            ][
+                "scanners"
+            ].append(
                 "breakout"
             )
 
-        symbol_map[symbol]["scanner_data"]["breakout"] = {
+
+        symbol_map[
+            symbol
+        ][
+            "scanner_data"
+        ][
+            "breakout"
+        ] = {
 
             "scan_date":
-                row.get("scan_date"),
+                row.get(
+                    "scan_date"
+                ),
 
             "price":
-                row.get("price"),
+                row.get(
+                    "price"
+                ),
 
             "resistance":
-                row.get("resistance"),
+                row.get(
+                    "resistance"
+                ),
 
             "distance_above_resistance":
-                row.get("distance_above_resistance"),
+                row.get(
+                    "distance_above_resistance"
+                ),
 
             "touches":
-                row.get("touches"),
+                row.get(
+                    "touches"
+                ),
 
             "higher_lows":
-                row.get("higher_lows"),
+                row.get(
+                    "higher_lows"
+                ),
 
             "volume_ratio":
-                row.get("volume_ratio"),
+                row.get(
+                    "volume_ratio"
+                ),
 
             "grade":
-                row.get("grade"),
+                row.get(
+                    "grade"
+                ),
 
             "rank":
-                row.get("rank")
+                row.get(
+                    "rank"
+                )
 
         }
 
@@ -305,56 +465,108 @@ def build_scanner_symbol_map():
         PRE_BREAKOUT_FILE
     )
 
+
     for row in pre_breakout_data:
 
         symbol = str(
-            row.get("symbol", "")
+            row.get(
+                "symbol",
+                ""
+            )
         ).strip().upper()
 
+
         if not symbol:
+
             continue
+
 
         if symbol not in symbol_map:
 
-            symbol_map[symbol] = {
-                "scanners": [],
-                "scanner_data": {}
+            symbol_map[
+                symbol
+            ] = {
+
+                "scanners":
+                    [],
+
+                "scanner_data":
+                    {}
+
             }
 
-        if "pre_breakout" not in symbol_map[symbol]["scanners"]:
 
-            symbol_map[symbol]["scanners"].append(
+        if (
+            "pre_breakout"
+            not in
+            symbol_map[
+                symbol
+            ][
+                "scanners"
+            ]
+        ):
+
+            symbol_map[
+                symbol
+            ][
+                "scanners"
+            ].append(
                 "pre_breakout"
             )
 
-        symbol_map[symbol]["scanner_data"]["pre_breakout"] = {
+
+        symbol_map[
+            symbol
+        ][
+            "scanner_data"
+        ][
+            "pre_breakout"
+        ] = {
 
             "scan_date":
-                row.get("scan_date"),
+                row.get(
+                    "scan_date"
+                ),
 
             "current_price":
-                row.get("current_price"),
+                row.get(
+                    "current_price"
+                ),
 
             "resistance_price":
-                row.get("resistance_price"),
+                row.get(
+                    "resistance_price"
+                ),
 
             "resistance_touches":
-                row.get("resistance_touches"),
+                row.get(
+                    "resistance_touches"
+                ),
 
             "higher_lows":
-                row.get("higher_lows"),
+                row.get(
+                    "higher_lows"
+                ),
 
             "distance_to_resistance":
-                row.get("distance_to_resistance"),
+                row.get(
+                    "distance_to_resistance"
+                ),
 
             "average_volume_20":
-                row.get("average_volume_20"),
+                row.get(
+                    "average_volume_20"
+                ),
 
             "average_dollar_volume_20":
-                row.get("average_dollar_volume_20"),
+                row.get(
+                    "average_dollar_volume_20"
+                ),
 
             "liquidity_group":
-                row.get("liquidity_group")
+                row.get(
+                    "liquidity_group"
+                )
 
         }
 
@@ -367,59 +579,113 @@ def build_scanner_symbol_map():
         LAUNCHPAD_FILE
     )
 
+
     for row in launchpad_data:
 
         symbol = str(
-            row.get("symbol", "")
+            row.get(
+                "symbol",
+                ""
+            )
         ).strip().upper()
 
+
         if not symbol:
+
             continue
+
 
         if symbol not in symbol_map:
 
-            symbol_map[symbol] = {
-                "scanners": [],
-                "scanner_data": {}
+            symbol_map[
+                symbol
+            ] = {
+
+                "scanners":
+                    [],
+
+                "scanner_data":
+                    {}
+
             }
 
-        if "launchpad" not in symbol_map[symbol]["scanners"]:
 
-            symbol_map[symbol]["scanners"].append(
+        if (
+            "launchpad"
+            not in
+            symbol_map[
+                symbol
+            ][
+                "scanners"
+            ]
+        ):
+
+            symbol_map[
+                symbol
+            ][
+                "scanners"
+            ].append(
                 "launchpad"
             )
 
-        symbol_map[symbol]["scanner_data"]["launchpad"] = {
+
+        symbol_map[
+            symbol
+        ][
+            "scanner_data"
+        ][
+            "launchpad"
+        ] = {
 
             "last_updated":
-                row.get("last_updated"),
+                row.get(
+                    "last_updated"
+                ),
 
             "current_price":
-                row.get("current_price"),
+                row.get(
+                    "current_price"
+                ),
 
             "launchpad_days":
-                row.get("launchpad_days"),
+                row.get(
+                    "launchpad_days"
+                ),
 
             "support_zone_low":
-                row.get("support_zone_low"),
+                row.get(
+                    "support_zone_low"
+                ),
 
             "support_zone_high":
-                row.get("support_zone_high"),
+                row.get(
+                    "support_zone_high"
+                ),
 
             "resistance_zone_low":
-                row.get("resistance_zone_low"),
+                row.get(
+                    "resistance_zone_low"
+                ),
 
             "resistance_zone_high":
-                row.get("resistance_zone_high"),
+                row.get(
+                    "resistance_zone_high"
+                ),
 
             "support_tests":
-                row.get("support_tests"),
+                row.get(
+                    "support_tests"
+                ),
 
             "resistance_tests":
-                row.get("resistance_tests"),
+                row.get(
+                    "resistance_tests"
+                ),
 
             "range_percent":
-                row.get("range_percent")
+                row.get(
+                    "range_percent"
+                )
 
         }
 
@@ -429,18 +695,33 @@ def build_scanner_symbol_map():
     # --------------------------------------------------------
 
     scanner_order = {
-        "breakout": 1,
-        "pre_breakout": 2,
-        "launchpad": 3
+
+        "breakout":
+            1,
+
+        "pre_breakout":
+            2,
+
+        "launchpad":
+            3
+
     }
+
 
     for symbol in symbol_map:
 
-        symbol_map[symbol]["scanners"].sort(
-            key=lambda x: scanner_order.get(
-                x,
-                99
-            )
+        symbol_map[
+            symbol
+        ][
+            "scanners"
+        ].sort(
+
+            key=lambda x:
+                scanner_order.get(
+                    x,
+                    99
+                )
+
         )
 
 
@@ -451,12 +732,16 @@ def build_scanner_symbol_map():
 # TWELVE DATA FETCH
 # ============================================================
 
-def fetch_batch(symbols):
+def fetch_batch(
+    symbols
+):
 
     params = {
 
         "symbol":
-            ",".join(symbols),
+            ",".join(
+                symbols
+            ),
 
         "interval":
             "1day",
@@ -468,6 +753,7 @@ def fetch_batch(symbols):
             API_KEY
 
     }
+
 
     for attempt in range(
         1,
@@ -482,26 +768,41 @@ def fetch_batch(symbols):
 
                 params=params,
 
-                timeout=REQUEST_TIMEOUT
+                timeout=
+                    REQUEST_TIMEOUT
 
             )
 
+
             response.raise_for_status()
 
-            data = response.json()
+
+            data = (
+                response.json()
+            )
+
 
             return data
+
 
         except Exception as e:
 
             print(
-                f"⚠️ Twelve Data attempt "
-                f"{attempt}/{MAX_RETRIES} failed: {e}"
+                "⚠️ Twelve Data attempt "
+                f"{attempt}/{MAX_RETRIES} "
+                f"failed: {e}"
             )
 
-            if attempt < MAX_RETRIES:
 
-                time.sleep(3)
+            if (
+                attempt <
+                MAX_RETRIES
+            ):
+
+                time.sleep(
+                    3
+                )
+
 
     return {}
 
@@ -516,7 +817,11 @@ def extract_symbol_values(
     batch_size
 ):
 
-    if not isinstance(batch_data, dict):
+    if not isinstance(
+        batch_data,
+        dict
+    ):
+
         return None
 
 
@@ -526,13 +831,30 @@ def extract_symbol_values(
 
     if symbol in batch_data:
 
-        content = batch_data.get(symbol)
+        content = (
+            batch_data.get(
+                symbol
+            )
+        )
 
-        if isinstance(content, dict):
 
-            values = content.get("values")
+        if isinstance(
+            content,
+            dict
+        ):
 
-            if isinstance(values, list):
+            values = (
+                content.get(
+                    "values"
+                )
+            )
+
+
+            if isinstance(
+                values,
+                list
+            ):
+
                 return values
 
 
@@ -542,9 +864,18 @@ def extract_symbol_values(
 
     if batch_size == 1:
 
-        values = batch_data.get("values")
+        values = (
+            batch_data.get(
+                "values"
+            )
+        )
 
-        if isinstance(values, list):
+
+        if isinstance(
+            values,
+            list
+        ):
+
             return values
 
 
@@ -555,12 +886,17 @@ def extract_symbol_values(
 # BUILD DATAFRAME
 # ============================================================
 
-def build_dataframe(values):
+def build_dataframe(
+    values
+):
 
     if not values:
+
         return None
 
+
     rows = []
+
 
     for bar in values:
 
@@ -569,50 +905,83 @@ def build_dataframe(values):
             row = {
 
                 "datetime":
-                    bar.get("datetime"),
+                    bar.get(
+                        "datetime"
+                    ),
 
                 "open":
                     safe_float(
-                        bar.get("open")
+                        bar.get(
+                            "open"
+                        )
                     ),
 
                 "high":
                     safe_float(
-                        bar.get("high")
+                        bar.get(
+                            "high"
+                        )
                     ),
 
                 "low":
                     safe_float(
-                        bar.get("low")
+                        bar.get(
+                            "low"
+                        )
                     ),
 
                 "close":
                     safe_float(
-                        bar.get("close")
+                        bar.get(
+                            "close"
+                        )
                     ),
 
                 "volume":
                     safe_float(
-                        bar.get("volume")
+                        bar.get(
+                            "volume"
+                        )
                     )
 
             }
 
+
             if (
+                row[
+                    "datetime"
+                ]
+                is None
 
-                row["datetime"] is None
+                or
 
-                or row["high"] is None
+                row[
+                    "high"
+                ]
+                is None
 
-                or row["low"] is None
+                or
 
-                or row["close"] is None
+                row[
+                    "low"
+                ]
+                is None
 
+                or
+
+                row[
+                    "close"
+                ]
+                is None
             ):
 
                 continue
 
-            rows.append(row)
+
+            rows.append(
+                row
+            )
+
 
         except:
 
@@ -620,32 +989,55 @@ def build_dataframe(values):
 
 
     if not rows:
+
         return None
 
 
-    df = pd.DataFrame(rows)
+    df = pd.DataFrame(
+        rows
+    )
 
 
     # Twelve Data normally returns newest first.
-    # Sort explicitly so calculations always run oldest → newest.
+    # Always calculate oldest -> newest.
 
-    df["datetime"] = pd.to_datetime(
-        df["datetime"],
-        errors="coerce"
+    df[
+        "datetime"
+    ] = pd.to_datetime(
+
+        df[
+            "datetime"
+        ],
+
+        errors=
+            "coerce"
+
     )
+
 
     df = df.dropna(
-        subset=["datetime"]
+        subset=[
+            "datetime"
+        ]
     )
+
 
     df = df.sort_values(
         "datetime"
     )
 
+
     df = df.drop_duplicates(
-        subset=["datetime"],
-        keep="last"
+
+        subset=[
+            "datetime"
+        ],
+
+        keep=
+            "last"
+
     )
+
 
     df = df.reset_index(
         drop=True
@@ -653,6 +1045,7 @@ def build_dataframe(values):
 
 
     if df.empty:
+
         return None
 
 
@@ -663,17 +1056,34 @@ def build_dataframe(values):
 # SMA
 # ============================================================
 
-def calculate_sma(series, period):
+def calculate_sma(
+    series,
+    period
+):
 
-    if len(series) < period:
+    if len(
+        series
+    ) < period:
+
         return None
 
+
     value = (
+
         series
-        .rolling(period)
+
+        .rolling(
+            period
+        )
+
         .mean()
-        .iloc[-1]
+
+        .iloc[
+            -1
+        ]
+
     )
+
 
     return clean_number(
         value
@@ -684,24 +1094,190 @@ def calculate_sma(series, period):
 # EMA
 # ============================================================
 
-def calculate_ema(series, period):
+def calculate_ema(
+    series,
+    period
+):
 
-    if len(series) < period:
+    if len(
+        series
+    ) < period:
+
         return None
 
+
     value = (
+
         series
+
         .ewm(
             span=period,
             adjust=False
         )
+
         .mean()
-        .iloc[-1]
+
+        .iloc[
+            -1
+        ]
+
     )
+
 
     return clean_number(
         value
     )
+
+
+# ============================================================
+# RSI SERIES
+# ============================================================
+
+def calculate_rsi_series(
+    series,
+    period=14
+):
+
+    if len(
+        series
+    ) < period + 1:
+
+        return None
+
+
+    delta = (
+        series.diff()
+    )
+
+
+    gains = (
+        delta.clip(
+            lower=0
+        )
+    )
+
+
+    losses = (
+
+        -delta.clip(
+            upper=0
+        )
+
+    )
+
+
+    average_gain = gains.ewm(
+
+        alpha=
+            1 / period,
+
+        adjust=
+            False,
+
+        min_periods=
+            period
+
+    ).mean()
+
+
+    average_loss = losses.ewm(
+
+        alpha=
+            1 / period,
+
+        adjust=
+            False,
+
+        min_periods=
+            period
+
+    ).mean()
+
+
+    rs = (
+        average_gain
+        /
+        average_loss.replace(
+            0,
+            float(
+                "nan"
+            )
+        )
+    )
+
+
+    rsi = (
+
+        100
+
+        -
+
+        (
+            100
+            /
+            (
+                1
+                +
+                rs
+            )
+        )
+
+    )
+
+
+    # Where average loss is zero:
+    #
+    # gains > 0 = RSI 100
+    # gains = 0 = RSI 50
+
+    zero_loss = (
+        average_loss
+        ==
+        0
+    )
+
+
+    rising_only = (
+
+        zero_loss
+
+        &
+
+        (
+            average_gain
+            >
+            0
+        )
+
+    )
+
+
+    no_movement = (
+
+        zero_loss
+
+        &
+
+        (
+            average_gain
+            ==
+            0
+        )
+
+    )
+
+
+    rsi.loc[
+        rising_only
+    ] = 100.0
+
+
+    rsi.loc[
+        no_movement
+    ] = 50.0
+
+
+    return rsi
 
 
 # ============================================================
@@ -713,74 +1289,35 @@ def calculate_rsi(
     period=14
 ):
 
-    if len(series) < period + 1:
-        return None
-
-    delta = series.diff()
-
-    gains = delta.clip(
-        lower=0
-    )
-
-    losses = (
-        -delta.clip(
-            upper=0
+    rsi_series = (
+        calculate_rsi_series(
+            series,
+            period
         )
     )
 
 
-    # Wilder-style smoothing
+    if rsi_series is None:
 
-    average_gain = gains.ewm(
-
-        alpha=1 / period,
-
-        adjust=False,
-
-        min_periods=period
-
-    ).mean()
-
-
-    average_loss = losses.ewm(
-
-        alpha=1 / period,
-
-        adjust=False,
-
-        min_periods=period
-
-    ).mean()
-
-
-    avg_gain = average_gain.iloc[-1]
-
-    avg_loss = average_loss.iloc[-1]
-
-
-    if pd.isna(avg_gain):
-        return None
-
-    if pd.isna(avg_loss):
         return None
 
 
-    if avg_loss == 0:
-
-        if avg_gain == 0:
-            return 50.0
-
-        return 100.0
-
-
-    rs = avg_gain / avg_loss
-
-    rsi = 100 - (
-        100 / (1 + rs)
+    latest = (
+        rsi_series.iloc[
+            -1
+        ]
     )
 
+
+    if pd.isna(
+        latest
+    ):
+
+        return None
+
+
     return clean_number(
-        rsi,
+        latest,
         2
     )
 
@@ -789,57 +1326,87 @@ def calculate_rsi(
 # MACD
 # ============================================================
 
-def calculate_macd(series):
+def calculate_macd(
+    series
+):
 
     minimum_bars = (
+
         MACD_SLOW
-        + MACD_SIGNAL
+        +
+        MACD_SIGNAL
+
     )
 
-    if len(series) < minimum_bars:
+
+    if len(
+        series
+    ) < minimum_bars:
+
         return {
-            "macd": None,
-            "signal": None,
-            "histogram": None
+
+            "macd":
+                None,
+
+            "signal":
+                None,
+
+            "histogram":
+                None
+
         }
 
 
-    ema_fast = series.ewm(
+    ema_fast = (
+        series.ewm(
 
-        span=MACD_FAST,
+            span=
+                MACD_FAST,
 
-        adjust=False
+            adjust=
+                False
 
-    ).mean()
+        ).mean()
+    )
 
 
-    ema_slow = series.ewm(
+    ema_slow = (
+        series.ewm(
 
-        span=MACD_SLOW,
+            span=
+                MACD_SLOW,
 
-        adjust=False
+            adjust=
+                False
 
-    ).mean()
+        ).mean()
+    )
 
 
     macd_line = (
         ema_fast
-        - ema_slow
+        -
+        ema_slow
     )
 
 
-    signal_line = macd_line.ewm(
+    signal_line = (
+        macd_line.ewm(
 
-        span=MACD_SIGNAL,
+            span=
+                MACD_SIGNAL,
 
-        adjust=False
+            adjust=
+                False
 
-    ).mean()
+        ).mean()
+    )
 
 
     histogram = (
         macd_line
-        - signal_line
+        -
+        signal_line
     )
 
 
@@ -847,17 +1414,23 @@ def calculate_macd(series):
 
         "macd":
             clean_number(
-                macd_line.iloc[-1]
+                macd_line.iloc[
+                    -1
+                ]
             ),
 
         "signal":
             clean_number(
-                signal_line.iloc[-1]
+                signal_line.iloc[
+                    -1
+                ]
             ),
 
         "histogram":
             clean_number(
-                histogram.iloc[-1]
+                histogram.iloc[
+                    -1
+                ]
             )
 
     }
@@ -867,45 +1440,78 @@ def calculate_macd(series):
 # BOLLINGER BANDS
 # ============================================================
 
-def calculate_bollinger(series):
+def calculate_bollinger(
+    series
+):
 
-    if len(series) < BOLLINGER_PERIOD:
+    if len(
+        series
+    ) < BOLLINGER_PERIOD:
 
         return {
-            "upper": None,
-            "middle": None,
-            "lower": None
+
+            "upper":
+                None,
+
+            "middle":
+                None,
+
+            "lower":
+                None
+
         }
 
 
-    rolling = series.rolling(
-        BOLLINGER_PERIOD
+    rolling = (
+        series.rolling(
+            BOLLINGER_PERIOD
+        )
     )
 
 
     middle = (
         rolling
         .mean()
-        .iloc[-1]
+        .iloc[
+            -1
+        ]
     )
 
 
     std = (
         rolling
-        .std(ddof=0)
-        .iloc[-1]
+        .std(
+            ddof=0
+        )
+        .iloc[
+            -1
+        ]
     )
 
 
     upper = (
+
         middle
-        + BOLLINGER_STD * std
+
+        +
+
+        BOLLINGER_STD
+        *
+        std
+
     )
 
 
     lower = (
+
         middle
-        - BOLLINGER_STD * std
+
+        -
+
+        BOLLINGER_STD
+        *
+        std
+
     )
 
 
@@ -933,64 +1539,104 @@ def calculate_bollinger(series):
 # ATR
 # ============================================================
 
-def calculate_atr(df):
+def calculate_atr(
+    df
+):
 
-    if len(df) < ATR_PERIOD + 1:
+    if len(
+        df
+    ) < ATR_PERIOD + 1:
+
         return None
 
 
     previous_close = (
-        df["close"]
-        .shift(1)
+        df[
+            "close"
+        ].shift(
+            1
+        )
     )
 
 
     range_one = (
-        df["high"]
-        - df["low"]
+
+        df[
+            "high"
+        ]
+
+        -
+
+        df[
+            "low"
+        ]
+
     )
 
 
     range_two = (
-        df["high"]
-        - previous_close
+
+        df[
+            "high"
+        ]
+
+        -
+
+        previous_close
+
     ).abs()
 
 
     range_three = (
-        df["low"]
-        - previous_close
+
+        df[
+            "low"
+        ]
+
+        -
+
+        previous_close
+
     ).abs()
 
 
     true_range = pd.concat(
 
         [
+
             range_one,
+
             range_two,
+
             range_three
+
         ],
 
         axis=1
 
-    ).max(axis=1)
+    ).max(
+        axis=1
+    )
 
-
-    # Wilder ATR
 
     atr = true_range.ewm(
 
-        alpha=1 / ATR_PERIOD,
+        alpha=
+            1 / ATR_PERIOD,
 
-        adjust=False,
+        adjust=
+            False,
 
-        min_periods=ATR_PERIOD
+        min_periods=
+            ATR_PERIOD
 
     ).mean()
 
 
     return clean_number(
-        atr.iloc[-1]
+        atr.iloc[
+            -1
+        ]
     )
 
 
@@ -998,33 +1644,55 @@ def calculate_atr(df):
 # VOLUME
 # ============================================================
 
-def calculate_volume_metrics(df):
+def calculate_volume_metrics(
+    df
+):
 
-    if "volume" not in df.columns:
+    if (
+        "volume"
+        not in
+        df.columns
+    ):
 
         return {
-            "average_volume_20": None,
-            "relative_volume": None
+
+            "average_volume_20":
+                None,
+
+            "relative_volume":
+                None
+
         }
 
 
     valid_volume = (
-        df["volume"]
+        df[
+            "volume"
+        ]
         .dropna()
     )
 
 
-    if len(valid_volume) < AVERAGE_VOLUME_PERIOD:
+    if len(
+        valid_volume
+    ) < AVERAGE_VOLUME_PERIOD:
 
         return {
-            "average_volume_20": None,
-            "relative_volume": None
+
+            "average_volume_20":
+                None,
+
+            "relative_volume":
+                None
+
         }
 
 
-    last_20 = valid_volume.iloc[
-        -AVERAGE_VOLUME_PERIOD:
-    ]
+    last_20 = (
+        valid_volume.iloc[
+            -AVERAGE_VOLUME_PERIOD:
+        ]
+    )
 
 
     average_volume = (
@@ -1033,21 +1701,27 @@ def calculate_volume_metrics(df):
 
 
     current_volume = (
-        valid_volume.iloc[-1]
+        valid_volume.iloc[
+            -1
+        ]
     )
 
 
-    relative_volume = None
+    relative_volume = (
+        None
+    )
 
-
-    # Relative volume is current day's volume
-    # divided by the 20-day average volume.
 
     if average_volume > 0:
 
         relative_volume = (
+
             current_volume
-            / average_volume
+
+            /
+
+            average_volume
+
         )
 
 
@@ -1066,73 +1740,238 @@ def calculate_volume_metrics(df):
 
     }
 
+
 # ============================================================
-# ON-BALANCE VOLUME (OBV)
+# PERCENT CHANGE
 # ============================================================
 
-def calculate_obv(df):
+def calculate_percent_change(
+    series,
+    lookback
+):
 
-    if "volume" not in df.columns:
+    if len(
+        series
+    ) < lookback + 1:
 
-        return {
-            "obv": None,
-            "obv_change_5d_percent": None,
-            "obv_change_20d_percent": None,
-            "obv_trend": None
-        }
-
-
-    close = df["close"]
-
-    volume = df["volume"].fillna(0)
+        return None
 
 
-    if len(df) < 2:
-
-        return {
-            "obv": None,
-            "obv_change_5d_percent": None,
-            "obv_change_20d_percent": None,
-            "obv_trend": None
-        }
+    current = safe_float(
+        series.iloc[
+            -1
+        ]
+    )
 
 
-    # --------------------------------------------------------
-    # BUILD OBV SERIES
-    # --------------------------------------------------------
+    previous = safe_float(
+        series.iloc[
+            -(lookback + 1)
+        ]
+    )
 
-    obv_values = [0.0]
+
+    if current is None:
+
+        return None
+
+
+    if previous is None:
+
+        return None
+
+
+    if previous == 0:
+
+        return None
+
+
+    change = (
+
+        (
+            current
+            -
+            previous
+        )
+
+        /
+
+        abs(
+            previous
+        )
+
+    ) * 100
+
+
+    return clean_number(
+        change,
+        2
+    )
+
+
+# ============================================================
+# PRICE TREND
+# ============================================================
+
+def classify_price_trend(
+    change_percent,
+    lookback
+):
+
+    if change_percent is None:
+
+        return None
+
+
+    # Wider windows require larger movement before
+    # EdgeBreak describes the price trend as meaningful.
+
+    threshold_map = {
+
+        5:
+            1.0,
+
+        20:
+            3.0,
+
+        60:
+            6.0
+
+    }
+
+
+    threshold = (
+        threshold_map.get(
+            lookback,
+            2.0
+        )
+    )
+
+
+    if (
+        change_percent
+        >
+        threshold
+    ):
+
+        return "rising"
+
+
+    if (
+        change_percent
+        <
+        -threshold
+    ):
+
+        return "falling"
+
+
+    return "flat"
+
+
+# ============================================================
+# BUILD OBV SERIES
+# ============================================================
+
+def build_obv_series(
+    df
+):
+
+    if (
+        "volume"
+        not in
+        df.columns
+    ):
+
+        return None
+
+
+    if len(
+        df
+    ) < 2:
+
+        return None
+
+
+    close = (
+        df[
+            "close"
+        ]
+    )
+
+
+    volume = (
+        df[
+            "volume"
+        ]
+        .fillna(
+            0
+        )
+    )
+
+
+    obv_values = [
+        0.0
+    ]
 
 
     for i in range(
         1,
-        len(df)
+        len(
+            df
+        )
     ):
 
         previous_obv = (
-            obv_values[-1]
+            obv_values[
+                -1
+            ]
         )
 
 
         if (
-            close.iloc[i]
-            > close.iloc[i - 1]
+            close.iloc[
+                i
+            ]
+            >
+            close.iloc[
+                i - 1
+            ]
         ):
 
             current_obv = (
+
                 previous_obv
-                + volume.iloc[i]
+
+                +
+
+                volume.iloc[
+                    i
+                ]
+
             )
 
 
         elif (
-            close.iloc[i]
-            < close.iloc[i - 1]
+            close.iloc[
+                i
+            ]
+            <
+            close.iloc[
+                i - 1
+            ]
         ):
 
             current_obv = (
+
                 previous_obv
-                - volume.iloc[i]
+
+                -
+
+                volume.iloc[
+                    i
+                ]
+
             )
 
 
@@ -1148,29 +1987,424 @@ def calculate_obv(df):
         )
 
 
-    obv = pd.Series(
+    return pd.Series(
+
         obv_values,
-        index=df.index,
-        dtype="float64"
+
+        index=
+            df.index,
+
+        dtype=
+            "float64"
+
+    )
+
+
+# ============================================================
+# OBV WINDOW STRENGTH
+# ============================================================
+
+def calculate_obv_window_strength(
+    obv,
+    volume,
+    lookback
+):
+
+    if obv is None:
+
+        return None
+
+
+    if len(
+        obv
+    ) < lookback + 1:
+
+        return None
+
+
+    recent_volume = (
+
+        volume
+
+        .iloc[
+            -lookback:
+        ]
+
+        .dropna()
+
+    )
+
+
+    if recent_volume.empty:
+
+        return None
+
+
+    average_volume = (
+        recent_volume.mean()
+    )
+
+
+    if average_volume <= 0:
+
+        return None
+
+
+    current_obv = (
+        obv.iloc[
+            -1
+        ]
+    )
+
+
+    old_obv = (
+        obv.iloc[
+            -(lookback + 1)
+        ]
+    )
+
+
+    obv_change = (
+
+        current_obv
+
+        -
+
+        old_obv
+
+    )
+
+
+    # --------------------------------------------------------
+    # IMPORTANT
+    # --------------------------------------------------------
+    #
+    # We do NOT divide by the historical absolute OBV value.
+    #
+    # OBV's absolute starting point is arbitrary.
+    #
+    # Instead we compare the OBV movement with the amount
+    # of trading volume that occurred during the period.
+    #
+    # A value around:
+    #
+    # +1.0 = most volume occurred on up days
+    # -1.0 = most volume occurred on down days
+    #  0.0 = broadly balanced
+    #
+    # Values can occasionally exceed +/-1 because individual
+    # daily volumes may differ from the period average.
+    # --------------------------------------------------------
+
+    denominator = (
+
+        average_volume
+
+        *
+
+        lookback
+
+    )
+
+
+    if denominator == 0:
+
+        return None
+
+
+    strength = (
+
+        obv_change
+
+        /
+
+        denominator
+
+    )
+
+
+    return clean_number(
+        strength,
+        4
+    )
+
+
+# ============================================================
+# CLASSIFY OBV WINDOW
+# ============================================================
+
+def classify_obv_window(
+    strength
+):
+
+    if strength is None:
+
+        return None
+
+
+    if strength >= 0.15:
+
+        return "rising"
+
+
+    if strength >= 0.04:
+
+        return "slightly_rising"
+
+
+    if strength <= -0.15:
+
+        return "falling"
+
+
+    if strength <= -0.04:
+
+        return "slightly_falling"
+
+
+    return "flat"
+
+
+# ============================================================
+# LEGACY OBV TREND
+# ============================================================
+
+def calculate_legacy_obv_trend(
+    obv,
+    volume
+):
+
+    if obv is None:
+
+        return None
+
+
+    if len(
+        obv
+    ) < 21:
+
+        return "neutral"
+
+
+    recent_obv = (
+
+        obv
+
+        .iloc[
+            -20:
+        ]
+
+        .reset_index(
+            drop=True
+        )
+
+    )
+
+
+    x = pd.Series(
+
+        range(
+            len(
+                recent_obv
+            )
+        ),
+
+        dtype=
+            "float64"
+
+    )
+
+
+    denominator = (
+        x.var()
+    )
+
+
+    if denominator <= 0:
+
+        return "neutral"
+
+
+    slope = (
+
+        x.cov(
+            recent_obv
+        )
+
+        /
+
+        denominator
+
+    )
+
+
+    recent_average_volume = (
+
+        volume
+
+        .iloc[
+            -20:
+        ]
+
+        .mean()
+
+    )
+
+
+    if (
+        recent_average_volume
+        is None
+    ):
+
+        return "neutral"
+
+
+    if (
+        pd.isna(
+            recent_average_volume
+        )
+    ):
+
+        return "neutral"
+
+
+    if recent_average_volume <= 0:
+
+        return "neutral"
+
+
+    normalized_slope = (
+
+        slope
+
+        /
+
+        recent_average_volume
+
+    )
+
+
+    if normalized_slope > 0.05:
+
+        return "rising"
+
+
+    if normalized_slope < -0.05:
+
+        return "falling"
+
+
+    return "neutral"
+
+
+# ============================================================
+# ON-BALANCE VOLUME
+# ============================================================
+
+def calculate_obv(
+    df
+):
+
+    empty_result = {
+
+        # Existing fields
+
+        "obv":
+            None,
+
+        "obv_change_5d_percent":
+            None,
+
+        "obv_change_20d_percent":
+            None,
+
+        "obv_trend":
+            None,
+
+
+        # New fields
+
+        "obv_strength_5d":
+            None,
+
+        "obv_strength_20d":
+            None,
+
+        "obv_strength_60d":
+            None,
+
+        "obv_trend_5d":
+            None,
+
+        "obv_trend_20d":
+            None,
+
+        "obv_trend_60d":
+            None
+
+    }
+
+
+    if (
+        "volume"
+        not in
+        df.columns
+    ):
+
+        return empty_result
+
+
+    obv = (
+        build_obv_series(
+            df
+        )
+    )
+
+
+    if obv is None:
+
+        return empty_result
+
+
+    volume = (
+        df[
+            "volume"
+        ]
+        .fillna(
+            0
+        )
     )
 
 
     latest_obv = (
-        obv.iloc[-1]
+        obv.iloc[
+            -1
+        ]
     )
 
 
     # --------------------------------------------------------
-    # 5-DAY OBV CHANGE
+    # EXISTING 5-DAY OBV PERCENTAGE
     # --------------------------------------------------------
+    #
+    # Kept for backward compatibility.
+    #
+    # Do NOT use this field as a primary EdgeBreak ranking
+    # signal because absolute OBV values are arbitrary.
 
-    obv_change_5d_percent = None
+    obv_change_5d_percent = (
+        None
+    )
 
 
-    if len(obv) >= 6:
+    if len(
+        obv
+    ) >= 6:
 
         old_obv = (
-            obv.iloc[-6]
+            obv.iloc[
+                -6
+            ]
         )
 
 
@@ -1180,10 +2414,13 @@ def calculate_obv(df):
 
                 (
                     latest_obv
-                    - old_obv
+                    -
+                    old_obv
                 )
 
-                / abs(
+                /
+
+                abs(
                     old_obv
                 )
 
@@ -1191,16 +2428,22 @@ def calculate_obv(df):
 
 
     # --------------------------------------------------------
-    # 20-DAY OBV CHANGE
+    # EXISTING 20-DAY OBV PERCENTAGE
     # --------------------------------------------------------
 
-    obv_change_20d_percent = None
+    obv_change_20d_percent = (
+        None
+    )
 
 
-    if len(obv) >= 21:
+    if len(
+        obv
+    ) >= 21:
 
         old_obv = (
-            obv.iloc[-21]
+            obv.iloc[
+                -21
+            ]
         )
 
 
@@ -1210,10 +2453,13 @@ def calculate_obv(df):
 
                 (
                     latest_obv
-                    - old_obv
+                    -
+                    old_obv
                 )
 
-                / abs(
+                /
+
+                abs(
                     old_obv
                 )
 
@@ -1221,77 +2467,91 @@ def calculate_obv(df):
 
 
     # --------------------------------------------------------
-    # OBV TREND
+    # LEGACY TREND
     # --------------------------------------------------------
 
-    obv_trend = "neutral"
+    legacy_trend = (
+        calculate_legacy_obv_trend(
 
+            obv,
 
-    if len(obv) >= 21:
+            volume
 
-        recent_obv = (
-            obv.iloc[-20:]
-            .reset_index(
-                drop=True
-            )
         )
+    )
 
 
-        x = pd.Series(
-            range(
-                len(recent_obv)
-            ),
-            dtype="float64"
+    # --------------------------------------------------------
+    # NEW NORMALISED OBV STRENGTH
+    # --------------------------------------------------------
+
+    strength_5d = (
+        calculate_obv_window_strength(
+
+            obv,
+
+            volume,
+
+            SHORT_WINDOW
+
         )
+    )
 
 
-        # Linear slope of recent OBV.
+    strength_20d = (
+        calculate_obv_window_strength(
 
-        denominator = (
-            x.var()
+            obv,
+
+            volume,
+
+            MEDIUM_WINDOW
+
         )
+    )
 
 
-        if denominator > 0:
+    strength_60d = (
+        calculate_obv_window_strength(
 
-            slope = (
-                x.cov(
-                    recent_obv
-                )
-                / denominator
-            )
+            obv,
 
+            volume,
 
-            recent_average_volume = (
-                volume
-                .iloc[-20:]
-                .mean()
-            )
+            LONG_WINDOW
+
+        )
+    )
 
 
-            # Normalize the slope against typical volume.
-            # This prevents tiny OBV movements from being
-            # labelled as meaningful trends.
+    # --------------------------------------------------------
+    # NEW OBV TREND LABELS
+    # --------------------------------------------------------
 
-            if recent_average_volume > 0:
-
-                normalized_slope = (
-                    slope
-                    / recent_average_volume
-                )
-
-
-                if normalized_slope > 0.05:
-
-                    obv_trend = "rising"
+    trend_5d = (
+        classify_obv_window(
+            strength_5d
+        )
+    )
 
 
-                elif normalized_slope < -0.05:
+    trend_20d = (
+        classify_obv_window(
+            strength_20d
+        )
+    )
 
-                    obv_trend = "falling"
+
+    trend_60d = (
+        classify_obv_window(
+            strength_60d
+        )
+    )
 
 
     return {
+
+        # Existing fields
 
         "obv":
             clean_number(
@@ -1312,9 +2572,899 @@ def calculate_obv(df):
             ),
 
         "obv_trend":
-            obv_trend
+            legacy_trend,
+
+
+        # New fields
+
+        "obv_strength_5d":
+            strength_5d,
+
+        "obv_strength_20d":
+            strength_20d,
+
+        "obv_strength_60d":
+            strength_60d,
+
+        "obv_trend_5d":
+            trend_5d,
+
+        "obv_trend_20d":
+            trend_20d,
+
+        "obv_trend_60d":
+            trend_60d
 
     }
+
+
+# ============================================================
+# RSI BEHAVIOUR
+# ============================================================
+
+def calculate_rsi_behaviour(
+    close
+):
+
+    result = {
+
+        "rsi_change_5d":
+            None,
+
+        "rsi_change_20d":
+            None,
+
+        "rsi_state":
+            None
+
+    }
+
+
+    rsi_series = (
+        calculate_rsi_series(
+
+            close,
+
+            RSI_PERIOD
+
+        )
+    )
+
+
+    if rsi_series is None:
+
+        return result
+
+
+    valid_rsi = (
+        rsi_series.dropna()
+    )
+
+
+    if valid_rsi.empty:
+
+        return result
+
+
+    current = safe_float(
+        valid_rsi.iloc[
+            -1
+        ]
+    )
+
+
+    if current is None:
+
+        return result
+
+
+    change_5d = (
+        None
+    )
+
+
+    change_20d = (
+        None
+    )
+
+
+    if len(
+        valid_rsi
+    ) >= 6:
+
+        old = safe_float(
+            valid_rsi.iloc[
+                -6
+            ]
+        )
+
+
+        if old is not None:
+
+            change_5d = (
+                current
+                -
+                old
+            )
+
+
+    if len(
+        valid_rsi
+    ) >= 21:
+
+        old = safe_float(
+            valid_rsi.iloc[
+                -21
+            ]
+        )
+
+
+        if old is not None:
+
+            change_20d = (
+                current
+                -
+                old
+            )
+
+
+    # --------------------------------------------------------
+    # RSI STATE
+    # --------------------------------------------------------
+
+    state = (
+        "holding"
+    )
+
+
+    if (
+        change_5d is not None
+
+        and
+
+        change_5d >= 4
+    ):
+
+        state = (
+            "strengthening"
+        )
+
+
+    elif (
+
+        current >= 55
+
+        and
+
+        (
+            change_5d is None
+
+            or
+
+            change_5d >= -5
+        )
+
+    ):
+
+        state = (
+            "holding_strong"
+        )
+
+
+    elif (
+
+        change_5d is not None
+
+        and
+
+        change_5d <= -8
+
+        and
+
+        current < 45
+
+    ):
+
+        state = (
+            "weakening"
+        )
+
+
+    elif (
+
+        change_5d is not None
+
+        and
+
+        change_5d <= -5
+
+    ):
+
+        state = (
+            "softening"
+        )
+
+
+    return {
+
+        "rsi_change_5d":
+            clean_number(
+                change_5d,
+                2
+            ),
+
+        "rsi_change_20d":
+            clean_number(
+                change_20d,
+                2
+            ),
+
+        "rsi_state":
+            state
+
+    }
+
+
+# ============================================================
+# OBV TREND HELPERS
+# ============================================================
+
+def obv_is_positive(
+    trend
+):
+
+    return trend in {
+
+        "rising",
+        "slightly_rising"
+
+    }
+
+
+def obv_is_healthy(
+    trend
+):
+
+    return trend in {
+
+        "rising",
+        "slightly_rising",
+        "flat"
+
+    }
+
+
+def obv_is_negative(
+    trend
+):
+
+    return trend in {
+
+        "falling",
+        "slightly_falling"
+
+    }
+
+
+# ============================================================
+# PRICE VS OBV RELATIONSHIP
+# ============================================================
+
+def classify_obv_price_relationship(
+
+    price_change_5d,
+
+    price_change_20d,
+
+    obv_trend_5d,
+
+    obv_trend_20d,
+
+    obv_trend_60d
+
+):
+
+    # --------------------------------------------------------
+    # SHORT-TERM PRICE PULLBACK
+    # --------------------------------------------------------
+
+    if (
+        price_change_5d is not None
+
+        and
+
+        price_change_5d <= -1.0
+    ):
+
+        longer_obv_healthy = (
+
+            obv_is_healthy(
+                obv_trend_20d
+            )
+
+            and
+
+            obv_is_healthy(
+                obv_trend_60d
+            )
+
+        )
+
+
+        # Price is pulling back while OBV is flat/rising.
+        #
+        # This is the strongest pullback relationship.
+
+        if (
+
+            longer_obv_healthy
+
+            and
+
+            obv_trend_5d in {
+
+                "rising",
+                "slightly_rising",
+                "flat"
+
+            }
+
+        ):
+
+            return (
+                "positive_divergence"
+            )
+
+
+        # Price is pulling back and short-term OBV is only
+        # slightly declining while the broader participation
+        # picture remains healthy.
+        #
+        # DO NOT treat this as deterioration.
+
+        if (
+
+            longer_obv_healthy
+
+            and
+
+            obv_trend_5d
+            ==
+            "slightly_falling"
+
+        ):
+
+            return (
+                "holding_during_pullback"
+            )
+
+
+        # Even a clearly falling 5-day OBV can be perfectly
+        # normal after several consecutive down sessions
+        # provided the 20/60-day structure remains healthy.
+
+        if (
+
+            longer_obv_healthy
+
+            and
+
+            obv_trend_5d
+            ==
+            "falling"
+
+        ):
+
+            return (
+                "normal_pullback"
+            )
+
+
+    # --------------------------------------------------------
+    # STRENGTH CONFIRMATION
+    # --------------------------------------------------------
+
+    if (
+        price_change_20d is not None
+
+        and
+
+        price_change_20d >= 3.0
+
+        and
+
+        obv_is_positive(
+            obv_trend_20d
+        )
+
+        and
+
+        obv_is_healthy(
+            obv_trend_60d
+        )
+    ):
+
+        return (
+            "confirming_strength"
+        )
+
+
+    # --------------------------------------------------------
+    # NEGATIVE DIVERGENCE
+    # --------------------------------------------------------
+
+    if (
+        price_change_5d is not None
+
+        and
+
+        price_change_5d >= 1.0
+
+        and
+
+        obv_trend_5d
+        ==
+        "falling"
+
+        and
+
+        obv_is_negative(
+            obv_trend_20d
+        )
+    ):
+
+        return (
+            "negative_divergence"
+        )
+
+
+    # --------------------------------------------------------
+    # CONFIRMING WEAKNESS
+    # --------------------------------------------------------
+
+    if (
+        price_change_20d is not None
+
+        and
+
+        price_change_20d <= -3.0
+
+        and
+
+        obv_trend_20d
+        ==
+        "falling"
+
+        and
+
+        obv_is_negative(
+            obv_trend_60d
+        )
+    ):
+
+        return (
+            "confirming_weakness"
+        )
+
+
+    return (
+        "neutral"
+    )
+
+
+# ============================================================
+# PARTICIPATION STATE
+# ============================================================
+
+def classify_participation_state(
+
+    relationship,
+
+    price_change_5d,
+
+    price_change_20d,
+
+    obv_trend_5d,
+
+    obv_trend_20d,
+
+    obv_trend_60d,
+
+    rsi_state
+
+):
+
+    # --------------------------------------------------------
+    # POSITIVE DIVERGENCE
+    # --------------------------------------------------------
+
+    if (
+        relationship
+        ==
+        "positive_divergence"
+    ):
+
+        return (
+            "POSITIVE_DIVERGENCE"
+        )
+
+
+    # --------------------------------------------------------
+    # HOLDING DURING PULLBACK
+    # --------------------------------------------------------
+
+    if (
+        relationship
+        ==
+        "holding_during_pullback"
+    ):
+
+        return (
+            "HOLDING_DURING_PULLBACK"
+        )
+
+
+    # --------------------------------------------------------
+    # NORMAL PULLBACK
+    # --------------------------------------------------------
+
+    if (
+        relationship
+        ==
+        "normal_pullback"
+    ):
+
+        return (
+            "NORMAL_PULLBACK"
+        )
+
+
+    # --------------------------------------------------------
+    # STRONG CONFIRMATION
+    # --------------------------------------------------------
+
+    if (
+        relationship
+        ==
+        "confirming_strength"
+
+        and
+
+        rsi_state
+        not in {
+
+            "weakening"
+
+        }
+    ):
+
+        return (
+            "STRONG_CONFIRMATION"
+        )
+
+
+    # --------------------------------------------------------
+    # PERSISTENT DISTRIBUTION
+    # --------------------------------------------------------
+    #
+    # Require weakness across multiple independent windows.
+    #
+    # A single 5-day OBV decline is NOT enough.
+
+    if (
+
+        obv_trend_20d
+        ==
+        "falling"
+
+        and
+
+        obv_trend_60d
+        ==
+        "falling"
+
+        and
+
+        rsi_state in {
+
+            "softening",
+            "weakening"
+
+        }
+
+        and
+
+        (
+            price_change_20d is None
+
+            or
+
+            price_change_20d <= 0
+        )
+
+    ):
+
+        return (
+            "PERSISTENT_DISTRIBUTION"
+        )
+
+
+    # --------------------------------------------------------
+    # CONFIRMING WEAKNESS
+    # --------------------------------------------------------
+
+    if (
+
+        relationship
+        ==
+        "confirming_weakness"
+
+        and
+
+        rsi_state in {
+
+            "softening",
+            "weakening"
+
+        }
+
+    ):
+
+        return (
+            "PERSISTENT_DISTRIBUTION"
+        )
+
+
+    # --------------------------------------------------------
+    # WEAKENING
+    # --------------------------------------------------------
+
+    if (
+        relationship
+        ==
+        "negative_divergence"
+    ):
+
+        return (
+            "WEAKENING"
+        )
+
+
+    if (
+
+        obv_trend_20d
+        ==
+        "falling"
+
+        and
+
+        rsi_state in {
+
+            "softening",
+            "weakening"
+
+        }
+
+    ):
+
+        return (
+            "WEAKENING"
+        )
+
+
+    # --------------------------------------------------------
+    # NEUTRAL
+    # --------------------------------------------------------
+
+    return (
+        "NEUTRAL"
+    )
+
+
+# ============================================================
+# PRICE / PARTICIPATION INTELLIGENCE
+# ============================================================
+
+def calculate_participation_intelligence(
+    df,
+    obv_data
+):
+
+    close = (
+        df[
+            "close"
+        ]
+    )
+
+
+    # --------------------------------------------------------
+    # PRICE CHANGES
+    # --------------------------------------------------------
+
+    price_change_5d = (
+        calculate_percent_change(
+
+            close,
+
+            SHORT_WINDOW
+
+        )
+    )
+
+
+    price_change_20d = (
+        calculate_percent_change(
+
+            close,
+
+            MEDIUM_WINDOW
+
+        )
+    )
+
+
+    price_change_60d = (
+        calculate_percent_change(
+
+            close,
+
+            LONG_WINDOW
+
+        )
+    )
+
+
+    # --------------------------------------------------------
+    # PRICE TREND LABELS
+    # --------------------------------------------------------
+
+    price_trend_5d = (
+        classify_price_trend(
+
+            price_change_5d,
+
+            SHORT_WINDOW
+
+        )
+    )
+
+
+    price_trend_20d = (
+        classify_price_trend(
+
+            price_change_20d,
+
+            MEDIUM_WINDOW
+
+        )
+    )
+
+
+    price_trend_60d = (
+        classify_price_trend(
+
+            price_change_60d,
+
+            LONG_WINDOW
+
+        )
+    )
+
+
+    # --------------------------------------------------------
+    # RSI BEHAVIOUR
+    # --------------------------------------------------------
+
+    rsi_behaviour = (
+        calculate_rsi_behaviour(
+            close
+        )
+    )
+
+
+    # --------------------------------------------------------
+    # PRICE VS OBV
+    # --------------------------------------------------------
+
+    relationship = (
+        classify_obv_price_relationship(
+
+            price_change_5d,
+
+            price_change_20d,
+
+            obv_data.get(
+                "obv_trend_5d"
+            ),
+
+            obv_data.get(
+                "obv_trend_20d"
+            ),
+
+            obv_data.get(
+                "obv_trend_60d"
+            )
+
+        )
+    )
+
+
+    # --------------------------------------------------------
+    # PARTICIPATION STATE
+    # --------------------------------------------------------
+
+    participation_state = (
+        classify_participation_state(
+
+            relationship,
+
+            price_change_5d,
+
+            price_change_20d,
+
+            obv_data.get(
+                "obv_trend_5d"
+            ),
+
+            obv_data.get(
+                "obv_trend_20d"
+            ),
+
+            obv_data.get(
+                "obv_trend_60d"
+            ),
+
+            rsi_behaviour.get(
+                "rsi_state"
+            )
+
+        )
+    )
+
+
+    return {
+
+        "price_change_5d_percent":
+            price_change_5d,
+
+        "price_change_20d_percent":
+            price_change_20d,
+
+        "price_change_60d_percent":
+            price_change_60d,
+
+        "price_trend_5d":
+            price_trend_5d,
+
+        "price_trend_20d":
+            price_trend_20d,
+
+        "price_trend_60d":
+            price_trend_60d,
+
+        "rsi_change_5d":
+            rsi_behaviour.get(
+                "rsi_change_5d"
+            ),
+
+        "rsi_change_20d":
+            rsi_behaviour.get(
+                "rsi_change_20d"
+            ),
+
+        "rsi_state":
+            rsi_behaviour.get(
+                "rsi_state"
+            ),
+
+        "obv_price_relationship":
+            relationship,
+
+        "participation_state":
+            participation_state
+
+    }
+
 
 # ============================================================
 # PRICE VS MOVING AVERAGE
@@ -1326,21 +3476,32 @@ def percent_from_level(
 ):
 
     if price is None:
+
         return None
+
 
     if level is None:
+
         return None
 
+
     if level == 0:
+
         return None
 
 
     value = (
+
         (
             price
-            - level
+            -
+            level
         )
-        / level
+
+        /
+
+        level
+
     ) * 100
 
 
@@ -1361,24 +3522,49 @@ def build_indicator_snapshot(
 ):
 
     if df is None:
+
         return None
+
 
     if df.empty:
+
         return None
 
 
-    close = df["close"]
+    close = (
+        df[
+            "close"
+        ]
+    )
 
-    current_price = clean_number(
-        close.iloc[-1],
-        4
+
+    current_price = (
+        clean_number(
+
+            close.iloc[
+                -1
+            ],
+
+            4
+
+        )
     )
 
 
     candle_date = (
-        df["datetime"]
-        .iloc[-1]
-        .strftime("%Y-%m-%d")
+
+        df[
+            "datetime"
+        ]
+
+        .iloc[
+            -1
+        ]
+
+        .strftime(
+            "%Y-%m-%d"
+        )
+
     )
 
 
@@ -1386,30 +3572,43 @@ def build_indicator_snapshot(
     # MOVING AVERAGES
     # --------------------------------------------------------
 
-    sma20 = calculate_sma(
-        close,
-        20
-    )
-
-    sma50 = calculate_sma(
-        close,
-        50
-    )
-
-    sma200 = calculate_sma(
-        close,
-        200
+    sma20 = (
+        calculate_sma(
+            close,
+            20
+        )
     )
 
 
-    ema20 = calculate_ema(
-        close,
-        20
+    sma50 = (
+        calculate_sma(
+            close,
+            50
+        )
     )
 
-    ema50 = calculate_ema(
-        close,
-        50
+
+    sma200 = (
+        calculate_sma(
+            close,
+            200
+        )
+    )
+
+
+    ema20 = (
+        calculate_ema(
+            close,
+            20
+        )
+    )
+
+
+    ema50 = (
+        calculate_ema(
+            close,
+            50
+        )
     )
 
 
@@ -1417,9 +3616,14 @@ def build_indicator_snapshot(
     # RSI
     # --------------------------------------------------------
 
-    rsi14 = calculate_rsi(
-        close,
-        RSI_PERIOD
+    rsi14 = (
+        calculate_rsi(
+
+            close,
+
+            RSI_PERIOD
+
+        )
     )
 
 
@@ -1427,8 +3631,10 @@ def build_indicator_snapshot(
     # MACD
     # --------------------------------------------------------
 
-    macd = calculate_macd(
-        close
+    macd = (
+        calculate_macd(
+            close
+        )
     )
 
 
@@ -1436,8 +3642,10 @@ def build_indicator_snapshot(
     # BOLLINGER
     # --------------------------------------------------------
 
-    bollinger = calculate_bollinger(
-        close
+    bollinger = (
+        calculate_bollinger(
+            close
+        )
     )
 
 
@@ -1445,8 +3653,10 @@ def build_indicator_snapshot(
     # ATR
     # --------------------------------------------------------
 
-    atr14 = calculate_atr(
-        df
+    atr14 = (
+        calculate_atr(
+            df
+        )
     )
 
 
@@ -1454,16 +3664,36 @@ def build_indicator_snapshot(
     # VOLUME
     # --------------------------------------------------------
 
-    volume = calculate_volume_metrics(
-        df
+    volume = (
+        calculate_volume_metrics(
+            df
+        )
     )
 
+
     # --------------------------------------------------------
-    # ON-BALANCE VOLUME
+    # OBV
     # --------------------------------------------------------
 
-    obv = calculate_obv(
-        df
+    obv = (
+        calculate_obv(
+            df
+        )
+    )
+
+
+    # --------------------------------------------------------
+    # EDGEBREAK PARTICIPATION INTELLIGENCE
+    # --------------------------------------------------------
+
+    participation = (
+        calculate_participation_intelligence(
+
+            df,
+
+            obv
+
+        )
     )
 
 
@@ -1485,6 +3715,7 @@ def build_indicator_snapshot(
         "price":
             current_price,
 
+
         # ========================
         # MOVING AVERAGES
         # ========================
@@ -1503,6 +3734,7 @@ def build_indicator_snapshot(
 
         "ema50":
             ema50,
+
 
         # ========================
         # DISTANCE FROM MA
@@ -1526,6 +3758,7 @@ def build_indicator_snapshot(
                 sma200
             ),
 
+
         # ========================
         # RSI
         # ========================
@@ -1533,31 +3766,46 @@ def build_indicator_snapshot(
         "rsi14":
             rsi14,
 
+
         # ========================
         # MACD
         # ========================
 
         "macd":
-            macd["macd"],
+            macd[
+                "macd"
+            ],
 
         "macd_signal":
-            macd["signal"],
+            macd[
+                "signal"
+            ],
 
         "macd_histogram":
-            macd["histogram"],
+            macd[
+                "histogram"
+            ],
+
 
         # ========================
         # BOLLINGER BANDS
         # ========================
 
         "bollinger_upper":
-            bollinger["upper"],
+            bollinger[
+                "upper"
+            ],
 
         "bollinger_middle":
-            bollinger["middle"],
+            bollinger[
+                "middle"
+            ],
 
         "bollinger_lower":
-            bollinger["lower"],
+            bollinger[
+                "lower"
+            ],
+
 
         # ========================
         # ATR
@@ -1565,6 +3813,7 @@ def build_indicator_snapshot(
 
         "atr14":
             atr14,
+
 
         # ========================
         # VOLUME
@@ -1580,8 +3829,9 @@ def build_indicator_snapshot(
                 "relative_volume"
             ],
 
+
         # ========================
-        # ON-BALANCE VOLUME
+        # EXISTING OBV FIELDS
         # ========================
 
         "obv":
@@ -1602,14 +3852,122 @@ def build_indicator_snapshot(
         "obv_trend":
             obv[
                 "obv_trend"
-            ],    
+            ],
+
+
+        # ========================
+        # NEW OBV INTELLIGENCE
+        # ========================
+
+        "obv_strength_5d":
+            obv[
+                "obv_strength_5d"
+            ],
+
+        "obv_strength_20d":
+            obv[
+                "obv_strength_20d"
+            ],
+
+        "obv_strength_60d":
+            obv[
+                "obv_strength_60d"
+            ],
+
+        "obv_trend_5d":
+            obv[
+                "obv_trend_5d"
+            ],
+
+        "obv_trend_20d":
+            obv[
+                "obv_trend_20d"
+            ],
+
+        "obv_trend_60d":
+            obv[
+                "obv_trend_60d"
+            ],
+
+
+        # ========================
+        # PRICE BEHAVIOUR
+        # ========================
+
+        "price_change_5d_percent":
+            participation[
+                "price_change_5d_percent"
+            ],
+
+        "price_change_20d_percent":
+            participation[
+                "price_change_20d_percent"
+            ],
+
+        "price_change_60d_percent":
+            participation[
+                "price_change_60d_percent"
+            ],
+
+        "price_trend_5d":
+            participation[
+                "price_trend_5d"
+            ],
+
+        "price_trend_20d":
+            participation[
+                "price_trend_20d"
+            ],
+
+        "price_trend_60d":
+            participation[
+                "price_trend_60d"
+            ],
+
+
+        # ========================
+        # RSI BEHAVIOUR
+        # ========================
+
+        "rsi_change_5d":
+            participation[
+                "rsi_change_5d"
+            ],
+
+        "rsi_change_20d":
+            participation[
+                "rsi_change_20d"
+            ],
+
+        "rsi_state":
+            participation[
+                "rsi_state"
+            ],
+
+
+        # ========================
+        # EDGEBREAK PARTICIPATION
+        # ========================
+
+        "obv_price_relationship":
+            participation[
+                "obv_price_relationship"
+            ],
+
+        "participation_state":
+            participation[
+                "participation_state"
+            ],
+
 
         # ========================
         # DATA QUALITY
         # ========================
 
         "bars_available":
-            len(df)
+            len(
+                df
+            )
 
     }
 
@@ -1622,21 +3980,32 @@ def build_indicator_snapshot(
 # ============================================================
 
 def update_symbol_history(
+
     history_database,
+
     symbol,
+
     snapshot,
+
     scanner_info
+
 ):
 
     if symbol not in history_database:
 
-        history_database[symbol] = {
+        history_database[
+            symbol
+        ] = {
 
             "first_seen":
-                snapshot["date"],
+                snapshot[
+                    "date"
+                ],
 
             "last_seen":
-                snapshot["date"],
+                snapshot[
+                    "date"
+                ],
 
             "scanners":
                 scanner_info.get(
@@ -1656,9 +4025,11 @@ def update_symbol_history(
         }
 
 
-    record = history_database[
-        symbol
-    ]
+    record = (
+        history_database[
+            symbol
+        ]
+    )
 
 
     # --------------------------------------------------------
@@ -1674,13 +4045,21 @@ def update_symbol_history(
 
     if not existing_first_seen:
 
-        record["first_seen"] = (
-            snapshot["date"]
+        record[
+            "first_seen"
+        ] = (
+            snapshot[
+                "date"
+            ]
         )
 
 
-    record["last_seen"] = (
-        snapshot["date"]
+    record[
+        "last_seen"
+    ] = (
+        snapshot[
+            "date"
+        ]
     )
 
 
@@ -1688,7 +4067,9 @@ def update_symbol_history(
     # CURRENT SCANNER MEMBERSHIP
     # --------------------------------------------------------
 
-    record["scanners"] = (
+    record[
+        "scanners"
+    ] = (
         scanner_info.get(
             "scanners",
             []
@@ -1696,7 +4077,9 @@ def update_symbol_history(
     )
 
 
-    record["scanner_data"] = (
+    record[
+        "scanner_data"
+    ] = (
         scanner_info.get(
             "scanner_data",
             {}
@@ -1708,9 +4091,11 @@ def update_symbol_history(
     # HISTORY
     # --------------------------------------------------------
 
-    snapshots = record.get(
-        "history",
-        []
+    snapshots = (
+        record.get(
+            "history",
+            []
+        )
     )
 
 
@@ -1722,17 +4107,24 @@ def update_symbol_history(
         snapshots = []
 
 
-    # Same-day reruns should REPLACE the existing
-    # snapshot rather than creating duplicates.
+    # Same-day reruns replace existing snapshot.
 
     snapshots = [
 
         item
 
-        for item in snapshots
+        for item
+        in snapshots
 
-        if item.get("date")
-        != snapshot["date"]
+        if (
+            item.get(
+                "date"
+            )
+            !=
+            snapshot[
+                "date"
+            ]
+        )
 
     ]
 
@@ -1753,7 +4145,11 @@ def update_symbol_history(
     )
 
 
-    record["history"] = snapshots
+    record[
+        "history"
+    ] = (
+        snapshots
+    )
 
 
 # ============================================================
@@ -1764,13 +4160,23 @@ def purge_old_history(
     history_database
 ):
 
-    today = datetime.now().date()
+    today = (
+        datetime.now()
+        .date()
+    )
+
 
     cutoff = (
+
         today
-        - timedelta(
-            days=RETENTION_DAYS
+
+        -
+
+        timedelta(
+            days=
+                RETENTION_DAYS
         )
+
     )
 
 
@@ -1778,14 +4184,18 @@ def purge_old_history(
         history_database.keys()
     ):
 
-        record = history_database[
-            symbol
-        ]
+        record = (
+            history_database[
+                symbol
+            ]
+        )
 
 
-        snapshots = record.get(
-            "history",
-            []
+        snapshots = (
+            record.get(
+                "history",
+                []
+            )
         )
 
 
@@ -1794,18 +4204,25 @@ def purge_old_history(
 
         for snapshot in snapshots:
 
-            date_string = snapshot.get(
-                "date"
+            date_string = (
+                snapshot.get(
+                    "date"
+                )
             )
 
 
             try:
 
                 snapshot_date = (
+
                     datetime.strptime(
+
                         date_string,
+
                         "%Y-%m-%d"
+
                     ).date()
+
                 )
 
             except:
@@ -1813,22 +4230,29 @@ def purge_old_history(
                 continue
 
 
-            if snapshot_date >= cutoff:
+            if (
+                snapshot_date
+                >=
+                cutoff
+            ):
 
                 cleaned.append(
                     snapshot
                 )
 
 
-        record["history"] = cleaned
+        record[
+            "history"
+        ] = (
+            cleaned
+        )
 
 
-        # We deliberately DO NOT delete the symbol record
-        # when its detailed 90-day history expires.
+        # Do not delete old symbol records.
         #
-        # This leaves behind first_seen / last_seen metadata
-        # so EdgeBreak can still remember that it previously
-        # found the stock.
+        # first_seen / last_seen allow EdgeBreak to retain
+        # historical scanner awareness even when detailed
+        # snapshots have expired.
 
 
 # ============================================================
@@ -1841,29 +4265,38 @@ def save_history_atomic(
 
     directory = (
         os.path.dirname(
+
             os.path.abspath(
                 OUTPUT_FILE
             )
+
         )
     )
 
 
-    temp_path = None
+    temp_path = (
+        None
+    )
 
 
     try:
 
         with tempfile.NamedTemporaryFile(
 
-            mode="w",
+            mode=
+                "w",
 
-            encoding="utf-8",
+            encoding=
+                "utf-8",
 
-            dir=directory,
+            dir=
+                directory,
 
-            delete=False,
+            delete=
+                False,
 
-            suffix=".tmp"
+            suffix=
+                ".tmp"
 
         ) as temp_file:
 
@@ -1873,11 +4306,14 @@ def save_history_atomic(
 
                 temp_file,
 
-                indent=2,
+                indent=
+                    2,
 
-                ensure_ascii=False
+                ensure_ascii=
+                    False
 
             )
+
 
             temp_path = (
                 temp_file.name
@@ -1885,8 +4321,11 @@ def save_history_atomic(
 
 
         os.replace(
+
             temp_path,
+
             OUTPUT_FILE
+
         )
 
 
@@ -1924,20 +4363,58 @@ def save_history_atomic(
 
 def main():
 
-    start_time = time.time()
+    start_time = (
+        time.time()
+    )
 
 
     print()
+
     print(
         "=============================================="
     )
+
     print(
         "EDGEBREAK INDICATOR HISTORY BUILDER"
     )
+
     print(
         "=============================================="
     )
+
     print()
+
+
+    # --------------------------------------------------------
+    # API KEY CHECK
+    # --------------------------------------------------------
+
+    if (
+
+        not API_KEY
+
+        or
+
+        API_KEY
+        ==
+        "PASTE_YOUR_EXISTING_KEY_HERE"
+
+    ):
+
+        print(
+            "❌ Twelve Data API key is not configured."
+        )
+
+        print()
+
+        print(
+            "Set TWELVE_DATA_API_KEY or replace the "
+            "placeholder in this file."
+        )
+
+        print()
+
+        return
 
 
     # --------------------------------------------------------
@@ -1967,10 +4444,16 @@ def main():
 
         1
 
-        for info in symbol_map.values()
+        for info
+        in symbol_map.values()
 
-        if "breakout"
-        in info["scanners"]
+        if (
+            "breakout"
+            in
+            info[
+                "scanners"
+            ]
+        )
 
     )
 
@@ -1979,10 +4462,16 @@ def main():
 
         1
 
-        for info in symbol_map.values()
+        for info
+        in symbol_map.values()
 
-        if "pre_breakout"
-        in info["scanners"]
+        if (
+            "pre_breakout"
+            in
+            info[
+                "scanners"
+            ]
+        )
 
     )
 
@@ -1991,28 +4480,38 @@ def main():
 
         1
 
-        for info in symbol_map.values()
+        for info
+        in symbol_map.values()
 
-        if "launchpad"
-        in info["scanners"]
+        if (
+            "launchpad"
+            in
+            info[
+                "scanners"
+            ]
+        )
 
     )
 
 
     print(
-        f"Breakout stocks     : {breakout_count}"
+        "Breakout stocks     : "
+        f"{breakout_count}"
     )
 
     print(
-        f"Pre-Breakout stocks : {pre_breakout_count}"
+        "Pre-Breakout stocks : "
+        f"{pre_breakout_count}"
     )
 
     print(
-        f"Launch Pad stocks   : {launchpad_count}"
+        "Launch Pad stocks   : "
+        f"{launchpad_count}"
     )
 
     print(
-        f"Unique stocks       : {len(symbols)}"
+        "Unique stocks       : "
+        f"{len(symbols)}"
     )
 
     print()
@@ -2028,7 +4527,7 @@ def main():
 
 
     print(
-        f"Existing history    : "
+        "Existing history    : "
         f"{len(history_database)} symbols"
     )
 
@@ -2050,35 +4549,58 @@ def main():
 
     total_batches = (
 
-        len(symbols)
-        + BATCH_SIZE
-        - 1
+        len(
+            symbols
+        )
+
+        +
+
+        BATCH_SIZE
+
+        -
+
+        1
 
     ) // BATCH_SIZE
 
 
     for i in range(
+
         0,
-        len(symbols),
+
+        len(
+            symbols
+        ),
+
         BATCH_SIZE
+
     ):
 
-        batch = symbols[
-            i:i + BATCH_SIZE
-        ]
+        batch = (
+            symbols[
+                i:
+                i + BATCH_SIZE
+            ]
+        )
 
 
         batch_number = (
-            i // BATCH_SIZE
+
+            i
+            //
+            BATCH_SIZE
+
         ) + 1
 
 
         print(
+
             f"📦 Batch "
             f"{batch_number}/"
             f"{total_batches}"
             f" — "
             f"{', '.join(batch)}"
+
         )
 
 
@@ -2103,7 +4625,9 @@ def main():
 
                         symbol,
 
-                        len(batch)
+                        len(
+                            batch
+                        )
 
                     )
                 )
@@ -2113,7 +4637,7 @@ def main():
 
                     print(
                         f"   ⚠️ {symbol}: "
-                        f"no candle data"
+                        "no candle data"
                     )
 
                     failed += 1
@@ -2132,7 +4656,7 @@ def main():
 
                     print(
                         f"   ⚠️ {symbol}: "
-                        f"invalid candle data"
+                        "invalid candle data"
                     )
 
                     failed += 1
@@ -2140,11 +4664,9 @@ def main():
                     continue
 
 
-                # We can still save stocks with less than
-                # 200 bars. Their unavailable long-period
-                # indicators simply remain None.
-
-                if len(df) < 200:
+                if len(
+                    df
+                ) < 200:
 
                     insufficient_history += 1
 
@@ -2199,8 +4721,14 @@ def main():
                     f" | RSI "
                     f"{snapshot['rsi14']}"
 
-                    f" | SMA200 "
-                    f"{snapshot['sma200']}"
+                    f" | OBV20 "
+                    f"{snapshot['obv_trend_20d']}"
+
+                    f" | OBV60 "
+                    f"{snapshot['obv_trend_60d']}"
+
+                    f" | Participation "
+                    f"{snapshot['participation_state']}"
 
                 )
 
@@ -2208,6 +4736,7 @@ def main():
             except Exception as e:
 
                 failed += 1
+
 
                 print(
                     f"   ❌ {symbol}: {e}"
@@ -2217,9 +4746,6 @@ def main():
         # ----------------------------------------------------
         # SAVE AFTER EVERY BATCH
         # ----------------------------------------------------
-        #
-        # If Windows, internet, Twelve Data or anything else
-        # dies halfway through, completed batches survive.
 
         purge_old_history(
             history_database
@@ -2243,7 +4769,10 @@ def main():
 
         if (
             i + BATCH_SIZE
-            < len(symbols)
+            <
+            len(
+                symbols
+            )
         ):
 
             time.sleep(
@@ -2270,58 +4799,76 @@ def main():
     # --------------------------------------------------------
 
     runtime = round(
+
         time.time()
-        - start_time,
+        -
+        start_time,
+
         2
+
     )
 
 
     print()
+
     print(
         "=============================================="
     )
+
     print(
         "INDICATOR HISTORY COMPLETE"
     )
+
     print(
         "=============================================="
     )
 
     print()
 
-    print(
-        f"Scanner stocks processed : {processed}"
-    )
 
     print(
-        f"Snapshots saved          : {saved}"
+        "Scanner stocks processed : "
+        f"{processed}"
     )
 
-    print(
-        f"Failed                   : {failed}"
-    )
 
     print(
-        f"Under 200 bars           : "
+        "Snapshots saved          : "
+        f"{saved}"
+    )
+
+
+    print(
+        "Failed                   : "
+        f"{failed}"
+    )
+
+
+    print(
+        "Under 200 bars           : "
         f"{insufficient_history}"
     )
 
+
     print(
-        f"History symbols stored   : "
+        "History symbols stored   : "
         f"{len(history_database)}"
     )
 
+
     print(
-        f"Retention                : "
+        "Retention                : "
         f"{RETENTION_DAYS} days"
     )
 
+
     print(
-        f"Runtime                  : "
+        "Runtime                  : "
         f"{runtime} seconds"
     )
 
     print()
+
 
     print(
         f"✅ Saved to {OUTPUT_FILE}"
