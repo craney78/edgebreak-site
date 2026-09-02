@@ -2,338 +2,1244 @@ import subprocess
 import time
 import csv
 import os
+import sys
 from datetime import datetime, timedelta
 
-# ==========================================
+
+# ============================================================
+# EDGEBREAK DAILY PIPELINE
+# ============================================================
+#
+# DAILY ORDER
+#
+#   1. Breakout Scanner
+#   2. Pre-Breakout Scanner
+#   3. Launch Pad Scanner
+#   4. Smart Money Scanner
+#
+#   5. Build Indicator History
+#
+#   6. Daily Brief Cull + Original Ranking
+#
+#   7. FINRA Off-Exchange Analysis
+#
+#   8. FINRA X-Factor Post-Ranking Rerank
+#
+#   9. Git Add / Commit / Push
+#
+#
+# IMPORTANT
+#
+# FINRA does NOT feed the scanners.
+#
+# Scanner source files and website scanner operation
+# remain unchanged.
+#
+# FINRA runs only AFTER the existing Daily Brief ranking.
+#
+# ============================================================
+
+
+# ============================================================
+# BASE DIRECTORY
+# ============================================================
+#
+# This is VERY IMPORTANT for Windows Task Scheduler.
+#
+# Scheduled tasks often start from:
+#
+#     C:\Windows\System32
+#
+# rather than the EdgeBreak folder.
+#
+# Everything below therefore uses the folder containing
+# this Python file as the working directory.
+#
+# ============================================================
+
+BASE_DIR = os.path.dirname(
+    os.path.abspath(__file__)
+)
+
+os.chdir(
+    BASE_DIR
+)
+
+
+# ============================================================
+# PYTHON EXECUTABLE
+# ============================================================
+#
+# Use the exact same Python interpreter that is running
+# daily_scans.py.
+#
+# This is safer than calling:
+#
+#     python
+#
+# because Task Scheduler may have a different PATH.
+#
+# ============================================================
+
+PYTHON_EXE = sys.executable
+
+
+# ============================================================
 # CONFIG
-# ==========================================
+# ============================================================
 
 SCANNERS = [
 
-    ("Breakout Scanner", "breakout_scanner_builder.py"),
+    (
+        "Breakout Scanner",
+        "breakout_scanner_builder.py"
+    ),
 
-    ("Pre-Breakout Scanner", "scanner_database_builder.py"),
+    (
+        "Pre-Breakout Scanner",
+        "scanner_database_builder.py"
+    ),
 
-    ("Launch Pad Scanner", "launchpad_database_builder.py"),
+    (
+        "Launch Pad Scanner",
+        "launchpad_database_builder.py"
+    ),
 
-    ("Smart Money Scanner", "smart_money_daily_scan.py")
+    (
+        "Smart Money Scanner",
+        "smart_money_daily_scan.py"
+    )
 
 ]
 
-CSV_FILE = "daily_scan_history.csv"
 
-# ==========================================
+INDICATOR_SCRIPT = (
+    "build_indicator_history.py"
+)
+
+
+DAILY_BRIEF_CULL_SCRIPT = (
+    "daily_brief_cull.py"
+)
+
+
+FINRA_SCRIPT = (
+    "finra_off_exchange_builder.py"
+)
+
+
+FINRA_RERANK_SCRIPT = (
+    "daily_brief_finra_rerank.py"
+)
+
+
+CSV_FILE = os.path.join(
+    BASE_DIR,
+    "daily_scan_history.csv"
+)
+
+
+LOG_FILE = os.path.join(
+    BASE_DIR,
+    "daily_scan_run.log"
+)
+
+
+# ============================================================
+# LOGGING
+# ============================================================
+
+def log(
+    message=""
+):
+
+    print(
+        message,
+        flush=True
+    )
+
+
+    try:
+
+        with open(
+            LOG_FILE,
+            "a",
+            encoding="utf-8"
+        ) as file:
+
+            file.write(
+                str(message)
+                +
+                "\n"
+            )
+
+    except Exception:
+
+        pass
+
+
+# ============================================================
+# RUN PYTHON SCRIPT
+# ============================================================
+
+def run_python_script(
+    name,
+    script
+):
+
+    script_path = os.path.join(
+        BASE_DIR,
+        script
+    )
+
+
+    log()
+    log(
+        f"▶ Running {name}..."
+    )
+
+
+    if not os.path.exists(
+        script_path
+    ):
+
+        log(
+            f"❌ {name} FAILED"
+        )
+
+        log(
+            f"   File not found: {script_path}"
+        )
+
+        return False
+
+
+    try:
+
+        subprocess.run(
+
+            [
+                PYTHON_EXE,
+                script_path
+            ],
+
+            cwd=BASE_DIR,
+
+            check=True
+
+        )
+
+
+        log(
+            f"✅ {name} Complete"
+        )
+
+
+        return True
+
+
+    except subprocess.CalledProcessError as error:
+
+        log(
+            f"❌ {name} FAILED"
+        )
+
+        log(
+            f"   Exit code: {error.returncode}"
+        )
+
+
+        return False
+
+
+    except Exception as error:
+
+        log(
+            f"❌ {name} FAILED"
+        )
+
+        log(
+            f"   Error: {error}"
+        )
+
+
+        return False
+
+
+# ============================================================
 # START
-# ==========================================
+# ============================================================
 
 start_dt = datetime.now()
+
 start_time = time.time()
+
 
 results = {}
 
-print("\n" + "=" * 65)
-print("              EDGEBREAK DAILY SCANS")
-print("=" * 65)
 
-# ==========================================
+overall_status = (
+    "SUCCESS"
+)
+
+
+# ============================================================
+# START LOG
+# ============================================================
+
+log()
+log()
+log(
+    "=" * 70
+)
+
+log(
+    "EDGEBREAK DAILY PIPELINE"
+)
+
+log(
+    "=" * 70
+)
+
+log(
+    f"Started: "
+    f"{start_dt.strftime('%d-%b-%Y %H:%M:%S')}"
+)
+
+log(
+    f"Working directory: "
+    f"{BASE_DIR}"
+)
+
+log(
+    f"Python: "
+    f"{PYTHON_EXE}"
+)
+
+log(
+    "=" * 70
+)
+
+
+# ============================================================
 # RUN SCANNERS
-# ==========================================
-
-overall_status = "SUCCESS"
+# ============================================================
 
 for name, script in SCANNERS:
 
-    print(f"\n▶ Running {name}...")
+    success = run_python_script(
+        name,
+        script
+    )
 
-    try:
 
-        subprocess.run(
-            ["python", script],
-            check=True
+    if success:
+
+        results[
+            name
+        ] = "SUCCESS"
+
+
+    else:
+
+        results[
+            name
+        ] = "FAILED"
+
+        overall_status = (
+            "FAILED"
         )
-
-        print(f"✅ {name} Complete")
-
-        results[name] = "SUCCESS"
-
-    except subprocess.CalledProcessError:
-
-        print(f"❌ {name} FAILED")
-
-        results[name] = "FAILED"
-
-        overall_status = "FAILED"
 
         break
 
-# ==========================================
+
+# ============================================================
 # INDICATOR HISTORY
-# ==========================================
+# ============================================================
+
+indicator_status = (
+    "NOT RUN"
+)
+
 
 if overall_status == "SUCCESS":
 
-    print("\n▶ Building Scanner Indicator History...")
+    success = run_python_script(
 
-    try:
+        "Scanner Indicator History",
 
-        subprocess.run(
-            ["python", "build_indicator_history.py"],
-            check=True
-        )
+        INDICATOR_SCRIPT
 
-        print("✅ Scanner Indicator History Complete")
-
-    except subprocess.CalledProcessError:
-
-        print("❌ Scanner Indicator History FAILED")
-
-        overall_status = "FAILED"        
-
-# ==========================================
-# DAILY BRIEF CULL
-# ==========================================
-
-if overall_status == "SUCCESS":
-
-    print("\n▶ Running Daily Brief Cull...")
-
-    try:
-
-        subprocess.run(
-            ["python", "daily_brief_cull.py"],
-            check=True
-        )
-
-        print("✅ Daily Brief Cull Complete")
-
-    except subprocess.CalledProcessError:
-
-        print("❌ Daily Brief Cull FAILED")
-
-        overall_status = "FAILED"        
-
-# ==========================================
-# GIT
-# ==========================================
-
-git_add = "NOT RUN"
-git_commit = "NOT RUN"
-git_push = "NOT RUN"
-
-if overall_status == "SUCCESS":
-
-    print("\nUpdating Git Repository...")
-
-    try:
-
-        subprocess.run(
-            ["git", "add", "."],
-            check=True
-        )
-
-        git_add = "SUCCESS"
-
-    except:
-
-        git_add = "FAILED"
-
-        overall_status = "FAILED"
-
-if overall_status == "SUCCESS":
-
-    status = subprocess.run(
-        ["git", "diff", "--cached", "--quiet"]
     )
 
-    if status.returncode == 1:
 
-        try:
+    if success:
 
-            subprocess.run(
-                [
-                    "git",
-                    "commit",
-                    "-m",
-                    f"Daily Scan {start_dt.strftime('%Y-%m-%d')}"
-                ],
-                check=True
-            )
+        indicator_status = (
+            "SUCCESS"
+        )
 
-            git_commit = "SUCCESS"
 
-        except:
+    else:
 
-            git_commit = "FAILED"
+        indicator_status = (
+            "FAILED"
+        )
 
-            overall_status = "FAILED"
+        overall_status = (
+            "FAILED"
+        )
 
-if overall_status == "SUCCESS" and git_commit == "SUCCESS":
+
+# ============================================================
+# DAILY BRIEF CULL + ORIGINAL RANKING
+# ============================================================
+
+daily_brief_status = (
+    "NOT RUN"
+)
+
+
+if overall_status == "SUCCESS":
+
+    success = run_python_script(
+
+        "Daily Brief Cull + Ranking",
+
+        DAILY_BRIEF_CULL_SCRIPT
+
+    )
+
+
+    if success:
+
+        daily_brief_status = (
+            "SUCCESS"
+        )
+
+
+    else:
+
+        daily_brief_status = (
+            "FAILED"
+        )
+
+        overall_status = (
+            "FAILED"
+        )
+
+
+# ============================================================
+# FINRA OFF-EXCHANGE ANALYSIS
+# ============================================================
+#
+# Runs ONLY after the Daily Brief has already:
+#
+#     culled
+#     ranked
+#     produced daily_brief_candidates.json
+#
+# FINRA therefore cannot alter scanner qualification.
+#
+# ============================================================
+
+finra_status = (
+    "NOT RUN"
+)
+
+
+if overall_status == "SUCCESS":
+
+    success = run_python_script(
+
+        "FINRA Off-Exchange Analysis",
+
+        FINRA_SCRIPT
+
+    )
+
+
+    if success:
+
+        finra_status = (
+            "SUCCESS"
+        )
+
+
+    else:
+
+        finra_status = (
+            "FAILED"
+        )
+
+        overall_status = (
+            "FAILED"
+        )
+
+
+# ============================================================
+# FINRA X-FACTOR RERANK
+# ============================================================
+#
+# This is a POST-RANKING stage.
+#
+# FINRA CAN PROMOTE.
+#
+# FINRA CANNOT RESCUE.
+#
+# ============================================================
+
+x_factor_status = (
+    "NOT RUN"
+)
+
+
+if overall_status == "SUCCESS":
+
+    success = run_python_script(
+
+        "FINRA X-Factor Rerank",
+
+        FINRA_RERANK_SCRIPT
+
+    )
+
+
+    if success:
+
+        x_factor_status = (
+            "SUCCESS"
+        )
+
+
+    else:
+
+        x_factor_status = (
+            "FAILED"
+        )
+
+        overall_status = (
+            "FAILED"
+        )
+
+
+# ============================================================
+# GIT
+# ============================================================
+
+git_add = (
+    "NOT RUN"
+)
+
+git_commit = (
+    "NOT RUN"
+)
+
+git_push = (
+    "NOT RUN"
+)
+
+
+# ============================================================
+# GIT ADD
+# ============================================================
+
+if overall_status == "SUCCESS":
+
+    log()
+    log(
+        "▶ Updating Git Repository..."
+    )
+
 
     try:
 
         subprocess.run(
-            ["git", "push"],
+
+            [
+                "git",
+                "add",
+                "."
+            ],
+
+            cwd=BASE_DIR,
+
             check=True
+
         )
 
-        git_push = "SUCCESS"
 
-    except:
+        git_add = (
+            "SUCCESS"
+        )
 
-        git_push = "FAILED"
 
-        overall_status = "FAILED"
+        log(
+            "✅ Git Add Complete"
+        )
 
-elif git_commit == "NOT RUN":
 
-    git_push = "NOT REQUIRED"
+    except Exception as error:
 
-# ==========================================
+        git_add = (
+            "FAILED"
+        )
+
+        overall_status = (
+            "FAILED"
+        )
+
+
+        log(
+            "❌ Git Add FAILED"
+        )
+
+        log(
+            f"   {error}"
+        )
+
+
+# ============================================================
+# CHECK FOR GIT CHANGES
+# ============================================================
+
+if overall_status == "SUCCESS":
+
+    try:
+
+        status = subprocess.run(
+
+            [
+                "git",
+                "diff",
+                "--cached",
+                "--quiet"
+            ],
+
+            cwd=BASE_DIR
+
+        )
+
+
+        # ----------------------------------------------------
+        # RETURN CODE 1 = CHANGES EXIST
+        # ----------------------------------------------------
+
+        if status.returncode == 1:
+
+            try:
+
+                subprocess.run(
+
+                    [
+                        "git",
+                        "commit",
+                        "-m",
+                        (
+                            "Daily Scan "
+                            +
+                            start_dt.strftime(
+                                "%Y-%m-%d"
+                            )
+                        )
+                    ],
+
+                    cwd=BASE_DIR,
+
+                    check=True
+
+                )
+
+
+                git_commit = (
+                    "SUCCESS"
+                )
+
+
+                log(
+                    "✅ Git Commit Complete"
+                )
+
+
+            except Exception as error:
+
+                git_commit = (
+                    "FAILED"
+                )
+
+                overall_status = (
+                    "FAILED"
+                )
+
+
+                log(
+                    "❌ Git Commit FAILED"
+                )
+
+                log(
+                    f"   {error}"
+                )
+
+
+        # ----------------------------------------------------
+        # RETURN CODE 0 = NOTHING TO COMMIT
+        # ----------------------------------------------------
+
+        elif status.returncode == 0:
+
+            git_commit = (
+                "NOT REQUIRED"
+            )
+
+            git_push = (
+                "NOT REQUIRED"
+            )
+
+
+            log(
+                "ℹ️ No Git changes to commit."
+            )
+
+
+        else:
+
+            git_commit = (
+                "FAILED"
+            )
+
+            overall_status = (
+                "FAILED"
+            )
+
+
+            log(
+                "❌ Git status check FAILED"
+            )
+
+
+    except Exception as error:
+
+        git_commit = (
+            "FAILED"
+        )
+
+        overall_status = (
+            "FAILED"
+        )
+
+
+        log(
+            "❌ Git status check FAILED"
+        )
+
+        log(
+            f"   {error}"
+        )
+
+
+# ============================================================
+# GIT PUSH
+# ============================================================
+
+if (
+    overall_status == "SUCCESS"
+    and
+    git_commit == "SUCCESS"
+):
+
+    try:
+
+        subprocess.run(
+
+            [
+                "git",
+                "push"
+            ],
+
+            cwd=BASE_DIR,
+
+            check=True
+
+        )
+
+
+        git_push = (
+            "SUCCESS"
+        )
+
+
+        log(
+            "✅ Git Push Complete"
+        )
+
+
+    except Exception as error:
+
+        git_push = (
+            "FAILED"
+        )
+
+        overall_status = (
+            "FAILED"
+        )
+
+
+        log(
+            "❌ Git Push FAILED"
+        )
+
+        log(
+            f"   {error}"
+        )
+
+
+# ============================================================
 # FINISH
-# ==========================================
+# ============================================================
 
 finish_dt = datetime.now()
 
+
 duration = round(
-    (time.time() - start_time) / 60,
+
+    (
+        time.time()
+        -
+        start_time
+    )
+    /
+    60,
+
     1
+
 )
 
-# ==========================================
+
+# ============================================================
 # CSV HISTORY
-# ==========================================
+# ============================================================
 
 rows = []
 
-if os.path.exists(CSV_FILE):
 
-    with open(CSV_FILE, newline="") as f:
+if os.path.exists(
+    CSV_FILE
+):
 
-        reader = csv.DictReader(f)
+    try:
 
-        rows = list(reader)
+        with open(
 
-cutoff = finish_dt - timedelta(days=180)
+            CSV_FILE,
+
+            newline="",
+
+            encoding="utf-8"
+
+        ) as file:
+
+            reader = csv.DictReader(
+                file
+            )
+
+
+            rows = list(
+                reader
+            )
+
+
+    except Exception as error:
+
+        log(
+            f"⚠️ Could not read existing CSV: {error}"
+        )
+
+        rows = []
+
+
+# ============================================================
+# KEEP LAST 180 DAYS
+# ============================================================
+
+cutoff = (
+    finish_dt
+    -
+    timedelta(
+        days=180
+    )
+)
+
 
 filtered = []
+
 
 for row in rows:
 
     try:
 
         row_date = datetime.strptime(
-            row["Date"],
+
+            row[
+                "Date"
+            ],
+
             "%Y-%m-%d"
+
         )
+
 
         if row_date >= cutoff:
 
-            filtered.append(row)
+            filtered.append(
+                row
+            )
 
-    except:
+
+    except Exception:
 
         pass
 
+
+# ============================================================
+# ADD TODAY
+# ============================================================
+
 filtered.append({
 
-    "Date": start_dt.strftime("%Y-%m-%d"),
+    "Date":
+        start_dt.strftime(
+            "%Y-%m-%d"
+        ),
 
-    "Started": start_dt.strftime("%H:%M:%S"),
+    "Started":
+        start_dt.strftime(
+            "%H:%M:%S"
+        ),
 
-    "Finished": finish_dt.strftime("%H:%M:%S"),
+    "Finished":
+        finish_dt.strftime(
+            "%H:%M:%S"
+        ),
 
-    "Duration (min)": duration,
+    "Duration (min)":
+        duration,
 
-    "Breakout": results.get("Breakout Scanner", "NOT RUN"),
+    "Breakout":
+        results.get(
+            "Breakout Scanner",
+            "NOT RUN"
+        ),
 
-    "Pre-Breakout": results.get("Pre-Breakout Scanner", "NOT RUN"),
+    "Pre-Breakout":
+        results.get(
+            "Pre-Breakout Scanner",
+            "NOT RUN"
+        ),
 
-    "Launch Pad": results.get("Launch Pad Scanner", "NOT RUN"),
+    "Launch Pad":
+        results.get(
+            "Launch Pad Scanner",
+            "NOT RUN"
+        ),
 
-    "Smart Money": results.get("Smart Money Scanner", "NOT RUN"),
+    "Smart Money":
+        results.get(
+            "Smart Money Scanner",
+            "NOT RUN"
+        ),
 
-    "Git Add": git_add,
+    "Indicators":
+        indicator_status,
 
-    "Git Commit": git_commit,
+    "Daily Brief":
+        daily_brief_status,
 
-    "Git Push": git_push,
+    "FINRA":
+        finra_status,
 
-    "Overall": overall_status
+    "X-Factor":
+        x_factor_status,
+
+    "Git Add":
+        git_add,
+
+    "Git Commit":
+        git_commit,
+
+    "Git Push":
+        git_push,
+
+    "Overall":
+        overall_status
 
 })
 
-with open(CSV_FILE, "w", newline="") as f:
 
-    writer = csv.DictWriter(
+# ============================================================
+# SAVE CSV
+# ============================================================
 
-        f,
+fieldnames = [
 
-        fieldnames=[
+    "Date",
 
-            "Date",
+    "Started",
 
-            "Started",
+    "Finished",
 
-            "Finished",
+    "Duration (min)",
 
-            "Duration (min)",
+    "Breakout",
 
-            "Breakout",
+    "Pre-Breakout",
 
-            "Pre-Breakout",
+    "Launch Pad",
 
-            "Launch Pad",
+    "Smart Money",
 
-            "Smart Money",
+    "Indicators",
 
-            "Git Add",
+    "Daily Brief",
 
-            "Git Commit",
+    "FINRA",
 
-            "Git Push",
+    "X-Factor",
 
-            "Overall"
+    "Git Add",
 
-        ]
+    "Git Commit",
 
+    "Git Push",
+
+    "Overall"
+
+]
+
+
+try:
+
+    with open(
+
+        CSV_FILE,
+
+        "w",
+
+        newline="",
+
+        encoding="utf-8"
+
+    ) as file:
+
+        writer = csv.DictWriter(
+
+            file,
+
+            fieldnames=fieldnames,
+
+            extrasaction="ignore"
+
+        )
+
+
+        writer.writeheader()
+
+
+        for row in filtered:
+
+            clean_row = {
+
+                field:
+                    row.get(
+                        field,
+                        ""
+                    )
+
+                for field in fieldnames
+
+            }
+
+
+            writer.writerow(
+                clean_row
+            )
+
+
+except Exception as error:
+
+    log(
+        f"❌ Could not save history CSV: {error}"
     )
 
-    writer.writeheader()
 
-    writer.writerows(filtered)
+# ============================================================
+# FINAL REPORT
+# ============================================================
 
-# ==========================================
-# REPORT
-# ==========================================
+log()
+log(
+    "=" * 70
+)
 
-print("\n" + "=" * 65)
+log(
+    "EDGEBREAK DAILY SCAN REPORT"
+)
 
-print("          EDGEBREAK DAILY SCAN REPORT")
+log(
+    "=" * 70
+)
 
-print("=" * 65)
 
-print(f"Started      : {start_dt.strftime('%d-%b-%Y %H:%M:%S')}")
+log(
 
-print(f"Finished     : {finish_dt.strftime('%d-%b-%Y %H:%M:%S')}")
+    f"Started      : "
+    f"{start_dt.strftime('%d-%b-%Y %H:%M:%S')}"
 
-print(f"Duration     : {duration} minutes\n")
+)
+
+
+log(
+
+    f"Finished     : "
+    f"{finish_dt.strftime('%d-%b-%Y %H:%M:%S')}"
+
+)
+
+
+log(
+
+    f"Duration     : "
+    f"{duration} minutes"
+
+)
+
+
+log()
+
 
 for scanner, _ in SCANNERS:
 
-    print(f"{scanner:<22}: {results.get(scanner,'NOT RUN')}")
+    log(
 
-print()
+        f"{scanner:<25}: "
+        f"{results.get(scanner, 'NOT RUN')}"
 
-print(f"Git Add      : {git_add}")
+    )
 
-print(f"Git Commit   : {git_commit}")
 
-print(f"Git Push     : {git_push}")
+log()
 
-print()
 
-print(f"Overall      : {overall_status}")
+log(
 
-print(f"History File : {CSV_FILE}")
+    f"{'Indicator History':<25}: "
+    f"{indicator_status}"
 
-print("=" * 65)
+)
+
+
+log(
+
+    f"{'Daily Brief Cull':<25}: "
+    f"{daily_brief_status}"
+
+)
+
+
+log(
+
+    f"{'FINRA Analysis':<25}: "
+    f"{finra_status}"
+
+)
+
+
+log(
+
+    f"{'X-Factor Rerank':<25}: "
+    f"{x_factor_status}"
+
+)
+
+
+log()
+
+
+log(
+
+    f"{'Git Add':<25}: "
+    f"{git_add}"
+
+)
+
+
+log(
+
+    f"{'Git Commit':<25}: "
+    f"{git_commit}"
+
+)
+
+
+log(
+
+    f"{'Git Push':<25}: "
+    f"{git_push}"
+
+)
+
+
+log()
+
+
+log(
+
+    f"{'Overall':<25}: "
+    f"{overall_status}"
+
+)
+
+
+log(
+
+    f"{'History File':<25}: "
+    f"{CSV_FILE}"
+
+)
+
+
+log(
+
+    f"{'Log File':<25}: "
+    f"{LOG_FILE}"
+
+)
+
+
+log(
+    "=" * 70
+)
+
+
+# ============================================================
+# EXIT CODE
+# ============================================================
+#
+# Useful for Windows Task Scheduler.
+#
+# 0 = successful
+# 1 = something failed
+#
+# ============================================================
+
+if overall_status == "SUCCESS":
+
+    sys.exit(
+        0
+    )
+
+
+else:
+
+    sys.exit(
+        1
+    )
