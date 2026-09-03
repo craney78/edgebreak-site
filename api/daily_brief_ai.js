@@ -1,178 +1,157 @@
 const BATCH_SIZE = 3;
-const GEMINI_TIMEOUT_MS = 45000;
-const GEMINI_MAX_ATTEMPTS = 2;
+const TOP_X_FACTOR_CANDIDATES = 12;
+
+// No retries. Each batch gets a longer single window.
+// 4 batches x 55s = 220s maximum Gemini wait time.
+// The overall research budget is capped at 270s to stay clear of
+// the Vercel function limit used by this endpoint.
+const GEMINI_TIMEOUT_MS = 55000;
 const MAX_RESEARCH_TIME_MS = 270000;
-const EARLY_STOP_RESULT_COUNT = 12;
-const MIN_TIME_FOR_NEW_ATTEMPT_MS = 55000;
+const FUNCTION_SAFETY_MARGIN_MS = 12000;
+const MIN_TIME_FOR_NEW_BATCH_MS =
+    GEMINI_TIMEOUT_MS + FUNCTION_SAFETY_MARGIN_MS;
 
 const RESEARCH_PROMPT_VERSION =
-    "fundamental-supply-catalyst-v1";
+    "fundamental-supply-catalyst-xfactor-top12-v2";
 
 
 export default async function handler(req, res) {
 
-    res.setHeader(
-        "Cache-Control",
-        "no-store"
-    );
-
+    res.setHeader("Cache-Control", "no-store");
 
     if (req.method !== "POST") {
-
-        return res
-            .status(405)
-            .json({
-                error: "Method not allowed."
-            });
-
+        return res.status(405).json({
+            error: "Method not allowed."
+        });
     }
-
 
     if (!process.env.GEMINI_API_KEY) {
-
-        return res
-            .status(500)
-            .json({
-                error: "Daily Brief AI is not configured."
-            });
-
+        return res.status(500).json({
+            error: "Daily Brief AI is not configured."
+        });
     }
-
 
     if (
         !process.env.SUPABASE_URL ||
         !process.env.SUPABASE_SERVICE_KEY
     ) {
-
-        return res
-            .status(500)
-            .json({
-                error: "Daily Brief cache is not configured."
-            });
-
+        return res.status(500).json({
+            error: "Daily Brief cache is not configured."
+        });
     }
 
-
-    const functionStartedAt =
-        Date.now();
-
+    const functionStartedAt = Date.now();
 
     try {
 
-        const {
-            candidates
-        } =
-            req.body || {};
-
+        const { candidates } = req.body || {};
 
         if (
             !Array.isArray(candidates) ||
             candidates.length === 0
         ) {
-
-            return res
-                .status(400)
-                .json({
-                    error:
-                        "No Daily Brief candidates were provided."
-                });
-
+            return res.status(400).json({
+                error: "No Daily Brief candidates were provided."
+            });
         }
-
 
         if (candidates.length > 150) {
-
-            return res
-                .status(400)
-                .json({
-                    error:
-                        "Too many Daily Brief candidates were provided."
-                });
-
+            return res.status(400).json({
+                error: "Too many Daily Brief candidates were provided."
+            });
         }
 
+        const candidateScanDate = String(
+            candidates[0]?.scan_date ||
+            candidates[0]?.scanDate ||
+            candidates[0]?.pre_breakout?.scan_date ||
+            candidates[0]?.pre_breakout?.scanDate ||
+            candidates[0]?.breakout?.scan_date ||
+            candidates[0]?.breakout?.scanDate ||
+            ""
+        ).trim();
 
-        const candidateScanDate =
-            String(
-                candidates[0]?.scan_date ||
-                candidates[0]?.scanDate ||
-                candidates[0]?.pre_breakout?.scan_date ||
-                candidates[0]?.pre_breakout?.scanDate ||
-                candidates[0]?.breakout?.scan_date ||
-                candidates[0]?.breakout?.scanDate ||
-                ""
-            ).trim();
-
-
-        const suppliedScanDate =
-            String(
-                req.body?.scanDate ||
-                ""
-            ).trim();
-
+        const suppliedScanDate = String(
+            req.body?.scanDate || ""
+        ).trim();
 
         let briefDate;
 
-
-        if (
-            /^\d{4}-\d{2}-\d{2}$/.test(
-                candidateScanDate
-            )
-        ) {
-
-            briefDate =
-                candidateScanDate;
+        if (/^\d{4}-\d{2}-\d{2}$/.test(candidateScanDate)) {
+            briefDate = candidateScanDate;
 
             console.log(
                 `EdgeBreak Daily Brief using candidate scanner date: ${briefDate}`
             );
-
         }
-        else if (
-            /^\d{4}-\d{2}-\d{2}$/.test(
-                suppliedScanDate
-            )
-        ) {
-
-            briefDate =
-                suppliedScanDate;
+        else if (/^\d{4}-\d{2}-\d{2}$/.test(suppliedScanDate)) {
+            briefDate = suppliedScanDate;
 
             console.log(
                 `EdgeBreak Daily Brief using supplied scanner date: ${briefDate}`
             );
-
         }
         else {
-
-            briefDate =
-                getNewYorkDate();
+            briefDate = getNewYorkDate();
 
             console.warn(
                 `EdgeBreak Daily Brief scanner date unavailable. Falling back to New York date: ${briefDate}`
             );
-
         }
-
 
         console.log(
             `EdgeBreak Daily Brief session date: ${briefDate}`
         );
 
 
-        const cleanCandidates =
-            candidates
+        // ====================================================
+        // CLEAN CANDIDATES
+        // ====================================================
 
-                .filter(
-                    stock =>
-                        stock &&
-                        stock.symbol
-                )
+        const cleanCandidates = candidates
+            .filter(
+                stock =>
+                    stock &&
+                    stock.symbol
+            )
+            .map(
+                (
+                    stock,
+                    index
+                ) => {
 
-                .map(
-                    (
-                        stock,
-                        index
-                    ) => ({
+                    const rankValue =
+                        stock.final_daily_brief_rank ??
+                        stock.finalDailyBriefRank ??
+                        stock.daily_brief_rank ??
+                        stock.dailyBriefRank ??
+                        stock.pre_finra_rank ??
+                        stock.preFinraRank ??
+                        stock.technical_rank ??
+                        stock.technicalRank ??
+                        stock.rank_position ??
+                        stock.rankPosition;
+
+
+                    const reasonTags =
+                        Array.isArray(
+                            stock.x_factor?.reason_tags
+                        )
+                            ?
+                            stock.x_factor.reason_tags
+                                .map(
+                                    value =>
+                                        cleanField(
+                                            String(value),
+                                            120
+                                        )
+                                )
+                                .filter(Boolean)
+                            :
+                            [];
+
+
+                    return {
 
                         symbol:
                             String(
@@ -184,30 +163,12 @@ export default async function handler(req, res) {
                         technicalRank:
                             Number.isFinite(
                                 Number(
-                                    stock.final_daily_brief_rank ??
-                                    stock.finalDailyBriefRank ??
-                                    stock.daily_brief_rank ??
-                                    stock.dailyBriefRank ??
-                                    stock.pre_finra_rank ??
-                                    stock.preFinraRank ??
-                                    stock.technical_rank ??
-                                    stock.technicalRank ??
-                                    stock.rank_position ??
-                                    stock.rankPosition
+                                    rankValue
                                 )
                             )
                                 ?
                                 Number(
-                                    stock.final_daily_brief_rank ??
-                                    stock.finalDailyBriefRank ??
-                                    stock.daily_brief_rank ??
-                                    stock.dailyBriefRank ??
-                                    stock.pre_finra_rank ??
-                                    stock.preFinraRank ??
-                                    stock.technical_rank ??
-                                    stock.technicalRank ??
-                                    stock.rank_position ??
-                                    stock.rankPosition
+                                    rankValue
                                 )
                                 :
                                 index + 1,
@@ -251,63 +212,136 @@ export default async function handler(req, res) {
                                     150
                                 )
 
+                        },
+
+                        xFactor: {
+
+                            score:
+                                Number.isFinite(
+                                    Number(
+                                        stock.x_factor?.score
+                                    )
+                                )
+                                    ?
+                                    Number(
+                                        stock.x_factor.score
+                                    )
+                                    :
+                                    null,
+
+                            label:
+                                cleanField(
+                                    stock.x_factor?.label,
+                                    80
+                                ),
+
+                            structureTimingState:
+                                cleanField(
+                                    stock.x_factor
+                                        ?.structure_timing_state,
+                                    120
+                                ),
+
+                            meaningfulActivitySignal:
+                                Boolean(
+                                    stock.x_factor
+                                        ?.meaningful_activity_signal
+                                ),
+
+                            finraActivityState:
+                                cleanField(
+                                    stock.x_factor
+                                        ?.finra_activity_state,
+                                    80
+                                ),
+
+                            finraVolumePercentile:
+                                Number.isFinite(
+                                    Number(
+                                        stock.x_factor
+                                            ?.finra_volume_percentile
+                                    )
+                                )
+                                    ?
+                                    Number(
+                                        stock.x_factor
+                                            .finra_volume_percentile
+                                    )
+                                    :
+                                    null,
+
+                            reasonTags
+
                         }
 
-                    })
-                );
+                    };
+
+                }
+            );
 
 
         if (cleanCandidates.length === 0) {
-
-            return res
-                .status(400)
-                .json({
-                    error:
-                        "No valid Daily Brief candidates were provided."
-                });
-
+            return res.status(400).json({
+                error:
+                    "No valid Daily Brief candidates were provided."
+            });
         }
 
 
-        const seenCandidateSymbols =
+        // ====================================================
+        // REMOVE DUPLICATES + PRESERVE FINAL EDGEBREAK ORDER
+        // ====================================================
+
+        const seen =
             new Set();
 
 
-        const rankedCandidates =
+        const allRankedCandidates =
             cleanCandidates
 
-                .filter(stock => {
+                .filter(
+                    stock => {
 
-                    if (
-                        seenCandidateSymbols.has(
+                        if (
+                            seen.has(
+                                stock.symbol
+                            )
+                        ) {
+                            return false;
+                        }
+
+                        seen.add(
                             stock.symbol
-                        )
-                    ) {
+                        );
 
-                        return false;
+                        return true;
 
                     }
-
-
-                    seenCandidateSymbols.add(
-                        stock.symbol
-                    );
-
-                    return true;
-
-                })
+                )
 
                 .sort(
                     (a, b) =>
                         (
                             a.technicalRank -
                             b.technicalRank
-                        ) ||
+                        )
+                        ||
                         (
                             a.suppliedOrder -
                             b.suppliedOrder
                         )
                 );
+
+
+        // ====================================================
+        // TOP 12 X-FACTOR CANDIDATES ONLY
+        // ====================================================
+
+        const rankedCandidates =
+            allRankedCandidates.slice(
+                0,
+                TOP_X_FACTOR_CANDIDATES
+            );
 
 
         const candidateSignature =
@@ -317,21 +351,30 @@ export default async function handler(req, res) {
 
 
         console.log(
-            `Daily Brief candidates supplied: ${candidates.length}`
+            `Daily Brief candidates received: ${allRankedCandidates.length}`
         );
 
         console.log(
-            `Daily Brief unique ranked candidates: ${rankedCandidates.length}`
+            `Daily Brief top X-Factor candidates selected: ${rankedCandidates.length}`
         );
 
         console.log(
-            `Daily Brief ranked order: ${rankedCandidates.map(stock => stock.symbol).join(", ")}`
+            `Daily Brief research order: ${rankedCandidates
+                .map(
+                    stock =>
+                        stock.symbol
+                )
+                .join(", ")}`
         );
 
         console.log(
             `Daily Brief candidate signature: ${candidateSignature}`
         );
 
+
+        // ====================================================
+        // CACHE
+        // ====================================================
 
         const cachedBrief =
             await getCachedBrief(
@@ -345,7 +388,6 @@ export default async function handler(req, res) {
             console.log(
                 `EdgeBreak Daily Brief CACHE HIT: ${briefDate}`
             );
-
 
             return res
                 .status(200)
@@ -385,22 +427,26 @@ export default async function handler(req, res) {
                     researchMeta:
                         cachedBrief
                             .ai_results
-                            ?.researchMeta ||
+                            ?.researchMeta
+                        ||
                         null,
 
                     nasdaqToday:
                         cachedBrief
-                            .nasdaq_today ||
+                            .nasdaq_today
+                        ||
                         null,
 
                     marketConditions:
                         cachedBrief
-                            .market_conditions ||
+                            .market_conditions
+                        ||
                         null,
 
                     scannerActivity:
                         cachedBrief
-                            .scanner_activity ||
+                            .scanner_activity
+                        ||
                         null
 
                 });
@@ -412,6 +458,10 @@ export default async function handler(req, res) {
             `EdgeBreak Daily Brief CACHE MISS: ${briefDate}`
         );
 
+
+        // ====================================================
+        // CREATE BATCHES
+        // ====================================================
 
         const batches =
             [];
@@ -438,20 +488,43 @@ export default async function handler(req, res) {
         );
 
         console.log(
-            `Daily Brief batches required: ${batches.length}`
+            `Daily Brief batches planned: ${batches.length}`
+        );
+
+        console.log(
+            `Daily Brief timeout per batch: ${Math.round(
+                GEMINI_TIMEOUT_MS /
+                1000
+            )}s`
+        );
+
+        console.log(
+            "Daily Brief retry policy: NO RETRIES."
         );
 
 
         batches.forEach(
-            (batch, index) => {
+            (
+                batch,
+                index
+            ) => {
 
                 console.log(
-                    `Daily Brief Batch ${index + 1}: ${batch.map(stock => stock.symbol).join(", ")}`
+                    `Batch ${index + 1}: ${batch
+                        .map(
+                            stock =>
+                                stock.symbol
+                        )
+                        .join(", ")}`
                 );
 
             }
         );
 
+
+        // ====================================================
+        // RUN GEMINI RESEARCH
+        // ====================================================
 
         const batchResearch =
             [];
@@ -463,6 +536,9 @@ export default async function handler(req, res) {
         let failedBatches =
             0;
 
+        let timedOutBatches =
+            0;
+
         let stoppedEarly =
             false;
 
@@ -472,9 +548,11 @@ export default async function handler(req, res) {
         let totalGeminiAttempts =
             0;
 
-        let retriedBatches =
-            0;
 
+        // ====================================================
+        // ONE ATTEMPT PER BATCH
+        // NO RETRIES
+        // ====================================================
 
         for (
             let index = 0;
@@ -489,49 +567,6 @@ export default async function handler(req, res) {
                 index + 1;
 
 
-            const currentRawResults =
-                batchResearch.flatMap(
-                    research =>
-                        Array.isArray(
-                            research?.results
-                        )
-                            ?
-                            research.results
-                            :
-                            []
-                );
-
-
-            const currentCleanResults =
-                cleanResearchResults(
-                    currentRawResults,
-                    rankedCandidates
-                );
-
-
-            const currentDeduplicated =
-                deduplicateResults(
-                    currentCleanResults
-                );
-
-
-            if (
-                currentDeduplicated.length >=
-                EARLY_STOP_RESULT_COUNT
-            ) {
-
-                console.log(
-                    `Daily Brief early-stop threshold reached: ${currentDeduplicated.length} qualified companies.`
-                );
-
-                stoppedEarly =
-                    true;
-
-                break;
-
-            }
-
-
             const elapsed =
                 Date.now() -
                 functionStartedAt;
@@ -543,17 +578,20 @@ export default async function handler(req, res) {
 
 
             console.log(
-                `Daily Brief elapsed time before Batch ${batchNumber}: ${Math.round(elapsed / 1000)}s`
+                `Elapsed before Batch ${batchNumber}: ${Math.round(
+                    elapsed /
+                    1000
+                )}s`
             );
 
 
             if (
                 remainingBudget <
-                MIN_TIME_FOR_NEW_ATTEMPT_MS
+                MIN_TIME_FOR_NEW_BATCH_MS
             ) {
 
                 console.warn(
-                    `Daily Brief stopping before Batch ${batchNumber}. Runtime safety limit approaching.`
+                    `Stopping before Batch ${batchNumber}. Runtime safety margin reached.`
                 );
 
                 stoppedEarly =
@@ -565,168 +603,66 @@ export default async function handler(req, res) {
 
 
             console.log(
-                `Daily Brief starting Batch ${batchNumber}/${batches.length}...`
+                `Starting Batch ${batchNumber}/${batches.length}: ${batch
+                    .map(
+                        stock =>
+                            stock.symbol
+                    )
+                    .join(", ")}`
             );
 
-            console.log(
-                `Daily Brief Batch ${batchNumber} symbols: ${batch.map(stock => stock.symbol).join(", ")}`
-            );
+
+            totalGeminiAttempts++;
 
 
-            let batchSucceeded =
-                false;
+            try {
 
-            let successfulResearch =
-                null;
+                const research =
+                    await researchBatch(
 
-            let attemptsUsed =
-                0;
+                        batch,
 
+                        briefDate,
 
-            for (
-                let attempt = 1;
-                attempt <= GEMINI_MAX_ATTEMPTS;
-                attempt++
-            ) {
+                        batchNumber,
 
-                const attemptElapsed =
-                    Date.now() -
-                    functionStartedAt;
+                        functionStartedAt
 
-
-                const attemptRemaining =
-                    MAX_RESEARCH_TIME_MS -
-                    attemptElapsed;
-
-
-                if (
-                    attemptRemaining <
-                    MIN_TIME_FOR_NEW_ATTEMPT_MS
-                ) {
-
-                    console.warn(
-                        `Daily Brief Batch ${batchNumber} Attempt ${attempt} not started because runtime safety limit is approaching.`
                     );
 
-                    break;
-
-                }
-
-
-                attemptsUsed++;
-                totalGeminiAttempts++;
-
-
-                if (attempt > 1) {
-
-                    console.warn(
-                        `Daily Brief Batch ${batchNumber} retrying with Gemini. Attempt ${attempt}/${GEMINI_MAX_ATTEMPTS}.`
-                    );
-
-                }
-
-
-                try {
-
-                    const research =
-                        await researchBatch(
-
-                            batch,
-
-                            briefDate,
-
-                            batchNumber,
-
-                            functionStartedAt,
-
-                            attempt
-
-                        );
-
-
-                    successfulResearch =
-                        research;
-
-                    batchSucceeded =
-                        true;
-
-                    break;
-
-                }
-                catch (batchError) {
-
-                    console.error(
-                        `Daily Brief Batch ${batchNumber} Attempt ${attempt}/${GEMINI_MAX_ATTEMPTS} failed:`,
-                        batchError?.message ||
-                        batchError
-                    );
-
-
-                    if (
-                        attempt <
-                        GEMINI_MAX_ATTEMPTS
-                    ) {
-
-                        const retryElapsed =
-                            Date.now() -
-                            functionStartedAt;
-
-
-                        const retryRemaining =
-                            MAX_RESEARCH_TIME_MS -
-                            retryElapsed;
-
-
-                        if (
-                            retryRemaining >=
-                            MIN_TIME_FOR_NEW_ATTEMPT_MS
-                        ) {
-
-                            await sleep(750);
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-
-            if (
-                batchSucceeded &&
-                successfulResearch
-            ) {
 
                 batchResearch.push(
-                    successfulResearch
+                    research
                 );
 
+
                 completedBatches++;
+
 
                 candidatesActuallyResearched +=
                     batch.length;
 
 
-                if (attemptsUsed > 1) {
-
-                    retriedBatches++;
-
-                }
-
-
                 console.log(
-                    `Daily Brief Batch ${batchNumber}/${batches.length} finished successfully after ${attemptsUsed} attempt(s).`
-                );
-
-                console.log(
-                    `Daily Brief successfully researched candidates so far: ${candidatesActuallyResearched}`
+                    `Batch ${batchNumber} complete.`
                 );
 
             }
-            else {
+            catch (batchError) {
 
                 failedBatches++;
+
+
+                const isTimeout =
+                    batchError?.code ===
+                    "GEMINI_TIMEOUT";
+
+
+                if (isTimeout) {
+
+                    timedOutBatches++;
+
+                }
 
 
                 batchResearch.push({
@@ -744,25 +680,40 @@ export default async function handler(req, res) {
 
 
                 console.error(
-                    `Daily Brief Batch ${batchNumber}/${batches.length} failed after ${attemptsUsed} attempt(s). ${batch.length} candidates were NOT counted as researched.`
+                    `Batch ${batchNumber} failed:`,
+                    batchError?.message ||
+                    batchError
                 );
 
+
+                if (isTimeout) {
+
+                    console.warn(
+                        `Batch ${batchNumber} timed out. No retry. Moving immediately to the next batch.`
+                    );
+
+                }
+                else {
+
+                    console.warn(
+                        `Batch ${batchNumber} will not be retried. Moving immediately to the next batch.`
+                    );
+
+                }
+
             }
 
 
-            const hasAnotherBatch =
-                index <
-                batches.length - 1;
-
-
-            if (hasAnotherBatch) {
-
-                await sleep(500);
-
-            }
+            // NO SLEEP
+            // NO RETRY DELAY
+            // NEXT BATCH STARTS IMMEDIATELY
 
         }
 
+
+        // ====================================================
+        // COMBINE RESULTS
+        // ====================================================
 
         const combinedRawResults =
             batchResearch.flatMap(
@@ -795,10 +746,9 @@ export default async function handler(req, res) {
             );
 
 
-        console.log(
-            `Daily Brief companies qualified before ranking: ${deduplicatedResults.length}`
-        );
-
+        // ====================================================
+        // RESULT ORDER
+        // ====================================================
 
         const attentionPriority = {
 
@@ -819,7 +769,10 @@ export default async function handler(req, res) {
 
 
         rankedCandidates.forEach(
-            (stock, index) => {
+            (
+                stock,
+                index
+            ) => {
 
                 candidateRankMap.set(
                     stock.symbol,
@@ -834,113 +787,123 @@ export default async function handler(req, res) {
             [
                 ...deduplicatedResults
             ]
-                .sort((a, b) => {
+                .sort(
+                    (
+                        a,
+                        b
+                    ) => {
 
-                    const attentionDifference =
-                        (
-                            attentionPriority[
-                                b.attentionLevel
-                            ] ||
+                        const attentionDifference =
+                            (
+                                attentionPriority[
+                                    b.attentionLevel
+                                ]
+                                ||
+                                0
+                            )
+                            -
+                            (
+                                attentionPriority[
+                                    a.attentionLevel
+                                ]
+                                ||
+                                0
+                            );
+
+
+                        if (
+                            attentionDifference !==
                             0
-                        )
-                        -
-                        (
-                            attentionPriority[
-                                a.attentionLevel
-                            ] ||
-                            0
+                        ) {
+
+                            return attentionDifference;
+
+                        }
+
+
+                        const aRank =
+                            Math.min(
+                                ...a.symbols.map(
+                                    symbol =>
+                                        candidateRankMap.has(
+                                            symbol
+                                        )
+                                            ?
+                                            candidateRankMap.get(
+                                                symbol
+                                            )
+                                            :
+                                            999999
+                                )
+                            );
+
+
+                        const bRank =
+                            Math.min(
+                                ...b.symbols.map(
+                                    symbol =>
+                                        candidateRankMap.has(
+                                            symbol
+                                        )
+                                            ?
+                                            candidateRankMap.get(
+                                                symbol
+                                            )
+                                            :
+                                            999999
+                                )
+                            );
+
+
+                        return (
+                            aRank -
+                            bRank
                         );
-
-
-                    if (
-                        attentionDifference !==
-                        0
-                    ) {
-
-                        return attentionDifference;
 
                     }
-
-
-                    const aRank =
-                        Math.min(
-                            ...a.symbols.map(
-                                symbol =>
-                                    candidateRankMap.has(
-                                        symbol
-                                    )
-                                        ?
-                                        candidateRankMap.get(
-                                            symbol
-                                        )
-                                        :
-                                        999999
-                            )
-                        );
-
-
-                    const bRank =
-                        Math.min(
-                            ...b.symbols.map(
-                                symbol =>
-                                    candidateRankMap.has(
-                                        symbol
-                                    )
-                                        ?
-                                        candidateRankMap.get(
-                                            symbol
-                                        )
-                                        :
-                                        999999
-                            )
-                        );
-
-
-                    return (
-                        aRank -
-                        bRank
-                    );
-
-                });
+                );
 
 
         const finalResults =
             rankedResults.slice(
                 0,
-                12
+                TOP_X_FACTOR_CANDIDATES
             );
 
 
         console.log(
-            `Daily Brief final companies included after 12-stock cap: ${finalResults.length}`
+            `Daily Brief final companies included: ${finalResults.length}`
         );
 
         console.log(
-            `Daily Brief batches completed: ${completedBatches}`
+            `Batches completed: ${completedBatches}`
         );
 
         console.log(
-            `Daily Brief batches failed: ${failedBatches}`
+            `Batches failed: ${failedBatches}`
         );
 
         console.log(
-            `Daily Brief batches retried successfully: ${retriedBatches}`
+            `Batches timed out: ${timedOutBatches}`
         );
 
         console.log(
-            `Daily Brief total Gemini attempts: ${totalGeminiAttempts}`
+            `Gemini attempts: ${totalGeminiAttempts}`
         );
 
         console.log(
-            `Daily Brief stopped early: ${stoppedEarly}`
+            "Retries attempted: 0"
         );
 
         console.log(
-            `Daily Brief candidates successfully researched: ${candidatesActuallyResearched}/${rankedCandidates.length}`
+            `Candidates successfully researched: ${candidatesActuallyResearched}/${rankedCandidates.length}`
         );
 
 
-        if (completedBatches === 0) {
+        if (
+            completedBatches ===
+            0
+        ) {
 
             throw new Error(
                 "No Daily Brief research batches completed successfully."
@@ -948,6 +911,10 @@ export default async function handler(req, res) {
 
         }
 
+
+        // ====================================================
+        // RESEARCH METADATA
+        // ====================================================
 
         const aiResults = {
 
@@ -961,7 +928,13 @@ export default async function handler(req, res) {
                 researchPromptVersion:
                     RESEARCH_PROMPT_VERSION,
 
+                candidatesReceived:
+                    allRankedCandidates.length,
+
                 candidatesSupplied:
+                    rankedCandidates.length,
+
+                candidatesSelectedForResearch:
                     rankedCandidates.length,
 
                 candidatesActuallyResearched,
@@ -982,7 +955,10 @@ export default async function handler(req, res) {
                 batchesFailed:
                     failedBatches,
 
-                retriedBatches,
+                timedOutBatches,
+
+                retriedBatches:
+                    0,
 
                 totalGeminiAttempts,
 
@@ -991,6 +967,9 @@ export default async function handler(req, res) {
                 batchSize:
                     BATCH_SIZE,
 
+                topCandidateLimit:
+                    TOP_X_FACTOR_CANDIDATES,
+
                 requestTimeoutSeconds:
                     Math.round(
                         GEMINI_TIMEOUT_MS /
@@ -998,12 +977,19 @@ export default async function handler(req, res) {
                     ),
 
                 attemptsPerBatch:
-                    GEMINI_MAX_ATTEMPTS
+                    1,
+
+                retryPolicy:
+                    "NO_RETRY_CONTINUE_NEXT_BATCH"
 
             }
 
         };
 
+
+        // ====================================================
+        // SAFETY FILTER
+        // ====================================================
 
         const combinedText =
             JSON.stringify(
@@ -1069,7 +1055,7 @@ export default async function handler(req, res) {
         if (unsafe) {
 
             console.error(
-                "Daily Brief blocked by safety filter: direct advice or promised result detected."
+                "Daily Brief blocked by safety filter."
             );
 
 
@@ -1082,6 +1068,10 @@ export default async function handler(req, res) {
 
         }
 
+
+        // ====================================================
+        // SAVE
+        // ====================================================
 
         const generatedAt =
             new Date()
@@ -1111,9 +1101,16 @@ export default async function handler(req, res) {
 
 
         console.log(
-            `EdgeBreak Daily Brief completed in ${Math.round(totalRuntime / 1000)} seconds.`
+            `EdgeBreak Daily Brief completed in ${Math.round(
+                totalRuntime /
+                1000
+            )} seconds.`
         );
 
+
+        // ====================================================
+        // RESPONSE
+        // ====================================================
 
         return res
             .status(200)
@@ -1140,40 +1137,8 @@ export default async function handler(req, res) {
 
                 researchMeta: {
 
-                    candidateSignature,
-
-                    researchPromptVersion:
-                        RESEARCH_PROMPT_VERSION,
-
-                    candidatesSupplied:
-                        rankedCandidates.length,
-
-                    candidatesActuallyResearched,
-
-                    candidatesNotResearched:
-                        Math.max(
-                            0,
-                            rankedCandidates.length -
-                            candidatesActuallyResearched
-                        ),
-
-                    batchesPlanned:
-                        batches.length,
-
-                    batchesCompleted:
-                        completedBatches,
-
-                    batchesFailed:
-                        failedBatches,
-
-                    retriedBatches,
-
-                    totalGeminiAttempts,
-
-                    stoppedEarly,
-
-                    batchSize:
-                        BATCH_SIZE,
+                    ...aiResults
+                        .researchMeta,
 
                     runtimeSeconds:
                         Math.round(
@@ -1215,6 +1180,10 @@ export default async function handler(req, res) {
 }
 
 
+// ============================================================
+// GEMINI RESEARCH — ONE ATTEMPT ONLY
+// ============================================================
+
 async function researchBatch(
 
     candidates,
@@ -1223,14 +1192,12 @@ async function researchBatch(
 
     batchNumber,
 
-    functionStartedAt,
-
-    attemptNumber
+    functionStartedAt
 
 ) {
 
     console.log(
-        `Daily Brief Batch ${batchNumber} research starting — Attempt ${attemptNumber}/${GEMINI_MAX_ATTEMPTS}...`
+        `Batch ${batchNumber} research starting — single attempt, no retry.`
     );
 
 
@@ -1239,207 +1206,165 @@ async function researchBatch(
 You are the Fundamental + Supply + Catalyst research engine
 for EdgeBreak.
 
-You will receive a small group of NASDAQ stocks that have
-already passed EdgeBreak's technical stock scanners,
-deterministic ranking, liquidity filters, industry filters
-and FINRA-derived X-Factor reranking.
+You will receive up to three NASDAQ stocks selected from
+EdgeBreak's TOP 12 final X-Factor-ranked Daily Brief candidates.
 
-The companies are supplied in final EdgeBreak ranking order.
+These companies have already passed EdgeBreak's technical
+scanners, deterministic filters, technical ranking and
+FINRA-derived X-Factor reranking.
 
-EdgeBreak has already assessed technical structure and
-off-exchange participation. Treat that ranking as established
-input. Do not override it or attempt to rerank the companies
-technically.
+Treat the supplied EdgeBreak ranking and X-Factor context as
+established input.
 
 DO NOT perform another technical scan.
 
-DO NOT decide whether a stock is a good investment.
+DO NOT technically rerank the companies.
 
 DO NOT provide buy, sell or hold recommendations.
 
 DO NOT provide price targets, entry prices or predictions.
 
-Your task is to investigate whether each supplied company has
-credible additional evidence in its fundamentals, share-supply
-structure, ownership or short positioning, balance sheet, or
-current company-specific developments that strengthens the
-case for further research beyond the technical chart alone.
 
-Use current Google Search grounding to research the supplied
-companies.
+YOUR JOB:
 
-IMPORTANT:
+Use current Google Search grounding to perform a fast,
+evidence-disciplined Fundamental + Supply + Catalyst stress test.
 
-Do not favour a company simply because it is large, famous
-or regularly covered by the media.
-
-We are particularly interested in companies where CURRENT
-attention or activity appears elevated, unusual or
-meaningfully different from what would normally be expected
-for that company.
-
-Smaller and lesser-known companies are important.
-
-Do not exclude a company simply because it normally receives
-little media coverage.
-
-A previously quiet company experiencing a sudden increase
-in attention may be more relevant than a large company that
-receives substantial coverage every day.
+Find the STRONGEST AVAILABLE factual evidence that materially
+adds to EdgeBreak's existing technical and X-Factor case.
 
 
-RESEARCH FRAMEWORK:
+CRITICAL PRIORITY:
 
-Investigate every supplied company across the following areas.
-Use the latest reliable public information available.
+DO NOT try to find every metric for every company.
 
-1. CURRENT CATALYST
+Do not waste time hunting for a missing float figure, short
+interest percentage, ownership change, revenue figure or other
+secondary metric.
 
-Look for credible company-specific developments such as recent
-earnings or guidance, significant contracts, partnerships,
-acquisitions, strategic transactions, FDA or regulatory events,
-clinical results, product announcements, material SEC filings,
-analyst developments, management changes or other meaningful
-current events.
+Prioritise the strongest evidence first.
 
-2. REVENUE TRAJECTORY
+For each company:
 
-Review approximately the latest four reported quarters when
-reliable figures are available. Determine whether revenue is
-accelerating, stable, inconsistent or deteriorating. Do not
-describe ordinary seasonality as acceleration without evidence.
+1. Look first for a material current company-specific catalyst
+   or development.
 
-3. PROFITABILITY TRAJECTORY
+2. Then look for the strongest readily available evidence in
+   fundamentals, financing, share supply, ownership, short
+   positioning or balance-sheet condition.
 
-Review recent net income, operating income or operating-loss
-performance. For an unprofitable company, determine whether
-losses are improving or worsening. Do not reject a company only
-because it is currently unprofitable.
+3. Prefer primary and high-quality sources.
 
-4. FLOAT / SHARE-SUPPLY STRUCTURE
+4. Once there is enough reliable evidence to decide whether the
+   company deserves inclusion, stop chasing weaker metrics.
 
-Find reliable public-float or tradable-share information where
-available. Determine whether supply is relatively constrained,
-moderate or very large compared with the company's normal
-liquidity and activity. Low float is a risk factor as well as a
-possible source of responsiveness; never present it as
-automatically positive.
+5. If a metric cannot be established efficiently and reliably,
+   treat it as unavailable and move on.
 
-5. SHORT-INTEREST PRESSURE
+A company does NOT need every research category completed.
 
-Find current short interest and preferably short interest as a
-percentage of float. Determine whether it appears materially
-elevated, moderate or insignificant. Do not predict a short
-squeeze.
+Strong evidence is more important than complete metric coverage.
 
-6. INSTITUTIONAL PARTICIPATION
 
-Look for the latest publicly reported institutional ownership
-and meaningful recent changes in holdings. Distinguish reported
-ownership from speculation. Do not call public institutional
-filings insider information.
+RESEARCH AREAS:
 
-7. DILUTION / ADDITIONAL SHARE-SUPPLY RISK
+These are categories to consider, NOT a mandatory checklist.
 
-Check for recent offerings, ATM programs, shelf registrations,
-warrants, convertibles or material increases in shares
-outstanding. Treat meaningful financing or dilution risk as an
-important negative flag.
+- Current company-specific catalyst or development
 
-8. BALANCE-SHEET / FINANCING CONDITION
+- Revenue / profitability trajectory when materially useful
 
-Especially for smaller companies, assess available cash, debt,
-cash burn and obvious near-term financing pressure using the
-latest reliable filings or reports.
+- Float / share-supply structure when readily available
 
-9. UNUSUAL CURRENT ATTENTION
+- Short interest when reliable and material
 
-Look for credible evidence of unusually high or increasing
-trading activity, unusual recent volume, or a material increase
-in media or investor attention. Price movement alone is not
-evidence.
+- Publicly reported institutional participation
+
+- Dilution / financing risk
+
+- Balance-sheet condition and cash pressure
+
+- Credible unusual current trading, company, media or investor
+  attention beyond price movement alone
+
+
+X-FACTOR CONTEXT:
+
+EdgeBreak may supply:
+
+- X-Factor score and label
+
+- structure/timing state
+
+- whether a meaningful off-exchange activity signal exists
+
+- off-exchange activity state and historical percentile
+
+- EdgeBreak reason tags
+
+Treat these as EdgeBreak-derived context.
+
+Do NOT reinterpret off-exchange activity as confirmed buying,
+selling, accumulation or distribution.
+
+Do NOT attempt to recreate the X-Factor.
+
 
 EVIDENCE DISCIPLINE:
 
 - Use only lawful, publicly available information.
+
 - Prefer company filings, investor-relations releases, exchange
   or regulator data, and other credible financial sources.
+
 - Never invent a figure, trend, date, source or causal claim.
-- If a metric cannot be reliably established, treat it as
-  unavailable rather than guessing.
-- A company does not need every metric to be available.
-- Contradictory, deteriorating or risky evidence must be
-  acknowledged and may justify omission.
-- Do not use phrases such as "absolute confidence", "guaranteed",
-  "supply seizure", "forced buying" or "multi-bagger".
+
+- If information is unavailable, move on rather than guessing.
+
+- Contradictory or risky evidence must be acknowledged.
+
+- Do not use phrases such as "absolute confidence",
+  "guaranteed", "supply seizure", "forced buying" or
+  "multi-bagger".
 
 
 RECENCY:
 
-Give strongest preference to company-specific developments
-from the last 7 days.
+Give strongest preference to company-specific developments from
+the last 7 days.
 
-You may consider developments up to 30 days old when they
-are clearly still relevant to current market attention.
+You may use developments up to 30 days old when still clearly
+relevant.
 
-For revenue, profitability, float, short interest, institutional
-ownership, dilution and balance-sheet analysis, use the latest
-reliable reported data even when the underlying filing is older
-than 30 days. Make clear that these are reported fundamentals or
-positioning data, not breaking news.
-
-Older company events should normally not justify inclusion by
-themselves.
+For reported fundamentals, ownership, short interest, dilution
+and balance-sheet data, use the latest reliable reported data
+even when older than 30 days.
 
 
 IMPORTANT EXCLUSION:
 
-Do not flag a stock solely because:
+Do not include a stock solely because:
 
-- its price increased or decreased
+- its price moved
+
 - it is near a 52-week high or low
-- it outperformed or underperformed the broader market
+
 - it has a technically strong chart
-- it recently broke resistance
-- it appears to have momentum
 
-EdgeBreak's scanners already analyse price and technical
-structure.
+- it broke resistance
 
-There must ALSO be credible evidence from at least one of:
+- it has momentum
 
-- improving or unusually strong recent business performance
-- meaningful share-supply, short-interest or institutional
-  positioning characteristics
-- a current company-specific catalyst or significant news
-- a material corporate, financial, regulatory, clinical or
-  strategic development
-- unusual or materially increased trading, market or media
-  attention
+- it has a high EdgeBreak X-Factor score
 
-Stronger inclusion normally requires more than one useful piece
-of evidence, or one clearly material current development.
+There must ALSO be credible factual evidence beyond price and
+technical structure.
 
-Price movement may SUPPORT the reason for inclusion.
-
-Price movement alone is NOT sufficient.
-
-
-POSITIVE AND NEGATIVE DEVELOPMENTS:
 
 Both positive and negative developments may justify further
 research.
 
-Inclusion is NOT an endorsement of the company.
-
-
-DUPLICATE COMPANIES:
-
-If multiple supplied ticker symbols represent different
-share classes of the same company and are responding to the
-same underlying development, research the company once and
-combine the ticker symbols into one result when those
-symbols are supplied in this batch.
+Inclusion is NOT an endorsement.
 
 
 ATTENTION LEVEL:
@@ -1447,36 +1372,31 @@ ATTENTION LEVEL:
 Every included company must receive exactly one of:
 
 HIGH
+
 ELEVATED
+
 NOTABLE
 
-These labels describe the strength and significance of the
-additional factual evidence found beyond EdgeBreak's existing
-technical and participation ranking.
 
-They are NOT investment ratings.
+These are research-attention labels, not investment ratings.
 
 
 HIGH:
 
-Use only for particularly significant or clearly unusual
-current attention or a major current development.
+Particularly significant or clearly unusual current evidence.
 
 
 ELEVATED:
 
-Use when current attention or developments appear
-meaningfully above what would normally be expected for that
-company.
+Evidence is meaningfully stronger or more unusual than normally
+expected for that company.
 
 
 NOTABLE:
 
-Use when there is a credible current development worth
-investigating but attention does not appear unusually high.
+Credible current evidence worth investigating, but not unusually
+strong.
 
-
-IMPORTANT:
 
 Do not force companies into the results.
 
@@ -1484,15 +1404,14 @@ Most supplied companies may be omitted.
 
 Quality is more important than quantity.
 
-Before including each company ask:
 
-"Ignoring recent price performance alone, is there credible
-current evidence in the company's fundamentals, share-supply
-structure, ownership or short positioning, balance sheet,
-corporate developments or market participation that materially
-adds to the EdgeBreak technical case?"
+Before including a company ask:
 
-If the answer is NO, omit the company.
+"Ignoring price performance and EdgeBreak's technical/X-Factor
+ranking, is there strong, credible factual evidence that
+materially adds to the research case?"
+
+If NO, omit it.
 
 Keep every returned field concise.
 
@@ -1500,6 +1419,10 @@ Return JSON only.
 
 `;
 
+
+    // ========================================================
+    // DATA GIVEN TO GEMINI
+    // ========================================================
 
     const candidatesForGemini =
         candidates.map(
@@ -1515,7 +1438,10 @@ Return JSON only.
                     stock.scanners,
 
                 company:
-                    stock.company
+                    stock.company,
+
+                xFactor:
+                    stock.xFactor
 
             })
         );
@@ -1523,8 +1449,8 @@ Return JSON only.
 
     const userInstruction = `
 
-Research this group of NASDAQ companies for the EdgeBreak
-Daily Brief dated ${briefDate}.
+Research this batch for the EdgeBreak Daily Brief dated
+${briefDate}.
 
 This is research batch ${batchNumber}.
 
@@ -1532,30 +1458,44 @@ Companies supplied in this batch:
 
 ${candidates.length}
 
-These companies have ALREADY passed EdgeBreak's technical
-scanners and deterministic filtering.
+
+These companies are already among EdgeBreak's TOP
+${TOP_X_FACTOR_CANDIDATES} final X-Factor-ranked candidates.
 
 Do not perform another technical assessment.
 
-Perform the Fundamental + Supply + Catalyst stress test from
-the system instruction using Google Search grounding.
+Use Google Search grounding.
 
-For each company, investigate:
 
-- current catalyst
-- recent revenue trajectory
-- recent profitability trajectory
-- float / share-supply structure
-- short interest, preferably as a percentage of float
-- publicly reported institutional participation or change
-- dilution and additional share-supply risk
-- balance-sheet and financing condition
-- unusual current trading, media or investor attention
+PRIORITISE THE STRONGEST AVAILABLE EVIDENCE.
 
-Use unavailable information as unavailable. Never guess.
+Do NOT try to complete every possible metric.
 
-Only include companies that genuinely satisfy the criteria
-in the system instruction.
+Do NOT spend time chasing unavailable secondary data.
+
+
+Prioritise:
+
+- a material current catalyst or company-specific development
+
+- the strongest useful recent fundamental evidence
+
+- material dilution, financing or balance-sheet risk
+
+- meaningful share-supply or short-positioning evidence
+
+- meaningful institutional evidence
+
+- unusual current attention supported by credible facts
+
+
+If one or two strong primary-source facts clearly establish the
+research case, use them and move on.
+
+If a metric cannot be reliably found quickly, treat it as
+unavailable.
+
+Only include companies that genuinely satisfy the criteria.
 
 
 RETURN EXACTLY THIS JSON STRUCTURE:
@@ -1582,65 +1522,80 @@ RETURN EXACTLY THIS JSON STRUCTURE:
 
 FIELD RULES:
 
+
 companiesReviewed:
+
 Must equal ${candidates.length}.
 
+
 companiesIncluded:
+
 Must equal the number of objects in results.
 
-symbols:
-Array of supplied ticker symbols.
 
-Do not return ticker symbols that were not supplied.
+symbols:
+
+Array of supplied ticker symbols only.
+
 
 companyName:
+
 Current company name.
 
+
 scanners:
-Use the scanner labels supplied with the candidate.
+
+Use the scanner labels supplied.
+
 
 attentionLevel:
-Exactly one of:
 
-HIGH
-ELEVATED
-NOTABLE
+Exactly HIGH, ELEVATED or NOTABLE.
+
 
 headline:
+
 One short factual headline.
 
+
 summary:
+
 Maximum two concise factual sentences.
 
+
 currentDevelopment:
-One concise factual sentence describing the strongest current
-catalyst, fundamental change, share-supply factor, positioning
+
+One concise sentence describing the strongest current catalyst,
+fundamental change, financing/share-supply factor, positioning
 factor, risk flag or unusual activity found.
 
+
 whyIncluded:
-One concise sentence explaining which combination of factual
-evidence strengthens the case for further research beyond the
-technical chart alone. Mention a material risk flag when one is
-central to the assessment.
+
+One concise sentence explaining why the strongest factual
+evidence materially adds to EdgeBreak's existing technical and
+X-Factor case.
+
 
 developmentDate:
+
 Use YYYY-MM-DD when reliably established.
 
 Otherwise return an empty string.
 
+
 sourceNames:
-Return only the principal credible source names.
+
+Principal credible source names only.
 
 Do not invent sources.
 
 
-FINAL TEST FOR EVERY RESULT:
+FINAL TEST:
 
-Ignoring recent price performance alone, is there credible
-current evidence in the company's fundamentals, share-supply
-structure, ownership or short positioning, balance sheet,
-corporate developments or market participation that materially
-adds to the EdgeBreak technical case?
+Ignoring price performance and EdgeBreak's existing technical
+and X-Factor ranking, is there credible factual evidence that
+materially adds to the research case?
 
 If NO:
 
@@ -1659,6 +1614,10 @@ Return JSON only.
 
 `;
 
+
+    // ========================================================
+    // GEMINI REQUEST
+    // ========================================================
 
     const requestBody = {
 
@@ -1700,7 +1659,7 @@ Return JSON only.
         generationConfig: {
 
             maxOutputTokens:
-                4000,
+                3500,
 
             responseMimeType:
                 "application/json",
@@ -1713,32 +1672,31 @@ Return JSON only.
     };
 
 
-    const overallElapsed =
+    // ========================================================
+    // TIME BUDGET
+    // ========================================================
+
+    const elapsed =
         Date.now() -
         functionStartedAt;
 
 
-    const overallRemaining =
+    const remaining =
         MAX_RESEARCH_TIME_MS -
-        overallElapsed;
+        elapsed;
 
 
-    if (overallRemaining < 15000) {
+    if (
+        remaining <
+        FUNCTION_SAFETY_MARGIN_MS +
+        5000
+    ) {
 
         throw new Error(
-            `Daily Brief Batch ${batchNumber} cancelled because runtime safety limit was reached.`
+            `Batch ${batchNumber} cancelled because the runtime safety limit was reached.`
         );
 
     }
-
-
-    console.log(
-        `Daily Brief Batch ${batchNumber} Gemini attempt ${attemptNumber}/${GEMINI_MAX_ATTEMPTS}`
-    );
-
-
-    const controller =
-        new AbortController();
 
 
     const allowedTimeout =
@@ -1750,16 +1708,28 @@ Return JSON only.
 
                 GEMINI_TIMEOUT_MS,
 
-                overallRemaining -
-                10000
+                remaining -
+                FUNCTION_SAFETY_MARGIN_MS
 
             )
 
         );
 
 
-    const requestStartedAt =
-        Date.now();
+    console.log(
+        `Batch ${batchNumber} Gemini single attempt. Timeout: ${Math.round(
+            allowedTimeout /
+            1000
+        )}s`
+    );
+
+
+    // ========================================================
+    // GEMINI FETCH
+    // ========================================================
+
+    const controller =
+        new AbortController();
 
 
     const timeout =
@@ -1767,7 +1737,7 @@ Return JSON only.
             () => {
 
                 console.warn(
-                    `Daily Brief Batch ${batchNumber} Attempt ${attemptNumber} Gemini request exceeded ${allowedTimeout}ms. Aborting.`
+                    `Batch ${batchNumber} exceeded ${allowedTimeout}ms. Aborting. No retry.`
                 );
 
                 controller.abort();
@@ -1775,6 +1745,10 @@ Return JSON only.
             },
             allowedTimeout
         );
+
+
+    const requestStartedAt =
+        Date.now();
 
 
     let geminiResponse;
@@ -1798,7 +1772,8 @@ Return JSON only.
                             "application/json",
 
                         "x-goog-api-key":
-                            process.env.GEMINI_API_KEY
+                            process.env
+                                .GEMINI_API_KEY
 
                     },
 
@@ -1816,7 +1791,14 @@ Return JSON only.
 
 
         console.log(
-            `Daily Brief Batch ${batchNumber} Attempt ${attemptNumber} Gemini responded in ${Math.round((Date.now() - requestStartedAt) / 1000)}s with HTTP ${geminiResponse.status}.`
+            `Batch ${batchNumber} Gemini responded in ${Math.round(
+                (
+                    Date.now() -
+                    requestStartedAt
+                )
+                /
+                1000
+            )}s with HTTP ${geminiResponse.status}.`
         );
 
     }
@@ -1827,20 +1809,23 @@ Return JSON only.
             "AbortError"
         ) {
 
-            console.warn(
-                `Daily Brief Batch ${batchNumber} Attempt ${attemptNumber} timed out after ${Math.round(allowedTimeout / 1000)} seconds.`
-            );
+            const timeoutError =
+                new Error(
+                    `Batch ${batchNumber} Gemini request timed out.`
+                );
 
 
-            throw new Error(
-                `Daily Brief Batch ${batchNumber} Gemini request timed out.`
-            );
+            timeoutError.code =
+                "GEMINI_TIMEOUT";
+
+
+            throw timeoutError;
 
         }
 
 
         console.error(
-            `Gemini Daily Brief Batch ${batchNumber} Attempt ${attemptNumber} network error:`,
+            `Gemini Batch ${batchNumber} network error:`,
             fetchError
         );
 
@@ -1857,6 +1842,10 @@ Return JSON only.
     }
 
 
+    // ========================================================
+    // GEMINI HTTP ERROR
+    // ========================================================
+
     if (!geminiResponse.ok) {
 
         const errorText =
@@ -1866,23 +1855,22 @@ Return JSON only.
 
 
         console.error(
-            `Gemini Daily Brief Batch ${batchNumber} Attempt ${attemptNumber} Error:`,
+            `Gemini Batch ${batchNumber} Error:`,
             geminiResponse.status,
             errorText
         );
 
 
         throw new Error(
-            `Daily Brief Batch ${batchNumber} failed. Gemini returned ${geminiResponse.status}.`
+            `Batch ${batchNumber} failed. Gemini returned ${geminiResponse.status}.`
         );
 
     }
 
 
-    console.log(
-        `Daily Brief Batch ${batchNumber} Attempt ${attemptNumber} Gemini request succeeded.`
-    );
-
+    // ========================================================
+    // GEMINI RESPONSE
+    // ========================================================
 
     const geminiData =
         await geminiResponse.json();
@@ -1904,13 +1892,8 @@ Return JSON only.
 
     if (!rawText) {
 
-        console.warn(
-            `Gemini Daily Brief Batch ${batchNumber} Attempt ${attemptNumber} returned no text.`
-        );
-
-
         throw new Error(
-            `Daily Brief Batch ${batchNumber} returned no research.`
+            `Batch ${batchNumber} returned no research.`
         );
 
     }
@@ -1918,6 +1901,10 @@ Return JSON only.
 
     let research;
 
+
+    // ========================================================
+    // JSON PARSE
+    // ========================================================
 
     try {
 
@@ -1932,7 +1919,7 @@ Return JSON only.
     catch (error) {
 
         console.warn(
-            `Daily Brief Batch ${batchNumber} normal JSON parse failed. Attempting recovery...`
+            `Batch ${batchNumber} JSON parse failed. Attempting recovery...`
         );
 
 
@@ -1942,23 +1929,16 @@ Return JSON only.
             );
 
 
-        if (recoveredResults.length === 0) {
-
-            console.error(
-                `Daily Brief Batch ${batchNumber} JSON recovery failed.`
-            );
-
+        if (
+            recoveredResults.length ===
+            0
+        ) {
 
             throw new Error(
-                `Daily Brief Batch ${batchNumber} returned invalid JSON.`
+                `Batch ${batchNumber} returned invalid JSON.`
             );
 
         }
-
-
-        console.log(
-            `Daily Brief Batch ${batchNumber} recovered ${recoveredResults.length} complete results.`
-        );
 
 
         research = {
@@ -1985,14 +1965,14 @@ Return JSON only.
     ) {
 
         throw new Error(
-            `Daily Brief Batch ${batchNumber} returned an invalid result.`
+            `Batch ${batchNumber} returned an invalid result.`
         );
 
     }
 
 
     console.log(
-        `Daily Brief Batch ${batchNumber} complete: ${research.results.length} included`
+        `Batch ${batchNumber} complete: ${research.results.length} included.`
     );
 
 
@@ -2000,6 +1980,10 @@ Return JSON only.
 
 }
 
+
+// ============================================================
+// SAFE RESPONSE TEXT
+// ============================================================
 
 async function safeReadResponseText(
     response
@@ -2010,7 +1994,7 @@ async function safeReadResponseText(
         return await response.text();
 
     }
-    catch (error) {
+    catch {
 
         return (
             "Unable to read Gemini error response."
@@ -2020,6 +2004,10 @@ async function safeReadResponseText(
 
 }
 
+
+// ============================================================
+// CLEAN JSON
+// ============================================================
 
 function cleanJsonText(
     text
@@ -2085,12 +2073,17 @@ function cleanJsonText(
 }
 
 
+// ============================================================
+// RECOVER PARTIAL GEMINI JSON
+// ============================================================
+
 function recoverGeminiResults(
     rawText
 ) {
 
     if (
-        typeof rawText !== "string" ||
+        typeof rawText !==
+            "string" ||
         !rawText.trim()
     ) {
 
@@ -2105,7 +2098,10 @@ function recoverGeminiResults(
         );
 
 
-    if (resultsKeyIndex === -1) {
+    if (
+        resultsKeyIndex ===
+        -1
+    ) {
 
         return [];
 
@@ -2119,7 +2115,10 @@ function recoverGeminiResults(
         );
 
 
-    if (arrayStart === -1) {
+    if (
+        arrayStart ===
+        -1
+    ) {
 
         return [];
 
@@ -2144,7 +2143,8 @@ function recoverGeminiResults(
 
 
     for (
-        let index = arrayStart + 1;
+        let index =
+            arrayStart + 1;
         index < rawText.length;
         index++
     ) {
@@ -2165,7 +2165,10 @@ function recoverGeminiResults(
             }
 
 
-            if (character === "\\") {
+            if (
+                character ===
+                "\\"
+            ) {
 
                 escaping =
                     true;
@@ -2175,7 +2178,10 @@ function recoverGeminiResults(
             }
 
 
-            if (character === '"') {
+            if (
+                character ===
+                '"'
+            ) {
 
                 insideString =
                     false;
@@ -2188,7 +2194,10 @@ function recoverGeminiResults(
         }
 
 
-        if (character === '"') {
+        if (
+            character ===
+            '"'
+        ) {
 
             insideString =
                 true;
@@ -2198,9 +2207,15 @@ function recoverGeminiResults(
         }
 
 
-        if (character === "{") {
+        if (
+            character ===
+            "{"
+        ) {
 
-            if (braceDepth === 0) {
+            if (
+                braceDepth ===
+                0
+            ) {
 
                 objectStart =
                     index;
@@ -2215,9 +2230,15 @@ function recoverGeminiResults(
         }
 
 
-        if (character === "}") {
+        if (
+            character ===
+            "}"
+        ) {
 
-            if (braceDepth > 0) {
+            if (
+                braceDepth >
+                0
+            ) {
 
                 braceDepth--;
 
@@ -2225,8 +2246,10 @@ function recoverGeminiResults(
 
 
             if (
-                braceDepth === 0 &&
-                objectStart !== -1
+                braceDepth ===
+                0 &&
+                objectStart !==
+                -1
             ) {
 
                 const objectText =
@@ -2246,8 +2269,11 @@ function recoverGeminiResults(
 
                     if (
                         parsedObject &&
-                        typeof parsedObject === "object" &&
-                        !Array.isArray(parsedObject)
+                        typeof parsedObject ===
+                            "object" &&
+                        !Array.isArray(
+                            parsedObject
+                        )
                     ) {
 
                         recovered.push(
@@ -2257,10 +2283,10 @@ function recoverGeminiResults(
                     }
 
                 }
-                catch (objectError) {
+                catch {
 
                     console.warn(
-                        "Skipped one malformed Daily Brief result object during recovery."
+                        "Skipped one malformed Daily Brief result during recovery."
                     );
 
                 }
@@ -2280,6 +2306,10 @@ function recoverGeminiResults(
 
 }
 
+
+// ============================================================
+// CLEAN RESEARCH RESULTS
+// ============================================================
 
 function cleanResearchResults(
 
@@ -2310,11 +2340,15 @@ function cleanResearchResults(
         [];
 
 
-    for (const item of rawResults) {
+    for (
+        const item
+        of rawResults
+    ) {
 
         if (
             !item ||
-            typeof item !== "object"
+            typeof item !==
+                "object"
         ) {
 
             continue;
@@ -2354,7 +2388,10 @@ function cleanResearchResults(
                 [];
 
 
-        if (symbols.length === 0) {
+        if (
+            symbols.length ===
+            0
+        ) {
 
             continue;
 
@@ -2513,6 +2550,10 @@ function cleanResearchResults(
 }
 
 
+// ============================================================
+// DEDUPLICATE
+// ============================================================
+
 function deduplicateResults(
     results
 ) {
@@ -2525,7 +2566,10 @@ function deduplicateResults(
         [];
 
 
-    for (const result of results) {
+    for (
+        const result
+        of results
+    ) {
 
         const newSymbols =
             result.symbols.filter(
@@ -2536,7 +2580,10 @@ function deduplicateResults(
             );
 
 
-        if (newSymbols.length === 0) {
+        if (
+            newSymbols.length ===
+            0
+        ) {
 
             continue;
 
@@ -2568,30 +2615,72 @@ function deduplicateResults(
 }
 
 
+// ============================================================
+// CANDIDATE SIGNATURE
+// ============================================================
+//
+// Includes:
+// symbol
+// final EdgeBreak rank
+// X-Factor score
+// X-Factor label
+//
+// So changing the X-Factor ranking invalidates an old cache.
+//
+
 function createCandidateSignature(
     rankedCandidates
 ) {
 
-    const rankedSymbols =
+    const signatureBody =
         rankedCandidates
 
             .map(
-                stock =>
-                    stock.symbol
-            )
+                stock => {
 
-            .filter(Boolean)
+                    const xScore =
+                        stock.xFactor
+                            ?.score
+                        ??
+                        "";
+
+
+                    const xLabel =
+                        stock.xFactor
+                            ?.label
+                        ??
+                        "";
+
+
+                    return [
+
+                        stock.symbol,
+
+                        stock.technicalRank,
+
+                        xScore,
+
+                        xLabel
+
+                    ].join(":");
+
+                }
+            )
 
             .join("|");
 
 
     return (
         `${RESEARCH_PROMPT_VERSION}:` +
-        rankedSymbols
+        signatureBody
     );
 
 }
 
+
+// ============================================================
+// GET CACHE
+// ============================================================
 
 async function getCachedBrief(
 
@@ -2604,7 +2693,9 @@ async function getCachedBrief(
     const cacheUrl =
         `${process.env.SUPABASE_URL}` +
         `/rest/v1/daily_briefs` +
-        `?brief_date=eq.${encodeURIComponent(briefDate)}` +
+        `?brief_date=eq.${encodeURIComponent(
+            briefDate
+        )}` +
         `&status=eq.complete` +
         `&select=*` +
         `&limit=1`;
@@ -2663,7 +2754,9 @@ async function getCachedBrief(
 
 
         if (
-            Array.isArray(rows) &&
+            Array.isArray(
+                rows
+            ) &&
             rows.length > 0 &&
             rows[0].ai_results
         ) {
@@ -2673,7 +2766,8 @@ async function getCachedBrief(
                     rows[0]
                         ?.ai_results
                         ?.researchMeta
-                        ?.candidateSignature ||
+                        ?.candidateSignature
+                    ||
                     ""
                 ).trim();
 
@@ -2684,7 +2778,7 @@ async function getCachedBrief(
             ) {
 
                 console.log(
-                    `EdgeBreak Daily Brief cache ignored because the final candidate list or research prompt changed: ${briefDate}`
+                    `Daily Brief cache ignored because candidate order, X-Factor context or prompt changed: ${briefDate}`
                 );
 
 
@@ -2715,6 +2809,10 @@ async function getCachedBrief(
 
 }
 
+
+// ============================================================
+// SAVE CACHE
+// ============================================================
 
 async function saveDailyBrief({
 
@@ -2836,6 +2934,10 @@ async function saveDailyBrief({
 }
 
 
+// ============================================================
+// NEW YORK DATE
+// ============================================================
+
 function getNewYorkDate() {
 
     const parts =
@@ -2869,9 +2971,15 @@ function getNewYorkDate() {
         {};
 
 
-    for (const part of parts) {
+    for (
+        const part
+        of parts
+    ) {
 
-        if (part.type !== "literal") {
+        if (
+            part.type !==
+            "literal"
+        ) {
 
             values[
                 part.type
@@ -2892,20 +3000,9 @@ function getNewYorkDate() {
 }
 
 
-function sleep(
-    milliseconds
-) {
-
-    return new Promise(
-        resolve =>
-            setTimeout(
-                resolve,
-                milliseconds
-            )
-    );
-
-}
-
+// ============================================================
+// CLEAN TEXT FIELD
+// ============================================================
 
 function cleanField(
 
@@ -2915,7 +3012,10 @@ function cleanField(
 
 ) {
 
-    if (typeof value !== "string") {
+    if (
+        typeof value !==
+        "string"
+    ) {
 
         return "";
 
