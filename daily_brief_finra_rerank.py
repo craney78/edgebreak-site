@@ -5,189 +5,47 @@ from copy import deepcopy
 from datetime import datetime, timezone
 
 
-# ============================================================
-# EDGEBREAK FINRA X-FACTOR RERANKER
-# ============================================================
-#
-# PURPOSE
-#
-# This file runs AFTER:
-#
-#     scanners
-#         ↓
-#     Daily Brief hard culls
-#         ↓
-#     technical / indicator / persistence ranking
-#         ↓
-#     daily_brief_candidates.json
-#         ↓
-#     FINRA history builder
-#         ↓
-#     finra_off_exchange_history.json
-#
-# THEN:
-#
-#     this file
-#         ↓
-#     X-Factor assessment
-#         ↓
-#     modest post-ranking rerank
-#         ↓
-#     daily_brief_candidates.json
-#
-#
-# LOCKED EDGEBREAK RULE
-#
-# FINRA CAN PROMOTE.
-#
-# FINRA CANNOT RESCUE.
-#
-# A stock must already have survived the normal EdgeBreak
-# pipeline before this file ever sees it.
-#
-#
-# X-FACTOR IDEA
-#
-# Unusual off-exchange activity is most interesting when it
-# occurs around useful price structure:
-#
-#     mature bases
-#     higher lows
-#     constructive resistance structure
-#     early structural transitions
-#
-# It is less useful when:
-#
-#     chart is choppy / directionless
-#     major event gap already happened
-#     stock is already heavily extended
-#     FINRA history is insufficient
-#
-#
-# IMPORTANT
-#
-# FINRA off-exchange activity measures ACTIVITY only.
-#
-# It does NOT indicate:
-#
-#     buying
-#     selling
-#     accumulation
-#     distribution
-#
-# This is NOT a trading signal.
-#
-# ============================================================
-
-
-# ============================================================
-# FILES
-# ============================================================
-
-CANDIDATES_FILE = (
-    "daily_brief_candidates.json"
-)
-
-FINRA_FILE = (
-    "finra_off_exchange_history.json"
-)
-
-BACKUP_FILE = (
-    "daily_brief_candidates_pre_finra.json"
-)
-
-
-# ============================================================
-# FINRA HISTORY REQUIREMENT
-# ============================================================
-#
-# Full 48 weeks is preferred.
-#
-# For V1 we require at least 24 reported weeks before FINRA
-# is allowed to alter ranking.
-#
-# This prevents very young histories such as FTH from being
-# treated as if they have a genuine 12-month baseline.
-#
-# ============================================================
+CANDIDATES_FILE = "daily_brief_candidates.json"
+FINRA_FILE = "finra_off_exchange_history.json"
+BACKUP_FILE = "daily_brief_candidates_pre_finra.json"
 
 MIN_FINRA_WEEKS_FOR_BOOST = 24
 
-
-# ============================================================
-# X-FACTOR BOOSTS
-# ============================================================
-#
-# These are deliberately SMALL.
-#
-# Existing EdgeBreak technical ranking remains dominant.
-#
-# ============================================================
-
 EXCEPTIONAL_BOOST = 15
-
 HIGH_BOOST = 8
-
 ELEVATED_BOOST = 5
-
 MILD_BOOST = 2
 
 
-# ============================================================
-# HELPERS
-# ============================================================
-
-def safe_float(
-    value,
-    default=None
-):
+def safe_float(value, default=None):
 
     try:
 
         if value is None:
-
             return default
 
-        return float(
-            value
-        )
+        return float(value)
 
-    except (
-        TypeError,
-        ValueError
-    ):
+    except (TypeError, ValueError):
 
         return default
 
 
-def safe_int(
-    value,
-    default=0
-):
+def safe_int(value, default=0):
 
     try:
 
         if value is None:
-
             return default
 
-        return int(
-            float(
-                value
-            )
-        )
+        return int(float(value))
 
-    except (
-        TypeError,
-        ValueError
-    ):
+    except (TypeError, ValueError):
 
         return default
 
 
-def load_json(
-    filename
-):
+def load_json(filename):
 
     if not os.path.exists(
         filename
@@ -196,7 +54,6 @@ def load_json(
         raise RuntimeError(
             f"Required file not found: {filename}"
         )
-
 
     try:
 
@@ -210,15 +67,10 @@ def load_json(
                 file
             )
 
-
     except Exception as error:
 
         raise RuntimeError(
-
-            f"Could not read "
-            f"{filename}: "
-            f"{error}"
-
+            f"Could not read {filename}: {error}"
         ) from error
 
 
@@ -227,46 +79,28 @@ def save_json_atomic(
     data
 ):
 
-    directory = (
-        os.path.dirname(
-            os.path.abspath(
-                filename
-            )
+    directory = os.path.dirname(
+        os.path.abspath(
+            filename
         )
     )
 
-
     with tempfile.NamedTemporaryFile(
-
         mode="w",
-
         encoding="utf-8",
-
         delete=False,
-
         dir=directory,
-
         suffix=".tmp"
-
     ) as temp_file:
 
         json.dump(
-
             data,
-
             temp_file,
-
             indent=4,
-
             ensure_ascii=False
-
         )
 
-
-        temp_name = (
-            temp_file.name
-        )
-
+        temp_name = temp_file.name
 
     os.replace(
         temp_name,
@@ -274,19 +108,12 @@ def save_json_atomic(
     )
 
 
-# ============================================================
-# GET EXISTING EDGEBREAK RANKING
-# ============================================================
-
-def get_ranking(
-    candidate
-):
+def get_ranking(candidate):
 
     ranking = candidate.get(
         "daily_brief_ranking",
         {}
     )
-
 
     if not isinstance(
         ranking,
@@ -295,45 +122,22 @@ def get_ranking(
 
         ranking = {}
 
-
     return ranking
 
 
-# ============================================================
-# GET ORIGINAL TECHNICAL SCORE
-# ============================================================
-
-def get_original_score(
-    candidate
-):
+def get_original_score(candidate):
 
     ranking = get_ranking(
         candidate
     )
 
-
     return safe_float(
-
         ranking.get(
             "total_score"
         ),
-
         0
-
     )
 
-
-# ============================================================
-# GET ORIGINAL RANK
-# ============================================================
-#
-# Makes this script safe to run twice.
-#
-# If the file has already been reranked, we continue using the
-# preserved PRE-FINRA rank rather than treating the reranked
-# position as the original rank.
-#
-# ============================================================
 
 def get_original_rank(
     candidate,
@@ -344,7 +148,6 @@ def get_original_rank(
         "pre_finra_rank"
     )
 
-
     if saved_rank is not None:
 
         return safe_int(
@@ -352,51 +155,34 @@ def get_original_rank(
             fallback_rank
         )
 
-
     return safe_int(
-
         candidate.get(
             "daily_brief_rank"
         ),
-
         fallback_rank
-
     )
 
 
-# ============================================================
-# CURRENT SCANNER TYPE
-# ============================================================
-
-def get_scanner_type(
-    candidate
-):
+def get_scanner_type(candidate):
 
     ranking = get_ranking(
         candidate
     )
 
-
     scanner_type = str(
-
         ranking.get(
             "scanner_type",
             ""
         )
-
     ).strip().upper()
 
-
     if scanner_type:
-
         return scanner_type
-
 
     scanners = candidate.get(
         "scanners",
         []
     )
-
 
     if isinstance(
         scanners,
@@ -405,167 +191,109 @@ def get_scanner_type(
 
         scanners = [
 
-            str(
-                value
-            ).strip().upper()
+            str(value).strip().upper()
 
             for value in scanners
-
         ]
 
-
         if "BREAKOUT" in scanners:
-
             return "BREAKOUT"
 
-
         if "PRE_BREAKOUT" in scanners:
-
             return "PRE_BREAKOUT"
-
 
     return "UNKNOWN"
 
 
-# ============================================================
-# GET TECHNICAL CONTEXT
-# ============================================================
-
-def get_technical_context(
-    candidate
-):
+def get_technical_context(candidate):
 
     ranking = get_ranking(
         candidate
     )
 
-
     structural_score = safe_float(
-
         ranking.get(
             "structural_score"
         ),
-
         0
-
     )
 
-
     resistance_touches = safe_int(
-
         ranking.get(
             "resistance_touches"
         ),
-
         0
-
     )
 
-
     higher_lows = safe_int(
-
         ranking.get(
             "higher_lows"
         ),
-
         0
-
     )
 
-
     distance = safe_float(
-
         ranking.get(
             "distance_from_resistance_percent"
         ),
-
         None
-
     )
 
-
     participation_state = str(
-
         ranking.get(
             "participation_state",
             ""
         )
-
     ).strip().upper()
 
-
     obv_relationship = str(
-
         ranking.get(
             "obv_price_relationship",
             ""
         )
-
     ).strip().lower()
 
-
     obv_5d = str(
-
         ranking.get(
             "obv_trend_5d",
             ""
         )
-
     ).strip().lower()
 
-
     obv_20d = str(
-
         ranking.get(
             "obv_trend_20d",
             ""
         )
-
     ).strip().lower()
 
-
     obv_60d = str(
-
         ranking.get(
             "obv_trend_60d",
             ""
         )
-
     ).strip().lower()
 
-
     price_5d = safe_float(
-
         ranking.get(
             "price_change_5d_percent"
         ),
-
         None
-
     )
 
-
     price_20d = safe_float(
-
         ranking.get(
             "price_change_20d_percent"
         ),
-
         None
-
     )
 
-
     price_60d = safe_float(
-
         ranking.get(
             "price_change_60d_percent"
         ),
-
         None
-
     )
-
 
     return {
 
@@ -609,13 +337,8 @@ def get_technical_context(
 
         "price_change_60d_percent":
             price_60d
-
     }
 
-
-# ============================================================
-# FINRA CONTEXT
-# ============================================================
 
 def get_finra_context(
     symbol,
@@ -627,7 +350,6 @@ def get_finra_context(
         {}
     )
 
-
     if not isinstance(
         symbols,
         dict
@@ -635,12 +357,10 @@ def get_finra_context(
 
         symbols = {}
 
-
     record = symbols.get(
         symbol,
         {}
     )
-
 
     if not isinstance(
         record,
@@ -649,12 +369,10 @@ def get_finra_context(
 
         record = {}
 
-
     analytics = record.get(
         "analytics",
         {}
     )
-
 
     if not isinstance(
         analytics,
@@ -663,12 +381,10 @@ def get_finra_context(
 
         analytics = {}
 
-
     blocks = record.get(
         "activity_blocks_4_week",
         []
     )
-
 
     if not isinstance(
         blocks,
@@ -677,16 +393,11 @@ def get_finra_context(
 
         blocks = []
 
-
     latest_block = {}
-
 
     if blocks:
 
-        latest_block = blocks[
-            -1
-        ]
-
+        latest_block = blocks[-1]
 
         if not isinstance(
             latest_block,
@@ -694,7 +405,6 @@ def get_finra_context(
         ):
 
             latest_block = {}
-
 
     return {
 
@@ -803,38 +513,26 @@ def get_finra_context(
                     ""
                 )
             ).strip().upper()
-
     }
 
-
-# ============================================================
-# FINRA DATA AGE
-# ============================================================
 
 def calculate_data_age_days(
     latest_week
 ):
 
     if not latest_week:
-
         return None
-
 
     try:
 
         latest_date = datetime.strptime(
-
             latest_week,
-
             "%Y-%m-%d"
-
         ).date()
-
 
         today = datetime.now(
             timezone.utc
         ).date()
-
 
         return (
             today
@@ -842,28 +540,18 @@ def calculate_data_age_days(
             latest_date
         ).days
 
-
-    except:
+    except Exception:
 
         return None
 
 
-# ============================================================
-# ACTIVITY SIGNAL CHECK
-# ============================================================
+def has_meaningful_activity_signal(finra):
 
-def has_meaningful_activity_signal(
-    finra
-):
-
-    if (
-        not finra.get(
-            "available"
-        )
+    if not finra.get(
+        "available"
     ):
 
         return False
-
 
     if (
         finra.get(
@@ -876,41 +564,32 @@ def has_meaningful_activity_signal(
 
         return False
 
-
     state = finra.get(
         "current_activity_state"
     )
-
 
     percentile = finra.get(
         "volume_percentile"
     )
 
-
     latest_vs_12 = finra.get(
         "latest_vs_12_week"
     )
-
 
     block_index = finra.get(
         "latest_block_activity_index"
     )
 
-
     block_z = finra.get(
         "latest_block_z_score"
     )
 
-
     if state in {
-
         "ELEVATED",
         "VERY_ELEVATED"
-
     }:
 
         return True
-
 
     if (
         block_index is not None
@@ -920,7 +599,6 @@ def has_meaningful_activity_signal(
 
         return True
 
-
     if (
         block_z is not None
         and
@@ -928,7 +606,6 @@ def has_meaningful_activity_signal(
     ):
 
         return True
-
 
     if (
         percentile is not None
@@ -942,23 +619,10 @@ def has_meaningful_activity_signal(
 
         return True
 
-
     return False
 
 
-# ============================================================
-# ACTIVITY SCORE
-# ============================================================
-#
-# Maximum:
-#
-#     40 points
-#
-# ============================================================
-
-def calculate_activity_score(
-    finra
-):
+def calculate_activity_score(finra):
 
     if not finra.get(
         "available"
@@ -966,137 +630,82 @@ def calculate_activity_score(
 
         return 0
 
-
     score = 0
-
-
-    # --------------------------------------------------------
-    # CURRENT STATE
-    # --------------------------------------------------------
 
     state = finra.get(
         "current_activity_state"
     )
 
-
     if state == "VERY_ELEVATED":
 
         score += 16
-
 
     elif state == "ELEVATED":
 
         score += 10
 
-
-    # --------------------------------------------------------
-    # PERCENTILE
-    # --------------------------------------------------------
-
     percentile = finra.get(
         "volume_percentile"
     )
 
-
     if percentile is not None:
 
         if percentile >= 98:
-
             score += 10
 
-
         elif percentile >= 90:
-
             score += 8
 
-
         elif percentile >= 80:
-
             score += 5
 
-
         elif percentile >= 70:
-
             score += 3
-
-
-    # --------------------------------------------------------
-    # LATEST WEEK VS PRIOR 12 WEEKS
-    # --------------------------------------------------------
 
     latest_vs_12 = finra.get(
         "latest_vs_12_week"
     )
 
-
     if latest_vs_12 is not None:
 
         if latest_vs_12 >= 150:
-
             score += 8
 
-
         elif latest_vs_12 >= 75:
-
             score += 6
 
-
         elif latest_vs_12 >= 25:
-
             score += 4
 
-
         elif latest_vs_12 >= 10:
-
             score += 2
-
-
-    # --------------------------------------------------------
-    # LATEST 4-WEEK BLOCK
-    # --------------------------------------------------------
 
     block_index = finra.get(
         "latest_block_activity_index"
     )
 
-
     if block_index is not None:
 
         if block_index >= 180:
-
             score += 6
 
-
         elif block_index >= 150:
-
             score += 5
 
-
         elif block_index >= 120:
-
             score += 3
-
-
-    # --------------------------------------------------------
-    # BLOCK Z-SCORE
-    # --------------------------------------------------------
 
     block_z = finra.get(
         "latest_block_z_score"
     )
 
-
     if block_z is not None:
 
         if block_z >= 2:
-
             score += 4
 
-
         elif block_z >= 1.5:
-
             score += 2
-
 
     return min(
         score,
@@ -1104,127 +713,80 @@ def calculate_activity_score(
     )
 
 
-# ============================================================
-# STRUCTURE SCORE
-# ============================================================
-#
-# Maximum:
-#
-#     40 points
-#
-# This does NOT replace the existing EdgeBreak structure score.
-#
-# It converts the already-calculated EdgeBreak information into
-# an X-Factor structure component.
-#
-# ============================================================
-
-def calculate_structure_score(
-    technical
-):
+def calculate_structure_score(technical):
 
     score = 0
-
 
     structural = technical.get(
         "structural_score",
         0
     )
 
-
     if structural >= 75:
 
         score += 18
-
 
     elif structural >= 70:
 
         score += 16
 
-
     elif structural >= 65:
 
         score += 14
-
 
     elif structural >= 60:
 
         score += 12
 
-
     elif structural >= 55:
 
         score += 10
 
-
     else:
 
         score += 6
-
-
-    # --------------------------------------------------------
-    # HIGHER LOWS
-    # --------------------------------------------------------
 
     higher_lows = technical.get(
         "higher_lows",
         0
     )
 
-
     if higher_lows >= 5:
 
         score += 8
-
 
     elif higher_lows == 4:
 
         score += 7
 
-
     elif higher_lows == 3:
 
         score += 5
 
-
     elif higher_lows == 2:
 
         score += 3
-
-
-    # --------------------------------------------------------
-    # RESISTANCE TOUCHES
-    # --------------------------------------------------------
 
     touches = technical.get(
         "resistance_touches",
         0
     )
 
-
     if touches >= 4:
 
         score += 5
-
 
     elif touches == 3:
 
         score += 4
 
-
     elif touches == 2:
 
         score += 2
 
-
-    # --------------------------------------------------------
-    # POSITION RELATIVE TO RESISTANCE
-    # --------------------------------------------------------
-
     distance = technical.get(
         "distance_from_resistance_percent"
     )
-
 
     if distance is not None:
 
@@ -1232,70 +794,49 @@ def calculate_structure_score(
             distance
         )
 
-
         if absolute_distance <= 1:
 
             score += 5
-
 
         elif absolute_distance <= 3:
 
             score += 4
 
-
         elif absolute_distance <= 5:
 
             score += 2
-
 
         elif absolute_distance <= 8:
 
             score += 1
 
-
-    # --------------------------------------------------------
-    # PARTICIPATION
-    # --------------------------------------------------------
-
     participation = technical.get(
         "participation_state"
     )
 
-
     if participation in {
-
         "STRONG_CONFIRMATION",
         "POSITIVE_DIVERGENCE"
-
     }:
 
         score += 4
-
 
     elif participation == "HOLDING_DURING_PULLBACK":
 
         score += 3
 
-
     elif participation in {
-
         "NORMAL_PULLBACK",
         "NEUTRAL"
-
     }:
 
         score += 1
-
 
     return min(
         score,
         40
     )
 
-
-# ============================================================
-# STRUCTURE / TIMING CLASSIFICATION
-# ============================================================
 
 def classify_structure_timing(
     technical,
@@ -1307,70 +848,51 @@ def classify_structure_timing(
         0
     )
 
-
     if (
         not finra.get(
             "available"
         )
         or
-        weeks < MIN_FINRA_WEEKS_FOR_BOOST
+        weeks
+        <
+        MIN_FINRA_WEEKS_FOR_BOOST
     ):
 
-        return (
-            "INSUFFICIENT_FINRA_HISTORY"
-        )
-
+        return "INSUFFICIENT_FINRA_HISTORY"
 
     scanner_type = technical.get(
         "scanner_type"
     )
-
 
     structural_score = technical.get(
         "structural_score",
         0
     )
 
-
     higher_lows = technical.get(
         "higher_lows",
         0
     )
 
-
     distance = technical.get(
         "distance_from_resistance_percent"
     )
-
 
     participation = technical.get(
         "participation_state"
     )
 
-
     price_5d = technical.get(
         "price_change_5d_percent"
     )
-
 
     price_20d = technical.get(
         "price_change_20d_percent"
     )
 
-
     price_60d = technical.get(
         "price_change_60d_percent"
     )
-
-
-    # --------------------------------------------------------
-    # EXTENDED BREAKOUT
-    # --------------------------------------------------------
-    #
-    # Activity arriving after a stock is already materially
-    # through resistance is less useful for early discovery.
-    #
-    # --------------------------------------------------------
 
     if scanner_type == "BREAKOUT":
 
@@ -1380,10 +902,7 @@ def classify_structure_timing(
             distance >= 8
         ):
 
-            return (
-                "EXTENDED_BREAKOUT"
-            )
-
+            return "EXTENDED_BREAKOUT"
 
         if (
             price_5d is not None
@@ -1391,109 +910,41 @@ def classify_structure_timing(
             price_5d >= 15
         ):
 
-            return (
-                "EXTENDED_BREAKOUT"
-            )
-
-
-    # --------------------------------------------------------
-    # POST-MOVE / EVENT-LIKE STRUCTURE
-    # --------------------------------------------------------
-    #
-    # Example behaviour:
-    #
-    # large 60-day move
-    # but recent 20-day price is flat
-    # and participation is no longer strong
-    #
-    # This is designed to stop a SAFT-style situation from
-    # receiving a giant X-Factor simply because FINRA exploded.
-    #
-    # --------------------------------------------------------
+            return "EXTENDED_BREAKOUT"
 
     if (
         price_60d is not None
         and
         price_60d >= 35
-
         and
-
         price_20d is not None
         and
-        abs(
-            price_20d
-        ) <= 5
-
+        abs(price_20d) <= 5
         and
-
-        participation
-        not in {
-
+        participation not in {
             "STRONG_CONFIRMATION",
             "POSITIVE_DIVERGENCE"
-
         }
     ):
 
-        return (
-            "POST_MOVE_ACTIVITY"
-        )
-
-
-    # --------------------------------------------------------
-    # CHOPPY / FLAT STRUCTURE
-    # --------------------------------------------------------
-    #
-    # Designed to catch the STRA-style pattern:
-    #
-    # high activity
-    # but very little 20d / 60d directional progress
-    # and no strong participation confirmation.
-    #
-    # --------------------------------------------------------
+        return "POST_MOVE_ACTIVITY"
 
     if (
         price_20d is not None
         and
-        abs(
-            price_20d
-        ) <= 3
-
+        abs(price_20d) <= 3
         and
-
         price_60d is not None
         and
-        abs(
-            price_60d
-        ) <= 8
-
+        abs(price_60d) <= 8
         and
-
-        participation
-        not in {
-
+        participation not in {
             "STRONG_CONFIRMATION",
             "POSITIVE_DIVERGENCE"
-
         }
     ):
 
-        return (
-            "CHOPPY_FLAT"
-        )
-
-
-    # --------------------------------------------------------
-    # ADVANCED TREND
-    # --------------------------------------------------------
-    #
-    # Still useful information, but activity appearing after a
-    # very large 60-day advance is less valuable as an EARLY
-    # X-Factor.
-    #
-    # KNSA is the type of case this protects against.
-    #
-    # --------------------------------------------------------
+        return "CHOPPY_FLAT"
 
     if (
         price_60d is not None
@@ -1501,115 +952,59 @@ def classify_structure_timing(
         price_60d >= 55
     ):
 
-        return (
-            "ADVANCED_TREND"
-        )
-
-
-    # --------------------------------------------------------
-    # EARLY CONSTRUCTIVE STRUCTURE
-    # --------------------------------------------------------
+        return "ADVANCED_TREND"
 
     if (
         scanner_type == "PRE_BREAKOUT"
-
         and
-
         distance is not None
         and
-        abs(
-            distance
-        ) <= 3.5
-
+        abs(distance) <= 3.5
         and
-
         higher_lows >= 3
-
         and
-
         participation in {
-
             "STRONG_CONFIRMATION",
             "POSITIVE_DIVERGENCE"
-
         }
-
         and
-
         (
             price_5d is None
             or
-            abs(
-                price_5d
-            ) <= 10
+            abs(price_5d) <= 10
         )
     ):
 
-        return (
-            "EARLY_CONSTRUCTIVE"
-        )
-
-
-    # --------------------------------------------------------
-    # CONSTRUCTIVE BASE
-    # --------------------------------------------------------
+        return "EARLY_CONSTRUCTIVE"
 
     if (
         scanner_type == "PRE_BREAKOUT"
-
         and
-
         distance is not None
         and
-        abs(
-            distance
-        ) <= 5
-
+        abs(distance) <= 5
         and
-
         higher_lows >= 3
-
         and
-
         structural_score >= 60
     ):
 
-        return (
-            "CONSTRUCTIVE_BASE"
-        )
-
-
-    # --------------------------------------------------------
-    # CONSTRUCTIVE BREAKOUT
-    # --------------------------------------------------------
+        return "CONSTRUCTIVE_BASE"
 
     if (
         scanner_type == "BREAKOUT"
-
         and
-
         distance is not None
         and
         distance <= 5
-
         and
-
         participation in {
-
             "STRONG_CONFIRMATION",
             "POSITIVE_DIVERGENCE"
-
         }
     ):
 
-        return (
-            "CONSTRUCTIVE_BREAKOUT"
-        )
-
-
-    # --------------------------------------------------------
-    # WEAK STRUCTURE
-    # --------------------------------------------------------
+        return "CONSTRUCTIVE_BREAKOUT"
 
     if (
         structural_score < 60
@@ -1617,28 +1012,10 @@ def classify_structure_timing(
         higher_lows < 2
     ):
 
-        return (
-            "WEAK_STRUCTURE"
-        )
+        return "WEAK_STRUCTURE"
 
+    return "MIXED_STRUCTURE"
 
-    return (
-        "MIXED_STRUCTURE"
-    )
-
-
-# ============================================================
-# ALIGNMENT SCORE
-# ============================================================
-#
-# Maximum:
-#
-#     20 points
-#
-# No alignment points are awarded unless a meaningful FINRA
-# activity signal exists.
-#
-# ============================================================
 
 def calculate_alignment_score(
     technical,
@@ -1652,55 +1029,36 @@ def calculate_alignment_score(
 
         return 0
 
-
     score = 0
-
-
-    # --------------------------------------------------------
-    # STRUCTURE / ACTIVITY ALIGNMENT
-    # --------------------------------------------------------
 
     if timing_state == "EARLY_CONSTRUCTIVE":
 
         score += 12
 
-
     elif timing_state == "CONSTRUCTIVE_BASE":
 
         score += 9
-
 
     elif timing_state == "CONSTRUCTIVE_BREAKOUT":
 
         score += 7
 
-
     elif timing_state == "MIXED_STRUCTURE":
 
         score += 3
-
-
-    # --------------------------------------------------------
-    # OBV CONTEXT
-    # --------------------------------------------------------
 
     obv_20d = technical.get(
         "obv_trend_20d"
     )
 
-
     obv_60d = technical.get(
         "obv_trend_60d"
     )
 
-
     positive_obv_states = {
-
         "rising",
         "slightly_rising"
-
     }
-
 
     if (
         obv_20d in positive_obv_states
@@ -1710,7 +1068,6 @@ def calculate_alignment_score(
 
         score += 4
 
-
     elif (
         obv_20d in positive_obv_states
         or
@@ -1719,25 +1076,17 @@ def calculate_alignment_score(
 
         score += 2
 
-
-    # --------------------------------------------------------
-    # CURRENT FINRA STRENGTH
-    # --------------------------------------------------------
-
     activity_state = finra.get(
         "current_activity_state"
     )
-
 
     if activity_state == "VERY_ELEVATED":
 
         score += 4
 
-
     elif activity_state == "ELEVATED":
 
         score += 2
-
 
     return min(
         score,
@@ -1745,18 +1094,10 @@ def calculate_alignment_score(
     )
 
 
-# ============================================================
-# APPLY STRUCTURE / TIMING CAPS
-# ============================================================
-
 def apply_x_factor_cap(
     raw_score,
     timing_state
 ):
-
-    # --------------------------------------------------------
-    # INSUFFICIENT HISTORY
-    # --------------------------------------------------------
 
     if timing_state == "INSUFFICIENT_FINRA_HISTORY":
 
@@ -1765,40 +1106,16 @@ def apply_x_factor_cap(
             49
         )
 
-
-    # --------------------------------------------------------
-    # CHOP / POST-MOVE / ALREADY EXTENDED
-    # --------------------------------------------------------
-    #
-    # These are deliberately capped BELOW the first boost band.
-    #
-    # Huge FINRA activity therefore cannot automatically move
-    # these stocks up the list.
-    #
-    # --------------------------------------------------------
-
     if timing_state in {
-
         "CHOPPY_FLAT",
         "POST_MOVE_ACTIVITY",
         "EXTENDED_BREAKOUT"
-
     }:
 
         return min(
             raw_score,
             54
         )
-
-
-    # --------------------------------------------------------
-    # ADVANCED TREND
-    # --------------------------------------------------------
-    #
-    # Can still register an X-Factor, but only receives a very
-    # small reranking opportunity.
-    #
-    # --------------------------------------------------------
 
     if timing_state == "ADVANCED_TREND":
 
@@ -1807,11 +1124,6 @@ def apply_x_factor_cap(
             64
         )
 
-
-    # --------------------------------------------------------
-    # WEAK STRUCTURE
-    # --------------------------------------------------------
-
     if timing_state == "WEAK_STRUCTURE":
 
         return min(
@@ -1819,16 +1131,11 @@ def apply_x_factor_cap(
             54
         )
 
-
     return min(
         raw_score,
         100
     )
 
-
-# ============================================================
-# X-FACTOR LABEL
-# ============================================================
 
 def get_x_factor_label(
     score,
@@ -1838,56 +1145,28 @@ def get_x_factor_label(
 
     if timing_state == "INSUFFICIENT_FINRA_HISTORY":
 
-        return (
-            "INSUFFICIENT_DATA"
-        )
-
+        return "INSUFFICIENT_DATA"
 
     if not has_meaningful_activity_signal(
         finra
     ):
 
-        return (
-            "NO_CURRENT_X_FACTOR"
-        )
-
+        return "NO_CURRENT_X_FACTOR"
 
     if score >= 85:
-
-        return (
-            "EXCEPTIONAL"
-        )
-
+        return "EXCEPTIONAL"
 
     if score >= 75:
-
-        return (
-            "HIGH"
-        )
-
+        return "HIGH"
 
     if score >= 65:
-
-        return (
-            "ELEVATED"
-        )
-
+        return "ELEVATED"
 
     if score >= 55:
+        return "MILD"
 
-        return (
-            "MILD"
-        )
+    return "LIMITED"
 
-
-    return (
-        "LIMITED"
-    )
-
-
-# ============================================================
-# X-FACTOR BOOST
-# ============================================================
 
 def calculate_boost(
     x_factor_score,
@@ -1895,62 +1174,34 @@ def calculate_boost(
     timing_state
 ):
 
-    # --------------------------------------------------------
-    # NEVER BOOST THESE STATES
-    # --------------------------------------------------------
-
     if timing_state in {
-
         "INSUFFICIENT_FINRA_HISTORY",
         "CHOPPY_FLAT",
         "POST_MOVE_ACTIVITY",
         "EXTENDED_BREAKOUT",
         "WEAK_STRUCTURE"
-
     }:
 
         return 0
-
 
     if x_factor_label == "NO_CURRENT_X_FACTOR":
 
         return 0
 
-
     if x_factor_score >= 85:
-
-        return (
-            EXCEPTIONAL_BOOST
-        )
-
+        return EXCEPTIONAL_BOOST
 
     if x_factor_score >= 75:
-
-        return (
-            HIGH_BOOST
-        )
-
+        return HIGH_BOOST
 
     if x_factor_score >= 65:
-
-        return (
-            ELEVATED_BOOST
-        )
-
+        return ELEVATED_BOOST
 
     if x_factor_score >= 55:
-
-        return (
-            MILD_BOOST
-        )
-
+        return MILD_BOOST
 
     return 0
 
-
-# ============================================================
-# BUILD USER / GEMINI REASON TAGS
-# ============================================================
 
 def build_reason_tags(
     technical,
@@ -1960,15 +1211,9 @@ def build_reason_tags(
 
     tags = []
 
-
-    # --------------------------------------------------------
-    # CURRENT FINRA ACTIVITY
-    # --------------------------------------------------------
-
     activity_state = finra.get(
         "current_activity_state"
     )
-
 
     if activity_state == "VERY_ELEVATED":
 
@@ -1976,22 +1221,15 @@ def build_reason_tags(
             "very_elevated_off_exchange_activity"
         )
 
-
     elif activity_state == "ELEVATED":
 
         tags.append(
             "elevated_off_exchange_activity"
         )
 
-
-    # --------------------------------------------------------
-    # HISTORICAL PERCENTILE
-    # --------------------------------------------------------
-
     percentile = finra.get(
         "volume_percentile"
     )
-
 
     if (
         percentile is not None
@@ -2003,15 +1241,9 @@ def build_reason_tags(
             "high_historical_activity_percentile"
         )
 
-
-    # --------------------------------------------------------
-    # 4-WEEK ACTIVITY
-    # --------------------------------------------------------
-
     block_index = finra.get(
         "latest_block_activity_index"
     )
-
 
     if (
         block_index is not None
@@ -2023,7 +1255,6 @@ def build_reason_tags(
             "very_elevated_4_week_activity"
         )
 
-
     elif (
         block_index is not None
         and
@@ -2034,87 +1265,66 @@ def build_reason_tags(
             "elevated_4_week_activity"
         )
 
-
-    # --------------------------------------------------------
-    # ACTIVITY + STRUCTURE ALIGNMENT
-    # --------------------------------------------------------
-    #
-    # IMPORTANT:
-    #
-    # Only describe activity as aligned with structure when
-    # there is actually a meaningful FINRA activity signal.
-    #
-    # This prevents Gemini from interpreting good structure
-    # alone as evidence of unusual off-exchange activity.
-    #
-    # --------------------------------------------------------
-
     meaningful_activity = (
         has_meaningful_activity_signal(
             finra
         )
     )
 
-
     if meaningful_activity:
 
         if timing_state == "EARLY_CONSTRUCTIVE":
 
             tags.append(
-                "activity_aligned_with_early_constructive_structure"
+                "activity_aligned_with_"
+                "early_constructive_structure"
             )
-
 
         elif timing_state == "CONSTRUCTIVE_BASE":
 
             tags.append(
-                "activity_aligned_with_constructive_base"
+                "activity_aligned_with_"
+                "constructive_base"
             )
-
 
         elif timing_state == "CONSTRUCTIVE_BREAKOUT":
 
             tags.append(
-                "activity_aligned_with_constructive_breakout"
+                "activity_aligned_with_"
+                "constructive_breakout"
             )
-
 
         elif timing_state == "CHOPPY_FLAT":
 
             tags.append(
-                "activity_occurring_in_choppy_flat_structure"
+                "activity_occurring_in_"
+                "choppy_flat_structure"
             )
-
 
         elif timing_state == "POST_MOVE_ACTIVITY":
 
             tags.append(
-                "activity_detected_after_large_prior_price_move"
+                "activity_detected_after_"
+                "large_prior_price_move"
             )
-
 
         elif timing_state == "EXTENDED_BREAKOUT":
 
             tags.append(
-                "activity_detected_after_price_extension"
+                "activity_detected_after_"
+                "price_extension"
             )
-
 
         elif timing_state == "ADVANCED_TREND":
 
             tags.append(
-                "activity_detected_in_advanced_trend"
+                "activity_detected_in_"
+                "advanced_trend"
             )
-
-
-    # --------------------------------------------------------
-    # TECHNICAL PARTICIPATION
-    # --------------------------------------------------------
 
     participation = technical.get(
         "participation_state"
     )
-
 
     if participation == "STRONG_CONFIRMATION":
 
@@ -2122,37 +1332,76 @@ def build_reason_tags(
             "strong_technical_participation"
         )
 
-
     elif participation == "POSITIVE_DIVERGENCE":
 
         tags.append(
             "positive_volume_price_divergence"
         )
 
-
     return tags
 
 
-    
+def get_institutional_footprint(
+    symbol,
+    finra_data
+):
+
+    symbols = finra_data.get(
+        "symbols",
+        {}
+    )
+
+    if not isinstance(
+        symbols,
+        dict
+    ):
+
+        return {}
+
+    record = symbols.get(
+        symbol,
+        {}
+    )
+
+    if not isinstance(
+        record,
+        dict
+    ):
+
+        return {}
+
+    footprint = record.get(
+        "institutional_footprint",
+        {}
+    )
+
+    if not isinstance(
+        footprint,
+        dict
+    ):
+
+        return {}
+
+    return footprint
 
 
-# ============================================================
-# CALCULATE COMPLETE X-FACTOR
-# ============================================================
-
-def calculate_x_factor(
+def calculate_institutional_factor(
     candidate,
     finra_data
 ):
 
     symbol = str(
-
         candidate.get(
             "symbol",
             ""
         )
-
     ).strip().upper()
+
+
+    footprint = get_institutional_footprint(
+        symbol,
+        finra_data
+    )
 
 
     technical = get_technical_context(
@@ -2160,11 +1409,352 @@ def calculate_x_factor(
     )
 
 
-    finra = get_finra_context(
+    # Current aggregate FINRA activity must support
+    # the cross-venue institutional footprint.
+
+    finra_context = get_finra_context(
         symbol,
         finra_data
     )
 
+
+    current_finra_percentile = finra_context.get(
+        "volume_percentile"
+    )
+
+
+    current_activity_gate_passed = (
+        current_finra_percentile is not None
+        and
+        current_finra_percentile >= 50
+    )
+
+
+    # Block institutional promotion when the existing
+    # EdgeBreak timing assessment is unsuitable.
+
+    timing_state = classify_structure_timing(
+        technical,
+        finra_context
+    )
+
+
+    blocked_timing_states = {
+        "CHOPPY_FLAT",
+        "POST_MOVE_ACTIVITY",
+        "EXTENDED_BREAKOUT",
+        "WEAK_STRUCTURE",
+        "INSUFFICIENT_FINRA_HISTORY"
+    }
+
+
+    timing_gate_passed = (
+        timing_state not in blocked_timing_states
+    )
+
+
+    activity_score = safe_int(
+        footprint.get(
+            "score"
+        ),
+        0
+    )
+
+
+    meaningful = bool(
+        footprint.get(
+            "meaningful_cross_venue_signal",
+            False
+        )
+    )
+
+
+    strongest_event = footprint.get(
+        "strongest_multi_venue_week"
+    )
+
+
+    if not isinstance(
+        strongest_event,
+        dict
+    ):
+
+        strongest_event = {}
+
+
+    venue_count = safe_int(
+        strongest_event.get(
+            "unusual_venue_count"
+        ),
+        0
+    )
+
+
+    alignment_score = 0
+    alignment_tags = []
+
+
+    if (
+        technical.get(
+            "obv_price_relationship"
+        )
+        ==
+        "confirming_strength"
+    ):
+
+        alignment_score += 3
+
+        alignment_tags.append(
+            "obv_confirming_strength"
+        )
+
+
+    rising_states = {
+        "rising",
+        "slightly_rising",
+        "strongly_rising"
+    }
+
+
+    if (
+        technical.get(
+            "obv_trend_20d"
+        )
+        in
+        rising_states
+    ):
+
+        alignment_score += 2
+
+        alignment_tags.append(
+            "obv_20d_rising"
+        )
+
+
+    if (
+        technical.get(
+            "obv_trend_60d"
+        )
+        in
+        rising_states
+    ):
+
+        alignment_score += 2
+
+        alignment_tags.append(
+            "obv_60d_rising"
+        )
+
+
+    if safe_float(
+        technical.get(
+            "price_change_20d_percent"
+        ),
+        0
+    ) > 0:
+
+        alignment_score += 1
+
+        alignment_tags.append(
+            "positive_20d_price_structure"
+        )
+
+
+    if (
+        technical.get(
+            "participation_state"
+        )
+        ==
+        "STRONG_CONFIRMATION"
+    ):
+
+        alignment_score += 2
+
+        alignment_tags.append(
+            "strong_participation_confirmation"
+        )
+
+
+    alignment_score = min(
+        alignment_score,
+        10
+    )
+
+
+    combined_score = min(
+        activity_score
+        +
+        alignment_score,
+        100
+    )
+
+
+    boost = 0
+
+
+    # Institutional boost requires:
+    # 1. Meaningful cross-venue activity
+    # 2. At least two unusual venues
+    # 3. Current FINRA percentile of at least 50
+    # 4. Suitable EdgeBreak timing
+    # 5. Supporting technical alignment
+
+    if (
+        meaningful
+        and
+        venue_count >= 2
+        and
+        current_activity_gate_passed
+        and
+        timing_gate_passed
+        and
+        alignment_score >= 3
+    ):
+
+        if combined_score >= 85:
+
+            boost = 8
+
+        elif combined_score >= 75:
+
+            boost = 5
+
+        elif combined_score >= 65:
+
+            boost = 3
+
+        elif combined_score >= 50:
+
+            boost = 2
+
+
+    reason_tags = footprint.get(
+        "reason_tags",
+        []
+    )
+
+
+    if not isinstance(
+        reason_tags,
+        list
+    ):
+
+        reason_tags = []
+
+
+    return {
+
+        "analyzed":
+            bool(
+                footprint.get(
+                    "analyzed",
+                    False
+                )
+            ),
+
+        "score":
+            int(
+                round(
+                    combined_score
+                )
+            ),
+
+        "activity_score":
+            activity_score,
+
+        "technical_alignment_score":
+            alignment_score,
+
+        "boost_points":
+            boost,
+
+        "label":
+            footprint.get(
+                "label",
+                "NO_VENUE_DATA"
+            ),
+
+        "meaningful_cross_venue_signal":
+            meaningful,
+
+        "current_finra_percentile":
+            current_finra_percentile,
+
+        "current_activity_gate_passed":
+            current_activity_gate_passed,
+
+        "structure_timing_state":
+            timing_state,
+
+        "timing_gate_passed":
+            timing_gate_passed,
+
+        "latest_finra_week":
+            footprint.get(
+                "latest_finra_week"
+            ),
+
+        "multi_venue_weeks_last_4":
+            safe_int(
+                footprint.get(
+                    "multi_venue_weeks_last_4"
+                ),
+                0
+            ),
+
+        "consecutive_multi_venue_weeks":
+            safe_int(
+                footprint.get(
+                    "consecutive_multi_venue_weeks"
+                ),
+                0
+            ),
+
+        "strongest_multi_venue_week":
+            strongest_event
+            if strongest_event
+            else None,
+
+        "reason_tags":
+            list(
+                dict.fromkeys(
+                    reason_tags
+                    +
+                    alignment_tags
+                )
+            ),
+
+        "important_note":
+            (
+                "This is an institutional-scale activity "
+                "inference from delayed FINRA reporting. "
+                "It does not prove buying or identify the "
+                "underlying investment fund."
+            )
+
+    }
+
+
+def calculate_x_factor(
+    candidate,
+    finra_data
+):
+
+    symbol = str(
+        candidate.get(
+            "symbol",
+            ""
+        )
+    ).strip().upper()
+
+    technical = get_technical_context(
+        candidate
+    )
+
+    finra = get_finra_context(
+        symbol,
+        finra_data
+    )
 
     activity_score = (
         calculate_activity_score(
@@ -2172,13 +1762,11 @@ def calculate_x_factor(
         )
     )
 
-
     structure_score = (
         calculate_structure_score(
             technical
         )
     )
-
 
     timing_state = (
         classify_structure_timing(
@@ -2186,7 +1774,6 @@ def calculate_x_factor(
             finra
         )
     )
-
 
     alignment_score = (
         calculate_alignment_score(
@@ -2196,22 +1783,13 @@ def calculate_x_factor(
         )
     )
 
-
     raw_score = (
-
         activity_score
         +
         structure_score
         +
         alignment_score
-
     )
-
-
-    # --------------------------------------------------------
-    # IF FINRA IS NOT CURRENTLY INTERESTING,
-    # X-FACTOR CANNOT BECOME HIGH FROM STRUCTURE ALONE.
-    # --------------------------------------------------------
 
     if not has_meaningful_activity_signal(
         finra
@@ -2222,41 +1800,28 @@ def calculate_x_factor(
             49
         )
 
-
-    final_score = (
-        apply_x_factor_cap(
-            raw_score,
-            timing_state
-        )
+    final_score = apply_x_factor_cap(
+        raw_score,
+        timing_state
     )
 
-
-    label = (
-        get_x_factor_label(
-            final_score,
-            finra,
-            timing_state
-        )
+    label = get_x_factor_label(
+        final_score,
+        finra,
+        timing_state
     )
 
-
-    boost = (
-        calculate_boost(
-            final_score,
-            label,
-            timing_state
-        )
+    boost = calculate_boost(
+        final_score,
+        label,
+        timing_state
     )
 
-
-    reason_tags = (
-        build_reason_tags(
-            technical,
-            finra,
-            timing_state
-        )
+    reason_tags = build_reason_tags(
+        technical,
+        finra,
+        timing_state
     )
-
 
     return {
 
@@ -2352,37 +1917,17 @@ def calculate_x_factor(
 
         "important_note":
             (
-                "Off-exchange activity measures trading "
-                "activity only and does not indicate "
-                "buying or selling direction."
+                "Off-exchange activity measures "
+                "trading activity only and does not "
+                "indicate buying or selling direction."
             )
-
     }
 
 
-# ============================================================
-# ASSIGN FINAL RANKS
-# ============================================================
-#
-# Competition ranking:
-#
-#     1
-#     1
-#     3
-#     4
-#
-# Same style as the existing Daily Brief.
-#
-# ============================================================
-
-def assign_final_ranks(
-    candidates
-):
+def assign_final_ranks(candidates):
 
     previous_score = None
-
     current_rank = 0
-
 
     for position, candidate in enumerate(
         candidates,
@@ -2390,15 +1935,11 @@ def assign_final_ranks(
     ):
 
         final_score = safe_float(
-
             candidate.get(
                 "final_daily_brief_score"
             ),
-
             0
-
         )
-
 
         if (
             previous_score is None
@@ -2406,67 +1947,36 @@ def assign_final_ranks(
             final_score != previous_score
         ):
 
-            current_rank = (
-                position
-            )
-
+            current_rank = position
 
         candidate[
             "final_daily_brief_rank"
         ] = current_rank
 
-
-        # ----------------------------------------------------
-        # EXISTING SITE CAN KEEP USING daily_brief_rank
-        # ----------------------------------------------------
-        #
-        # We update the existing rank field so the site /
-        # Gemini pipeline does not need a new filename or a new
-        # front-end data source.
-        #
-        # ----------------------------------------------------
-
         candidate[
             "daily_brief_rank"
         ] = current_rank
 
+        previous_score = final_score
 
-        previous_score = (
-            final_score
-        )
-
-
-# ============================================================
-# MAIN
-# ============================================================
 
 def main():
 
     print()
-
     print(
-        "==================================="
+        "=" * 70
     )
-
     print(
         "EDGEBREAK FINRA X-FACTOR RERANK"
     )
-
     print(
-        "==================================="
+        "=" * 70
     )
-
     print()
-
-
-    # --------------------------------------------------------
-    # LOAD CURRENT ALREADY-RANKED SHORTLIST
-    # --------------------------------------------------------
 
     candidates = load_json(
         CANDIDATES_FILE
     )
-
 
     if not isinstance(
         candidates,
@@ -2474,21 +1984,13 @@ def main():
     ):
 
         raise RuntimeError(
-
-            f"{CANDIDATES_FILE} "
-            "must contain a JSON array."
-
+            f"{CANDIDATES_FILE} must "
+            "contain a JSON array."
         )
-
-
-    # --------------------------------------------------------
-    # LOAD FINRA OUTPUT
-    # --------------------------------------------------------
 
     finra_data = load_json(
         FINRA_FILE
     )
-
 
     if not isinstance(
         finra_data,
@@ -2496,39 +1998,20 @@ def main():
     ):
 
         raise RuntimeError(
-
-            f"{FINRA_FILE} "
-            "must contain a JSON object."
-
+            f"{FINRA_FILE} must "
+            "contain a JSON object."
         )
 
-
-    # --------------------------------------------------------
-    # SAVE PRE-FINRA BACKUP
-    # --------------------------------------------------------
-
-    original_candidates = (
-        deepcopy(
-            candidates
-        )
+    original_candidates = deepcopy(
+        candidates
     )
-
 
     save_json_atomic(
-
         BACKUP_FILE,
-
         original_candidates
-
     )
 
-
-    # --------------------------------------------------------
-    # CALCULATE X-FACTOR FOR EVERY SURVIVING STOCK
-    # --------------------------------------------------------
-
     processed = []
-
 
     for fallback_rank, candidate in enumerate(
         candidates,
@@ -2542,146 +2025,108 @@ def main():
 
             continue
 
-
         symbol = str(
-
             candidate.get(
                 "symbol",
                 ""
             )
-
         ).strip().upper()
 
-
         if not symbol:
-
             continue
 
-
-        original_rank = (
-            get_original_rank(
-                candidate,
-                fallback_rank
-            )
+        original_rank = get_original_rank(
+            candidate,
+            fallback_rank
         )
 
-
-        original_score = (
-            get_original_score(
-                candidate
-            )
+        original_score = get_original_score(
+            candidate
         )
 
+        x_factor = calculate_x_factor(
+            candidate,
+            finra_data
+        )
 
-        x_factor = (
-            calculate_x_factor(
+        x_factor_boost = safe_float(
+            x_factor.get(
+                "boost_points"
+            ),
+            0
+        )
+
+        institutional_footprint = (
+            calculate_institutional_factor(
                 candidate,
                 finra_data
             )
         )
 
-
-        boost = safe_float(
-
-            x_factor.get(
+        institutional_boost = safe_float(
+            institutional_footprint.get(
                 "boost_points"
             ),
-
             0
-
         )
-
 
         final_score = (
-
             original_score
             +
-            boost
-
+            x_factor_boost
+            +
+            institutional_boost
         )
-
-
-        # ----------------------------------------------------
-        # PRESERVE ORIGINAL EDGEBREAK RANK
-        # ----------------------------------------------------
 
         candidate[
             "pre_finra_rank"
         ] = original_rank
 
-
         candidate[
             "pre_finra_score"
         ] = original_score
-
-
-        # ----------------------------------------------------
-        # ADD X-FACTOR
-        # ----------------------------------------------------
 
         candidate[
             "x_factor"
         ] = x_factor
 
+        candidate[
+            "institutional_footprint"
+        ] = institutional_footprint
 
         candidate[
             "final_daily_brief_score"
         ] = final_score
 
-
-        # ----------------------------------------------------
-        # ADDITIVE FIELDS INSIDE EXISTING RANKING OBJECT
-        # ----------------------------------------------------
-
         ranking = get_ranking(
             candidate
         )
-
 
         ranking[
             "pre_finra_total_score"
         ] = original_score
 
-
         ranking[
             "x_factor_boost"
-        ] = boost
+        ] = x_factor_boost
 
+        ranking[
+            "institutional_footprint_boost"
+        ] = institutional_boost
 
         ranking[
             "final_score"
         ] = final_score
 
-
         candidate[
             "daily_brief_ranking"
         ] = ranking
-
 
         processed.append(
             candidate
         )
 
-
-    # --------------------------------------------------------
-    # FINAL SORT
-    # --------------------------------------------------------
-    #
-    # Primary:
-    #
-    #     original technical score + X-Factor boost
-    #
-    # Tie:
-    #
-    #     preserve original EdgeBreak rank
-    #
-    # Therefore FINRA only changes order when it genuinely
-    # earns enough boost to do so.
-    #
-    # --------------------------------------------------------
-
     processed.sort(
-
         key=lambda candidate: (
 
             -safe_float(
@@ -2704,58 +2149,24 @@ def main():
                     ""
                 )
             )
-
         )
-
     )
-
-
-    # --------------------------------------------------------
-    # ASSIGN FINAL RANKS
-    # --------------------------------------------------------
 
     assign_final_ranks(
         processed
     )
 
-
-    # --------------------------------------------------------
-    # SAVE BACK TO SAME DAILY BRIEF FILE
-    # --------------------------------------------------------
-    #
-    # IMPORTANT:
-    #
-    # Same filename.
-    #
-    # Existing site / Gemini pipeline can continue reading:
-    #
-    #     daily_brief_candidates.json
-    #
-    # No scanner input file is changed.
-    #
-    # --------------------------------------------------------
-
     save_json_atomic(
-
         CANDIDATES_FILE,
-
         processed
-
     )
-
-
-    # --------------------------------------------------------
-    # PRINT RESULTS
-    # --------------------------------------------------------
 
     print(
         "ORIGINAL → FINAL"
     )
-
     print(
-        "-----------------------------------"
+        "-" * 120
     )
-
 
     for candidate in processed:
 
@@ -2763,141 +2174,124 @@ def main():
             "symbol"
         )
 
-
         old_rank = candidate.get(
             "pre_finra_rank"
         )
-
 
         new_rank = candidate.get(
             "final_daily_brief_rank"
         )
 
-
         original_score = candidate.get(
             "pre_finra_score"
         )
 
-
         final_score = candidate.get(
             "final_daily_brief_score"
         )
-
 
         x_factor = candidate.get(
             "x_factor",
             {}
         )
 
-
         x_score = x_factor.get(
-            "score"
+            "score",
+            0
         )
-
 
         x_label = x_factor.get(
-            "label"
+            "label",
+            ""
         )
 
-
-        boost = x_factor.get(
-            "boost_points"
+        x_boost = x_factor.get(
+            "boost_points",
+            0
         )
 
+        institutional = candidate.get(
+            "institutional_footprint",
+            {}
+        )
+
+        institutional_score = institutional.get(
+            "score",
+            0
+        )
+
+        institutional_boost = institutional.get(
+            "boost_points",
+            0
+        )
 
         timing = x_factor.get(
-            "structure_timing_state"
+            "structure_timing_state",
+            ""
         )
-
 
         activity = x_factor.get(
-            "finra_activity_state"
+            "finra_activity_state",
+            ""
         )
-
 
         percentile = x_factor.get(
             "finra_volume_percentile"
         )
 
-
         print(
-
             f"#{old_rank:<2} → "
             f"#{new_rank:<2} "
-
             f"{symbol:<6} | "
-
             f"Tech {original_score:>5.1f} | "
-
             f"X {x_score:>3} "
             f"{x_label:<18} | "
-
-            f"+{boost:<2} | "
-
+            f"X +{x_boost:<2} | "
+            f"Venue {institutional_score:>3} "
+            f"+{institutional_boost:<2} | "
             f"Final {final_score:>5.1f} | "
-
             f"{timing:<24} | "
-
             f"FINRA {activity} "
             f"{percentile}"
-
         )
 
-
+    print()
+    print(
+        "=" * 70
+    )
+    print(
+        "X-FACTOR + INSTITUTIONAL RERANK COMPLETE"
+    )
+    print(
+        "=" * 70
+    )
     print()
 
     print(
-        "==================================="
-    )
-
-    print(
-        "X-FACTOR RERANK COMPLETE"
-    )
-
-    print(
-        "==================================="
-    )
-
-    print()
-
-
-    print(
-
-        f"✅ Original shortlist backup: "
+        f"Original shortlist backup: "
         f"{BACKUP_FILE}"
-
     )
 
-
     print(
-
-        f"✅ Final reranked shortlist: "
+        f"Final reranked shortlist: "
         f"{CANDIDATES_FILE}"
-
     )
-
 
     print(
-        "✅ Scanner source files unchanged."
+        "Scanner source files unchanged."
     )
-
 
     print(
-        "✅ Existing website data filename unchanged."
+        "Existing website data filename unchanged."
     )
-
 
     print(
-        "✅ FINRA only promoted existing survivors."
+        "FINRA and institutional analysis only "
+        "promoted existing survivors."
     )
-
 
     print()
 
-
-# ============================================================
-# RUN
-# ============================================================
 
 if __name__ == "__main__":
 
