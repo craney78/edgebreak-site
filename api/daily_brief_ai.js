@@ -1,346 +1,276 @@
-const BATCH_SIZE = 3;
-const TOP_X_FACTOR_CANDIDATES = 12;
+// ============================================================
+// EDGEBREAK DAILY BRIEF AI
+// ============================================================
+//
+// PURPOSE:
+//
+// EdgeBreak has already:
+//
+// 1. Scanned the NASDAQ
+// 2. Culled unsuitable stocks
+// 3. Ranked technical structure
+// 4. Applied FINRA X-Factor analysis
+// 5. Checked multi-venue institutional-style activity
+// 6. Locked the final top six
+// 7. Applied the Pressure Building Index
+//
+// Gemini does NOT research, select, remove or rerank stocks.
+//
+// Gemini only converts EdgeBreak's supplied evidence into
+// a short, consistent, plain-English report.
+//
+// If Gemini fails or times out, EdgeBreak creates a report
+// directly from the supplied data so all six still appear.
+//
+// ============================================================
 
-// No retries. Each batch gets a longer single window.
-// 4 batches x 55s = 220s maximum Gemini wait time.
-// The overall research budget is capped at 270s to stay clear of
-// the Vercel function limit used by this endpoint.
-const GEMINI_TIMEOUT_MS = 55000;
-const MAX_RESEARCH_TIME_MS = 270000;
-const FUNCTION_SAFETY_MARGIN_MS = 12000;
-const MIN_TIME_FOR_NEW_BATCH_MS =
-    GEMINI_TIMEOUT_MS + FUNCTION_SAFETY_MARGIN_MS;
+
+// ============================================================
+// CONFIGURATION
+// ============================================================
+
+const BATCH_SIZE = 3;
+
+const TOP_DAILY_BRIEF_CANDIDATES = 6;
+
+// Two batches of three.
+// Each batch receives one attempt only.
+const GEMINI_TIMEOUT_MS = 32000;
+
+// Keeps the complete endpoint comfortably below the
+// normal Vercel execution window.
+const MAX_FUNCTION_TIME_MS = 90000;
+
+const FUNCTION_SAFETY_MARGIN_MS = 10000;
 
 const RESEARCH_PROMPT_VERSION =
-    "fundamental-supply-catalyst-xfactor-top12-v2";
+    "edgebreak-top6-data-writer-v1";
 
 
-export default async function handler(req, res) {
+// ============================================================
+// MAIN HANDLER
+// ============================================================
 
-    res.setHeader("Cache-Control", "no-store");
+export default async function handler(
+    req,
+    res
+) {
 
-    if (req.method !== "POST") {
-        return res.status(405).json({
-            error: "Method not allowed."
-        });
+    res.setHeader(
+        "Cache-Control",
+        "no-store"
+    );
+
+
+    if (
+        req.method !==
+        "POST"
+    ) {
+
+        return res
+            .status(405)
+            .json({
+                error:
+                    "Method not allowed."
+            });
+
     }
 
-    if (!process.env.GEMINI_API_KEY) {
-        return res.status(500).json({
-            error: "Daily Brief AI is not configured."
-        });
+
+    if (
+        !process.env.GEMINI_API_KEY
+    ) {
+
+        return res
+            .status(500)
+            .json({
+                error:
+                    "Daily Brief AI is not configured."
+            });
+
     }
+
 
     if (
         !process.env.SUPABASE_URL ||
         !process.env.SUPABASE_SERVICE_KEY
     ) {
-        return res.status(500).json({
-            error: "Daily Brief cache is not configured."
-        });
+
+        return res
+            .status(500)
+            .json({
+                error:
+                    "Daily Brief cache is not configured."
+            });
+
     }
 
-    const functionStartedAt = Date.now();
+
+    const functionStartedAt =
+        Date.now();
+
 
     try {
 
-        const { candidates } = req.body || {};
+        const candidates =
+            req.body?.candidates;
+
 
         if (
-            !Array.isArray(candidates) ||
-            candidates.length === 0
+            !Array.isArray(
+                candidates
+            ) ||
+            candidates.length ===
+                0
         ) {
-            return res.status(400).json({
-                error: "No Daily Brief candidates were provided."
-            });
+
+            return res
+                .status(400)
+                .json({
+                    error:
+                        "No Daily Brief candidates were provided."
+                });
+
         }
 
-        if (candidates.length > 150) {
-            return res.status(400).json({
-                error: "Too many Daily Brief candidates were provided."
-            });
+
+        if (
+            candidates.length >
+            150
+        ) {
+
+            return res
+                .status(400)
+                .json({
+                    error:
+                        "Too many Daily Brief candidates were provided."
+                });
+
         }
 
-        const candidateScanDate = String(
-            candidates[0]?.scan_date ||
-            candidates[0]?.scanDate ||
-            candidates[0]?.pre_breakout?.scan_date ||
-            candidates[0]?.pre_breakout?.scanDate ||
-            candidates[0]?.breakout?.scan_date ||
-            candidates[0]?.breakout?.scanDate ||
-            ""
-        ).trim();
 
-        const suppliedScanDate = String(
-            req.body?.scanDate || ""
-        ).trim();
+        // ====================================================
+        // SCAN DATE
+        // ====================================================
 
-        let briefDate;
-
-        if (/^\d{4}-\d{2}-\d{2}$/.test(candidateScanDate)) {
-            briefDate = candidateScanDate;
-
-            console.log(
-                `EdgeBreak Daily Brief using candidate scanner date: ${briefDate}`
+        const candidateScanDate =
+            cleanDate(
+                candidates[0]?.scan_date ||
+                candidates[0]?.scanDate ||
+                candidates[0]
+                    ?.pre_breakout
+                    ?.scan_date ||
+                candidates[0]
+                    ?.pre_breakout
+                    ?.scanDate ||
+                candidates[0]
+                    ?.breakout
+                    ?.scan_date ||
+                candidates[0]
+                    ?.breakout
+                    ?.scanDate ||
+                ""
             );
-        }
-        else if (/^\d{4}-\d{2}-\d{2}$/.test(suppliedScanDate)) {
-            briefDate = suppliedScanDate;
 
-            console.log(
-                `EdgeBreak Daily Brief using supplied scanner date: ${briefDate}`
-            );
-        }
-        else {
-            briefDate = getNewYorkDate();
 
-            console.warn(
-                `EdgeBreak Daily Brief scanner date unavailable. Falling back to New York date: ${briefDate}`
+        const suppliedScanDate =
+            cleanDate(
+                req.body?.scanDate ||
+                ""
             );
-        }
+
+
+        const briefDate =
+            candidateScanDate ||
+            suppliedScanDate ||
+            getNewYorkDate();
+
 
         console.log(
-            `EdgeBreak Daily Brief session date: ${briefDate}`
+            `EdgeBreak Daily Brief date: ${briefDate}`
         );
 
 
         // ====================================================
-        // CLEAN CANDIDATES
+        // CLEAN AND PRESERVE FINAL EDGEBREAK ORDER
+        // ====================================================
+        //
+        // daily_brief_finra_rerank.py has already placed the
+        // final six at the beginning of the JSON array.
+        //
+        // We preserve that exact order.
+        // Gemini is not permitted to change it.
         // ====================================================
 
-        const cleanCandidates = candidates
-            .filter(
-                stock =>
-                    stock &&
-                    stock.symbol
-            )
-            .map(
-                (
-                    stock,
-                    index
-                ) => {
-
-                    const rankValue =
-                        stock.final_daily_brief_rank ??
-                        stock.finalDailyBriefRank ??
-                        stock.daily_brief_rank ??
-                        stock.dailyBriefRank ??
-                        stock.pre_finra_rank ??
-                        stock.preFinraRank ??
-                        stock.technical_rank ??
-                        stock.technicalRank ??
-                        stock.rank_position ??
-                        stock.rankPosition;
-
-
-                    const reasonTags =
-                        Array.isArray(
-                            stock.x_factor?.reason_tags
-                        )
-                            ?
-                            stock.x_factor.reason_tags
-                                .map(
-                                    value =>
-                                        cleanField(
-                                            String(value),
-                                            120
-                                        )
-                                )
-                                .filter(Boolean)
-                            :
-                            [];
-
-
-                    return {
-
-                        symbol:
-                            String(
-                                stock.symbol
-                            )
-                                .trim()
-                                .toUpperCase(),
-
-                        technicalRank:
-                            Number.isFinite(
-                                Number(
-                                    rankValue
-                                )
-                            )
-                                ?
-                                Number(
-                                    rankValue
-                                )
-                                :
-                                index + 1,
-
-                        suppliedOrder:
-                            index,
-
-                        scanners:
-                            Array.isArray(
-                                stock.scanners
-                            )
-                                ?
-                                stock.scanners
-                                    .map(
-                                        scanner =>
-                                            String(
-                                                scanner
-                                            ).trim()
-                                    )
-                                    .filter(Boolean)
-                                :
-                                [],
-
-                        company: {
-
-                            name:
-                                cleanField(
-                                    stock.company?.name,
-                                    200
-                                ),
-
-                            sector:
-                                cleanField(
-                                    stock.company?.sector,
-                                    150
-                                ),
-
-                            industry:
-                                cleanField(
-                                    stock.company?.industry,
-                                    150
-                                )
-
-                        },
-
-                        xFactor: {
-
-                            score:
-                                Number.isFinite(
-                                    Number(
-                                        stock.x_factor?.score
-                                    )
-                                )
-                                    ?
-                                    Number(
-                                        stock.x_factor.score
-                                    )
-                                    :
-                                    null,
-
-                            label:
-                                cleanField(
-                                    stock.x_factor?.label,
-                                    80
-                                ),
-
-                            structureTimingState:
-                                cleanField(
-                                    stock.x_factor
-                                        ?.structure_timing_state,
-                                    120
-                                ),
-
-                            meaningfulActivitySignal:
-                                Boolean(
-                                    stock.x_factor
-                                        ?.meaningful_activity_signal
-                                ),
-
-                            finraActivityState:
-                                cleanField(
-                                    stock.x_factor
-                                        ?.finra_activity_state,
-                                    80
-                                ),
-
-                            finraVolumePercentile:
-                                Number.isFinite(
-                                    Number(
-                                        stock.x_factor
-                                            ?.finra_volume_percentile
-                                    )
-                                )
-                                    ?
-                                    Number(
-                                        stock.x_factor
-                                            .finra_volume_percentile
-                                    )
-                                    :
-                                    null,
-
-                            reasonTags
-
-                        }
-
-                    };
-
-                }
-            );
-
-
-        if (cleanCandidates.length === 0) {
-            return res.status(400).json({
-                error:
-                    "No valid Daily Brief candidates were provided."
-            });
-        }
-
-
-        // ====================================================
-        // REMOVE DUPLICATES + PRESERVE FINAL EDGEBREAK ORDER
-        // ====================================================
-
-        const seen =
+        const seenSymbols =
             new Set();
 
 
-        const allRankedCandidates =
-            cleanCandidates
+        const cleanCandidates =
+            candidates
 
                 .filter(
-                    stock => {
+                    candidate =>
+                        candidate &&
+                        candidate.symbol
+                )
+
+                .map(
+                    (
+                        candidate,
+                        suppliedOrder
+                    ) =>
+                        normaliseCandidate(
+                            candidate,
+                            suppliedOrder
+                        )
+                )
+
+                .filter(
+                    candidate => {
 
                         if (
-                            seen.has(
-                                stock.symbol
+                            !candidate.symbol ||
+                            seenSymbols.has(
+                                candidate.symbol
                             )
                         ) {
+
                             return false;
+
                         }
 
-                        seen.add(
-                            stock.symbol
+
+                        seenSymbols.add(
+                            candidate.symbol
                         );
+
 
                         return true;
 
                     }
-                )
-
-                .sort(
-                    (a, b) =>
-                        (
-                            a.technicalRank -
-                            b.technicalRank
-                        )
-                        ||
-                        (
-                            a.suppliedOrder -
-                            b.suppliedOrder
-                        )
                 );
 
 
-        // ====================================================
-        // TOP 12 X-FACTOR CANDIDATES ONLY
-        // ====================================================
+        if (
+            cleanCandidates.length ===
+            0
+        ) {
+
+            return res
+                .status(400)
+                .json({
+                    error:
+                        "No valid Daily Brief candidates were provided."
+                });
+
+        }
+
 
         const rankedCandidates =
-            allRankedCandidates.slice(
+            cleanCandidates.slice(
                 0,
-                TOP_X_FACTOR_CANDIDATES
+                TOP_DAILY_BRIEF_CANDIDATES
             );
 
 
@@ -351,24 +281,22 @@ export default async function handler(req, res) {
 
 
         console.log(
-            `Daily Brief candidates received: ${allRankedCandidates.length}`
+            `Candidates received: ${cleanCandidates.length}`
         );
 
-        console.log(
-            `Daily Brief top X-Factor candidates selected: ${rankedCandidates.length}`
-        );
 
         console.log(
-            `Daily Brief research order: ${rankedCandidates
+            `Locked Daily Brief candidates: ${rankedCandidates.length}`
+        );
+
+
+        console.log(
+            `Locked order: ${rankedCandidates
                 .map(
-                    stock =>
-                        stock.symbol
+                    candidate =>
+                        candidate.symbol
                 )
                 .join(", ")}`
-        );
-
-        console.log(
-            `Daily Brief candidate signature: ${candidateSignature}`
         );
 
 
@@ -388,6 +316,7 @@ export default async function handler(req, res) {
             console.log(
                 `EdgeBreak Daily Brief CACHE HIT: ${briefDate}`
             );
+
 
             return res
                 .status(200)
@@ -414,7 +343,7 @@ export default async function handler(req, res) {
                     results:
                         Array.isArray(
                             cachedBrief
-                                .ai_results
+                                ?.ai_results
                                 ?.results
                         )
                             ?
@@ -426,26 +355,26 @@ export default async function handler(req, res) {
 
                     researchMeta:
                         cachedBrief
-                            .ai_results
+                            ?.ai_results
                             ?.researchMeta
                         ||
                         null,
 
                     nasdaqToday:
                         cachedBrief
-                            .nasdaq_today
+                            ?.nasdaq_today
                         ||
                         null,
 
                     marketConditions:
                         cachedBrief
-                            .market_conditions
+                            ?.market_conditions
                         ||
                         null,
 
                     scannerActivity:
                         cachedBrief
-                            .scanner_activity
+                            ?.scanner_activity
                         ||
                         null
 
@@ -460,7 +389,7 @@ export default async function handler(req, res) {
 
 
         // ====================================================
-        // CREATE BATCHES
+        // CREATE BATCHES OF THREE
         // ====================================================
 
         const batches =
@@ -484,50 +413,23 @@ export default async function handler(req, res) {
 
 
         console.log(
-            `Daily Brief batch size: ${BATCH_SIZE}`
-        );
-
-        console.log(
-            `Daily Brief batches planned: ${batches.length}`
-        );
-
-        console.log(
-            `Daily Brief timeout per batch: ${Math.round(
-                GEMINI_TIMEOUT_MS /
-                1000
-            )}s`
-        );
-
-        console.log(
-            "Daily Brief retry policy: NO RETRIES."
-        );
-
-
-        batches.forEach(
-            (
-                batch,
-                index
-            ) => {
-
-                console.log(
-                    `Batch ${index + 1}: ${batch
-                        .map(
-                            stock =>
-                                stock.symbol
-                        )
-                        .join(", ")}`
-                );
-
-            }
+            `Batches planned: ${batches.length}`
         );
 
 
         // ====================================================
-        // RUN GEMINI RESEARCH
+        // RUN GEMINI REPORT WRITER
+        // ====================================================
+        //
+        // One attempt per batch.
+        // No retries.
+        //
+        // A failed batch immediately receives deterministic
+        // EdgeBreak fallback reports.
         // ====================================================
 
-        const batchResearch =
-            [];
+        const reportBySymbol =
+            new Map();
 
 
         let completedBatches =
@@ -539,20 +441,15 @@ export default async function handler(req, res) {
         let timedOutBatches =
             0;
 
-        let stoppedEarly =
-            false;
-
-        let candidatesActuallyResearched =
-            0;
-
         let totalGeminiAttempts =
             0;
 
+        let geminiWrittenReports =
+            0;
 
-        // ====================================================
-        // ONE ATTEMPT PER BATCH
-        // NO RETRIES
-        // ====================================================
+        let fallbackReports =
+            0;
+
 
         for (
             let index = 0;
@@ -572,53 +469,63 @@ export default async function handler(req, res) {
                 functionStartedAt;
 
 
-            const remainingBudget =
-                MAX_RESEARCH_TIME_MS -
+            const remainingTime =
+                MAX_FUNCTION_TIME_MS -
                 elapsed;
 
 
-            console.log(
-                `Elapsed before Batch ${batchNumber}: ${Math.round(
-                    elapsed /
-                    1000
-                )}s`
-            );
-
-
             if (
-                remainingBudget <
-                MIN_TIME_FOR_NEW_BATCH_MS
+                remainingTime <
+                FUNCTION_SAFETY_MARGIN_MS +
+                5000
             ) {
 
                 console.warn(
-                    `Stopping before Batch ${batchNumber}. Runtime safety margin reached.`
+                    `Runtime safety limit reached before Batch ${batchNumber}. Using EdgeBreak fallback reports.`
                 );
 
-                stoppedEarly =
-                    true;
 
-                break;
+                for (
+                    const candidate
+                    of batch
+                ) {
+
+                    reportBySymbol.set(
+                        candidate.symbol,
+                        buildFallbackReport(
+                            candidate,
+                            briefDate
+                        )
+                    );
+
+
+                    fallbackReports++;
+
+                }
+
+
+                continue;
 
             }
-
-
-            console.log(
-                `Starting Batch ${batchNumber}/${batches.length}: ${batch
-                    .map(
-                        stock =>
-                            stock.symbol
-                    )
-                    .join(", ")}`
-            );
 
 
             totalGeminiAttempts++;
 
 
+            console.log(
+                `Starting Batch ${batchNumber}: ${batch
+                    .map(
+                        candidate =>
+                            candidate.symbol
+                    )
+                    .join(", ")}`
+            );
+
+
             try {
 
-                const research =
-                    await researchBatch(
+                const rawResults =
+                    await writeBatchReports(
 
                         batch,
 
@@ -631,16 +538,55 @@ export default async function handler(req, res) {
                     );
 
 
-                batchResearch.push(
-                    research
-                );
+                const cleanedResults =
+                    cleanBatchResults(
+                        rawResults,
+                        batch,
+                        briefDate
+                    );
+
+
+                for (
+                    const candidate
+                    of batch
+                ) {
+
+                    const geminiResult =
+                        cleanedResults.get(
+                            candidate.symbol
+                        );
+
+
+                    if (geminiResult) {
+
+                        reportBySymbol.set(
+                            candidate.symbol,
+                            geminiResult
+                        );
+
+
+                        geminiWrittenReports++;
+
+                    }
+                    else {
+
+                        reportBySymbol.set(
+                            candidate.symbol,
+                            buildFallbackReport(
+                                candidate,
+                                briefDate
+                            )
+                        );
+
+
+                        fallbackReports++;
+
+                    }
+
+                }
 
 
                 completedBatches++;
-
-
-                candidatesActuallyResearched +=
-                    batch.length;
 
 
                 console.log(
@@ -648,273 +594,77 @@ export default async function handler(req, res) {
                 );
 
             }
-            catch (batchError) {
+            catch (error) {
 
                 failedBatches++;
 
 
-                const isTimeout =
-                    batchError?.code ===
-                    "GEMINI_TIMEOUT";
-
-
-                if (isTimeout) {
+                if (
+                    error?.code ===
+                    "GEMINI_TIMEOUT"
+                ) {
 
                     timedOutBatches++;
 
                 }
 
 
-                batchResearch.push({
-
-                    companiesReviewed:
-                        0,
-
-                    companiesIncluded:
-                        0,
-
-                    results:
-                        []
-
-                });
-
-
                 console.error(
                     `Batch ${batchNumber} failed:`,
-                    batchError?.message ||
-                    batchError
+                    error?.message ||
+                    error
                 );
 
 
-                if (isTimeout) {
+                console.warn(
+                    `No retry for Batch ${batchNumber}. EdgeBreak fallback reports will be used.`
+                );
 
-                    console.warn(
-                        `Batch ${batchNumber} timed out. No retry. Moving immediately to the next batch.`
+
+                for (
+                    const candidate
+                    of batch
+                ) {
+
+                    reportBySymbol.set(
+                        candidate.symbol,
+                        buildFallbackReport(
+                            candidate,
+                            briefDate
+                        )
                     );
 
-                }
-                else {
 
-                    console.warn(
-                        `Batch ${batchNumber} will not be retried. Moving immediately to the next batch.`
-                    );
+                    fallbackReports++;
 
                 }
 
             }
-
-
-            // NO SLEEP
-            // NO RETRY DELAY
-            // NEXT BATCH STARTS IMMEDIATELY
 
         }
 
 
         // ====================================================
-        // COMBINE RESULTS
+        // FINAL RESULTS
         // ====================================================
-
-        const combinedRawResults =
-            batchResearch.flatMap(
-                research =>
-                    Array.isArray(
-                        research?.results
-                    )
-                        ?
-                        research.results
-                        :
-                        []
-            );
-
-
-        console.log(
-            `Daily Brief raw results returned: ${combinedRawResults.length}`
-        );
-
-
-        const cleanResults =
-            cleanResearchResults(
-                combinedRawResults,
-                rankedCandidates
-            );
-
-
-        const deduplicatedResults =
-            deduplicateResults(
-                cleanResults
-            );
-
-
+        //
+        // Rebuild results from rankedCandidates so the final
+        // output always follows the locked EdgeBreak order.
         // ====================================================
-        // RESULT ORDER
-        // ====================================================
-
-        const attentionPriority = {
-
-            HIGH:
-                3,
-
-            ELEVATED:
-                2,
-
-            NOTABLE:
-                1
-
-        };
-
-
-        const candidateRankMap =
-            new Map();
-
-
-        rankedCandidates.forEach(
-            (
-                stock,
-                index
-            ) => {
-
-                candidateRankMap.set(
-                    stock.symbol,
-                    index
-                );
-
-            }
-        );
-
-
-        const rankedResults =
-            [
-                ...deduplicatedResults
-            ]
-                .sort(
-                    (
-                        a,
-                        b
-                    ) => {
-
-                        const attentionDifference =
-                            (
-                                attentionPriority[
-                                    b.attentionLevel
-                                ]
-                                ||
-                                0
-                            )
-                            -
-                            (
-                                attentionPriority[
-                                    a.attentionLevel
-                                ]
-                                ||
-                                0
-                            );
-
-
-                        if (
-                            attentionDifference !==
-                            0
-                        ) {
-
-                            return attentionDifference;
-
-                        }
-
-
-                        const aRank =
-                            Math.min(
-                                ...a.symbols.map(
-                                    symbol =>
-                                        candidateRankMap.has(
-                                            symbol
-                                        )
-                                            ?
-                                            candidateRankMap.get(
-                                                symbol
-                                            )
-                                            :
-                                            999999
-                                )
-                            );
-
-
-                        const bRank =
-                            Math.min(
-                                ...b.symbols.map(
-                                    symbol =>
-                                        candidateRankMap.has(
-                                            symbol
-                                        )
-                                            ?
-                                            candidateRankMap.get(
-                                                symbol
-                                            )
-                                            :
-                                            999999
-                                )
-                            );
-
-
-                        return (
-                            aRank -
-                            bRank
-                        );
-
-                    }
-                );
-
 
         const finalResults =
-            rankedResults.slice(
-                0,
-                TOP_X_FACTOR_CANDIDATES
+            rankedCandidates.map(
+                candidate =>
+                    reportBySymbol.get(
+                        candidate.symbol
+                    )
+                    ||
+                    buildFallbackReport(
+                        candidate,
+                        briefDate
+                    )
             );
 
-
-        console.log(
-            `Daily Brief final companies included: ${finalResults.length}`
-        );
-
-        console.log(
-            `Batches completed: ${completedBatches}`
-        );
-
-        console.log(
-            `Batches failed: ${failedBatches}`
-        );
-
-        console.log(
-            `Batches timed out: ${timedOutBatches}`
-        );
-
-        console.log(
-            `Gemini attempts: ${totalGeminiAttempts}`
-        );
-
-        console.log(
-            "Retries attempted: 0"
-        );
-
-        console.log(
-            `Candidates successfully researched: ${candidatesActuallyResearched}/${rankedCandidates.length}`
-        );
-
-
-        if (
-            completedBatches ===
-            0
-        ) {
-
-            throw new Error(
-                "No Daily Brief research batches completed successfully."
-            );
-
-        }
-
-
-        // ====================================================
-        // RESEARCH METADATA
-        // ====================================================
 
         const aiResults = {
 
@@ -928,23 +678,26 @@ export default async function handler(req, res) {
                 researchPromptVersion:
                     RESEARCH_PROMPT_VERSION,
 
+                reportMode:
+                    "EDGEBREAK_DATA_WRITER",
+
+                selectionAuthority:
+                    "EDGEBREAK",
+
+                rankingAuthority:
+                    "EDGEBREAK",
+
+                externalWebSearch:
+                    false,
+
                 candidatesReceived:
-                    allRankedCandidates.length,
+                    cleanCandidates.length,
 
                 candidatesSupplied:
                     rankedCandidates.length,
 
-                candidatesSelectedForResearch:
-                    rankedCandidates.length,
-
-                candidatesActuallyResearched,
-
-                candidatesNotResearched:
-                    Math.max(
-                        0,
-                        rankedCandidates.length -
-                        candidatesActuallyResearched
-                    ),
+                candidatesIncluded:
+                    finalResults.length,
 
                 batchesPlanned:
                     batches.length,
@@ -962,13 +715,15 @@ export default async function handler(req, res) {
 
                 totalGeminiAttempts,
 
-                stoppedEarly,
+                geminiWrittenReports,
+
+                fallbackReports,
 
                 batchSize:
                     BATCH_SIZE,
 
                 topCandidateLimit:
-                    TOP_X_FACTOR_CANDIDATES,
+                    TOP_DAILY_BRIEF_CANDIDATES,
 
                 requestTimeoutSeconds:
                     Math.round(
@@ -976,11 +731,14 @@ export default async function handler(req, res) {
                         1000
                     ),
 
-                attemptsPerBatch:
-                    1,
-
                 retryPolicy:
-                    "NO_RETRY_CONTINUE_NEXT_BATCH"
+                    "NO_RETRY_USE_EDGEBREAK_FALLBACK",
+
+                resultOrder:
+                    rankedCandidates.map(
+                        candidate =>
+                            candidate.symbol
+                    )
 
             }
 
@@ -988,83 +746,40 @@ export default async function handler(req, res) {
 
 
         // ====================================================
-        // SAFETY FILTER
+        // SAFETY CHECK
         // ====================================================
 
-        const combinedText =
-            JSON.stringify(
+        if (
+            containsProhibitedAdvice(
                 aiResults
+            )
+        ) {
+
+            console.warn(
+                "Unsafe Gemini wording detected. Replacing all reports with EdgeBreak fallback reports."
             );
 
 
-        const prohibitedPatterns = [
-
-            /\byou should buy\b/i,
-            /\byou should sell\b/i,
-            /\byou should hold\b/i,
-
-            /\binvestors should buy\b/i,
-            /\binvestors should sell\b/i,
-            /\binvestors should hold\b/i,
-
-            /\bwe recommend buying\b/i,
-            /\bwe recommend selling\b/i,
-            /\bwe recommend holding\b/i,
-
-            /\bthis stock is a strong buy\b/i,
-            /\bthis stock is a strong sell\b/i,
-
-            /\bthis is a buy opportunity\b/i,
-            /\bthis is a sell opportunity\b/i,
-
-            /\byou should enter\b/i,
-            /\byou should exit\b/i,
-
-            /\binvestors should enter\b/i,
-            /\binvestors should exit\b/i,
-
-            /\bbuy this stock\b/i,
-            /\bsell this stock\b/i,
-
-            /\bguaranteed return\b/i,
-            /\bguaranteed profit\b/i,
-            /\bguaranteed gain\b/i,
-
-            /\bwill definitely rise\b/i,
-            /\bwill definitely increase\b/i,
-            /\bwill definitely gain\b/i,
-
-            /\bguaranteed to rise\b/i,
-            /\bguaranteed to increase\b/i,
-
-            /\brisk[- ]free return\b/i,
-            /\brisk[- ]free profit\b/i
-
-        ];
+            aiResults.results =
+                rankedCandidates.map(
+                    candidate =>
+                        buildFallbackReport(
+                            candidate,
+                            briefDate
+                        )
+                );
 
 
-        const unsafe =
-            prohibitedPatterns.some(
-                pattern =>
-                    pattern.test(
-                        combinedText
-                    )
-            );
+            aiResults
+                .researchMeta
+                .fallbackReports =
+                    rankedCandidates.length;
 
 
-        if (unsafe) {
-
-            console.error(
-                "Daily Brief blocked by safety filter."
-            );
-
-
-            return res
-                .status(422)
-                .json({
-                    error:
-                        "The Daily Brief research could not be displayed."
-                });
+            aiResults
+                .researchMeta
+                .geminiWrittenReports =
+                    0;
 
         }
 
@@ -1085,10 +800,10 @@ export default async function handler(req, res) {
             generatedAt,
 
             companiesReviewed:
-                candidatesActuallyResearched,
+                rankedCandidates.length,
 
             companiesIncluded:
-                finalResults.length,
+                aiResults.results.length,
 
             aiResults
 
@@ -1101,10 +816,20 @@ export default async function handler(req, res) {
 
 
         console.log(
-            `EdgeBreak Daily Brief completed in ${Math.round(
+            `Daily Brief complete in ${Math.round(
                 totalRuntime /
                 1000
             )} seconds.`
+        );
+
+
+        console.log(
+            `Gemini reports: ${aiResults.researchMeta.geminiWrittenReports}`
+        );
+
+
+        console.log(
+            `Fallback reports: ${aiResults.researchMeta.fallbackReports}`
         );
 
 
@@ -1127,13 +852,13 @@ export default async function handler(req, res) {
                 generatedAt,
 
                 companiesReviewed:
-                    candidatesActuallyResearched,
+                    rankedCandidates.length,
 
                 companiesIncluded:
-                    finalResults.length,
+                    aiResults.results.length,
 
                 results:
-                    finalResults,
+                    aiResults.results,
 
                 researchMeta: {
 
@@ -1172,7 +897,7 @@ export default async function handler(req, res) {
             .status(500)
             .json({
                 error:
-                    "Daily Brief research is temporarily unavailable."
+                    "Daily Brief reports are temporarily unavailable."
             });
 
     }
@@ -1181,10 +906,486 @@ export default async function handler(req, res) {
 
 
 // ============================================================
-// GEMINI RESEARCH — ONE ATTEMPT ONLY
+// NORMALISE CANDIDATE
 // ============================================================
 
-async function researchBatch(
+function normaliseCandidate(
+    stock,
+    suppliedOrder
+) {
+
+    const finalRank =
+        firstNumber(
+
+            stock.final_daily_brief_rank,
+
+            stock.finalDailyBriefRank,
+
+            stock.daily_brief_rank,
+
+            stock.dailyBriefRank,
+
+            stock.pre_pressure_rank,
+
+            suppliedOrder + 1
+
+        );
+
+
+    const technicalScore =
+        firstNumber(
+
+            stock.pre_finra_score,
+
+            stock.daily_brief_ranking
+                ?.pre_finra_total_score,
+
+            stock.ranking
+                ?.total_score,
+
+            stock.total_score
+
+        );
+
+
+    const finalScore =
+        firstNumber(
+
+            stock.final_daily_brief_score,
+
+            stock.daily_brief_ranking
+                ?.final_score,
+
+            technicalScore
+
+        );
+
+
+    const xFactor =
+        stock.x_factor &&
+        typeof stock.x_factor ===
+            "object"
+            ?
+            stock.x_factor
+            :
+            {};
+
+
+    const institutional =
+        stock.institutional_footprint &&
+        typeof stock.institutional_footprint ===
+            "object"
+            ?
+            stock.institutional_footprint
+            :
+            {};
+
+
+    const pressure =
+        stock.pressure_building_index &&
+        typeof stock.pressure_building_index ===
+            "object"
+            ?
+            stock.pressure_building_index
+            :
+            {};
+
+
+    const timingState =
+        cleanField(
+
+            pressure.structure_timing_state ||
+
+            institutional
+                .structure_timing_state ||
+
+            xFactor
+                .structure_timing_state,
+
+            100
+
+        );
+
+
+    return {
+
+        symbol:
+            cleanField(
+                String(
+                    stock.symbol ||
+                    ""
+                ).toUpperCase(),
+                20
+            ),
+
+        finalRank,
+
+        suppliedOrder,
+
+        company: {
+
+            name:
+                cleanField(
+                    stock.company?.name ||
+                    stock.company_name ||
+                    stock.name,
+                    200
+                ),
+
+            sector:
+                cleanField(
+                    stock.company?.sector ||
+                    stock.sector,
+                    120
+                ),
+
+            industry:
+                cleanField(
+                    stock.company?.industry ||
+                    stock.industry,
+                    120
+                )
+
+        },
+
+        scanners:
+            cleanArray(
+                stock.scanners,
+                80
+            ),
+
+        scores: {
+
+            technical:
+                technicalScore,
+
+            final:
+                finalScore
+
+        },
+
+        technical: {
+
+            timingState,
+
+            participationState:
+                cleanField(
+
+                    stock.participation_state ||
+
+                    stock.technical_context
+                        ?.participation_state ||
+
+                    stock.indicator_history
+                        ?.participation_state,
+
+                    100
+
+                ),
+
+            obvPriceRelationship:
+                cleanField(
+
+                    stock.obv_price_relationship ||
+
+                    stock.technical_context
+                        ?.obv_price_relationship ||
+
+                    stock.indicator_history
+                        ?.obv_price_relationship,
+
+                    100
+
+                ),
+
+            obvTrend20Day:
+                cleanField(
+
+                    stock.obv_trend_20d ||
+
+                    stock.technical_context
+                        ?.obv_trend_20d ||
+
+                    stock.indicator_history
+                        ?.obv_trend_20d,
+
+                    100
+
+                ),
+
+            obvTrend60Day:
+                cleanField(
+
+                    stock.obv_trend_60d ||
+
+                    stock.technical_context
+                        ?.obv_trend_60d ||
+
+                    stock.indicator_history
+                        ?.obv_trend_60d,
+
+                    100
+
+                ),
+
+            distanceFromResistancePercent:
+                firstNumber(
+
+                    stock
+                        .distance_from_resistance_percent,
+
+                    stock
+                        .technical_context
+                        ?.distance_from_resistance_percent,
+
+                    stock
+                        .pre_breakout
+                        ?.distance_from_resistance_percent,
+
+                    stock
+                        .breakout
+                        ?.distance_from_resistance_percent,
+
+                    stock
+                        .launch_pad
+                        ?.distance_from_resistance_percent
+
+                ),
+
+            priceChange20DayPercent:
+                firstNumber(
+
+                    stock
+                        .price_change_20d_percent,
+
+                    stock
+                        .technical_context
+                        ?.price_change_20d_percent,
+
+                    stock
+                        .indicator_history
+                        ?.price_change_20d_percent
+
+                )
+
+        },
+
+        xFactor: {
+
+            score:
+                firstNumber(
+                    xFactor.score
+                ),
+
+            label:
+                cleanField(
+                    xFactor.label,
+                    100
+                ),
+
+            boostPoints:
+                firstNumber(
+                    xFactor.boost_points,
+                    0
+                ),
+
+            timingState,
+
+            finraActivityState:
+                cleanField(
+                    xFactor.finra_activity_state,
+                    100
+                ),
+
+            finraVolumePercentile:
+                firstNumber(
+                    xFactor.finra_volume_percentile
+                ),
+
+            meaningfulActivitySignal:
+                Boolean(
+                    xFactor
+                        .meaningful_activity_signal
+                ),
+
+            reasonTags:
+                cleanArray(
+                    xFactor.reason_tags,
+                    120
+                )
+
+        },
+
+        institutionalFootprint: {
+
+            analyzed:
+                Boolean(
+                    institutional.analyzed
+                ),
+
+            score:
+                firstNumber(
+                    institutional.score
+                ),
+
+            label:
+                cleanField(
+                    institutional.label,
+                    100
+                ),
+
+            boostPoints:
+                firstNumber(
+                    institutional.boost_points,
+                    0
+                ),
+
+            meaningfulCrossVenueSignal:
+                Boolean(
+                    institutional
+                        .meaningful_cross_venue_signal
+                ),
+
+            currentFinraPercentile:
+                firstNumber(
+
+                    institutional
+                        .current_finra_percentile,
+
+                    xFactor
+                        .finra_volume_percentile
+
+                ),
+
+            currentActivityGatePassed:
+                Boolean(
+                    institutional
+                        .current_activity_gate_passed
+                ),
+
+            timingGatePassed:
+                institutional
+                    .timing_gate_passed ===
+                    true,
+
+            multiVenueWeeksLast4:
+                firstNumber(
+                    institutional
+                        .multi_venue_weeks_last_4,
+                    0
+                ),
+
+            consecutiveMultiVenueWeeks:
+                firstNumber(
+                    institutional
+                        .consecutive_multi_venue_weeks,
+                    0
+                ),
+
+            strongestUnusualVenueCount:
+                firstNumber(
+
+                    institutional
+                        .strongest_multi_venue_week
+                        ?.unusual_venue_count,
+
+                    0
+
+                ),
+
+            reasonTags:
+                cleanArray(
+                    institutional.reason_tags,
+                    120
+                )
+
+        },
+
+        pressureBuildingIndex: {
+
+            analyzed:
+                pressure.analyzed ===
+                true,
+
+            score:
+                firstNumber(
+                    pressure.score
+                ),
+
+            label:
+                cleanField(
+                    pressure.label,
+                    120
+                ),
+
+            confirmationTier:
+                cleanField(
+                    pressure.confirmation_tier,
+                    120
+                ),
+
+            boostPoints:
+                firstNumber(
+                    pressure.boost_points,
+                    0
+                ),
+
+            eligibleFromFinraEvidence:
+                Boolean(
+                    pressure
+                        .eligible_from_finra_evidence
+                ),
+
+            timingGatePassed:
+                pressure
+                    .timing_gate_passed ===
+                    true,
+
+            currentFinraPercentile:
+                firstNumber(
+                    pressure
+                        .current_finra_percentile
+                ),
+
+            strongestUnusualVenueCount:
+                firstNumber(
+                    pressure
+                        .strongest_unusual_venue_count,
+                    0
+                ),
+
+            multiVenueWeeksLast4:
+                firstNumber(
+                    pressure
+                        .multi_venue_weeks_last_4,
+                    0
+                ),
+
+            consecutiveMultiVenueWeeks:
+                firstNumber(
+                    pressure
+                        .consecutive_multi_venue_weeks,
+                    0
+                ),
+
+            reasonTags:
+                cleanArray(
+                    pressure.reason_tags,
+                    120
+                )
+
+        }
+
+    };
+
+}
+
+
+// ============================================================
+// GEMINI REPORT WRITER
+// ============================================================
+
+async function writeBatchReports(
 
     candidates,
 
@@ -1196,252 +1397,116 @@ async function researchBatch(
 
 ) {
 
-    console.log(
-        `Batch ${batchNumber} research starting — single attempt, no retry.`
-    );
-
-
     const systemInstruction = `
 
-You are the Fundamental + Supply + Catalyst research engine
-for EdgeBreak.
+You are the report writer for EdgeBreak.
 
-You will receive up to three NASDAQ stocks selected from
-EdgeBreak's TOP 12 final X-Factor-ranked Daily Brief candidates.
+EdgeBreak has already completed all scanning, filtering,
+technical ranking, FINRA off-exchange analysis, multi-venue
+institutional-footprint analysis and Pressure Building Index
+analysis.
 
-These companies have already passed EdgeBreak's technical
-scanners, deterministic filters, technical ranking and
-FINRA-derived X-Factor reranking.
+You are NOT a stock selector.
 
-Treat the supplied EdgeBreak ranking and X-Factor context as
-established input.
+You are NOT an investment adviser.
 
-DO NOT perform another technical scan.
+You are NOT conducting outside research.
 
-DO NOT technically rerank the companies.
+You must use only the EdgeBreak evidence supplied in the JSON.
 
-DO NOT provide buy, sell or hold recommendations.
+You must not:
 
-DO NOT provide price targets, entry prices or predictions.
+- search the internet
+- add company news
+- add earnings information
+- add fundamentals
+- invent missing evidence
+- remove a supplied company
+- combine companies
+- reorder companies
+- rerank companies
+- call a stock a buy, sell or hold
+- predict future price movements
+- claim that institutional buying is confirmed
 
+Your only job is to explain why EdgeBreak surfaced each stock.
 
-YOUR JOB:
+Write for an everyday investor or trader.
 
-Use current Google Search grounding to perform a fast,
-evidence-disciplined Fundamental + Supply + Catalyst stress test.
+Use plain English.
 
-Find the STRONGEST AVAILABLE factual evidence that materially
-adds to EdgeBreak's existing technical and X-Factor case.
+Explain the strongest available evidence without listing every
+score mechanically.
 
+Each report should normally be between 60 and 100 words.
 
-CRITICAL PRIORITY:
+Use careful phrases such as:
 
-DO NOT try to find every metric for every company.
+- possible institutional-scale activity
+- institutional-style footprint
+- unusual activity across multiple reporting venues
+- evidence of pressure building
+- activity may indicate participation by larger market players
 
-Do not waste time hunting for a missing float figure, short
-interest percentage, ownership change, revenue figure or other
-secondary metric.
+Never say:
 
-Prioritise the strongest evidence first.
+- confirmed institutional buying
+- institutions are buying
+- guaranteed
+- strong buy
+- best stock
+- price will rise
 
-For each company:
+FINRA information is delayed and does not identify buy or sell
+direction.
 
-1. Look first for a material current company-specific catalyst
-   or development.
-
-2. Then look for the strongest readily available evidence in
-   fundamentals, financing, share supply, ownership, short
-   positioning or balance-sheet condition.
-
-3. Prefer primary and high-quality sources.
-
-4. Once there is enough reliable evidence to decide whether the
-   company deserves inclusion, stop chasing weaker metrics.
-
-5. If a metric cannot be established efficiently and reliably,
-   treat it as unavailable and move on.
-
-A company does NOT need every research category completed.
-
-Strong evidence is more important than complete metric coverage.
-
-
-RESEARCH AREAS:
-
-These are categories to consider, NOT a mandatory checklist.
-
-- Current company-specific catalyst or development
-
-- Revenue / profitability trajectory when materially useful
-
-- Float / share-supply structure when readily available
-
-- Short interest when reliable and material
-
-- Publicly reported institutional participation
-
-- Dilution / financing risk
-
-- Balance-sheet condition and cash pressure
-
-- Credible unusual current trading, company, media or investor
-  attention beyond price movement alone
-
-
-X-FACTOR CONTEXT:
-
-EdgeBreak may supply:
-
-- X-Factor score and label
-
-- structure/timing state
-
-- whether a meaningful off-exchange activity signal exists
-
-- off-exchange activity state and historical percentile
-
-- EdgeBreak reason tags
-
-Treat these as EdgeBreak-derived context.
-
-Do NOT reinterpret off-exchange activity as confirmed buying,
-selling, accumulation or distribution.
-
-Do NOT attempt to recreate the X-Factor.
-
-
-EVIDENCE DISCIPLINE:
-
-- Use only lawful, publicly available information.
-
-- Prefer company filings, investor-relations releases, exchange
-  or regulator data, and other credible financial sources.
-
-- Never invent a figure, trend, date, source or causal claim.
-
-- If information is unavailable, move on rather than guessing.
-
-- Contradictory or risky evidence must be acknowledged.
-
-- Do not use phrases such as "absolute confidence",
-  "guaranteed", "supply seizure", "forced buying" or
-  "multi-bagger".
-
-
-RECENCY:
-
-Give strongest preference to company-specific developments from
-the last 7 days.
-
-You may use developments up to 30 days old when still clearly
-relevant.
-
-For reported fundamentals, ownership, short interest, dilution
-and balance-sheet data, use the latest reliable reported data
-even when older than 30 days.
-
-
-IMPORTANT EXCLUSION:
-
-Do not include a stock solely because:
-
-- its price moved
-
-- it is near a 52-week high or low
-
-- it has a technically strong chart
-
-- it broke resistance
-
-- it has momentum
-
-- it has a high EdgeBreak X-Factor score
-
-There must ALSO be credible factual evidence beyond price and
-technical structure.
-
-
-Both positive and negative developments may justify further
-research.
-
-Inclusion is NOT an endorsement.
-
-
-ATTENTION LEVEL:
-
-Every included company must receive exactly one of:
-
-HIGH
-
-ELEVATED
-
-NOTABLE
-
-
-These are research-attention labels, not investment ratings.
-
-
-HIGH:
-
-Particularly significant or clearly unusual current evidence.
-
-
-ELEVATED:
-
-Evidence is meaningfully stronger or more unusual than normally
-expected for that company.
-
-
-NOTABLE:
-
-Credible current evidence worth investigating, but not unusually
-strong.
-
-
-Do not force companies into the results.
-
-Most supplied companies may be omitted.
-
-Quality is more important than quantity.
-
-
-Before including a company ask:
-
-"Ignoring price performance and EdgeBreak's technical/X-Factor
-ranking, is there strong, credible factual evidence that
-materially adds to the research case?"
-
-If NO, omit it.
-
-Keep every returned field concise.
-
-Return JSON only.
+Return valid JSON only.
 
 `;
 
 
-    // ========================================================
-    // DATA GIVEN TO GEMINI
-    // ========================================================
-
     const candidatesForGemini =
         candidates.map(
-            stock => ({
+            candidate => ({
 
                 symbol:
-                    stock.symbol,
+                    candidate.symbol,
 
                 finalEdgeBreakRank:
-                    stock.technicalRank,
-
-                scanners:
-                    stock.scanners,
+                    candidate.finalRank,
 
                 company:
-                    stock.company,
+                    candidate.company,
+
+                scanners:
+                    candidate.scanners,
+
+                technicalScore:
+                    candidate.scores
+                        .technical,
+
+                finalEdgeBreakScore:
+                    candidate.scores
+                        .final,
+
+                technicalEvidence:
+                    candidate.technical,
 
                 xFactor:
-                    stock.xFactor
+                    candidate.xFactor,
+
+                institutionalFootprint:
+                    candidate
+                        .institutionalFootprint,
+
+                pressureBuildingIndex:
+                    candidate
+                        .pressureBuildingIndex,
+
+                requiredAttentionLevel:
+                    getAttentionLevel(
+                        candidate
+                    )
 
             })
         );
@@ -1449,158 +1514,67 @@ Return JSON only.
 
     const userInstruction = `
 
-Research this batch for the EdgeBreak Daily Brief dated
-${briefDate}.
+Write the EdgeBreak quick reports dated ${briefDate}.
 
-This is research batch ${batchNumber}.
+This is Batch ${batchNumber}.
 
-Companies supplied in this batch:
+You must return exactly one report for every supplied stock.
 
-${candidates.length}
+Keep the supplied order.
 
+Do not omit any stock.
 
-These companies are already among EdgeBreak's TOP
-${TOP_X_FACTOR_CANDIDATES} final X-Factor-ranked candidates.
+Use only the supplied EdgeBreak data.
 
-Do not perform another technical assessment.
+For each stock:
 
-Use Google Search grounding.
+1. Identify its technical setup or structure stage.
+2. Explain relevant off-exchange activity.
+3. Explain any meaningful activity across multiple venues.
+4. Explain its Pressure Building Index evidence.
+5. State why EdgeBreak surfaced it.
+6. Clearly describe institutional behaviour as an inference,
+   never as confirmed buying.
 
+If pressure or institutional evidence is weak, say that the
+stock was primarily surfaced by its technical structure.
 
-PRIORITISE THE STRONGEST AVAILABLE EVIDENCE.
-
-Do NOT try to complete every possible metric.
-
-Do NOT spend time chasing unavailable secondary data.
-
-
-Prioritise:
-
-- a material current catalyst or company-specific development
-
-- the strongest useful recent fundamental evidence
-
-- material dilution, financing or balance-sheet risk
-
-- meaningful share-supply or short-positioning evidence
-
-- meaningful institutional evidence
-
-- unusual current attention supported by credible facts
-
-
-If one or two strong primary-source facts clearly establish the
-research case, use them and move on.
-
-If a metric cannot be reliably found quickly, treat it as
-unavailable.
-
-Only include companies that genuinely satisfy the criteria.
-
+Do not make weak evidence sound strong.
 
 RETURN EXACTLY THIS JSON STRUCTURE:
 
 {
-    "companiesReviewed": ${candidates.length},
-    "companiesIncluded": 0,
     "results": [
         {
-            "symbols": [],
-            "companyName": "",
-            "scanners": [],
-            "attentionLevel": "",
+            "symbol": "",
             "headline": "",
             "summary": "",
             "currentDevelopment": "",
-            "whyIncluded": "",
-            "developmentDate": "",
-            "sourceNames": []
+            "whyIncluded": ""
         }
     ]
 }
 
-
 FIELD RULES:
 
-
-companiesReviewed:
-
-Must equal ${candidates.length}.
-
-
-companiesIncluded:
-
-Must equal the number of objects in results.
-
-
-symbols:
-
-Array of supplied ticker symbols only.
-
-
-companyName:
-
-Current company name.
-
-
-scanners:
-
-Use the scanner labels supplied.
-
-
-attentionLevel:
-
-Exactly HIGH, ELEVATED or NOTABLE.
-
+symbol:
+Use one supplied ticker symbol.
 
 headline:
-
-One short factual headline.
-
+A short description of the EdgeBreak setup.
+Do not use investment-rating language.
 
 summary:
-
-Maximum two concise factual sentences.
-
+A concise plain-English report using the strongest supplied
+technical, FINRA, venue and pressure evidence.
 
 currentDevelopment:
-
-One concise sentence describing the strongest current catalyst,
-fundamental change, financing/share-supply factor, positioning
-factor, risk flag or unusual activity found.
-
+One concise sentence describing the strongest current
+EdgeBreak-detected market-data evidence.
 
 whyIncluded:
-
-One concise sentence explaining why the strongest factual
-evidence materially adds to EdgeBreak's existing technical and
-X-Factor case.
-
-
-developmentDate:
-
-Use YYYY-MM-DD when reliably established.
-
-Otherwise return an empty string.
-
-
-sourceNames:
-
-Principal credible source names only.
-
-Do not invent sources.
-
-
-FINAL TEST:
-
-Ignoring price performance and EdgeBreak's existing technical
-and X-Factor ranking, is there credible factual evidence that
-materially adds to the research case?
-
-If NO:
-
-OMIT IT.
-
+One concise sentence explaining why the stock remained in the
+final EdgeBreak six.
 
 CANDIDATES:
 
@@ -1614,10 +1588,6 @@ Return JSON only.
 
 `;
 
-
-    // ========================================================
-    // GEMINI REQUEST
-    // ========================================================
 
     const requestBody = {
 
@@ -1650,31 +1620,24 @@ Return JSON only.
 
         ],
 
-        tools: [
-            {
-                google_search: {}
-            }
-        ],
+        // Deliberately no Google Search tool.
+        // Gemini only reads EdgeBreak data.
 
         generationConfig: {
 
             maxOutputTokens:
-                3500,
+                2200,
 
             responseMimeType:
                 "application/json",
 
             temperature:
-                0.15
+                0.1
 
         }
 
     };
 
-
-    // ========================================================
-    // TIME BUDGET
-    // ========================================================
 
     const elapsed =
         Date.now() -
@@ -1682,21 +1645,8 @@ Return JSON only.
 
 
     const remaining =
-        MAX_RESEARCH_TIME_MS -
+        MAX_FUNCTION_TIME_MS -
         elapsed;
-
-
-    if (
-        remaining <
-        FUNCTION_SAFETY_MARGIN_MS +
-        5000
-    ) {
-
-        throw new Error(
-            `Batch ${batchNumber} cancelled because the runtime safety limit was reached.`
-        );
-
-    }
 
 
     const allowedTimeout =
@@ -1716,17 +1666,17 @@ Return JSON only.
         );
 
 
-    console.log(
-        `Batch ${batchNumber} Gemini single attempt. Timeout: ${Math.round(
-            allowedTimeout /
-            1000
-        )}s`
-    );
+    if (
+        allowedTimeout <
+        5000
+    ) {
 
+        throw new Error(
+            `Batch ${batchNumber} cancelled because the runtime limit was reached.`
+        );
 
-    // ========================================================
-    // GEMINI FETCH
-    // ========================================================
+    }
+
 
     const controller =
         new AbortController();
@@ -1734,29 +1684,18 @@ Return JSON only.
 
     const timeout =
         setTimeout(
-            () => {
-
-                console.warn(
-                    `Batch ${batchNumber} exceeded ${allowedTimeout}ms. Aborting. No retry.`
-                );
-
-                controller.abort();
-
-            },
+            () =>
+                controller.abort(),
             allowedTimeout
         );
 
 
-    const requestStartedAt =
-        Date.now();
-
-
-    let geminiResponse;
+    let response;
 
 
     try {
 
-        geminiResponse =
+        response =
             await fetch(
 
                 "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
@@ -1789,29 +1728,17 @@ Return JSON only.
 
             );
 
-
-        console.log(
-            `Batch ${batchNumber} Gemini responded in ${Math.round(
-                (
-                    Date.now() -
-                    requestStartedAt
-                )
-                /
-                1000
-            )}s with HTTP ${geminiResponse.status}.`
-        );
-
     }
-    catch (fetchError) {
+    catch (error) {
 
         if (
-            fetchError?.name ===
+            error?.name ===
             "AbortError"
         ) {
 
             const timeoutError =
                 new Error(
-                    `Batch ${batchNumber} Gemini request timed out.`
+                    `Batch ${batchNumber} timed out.`
                 );
 
 
@@ -1824,13 +1751,7 @@ Return JSON only.
         }
 
 
-        console.error(
-            `Gemini Batch ${batchNumber} network error:`,
-            fetchError
-        );
-
-
-        throw fetchError;
+        throw error;
 
     }
     finally {
@@ -1842,42 +1763,36 @@ Return JSON only.
     }
 
 
-    // ========================================================
-    // GEMINI HTTP ERROR
-    // ========================================================
-
-    if (!geminiResponse.ok) {
+    if (
+        !response.ok
+    ) {
 
         const errorText =
             await safeReadResponseText(
-                geminiResponse
+                response
             );
 
 
         console.error(
-            `Gemini Batch ${batchNumber} Error:`,
-            geminiResponse.status,
+            `Gemini Batch ${batchNumber} error:`,
+            response.status,
             errorText
         );
 
 
         throw new Error(
-            `Batch ${batchNumber} failed. Gemini returned ${geminiResponse.status}.`
+            `Gemini returned HTTP ${response.status}.`
         );
 
     }
 
 
-    // ========================================================
-    // GEMINI RESPONSE
-    // ========================================================
-
-    const geminiData =
-        await geminiResponse.json();
+    const data =
+        await response.json();
 
 
     const rawText =
-        geminiData
+        data
             ?.candidates?.[0]
             ?.content
             ?.parts
@@ -1893,461 +1808,76 @@ Return JSON only.
     if (!rawText) {
 
         throw new Error(
-            `Batch ${batchNumber} returned no research.`
+            `Batch ${batchNumber} returned no report text.`
         );
 
     }
 
 
-    let research;
-
-
-    // ========================================================
-    // JSON PARSE
-    // ========================================================
-
-    try {
-
-        research =
-            JSON.parse(
-                cleanJsonText(
-                    rawText
-                )
-            );
-
-    }
-    catch (error) {
-
-        console.warn(
-            `Batch ${batchNumber} JSON parse failed. Attempting recovery...`
-        );
-
-
-        const recoveredResults =
-            recoverGeminiResults(
+    const parsed =
+        JSON.parse(
+            cleanJsonText(
                 rawText
-            );
-
-
-        if (
-            recoveredResults.length ===
-            0
-        ) {
-
-            throw new Error(
-                `Batch ${batchNumber} returned invalid JSON.`
-            );
-
-        }
-
-
-        research = {
-
-            companiesReviewed:
-                candidates.length,
-
-            companiesIncluded:
-                recoveredResults.length,
-
-            results:
-                recoveredResults
-
-        };
-
-    }
-
-
-    if (
-        !research ||
-        !Array.isArray(
-            research.results
-        )
-    ) {
-
-        throw new Error(
-            `Batch ${batchNumber} returned an invalid result.`
-        );
-
-    }
-
-
-    console.log(
-        `Batch ${batchNumber} complete: ${research.results.length} included.`
-    );
-
-
-    return research;
-
-}
-
-
-// ============================================================
-// SAFE RESPONSE TEXT
-// ============================================================
-
-async function safeReadResponseText(
-    response
-) {
-
-    try {
-
-        return await response.text();
-
-    }
-    catch {
-
-        return (
-            "Unable to read Gemini error response."
-        );
-
-    }
-
-}
-
-
-// ============================================================
-// CLEAN JSON
-// ============================================================
-
-function cleanJsonText(
-    text
-) {
-
-    let cleaned =
-        String(
-            text ||
-            ""
-        ).trim();
-
-
-    cleaned =
-        cleaned.replace(
-            /^```json\s*/i,
-            ""
-        );
-
-
-    cleaned =
-        cleaned.replace(
-            /^```\s*/i,
-            ""
-        );
-
-
-    cleaned =
-        cleaned.replace(
-            /\s*```$/,
-            ""
-        );
-
-
-    const firstBrace =
-        cleaned.indexOf(
-            "{"
-        );
-
-
-    const lastBrace =
-        cleaned.lastIndexOf(
-            "}"
-        );
-
-
-    if (
-        firstBrace !== -1 &&
-        lastBrace !== -1 &&
-        lastBrace > firstBrace
-    ) {
-
-        cleaned =
-            cleaned.slice(
-                firstBrace,
-                lastBrace + 1
-            );
-
-    }
-
-
-    return cleaned;
-
-}
-
-
-// ============================================================
-// RECOVER PARTIAL GEMINI JSON
-// ============================================================
-
-function recoverGeminiResults(
-    rawText
-) {
-
-    if (
-        typeof rawText !==
-            "string" ||
-        !rawText.trim()
-    ) {
-
-        return [];
-
-    }
-
-
-    const resultsKeyIndex =
-        rawText.indexOf(
-            '"results"'
-        );
-
-
-    if (
-        resultsKeyIndex ===
-        -1
-    ) {
-
-        return [];
-
-    }
-
-
-    const arrayStart =
-        rawText.indexOf(
-            "[",
-            resultsKeyIndex
-        );
-
-
-    if (
-        arrayStart ===
-        -1
-    ) {
-
-        return [];
-
-    }
-
-
-    const recovered =
-        [];
-
-
-    let objectStart =
-        -1;
-
-    let braceDepth =
-        0;
-
-    let insideString =
-        false;
-
-    let escaping =
-        false;
-
-
-    for (
-        let index =
-            arrayStart + 1;
-        index < rawText.length;
-        index++
-    ) {
-
-        const character =
-            rawText[index];
-
-
-        if (insideString) {
-
-            if (escaping) {
-
-                escaping =
-                    false;
-
-                continue;
-
-            }
-
-
-            if (
-                character ===
-                "\\"
-            ) {
-
-                escaping =
-                    true;
-
-                continue;
-
-            }
-
-
-            if (
-                character ===
-                '"'
-            ) {
-
-                insideString =
-                    false;
-
-            }
-
-
-            continue;
-
-        }
-
-
-        if (
-            character ===
-            '"'
-        ) {
-
-            insideString =
-                true;
-
-            continue;
-
-        }
-
-
-        if (
-            character ===
-            "{"
-        ) {
-
-            if (
-                braceDepth ===
-                0
-            ) {
-
-                objectStart =
-                    index;
-
-            }
-
-
-            braceDepth++;
-
-            continue;
-
-        }
-
-
-        if (
-            character ===
-            "}"
-        ) {
-
-            if (
-                braceDepth >
-                0
-            ) {
-
-                braceDepth--;
-
-            }
-
-
-            if (
-                braceDepth ===
-                0 &&
-                objectStart !==
-                -1
-            ) {
-
-                const objectText =
-                    rawText.slice(
-                        objectStart,
-                        index + 1
-                    );
-
-
-                try {
-
-                    const parsedObject =
-                        JSON.parse(
-                            objectText
-                        );
-
-
-                    if (
-                        parsedObject &&
-                        typeof parsedObject ===
-                            "object" &&
-                        !Array.isArray(
-                            parsedObject
-                        )
-                    ) {
-
-                        recovered.push(
-                            parsedObject
-                        );
-
-                    }
-
-                }
-                catch {
-
-                    console.warn(
-                        "Skipped one malformed Daily Brief result during recovery."
-                    );
-
-                }
-
-
-                objectStart =
-                    -1;
-
-            }
-
-        }
-
-    }
-
-
-    return recovered;
-
-}
-
-
-// ============================================================
-// CLEAN RESEARCH RESULTS
-// ============================================================
-
-function cleanResearchResults(
-
-    rawResults,
-
-    cleanCandidates
-
-) {
-
-    const allowedLevels =
-        new Set([
-            "HIGH",
-            "ELEVATED",
-            "NOTABLE"
-        ]);
-
-
-    const suppliedSymbols =
-        new Set(
-            cleanCandidates.map(
-                stock =>
-                    stock.symbol
             )
         );
 
 
-    const cleanResults =
-        [];
+    if (
+        !parsed ||
+        !Array.isArray(
+            parsed.results
+        )
+    ) {
+
+        throw new Error(
+            `Batch ${batchNumber} returned invalid report data.`
+        );
+
+    }
+
+
+    return parsed.results;
+
+}
+
+
+// ============================================================
+// CLEAN GEMINI RESULTS
+// ============================================================
+
+function cleanBatchResults(
+
+    rawResults,
+
+    batch,
+
+    briefDate
+
+) {
+
+    const candidateMap =
+        new Map(
+            batch.map(
+                candidate => [
+                    candidate.symbol,
+                    candidate
+                ]
+            )
+        );
+
+
+    const cleaned =
+        new Map();
 
 
     for (
-        const item
+        const rawResult
         of rawResults
     ) {
 
         if (
-            !item ||
-            typeof item !==
+            !rawResult ||
+            typeof rawResult !==
                 "object"
         ) {
 
@@ -2356,60 +1886,27 @@ function cleanResearchResults(
         }
 
 
-        const symbols =
-            Array.isArray(
-                item.symbols
-            )
-                ?
-                [
-                    ...new Set(
+        const symbol =
+            cleanField(
+                String(
+                    rawResult.symbol ||
+                    rawResult.symbols?.[0] ||
+                    ""
+                ).toUpperCase(),
+                20
+            );
 
-                        item.symbols
 
-                            .map(
-                                symbol =>
-                                    String(
-                                        symbol
-                                    )
-                                        .trim()
-                                        .toUpperCase()
-                            )
-
-                            .filter(
-                                symbol =>
-                                    suppliedSymbols.has(
-                                        symbol
-                                    )
-                            )
-
-                    )
-                ]
-                :
-                [];
+        const candidate =
+            candidateMap.get(
+                symbol
+            );
 
 
         if (
-            symbols.length ===
-            0
-        ) {
-
-            continue;
-
-        }
-
-
-        const attentionLevel =
-            String(
-                item.attentionLevel ||
-                ""
-            )
-                .trim()
-                .toUpperCase();
-
-
-        if (
-            !allowedLevels.has(
-                attentionLevel
+            !candidate ||
+            cleaned.has(
+                symbol
             )
         ) {
 
@@ -2420,29 +1917,29 @@ function cleanResearchResults(
 
         const headline =
             cleanField(
-                item.headline,
-                220
+                rawResult.headline,
+                180
             );
 
 
         const summary =
             cleanField(
-                item.summary,
-                650
+                rawResult.summary,
+                850
             );
 
 
         const currentDevelopment =
             cleanField(
-                item.currentDevelopment,
-                1000
+                rawResult.currentDevelopment,
+                500
             );
 
 
         const whyIncluded =
             cleanField(
-                item.whyIncluded,
-                800
+                rawResult.whyIncluded,
+                500
             );
 
 
@@ -2458,71 +1955,22 @@ function cleanResearchResults(
         }
 
 
-        const scanners =
-            Array.isArray(
-                item.scanners
-            )
-                ?
-                [
-                    ...new Set(
+        const result = {
 
-                        item.scanners
-
-                            .map(
-                                scanner =>
-                                    cleanField(
-                                        scanner,
-                                        80
-                                    )
-                            )
-
-                            .filter(Boolean)
-
-                    )
-                ]
-                :
-                [];
-
-
-        const sourceNames =
-            Array.isArray(
-                item.sourceNames
-            )
-                ?
-                [
-                    ...new Set(
-
-                        item.sourceNames
-
-                            .map(
-                                source =>
-                                    cleanField(
-                                        source,
-                                        150
-                                    )
-                            )
-
-                            .filter(Boolean)
-
-                    )
-                ]
-                :
-                [];
-
-
-        cleanResults.push({
-
-            symbols,
+            symbols: [
+                symbol
+            ],
 
             companyName:
-                cleanField(
-                    item.companyName,
-                    200
+                candidate.company.name,
+
+            scanners:
+                candidate.scanners,
+
+            attentionLevel:
+                getAttentionLevel(
+                    candidate
                 ),
-
-            scanners,
-
-            attentionLevel,
 
             headline,
 
@@ -2533,56 +1981,20 @@ function cleanResearchResults(
             whyIncluded,
 
             developmentDate:
-                cleanField(
-                    item.developmentDate,
-                    40
-                ),
+                briefDate,
 
-            sourceNames
+            sourceNames:
+                getSourceNames(
+                    candidate
+                )
 
-        });
-
-    }
-
-
-    return cleanResults;
-
-}
-
-
-// ============================================================
-// DEDUPLICATE
-// ============================================================
-
-function deduplicateResults(
-    results
-) {
-
-    const seenSymbols =
-        new Set();
-
-
-    const finalResults =
-        [];
-
-
-    for (
-        const result
-        of results
-    ) {
-
-        const newSymbols =
-            result.symbols.filter(
-                symbol =>
-                    !seenSymbols.has(
-                        symbol
-                    )
-            );
+        };
 
 
         if (
-            newSymbols.length ===
-            0
+            containsProhibitedAdvice(
+                result
+            )
         ) {
 
             continue;
@@ -2590,27 +2002,547 @@ function deduplicateResults(
         }
 
 
-        newSymbols.forEach(
-            symbol =>
-                seenSymbols.add(
-                    symbol
-                )
+        cleaned.set(
+            symbol,
+            result
         );
-
-
-        finalResults.push({
-
-            ...result,
-
-            symbols:
-                newSymbols
-
-        });
 
     }
 
 
-    return finalResults;
+    return cleaned;
+
+}
+
+
+// ============================================================
+// EDGEBREAK FALLBACK REPORT
+// ============================================================
+
+function buildFallbackReport(
+    candidate,
+    briefDate
+) {
+
+    const symbol =
+        candidate.symbol;
+
+
+    const timingLabel =
+        formatLabel(
+            candidate
+                .technical
+                .timingState
+        );
+
+
+    const pressure =
+        candidate
+            .pressureBuildingIndex;
+
+
+    const institutional =
+        candidate
+            .institutionalFootprint;
+
+
+    const xFactor =
+        candidate
+            .xFactor;
+
+
+    const setupDescription =
+        getSetupDescription(
+            candidate
+                .technical
+                .timingState
+        );
+
+
+    const evidenceSentences =
+        [];
+
+
+    evidenceSentences.push(
+        `${symbol} was surfaced by EdgeBreak through ${setupDescription}.`
+    );
+
+
+    if (
+        Number.isFinite(
+            xFactor.finraVolumePercentile
+        )
+    ) {
+
+        evidenceSentences.push(
+            `Its current FINRA off-exchange activity ranks around the ${formatNumber(
+                xFactor.finraVolumePercentile
+            )} percentile of its available history.`
+        );
+
+    }
+
+
+    if (
+        institutional
+            .meaningfulCrossVenueSignal &&
+        institutional
+            .strongestUnusualVenueCount >=
+            2
+    ) {
+
+        evidenceSentences.push(
+            `EdgeBreak also detected unusual activity across ${formatNumber(
+                institutional
+                    .strongestUnusualVenueCount
+            )} reporting venues, with multi-venue evidence appearing in ${formatNumber(
+                institutional
+                    .multiVenueWeeksLast4
+            )} of the last four analysed weeks.`
+        );
+
+    }
+    else {
+
+        evidenceSentences.push(
+            "Current multi-venue evidence did not independently qualify for an institutional-footprint boost."
+        );
+
+    }
+
+
+    if (
+        pressure.analyzed &&
+        Number.isFinite(
+            pressure.score
+        )
+    ) {
+
+        if (
+            pressure.confirmationTier ===
+            "ACTIVE_PRESSURE_BUILD"
+        ) {
+
+            evidenceSentences.push(
+                `Its Pressure Building Index scored ${formatNumber(
+                    pressure.score
+                )}, indicating that the qualifying activity has persisted alongside an acceptable chart structure.`
+            );
+
+        }
+        else if (
+            pressure.confirmationTier ===
+            "RECENT_PRESSURE_EVIDENCE"
+        ) {
+
+            evidenceSentences.push(
+                `Its Pressure Building Index scored ${formatNumber(
+                    pressure.score
+                )}, although the evidence remains recent or incomplete rather than fully confirmed by EdgeBreak's rules.`
+            );
+
+        }
+        else {
+
+            evidenceSentences.push(
+                `Its Pressure Building Index scored ${formatNumber(
+                    pressure.score
+                )}, but did not establish a current qualified pressure-building signal.`
+            );
+
+        }
+
+    }
+
+
+    evidenceSentences.push(
+        "This is an inference from delayed market data and does not confirm institutional buying or identify an investment firm."
+    );
+
+
+    const headline =
+        pressure.confirmationTier ===
+        "ACTIVE_PRESSURE_BUILD"
+            ?
+            `${timingLabel || "Constructive Setup"} With Pressure Evidence`
+            :
+            `${timingLabel || "Technical Setup"} Surfaced by EdgeBreak`;
+
+
+    const currentDevelopment =
+        buildCurrentEvidenceSentence(
+            candidate
+        );
+
+
+    const whyIncluded =
+        buildWhyIncludedSentence(
+            candidate
+        );
+
+
+    return {
+
+        symbols: [
+            symbol
+        ],
+
+        companyName:
+            candidate.company.name,
+
+        scanners:
+            candidate.scanners,
+
+        attentionLevel:
+            getAttentionLevel(
+                candidate
+            ),
+
+        headline,
+
+        summary:
+            evidenceSentences.join(
+                " "
+            ),
+
+        currentDevelopment,
+
+        whyIncluded,
+
+        developmentDate:
+            briefDate,
+
+        sourceNames:
+            getSourceNames(
+                candidate
+            )
+
+    };
+
+}
+
+
+// ============================================================
+// CURRENT EVIDENCE SENTENCE
+// ============================================================
+
+function buildCurrentEvidenceSentence(
+    candidate
+) {
+
+    const pressure =
+        candidate
+            .pressureBuildingIndex;
+
+
+    const institutional =
+        candidate
+            .institutionalFootprint;
+
+
+    if (
+        pressure
+            .confirmationTier ===
+            "ACTIVE_PRESSURE_BUILD"
+    ) {
+
+        return (
+            `EdgeBreak recorded a Pressure Building Index of ` +
+            `${formatNumber(
+                pressure.score
+            )}, supported by ` +
+            `${formatNumber(
+                pressure
+                    .strongestUnusualVenueCount
+            )} unusual reporting venues and ` +
+            `${formatNumber(
+                pressure
+                    .multiVenueWeeksLast4
+            )} multi-venue weeks.`
+        );
+
+    }
+
+
+    if (
+        institutional
+            .meaningfulCrossVenueSignal
+    ) {
+
+        return (
+            `EdgeBreak detected a possible institutional-style footprint across ` +
+            `${formatNumber(
+                institutional
+                    .strongestUnusualVenueCount
+            )} reporting venues.`
+        );
+
+    }
+
+
+    return (
+        "The stock remained in the final six primarily because of its EdgeBreak technical ranking and chart structure."
+    );
+
+}
+
+
+// ============================================================
+// WHY INCLUDED SENTENCE
+// ============================================================
+
+function buildWhyIncludedSentence(
+    candidate
+) {
+
+    const parts =
+        [];
+
+
+    if (
+        candidate
+            .technical
+            .timingState
+    ) {
+
+        parts.push(
+            formatLabel(
+                candidate
+                    .technical
+                    .timingState
+            )
+        );
+
+    }
+
+
+    if (
+        candidate
+            .institutionalFootprint
+            .boostPoints >
+        0
+    ) {
+
+        parts.push(
+            "qualifying multi-venue activity"
+        );
+
+    }
+
+
+    if (
+        candidate
+            .xFactor
+            .boostPoints >
+        0
+    ) {
+
+        parts.push(
+            "supportive off-exchange activity"
+        );
+
+    }
+
+
+    if (
+        candidate
+            .pressureBuildingIndex
+            .boostPoints >
+        0
+    ) {
+
+        parts.push(
+            "confirmed pressure-building evidence"
+        );
+
+    }
+
+
+    if (
+        parts.length ===
+        0
+    ) {
+
+        parts.push(
+            "its technical score and final EdgeBreak position"
+        );
+
+    }
+
+
+    return (
+        `${candidate.symbol} remained in the final EdgeBreak six because of ` +
+        `${joinNaturalLanguage(
+            parts
+        )}.`
+    );
+
+}
+
+
+// ============================================================
+// SETUP DESCRIPTION
+// ============================================================
+
+function getSetupDescription(
+    timingState
+) {
+
+    const descriptions = {
+
+        EARLY_CONSTRUCTIVE:
+            "an early constructive setup showing improving chart structure",
+
+        CONSTRUCTIVE_BASE:
+            "a constructive base or consolidation structure",
+
+        CONSTRUCTIVE_BREAKOUT:
+            "a constructive breakout developing from an established structure",
+
+        ADVANCED_TREND:
+            "an established upward trend with supporting structure",
+
+        CHOPPY_FLAT:
+            "a technically ranked but currently choppy structure",
+
+        POST_MOVE_ACTIVITY:
+            "a technically ranked setup where notable activity followed an earlier price move",
+
+        EXTENDED_BREAKOUT:
+            "an advanced breakout structure",
+
+        WEAK_STRUCTURE:
+            "a setup with limited structural confirmation",
+
+        INSUFFICIENT_FINRA_HISTORY:
+            "a technical setup with limited FINRA history"
+
+    };
+
+
+    return (
+        descriptions[
+            String(
+                timingState ||
+                ""
+            ).toUpperCase()
+        ]
+        ||
+        "a high-ranking technical setup"
+    );
+
+}
+
+
+// ============================================================
+// ATTENTION LEVEL
+// ============================================================
+//
+// These labels describe strength of supplied EdgeBreak evidence.
+// They are not investment ratings.
+//
+// ============================================================
+
+function getAttentionLevel(
+    candidate
+) {
+
+    const pressure =
+        candidate
+            .pressureBuildingIndex;
+
+
+    if (
+        pressure
+            .confirmationTier ===
+            "ACTIVE_PRESSURE_BUILD" &&
+        Number(
+            pressure.score
+        ) >=
+        85
+    ) {
+
+        return "HIGH";
+
+    }
+
+
+    if (
+        pressure
+            .confirmationTier ===
+            "ACTIVE_PRESSURE_BUILD" ||
+        candidate
+            .institutionalFootprint
+            .boostPoints >
+            0 ||
+        candidate
+            .xFactor
+            .boostPoints >
+            0
+    ) {
+
+        return "ELEVATED";
+
+    }
+
+
+    return "NOTABLE";
+
+}
+
+
+// ============================================================
+// SOURCE NAMES
+// ============================================================
+
+function getSourceNames(
+    candidate
+) {
+
+    const sources = [
+        "EdgeBreak Technical Scanner"
+    ];
+
+
+    if (
+        candidate.xFactor.score !==
+        null
+    ) {
+
+        sources.push(
+            "FINRA Off-Exchange Data"
+        );
+
+    }
+
+
+    if (
+        candidate
+            .institutionalFootprint
+            .analyzed
+    ) {
+
+        sources.push(
+            "EdgeBreak Multi-Venue Analysis"
+        );
+
+    }
+
+
+    if (
+        candidate
+            .pressureBuildingIndex
+            .analyzed
+    ) {
+
+        sources.push(
+            "EdgeBreak Pressure Building Index"
+        );
+
+    }
+
+
+    return sources;
 
 }
 
@@ -2618,68 +2550,60 @@ function deduplicateResults(
 // ============================================================
 // CANDIDATE SIGNATURE
 // ============================================================
-//
-// Includes:
-// symbol
-// final EdgeBreak rank
-// X-Factor score
-// X-Factor label
-//
-// So changing the X-Factor ranking invalidates an old cache.
-//
 
 function createCandidateSignature(
-    rankedCandidates
+    candidates
 ) {
 
-    const signatureBody =
-        rankedCandidates
+    const signature =
+        candidates.map(
+            candidate => [
 
-            .map(
-                stock => {
+                candidate.symbol,
 
-                    const xScore =
-                        stock.xFactor
-                            ?.score
-                        ??
-                        "";
+                candidate.finalRank,
 
+                candidate.scores.final,
 
-                    const xLabel =
-                        stock.xFactor
-                            ?.label
-                        ??
-                        "";
+                candidate.xFactor.score,
 
+                candidate.xFactor.label,
 
-                    return [
+                candidate
+                    .institutionalFootprint
+                    .score,
 
-                        stock.symbol,
+                candidate
+                    .institutionalFootprint
+                    .boostPoints,
 
-                        stock.technicalRank,
+                candidate
+                    .pressureBuildingIndex
+                    .score,
 
-                        xScore,
+                candidate
+                    .pressureBuildingIndex
+                    .label,
 
-                        xLabel
+                candidate
+                    .pressureBuildingIndex
+                    .boostPoints
 
-                    ].join(":");
-
-                }
-            )
-
+            ].join(":")
+        )
             .join("|");
 
 
     return (
         `${RESEARCH_PROMPT_VERSION}:` +
-        signatureBody
+        signature
     );
 
 }
 
 
 // ============================================================
-// GET CACHE
+// CACHE READ
 // ============================================================
 
 async function getCachedBrief(
@@ -2732,15 +2656,15 @@ async function getCachedBrief(
             );
 
 
-        if (!response.ok) {
-
-            const errorText =
-                await response.text();
-
+        if (
+            !response.ok
+        ) {
 
             console.error(
-                "Daily Brief Cache Read Error:",
-                errorText
+                "Daily Brief cache read failed:",
+                await safeReadResponseText(
+                    response
+                )
             );
 
 
@@ -2754,51 +2678,52 @@ async function getCachedBrief(
 
 
         if (
-            Array.isArray(
+            !Array.isArray(
                 rows
-            ) &&
-            rows.length > 0 &&
-            rows[0].ai_results
+            ) ||
+            rows.length ===
+                0 ||
+            !rows[0]?.ai_results
         ) {
 
-            const cachedSignature =
-                String(
-                    rows[0]
-                        ?.ai_results
-                        ?.researchMeta
-                        ?.candidateSignature
-                    ||
-                    ""
-                ).trim();
-
-
-            if (
-                cachedSignature !==
-                candidateSignature
-            ) {
-
-                console.log(
-                    `Daily Brief cache ignored because candidate order, X-Factor context or prompt changed: ${briefDate}`
-                );
-
-
-                return null;
-
-            }
-
-
-            return rows[0];
+            return null;
 
         }
 
 
-        return null;
+        const cachedSignature =
+            String(
+                rows[0]
+                    ?.ai_results
+                    ?.researchMeta
+                    ?.candidateSignature
+                ||
+                ""
+            ).trim();
+
+
+        if (
+            cachedSignature !==
+            candidateSignature
+        ) {
+
+            console.log(
+                "Cached brief ignored because the final six or supplied evidence changed."
+            );
+
+
+            return null;
+
+        }
+
+
+        return rows[0];
 
     }
     catch (error) {
 
         console.error(
-            "Daily Brief Cache Read Error:",
+            "Daily Brief cache read error:",
             error
         );
 
@@ -2811,7 +2736,7 @@ async function getCachedBrief(
 
 
 // ============================================================
-// SAVE CACHE
+// CACHE SAVE
 // ============================================================
 
 async function saveDailyBrief({
@@ -2894,15 +2819,15 @@ async function saveDailyBrief({
             );
 
 
-        if (!response.ok) {
-
-            const errorText =
-                await response.text();
-
+        if (
+            !response.ok
+        ) {
 
             console.error(
-                "Daily Brief Cache Save Error:",
-                errorText
+                "Daily Brief cache save failed:",
+                await safeReadResponseText(
+                    response
+                )
             );
 
 
@@ -2922,7 +2847,7 @@ async function saveDailyBrief({
     catch (error) {
 
         console.error(
-            "Daily Brief Cache Save Error:",
+            "Daily Brief cache save error:",
             error
         );
 
@@ -2935,8 +2860,176 @@ async function saveDailyBrief({
 
 
 // ============================================================
-// NEW YORK DATE
+// SAFETY FILTER
 // ============================================================
+
+function containsProhibitedAdvice(
+    value
+) {
+
+    const text =
+        JSON.stringify(
+            value
+        );
+
+
+    const prohibitedPatterns = [
+
+        /\byou should buy\b/i,
+        /\byou should sell\b/i,
+        /\byou should hold\b/i,
+
+        /\binvestors should buy\b/i,
+        /\binvestors should sell\b/i,
+        /\binvestors should hold\b/i,
+
+        /\bstrong buy\b/i,
+        /\bstrong sell\b/i,
+
+        /\bbuy this stock\b/i,
+        /\bsell this stock\b/i,
+
+        /\bguaranteed\b/i,
+
+        /\bwill definitely rise\b/i,
+        /\bwill definitely increase\b/i,
+
+        /\bconfirmed institutional buying\b/i,
+        /\binstitutions are buying\b/i,
+
+        /\brisk[- ]free\b/i
+
+    ];
+
+
+    return prohibitedPatterns.some(
+        pattern =>
+            pattern.test(
+                text
+            )
+    );
+
+}
+
+
+// ============================================================
+// JSON CLEANER
+// ============================================================
+
+function cleanJsonText(
+    value
+) {
+
+    let text =
+        String(
+            value ||
+            ""
+        ).trim();
+
+
+    text =
+        text.replace(
+            /^```json\s*/i,
+            ""
+        );
+
+
+    text =
+        text.replace(
+            /^```\s*/i,
+            ""
+        );
+
+
+    text =
+        text.replace(
+            /\s*```$/,
+            ""
+        );
+
+
+    const firstBrace =
+        text.indexOf(
+            "{"
+        );
+
+
+    const lastBrace =
+        text.lastIndexOf(
+            "}"
+        );
+
+
+    if (
+        firstBrace !==
+            -1 &&
+        lastBrace >
+            firstBrace
+    ) {
+
+        text =
+            text.slice(
+                firstBrace,
+                lastBrace + 1
+            );
+
+    }
+
+
+    return text;
+
+}
+
+
+// ============================================================
+// SAFE ERROR RESPONSE
+// ============================================================
+
+async function safeReadResponseText(
+    response
+) {
+
+    try {
+
+        return await response.text();
+
+    }
+    catch {
+
+        return (
+            "Unable to read response."
+        );
+
+    }
+
+}
+
+
+// ============================================================
+// DATE HELPERS
+// ============================================================
+
+function cleanDate(
+    value
+) {
+
+    const date =
+        String(
+            value ||
+            ""
+        ).trim();
+
+
+    return /^\d{4}-\d{2}-\d{2}$/.test(
+        date
+    )
+        ?
+        date
+        :
+        "";
+
+}
+
 
 function getNewYorkDate() {
 
@@ -3001,8 +3094,55 @@ function getNewYorkDate() {
 
 
 // ============================================================
-// CLEAN TEXT FIELD
+// GENERAL HELPERS
 // ============================================================
+
+function firstNumber(
+    ...values
+) {
+
+    for (
+        const value
+        of values
+    ) {
+
+        if (
+            value ===
+                null ||
+            value ===
+                undefined ||
+            value ===
+                ""
+        ) {
+
+            continue;
+
+        }
+
+
+        const number =
+            Number(
+                value
+            );
+
+
+        if (
+            Number.isFinite(
+                number
+            )
+        ) {
+
+            return number;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
 
 function cleanField(
 
@@ -3013,8 +3153,10 @@ function cleanField(
 ) {
 
     if (
-        typeof value !==
-        "string"
+        value ===
+        null ||
+        value ===
+        undefined
     ) {
 
         return "";
@@ -3022,7 +3164,9 @@ function cleanField(
     }
 
 
-    return value
+    return String(
+        value
+    )
 
         .replace(
             /\s+/g,
@@ -3035,5 +3179,181 @@ function cleanField(
             0,
             maxLength
         );
+
+}
+
+
+function cleanArray(
+
+    value,
+
+    itemLength = 120
+
+) {
+
+    if (
+        !Array.isArray(
+            value
+        )
+    ) {
+
+        return [];
+
+    }
+
+
+    return [
+        ...new Set(
+
+            value
+
+                .map(
+                    item =>
+                        cleanField(
+                            item,
+                            itemLength
+                        )
+                )
+
+                .filter(Boolean)
+
+        )
+    ];
+
+}
+
+
+function formatLabel(
+    value
+) {
+
+    const text =
+        cleanField(
+            value,
+            100
+        );
+
+
+    if (!text) {
+
+        return "";
+
+    }
+
+
+    return text
+
+        .toLowerCase()
+
+        .split("_")
+
+        .filter(Boolean)
+
+        .map(
+            word =>
+                word.charAt(0)
+                    .toUpperCase()
+                +
+                word.slice(1)
+        )
+
+        .join(" ");
+
+}
+
+
+function formatNumber(
+    value
+) {
+
+    const number =
+        Number(
+            value
+        );
+
+
+    if (
+        !Number.isFinite(
+            number
+        )
+    ) {
+
+        return "0";
+
+    }
+
+
+    return Number.isInteger(
+        number
+    )
+        ?
+        String(
+            number
+        )
+        :
+        number.toFixed(
+            1
+        );
+
+}
+
+
+function joinNaturalLanguage(
+    values
+) {
+
+    const cleanValues =
+        values.filter(
+            Boolean
+        );
+
+
+    if (
+        cleanValues.length ===
+        0
+    ) {
+
+        return (
+            "its EdgeBreak ranking"
+        );
+
+    }
+
+
+    if (
+        cleanValues.length ===
+        1
+    ) {
+
+        return cleanValues[0];
+
+    }
+
+
+    if (
+        cleanValues.length ===
+        2
+    ) {
+
+        return (
+            `${cleanValues[0]} and ` +
+            `${cleanValues[1]}`
+        );
+
+    }
+
+
+    return (
+        cleanValues
+            .slice(
+                0,
+                -1
+            )
+            .join(", ")
+        +
+        ` and ${cleanValues[
+            cleanValues.length - 1
+        ]}`
+    );
 
 }
