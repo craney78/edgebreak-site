@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EdgeBreak | NASDAQ Stock Scanner & Market Intelligence</title>
+<meta name="description" content="EdgeBreak scans more than 3,200 NASDAQ stocks, evaluates technical structure, off-exchange activity and multi-venue footprints, then surfaces six stocks for further research.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f8fafc">
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="/css/footer.css">
+
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#fff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.ix-page{overflow:hidden;background:#fff}
+.ix-shell{width:min(1180px,calc(100% - 40px));margin:auto}
+.ix-kicker{
+    display:inline-flex;align-items:center;gap:9px;padding:9px 15px;
+    border:1px solid #dce6df;border-radius:999px;background:rgba(255,255,255,.8);
+    color:var(--ix-green-dark);font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+}
+.ix-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 6px rgba(34,197,94,.11)}
+.ix-title{margin:0;font-size:clamp(42px,6.4vw,82px);line-height:.99;letter-spacing:-.055em;font-weight:850}
+.ix-title span{color:var(--ix-green)}
+.ix-subtitle{max-width:720px;margin:26px auto 0;color:#566173;font-size:clamp(18px,2vw,23px);line-height:1.55}
+.ix-actions{display:flex;justify-content:center;gap:13px;flex-wrap:wrap;margin-top:34px}
+.ix-btn{
+    min-height:54px;padding:0 24px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    gap:10px;text-decoration:none;font-size:16px;font-weight:800;transition:.2s ease;
+}
+.ix-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 34px rgba(22,163,74,.24)}
+.ix-btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 38px rgba(22,163,74,.3)}
+.ix-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ix-btn-secondary:hover{border-color:#94a3b8;transform:translateY(-2px)}
+
+.ix-hero{
+    position:relative;padding:108px 0 74px;text-align:center;
+    background:
+        radial-gradient(circle at 18% 18%,rgba(37,99,235,.10),transparent 27%),
+        radial-gradient(circle at 82% 24%,rgba(34,197,94,.13),transparent 29%),
+        linear-gradient(180deg,#fbfdff 0%,#fff 88%);
+}
+.ix-hero:after{content:"";position:absolute;left:12%;right:12%;bottom:0;height:1px;background:linear-gradient(90deg,transparent,#d9e4dd,transparent)}
+.ix-hero .ix-kicker{margin-bottom:28px}
+.ix-trust{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:28px;color:#687386;font-size:14px;font-weight:650}
+.ix-trust span{display:flex;align-items:center;gap:7px}.ix-trust b{color:var(--ix-green)}
+
+.ix-proof{padding:58px 0}
+.ix-proof-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--ix-line);border-radius:24px;background:#fff;box-shadow:var(--ix-shadow);overflow:hidden}
+.ix-proof-item{padding:30px 24px;text-align:center;border-right:1px solid var(--ix-line)}
+.ix-proof-item:last-child{border-right:0}
+.ix-proof-number{display:block;font-size:34px;line-height:1;font-weight:850;letter-spacing:-.04em;color:var(--ix-ink)}
+.ix-proof-label{display:block;margin-top:9px;color:var(--ix-muted);font-size:14px;line-height:1.45}
+
+.ix-section{padding:100px 0}
+.ix-section-soft{background:var(--ix-soft)}
+.ix-section-head{max-width:780px;margin:0 auto 48px;text-align:center}
+.ix-eyebrow{margin-bottom:17px;color:var(--ix-green-dark);font-size:13px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ix-h2{margin:0;font-size:clamp(36px,4.5vw,60px);line-height:1.05;letter-spacing:-.045em}
+.ix-lead{margin:20px auto 0;color:var(--ix-muted);font-size:18px;line-height:1.65}
+
+.ix-evidence-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.ix-evidence-card{min-height:300px;padding:34px;border:1px solid var(--ix-line);border-radius:26px;background:#fff;box-shadow:0 14px 42px rgba(15,23,42,.055)}
+.ix-icon{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;margin-bottom:50px;background:linear-gradient(145deg,#ecfdf3,#e9f4ff);color:var(--ix-green-dark)}
+.ix-icon svg{width:28px;height:28px}
+.ix-evidence-card h3{margin:0 0 12px;font-size:24px;letter-spacing:-.025em}
+.ix-evidence-card p{margin:0;color:var(--ix-muted);font-size:16px;line-height:1.65}
+
+.ix-workflow{position:relative;max-width:980px;margin:auto}
+.ix-workflow:before{content:"";position:absolute;left:35px;top:42px;bottom:42px;width:2px;background:linear-gradient(var(--ix-blue),var(--ix-green))}
+.ix-step{position:relative;display:grid;grid-template-columns:72px 1fr;gap:28px;align-items:start;padding:25px 0}
+.ix-step-number{position:relative;z-index:1;width:72px;height:72px;border-radius:22px;display:grid;place-items:center;background:#fff;border:1px solid var(--ix-line);box-shadow:0 10px 30px rgba(15,23,42,.08);font-size:20px;font-weight:850}
+.ix-step-copy{padding:8px 0 0}
+.ix-step-copy h3{margin:0 0 8px;font-size:30px;letter-spacing:-.03em}
+.ix-step-copy p{max-width:670px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.65}
+
+.ix-product-section{padding:110px 0;background:#fff}
+.ix-carousel-wrap{position:relative}
+.ix-carousel{
+    display:grid;grid-auto-flow:column;grid-auto-columns:min(76vw,860px);gap:22px;
+    overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:6px max(20px,calc((100vw - 1180px)/2)) 32px;
+    scrollbar-width:none;
+}
+.ix-carousel::-webkit-scrollbar{display:none}
+.ix-product{scroll-snap-align:center;position:relative;min-height:520px;border:1px solid var(--ix-line);border-radius:30px;background:#f8fafc;overflow:hidden;box-shadow:var(--ix-shadow)}
+.ix-product-image{height:355px;background:linear-gradient(145deg,#eaf7ef,#edf3ff);overflow:hidden}
+.ix-product-image img{width:100%;height:100%;display:block;object-fit:cover;object-position:top center}
+.ix-product-copy{padding:28px 32px 31px;background:#fff}
+.ix-product-top{display:flex;align-items:flex-start;justify-content:space-between;gap:25px}
+.ix-product h3{margin:0;font-size:28px;letter-spacing:-.03em}
+.ix-product p{max-width:630px;margin:10px 0 0;color:var(--ix-muted);font-size:16px;line-height:1.55}
+.ix-product-link{flex:0 0 auto;color:var(--ix-green-dark);font-weight:800;text-decoration:none}
+.ix-carousel-controls{display:flex;justify-content:center;gap:10px;margin-top:8px}
+.ix-round-btn{width:52px;height:52px;border-radius:50%;border:1px solid var(--ix-line);background:#fff;color:var(--ix-ink);font-size:24px;cursor:pointer;box-shadow:0 10px 28px rgba(15,23,42,.07)}
+.ix-round-btn:hover{border-color:#9aa7b6}
+
+.ix-feature-stage{display:grid;grid-template-columns:.82fr 1.18fr;gap:64px;align-items:center}
+.ix-feature-copy .ix-h2{font-size:clamp(38px,4.8vw,64px)}
+.ix-feature-copy p{margin:24px 0 0;color:var(--ix-muted);font-size:19px;line-height:1.7}
+.ix-mini-card{margin-top:26px;padding:20px 22px;border:1px solid #dce7df;border-radius:18px;background:#fff;box-shadow:0 12px 35px rgba(15,23,42,.06)}
+.ix-mini-card strong{display:block;margin-bottom:5px;color:var(--ix-green-dark)}
+.ix-screen{position:relative;padding:16px;border:1px solid var(--ix-line);border-radius:28px;background:#fff;box-shadow:var(--ix-shadow);transform:rotate(1deg)}
+.ix-screen:before{content:"";display:block;width:54px;height:6px;margin:0 auto 13px;border-radius:99px;background:#dce3ea}
+.ix-screen img{width:100%;display:block;border-radius:17px}
+.ix-float{position:absolute;padding:14px 17px;border:1px solid var(--ix-line);border-radius:15px;background:rgba(255,255,255,.94);box-shadow:0 15px 35px rgba(15,23,42,.12);font-size:13px;font-weight:800;backdrop-filter:blur(8px)}
+.ix-float-one{left:-48px;top:22%}.ix-float-two{right:-35px;bottom:18%}.ix-float b{color:var(--ix-green)}
+
+.ix-trust-panel{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;padding:58px;border-radius:30px;background:#0c1728;color:#fff;box-shadow:0 30px 80px rgba(15,23,42,.18)}
+.ix-trust-panel .ix-eyebrow{color:#5ee58d}.ix-trust-panel .ix-h2{font-size:clamp(35px,4vw,54px)}
+.ix-trust-panel p{color:#b3bfce;font-size:17px;line-height:1.7}
+.ix-trust-list{display:grid;gap:13px}
+.ix-trust-row{display:grid;grid-template-columns:38px 1fr;gap:14px;align-items:start;padding:17px;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:rgba(255,255,255,.045)}
+.ix-check{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:rgba(34,197,94,.14);color:#67e892;font-weight:900}
+.ix-trust-row strong{display:block;margin-bottom:3px}.ix-trust-row span{color:#aebccc;font-size:14px;line-height:1.5}
+
+.ix-support-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.ix-support-item{padding:24px;border:1px solid var(--ix-line);border-radius:19px;background:#fff;color:var(--ix-ink);text-decoration:none;transition:.2s ease}
+.ix-support-item:hover{transform:translateY(-3px);box-shadow:0 14px 35px rgba(15,23,42,.07)}
+.ix-support-item strong{display:block;font-size:17px}.ix-support-item span{display:block;margin-top:6px;color:var(--ix-muted);font-size:14px;line-height:1.5}
+
+.ix-faq{max-width:860px;margin:auto}
+.ix-faq details{border-bottom:1px solid var(--ix-line)}
+.ix-faq summary{padding:23px 4px;cursor:pointer;list-style:none;font-size:18px;font-weight:800}
+.ix-faq summary::-webkit-details-marker{display:none}
+.ix-faq summary:after{content:"+";float:right;color:var(--ix-green);font-size:24px}
+.ix-faq details[open] summary:after{content:"−"}
+.ix-faq p{margin:0;padding:0 35px 23px 4px;color:var(--ix-muted);font-size:16px;line-height:1.65}
+
+.ix-final{padding:112px 20px;text-align:center;background:linear-gradient(145deg,#f1f8f4,#f3f7ff)}
+.ix-final .ix-h2{font-size:clamp(42px,5.5vw,72px)}
+.ix-price{margin-top:23px;color:var(--ix-green-dark);font-weight:800}
+.ix-fine{margin-top:16px;color:#7b8797;font-size:13px}
+
+@media(max-width:900px){
+    .ix-proof-grid{grid-template-columns:repeat(2,1fr)}
+    .ix-proof-item:nth-child(2){border-right:0}.ix-proof-item:nth-child(-n+2){border-bottom:1px solid var(--ix-line)}
+    .ix-evidence-grid,.ix-support-grid{grid-template-columns:1fr}
+    .ix-feature-stage,.ix-trust-panel{grid-template-columns:1fr;gap:40px}
+    .ix-carousel{grid-auto-columns:86vw}
+    .ix-product{min-height:470px}.ix-product-image{height:310px}
+    .ix-float-one{left:-8px}.ix-float-two{right:-8px}
+}
+@media(max-width:600px){
+    .ix-shell{width:min(100% - 28px,1180px)}
+    .ix-hero{padding:76px 0 55px}.ix-title{font-size:46px}.ix-subtitle{font-size:18px}
+    .ix-actions{flex-direction:column}.ix-btn{width:100%}
+    .ix-proof{padding:36px 0}.ix-proof-number{font-size:29px}.ix-proof-item{padding:23px 12px}
+    .ix-section,.ix-product-section{padding:76px 0}.ix-section-head{margin-bottom:34px}
+    .ix-evidence-card{min-height:0;padding:27px}.ix-icon{margin-bottom:30px}
+    .ix-step{grid-template-columns:56px 1fr;gap:17px}.ix-step-number{width:56px;height:56px;border-radius:17px}.ix-workflow:before{left:27px}
+    .ix-step-copy h3{font-size:23px}.ix-step-copy p{font-size:15px}
+    .ix-carousel{grid-auto-columns:91vw;gap:13px;padding-inline:14px}.ix-product{min-height:430px;border-radius:22px}.ix-product-image{height:245px}
+    .ix-product-copy{padding:23px}.ix-product-top{display:block}.ix-product-link{display:inline-block;margin-top:18px}.ix-product h3{font-size:24px}
+    .ix-feature-stage{gap:30px}.ix-screen{transform:none}.ix-float{position:static;display:inline-block;margin:10px 5px 0 0}
+    .ix-trust-panel{padding:31px 23px;border-radius:24px}.ix-support-grid{gap:11px}
+}
+</style>
+</head>
+
+<body>
+<div id="navbar"></div>
+
+<main class="ix-page">
+
+<section class="ix-hero">
+    <div class="ix-shell">
+        <div class="ix-kicker"><span class="ix-dot"></span> Automated NASDAQ market intelligence</div>
+        <h1 class="ix-title">From thousands of stocks<br><span>to six worth investigating.</span></h1>
+        <p class="ix-subtitle">EdgeBreak finds the chart setup, follows unusual off-exchange activity and measures where pressure may be building beneath the surface.</p>
+        <div class="ix-actions">
+            <a class="ix-btn ix-btn-primary" href="/pricing.html">Start 7-Day Free Trial <span>→</span></a>
+            <a class="ix-btn ix-btn-secondary" href="#how-it-works">See How It Works</a>
+        </div>
+        <div class="ix-trust">
+            <span><b>✓</b> NASDAQ focused</span>
+            <span><b>✓</b> Evidence-led</span>
+            <span><b>✓</b> Built for independent research</span>
+        </div>
+    </div>
+</section>
+
+<section class="ix-proof" aria-label="EdgeBreak daily scan facts">
+    <div class="ix-shell ix-proof-grid">
+        <div class="ix-proof-item"><span class="ix-proof-number">3,200+</span><span class="ix-proof-label">NASDAQ stocks scanned</span></div>
+        <div class="ix-proof-item"><span class="ix-proof-number">Multiple</span><span class="ix-proof-label">technical filters applied</span></div>
+        <div class="ix-proof-item"><span class="ix-proof-number">4 weeks</span><span class="ix-proof-label">of venue activity assessed</span></div>
+        <div class="ix-proof-item"><span class="ix-proof-number">6</span><span class="ix-proof-label">stocks surfaced daily</span></div>
+    </div>
+</section>
+
+<section class="ix-section">
+    <div class="ix-shell">
+        <header class="ix-section-head">
+            <div class="ix-eyebrow">Evidence behind the setup</div>
+            <h2 class="ix-h2">See what the chart alone cannot show.</h2>
+            <p class="ix-lead">EdgeBreak combines technical structure with market activity that is difficult to uncover through ordinary stock research.</p>
+        </header>
+        <div class="ix-evidence-grid">
+            <article class="ix-evidence-card">
+                <div class="ix-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18l5-6 4 3 9-10"/><path d="M17 5h4v4"/></svg></div>
+                <h3>Technical Structure</h3>
+                <p>Breakouts, reversals and tight consolidations are scored, compared and filtered.</p>
+            </article>
+            <article class="ix-evidence-card">
+                <div class="ix-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="12" r="3"/><circle cx="18" cy="7" r="3"/><circle cx="18" cy="17" r="3"/><path d="M9 11l6-3M9 13l6 3"/></svg></div>
+                <h3>Hidden Market Activity</h3>
+                <p>Unusual off-exchange activity is compared across multiple FINRA reporting venues.</p>
+            </article>
+            <article class="ix-evidence-card">
+                <div class="ix-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/></svg></div>
+                <h3>Pressure Building</h3>
+                <p>Proprietary indicators measure persistence, participation and whether the timing supports the chart.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="ix-section ix-section-soft" id="how-it-works">
+    <div class="ix-shell">
+        <header class="ix-section-head">
+            <div class="ix-eyebrow">How EdgeBreak works</div>
+            <h2 class="ix-h2">A complete first research pass. Every market day.</h2>
+        </header>
+        <div class="ix-workflow">
+            <article class="ix-step"><div class="ix-step-number">01</div><div class="ix-step-copy"><h3>Find the setup</h3><p>More than 3,200 NASDAQ-listed stocks are scanned after the U.S. market closes.</p></div></article>
+            <article class="ix-step"><div class="ix-step-number">02</div><div class="ix-step-copy"><h3>Remove the noise</h3><p>Weak, overextended and unsuitable structures are removed through a rules-based culling process.</p></div></article>
+            <article class="ix-step"><div class="ix-step-number">03</div><div class="ix-step-copy"><h3>Follow the footprints</h3><p>FINRA activity and unusual behaviour across multiple reporting venues add evidence behind the chart.</p></div></article>
+            <article class="ix-step"><div class="ix-step-number">04</div><div class="ix-step-copy"><h3>Measure the pressure</h3><p>The proprietary Pressure Building Index examines persistence, participation and timing.</p></div></article>
+            <article class="ix-step"><div class="ix-step-number">05</div><div class="ix-step-copy"><h3>Surface six</h3><p>Six focused stocks are presented with a clear explanation of why EdgeBreak found them.</p></div></article>
+        </div>
+    </div>
+</section>
+
+<section class="ix-product-section" aria-labelledby="products-title">
+    <header class="ix-section-head ix-shell">
+        <div class="ix-eyebrow">One connected platform</div>
+        <h2 class="ix-h2" id="products-title">Discover. Investigate. Understand.</h2>
+        <p class="ix-lead">Swipe through the tools that take you from automated discovery to deeper independent research.</p>
+    </header>
+
+    <div class="ix-carousel-wrap">
+        <div class="ix-carousel" id="productCarousel" tabindex="0" aria-label="EdgeBreak products">
+            <article class="ix-product">
+                <div class="ix-product-image"><img src="/images/nasdaq-AI-stock-scanner.webp" alt="EdgeBreak automated NASDAQ scan" loading="lazy"></div>
+                <div class="ix-product-copy"><div class="ix-product-top"><div><h3>Automated Daily Scan</h3><p>Open EdgeBreak after the market close and begin with six stocks already scanned, filtered and explained.</p></div><a class="ix-product-link" href="/nasdaq-stock-scanner.html">Explore →</a></div></div>
+            </article>
+            <article class="ix-product">
+                <div class="ix-product-image"><img src="/images/scanner-preview.webp" alt="EdgeBreak Breakout and Pre-Breakout scanners" loading="lazy"></div>
+                <div class="ix-product-copy"><div class="ix-product-top"><div><h3>Breakout & Pre-Breakout</h3><p>Search for established breakouts, developing reversals and structures approaching resistance.</p></div><a class="ix-product-link" href="/nasdaq-stock-scanner.html">Explore →</a></div></div>
+            </article>
+            <article class="ix-product">
+                <div class="ix-product-image"><img src="/images/launchpad-preview.webp" alt="EdgeBreak Launch Pad scanner" loading="lazy"></div>
+                <div class="ix-product-copy"><div class="ix-product-top"><div><h3>Launch Pad</h3><p>Find stocks building organised bases and tight trading ranges before a larger move develops.</p></div><a class="ix-product-link" href="/launch-pad.html">Explore →</a></div></div>
+            </article>
+            <article class="ix-product">
+                <div class="ix-product-image"><img src="/images/ai-research-preview.webp" alt="EdgeBreak company research" loading="lazy"></div>
+                <div class="ix-product-copy"><div class="ix-product-top"><div><h3>Company Research</h3><p>Investigate company information, financial highlights, news, filings and institutional context.</p></div><a class="ix-product-link" href="/nasdaq-stock-scanner.html">Explore →</a></div></div>
+            </article>
+            <article class="ix-product">
+                <div class="ix-product-image"><img src="/images/ai-chart-analysis-preview.webp" alt="EdgeBreak AI chart analysis" loading="lazy"></div>
+                <div class="ix-product-copy"><div class="ix-product-top"><div><h3>Chart Analysis</h3><p>Upload a chart for a clear explanation of structure, support, resistance, consolidation and volume.</p></div><a class="ix-product-link" href="/nasdaq-stock-scanner.html">Explore →</a></div></div>
+            </article>
+            <article class="ix-product">
+                <div class="ix-product-image"><img src="/images/ai-panel-preview.webp" alt="EdgeBreak guided and conversational AI" loading="lazy"></div>
+                <div class="ix-product-copy"><div class="ix-product-top"><div><h3>Guided & Conversational AI</h3><p>Choose structured questions for quick answers or explore your own research questions naturally.</p></div><a class="ix-product-link" href="/nasdaq-stock-scanner.html">Explore →</a></div></div>
+            </article>
+            <article class="ix-product">
+                <div class="ix-product-image"><img src="/images/edgebreak-academy.webp" alt="EdgeBreak Academy" loading="lazy"></div>
+                <div class="ix-product-copy"><div class="ix-product-top"><div><h3>EdgeBreak Academy</h3><p>Build the knowledge to understand technical structure, volume, breakouts and independent research.</p></div><a class="ix-product-link" href="/academy.html">Explore →</a></div></div>
+            </article>
+        </div>
+        <div class="ix-carousel-controls">
+            <button class="ix-round-btn" id="carouselPrev" type="button" aria-label="Previous product">←</button>
+            <button class="ix-round-btn" id="carouselNext" type="button" aria-label="Next product">→</button>
+        </div>
+    </div>
+</section>
+
+<section class="ix-section ix-section-soft">
+    <div class="ix-shell ix-feature-stage">
+        <div class="ix-feature-copy">
+            <div class="ix-eyebrow">The EdgeBreak difference</div>
+            <h2 class="ix-h2">Research most people cannot reproduce with a single search.</h2>
+            <p>EdgeBreak combines technical structure, historical market data, off-exchange activity and unusual multi-venue behaviour inside one automated research pipeline.</p>
+            <div class="ix-mini-card"><strong>Ready after market close</strong><span>The initial NASDAQ scan and evidence check have already been completed.</span></div>
+        </div>
+        <div class="ix-screen">
+            <img src="/images/nasdaq-AI-stock-scanner.webp" alt="EdgeBreak automated scan results showing the daily shortlist" loading="lazy">
+            <div class="ix-float ix-float-one"><b>3,200+</b> stocks checked</div>
+            <div class="ix-float ix-float-two"><b>6</b> surfaced for research</div>
+        </div>
+    </div>
+</section>
+
+<section class="ix-section">
+    <div class="ix-shell ix-trust-panel">
+        <div>
+            <div class="ix-eyebrow">Trust through transparency</div>
+            <h2 class="ix-h2">Evidence first. Claims kept in check.</h2>
+            <p>EdgeBreak shows what the data suggests while remaining clear about what market data cannot prove.</p>
+        </div>
+        <div class="ix-trust-list">
+            <div class="ix-trust-row"><div class="ix-check">✓</div><div><strong>Careful language</strong><span>Market footprints are evidence of possible institutional-scale behaviour—not confirmed buying.</span></div></div>
+            <div class="ix-trust-row"><div class="ix-check">✓</div><div><strong>Independent research</strong><span>Every surfaced stock is an opportunity for investigation, not a recommendation.</span></div></div>
+            <div class="ix-trust-row"><div class="ix-check">✓</div><div><strong>Deeper verification</strong><span>Research tools help users check company disclosures, financial information and official filings.</span></div></div>
+        </div>
+    </div>
+</section>
+
+<section class="ix-section ix-section-soft">
+    <div class="ix-shell">
+        <header class="ix-section-head"><div class="ix-eyebrow">Go deeper when you choose</div><h2 class="ix-h2">More than a daily shortlist.</h2></header>
+        <div class="ix-support-grid">
+            <a class="ix-support-item" href="/nasdaq-stock-scanner.html"><strong>Manual NASDAQ Scanners</strong><span>Explore Breakout, Pre-Breakout and Launch Pad results yourself.</span></a>
+            <a class="ix-support-item" href="/nasdaq-stock-scanner.html"><strong>Company & Chart Research</strong><span>Investigate the business, market context and technical picture.</span></a>
+            <a class="ix-support-item" href="/academy.html"><strong>EdgeBreak Academy</strong><span>Learn how to interpret structures, evidence and risk independently.</span></a>
+        </div>
+    </div>
+</section>
+
+<section class="ix-section">
+    <div class="ix-shell">
+        <header class="ix-section-head"><div class="ix-eyebrow">Common questions</div><h2 class="ix-h2">Straight answers.</h2></header>
+        <div class="ix-faq">
+            <details><summary>What does EdgeBreak do?</summary><p>EdgeBreak scans the NASDAQ for technical structures, applies rules-based filters, assesses off-exchange and multi-venue activity, and presents six stocks for independent research after each market close.</p></details>
+            <details><summary>Does EdgeBreak confirm institutional buying?</summary><p>No. FINRA data is delayed and does not identify buy or sell direction. EdgeBreak uses careful language to describe possible institutional-scale behaviour inferred from unusual activity.</p></details>
+            <details><summary>Does EdgeBreak tell me what to buy?</summary><p>No. EdgeBreak provides stock discovery, market information, educational tools and descriptive analysis. It does not provide buy, sell or hold recommendations.</p></details>
+            <details><summary>Can I run the scanners myself?</summary><p>Yes. The automated scan provides a focused daily starting point, while the platform also gives you access to manual scanners and deeper research tools.</p></details>
+            <details><summary>Can beginners use EdgeBreak?</summary><p>Yes. Reports use clear language, Guided AI helps explain results, and EdgeBreak Academy teaches the concepts behind the platform.</p></details>
+        </div>
+    </div>
+</section>
+
+<section class="ix-final">
+    <div class="ix-shell">
+        <div class="ix-eyebrow">Your daily starting point</div>
+        <h2 class="ix-h2">Scan less.<br>Investigate what matters.</h2>
+        <p class="ix-lead">Start with six evidence-backed NASDAQ setups after every market close.</p>
+        <div class="ix-actions"><a class="ix-btn ix-btn-primary" href="/pricing.html">Start 7-Day Free Trial <span>→</span></a><a class="ix-btn ix-btn-secondary" href="/edgebreak-free.html">Try EdgeBreak Free</a></div>
+        <div class="ix-price">Standard $19.99 • AI Unlimited $29.99</div>
+        <div class="ix-fine">Cancel anytime • Research and educational information only</div>
+    </div>
+</section>
+
+</main>
+
+<div id="footer"></div>
+<script src="/js/components.js"></script>
+<script>
+(function(){
+    const carousel=document.getElementById('productCarousel');
+    const previous=document.getElementById('carouselPrev');
+    const next=document.getElementById('carouselNext');
+    if(!carousel||!previous||!next)return;
+    function distance(){const card=carousel.querySelector('.ix-product');return card?card.getBoundingClientRect().width+22:700}
+    previous.addEventListener('click',()=>carousel.scrollBy({left:-distance(),behavior:'smooth'}));
+    next.addEventListener('click',()=>carousel.scrollBy({left:distance(),behavior:'smooth'}));
+    carousel.addEventListener('keydown',event=>{
+        if(event.key==='ArrowLeft'){event.preventDefault();carousel.scrollBy({left:-distance(),behavior:'smooth'})}
+        if(event.key==='ArrowRight'){event.preventDefault();carousel.scrollBy({left:distance(),behavior:'smooth'})}
+    });
+})();
+</script>
+</body>
+</html>
