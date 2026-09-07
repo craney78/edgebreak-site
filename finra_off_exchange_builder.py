@@ -45,6 +45,28 @@ MIN_VENUE_HISTORY = 8
 MIN_WEEKLY_VENUE_SHARES = 5000
 MIN_APPROX_VENUE_NOTIONAL = 250000
 
+# =========================================================
+# PRESSURE BUILDING EVIDENCE SETTINGS
+# =========================================================
+#
+# This builder records evidence only.
+#
+# It does NOT:
+# - change the shortlist
+# - calculate the final Pressure Building Index
+# - change candidate ranks
+#
+# daily_brief_finra_rerank.py will:
+# 1. complete its existing ranking
+# 2. lock the top six
+# 3. calculate PBI for those six only
+# =========================================================
+
+PRESSURE_MIN_CURRENT_PERCENTILE = 50
+PRESSURE_MIN_UNUSUAL_VENUES = 2
+PRESSURE_MIN_MULTI_VENUE_WEEKS = 2
+PRESSURE_LOOKBACK_WEEKS = 4
+
 
 VERY_LOW_INDEX = 60
 LOW_INDEX = 80
@@ -1740,25 +1762,19 @@ def build_cross_venue_footprint(
 
         if key not in combined:
 
-            combined[
-                key
-            ] = dict(
+            combined[key] = dict(
                 row
             )
 
         else:
 
-            combined[
-                key
-            ][
-                "shares"
-            ] += row["shares"]
+            combined[key]["shares"] += (
+                row["shares"]
+            )
 
-            combined[
-                key
-            ][
-                "trades"
-            ] += row["trades"]
+            combined[key]["trades"] += (
+                row["trades"]
+            )
 
     rows = list(
         combined.values()
@@ -1769,6 +1785,7 @@ def build_cross_venue_footprint(
         row["week"]
 
         for row in rows
+
     })
 
     venue_history = {}
@@ -1804,13 +1821,16 @@ def build_cross_venue_footprint(
             current_row = next(
                 (
                     row
+
                     for row in history
+
                     if row["week"] == week
                 ),
                 None
             )
 
             if current_row is None:
+
                 continue
 
             prior_shares = [
@@ -1838,11 +1858,15 @@ def build_cross_venue_footprint(
             )
 
             ratio = (
+
                 current_row["shares"]
                 /
                 baseline
+
                 if baseline > 0
+
                 else None
+
             )
 
             deviation = standard_deviation(
@@ -1863,31 +1887,41 @@ def build_cross_venue_footprint(
             )
 
             approximate_notional = (
+
                 current_row["shares"]
                 *
                 current_price
+
                 if (
                     current_price is not None
                     and
                     current_price > 0
                 )
+
                 else None
+
             )
 
             large_enough = (
+
                 current_row["shares"]
                 >=
                 MIN_WEEKLY_VENUE_SHARES
+
             )
 
             if approximate_notional is not None:
 
                 large_enough = (
+
                     large_enough
+
                     and
+
                     approximate_notional
                     >=
                     MIN_APPROX_VENUE_NOTIONAL
+
                 )
 
             statistically_unusual = (
@@ -1921,6 +1955,7 @@ def build_cross_venue_footprint(
                     and
                     percentile >= 95
                 )
+
             )
 
             if (
@@ -1964,14 +1999,18 @@ def build_cross_venue_footprint(
                     ],
 
                 "average_trade_size":
-                    round(
-                        current_row["shares"]
-                        /
-                        current_row["trades"],
-                        1
-                    )
-                    if current_row["trades"] > 0
-                    else None,
+                    (
+                        round(
+                            current_row["shares"]
+                            /
+                            current_row["trades"],
+                            1
+                        )
+
+                        if current_row["trades"] > 0
+
+                        else None
+                    ),
 
                 "baseline_median_shares":
                     round(
@@ -1980,31 +2019,45 @@ def build_cross_venue_footprint(
                     ),
 
                 "activity_ratio":
-                    round(
-                        ratio,
-                        2
-                    )
-                    if ratio is not None
-                    else None,
+                    (
+                        round(
+                            ratio,
+                            2
+                        )
+
+                        if ratio is not None
+
+                        else None
+                    ),
 
                 "z_score":
-                    round(
-                        z_score,
-                        2
-                    )
-                    if z_score is not None
-                    else None,
+                    (
+                        round(
+                            z_score,
+                            2
+                        )
+
+                        if z_score is not None
+
+                        else None
+                    ),
 
                 "percentile":
                     percentile,
 
                 "approximate_notional":
-                    round(
-                        approximate_notional,
-                        2
+                    (
+                        round(
+                            approximate_notional,
+                            2
+                        )
+
+                        if approximate_notional
+                        is not None
+
+                        else None
                     )
-                    if approximate_notional is not None
-                    else None
+
             })
 
         unusual_venues.sort(
@@ -2026,37 +2079,56 @@ def build_cross_venue_footprint(
 
             "channels":
                 sorted({
+
                     item["channel"]
-                    for item in unusual_venues
+
+                    for item
+                    in unusual_venues
+
                 }),
 
             "reporting_venues":
                 unusual_venues
+
         })
 
     multi_venue_events = [
 
         event
 
-        for event in weekly_events
+        for event
+        in weekly_events
 
-        if event[
-            "unusual_venue_count"
-        ] >= 2
+        if (
+            event[
+                "unusual_venue_count"
+            ]
+            >=
+            PRESSURE_MIN_UNUSUAL_VENUES
+        )
+
     ]
 
     strongest_event = (
+
         max(
             multi_venue_events,
+
             key=lambda event: (
+
                 event[
                     "unusual_venue_count"
                 ],
+
                 event["week"]
+
             )
         )
+
         if multi_venue_events
+
         else None
+
     )
 
     consecutive_weeks = 0
@@ -2069,7 +2141,8 @@ def build_cross_venue_footprint(
             event[
                 "unusual_venue_count"
             ]
-            >= 2
+            >=
+            PRESSURE_MIN_UNUSUAL_VENUES
         ):
 
             consecutive_weeks += 1
@@ -2127,7 +2200,9 @@ def build_cross_venue_footprint(
                     ),
                     0
                 )
-                for venue in strongest_event[
+
+                for venue
+                in strongest_event[
                     "reporting_venues"
                 ]
             ),
@@ -2144,7 +2219,9 @@ def build_cross_venue_footprint(
             )
         )
 
-    if len(multi_venue_events) >= 2:
+    if len(
+        multi_venue_events
+    ) >= 2:
 
         activity_score += 12
 
@@ -2152,7 +2229,9 @@ def build_cross_venue_footprint(
             "repeated_multi_venue_weeks"
         )
 
-    if len(multi_venue_events) >= 3:
+    if len(
+        multi_venue_events
+    ) >= 3:
 
         activity_score += 6
 
@@ -2198,10 +2277,14 @@ def build_cross_venue_footprint(
         )
 
     elif any(
+
         event[
             "unusual_venue_count"
         ] == 1
-        for event in weekly_events
+
+        for event
+        in weekly_events
+
     ):
 
         label = (
@@ -2220,12 +2303,16 @@ def build_cross_venue_footprint(
             True,
 
         "latest_finra_week":
-            weeks[-1]
-            if weeks
-            else None,
+            (
+                weeks[-1]
+                if weeks
+                else None
+            ),
 
         "weeks_available":
-            len(weeks),
+            len(
+                weeks
+            ),
 
         "venues_available":
             len(
@@ -2234,6 +2321,9 @@ def build_cross_venue_footprint(
 
         "recent_weeks_analyzed":
             recent_weeks,
+
+        "recent_weekly_venue_activity":
+            weekly_events,
 
         "multi_venue_weeks_last_4":
             len(
@@ -2270,7 +2360,377 @@ def build_cross_venue_footprint(
                 "reporting broker-dealers, not "
                 "confirmed investment-manager owners."
             )
+
     }
+
+# =========================================================
+# PRESSURE BUILDING EVIDENCE
+# =========================================================
+
+def build_pressure_building_evidence(
+    analytics,
+    institutional_footprint
+):
+
+    """
+    Prepare FINRA-only evidence for the later
+    Pressure Building Index stage.
+
+    This function does not use chart structure,
+    select the top six or apply ranking points.
+    """
+
+    if not isinstance(
+        analytics,
+        dict
+    ):
+
+        analytics = {}
+
+    if not isinstance(
+        institutional_footprint,
+        dict
+    ):
+
+        institutional_footprint = {}
+
+
+    # =====================================================
+    # CURRENT FINRA ACTIVITY
+    # =====================================================
+
+    current_percentile = safe_float(
+        analytics.get(
+            "volume_12_month_percentile"
+        ),
+        None
+    )
+
+
+    current_activity_gate_passed = (
+
+        current_percentile is not None
+
+        and
+
+        current_percentile
+        >=
+        PRESSURE_MIN_CURRENT_PERCENTILE
+
+    )
+
+
+    # =====================================================
+    # MULTI-VENUE PERSISTENCE
+    # =====================================================
+
+    multi_venue_weeks = safe_int(
+        institutional_footprint.get(
+            "multi_venue_weeks_last_4"
+        ),
+        0
+    )
+
+
+    consecutive_weeks = safe_int(
+        institutional_footprint.get(
+            "consecutive_multi_venue_weeks"
+        ),
+        0
+    )
+
+
+    strongest_event = (
+        institutional_footprint.get(
+            "strongest_multi_venue_week"
+        )
+    )
+
+
+    if not isinstance(
+        strongest_event,
+        dict
+    ):
+
+        strongest_event = {}
+
+
+    strongest_venue_count = safe_int(
+        strongest_event.get(
+            "unusual_venue_count"
+        ),
+        0
+    )
+
+
+    # =====================================================
+    # RECENT WEEKLY VENUE HISTORY
+    # =====================================================
+
+    recent_activity = (
+        institutional_footprint.get(
+            "recent_weekly_venue_activity",
+            []
+        )
+    )
+
+
+    if not isinstance(
+        recent_activity,
+        list
+    ):
+
+        recent_activity = []
+
+
+    recent_activity = recent_activity[
+        -PRESSURE_LOOKBACK_WEEKS:
+    ]
+
+
+    latest_event = (
+
+        recent_activity[-1]
+
+        if recent_activity
+
+        else {}
+
+    )
+
+
+    if not isinstance(
+        latest_event,
+        dict
+    ):
+
+        latest_event = {}
+
+
+    latest_venue_count = safe_int(
+        latest_event.get(
+            "unusual_venue_count"
+        ),
+        0
+    )
+
+
+    # =====================================================
+    # EVIDENCE GATES
+    # =====================================================
+
+    meaningful = bool(
+        institutional_footprint.get(
+            "meaningful_cross_venue_signal",
+            False
+        )
+    )
+
+
+    venue_gate_passed = (
+
+        meaningful
+
+        and
+
+        strongest_venue_count
+        >=
+        PRESSURE_MIN_UNUSUAL_VENUES
+
+    )
+
+
+    persistence_gate_passed = (
+
+        multi_venue_weeks
+        >=
+        PRESSURE_MIN_MULTI_VENUE_WEEKS
+
+    )
+
+
+    eligible = (
+
+        current_activity_gate_passed
+
+        and
+
+        venue_gate_passed
+
+        and
+
+        persistence_gate_passed
+
+    )
+
+
+    # =====================================================
+    # EVIDENCE STATE
+    # =====================================================
+
+    if eligible:
+
+        evidence_state = (
+            "ELIGIBLE_FOR_PRESSURE_INDEX"
+        )
+
+
+    elif (
+
+        venue_gate_passed
+
+        and
+
+        multi_venue_weeks >= 1
+
+    ):
+
+        evidence_state = (
+            "EARLY_OR_RECENT_VENUE_EVIDENCE"
+        )
+
+
+    elif meaningful:
+
+        evidence_state = (
+            "LIMITED_CROSS_VENUE_EVIDENCE"
+        )
+
+
+    else:
+
+        evidence_state = (
+            "NO_PRESSURE_CONFIRMATION"
+        )
+
+
+    # =====================================================
+    # REASON TAGS
+    # =====================================================
+
+    evidence_tags = []
+
+
+    if current_activity_gate_passed:
+
+        evidence_tags.append(
+            "current_finra_percentile_at_least_50"
+        )
+
+
+    if venue_gate_passed:
+
+        evidence_tags.append(
+            "at_least_two_unusual_venues"
+        )
+
+
+    if persistence_gate_passed:
+
+        evidence_tags.append(
+            "multi_venue_activity_in_at_least_two_of_four_weeks"
+        )
+
+
+    if consecutive_weeks >= 2:
+
+        evidence_tags.append(
+            "consecutive_multi_venue_weeks"
+        )
+
+
+    # =====================================================
+    # RESULT
+    # =====================================================
+
+    return {
+
+        "available":
+            bool(
+                analytics.get(
+                    "available",
+                    False
+                )
+            ),
+
+        "evidence_state":
+            evidence_state,
+
+        "eligible_for_pressure_index":
+            eligible,
+
+        "latest_finra_week":
+            analytics.get(
+                "latest_week"
+            ),
+
+        "current_finra_percentile":
+            current_percentile,
+
+        "minimum_current_finra_percentile":
+            PRESSURE_MIN_CURRENT_PERCENTILE,
+
+        "current_activity_gate_passed":
+            current_activity_gate_passed,
+
+        "meaningful_cross_venue_signal":
+            meaningful,
+
+        "strongest_unusual_venue_count":
+            strongest_venue_count,
+
+        "latest_week_unusual_venue_count":
+            latest_venue_count,
+
+        "minimum_unusual_venues":
+            PRESSURE_MIN_UNUSUAL_VENUES,
+
+        "venue_breadth_gate_passed":
+            venue_gate_passed,
+
+        "multi_venue_weeks_last_4":
+            multi_venue_weeks,
+
+        "consecutive_multi_venue_weeks":
+            consecutive_weeks,
+
+        "minimum_multi_venue_weeks":
+            PRESSURE_MIN_MULTI_VENUE_WEEKS,
+
+        "persistence_gate_passed":
+            persistence_gate_passed,
+
+        "latest_vs_prior_4_week_percent":
+            analytics.get(
+                "latest_vs_prior_4_week_percent"
+            ),
+
+        "latest_vs_prior_12_week_percent":
+            analytics.get(
+                "latest_vs_prior_12_week_percent"
+            ),
+
+        "recent_weekly_venue_activity":
+            recent_activity,
+
+        "strongest_multi_venue_week":
+            (
+                strongest_event
+                if strongest_event
+                else None
+            ),
+
+        "evidence_tags":
+            evidence_tags,
+
+        "important_note":
+            (
+                "This is delayed FINRA activity evidence. "
+                "It does not establish trade direction or "
+                "prove that an investment manager was buying."
+            )
+
+    }    
 
 
 def process_symbol(
@@ -2396,6 +2856,19 @@ def process_symbol(
         "yearly_activity_pattern"
     ] = yearly_trend
 
+
+    # =====================================================
+    # PRESSURE BUILDING EVIDENCE
+    # =====================================================
+
+    pressure_building_evidence = (
+        build_pressure_building_evidence(
+            analytics,
+            institutional_footprint
+        )
+    )
+
+
     print()
     print(
         f"{symbol} FINRA SUMMARY"
@@ -2442,6 +2915,11 @@ def process_symbol(
     print(
         f"Venue score          : "
         f"{institutional_footprint.get('score')}"
+    )
+
+    print(
+        f"Pressure evidence    : "
+        f"{pressure_building_evidence.get('evidence_state')}"
     )
 
     print()
@@ -2503,6 +2981,9 @@ def process_symbol(
 
         "institutional_footprint":
             institutional_footprint,
+
+        "pressure_building_evidence":
+            pressure_building_evidence,    
 
         "history":
             history
@@ -2623,6 +3104,14 @@ def main():
                 "48-week comparison period."
             ),
 
+                "pressure_building_note":
+            (
+                "This builder records FINRA persistence and "
+                "cross-venue evidence only. The existing "
+                "reranker locks its top six before calculating "
+                "the complete Pressure Building Index."
+            ),    
+
         "symbols":
             {}
     }
@@ -2726,6 +3215,11 @@ def main():
             {}
         )
 
+        pressure_evidence = record.get(
+            "pressure_building_evidence",
+            {}
+        )
+
         if not analytics:
 
             print(
@@ -2746,7 +3240,9 @@ def main():
             f"Venue "
             f"{footprint.get('label')} | "
             f"Score "
-            f"{footprint.get('score')}"
+            f"{footprint.get('score')} | "
+            f"Pressure "
+            f"{pressure_evidence.get('evidence_state')}"
         )
 
     print()

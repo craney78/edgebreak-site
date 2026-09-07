@@ -1,22 +1,6 @@
-# ============================================================
 # EDGEBREAK DAILY BRIEF CULL
-# ============================================================
-#
-# Full replacement based on current 2026-09-02 version.
-#
-# Adds:
-# - indicator/participation ranking
-# - preferred/special security profile exclusion
-# - scanner persistence intelligence
-#
-# Scanner persistence:
-# - counts appearances across actual saved scan sessions
-# - weekends/holidays do not break streaks
-# - never hard-culls
-# - max +3 ranking points
-# - automatically becomes more informative as history grows
-#
-# ============================================================
+# Reversal protection + consolidated continuation timing.
+# Scanner -> cull -> FINRA builder -> FINRA reranker.
 
 import json
 import os
@@ -25,31 +9,22 @@ import requests
 
 
 # ============================================================
-# TWELVE DATA
+# CONFIGURATION
 # ============================================================
 
 API_KEY = os.getenv(
-    "TWELVE_DATA_API_KEY",
-    "c0c94a09b4e242e0805cf8261b5bda67"
+    'TWELVE_DATA_API_KEY',
+    'c0c94a09b4e242e0805cf8261b5bda67'
 )
 
+BREAKOUT_FILE = 'breakout_scanner.json'
+PREBREAKOUT_FILE = 'scanner_database.json'
+INDICATOR_HISTORY_FILE = 'scanner_indicator_history.json'
 
-# ============================================================
-# FILES
-# ============================================================
-
-BREAKOUT_FILE = "breakout_scanner.json"
-PREBREAKOUT_FILE = "scanner_database.json"
-INDICATOR_HISTORY_FILE = "scanner_indicator_history.json"
-
-OUTPUT_FILE = "daily_brief_candidates.json"
-STATS_OUTPUT_FILE = "daily_brief_stats.json"
-PROFILE_CACHE_FILE = "daily_brief_profile_cache.json"
-
-
-# ============================================================
-# HARD CULL SETTINGS
-# ============================================================
+OUTPUT_FILE = 'daily_brief_candidates.json'
+STATS_OUTPUT_FILE = 'daily_brief_stats.json'
+PROFILE_CACHE_FILE = 'daily_brief_profile_cache.json'
+PRICE_HISTORY_CACHE_FILE = 'daily_brief_price_history_cache.json'
 
 MIN_AVERAGE_VOLUME = 100000
 MIN_AVERAGE_DOLLAR_VOLUME = 1000000
@@ -59,112 +34,90 @@ MAX_ABOVE_RESISTANCE = 15.0
 HIGH_VOLUME_EXCEPTION = 2.0
 
 PROFILE_SLEEP_TIME = 0.5
+PRICE_HISTORY_SLEEP_TIME = 0.25
 
+MIN_CONSOLIDATION_DAYS = 20
+MAX_CONSOLIDATION_DAYS = 30
+MAX_CONSOLIDATION_RANGE_PERCENT = 12.0
 
-# ============================================================
-# RANKING SETTINGS
-# ============================================================
+MAX_FRESH_BREAKOUT_ABOVE_RESISTANCE = 3.0
+MAX_ALLOWED_BREAKOUT_ABOVE_RESISTANCE = 6.0
+MIN_COMPLETED_BREAKOUT_RELATIVE_VOLUME = 1.0
+
+LARGE_60_DAY_MOVE_PERCENT = 30.0
+
+MIN_REVERSAL_DECLINE_PERCENT = 15.0
+MIN_REVERSAL_RECOVERY_PERCENT = 12.0
 
 TARGET_TOP_CANDIDATES = 20
 
 
 PARTICIPATION_SCORE_MAP = {
 
-    "STRONG_CONFIRMATION":
-        10,
+    'STRONG_CONFIRMATION': 10,
+    'POSITIVE_DIVERGENCE': 10,
+    'HOLDING_DURING_PULLBACK': 7,
+    'NORMAL_PULLBACK': 0,
+    'NEUTRAL': 0,
+    'WEAKENING': -4,
+    'PERSISTENT_DISTRIBUTION': -8
 
-    "POSITIVE_DIVERGENCE":
-        10,
-
-    "HOLDING_DURING_PULLBACK":
-        7,
-
-    "NORMAL_PULLBACK":
-        0,
-
-    "NEUTRAL":
-        0,
-
-    "WEAKENING":
-        -4,
-
-    "PERSISTENT_DISTRIBUTION":
-        -8
 }
 
-
-# ============================================================
-# SCANNER PERSISTENCE SCORE
-# ============================================================
-#
-# Deliberately low-weight.
-#
-# Persistence NEVER hard-culls a stock.
-#
-# As EdgeBreak accumulates more history, the same code will
-# automatically be able to classify longer persistence.
-#
-# ============================================================
 
 PERSISTENCE_SCORE_MAP = {
 
-    "INSUFFICIENT_HISTORY":
-        0,
+    'INSUFFICIENT_HISTORY': 0,
+    'NEW': 0,
+    'OCCASIONAL': 0,
+    'REPEATED': 1,
+    'PERSISTENT': 2,
+    'HIGHLY_PERSISTENT': 3
 
-    "NEW":
-        0,
-
-    "OCCASIONAL":
-        0,
-
-    "REPEATED":
-        1,
-
-    "PERSISTENT":
-        2,
-
-    "HIGHLY_PERSISTENT":
-        3
 }
 
 
-# ============================================================
-# EXCLUSION SETTINGS
-# ============================================================
-
 BANK_KEYWORDS = [
-    "banks",
-    "bank",
-    "savings",
-    "thrift"
+
+    'banks',
+    'bank',
+    'savings',
+    'thrift'
+
 ]
 
 
 PROPERTY_KEYWORDS = [
-    "reit",
-    "real estate"
+
+    'reit',
+    'real estate'
+
+]
+
+
+SHELL_COMPANY_KEYWORDS = [
+
+    'shell companies',
+    'shell company',
+    'blank check',
+    'acquisition corp',
+    'acquisition corporation',
+    'acquisition company',
+    'special purpose acquisition',
+    'spac'
+
 ]
 
 
 SPECIAL_SECURITY_SUFFIXES = {
 
-    "W":
-        "Warrant",
+    'W': 'Warrant',
+    'R': 'Rights',
+    'U': 'Units',
+    'P': 'Preferred',
+    'Q': 'Bankruptcy',
+    'V': 'When Issued'
 
-    "R":
-        "Rights",
-
-    "U":
-        "Units",
-
-    "P":
-        "Preferred",
-
-    "Q":
-        "Bankruptcy",
-
-    "V":
-        "When Issued"
 }
 
 
@@ -186,8 +139,8 @@ def load_json(
 
         with open(
             filename,
-            "r",
-            encoding="utf-8"
+            'r',
+            encoding='utf-8'
         ) as file:
 
             return json.load(
@@ -198,7 +151,7 @@ def load_json(
     except FileNotFoundError:
 
         print(
-            f"⚠️ File not found: {filename}"
+            f'⚠️ File not found: {filename}'
         )
 
         return default
@@ -207,7 +160,7 @@ def load_json(
     except Exception as error:
 
         print(
-            f"❌ Could not load {filename}: {error}"
+            f'❌ Could not load {filename}: {error}'
         )
 
         return default
@@ -220,8 +173,8 @@ def save_json(
 
     with open(
         filename,
-        "w",
-        encoding="utf-8"
+        'w',
+        encoding='utf-8'
     ) as file:
 
         json.dump(
@@ -274,10 +227,6 @@ if not isinstance(
     indicator_history = {}
 
 
-# ============================================================
-# LATEST INDICATOR SNAPSHOT
-# ============================================================
-
 def get_latest_indicator_snapshot(
     symbol
 ):
@@ -306,7 +255,7 @@ def get_latest_indicator_snapshot(
 
 
     history = record.get(
-        "history",
+        'history',
         []
     )
 
@@ -323,8 +272,7 @@ def get_latest_indicator_snapshot(
 
         item
 
-        for item
-        in history
+        for item in history
 
         if (
             isinstance(
@@ -335,7 +283,7 @@ def get_latest_indicator_snapshot(
             and
 
             item.get(
-                "date"
+                'date'
             )
         )
 
@@ -353,16 +301,12 @@ def get_latest_indicator_snapshot(
 
         key=lambda item:
             item.get(
-                "date",
-                ""
+                'date',
+                ''
             )
 
     )
 
-
-# ============================================================
-# INDICATOR INTELLIGENCE
-# ============================================================
 
 def get_indicator_intelligence(
     symbol
@@ -377,134 +321,99 @@ def get_indicator_intelligence(
 
         return {
 
-            "available":
-                False,
-
-            "date":
-                None,
-
-            "participation_state":
-                None,
-
-            "obv_price_relationship":
-                None,
-
-            "obv_trend_5d":
-                None,
-
-            "obv_trend_20d":
-                None,
-
-            "obv_trend_60d":
-                None,
-
-            "rsi_state":
-                None,
-
-            "relative_volume":
-                None,
-
-            "price_change_5d_percent":
-                None,
-
-            "price_change_20d_percent":
-                None,
-
-            "price_change_60d_percent":
-                None
+            'available': False,
+            'date': None,
+            'participation_state': None,
+            'obv_price_relationship': None,
+            'obv_trend_5d': None,
+            'obv_trend_20d': None,
+            'obv_trend_60d': None,
+            'rsi_state': None,
+            'relative_volume': None,
+            'price_change_5d_percent': None,
+            'price_change_20d_percent': None,
+            'price_change_60d_percent': None
 
         }
 
 
     return {
 
-        "available":
+        'available':
             True,
 
-        "date":
+        'date':
             snapshot.get(
-                "date"
+                'date'
             ),
 
-        "participation_state":
+        'participation_state':
             snapshot.get(
-                "participation_state"
+                'participation_state'
             ),
 
-        "obv_price_relationship":
+        'obv_price_relationship':
             snapshot.get(
-                "obv_price_relationship"
+                'obv_price_relationship'
             ),
 
-        "obv_trend_5d":
+        'obv_trend_5d':
             snapshot.get(
-                "obv_trend_5d"
+                'obv_trend_5d'
             ),
 
-        "obv_trend_20d":
+        'obv_trend_20d':
             snapshot.get(
-                "obv_trend_20d"
+                'obv_trend_20d'
             ),
 
-        "obv_trend_60d":
+        'obv_trend_60d':
             snapshot.get(
-                "obv_trend_60d"
+                'obv_trend_60d'
             ),
 
-        "rsi_state":
+        'rsi_state':
             snapshot.get(
-                "rsi_state"
+                'rsi_state'
             ),
 
-        "relative_volume":
+        'relative_volume':
             safe_number(
                 snapshot.get(
-                    "relative_volume"
+                    'relative_volume'
                 ),
                 None
             ),
 
-        "price_change_5d_percent":
+        'price_change_5d_percent':
             safe_number(
                 snapshot.get(
-                    "price_change_5d_percent"
+                    'price_change_5d_percent'
                 ),
                 None
             ),
 
-        "price_change_20d_percent":
+        'price_change_20d_percent':
             safe_number(
                 snapshot.get(
-                    "price_change_20d_percent"
+                    'price_change_20d_percent'
                 ),
                 None
             ),
 
-        "price_change_60d_percent":
+        'price_change_60d_percent':
             safe_number(
                 snapshot.get(
-                    "price_change_60d_percent"
+                    'price_change_60d_percent'
                 ),
                 None
             )
+
     }
 
 
 # ============================================================
-# GLOBAL SAVED SCAN SESSIONS
-# ============================================================
-#
-# Build the union of all saved scanner snapshot dates.
-#
-# This means:
-#
-# "last 5 scans"
-#
-# means the last five actual saved EdgeBreak scanner sessions,
-# NOT the last five calendar days.
-#
-# Weekends and holidays do not break persistence.
-#
+# SCANNER PERSISTENCE
 # ============================================================
 
 def build_global_scan_sessions():
@@ -523,7 +432,7 @@ def build_global_scan_sessions():
 
 
         history = record.get(
-            "history",
+            'history',
             []
         )
 
@@ -547,7 +456,7 @@ def build_global_scan_sessions():
 
 
             date_value = snapshot.get(
-                "date"
+                'date'
             )
 
 
@@ -565,14 +474,8 @@ def build_global_scan_sessions():
     )
 
 
-GLOBAL_SCAN_SESSIONS = (
-    build_global_scan_sessions()
-)
+GLOBAL_SCAN_SESSIONS = build_global_scan_sessions()
 
-
-# ============================================================
-# SCANNER PERSISTENCE
-# ============================================================
 
 def get_scanner_persistence(
     symbol
@@ -585,55 +488,55 @@ def get_scanner_persistence(
 
     result = {
 
-        "available":
+        'available':
             False,
 
-        "scanner_sessions_available":
+        'scanner_sessions_available':
             available_session_count,
 
-        "appearances_last_5_scans":
+        'appearances_last_5_scans':
             0,
 
-        "appearances_last_10_scans":
+        'appearances_last_10_scans':
             0,
 
-        "appearances_last_20_scans":
+        'appearances_last_20_scans':
             0,
 
-        "sessions_in_5_scan_window":
+        'sessions_in_5_scan_window':
             min(
                 5,
                 available_session_count
             ),
 
-        "sessions_in_10_scan_window":
+        'sessions_in_10_scan_window':
             min(
                 10,
                 available_session_count
             ),
 
-        "sessions_in_20_scan_window":
+        'sessions_in_20_scan_window':
             min(
                 20,
                 available_session_count
             ),
 
-        "consecutive_scan_appearances":
+        'consecutive_scan_appearances':
             0,
 
-        "saved_appearances":
+        'saved_appearances':
             0,
 
-        "first_seen":
+        'first_seen':
             None,
 
-        "last_seen":
+        'last_seen':
             None,
 
-        "persistence_state":
-            "INSUFFICIENT_HISTORY",
+        'persistence_state':
+            'INSUFFICIENT_HISTORY',
 
-        "persistence_points":
+        'persistence_points':
             0
 
     }
@@ -663,7 +566,7 @@ def get_scanner_persistence(
 
 
     history = record.get(
-        "history",
+        'history',
         []
     )
 
@@ -690,7 +593,7 @@ def get_scanner_persistence(
 
 
         date_value = snapshot.get(
-            "date"
+            'date'
         )
 
 
@@ -709,62 +612,51 @@ def get_scanner_persistence(
 
 
     result[
-        "available"
+        'available'
     ] = True
 
 
     result[
-        "saved_appearances"
+        'saved_appearances'
     ] = len(
         appearance_dates
     )
 
 
     result[
-        "first_seen"
+        'first_seen'
     ] = record.get(
-        "first_seen"
+        'first_seen'
     )
 
 
     result[
-        "last_seen"
+        'last_seen'
     ] = record.get(
-        "last_seen"
+        'last_seen'
     )
 
 
-    # --------------------------------------------------------
-    # RECENT WINDOWS
-    # --------------------------------------------------------
-
-    last_5_sessions = (
-        GLOBAL_SCAN_SESSIONS[
-            -5:
-        ]
-    )
+    last_5_sessions = GLOBAL_SCAN_SESSIONS[
+        -5:
+    ]
 
 
-    last_10_sessions = (
-        GLOBAL_SCAN_SESSIONS[
-            -10:
-        ]
-    )
+    last_10_sessions = GLOBAL_SCAN_SESSIONS[
+        -10:
+    ]
 
 
-    last_20_sessions = (
-        GLOBAL_SCAN_SESSIONS[
-            -20:
-        ]
-    )
+    last_20_sessions = GLOBAL_SCAN_SESSIONS[
+        -20:
+    ]
 
 
     appearances_5 = sum(
 
         1
 
-        for session
-        in last_5_sessions
+        for session in last_5_sessions
 
         if session in appearance_dates
 
@@ -775,8 +667,7 @@ def get_scanner_persistence(
 
         1
 
-        for session
-        in last_10_sessions
+        for session in last_10_sessions
 
         if session in appearance_dates
 
@@ -787,8 +678,7 @@ def get_scanner_persistence(
 
         1
 
-        for session
-        in last_20_sessions
+        for session in last_20_sessions
 
         if session in appearance_dates
 
@@ -796,23 +686,19 @@ def get_scanner_persistence(
 
 
     result[
-        "appearances_last_5_scans"
+        'appearances_last_5_scans'
     ] = appearances_5
 
 
     result[
-        "appearances_last_10_scans"
+        'appearances_last_10_scans'
     ] = appearances_10
 
 
     result[
-        "appearances_last_20_scans"
+        'appearances_last_20_scans'
     ] = appearances_20
 
-
-    # --------------------------------------------------------
-    # CONSECUTIVE APPEARANCES
-    # --------------------------------------------------------
 
     consecutive = 0
 
@@ -831,7 +717,7 @@ def get_scanner_persistence(
 
 
     result[
-        "consecutive_scan_appearances"
+        'consecutive_scan_appearances'
     ] = consecutive
 
 
@@ -840,41 +726,14 @@ def get_scanner_persistence(
     )
 
 
-    # --------------------------------------------------------
-    # PERSISTENCE CLASSIFICATION
-    # --------------------------------------------------------
-    #
-    # Less than 3 available sessions:
-    # no meaningful persistence score yet.
-    #
-    # REPEATED:
-    # 3 consecutive appearances
-    # OR 3 appearances across recent 5-session window.
-    #
-    # PERSISTENT:
-    # 5 consecutive appearances
-    # OR 4 appearances across last 5 scans.
-    #
-    # HIGHLY_PERSISTENT:
-    # 8 consecutive appearances
-    # OR 8 appearances across last 10 scans.
-    #
-    # No persistence state creates a negative score.
-    #
-    # --------------------------------------------------------
-
     if available_session_count < 3:
 
-        state = (
-            "INSUFFICIENT_HISTORY"
-        )
+        state = 'INSUFFICIENT_HISTORY'
 
 
     elif saved_appearances <= 1:
 
-        state = (
-            "NEW"
-        )
+        state = 'NEW'
 
 
     elif (
@@ -893,9 +752,7 @@ def get_scanner_persistence(
 
     ):
 
-        state = (
-            "HIGHLY_PERSISTENT"
-        )
+        state = 'HIGHLY_PERSISTENT'
 
 
     elif (
@@ -914,9 +771,7 @@ def get_scanner_persistence(
 
     ):
 
-        state = (
-            "PERSISTENT"
-        )
+        state = 'PERSISTENT'
 
 
     elif (
@@ -935,16 +790,12 @@ def get_scanner_persistence(
 
     ):
 
-        state = (
-            "REPEATED"
-        )
+        state = 'REPEATED'
 
 
     else:
 
-        state = (
-            "OCCASIONAL"
-        )
+        state = 'OCCASIONAL'
 
 
     points = PERSISTENCE_SCORE_MAP.get(
@@ -954,12 +805,12 @@ def get_scanner_persistence(
 
 
     result[
-        "persistence_state"
+        'persistence_state'
     ] = state
 
 
     result[
-        "persistence_points"
+        'persistence_points'
     ] = int(
         points
     )
@@ -977,32 +828,32 @@ def get_scanner_stock(
 ):
 
     if candidate.get(
-        "breakout"
+        'breakout'
     ):
 
         return (
             candidate[
-                "breakout"
+                'breakout'
             ],
-            "BREAKOUT"
+            'BREAKOUT'
         )
 
 
     if candidate.get(
-        "pre_breakout"
+        'pre_breakout'
     ):
 
         return (
             candidate[
-                "pre_breakout"
+                'pre_breakout'
             ],
-            "PRE_BREAKOUT"
+            'PRE_BREAKOUT'
         )
 
 
     return (
         {},
-        "UNKNOWN"
+        'UNKNOWN'
     )
 
 
@@ -1012,7 +863,7 @@ def get_current_price(
 
     price = safe_number(
         stock.get(
-            "price"
+            'price'
         ),
         0
     )
@@ -1025,7 +876,7 @@ def get_current_price(
 
     price = safe_number(
         stock.get(
-            "current_price"
+            'current_price'
         ),
         0
     )
@@ -1044,9 +895,9 @@ def get_resistance(
 ):
 
     for field in (
-        "resistance_price",
-        "resistance",
-        "resistance_high"
+        'resistance_price',
+        'resistance',
+        'resistance_high'
     ):
 
         resistance = safe_number(
@@ -1071,7 +922,7 @@ def get_resistance_touches(
 
     touches = safe_number(
         stock.get(
-            "touches"
+            'touches'
         ),
         -1
     )
@@ -1084,7 +935,7 @@ def get_resistance_touches(
 
     return safe_number(
         stock.get(
-            "resistance_touches"
+            'resistance_touches'
         ),
         0
     )
@@ -1096,15 +947,11 @@ def get_higher_lows(
 
     return safe_number(
         stock.get(
-            "higher_lows"
+            'higher_lows'
         ),
         0
     )
 
-
-# ============================================================
-# RELATIVE VOLUME
-# ============================================================
 
 def get_relative_volume(
     stock,
@@ -1113,11 +960,11 @@ def get_relative_volume(
 
     possible_fields = (
 
-        "volume_ratio",
-        "relative_volume",
-        "relative_volume_20",
-        "relativeVolume",
-        "relativeVolume20"
+        'volume_ratio',
+        'relative_volume',
+        'relative_volume_20',
+        'relativeVolume',
+        'relativeVolume20'
 
     )
 
@@ -1144,13 +991,13 @@ def get_relative_volume(
 
         return {
 
-            "available":
+            'available':
                 True,
 
-            "value":
+            'value':
                 value,
 
-            "field":
+            'field':
                 field
 
         }
@@ -1167,7 +1014,7 @@ def get_relative_volume(
 
             value = safe_number(
                 snapshot.get(
-                    "relative_volume"
+                    'relative_volume'
                 ),
                 None
             )
@@ -1177,16 +1024,16 @@ def get_relative_volume(
 
                 return {
 
-                    "available":
+                    'available':
                         True,
 
-                    "value":
+                    'value':
                         value,
 
-                    "field":
+                    'field':
                         (
-                            "scanner_indicator_history."
-                            "relative_volume"
+                            'scanner_indicator_history.'
+                            'relative_volume'
                         )
 
                 }
@@ -1194,36 +1041,29 @@ def get_relative_volume(
 
     return {
 
-        "available":
+        'available':
             False,
 
-        "value":
+        'value':
             0,
 
-        "field":
+        'field':
             None
 
     }
 
 
-# ============================================================
-# PRE-BREAKOUT DISTANCE
-# ============================================================
-
 def get_prebreakout_distance(
     stock
 ):
 
-    if (
-        stock.get(
-            "distance_to_resistance"
-        )
-        is not None
-    ):
+    if stock.get(
+        'distance_to_resistance'
+    ) is not None:
 
         distance = safe_number(
             stock.get(
-                "distance_to_resistance"
+                'distance_to_resistance'
             ),
             None
         )
@@ -1262,13 +1102,9 @@ def get_prebreakout_distance(
             -
             price
         )
-
         /
-
         resistance
-
         *
-
         100,
 
         2
@@ -1277,7 +1113,7 @@ def get_prebreakout_distance(
 
 
 # ============================================================
-# PRE-BREAKOUT LIQUIDITY
+# EARLY SCANNER CULLS
 # ============================================================
 
 def passes_prebreakout_liquidity(
@@ -1286,7 +1122,7 @@ def passes_prebreakout_liquidity(
 
     average_volume = safe_number(
         stock.get(
-            "average_volume_20"
+            'average_volume_20'
         ),
         0
     )
@@ -1294,7 +1130,7 @@ def passes_prebreakout_liquidity(
 
     average_dollar_volume = safe_number(
         stock.get(
-            "average_dollar_volume_20"
+            'average_dollar_volume_20'
         ),
         0
     )
@@ -1314,10 +1150,6 @@ def passes_prebreakout_liquidity(
 
     )
 
-
-# ============================================================
-# PRE-BREAKOUT PROXIMITY
-# ============================================================
 
 def check_prebreakout_proximity(
     stock
@@ -1342,48 +1174,35 @@ def check_prebreakout_proximity(
 
         return {
 
-            "remove":
-                False,
-
-            "distance":
-                None,
-
-            "price":
-                price,
-
-            "resistance":
-                resistance
+            'remove': False,
+            'distance': None,
+            'price': price,
+            'resistance': resistance
 
         }
 
 
     return {
 
-        "remove":
-            (
-                distance
-                >
-                MAX_PREBREAKOUT_DISTANCE
-            ),
+        'remove':
+            distance
+            >
+            MAX_PREBREAKOUT_DISTANCE,
 
-        "distance":
+        'distance':
             round(
                 distance,
                 2
             ),
 
-        "price":
+        'price':
             price,
 
-        "resistance":
+        'resistance':
             resistance
 
     }
 
-
-# ============================================================
-# STALE BREAKOUT
-# ============================================================
 
 def check_stale_breakout(
     stock,
@@ -1402,31 +1221,31 @@ def check_stale_breakout(
 
     base_result = {
 
-        "stale":
+        'stale':
             False,
 
-        "is_breakout":
+        'is_breakout':
             False,
 
-        "price":
+        'price':
             price,
 
-        "resistance":
+        'resistance':
             resistance,
 
-        "distance_above_resistance":
+        'distance_above_resistance':
             None,
 
-        "volume_available":
+        'volume_available':
             False,
 
-        "relative_volume":
+        'relative_volume':
             0,
 
-        "relative_volume_field":
+        'relative_volume_field':
             None,
 
-        "high_volume_exception":
+        'high_volume_exception':
             False
 
     }
@@ -1450,13 +1269,9 @@ def check_stale_breakout(
             -
             resistance
         )
-
         /
-
         resistance
-
         *
-
         100
 
     )
@@ -1465,12 +1280,11 @@ def check_stale_breakout(
     if distance_above <= 0:
 
         base_result[
-            "distance_above_resistance"
+            'distance_above_resistance'
         ] = round(
             distance_above,
             2
         )
-
 
         return base_result
 
@@ -1485,38 +1299,34 @@ def check_stale_breakout(
 
         **base_result,
 
-        "is_breakout":
+        'is_breakout':
             True,
 
-        "distance_above_resistance":
+        'distance_above_resistance':
             round(
                 distance_above,
                 2
             ),
 
-        "volume_available":
+        'volume_available':
             volume[
-                "available"
+                'available'
             ],
 
-        "relative_volume":
+        'relative_volume':
             volume[
-                "value"
+                'value'
             ],
 
-        "relative_volume_field":
+        'relative_volume_field':
             volume[
-                "field"
+                'field'
             ]
 
     }
 
 
-    if (
-        distance_above
-        <=
-        MAX_ABOVE_RESISTANCE
-    ):
+    if distance_above <= MAX_ABOVE_RESISTANCE:
 
         return result
 
@@ -1524,13 +1334,13 @@ def check_stale_breakout(
     high_volume_exception = (
 
         volume[
-            "available"
+            'available'
         ]
 
         and
 
         volume[
-            "value"
+            'value'
         ]
         >=
         HIGH_VOLUME_EXCEPTION
@@ -1539,14 +1349,12 @@ def check_stale_breakout(
 
 
     result[
-        "stale"
-    ] = (
-        not high_volume_exception
-    )
+        'stale'
+    ] = not high_volume_exception
 
 
     result[
-        "high_volume_exception"
+        'high_volume_exception'
     ] = high_volume_exception
 
 
@@ -1566,7 +1374,7 @@ def apply_stale_breakout_cull(
     for stock in stocks:
 
         symbol = stock.get(
-            "symbol"
+            'symbol'
         )
 
 
@@ -1577,68 +1385,67 @@ def apply_stale_breakout_cull(
 
 
         if result[
-            "stale"
+            'stale'
         ]:
 
             removed.append({
 
-                "symbol":
+                'symbol':
                     symbol,
 
-                "scanner":
+                'scanner':
                     scanner_name,
 
-                "price":
+                'price':
                     result[
-                        "price"
+                        'price'
                     ],
 
-                "resistance":
+                'resistance':
                     result[
-                        "resistance"
+                        'resistance'
                     ],
 
-                "distance_above_resistance":
+                'distance_above_resistance':
                     result[
-                        "distance_above_resistance"
+                        'distance_above_resistance'
                     ],
 
-                "volume_available":
+                'volume_available':
                     result[
-                        "volume_available"
+                        'volume_available'
                     ],
 
-                "relative_volume":
+                'relative_volume':
                     result[
-                        "relative_volume"
+                        'relative_volume'
                     ]
 
             })
-
 
             continue
 
 
         if result[
-            "high_volume_exception"
+            'high_volume_exception'
         ]:
 
             volume_exceptions.append({
 
-                "symbol":
+                'symbol':
                     symbol,
 
-                "scanner":
+                'scanner':
                     scanner_name,
 
-                "distance_above_resistance":
+                'distance_above_resistance':
                     result[
-                        "distance_above_resistance"
+                        'distance_above_resistance'
                     ],
 
-                "relative_volume":
+                'relative_volume':
                     result[
-                        "relative_volume"
+                        'relative_volume'
                     ]
 
             })
@@ -1657,7 +1464,7 @@ def apply_stale_breakout_cull(
 
 
 # ============================================================
-# SPECIAL SECURITY
+# SECURITY AND PROFILE CULLS
 # ============================================================
 
 def get_special_security_reason(
@@ -1688,10 +1495,6 @@ def get_special_security_reason(
     )
 
 
-# ============================================================
-# PROFILE CACHE
-# ============================================================
-
 profile_cache = load_json(
     PROFILE_CACHE_FILE,
     {}
@@ -1706,9 +1509,19 @@ if not isinstance(
     profile_cache = {}
 
 
-# ============================================================
-# TWELVE DATA PROFILE
-# ============================================================
+price_history_cache = load_json(
+    PRICE_HISTORY_CACHE_FILE,
+    {}
+)
+
+
+if not isinstance(
+    price_history_cache,
+    dict
+):
+
+    price_history_cache = {}
+
 
 def fetch_profile(
     symbol
@@ -1728,12 +1541,12 @@ def fetch_profile(
 
         API_KEY
         ==
-        "PASTE_YOUR_EXISTING_KEY_HERE"
+        'PASTE_YOUR_EXISTING_KEY_HERE'
     ):
 
         print(
-            f"⚠️ Profile skipped: {symbol} "
-            "(Twelve Data API key not configured)"
+            f'⚠️ Profile skipped: {symbol} '
+            '(Twelve Data API key not configured)'
         )
 
         return None
@@ -1743,14 +1556,14 @@ def fetch_profile(
 
         response = requests.get(
 
-            "https://api.twelvedata.com/profile",
+            'https://api.twelvedata.com/profile',
 
             params={
 
-                "symbol":
+                'symbol':
                     symbol,
 
-                "apikey":
+                'apikey':
                     API_KEY
 
             },
@@ -1773,15 +1586,15 @@ def fetch_profile(
             or
 
             data.get(
-                "status"
+                'status'
             )
             ==
-            "error"
+            'error'
 
         ):
 
             print(
-                f"⚠️ Profile failed: {symbol}"
+                f'⚠️ Profile failed: {symbol}'
             )
 
             return None
@@ -1789,24 +1602,24 @@ def fetch_profile(
 
         profile = {
 
-            "name":
+            'name':
                 data.get(
-                    "name"
+                    'name'
                 ),
 
-            "sector":
+            'sector':
                 data.get(
-                    "sector"
+                    'sector'
                 ),
 
-            "industry":
+            'industry':
                 data.get(
-                    "industry"
+                    'industry'
                 ),
 
-            "type":
+            'type':
                 data.get(
-                    "type"
+                    'type'
                 )
 
         }
@@ -1824,7 +1637,7 @@ def fetch_profile(
 
 
         print(
-            f"Profile saved: {symbol}"
+            f'Profile saved: {symbol}'
         )
 
 
@@ -1839,16 +1652,11 @@ def fetch_profile(
     except Exception as error:
 
         print(
-            f"⚠️ Profile error "
-            f"{symbol}: {error}"
+            f'⚠️ Profile error {symbol}: {error}'
         )
 
         return None
 
-
-# ============================================================
-# PROFILE EXCLUSION CHECK
-# ============================================================
 
 def get_exclusion_reason(
     profile
@@ -1861,83 +1669,1614 @@ def get_exclusion_reason(
 
     sector = str(
         profile.get(
-            "sector",
-            ""
+            'sector',
+            ''
         )
     ).lower()
 
 
     industry = str(
         profile.get(
-            "industry",
-            ""
+            'industry',
+            ''
         )
     ).lower()
 
 
     stock_type = str(
         profile.get(
-            "type",
-            ""
+            'type',
+            ''
+        )
+    ).lower()
+
+
+    name = str(
+        profile.get(
+            'name',
+            ''
         )
     ).lower()
 
 
     combined_text = (
 
-        sector
-
+        name
         +
-        " "
-
+        ' '
+        +
+        sector
+        +
+        ' '
         +
         industry
-
         +
-        " "
-
+        ' '
         +
         stock_type
 
     )
 
 
-    SPECIAL_PROFILE_TYPES = [
+    special_profile_types = [
 
-        "preferred",
-        "warrant",
-        "rights",
-        "unit"
+        'preferred',
+        'warrant',
+        'rights',
+        'unit'
 
     ]
 
 
-    for keyword in SPECIAL_PROFILE_TYPES:
+    for keyword in special_profile_types:
 
         if keyword in stock_type:
 
-            return "SPECIAL_SECURITY"
+            return 'SPECIAL_SECURITY'
 
 
     for keyword in BANK_KEYWORDS:
 
         if keyword in industry:
 
-            return "BANK"
+            return 'BANK'
 
 
     for keyword in PROPERTY_KEYWORDS:
 
         if keyword in combined_text:
 
-            return "PROPERTY"
+            return 'PROPERTY'
+
+
+    for keyword in SHELL_COMPANY_KEYWORDS:
+
+        if keyword in combined_text:
+
+            return 'SHELL_OR_SPAC'
 
 
     return None
 
 
 # ============================================================
-# TOUCH SCORE
+# PRICE HISTORY
+# ============================================================
+
+def get_candidate_scan_date(
+    candidate
+):
+
+    stock, _ = get_scanner_stock(
+        candidate
+    )
+
+
+    value = (
+
+        stock.get(
+            'scan_date'
+        )
+
+        or
+
+        stock.get(
+            'last_updated'
+        )
+
+    )
+
+
+    if value:
+
+        return str(
+            value
+        )[:10]
+
+
+    snapshot = get_latest_indicator_snapshot(
+        candidate.get(
+            'symbol'
+        )
+    )
+
+
+    if snapshot:
+
+        return str(
+            snapshot.get(
+                'date',
+                ''
+            )
+        )[:10]
+
+
+    return None
+
+
+def normalize_price_bars(
+    values
+):
+
+    bars = []
+
+
+    if not isinstance(
+        values,
+        list
+    ):
+
+        return bars
+
+
+    for item in values:
+
+        if not isinstance(
+            item,
+            dict
+        ):
+
+            continue
+
+
+        date = str(
+
+            item.get(
+
+                'datetime',
+
+                item.get(
+                    'date',
+                    ''
+                )
+
+            )
+
+        )[:10]
+
+
+        open_price = safe_number(
+            item.get(
+                'open'
+            ),
+            None
+        )
+
+
+        high = safe_number(
+            item.get(
+                'high'
+            ),
+            None
+        )
+
+
+        low = safe_number(
+            item.get(
+                'low'
+            ),
+            None
+        )
+
+
+        close = safe_number(
+            item.get(
+                'close'
+            ),
+            None
+        )
+
+
+        volume = safe_number(
+            item.get(
+                'volume'
+            ),
+            0
+        )
+
+
+        if (
+
+            not date
+
+            or
+
+            open_price is None
+
+            or
+
+            high is None
+
+            or
+
+            low is None
+
+            or
+
+            close is None
+
+            or
+
+            min(
+                open_price,
+                high,
+                low,
+                close
+            ) <= 0
+
+        ):
+
+            continue
+
+
+        bars.append({
+
+            'date':
+                date,
+
+            'open':
+                open_price,
+
+            'high':
+                high,
+
+            'low':
+                low,
+
+            'close':
+                close,
+
+            'volume':
+                volume
+
+        })
+
+
+    bars.sort(
+
+        key=lambda bar:
+            bar[
+                'date'
+            ]
+
+    )
+
+
+    return bars
+
+
+def fetch_price_history(
+    symbol,
+    expected_date=None
+):
+
+    cached = price_history_cache.get(
+        symbol
+    )
+
+
+    if isinstance(
+        cached,
+        dict
+    ):
+
+        cached_bars = normalize_price_bars(
+            cached.get(
+                'values',
+                []
+            )
+        )
+
+
+        cached_date = (
+
+            cached_bars[
+                -1
+            ][
+                'date'
+            ]
+
+            if cached_bars
+
+            else None
+
+        )
+
+
+        if (
+
+            cached_bars
+
+            and
+
+            (
+                not expected_date
+
+                or
+
+                cached_date >= expected_date
+            )
+
+        ):
+
+            return cached_bars
+
+
+    if (
+
+        not API_KEY
+
+        or
+
+        API_KEY
+        ==
+        'PASTE_YOUR_EXISTING_KEY_HERE'
+
+    ):
+
+        return []
+
+
+    try:
+
+        response = requests.get(
+
+            'https://api.twelvedata.com/time_series',
+
+            params={
+
+                'symbol':
+                    symbol,
+
+                'interval':
+                    '1day',
+
+                'outputsize':
+                    260,
+
+                'order':
+                    'DESC',
+
+                'apikey':
+                    API_KEY
+
+            },
+
+            timeout=25
+
+        )
+
+
+        data = response.json()
+
+
+        if (
+
+            not isinstance(
+                data,
+                dict
+            )
+
+            or
+
+            data.get(
+                'status'
+            )
+            ==
+            'error'
+
+        ):
+
+            print(
+                f'   Price history unavailable: {symbol}'
+            )
+
+            return []
+
+
+        bars = normalize_price_bars(
+            data.get(
+                'values',
+                []
+            )
+        )
+
+
+        if bars:
+
+            price_history_cache[
+                symbol
+            ] = {
+
+                'values':
+                    bars
+
+            }
+
+
+            save_json(
+                PRICE_HISTORY_CACHE_FILE,
+                price_history_cache
+            )
+
+
+        time.sleep(
+            PRICE_HISTORY_SLEEP_TIME
+        )
+
+
+        return bars
+
+
+    except Exception as error:
+
+        print(
+            f'   Price history error {symbol}: {error}'
+        )
+
+        return []
+
+
+# ============================================================
+# MATHEMATICAL HELPERS
+# ============================================================
+
+def average(
+    values
+):
+
+    clean = [
+
+        safe_number(
+            value,
+            None
+        )
+
+        for value in values
+
+    ]
+
+
+    clean = [
+
+        value
+
+        for value in clean
+
+        if value is not None
+
+    ]
+
+
+    if not clean:
+
+        return None
+
+
+    return sum(
+        clean
+    ) / len(
+        clean
+    )
+
+
+def percent_change(
+    start,
+    end
+):
+
+    start = safe_number(
+        start,
+        0
+    )
+
+
+    end = safe_number(
+        end,
+        0
+    )
+
+
+    if start <= 0:
+
+        return None
+
+
+    return (
+
+        (
+            end
+            -
+            start
+        )
+        /
+        start
+        *
+        100
+
+    )
+
+
+# ============================================================
+# CONSOLIDATION DETECTION
+# ============================================================
+
+def find_tight_consolidation(
+    bars,
+    resistance,
+    current_price
+):
+
+    result = {
+
+        'qualified':
+            False,
+
+        'days':
+            0,
+
+        'range_percent':
+            None,
+
+        'start_date':
+            None,
+
+        'end_date':
+            None,
+
+        'prior_advance_percent':
+            None,
+
+        'volume_contracted':
+            None
+
+    }
+
+
+    if (
+
+        len(
+            bars
+        )
+        <
+        MAX_CONSOLIDATION_DAYS
+        +
+        45
+
+        or
+
+        resistance <= 0
+
+        or
+
+        current_price <= 0
+
+    ):
+
+        return result
+
+
+    candidates = []
+
+
+    for breakout_offset in range(
+        1,
+        6
+    ):
+
+        base_end = (
+
+            len(
+                bars
+            )
+            -
+            breakout_offset
+
+        )
+
+
+        for days in range(
+
+            MIN_CONSOLIDATION_DAYS,
+
+            MAX_CONSOLIDATION_DAYS
+            +
+            1
+
+        ):
+
+            base_start = (
+
+                base_end
+                -
+                days
+
+            )
+
+
+            if base_start < 40:
+
+                continue
+
+
+            window = bars[
+                base_start:
+                base_end
+            ]
+
+
+            base_high = max(
+
+                bar[
+                    'high'
+                ]
+
+                for bar in window
+
+            )
+
+
+            base_low = min(
+
+                bar[
+                    'low'
+                ]
+
+                for bar in window
+
+            )
+
+
+            midpoint = (
+
+                base_high
+                +
+                base_low
+
+            ) / 2
+
+
+            if midpoint <= 0:
+
+                continue
+
+
+            range_percent = (
+
+                (
+                    base_high
+                    -
+                    base_low
+                )
+                /
+                midpoint
+                *
+                100
+
+            )
+
+
+            resistance_gap = (
+
+                abs(
+                    base_high
+                    -
+                    resistance
+                )
+                /
+                resistance
+                *
+                100
+
+            )
+
+
+            first_half = average([
+
+                bar[
+                    'close'
+                ]
+
+                for bar in window[
+                    :len(window) // 2
+                ]
+
+            ])
+
+
+            second_half = average([
+
+                bar[
+                    'close'
+                ]
+
+                for bar in window[
+                    len(window) // 2:
+                ]
+
+            ])
+
+
+            drift_percent = percent_change(
+                first_half,
+                second_half
+            )
+
+
+            if (
+
+                range_percent
+                >
+                MAX_CONSOLIDATION_RANGE_PERCENT
+
+                or
+
+                resistance_gap
+                >
+                5.0
+
+                or
+
+                drift_percent is None
+
+                or
+
+                drift_percent
+                <
+                -5.0
+
+            ):
+
+                continue
+
+
+            prior_window = bars[
+
+                max(
+                    0,
+                    base_start - 120
+                ):
+
+                base_start
+
+            ]
+
+
+            prior_low = (
+
+                min(
+
+                    bar[
+                        'low'
+                    ]
+
+                    for bar in prior_window
+
+                )
+
+                if prior_window
+
+                else None
+
+            )
+
+
+            prior_advance = percent_change(
+                prior_low,
+                base_high
+            )
+
+
+            base_volume = average([
+
+                bar[
+                    'volume'
+                ]
+
+                for bar in window
+
+                if bar[
+                    'volume'
+                ] > 0
+
+            ])
+
+
+            previous_volume_window = bars[
+
+                max(
+                    0,
+                    base_start - days
+                ):
+
+                base_start
+
+            ]
+
+
+            prior_volume = average([
+
+                bar[
+                    'volume'
+                ]
+
+                for bar in previous_volume_window
+
+                if bar[
+                    'volume'
+                ] > 0
+
+            ])
+
+
+            volume_contracted = (
+
+                base_volume is not None
+
+                and
+
+                prior_volume is not None
+
+                and
+
+                base_volume
+                <=
+                prior_volume * 1.10
+
+            )
+
+
+            candidates.append({
+
+                'qualified':
+                    True,
+
+                'days':
+                    days,
+
+                'range_percent':
+                    round(
+                        range_percent,
+                        2
+                    ),
+
+                'start_date':
+                    window[
+                        0
+                    ][
+                        'date'
+                    ],
+
+                'end_date':
+                    window[
+                        -1
+                    ][
+                        'date'
+                    ],
+
+                'prior_advance_percent':
+                    (
+                        round(
+                            prior_advance,
+                            2
+                        )
+
+                        if prior_advance is not None
+
+                        else None
+                    ),
+
+                'volume_contracted':
+                    volume_contracted
+
+            })
+
+
+    if not candidates:
+
+        return result
+
+
+    return min(
+
+        candidates,
+
+        key=lambda item: (
+
+            item[
+                'range_percent'
+            ],
+
+            -item[
+                'days'
+            ]
+
+        )
+
+    )
+
+
+# ============================================================
+# EARLY TREND REVERSAL DETECTION
+# ============================================================
+
+def detect_early_trend_reversal(
+    bars,
+    resistance,
+    current_price
+):
+
+    result = {
+
+        'qualified':
+            False,
+
+        'trough_date':
+            None,
+
+        'prior_decline_percent':
+            None,
+
+        'recovery_from_trough_percent':
+            None,
+
+        'above_sma20':
+            None,
+
+        'sma20_above_sma50':
+            None
+
+    }
+
+
+    if (
+
+        len(
+            bars
+        ) < 140
+
+        or
+
+        current_price <= 0
+
+        or
+
+        resistance <= 0
+
+    ):
+
+        return result
+
+
+    recent = bars[
+        -120:
+    ]
+
+
+    trough_index = min(
+
+        range(
+            len(
+                recent
+            )
+        ),
+
+        key=lambda index:
+            recent[
+                index
+            ][
+                'low'
+            ]
+
+    )
+
+
+    sessions_since_trough = (
+
+        len(
+            recent
+        )
+        -
+        1
+        -
+        trough_index
+
+    )
+
+
+    if (
+
+        sessions_since_trough < 15
+
+        or
+
+        sessions_since_trough > 100
+
+    ):
+
+        return result
+
+
+    trough = recent[
+        trough_index
+    ][
+        'low'
+    ]
+
+
+    earlier = recent[
+
+        max(
+            0,
+            trough_index - 60
+        ):
+
+        trough_index
+
+    ]
+
+
+    if not earlier:
+
+        return result
+
+
+    earlier_high = max(
+
+        bar[
+            'high'
+        ]
+
+        for bar in earlier
+
+    )
+
+
+    prior_decline = (
+
+        (
+            earlier_high
+            -
+            trough
+        )
+        /
+        earlier_high
+        *
+        100
+
+    )
+
+
+    recovery = percent_change(
+        trough,
+        current_price
+    )
+
+
+    sma20 = average([
+
+        bar[
+            'close'
+        ]
+
+        for bar in bars[
+            -20:
+        ]
+
+    ])
+
+
+    sma50 = average([
+
+        bar[
+            'close'
+        ]
+
+        for bar in bars[
+            -50:
+        ]
+
+    ])
+
+
+    above_sma20 = (
+
+        sma20 is not None
+
+        and
+
+        current_price >= sma20
+
+    )
+
+
+    sma20_above_sma50 = (
+
+        sma20 is not None
+
+        and
+
+        sma50 is not None
+
+        and
+
+        sma20 >= sma50 * 0.97
+
+    )
+
+
+    resistance_distance = (
+
+        (
+            current_price
+            -
+            resistance
+        )
+        /
+        resistance
+        *
+        100
+
+    )
+
+
+    qualified = (
+
+        prior_decline
+        >=
+        MIN_REVERSAL_DECLINE_PERCENT
+
+        and
+
+        recovery is not None
+
+        and
+
+        recovery
+        >=
+        MIN_REVERSAL_RECOVERY_PERCENT
+
+        and
+
+        above_sma20
+
+        and
+
+        sma20_above_sma50
+
+        and
+
+        -MAX_PREBREAKOUT_DISTANCE
+        <=
+        resistance_distance
+        <=
+        MAX_FRESH_BREAKOUT_ABOVE_RESISTANCE
+
+    )
+
+
+    return {
+
+        'qualified':
+            qualified,
+
+        'trough_date':
+            recent[
+                trough_index
+            ][
+                'date'
+            ],
+
+        'prior_decline_percent':
+            round(
+                prior_decline,
+                2
+            ),
+
+        'recovery_from_trough_percent':
+            (
+                round(
+                    recovery,
+                    2
+                )
+
+                if recovery is not None
+
+                else None
+            ),
+
+        'above_sma20':
+            above_sma20,
+
+        'sma20_above_sma50':
+            sma20_above_sma50
+
+    }
+
+
+# ============================================================
+# SETUP TIMING DECISION
+# ============================================================
+
+def evaluate_setup_timing(
+    candidate
+):
+
+    symbol = str(
+        candidate.get(
+            'symbol',
+            ''
+        )
+    ).strip().upper()
+
+
+    stock, scanner_type = get_scanner_stock(
+        candidate
+    )
+
+
+    current_price = get_current_price(
+        stock
+    )
+
+
+    resistance = get_resistance(
+        stock
+    )
+
+
+    distance = (
+
+        (
+            current_price
+            -
+            resistance
+        )
+        /
+        resistance
+        *
+        100
+
+        if (
+            current_price > 0
+
+            and
+
+            resistance > 0
+        )
+
+        else None
+
+    )
+
+
+    bars = fetch_price_history(
+
+        symbol,
+
+        get_candidate_scan_date(
+            candidate
+        )
+
+    )
+
+
+    if not bars:
+
+        return {
+
+            'remove':
+                False,
+
+            'state':
+                'UNKNOWN_PRICE_HISTORY',
+
+            'timing_points':
+                0,
+
+            'reason':
+                (
+                    'Price history unavailable; '
+                    'candidate preserved'
+                ),
+
+            'distance_above_resistance_percent':
+                distance,
+
+            'consolidation':
+                None,
+
+            'reversal':
+                None
+
+        }
+
+
+    consolidation = find_tight_consolidation(
+        bars,
+        resistance,
+        current_price
+    )
+
+
+    reversal = detect_early_trend_reversal(
+        bars,
+        resistance,
+        current_price
+    )
+
+
+    intelligence = get_indicator_intelligence(
+        symbol
+    )
+
+
+    move_60d = safe_number(
+        intelligence.get(
+            'price_change_60d_percent'
+        ),
+        None
+    )
+
+
+    volume = get_relative_volume(
+        stock,
+        symbol
+    )
+
+
+    if (
+
+        scanner_type == 'BREAKOUT'
+
+        and
+
+        volume[
+            'available'
+        ]
+
+        and
+
+        volume[
+            'value'
+        ]
+        <
+        MIN_COMPLETED_BREAKOUT_RELATIVE_VOLUME
+
+    ):
+
+        return {
+
+            'remove':
+                True,
+
+            'state':
+                'WEAK_VOLUME_BREAKOUT',
+
+            'timing_points':
+                -10,
+
+            'reason':
+                (
+                    'Completed breakout relative volume '
+                    'below 1.0'
+                ),
+
+            'distance_above_resistance_percent':
+                distance,
+
+            'consolidation':
+                consolidation,
+
+            'reversal':
+                reversal
+
+        }
+
+
+    if (
+
+        scanner_type == 'BREAKOUT'
+
+        and
+
+        distance is not None
+
+        and
+
+        distance
+        >
+        MAX_ALLOWED_BREAKOUT_ABOVE_RESISTANCE
+
+    ):
+
+        return {
+
+            'remove':
+                True,
+
+            'state':
+                'EXTENDED_ABOVE_RESISTANCE',
+
+            'timing_points':
+                -10,
+
+            'reason':
+                'Price is more than 6% above resistance',
+
+            'distance_above_resistance_percent':
+                distance,
+
+            'consolidation':
+                consolidation,
+
+            'reversal':
+                reversal
+
+        }
+
+
+    if reversal[
+        'qualified'
+    ]:
+
+        return {
+
+            'remove':
+                False,
+
+            'state':
+                'EARLY_TREND_REVERSAL',
+
+            'timing_points':
+                8,
+
+            'reason':
+                (
+                    'Prior downtrend, recovery and '
+                    'fresh resistance test'
+                ),
+
+            'distance_above_resistance_percent':
+                distance,
+
+            'consolidation':
+                consolidation,
+
+            'reversal':
+                reversal
+
+        }
+
+
+    if consolidation[
+        'qualified'
+    ]:
+
+        return {
+
+            'remove':
+                False,
+
+            'state':
+                'CONSOLIDATED_CONTINUATION',
+
+            'timing_points':
+                8,
+
+            'reason':
+                (
+                    'Tight 4-6 week consolidation '
+                    'at resistance'
+                ),
+
+            'distance_above_resistance_percent':
+                distance,
+
+            'consolidation':
+                consolidation,
+
+            'reversal':
+                reversal
+
+        }
+
+
+    if (
+
+        move_60d is not None
+
+        and
+
+        move_60d
+        >=
+        LARGE_60_DAY_MOVE_PERCENT
+
+    ):
+
+        return {
+
+            'remove':
+                True,
+
+            'state':
+                'LATE_UNRESET_MOVE',
+
+            'timing_points':
+                -10,
+
+            'reason':
+                (
+                    'Large 60-day rise without '
+                    'a qualifying reset'
+                ),
+
+            'distance_above_resistance_percent':
+                distance,
+
+            'consolidation':
+                consolidation,
+
+            'reversal':
+                reversal
+
+        }
+
+
+    return {
+
+        'remove':
+            False,
+
+        'state':
+            (
+                'FRESH_SCANNER_BREAKOUT'
+
+                if scanner_type == 'BREAKOUT'
+
+                else 'DEVELOPING_PRE_BREAKOUT'
+            ),
+
+        'timing_points':
+            2,
+
+        'reason':
+            'Current scanner structure remains timely',
+
+        'distance_above_resistance_percent':
+            distance,
+
+        'consolidation':
+            consolidation,
+
+        'reversal':
+            reversal
+
+    }
+
+
+# ============================================================
+# RANKING
 # ============================================================
 
 def score_touches(
@@ -1950,41 +3289,25 @@ def score_touches(
 
 
     if touches >= 6:
-
         return 30
 
-
     if touches == 5:
-
         return 27
 
-
     if touches == 4:
-
         return 24
 
-
     if touches == 3:
-
         return 20
 
-
     if touches == 2:
-
         return 15
 
-
     if touches == 1:
-
         return 7
-
 
     return 0
 
-
-# ============================================================
-# HIGHER LOW SCORE
-# ============================================================
 
 def score_higher_lows(
     stock
@@ -1996,46 +3319,28 @@ def score_higher_lows(
 
 
     if higher_lows >= 8:
-
         return 30
 
-
     if higher_lows >= 6:
-
         return 28
 
-
     if higher_lows >= 5:
-
         return 26
 
-
     if higher_lows >= 4:
-
         return 24
 
-
     if higher_lows >= 3:
-
         return 21
 
-
     if higher_lows >= 2:
-
         return 17
 
-
     if higher_lows >= 1:
-
         return 9
-
 
     return 0
 
-
-# ============================================================
-# BREAKOUT POSITION SCORE
-# ============================================================
 
 def score_breakout_position(
     stock
@@ -2072,13 +3377,9 @@ def score_breakout_position(
             -
             resistance
         )
-
         /
-
         resistance
-
         *
-
         100,
 
         2
@@ -2086,13 +3387,7 @@ def score_breakout_position(
     )
 
 
-    if (
-        0
-        <=
-        distance_above
-        <=
-        2
-    ):
+    if 0 <= distance_above <= 2:
 
         return (
             30,
@@ -2137,10 +3432,6 @@ def score_breakout_position(
         distance_above
     )
 
-
-# ============================================================
-# PRE-BREAKOUT POSITION SCORE
-# ============================================================
 
 def score_prebreakout_position(
     stock
@@ -2250,10 +3541,6 @@ def score_prebreakout_position(
     )
 
 
-# ============================================================
-# VOLUME SCORE
-# ============================================================
-
 def score_volume(
     stock,
     symbol=None
@@ -2266,7 +3553,7 @@ def score_volume(
 
 
     if not volume[
-        "available"
+        'available'
     ]:
 
         return (
@@ -2277,12 +3564,12 @@ def score_volume(
 
 
     ratio = volume[
-        "value"
+        'value'
     ]
 
 
     source = volume[
-        "field"
+        'field'
     ]
 
 
@@ -2338,10 +3625,6 @@ def score_volume(
     )
 
 
-# ============================================================
-# PARTICIPATION SCORE
-# ============================================================
-
 def score_participation(
     symbol
 ):
@@ -2352,18 +3635,18 @@ def score_participation(
 
 
     if not intelligence[
-        "available"
+        'available'
     ]:
 
         return {
 
-            "points":
+            'points':
                 0,
 
-            "state":
+            'state':
                 None,
 
-            "intelligence":
+            'intelligence':
                 intelligence
 
         }
@@ -2372,12 +3655,12 @@ def score_participation(
     state = str(
 
         intelligence.get(
-            "participation_state"
+            'participation_state'
         )
 
         or
 
-        "NEUTRAL"
+        'NEUTRAL'
 
     ).strip().upper()
 
@@ -2390,23 +3673,19 @@ def score_participation(
 
     return {
 
-        "points":
+        'points':
             int(
                 points
             ),
 
-        "state":
+        'state':
             state,
 
-        "intelligence":
+        'intelligence':
             intelligence
 
     }
 
-
-# ============================================================
-# FINAL DAILY BRIEF SCORE
-# ============================================================
 
 def calculate_daily_brief_score(
     candidate
@@ -2414,16 +3693,14 @@ def calculate_daily_brief_score(
 
     symbol = str(
         candidate.get(
-            "symbol",
-            ""
+            'symbol',
+            ''
         )
     ).strip().upper()
 
 
-    stock, scanner_type = (
-        get_scanner_stock(
-            candidate
-        )
+    stock, scanner_type = get_scanner_stock(
+        candidate
     )
 
 
@@ -2437,23 +3714,21 @@ def calculate_daily_brief_score(
     )
 
 
-    if scanner_type == "BREAKOUT":
+    if scanner_type == 'BREAKOUT':
 
-        (
-            position_points,
-            distance
-        ) = score_breakout_position(
-            stock
+        position_points, distance = (
+            score_breakout_position(
+                stock
+            )
         )
 
 
     else:
 
-        (
-            position_points,
-            distance
-        ) = score_prebreakout_position(
-            stock
+        position_points, distance = (
+            score_prebreakout_position(
+                stock
+            )
         )
 
 
@@ -2461,6 +3736,7 @@ def calculate_daily_brief_score(
         volume_points,
         relative_volume,
         relative_volume_source
+
     ) = score_volume(
         stock,
         symbol
@@ -2470,13 +3746,10 @@ def calculate_daily_brief_score(
     structural_score = (
 
         touch_points
-
         +
         higher_low_points
-
         +
         position_points
-
         +
         volume_points
 
@@ -2489,12 +3762,12 @@ def calculate_daily_brief_score(
 
 
     participation_points = participation[
-        "points"
+        'points'
     ]
 
 
     intelligence = participation[
-        "intelligence"
+        'intelligence'
     ]
 
 
@@ -2504,191 +3777,220 @@ def calculate_daily_brief_score(
 
 
     persistence_points = persistence[
-        "persistence_points"
+        'persistence_points'
     ]
+
+
+    setup_timing = candidate.get(
+        'setup_timing',
+        {}
+    )
+
+
+    timing_points = int(
+
+        safe_number(
+
+            setup_timing.get(
+                'timing_points'
+            ),
+
+            0
+
+        )
+
+    )
 
 
     total_score = (
 
         structural_score
-
         +
         participation_points
-
         +
         persistence_points
+        +
+        timing_points
 
     )
 
 
     return {
 
-        "total_score":
+        'total_score':
             int(
                 total_score
             ),
 
-        "structural_score":
+        'structural_score':
             int(
                 structural_score
             ),
 
-        "participation_points":
+        'participation_points':
             int(
                 participation_points
             ),
 
-        "participation_state":
+        'participation_state':
             participation[
-                "state"
+                'state'
             ],
 
-        "persistence_points":
+        'persistence_points':
             int(
                 persistence_points
             ),
 
-        "persistence_state":
-            persistence.get(
-                "persistence_state"
+        'setup_timing_points':
+            timing_points,
+
+        'setup_timing_state':
+            setup_timing.get(
+                'state'
             ),
 
-        "scanner_sessions_available":
+        'persistence_state':
             persistence.get(
-                "scanner_sessions_available"
+                'persistence_state'
             ),
 
-        "appearances_last_5_scans":
+        'scanner_sessions_available':
             persistence.get(
-                "appearances_last_5_scans"
+                'scanner_sessions_available'
             ),
 
-        "appearances_last_10_scans":
+        'appearances_last_5_scans':
             persistence.get(
-                "appearances_last_10_scans"
+                'appearances_last_5_scans'
             ),
 
-        "appearances_last_20_scans":
+        'appearances_last_10_scans':
             persistence.get(
-                "appearances_last_20_scans"
+                'appearances_last_10_scans'
             ),
 
-        "sessions_in_5_scan_window":
+        'appearances_last_20_scans':
             persistence.get(
-                "sessions_in_5_scan_window"
+                'appearances_last_20_scans'
             ),
 
-        "sessions_in_10_scan_window":
+        'sessions_in_5_scan_window':
             persistence.get(
-                "sessions_in_10_scan_window"
+                'sessions_in_5_scan_window'
             ),
 
-        "sessions_in_20_scan_window":
+        'sessions_in_10_scan_window':
             persistence.get(
-                "sessions_in_20_scan_window"
+                'sessions_in_10_scan_window'
             ),
 
-        "consecutive_scan_appearances":
+        'sessions_in_20_scan_window':
             persistence.get(
-                "consecutive_scan_appearances"
+                'sessions_in_20_scan_window'
             ),
 
-        "saved_appearances":
+        'consecutive_scan_appearances':
             persistence.get(
-                "saved_appearances"
+                'consecutive_scan_appearances'
             ),
 
-        "first_seen":
+        'saved_appearances':
             persistence.get(
-                "first_seen"
+                'saved_appearances'
             ),
 
-        "last_seen":
+        'first_seen':
             persistence.get(
-                "last_seen"
+                'first_seen'
             ),
 
-        "indicator_date":
+        'last_seen':
+            persistence.get(
+                'last_seen'
+            ),
+
+        'indicator_date':
             intelligence.get(
-                "date"
+                'date'
             ),
 
-        "obv_price_relationship":
+        'obv_price_relationship':
             intelligence.get(
-                "obv_price_relationship"
+                'obv_price_relationship'
             ),
 
-        "obv_trend_5d":
+        'obv_trend_5d':
             intelligence.get(
-                "obv_trend_5d"
+                'obv_trend_5d'
             ),
 
-        "obv_trend_20d":
+        'obv_trend_20d':
             intelligence.get(
-                "obv_trend_20d"
+                'obv_trend_20d'
             ),
 
-        "obv_trend_60d":
+        'obv_trend_60d':
             intelligence.get(
-                "obv_trend_60d"
+                'obv_trend_60d'
             ),
 
-        "rsi_state":
+        'rsi_state':
             intelligence.get(
-                "rsi_state"
+                'rsi_state'
             ),
 
-        "price_change_5d_percent":
+        'price_change_5d_percent':
             intelligence.get(
-                "price_change_5d_percent"
+                'price_change_5d_percent'
             ),
 
-        "price_change_20d_percent":
+        'price_change_20d_percent':
             intelligence.get(
-                "price_change_20d_percent"
+                'price_change_20d_percent'
             ),
 
-        "price_change_60d_percent":
+        'price_change_60d_percent':
             intelligence.get(
-                "price_change_60d_percent"
+                'price_change_60d_percent'
             ),
 
-        "scanner_type":
+        'scanner_type':
             scanner_type,
 
-        "touch_points":
+        'touch_points':
             touch_points,
 
-        "higher_low_points":
+        'higher_low_points':
             higher_low_points,
 
-        "position_points":
+        'position_points':
             position_points,
 
-        "volume_points":
+        'volume_points':
             volume_points,
 
-        "resistance_touches":
+        'resistance_touches':
             int(
                 get_resistance_touches(
                     stock
                 )
             ),
 
-        "higher_lows":
+        'higher_lows':
             int(
                 get_higher_lows(
                     stock
                 )
             ),
 
-        "distance_from_resistance_percent":
+        'distance_from_resistance_percent':
             distance,
 
-        "relative_volume":
+        'relative_volume':
             relative_volume,
 
-        "relative_volume_source":
+        'relative_volume_source':
             relative_volume_source
 
     }
@@ -2701,15 +4003,11 @@ def calculate_daily_brief_score(
 def main():
 
     print()
-    print("===================================")
-    print("EDGEBREAK DAILY BRIEF CULL")
-    print("===================================")
+    print('===================================')
+    print('EDGEBREAK DAILY BRIEF CULL')
+    print('===================================')
     print()
 
-
-    # --------------------------------------------------------
-    # LOAD SCANNERS
-    # --------------------------------------------------------
 
     breakouts = load_json(
         BREAKOUT_FILE,
@@ -2728,9 +4026,7 @@ def main():
         len(
             breakouts
         )
-
         +
-
         len(
             prebreakouts
         )
@@ -2739,38 +4035,32 @@ def main():
 
 
     print(
-        f"Breakouts loaded     : "
-        f"{len(breakouts)}"
+        f'Breakouts loaded     : {len(breakouts)}'
     )
 
 
     print(
-        f"Pre-Breakouts loaded : "
-        f"{len(prebreakouts)}"
+        f'Pre-Breakouts loaded : {len(prebreakouts)}'
     )
 
 
     print(
-        "Launch Pads          : "
-        "EXCLUDED FROM DAILY BRIEF"
+        'Launch Pads          : EXCLUDED FROM DAILY BRIEF'
     )
 
 
     print(
-        f"Indicator history    : "
-        f"{len(indicator_history)} symbols"
+        f'Indicator history    : {len(indicator_history)} symbols'
     )
 
 
     print(
-        f"Saved scan sessions  : "
-        f"{len(GLOBAL_SCAN_SESSIONS)}"
+        f'Saved scan sessions  : {len(GLOBAL_SCAN_SESSIONS)}'
     )
 
 
     print(
-        f"Starting results     : "
-        f"{starting_total}"
+        f'Starting results     : {starting_total}'
     )
 
 
@@ -2784,26 +4074,24 @@ def main():
 
 
     print()
-    print("-----------------------------------")
-    print("BREAKOUT LIQUIDITY")
-    print("-----------------------------------")
+    print('-----------------------------------')
+    print('BREAKOUT LIQUIDITY')
+    print('-----------------------------------')
 
 
     print(
-        f"Before               : "
-        f"{len(breakouts)}"
+        f'Before               : {len(breakouts)}'
     )
 
 
     print(
-        "Liquidity cull       : "
-        "NOT APPLIED"
+        'Liquidity cull       : NOT APPLIED'
     )
 
 
     print(
-        f"Remaining            : "
-        f"{len(breakout_liquidity_survivors)}"
+        f'Remaining            : '
+        f'{len(breakout_liquidity_survivors)}'
     )
 
 
@@ -2830,23 +4118,23 @@ def main():
 
             prebreakout_liquidity_removed.append({
 
-                "symbol":
+                'symbol':
                     stock.get(
-                        "symbol"
+                        'symbol'
                     ),
 
-                "average_volume_20":
+                'average_volume_20':
                     safe_number(
                         stock.get(
-                            "average_volume_20"
+                            'average_volume_20'
                         ),
                         0
                     ),
 
-                "average_dollar_volume_20":
+                'average_dollar_volume_20':
                     safe_number(
                         stock.get(
-                            "average_dollar_volume_20"
+                            'average_dollar_volume_20'
                         ),
                         0
                     )
@@ -2855,26 +4143,25 @@ def main():
 
 
     print()
-    print("-----------------------------------")
-    print("PRE-BREAKOUT LIQUIDITY CULL")
-    print("-----------------------------------")
+    print('-----------------------------------')
+    print('PRE-BREAKOUT LIQUIDITY CULL')
+    print('-----------------------------------')
 
 
     print(
-        f"Before               : "
-        f"{len(prebreakouts)}"
+        f'Before               : {len(prebreakouts)}'
     )
 
 
     print(
-        f"Removed              : "
-        f"{len(prebreakout_liquidity_removed)}"
+        f'Removed              : '
+        f'{len(prebreakout_liquidity_removed)}'
     )
 
 
     print(
-        f"Remaining            : "
-        f"{len(prebreakout_liquidity_survivors)}"
+        f'Remaining            : '
+        f'{len(prebreakout_liquidity_survivors)}'
     )
 
 
@@ -2894,33 +4181,32 @@ def main():
 
 
         if result[
-            "remove"
+            'remove'
         ]:
 
             prebreakout_proximity_removed.append({
 
-                "symbol":
+                'symbol':
                     stock.get(
-                        "symbol"
+                        'symbol'
                     ),
 
-                "price":
+                'price':
                     result[
-                        "price"
+                        'price'
                     ],
 
-                "resistance":
+                'resistance':
                     result[
-                        "resistance"
+                        'resistance'
                     ],
 
-                "distance":
+                'distance':
                     result[
-                        "distance"
+                        'distance'
                     ]
 
             })
-
 
             continue
 
@@ -2931,42 +4217,42 @@ def main():
 
 
     print()
-    print("-----------------------------------")
-    print("PRE-BREAKOUT 5% PROXIMITY CULL")
-    print("-----------------------------------")
+    print('-----------------------------------')
+    print('PRE-BREAKOUT 5% PROXIMITY CULL')
+    print('-----------------------------------')
 
 
     print(
-        f"Before               : "
-        f"{len(prebreakout_liquidity_survivors)}"
+        f'Before               : '
+        f'{len(prebreakout_liquidity_survivors)}'
     )
 
 
     print(
-        f"Removed >5% away     : "
-        f"{len(prebreakout_proximity_removed)}"
+        f'Removed >5% away     : '
+        f'{len(prebreakout_proximity_removed)}'
     )
 
 
     print(
-        f"Remaining            : "
-        f"{len(prebreakout_proximity_survivors)}"
+        f'Remaining            : '
+        f'{len(prebreakout_proximity_survivors)}'
     )
 
 
     # --------------------------------------------------------
-    # STALE BREAKOUT
+    # OLD STALE BREAKOUT CULL
     # --------------------------------------------------------
 
     (
         breakout_survivors,
         breakout_stale_removed,
         breakout_volume_exceptions
+
     ) = apply_stale_breakout_cull(
 
         breakout_liquidity_survivors,
-
-        "BREAKOUT"
+        'BREAKOUT'
 
     )
 
@@ -2975,11 +4261,11 @@ def main():
         prebreakout_survivors,
         prebreakout_stale_removed,
         prebreakout_volume_exceptions
+
     ) = apply_stale_breakout_cull(
 
         prebreakout_proximity_survivors,
-
-        "PRE_BREAKOUT"
+        'PRE_BREAKOUT'
 
     )
 
@@ -2989,9 +4275,7 @@ def main():
         len(
             breakout_stale_removed
         )
-
         +
-
         len(
             prebreakout_stale_removed
         )
@@ -3002,41 +4286,38 @@ def main():
     all_volume_exceptions = (
 
         breakout_volume_exceptions
-
         +
-
         prebreakout_volume_exceptions
 
     )
 
 
     print()
-    print("-----------------------------------")
-    print("STALE BREAKOUT CULL")
-    print("-----------------------------------")
+    print('-----------------------------------')
+    print('STALE BREAKOUT CULL')
+    print('-----------------------------------')
 
 
     print(
-        f"Breakout removed     : "
-        f"{len(breakout_stale_removed)}"
+        f'Breakout removed     : '
+        f'{len(breakout_stale_removed)}'
     )
 
 
     print(
-        f"Pre-Breakout removed : "
-        f"{len(prebreakout_stale_removed)}"
+        f'Pre-Breakout removed : '
+        f'{len(prebreakout_stale_removed)}'
     )
 
 
     print(
-        f"Total stale removed  : "
-        f"{total_stale_removed}"
+        f'Total stale removed  : {total_stale_removed}'
     )
 
 
     print(
-        f"2x volume exceptions : "
-        f"{len(all_volume_exceptions)}"
+        f'2x volume exceptions : '
+        f'{len(all_volume_exceptions)}'
     )
 
 
@@ -3051,17 +4332,17 @@ def main():
 
         combined.append({
 
-            "symbol":
+            'symbol':
                 stock.get(
-                    "symbol"
+                    'symbol'
                 ),
 
-            "scanners":
+            'scanners':
                 [
-                    "BREAKOUT"
+                    'BREAKOUT'
                 ],
 
-            "breakout":
+            'breakout':
                 stock
 
         })
@@ -3071,48 +4352,45 @@ def main():
 
         combined.append({
 
-            "symbol":
+            'symbol':
                 stock.get(
-                    "symbol"
+                    'symbol'
                 ),
 
-            "scanners":
+            'scanners':
                 [
-                    "PRE_BREAKOUT"
+                    'PRE_BREAKOUT'
                 ],
 
-            "pre_breakout":
+            'pre_breakout':
                 stock
 
         })
 
 
     print()
-    print("-----------------------------------")
-    print("AFTER SCANNER-SPECIFIC CULLS")
-    print("-----------------------------------")
+    print('-----------------------------------')
+    print('AFTER SCANNER-SPECIFIC CULLS')
+    print('-----------------------------------')
 
 
     print(
-        f"Breakouts            : "
-        f"{len(breakout_survivors)}"
+        f'Breakouts            : {len(breakout_survivors)}'
     )
 
 
     print(
-        f"Pre-Breakouts        : "
-        f"{len(prebreakout_survivors)}"
+        f'Pre-Breakouts        : {len(prebreakout_survivors)}'
     )
 
 
     print(
-        f"Combined appearances : "
-        f"{len(combined)}"
+        f'Combined appearances : {len(combined)}'
     )
 
 
     # --------------------------------------------------------
-    # SPECIAL SECURITY TICKER CULL
+    # SPECIAL SECURITY SYMBOL CULL
     # --------------------------------------------------------
 
     normal_security_candidates = []
@@ -3123,8 +4401,8 @@ def main():
 
         symbol = str(
             stock.get(
-                "symbol",
-                ""
+                'symbol',
+                ''
             )
         ).strip().upper()
 
@@ -3138,20 +4416,19 @@ def main():
 
             weird_security_removed.append({
 
-                "symbol":
+                'symbol':
                     symbol,
 
-                "reason":
+                'reason':
                     reason,
 
-                "scanners":
+                'scanners':
                     stock.get(
-                        "scanners",
+                        'scanners',
                         []
                     )
 
             })
-
 
             continue
 
@@ -3162,26 +4439,25 @@ def main():
 
 
     print()
-    print("-----------------------------------")
-    print("SPECIAL SECURITY CULL")
-    print("-----------------------------------")
+    print('-----------------------------------')
+    print('SPECIAL SECURITY CULL')
+    print('-----------------------------------')
 
 
     print(
-        f"Before               : "
-        f"{len(combined)}"
+        f'Before               : {len(combined)}'
     )
 
 
     print(
-        f"Special removed      : "
-        f"{len(weird_security_removed)}"
+        f'Special removed      : '
+        f'{len(weird_security_removed)}'
     )
 
 
     print(
-        f"Remaining            : "
-        f"{len(normal_security_candidates)}"
+        f'Remaining            : '
+        f'{len(normal_security_candidates)}'
     )
 
 
@@ -3195,7 +4471,7 @@ def main():
     for stock in normal_security_candidates:
 
         symbol = stock.get(
-            "symbol"
+            'symbol'
         )
 
 
@@ -3215,10 +4491,10 @@ def main():
                 symbol
             ] = {
 
-                "symbol":
+                'symbol':
                     symbol,
 
-                "scanners":
+                'scanners':
                     []
 
             }
@@ -3230,36 +4506,36 @@ def main():
 
 
         for scanner in stock.get(
-            "scanners",
+            'scanners',
             []
         ):
 
             if scanner not in record[
-                "scanners"
+                'scanners'
             ]:
 
                 record[
-                    "scanners"
+                    'scanners'
                 ].append(
                     scanner
                 )
 
 
-        if "breakout" in stock:
+        if 'breakout' in stock:
 
             record[
-                "breakout"
+                'breakout'
             ] = stock[
-                "breakout"
+                'breakout'
             ]
 
 
-        if "pre_breakout" in stock:
+        if 'pre_breakout' in stock:
 
             record[
-                "pre_breakout"
+                'pre_breakout'
             ] = stock[
-                "pre_breakout"
+                'pre_breakout'
             ]
 
 
@@ -3273,9 +4549,7 @@ def main():
         len(
             normal_security_candidates
         )
-
         -
-
         len(
             merged_candidates
         )
@@ -3284,44 +4558,43 @@ def main():
 
 
     print()
-    print("-----------------------------------")
-    print("DUPLICATE MERGE")
-    print("-----------------------------------")
+    print('-----------------------------------')
+    print('DUPLICATE MERGE')
+    print('-----------------------------------')
 
 
     print(
-        f"Before merge         : "
-        f"{len(normal_security_candidates)}"
+        f'Before merge         : '
+        f'{len(normal_security_candidates)}'
     )
 
 
     print(
-        f"Duplicates merged    : "
-        f"{duplicates_removed}"
+        f'Duplicates merged    : {duplicates_removed}'
     )
 
 
     print(
-        f"Unique candidates    : "
-        f"{len(merged_candidates)}"
+        f'Unique candidates    : {len(merged_candidates)}'
     )
 
 
     # --------------------------------------------------------
-    # BANK / PROPERTY / PROFILE SECURITY CULL
+    # PROFILE CULL
     # --------------------------------------------------------
 
     qualified_candidates = []
 
     bank_removed = []
     property_removed = []
+    shell_spac_removed = []
     profile_failures = []
 
 
     print()
-    print("-----------------------------------")
-    print("BANK / PROPERTY CULL")
-    print("-----------------------------------")
+    print('-----------------------------------')
+    print('BANK / PROPERTY / SHELL CULL')
+    print('-----------------------------------')
     print()
 
 
@@ -3331,14 +4604,12 @@ def main():
     ):
 
         symbol = stock[
-            "symbol"
+            'symbol'
         ]
 
 
         print(
-            f"[{index}/"
-            f"{len(merged_candidates)}] "
-            f"{symbol}"
+            f'[{index}/{len(merged_candidates)}] {symbol}'
         )
 
 
@@ -3353,37 +4624,35 @@ def main():
                 symbol
             )
 
-
             qualified_candidates.append(
                 stock
             )
-
 
             continue
 
 
         stock[
-            "company"
+            'company'
         ] = {
 
-            "name":
+            'name':
                 profile.get(
-                    "name"
+                    'name'
                 ),
 
-            "sector":
+            'sector':
                 profile.get(
-                    "sector"
+                    'sector'
                 ),
 
-            "industry":
+            'industry':
                 profile.get(
-                    "industry"
+                    'industry'
                 ),
 
-            "type":
+            'type':
                 profile.get(
-                    "type"
+                    'type'
                 )
 
         }
@@ -3394,23 +4663,25 @@ def main():
         )
 
 
-        if reason == "SPECIAL_SECURITY":
+        if reason == 'SPECIAL_SECURITY':
 
             weird_security_removed.append({
 
-                "symbol":
+                'symbol':
                     symbol,
 
-                "reason":
-                    profile.get(
-                        "type"
-                    )
-                    or
-                    "Special Security",
+                'reason':
+                    (
+                        profile.get(
+                            'type'
+                        )
+                        or
+                        'Special Security'
+                    ),
 
-                "scanners":
+                'scanners':
                     stock.get(
-                        "scanners",
+                        'scanners',
                         []
                     )
 
@@ -3422,25 +4693,24 @@ def main():
                 f"{profile.get('type')}"
             )
 
-
             continue
 
 
-        if reason == "BANK":
+        if reason == 'BANK':
 
             bank_removed.append({
 
-                "symbol":
+                'symbol':
                     symbol,
 
-                "name":
+                'name':
                     profile.get(
-                        "name"
+                        'name'
                     ),
 
-                "industry":
+                'industry':
                     profile.get(
-                        "industry"
+                        'industry'
                     )
 
             })
@@ -3451,25 +4721,24 @@ def main():
                 f"{profile.get('industry')}"
             )
 
-
             continue
 
 
-        if reason == "PROPERTY":
+        if reason == 'PROPERTY':
 
             property_removed.append({
 
-                "symbol":
+                'symbol':
                     symbol,
 
-                "name":
+                'name':
                     profile.get(
-                        "name"
+                        'name'
                     ),
 
-                "industry":
+                'industry':
                     profile.get(
-                        "industry"
+                        'industry'
                     )
 
             })
@@ -3480,6 +4749,36 @@ def main():
                 f"{profile.get('industry')}"
             )
 
+            continue
+
+
+        if reason == 'SHELL_OR_SPAC':
+
+            shell_spac_removed.append({
+
+                'symbol':
+                    symbol,
+
+                'name':
+                    profile.get(
+                        'name'
+                    ),
+
+                'industry':
+                    profile.get(
+                        'industry'
+                    )
+
+            })
+
+
+            print(
+
+                f"   REMOVED SHELL/SPAC: "
+                f"{profile.get('name')} | "
+                f"{profile.get('industry')}"
+
+            )
 
             continue
 
@@ -3487,6 +4786,94 @@ def main():
         qualified_candidates.append(
             stock
         )
+
+
+    # --------------------------------------------------------
+    # REVERSAL / CONSOLIDATION CULL
+    # --------------------------------------------------------
+
+    timing_survivors = []
+    timing_removed = []
+
+
+    print()
+    print('-----------------------------------')
+    print('REVERSAL / CONSOLIDATION CULL')
+    print('-----------------------------------')
+    print()
+
+
+    for index, candidate in enumerate(
+        qualified_candidates,
+        start=1
+    ):
+
+        symbol = candidate.get(
+            'symbol',
+            ''
+        )
+
+
+        print(
+            f'[{index}/{len(qualified_candidates)}] {symbol}'
+        )
+
+
+        timing = evaluate_setup_timing(
+            candidate
+        )
+
+
+        candidate[
+            'setup_timing'
+        ] = timing
+
+
+        if timing.get(
+            'remove',
+            False
+        ):
+
+            timing_removed.append({
+
+                'symbol':
+                    symbol,
+
+                'state':
+                    timing.get(
+                        'state'
+                    ),
+
+                'reason':
+                    timing.get(
+                        'reason'
+                    )
+
+            })
+
+
+            print(
+
+                f"   REMOVED: "
+                f"{timing.get('state')} | "
+                f"{timing.get('reason')}"
+
+            )
+
+            continue
+
+
+        timing_survivors.append(
+            candidate
+        )
+
+
+        print(
+            f"   KEPT: {timing.get('state')}"
+        )
+
+
+    qualified_candidates = timing_survivors
 
 
     # --------------------------------------------------------
@@ -3499,26 +4886,26 @@ def main():
     for candidate in qualified_candidates:
 
         symbol = candidate.get(
-            "symbol"
+            'symbol'
         )
 
 
         candidate[
-            "indicator_intelligence"
+            'indicator_intelligence'
         ] = get_indicator_intelligence(
             symbol
         )
 
 
         candidate[
-            "scanner_persistence"
+            'scanner_persistence'
         ] = get_scanner_persistence(
             symbol
         )
 
 
         candidate[
-            "daily_brief_ranking"
+            'daily_brief_ranking'
         ] = calculate_daily_brief_score(
             candidate
         )
@@ -3529,63 +4916,61 @@ def main():
         )
 
 
-    # --------------------------------------------------------
-    # SORT
-    # --------------------------------------------------------
-
     ranked_candidates.sort(
 
         key=lambda stock: (
 
             -stock[
-                "daily_brief_ranking"
+                'daily_brief_ranking'
             ][
-                "total_score"
+                'total_score'
             ],
 
             -stock[
-                "daily_brief_ranking"
+                'daily_brief_ranking'
             ][
-                "participation_points"
+                'participation_points'
             ],
 
             -stock[
-                "daily_brief_ranking"
+                'daily_brief_ranking'
             ][
-                "persistence_points"
+                'setup_timing_points'
             ],
 
             -stock[
-                "daily_brief_ranking"
+                'daily_brief_ranking'
             ][
-                "position_points"
+                'persistence_points'
             ],
 
             -stock[
-                "daily_brief_ranking"
+                'daily_brief_ranking'
             ][
-                "higher_low_points"
+                'position_points'
             ],
 
             -stock[
-                "daily_brief_ranking"
+                'daily_brief_ranking'
             ][
-                "touch_points"
+                'higher_low_points'
+            ],
+
+            -stock[
+                'daily_brief_ranking'
+            ][
+                'touch_points'
             ],
 
             stock.get(
-                "symbol",
-                ""
+                'symbol',
+                ''
             )
 
         )
 
     )
 
-
-    # --------------------------------------------------------
-    # COMPETITION RANK
-    # --------------------------------------------------------
 
     previous_score = None
     current_rank = 0
@@ -3597,9 +4982,9 @@ def main():
     ):
 
         score = candidate[
-            "daily_brief_ranking"
+            'daily_brief_ranking'
         ][
-            "total_score"
+            'total_score'
         ]
 
 
@@ -3609,7 +4994,7 @@ def main():
 
 
         candidate[
-            "daily_brief_rank"
+            'daily_brief_rank'
         ] = current_rank
 
 
@@ -3617,53 +5002,38 @@ def main():
 
 
     # --------------------------------------------------------
-    # TOP 20 + ALL TIES
+    # TOP 20 INCLUDING SCORE TIES
     # --------------------------------------------------------
 
-    if (
-        len(
-            ranked_candidates
-        )
-        <=
-        TARGET_TOP_CANDIDATES
-    ):
+    if len(
+        ranked_candidates
+    ) <= TARGET_TOP_CANDIDATES:
 
-        final_candidates = (
-            ranked_candidates
-        )
-
-
+        final_candidates = ranked_candidates
         cutoff_score = None
 
 
     else:
 
-        cutoff_score = (
-
-            ranked_candidates[
-                TARGET_TOP_CANDIDATES
-                -
-                1
-            ][
-                "daily_brief_ranking"
-            ][
-                "total_score"
-            ]
-
-        )
+        cutoff_score = ranked_candidates[
+            TARGET_TOP_CANDIDATES - 1
+        ][
+            'daily_brief_ranking'
+        ][
+            'total_score'
+        ]
 
 
         final_candidates = [
 
             candidate
 
-            for candidate
-            in ranked_candidates
+            for candidate in ranked_candidates
 
             if candidate[
-                "daily_brief_ranking"
+                'daily_brief_ranking'
             ][
-                "total_score"
+                'total_score'
             ]
             >=
             cutoff_score
@@ -3672,39 +5042,38 @@ def main():
 
 
     # --------------------------------------------------------
-    # PRINT FULL RANKING
+    # PRINT RANKING
     # --------------------------------------------------------
 
     print()
-    print("===================================")
-    print("DAILY BRIEF RANKING")
-    print("===================================")
+    print('===================================')
+    print('DAILY BRIEF RANKING')
+    print('===================================')
     print()
 
 
     print(
-        f"Qualified candidates    : "
-        f"{len(qualified_candidates)}"
+        f'Qualified candidates    : '
+        f'{len(qualified_candidates)}'
     )
 
 
     print(
-        f"Target top candidates   : "
-        f"{TARGET_TOP_CANDIDATES}"
+        f'Target top candidates   : '
+        f'{TARGET_TOP_CANDIDATES}'
     )
 
 
     if cutoff_score is not None:
 
         print(
-            f"Cutoff score            : "
-            f"{cutoff_score}"
+            f'Cutoff score            : {cutoff_score}'
         )
 
 
     print(
-        f"Selected including ties : "
-        f"{len(final_candidates)}"
+        f'Selected including ties : '
+        f'{len(final_candidates)}'
     )
 
 
@@ -3712,51 +5081,49 @@ def main():
 
 
     print(
-        "RANK | SYMBOL | TYPE         | FINAL | "
-        "BASE | PART | PERS | VOL | PARTICIPATION"
+
+        'RANK | SYMBOL | TYPE         | FINAL | '
+        'BASE | PART | TIME | PERS | VOL | PARTICIPATION'
+
     )
 
 
     print(
-        "------------------------------------------------"
-        "----------------------------"
+        '----------------------------------------------------------------------------'
     )
 
 
     for candidate in ranked_candidates:
 
         ranking = candidate[
-            "daily_brief_ranking"
+            'daily_brief_ranking'
         ]
 
 
         state = (
+
             ranking.get(
-                "participation_state"
+                'participation_state'
             )
+
             or
-            "NO_DATA"
+
+            'NO_DATA'
+
         )
 
 
         print(
 
             f"{candidate['daily_brief_rank']:>4} | "
-
             f"{candidate['symbol']:<6} | "
-
             f"{ranking['scanner_type']:<12} | "
-
             f"{ranking['total_score']:>5} | "
-
             f"{ranking['structural_score']:>4} | "
-
             f"{ranking['participation_points']:>+4} | "
-
+            f"{ranking['setup_timing_points']:>+4} | "
             f"{ranking['persistence_points']:>+4} | "
-
             f"{ranking['volume_points']:>3} | "
-
             f"{state}"
 
         )
@@ -3767,93 +5134,90 @@ def main():
     # --------------------------------------------------------
 
     print()
-    print("===================================")
-    print("SELECTED FOR DAILY BRIEF RESEARCH")
-    print("===================================")
+    print('===================================')
+    print('SELECTED FOR DAILY BRIEF RESEARCH')
+    print('===================================')
     print()
 
 
     for candidate in final_candidates:
 
         ranking = candidate[
-            "daily_brief_ranking"
+            'daily_brief_ranking'
         ]
 
 
         distance = ranking[
-            "distance_from_resistance_percent"
+            'distance_from_resistance_percent'
         ]
 
 
         relative_volume = ranking[
-            "relative_volume"
+            'relative_volume'
         ]
 
 
         scanner_type = ranking[
-            "scanner_type"
+            'scanner_type'
         ]
 
 
         if distance is None:
 
-            distance_text = (
-                "N/A"
-            )
+            distance_text = 'N/A'
 
 
-        elif scanner_type == "BREAKOUT":
+        elif scanner_type == 'BREAKOUT':
 
             if distance >= 0:
 
                 distance_text = (
-                    f"{distance:.2f}% above"
+                    f'{distance:.2f}% above'
                 )
+
 
             else:
 
                 distance_text = (
-                    f"{abs(distance):.2f}% below"
+                    f'{abs(distance):.2f}% below'
                 )
 
 
         elif distance >= 0:
 
             distance_text = (
-                f"{distance:.2f}% below"
+                f'{distance:.2f}% below'
             )
 
 
         else:
 
             distance_text = (
-                f"{abs(distance):.2f}% above"
+                f'{abs(distance):.2f}% above'
             )
 
 
         if relative_volume is None:
 
-            volume_text = (
-                "N/A"
-            )
+            volume_text = 'N/A'
 
 
         else:
 
             volume_text = (
-                f"{relative_volume:.2f}x"
+                f'{relative_volume:.2f}x'
             )
 
 
         participation_state = (
 
             ranking.get(
-                "participation_state"
+                'participation_state'
             )
 
             or
 
-            "NO_DATA"
+            'NO_DATA'
 
         )
 
@@ -3861,12 +5225,25 @@ def main():
         persistence_state = (
 
             ranking.get(
-                "persistence_state"
+                'persistence_state'
             )
 
             or
 
-            "NO_DATA"
+            'NO_DATA'
+
+        )
+
+
+        setup_timing_state = (
+
+            ranking.get(
+                'setup_timing_state'
+            )
+
+            or
+
+            'NO_DATA'
 
         )
 
@@ -3874,59 +5251,45 @@ def main():
         print(
 
             f"#{candidate['daily_brief_rank']} "
-
             f"{candidate['symbol']} | "
-
             f"{scanner_type} | "
-
-            f"Score "
-            f"{ranking['total_score']} | "
-
-            f"Base "
-            f"{ranking['structural_score']} | "
-
+            f"Score {ranking['total_score']} | "
+            f"Base {ranking['structural_score']} | "
             f"Participation "
             f"{ranking['participation_points']:+d} "
             f"({participation_state}) | "
-
             f"Persistence "
             f"{ranking['persistence_points']:+d} "
             f"({persistence_state}; "
-
             f"{ranking['appearances_last_5_scans']}/"
             f"{ranking['sessions_in_5_scan_window']} "
             f"last scans) | "
-
-            f"Touches "
-            f"{ranking['resistance_touches']} | "
-
-            f"Higher Lows "
-            f"{ranking['higher_lows']} | "
-
+            f"Timing "
+            f"{ranking['setup_timing_points']:+d} "
+            f"({setup_timing_state}) | "
+            f"Touches {ranking['resistance_touches']} | "
+            f"Higher Lows {ranking['higher_lows']} | "
             f"{distance_text} resistance | "
-
-            f"Volume "
-            f"{volume_text}"
+            f"Volume {volume_text}"
 
         )
 
 
     # --------------------------------------------------------
-    # INDICATOR STATS
+    # SUMMARY DATA
     # --------------------------------------------------------
 
     indicator_data_available = sum(
 
         1
 
-        for candidate
-        in ranked_candidates
+        for candidate in ranked_candidates
 
         if candidate.get(
-            "indicator_intelligence",
+            'indicator_intelligence',
             {}
         ).get(
-            "available"
+            'available'
         )
 
     )
@@ -3938,18 +5301,16 @@ def main():
     for candidate in ranked_candidates:
 
         state = candidate.get(
-            "daily_brief_ranking",
+            'daily_brief_ranking',
             {}
         ).get(
-            "participation_state"
+            'participation_state'
         )
 
 
         if not state:
 
-            state = (
-                "NO_DATA"
-            )
+            state = 'NO_DATA'
 
 
         participation_state_counts[
@@ -3960,17 +5321,11 @@ def main():
                 state,
                 0
             )
-
             +
-
             1
 
         )
 
-
-    # --------------------------------------------------------
-    # PERSISTENCE STATS
-    # --------------------------------------------------------
 
     persistence_state_counts = {}
 
@@ -3978,18 +5333,16 @@ def main():
     for candidate in ranked_candidates:
 
         state = candidate.get(
-            "daily_brief_ranking",
+            'daily_brief_ranking',
             {}
         ).get(
-            "persistence_state"
+            'persistence_state'
         )
 
 
         if not state:
 
-            state = (
-                "NO_DATA"
-            )
+            state = 'NO_DATA'
 
 
         persistence_state_counts[
@@ -4000,16 +5353,14 @@ def main():
                 state,
                 0
             )
-
             +
-
             1
 
         )
 
 
     # --------------------------------------------------------
-    # SAVE CANDIDATES
+    # SAVE OUTPUTS
     # --------------------------------------------------------
 
     save_json(
@@ -4018,45 +5369,54 @@ def main():
     )
 
 
-    # --------------------------------------------------------
-    # SAVE STATS
-    # --------------------------------------------------------
-
     daily_brief_stats = {
 
-        "technical_setups_found":
+        'technical_setups_found':
             starting_total,
 
-        "breakout_setups_found":
+        'breakout_setups_found':
             len(
                 breakouts
             ),
 
-        "pre_breakout_setups_found":
+        'pre_breakout_setups_found':
             len(
                 prebreakouts
             ),
 
-        "forwarded_for_ai_research":
+        'forwarded_for_ai_research':
             len(
                 final_candidates
             ),
 
-        "indicator_data_available":
+        'indicator_data_available':
             indicator_data_available,
 
-        "participation_state_counts":
+        'participation_state_counts':
             participation_state_counts,
 
-        "scanner_sessions_available":
+        'scanner_sessions_available':
             len(
                 GLOBAL_SCAN_SESSIONS
             ),
 
-        "persistence_state_counts":
+        'persistence_state_counts':
             persistence_state_counts,
 
-        "launch_pad_included":
+        'shell_spac_removed':
+            len(
+                shell_spac_removed
+            ),
+
+        'setup_timing_removed':
+            len(
+                timing_removed
+            ),
+
+        'setup_timing_removed_details':
+            timing_removed,
+
+        'launch_pad_included':
             False
 
     }
@@ -4068,10 +5428,6 @@ def main():
     )
 
 
-    # --------------------------------------------------------
-    # FINAL SUMMARY
-    # --------------------------------------------------------
-
     tie_extras = max(
 
         0,
@@ -4079,95 +5435,104 @@ def main():
         len(
             final_candidates
         )
-
         -
-
         TARGET_TOP_CANDIDATES
 
     )
 
 
-    print()
-    print("===================================")
-    print("FINAL DAILY BRIEF POOL")
-    print("===================================")
-    print()
-
-
-    print(
-        f"Started with             : "
-        f"{starting_total}"
-    )
-
-
-    print(
-        f"Pre-Breakout liquidity   : "
-        f"{len(prebreakout_liquidity_removed)} removed"
-    )
-
-
-    print(
-        f"Pre-Breakout >5% away    : "
-        f"{len(prebreakout_proximity_removed)} removed"
-    )
-
-
-    print(
-        f"Stale breakouts          : "
-        f"{total_stale_removed} removed"
-    )
-
-
-    print(
-        f"Saved by 2x volume       : "
-        f"{len(all_volume_exceptions)}"
-    )
-
-
-    print(
-        f"Special securities       : "
-        f"{len(weird_security_removed)} removed"
-    )
-
-
-    print(
-        f"Duplicates merged        : "
-        f"{duplicates_removed}"
-    )
-
-
-    print(
-        f"Banks removed            : "
-        f"{len(bank_removed)}"
-    )
-
-
-    print(
-        f"Property/REIT removed    : "
-        f"{len(property_removed)}"
-    )
-
-
-    print(
-        f"Profile failures         : "
-        f"{len(profile_failures)}"
-    )
-
+    # --------------------------------------------------------
+    # FINAL REPORT
+    # --------------------------------------------------------
 
     print()
-    print("INDICATOR INTELLIGENCE")
-    print("-----------------------------------")
+    print('===================================')
+    print('FINAL DAILY BRIEF POOL')
+    print('===================================')
+    print()
 
 
     print(
-        f"Indicator history symbols : "
-        f"{len(indicator_history)}"
+        f'Started with             : {starting_total}'
     )
 
 
     print(
-        f"Candidates with data      : "
-        f"{indicator_data_available}"
+        f'Pre-Breakout liquidity   : '
+        f'{len(prebreakout_liquidity_removed)} removed'
+    )
+
+
+    print(
+        f'Pre-Breakout >5% away    : '
+        f'{len(prebreakout_proximity_removed)} removed'
+    )
+
+
+    print(
+        f'Stale breakouts          : '
+        f'{total_stale_removed} removed'
+    )
+
+
+    print(
+        f'Saved by 2x volume       : '
+        f'{len(all_volume_exceptions)}'
+    )
+
+
+    print(
+        f'Special securities       : '
+        f'{len(weird_security_removed)} removed'
+    )
+
+
+    print(
+        f'Shell/SPAC companies     : '
+        f'{len(shell_spac_removed)} removed'
+    )
+
+
+    print(
+        f'Timing/extension cull    : '
+        f'{len(timing_removed)} removed'
+    )
+
+
+    print(
+        f'Duplicates merged        : {duplicates_removed}'
+    )
+
+
+    print(
+        f'Banks removed            : {len(bank_removed)}'
+    )
+
+
+    print(
+        f'Property/REIT removed    : {len(property_removed)}'
+    )
+
+
+    print(
+        f'Profile failures         : {len(profile_failures)}'
+    )
+
+
+    print()
+    print('INDICATOR INTELLIGENCE')
+    print('-----------------------------------')
+
+
+    print(
+        f'Indicator history symbols : '
+        f'{len(indicator_history)}'
+    )
+
+
+    print(
+        f'Candidates with data      : '
+        f'{indicator_data_available}'
     )
 
 
@@ -4176,19 +5541,18 @@ def main():
     ):
 
         print(
-            f"{state:<26}: "
-            f"{count}"
+            f'{state:<26}: {count}'
         )
 
 
     print()
-    print("SCANNER PERSISTENCE")
-    print("-----------------------------------")
+    print('SCANNER PERSISTENCE')
+    print('-----------------------------------')
 
 
     print(
-        f"Saved scan sessions       : "
-        f"{len(GLOBAL_SCAN_SESSIONS)}"
+        f'Saved scan sessions       : '
+        f'{len(GLOBAL_SCAN_SESSIONS)}'
     )
 
 
@@ -4197,71 +5561,70 @@ def main():
     ):
 
         print(
-            f"{state:<26}: "
-            f"{count}"
+            f'{state:<26}: {count}'
         )
 
 
     print()
-    print("RANKING")
-    print("-----------------------------------")
+    print('RANKING')
+    print('-----------------------------------')
 
 
     print(
-        f"Qualified before ranking : "
-        f"{len(qualified_candidates)}"
+        f'Qualified before ranking : '
+        f'{len(qualified_candidates)}'
     )
 
 
     print(
-        f"Target                   : "
-        f"{TARGET_TOP_CANDIDATES}"
+        f'Target                   : '
+        f'{TARGET_TOP_CANDIDATES}'
     )
 
 
     if cutoff_score is not None:
 
         print(
-            f"20th-place score         : "
-            f"{cutoff_score}"
+            f'20th-place score         : {cutoff_score}'
         )
 
 
     print(
-        f"Extra stocks from tie    : "
-        f"{tie_extras}"
+        f'Extra stocks from tie    : {tie_extras}'
     )
 
 
     print()
-    print("-----------------------------------")
+    print('-----------------------------------')
 
 
     print(
-        f"FINAL CANDIDATES         : "
-        f"{len(final_candidates)}"
+        f'FINAL CANDIDATES         : '
+        f'{len(final_candidates)}'
     )
 
 
-    print("-----------------------------------")
+    print('-----------------------------------')
     print()
 
 
     print(
-        f"✅ Saved candidates to "
-        f"{OUTPUT_FILE}"
+        f'✅ Saved candidates to {OUTPUT_FILE}'
     )
 
 
     print(
-        f"✅ Saved stats to "
-        f"{STATS_OUTPUT_FILE}"
+        f'✅ Saved stats to {STATS_OUTPUT_FILE}'
     )
 
 
     print(
-        f"✅ Profile cache: "
-        f"{PROFILE_CACHE_FILE}"
+        f'✅ Profile cache: {PROFILE_CACHE_FILE}'
+    )
+
+
+    print(
+        f'✅ Price cache: {PRICE_HISTORY_CACHE_FILE}'
     )
 
 
@@ -4272,6 +5635,6 @@ def main():
 # RUN
 # ============================================================
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
     main()
