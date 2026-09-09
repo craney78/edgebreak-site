@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
 
 <!-- ===================================
@@ -77,7 +79,7 @@ Try EdgeBreak Free | AI NASDAQ Stock Research & Scanners
 
 <meta
     name="theme-color"
-    content="#020617"
+    content="#f8fafc"
 >
 
 
@@ -127,7 +129,7 @@ OPEN GRAPH
 
 <meta
     property="og:locale"
-    content="en_US"
+    content="en_AU"
 >
 
 
@@ -8466,14 +8468,1349 @@ FREE PAGE — LOCKED AI STOCK RESULTS
 </style>  
 
 
+<style id="edgebreak-app-shell-v2">
+
+/* =========================================================
+   EDGEBREAK APP SHELL V2
+   LIGHT / OPEN / TRUSTED
+   SAFE VISUAL OVERRIDES ONLY
+========================================================= */
+
+:root{
+    --eb-ink:#0b1220;
+    --eb-muted:#64748b;
+    --eb-line:#e5eaf0;
+    --eb-soft:#f5f8fb;
+    --eb-green:#16a34a;
+    --eb-green-dark:#08783b;
+    --eb-blue:#2563eb;
+    --eb-white:#ffffff;
+    --eb-shadow:0 18px 55px rgba(15,23,42,.07);
+    --eb-sidebar:238px;
+}
+
+html{
+    scroll-padding-top:110px;
+}
+
+body.eb-app-body{
+    margin:0 !important;
+    background:#f6f8fb !important;
+    color:var(--eb-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+body.eb-app-body main{
+    margin-left:var(--eb-sidebar);
+    padding:0 28px 150px;
+    min-width:0;
+}
+
+body.eb-app-body .elite-container{
+    width:min(1400px,100%);
+    max-width:1400px;
+    margin:0 auto !important;
+    padding:28px 0 80px !important;
+}
+
+
+/* =========================================================
+   SHARED LEFT NAV
+========================================================= */
+
+.eb-app-sidebar{
+    position:fixed;
+    top:78px;
+    left:0;
+    bottom:0;
+    z-index:900;
+    width:var(--eb-sidebar);
+    padding:18px 14px 24px;
+    overflow-y:auto;
+    border-right:1px solid var(--eb-line);
+    background:rgba(255,255,255,.97);
+    box-shadow:6px 0 28px rgba(15,23,42,.035);
+}
+
+.eb-app-sidebar-head{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:6px 8px 20px;
+}
+
+.eb-app-sidebar-head img{
+    width:40px;
+    height:40px;
+    object-fit:contain;
+}
+
+.eb-app-sidebar-head strong{
+    display:block;
+    color:var(--eb-ink);
+    font-size:15px;
+    letter-spacing:-.02em;
+}
+
+.eb-app-sidebar-head span{
+    display:block;
+    margin-top:2px;
+    color:#94a3b8;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+}
+
+.eb-app-nav{
+    display:grid;
+    gap:18px;
+}
+
+.eb-app-nav-group{
+    display:grid;
+    gap:4px;
+}
+
+.eb-app-nav-primary{
+    padding-bottom:15px;
+    border-bottom:1px solid var(--eb-line);
+}
+
+.eb-app-nav-label{
+    padding:0 10px 5px;
+    color:#94a3b8;
+    font-size:10px;
+    font-weight:850;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+}
+
+.eb-app-nav-item{
+    width:100%;
+    min-height:43px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:0 11px;
+    border:0;
+    border-radius:11px;
+    background:transparent;
+    color:#475569;
+    text-decoration:none;
+    text-align:left;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.18s ease;
+}
+
+.eb-app-nav-item:hover{
+    background:#f3f7f5;
+    color:var(--eb-ink);
+}
+
+.eb-app-nav-item.active{
+    background:#eef9f1;
+    color:var(--eb-green-dark);
+}
+
+.eb-app-nav-icon{
+    width:26px;
+    height:26px;
+    flex:0 0 26px;
+    display:grid;
+    place-items:center;
+    border-radius:8px;
+    background:#f3f6f8;
+    color:#64748b;
+    font-size:13px;
+    font-weight:850;
+}
+
+.eb-app-nav-item.active .eb-app-nav-icon{
+    background:#dff5e6;
+    color:var(--eb-green-dark);
+}
+
+.eb-app-nav-ai{
+    padding-top:4px;
+    border-top:1px solid var(--eb-line);
+}
+
+
+/* =========================================================
+   TOP VIEW SWITCH
+========================================================= */
+
+.eb-app-topbar{
+    width:min(1400px,100%);
+    min-height:72px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    padding:15px 2px;
+    border-bottom:1px solid var(--eb-line);
+}
+
+.eb-app-topbar-copy span{
+    display:block;
+    color:#94a3b8;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.eb-app-topbar-copy strong{
+    display:block;
+    margin-top:2px;
+    color:var(--eb-ink);
+    font-size:20px;
+    letter-spacing:-.025em;
+}
+
+.eb-app-view-switch{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    padding:4px;
+    border:1px solid var(--eb-line);
+    border-radius:12px;
+    background:#fff;
+    box-shadow:0 7px 22px rgba(15,23,42,.04);
+}
+
+.eb-app-view-switch a{
+    min-height:38px;
+    padding:0 15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:9px;
+    color:#64748b;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:800;
+}
+
+.eb-app-view-switch a.active{
+    background:#eef9f1;
+    color:var(--eb-green-dark);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+body.eb-app-body .elite-banner{
+    display:block;
+    margin:18px 0 24px;
+    padding:46px 46px 42px;
+    border:1px solid var(--eb-line);
+    border-radius:28px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 31%),
+        radial-gradient(circle at 12% 12%,rgba(37,99,235,.08),transparent 27%),
+        #ffffff;
+    box-shadow:var(--eb-shadow);
+    text-align:left;
+}
+
+body.eb-app-body .elite-banner > div{
+    max-width:870px;
+}
+
+.eb-hero-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    margin-bottom:18px;
+    color:var(--eb-green-dark);
+    font-size:11px;
+    font-weight:850;
+    letter-spacing:.12em;
+}
+
+.eb-hero-kicker span{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 0 5px rgba(34,197,94,.10);
+}
+
+body.eb-app-body .elite-banner h1{
+    margin:0 0 16px !important;
+    color:var(--eb-ink) !important;
+    font-size:clamp(42px,5vw,68px) !important;
+    line-height:1 !important;
+    font-weight:850 !important;
+    letter-spacing:-.055em !important;
+    text-shadow:none !important;
+}
+
+body.eb-app-body .elite-banner h1 em{
+    color:var(--eb-green);
+    font-style:normal;
+}
+
+body.eb-app-body .elite-banner p{
+    max-width:760px;
+    margin:0 0 25px;
+    color:#596577 !important;
+    font-size:17px;
+    line-height:1.7;
+}
+
+body.eb-app-body .manual-scanner-btn{
+    min-height:48px;
+    padding:0 19px;
+    border:1px solid #d8dee7;
+    border-radius:999px;
+    background:#fff;
+    color:var(--eb-ink);
+    box-shadow:none;
+}
+
+body.eb-app-body .manual-scanner-btn:hover{
+    border-color:#9ba7b5;
+    background:#fff;
+}
+
+
+/* =========================================================
+   COMMON LIGHT CARDS
+========================================================= */
+
+body.eb-app-body .nasdaq-overview-panel,
+body.eb-app-body .daily-brief-panel,
+body.eb-app-body .scanner-panel,
+body.eb-app-body .chart-ai-tool{
+    border:1px solid var(--eb-line) !important;
+    background:#ffffff !important;
+    box-shadow:var(--eb-shadow) !important;
+    color:var(--eb-ink);
+}
+
+body.eb-app-body .nasdaq-overview-panel,
+body.eb-app-body .daily-brief-panel{
+    border-radius:26px !important;
+    padding:30px !important;
+}
+
+body.eb-app-body .scanner-panel{
+    border-radius:22px !important;
+    padding:24px !important;
+}
+
+body.eb-app-body .scanner-panel:hover{
+    border-color:#d8e1e8 !important;
+    box-shadow:0 20px 54px rgba(15,23,42,.075) !important;
+}
+
+body.eb-app-body .nasdaq-overview-header h2,
+body.eb-app-body .daily-brief-panel h2,
+body.eb-app-body .daily-brief-section-heading h3,
+body.eb-app-body .scanner-panel h3,
+body.eb-app-body .chart-ai-header h2,
+body.eb-app-body .chart-ai-results-heading h3{
+    color:var(--eb-ink) !important;
+}
+
+body.eb-app-body .nasdaq-overview-header p,
+body.eb-app-body .daily-brief-copy > p,
+body.eb-app-body .daily-brief-section-heading p,
+body.eb-app-body .scanner-panel p,
+body.eb-app-body .chart-ai-header p{
+    color:var(--eb-muted) !important;
+}
+
+
+/* =========================================================
+   MARKET OVERVIEW
+========================================================= */
+
+body.eb-app-body .nasdaq-overview-label,
+body.eb-app-body .nasdaq-overview-eyebrow,
+body.eb-app-body .daily-brief-label,
+body.eb-app-body .daily-brief-eyebrow,
+body.eb-app-body .chart-ai-eyebrow{
+    color:var(--eb-green-dark) !important;
+}
+
+body.eb-app-body .nasdaq-overview-btn,
+body.eb-app-body .daily-brief-open-btn,
+body.eb-app-body .scanner-btn,
+body.eb-app-body .chart-ai-analyse-btn{
+    border-radius:999px !important;
+    background:linear-gradient(135deg,#0f9f4b,#20c66b) !important;
+    color:#fff !important;
+    box-shadow:0 12px 28px rgba(22,163,74,.18) !important;
+}
+
+body.eb-app-body .nasdaq-overview-divider,
+body.eb-app-body .daily-brief-divider{
+    background:var(--eb-line) !important;
+}
+
+body.eb-app-body .nasdaq-overview-date-row,
+body.eb-app-body .daily-brief-date-row,
+body.eb-app-body .nasdaq-overview-section,
+body.eb-app-body .daily-brief-section{
+    border-color:var(--eb-line) !important;
+}
+
+body.eb-app-body .nasdaq-overview-date-row strong{
+    color:#64748b !important;
+}
+
+body.eb-app-body .nasdaq-overview-section > h3{
+    color:var(--eb-ink) !important;
+}
+
+body.eb-app-body .nasdaq-overview-section > p{
+    color:var(--eb-muted) !important;
+}
+
+body.eb-app-body .nasdaq-index-card,
+body.eb-app-body .nasdaq-strength-card,
+body.eb-app-body .nasdaq-scanner-card,
+body.eb-app-body .nasdaq-list-item,
+body.eb-app-body .daily-brief-summary-bar > div,
+body.eb-app-body .daily-brief-stock-card,
+body.eb-app-body .daily-brief-placeholder{
+    border:1px solid var(--eb-line) !important;
+    background:#f8fafc !important;
+}
+
+body.eb-app-body .nasdaq-index-card > strong,
+body.eb-app-body .nasdaq-strength-card h4,
+body.eb-app-body .nasdaq-area-item strong,
+body.eb-app-body .nasdaq-list-item strong,
+body.eb-app-body .nasdaq-scanner-card > strong,
+body.eb-app-body .daily-brief-summary-bar strong,
+body.eb-app-body .daily-brief-stock-card h4{
+    color:var(--eb-ink) !important;
+}
+
+body.eb-app-body .nasdaq-index-card > p,
+body.eb-app-body .nasdaq-area-item p,
+body.eb-app-body .nasdaq-list-item p,
+body.eb-app-body .daily-brief-stock-card p{
+    color:var(--eb-muted) !important;
+}
+
+body.eb-app-body .nasdaq-overview-takeaway{
+    background:#f0faf3 !important;
+    border-color:#cfead7 !important;
+}
+
+body.eb-app-body .nasdaq-overview-takeaway p{
+    color:#425466 !important;
+}
+
+
+/* =========================================================
+   TRADINGVIEW — KEEP DARK
+========================================================= */
+
+body.eb-app-body .scanner-chart{
+    margin:28px 0;
+    padding:17px;
+    border:1px solid #182235;
+    border-radius:24px;
+    background:#0c1728;
+    box-shadow:0 20px 60px rgba(15,23,42,.12);
+}
+
+body.eb-app-body .chart-title{
+    color:#aebccc;
+}
+
+body.eb-app-body #tv_chart{
+    border-radius:17px;
+    border-color:#1d2a3e;
+}
+
+
+/* =========================================================
+   CHART AI
+========================================================= */
+
+body.eb-app-body .chart-ai-tool{
+    margin:28px 0;
+    border-radius:24px;
+}
+
+body.eb-app-body .chart-ai-dropzone{
+    border-color:#bfdcc8;
+    background:#f8fbf9;
+}
+
+body.eb-app-body .chart-ai-dropzone:hover,
+body.eb-app-body .chart-ai-dropzone.chart-ai-dragover{
+    border-color:var(--eb-green);
+    background:#f1faf4;
+}
+
+body.eb-app-body .chart-ai-empty h3{
+    color:var(--eb-ink);
+}
+
+body.eb-app-body .chart-ai-empty p,
+body.eb-app-body .chart-ai-file-note,
+body.eb-app-body .chart-ai-notice{
+    color:var(--eb-muted);
+}
+
+body.eb-app-body .chart-ai-choose-btn{
+    border-color:#b7d9c1;
+    background:#fff;
+    color:var(--eb-green-dark);
+}
+
+body.eb-app-body .chart-ai-results{
+    border-color:var(--eb-line);
+}
+
+body.eb-app-body .chart-ai-result-card{
+    border-color:var(--eb-line);
+    background:#f8fafc;
+}
+
+body.eb-app-body .chart-ai-result-card p{
+    color:#475569;
+}
+
+body.eb-app-body .chart-ai-summary{
+    border-color:#cae7d2;
+    background:#f1faf4;
+}
+
+body.eb-app-body .chart-ai-summary p{
+    color:#334155;
+}
+
+body.eb-app-body .chart-ai-hint{
+    border-color:#2b3b50;
+    background:#111d31;
+}
+
+
+/* =========================================================
+   SCANNER SELECTOR
+========================================================= */
+
+body.eb-app-body .scanner-label{
+    color:#64748b;
+}
+
+body.eb-app-body .scanner-selected{
+    padding:18px 22px;
+    border:1px solid #bfdcc8;
+    border-radius:17px;
+    background:#fff;
+    box-shadow:0 10px 32px rgba(15,23,42,.055);
+}
+
+body.eb-app-body .scanner-selected span{
+    color:var(--eb-ink);
+    font-size:20px;
+}
+
+body.eb-app-body .scanner-arrow{
+    color:#64748b;
+}
+
+body.eb-app-body .scanner-options{
+    border-color:var(--eb-line);
+    background:#fff;
+    box-shadow:0 22px 55px rgba(15,23,42,.12);
+}
+
+body.eb-app-body .scanner-option{
+    border-bottom:1px solid var(--eb-line);
+}
+
+body.eb-app-body .scanner-option:last-child{
+    border-bottom:0;
+}
+
+body.eb-app-body .scanner-option:hover{
+    background:#f7faf8;
+}
+
+body.eb-app-body .scanner-option.active{
+    background:#eef9f1;
+}
+
+body.eb-app-body .scanner-option strong{
+    color:var(--eb-ink);
+}
+
+body.eb-app-body .scanner-option small{
+    color:var(--eb-muted);
+}
+
+
+/* =========================================================
+   MANUAL SCANNERS
+========================================================= */
+
+body.eb-app-body .scanner-layout{
+    grid-template-columns:280px minmax(0,1fr) 280px;
+    gap:18px;
+    margin:22px 0 34px;
+}
+
+body.eb-app-body .filter-group label{
+    color:#64748b !important;
+}
+
+body.eb-app-body .filter-group:after{
+    background:var(--eb-line) !important;
+}
+
+body.eb-app-body .filter-group select{
+    border:1px solid #d7dee7 !important;
+    background:#fff !important;
+    color:var(--eb-ink) !important;
+}
+
+body.eb-app-body .filter-group select:hover{
+    border-color:#94a3b8 !important;
+}
+
+body.eb-app-body .filter-group select:focus{
+    border-color:#72c98d !important;
+    box-shadow:0 0 0 4px rgba(34,197,94,.10) !important;
+}
+
+body.eb-app-body #breakoutTable thead,
+body.eb-app-body #scannerTable thead,
+body.eb-app-body #launchPadTable thead{
+    background:#f8fafc !important;
+}
+
+body.eb-app-body #breakoutTable th,
+body.eb-app-body #scannerTable th,
+body.eb-app-body #launchPadTable th{
+    color:#64748b !important;
+    border-color:var(--eb-line) !important;
+    background:#f8fafc !important;
+}
+
+body.eb-app-body #breakoutTable tbody tr,
+body.eb-app-body #scannerTable tbody tr,
+body.eb-app-body #launchPadTable tbody tr{
+    border-color:var(--eb-line) !important;
+}
+
+body.eb-app-body #breakoutTable tbody tr:hover,
+body.eb-app-body #scannerTable tbody tr:hover,
+body.eb-app-body #launchPadTable tbody tr:hover{
+    background:#f5faf6 !important;
+}
+
+body.eb-app-body #breakoutTable td,
+body.eb-app-body #scannerTable td,
+body.eb-app-body #launchPadTable td{
+    color:#334155 !important;
+}
+
+body.eb-app-body #breakoutTable td:nth-child(2),
+body.eb-app-body #scannerTable td:first-child,
+body.eb-app-body #launchPadTable td:first-child{
+    color:var(--eb-green-dark) !important;
+}
+
+body.eb-app-body .breakout-results,
+body.eb-app-body .scanner-results{
+    scrollbar-color:#cbd5e1 transparent;
+}
+
+body.eb-app-body .metric{
+    border-color:var(--eb-line);
+    background:#f8fafc;
+}
+
+body.eb-app-body .metric:hover{
+    border-color:#cbd5e1;
+    background:#f6f8fb;
+}
+
+body.eb-app-body .metric strong{
+    color:var(--eb-ink);
+}
+
+body.eb-app-body .metric-insight{
+    background:#f0faf3;
+    color:#475569;
+}
+
+
+/* =========================================================
+   WATCHLIST
+========================================================= */
+
+body.eb-app-body #watchlistTable thead th{
+    border-color:var(--eb-line);
+    color:#64748b;
+}
+
+body.eb-app-body #watchlistTable tbody tr{
+    border-color:var(--eb-line);
+}
+
+body.eb-app-body #watchlistTable tbody tr:hover{
+    background:#f8fafc;
+}
+
+body.eb-app-body #watchlistTable tbody td{
+    color:#334155;
+}
+
+body.eb-app-body .watchlist-symbol{
+    color:var(--eb-green-dark);
+}
+
+body.eb-app-body .watchlist-added strong{
+    color:var(--eb-ink);
+}
+
+body.eb-app-body .watchlist-open{
+    border-color:#b8d9c1;
+    background:#fff;
+    color:var(--eb-green-dark);
+}
+
+body.eb-app-body .watchlist-open:hover{
+    background:#eef9f1;
+    color:var(--eb-green-dark);
+}
+
+body.eb-app-body .watchlist-remove{
+    border-color:#e2e8f0;
+    background:#f8fafc;
+}
+
+
+/* =========================================================
+   DECLUTTER CENTRAL WORKSPACE
+========================================================= */
+
+body.eb-app-body .eb-tools-panel{
+    display:none !important;
+}
+
+body.eb-app-body .scanner-seo{
+    display:none !important;
+}
+
+
+/* =========================================================
+   EXISTING AI SIDE PANEL REMAINS DARK
+========================================================= */
+
+body.eb-app-body .edge-chat-panel,
+body.eb-app-body .edge-ai-panel{
+    color:#e2e8f0;
+}
+
+body.eb-app-body .edge-chat-button{
+    right:24px;
+    bottom:104px;
+}
+
+
+/* =========================================================
+   BOTTOM AI UNLIMITED BAR
+========================================================= */
+
+.eb-bottom-ai{
+    position:fixed;
+    left:calc(var(--eb-sidebar) + 28px);
+    right:28px;
+    bottom:16px;
+    z-index:9985;
+    max-width:920px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.eb-bottom-ai-inner{
+    min-height:62px;
+    display:flex;
+    align-items:flex-end;
+    gap:10px;
+    padding:9px 10px 9px 15px;
+    border:1px solid #d8dee7;
+    border-radius:22px;
+    background:rgba(255,255,255,.97);
+    box-shadow:0 18px 55px rgba(15,23,42,.14);
+    backdrop-filter:blur(15px);
+}
+
+.eb-bottom-ai-mark{
+    width:34px;
+    height:34px;
+    flex:0 0 34px;
+    margin-bottom:3px;
+    display:grid;
+    place-items:center;
+    border-radius:11px;
+    background:#eef9f1;
+    color:var(--eb-green-dark);
+    font-size:14px;
+    font-weight:850;
+}
+
+#ebBottomAIQuestion{
+    flex:1;
+    min-height:40px;
+    max-height:128px;
+    padding:9px 4px 7px;
+    resize:none;
+    overflow-y:auto;
+    border:0;
+    outline:0;
+    background:transparent;
+    color:var(--eb-ink);
+    font:inherit;
+    font-size:14px;
+    line-height:1.5;
+}
+
+#ebBottomAIQuestion::placeholder{
+    color:#94a3b8;
+}
+
+#ebBottomAIAsk{
+    width:42px;
+    height:42px;
+    flex:0 0 42px;
+    border:0;
+    border-radius:14px;
+    background:var(--eb-ink);
+    color:#fff;
+    font-size:18px;
+    font-weight:850;
+    cursor:pointer;
+    transition:.18s ease;
+}
+
+#ebBottomAIAsk:hover{
+    transform:translateY(-1px);
+    background:#182235;
+}
+
+.eb-bottom-ai-note{
+    margin-top:6px;
+    text-align:center;
+    color:#94a3b8;
+    font-size:10px;
+    font-weight:650;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1180px){
+
+    body.eb-app-body .scanner-layout{
+        grid-template-columns:240px minmax(0,1fr);
+    }
+
+    body.eb-app-body .scanner-layout > .scanner-panel:last-child{
+        grid-column:1 / -1;
+    }
+
+}
+
+@media(max-width:900px){
+
+    :root{
+        --eb-sidebar:0px;
+    }
+
+    .eb-app-sidebar{
+        position:sticky;
+        top:0;
+        width:auto;
+        height:auto;
+        margin:0;
+        padding:8px 14px;
+        overflow-x:auto;
+        overflow-y:hidden;
+        border-right:0;
+        border-bottom:1px solid var(--eb-line);
+        box-shadow:none;
+    }
+
+    .eb-app-sidebar-head,
+    .eb-app-nav-label,
+    .eb-app-nav-group:not(.eb-app-nav-primary){
+        display:none;
+    }
+
+    .eb-app-nav{
+        display:block;
+    }
+
+    .eb-app-nav-primary{
+        display:flex;
+        gap:6px;
+        padding:0;
+        border:0;
+    }
+
+    .eb-app-nav-primary .eb-app-nav-item{
+        width:auto;
+        white-space:nowrap;
+    }
+
+    body.eb-app-body main{
+        margin-left:0;
+        padding:0 16px 145px;
+    }
+
+    .eb-app-topbar{
+        padding-top:14px;
+    }
+
+    body.eb-app-body .scanner-layout{
+        display:flex;
+        flex-direction:column;
+    }
+
+    body.eb-app-body .scanner-panel:first-child{
+        position:static;
+    }
+
+    .eb-bottom-ai{
+        left:14px;
+        right:14px;
+    }
+
+    body.eb-app-body .edge-chat-button{
+        right:14px;
+        bottom:100px;
+    }
+
+}
+
+@media(max-width:600px){
+
+    body.eb-app-body main{
+        padding-inline:12px;
+    }
+
+    .eb-app-topbar-copy{
+        display:none;
+    }
+
+    .eb-app-view-switch{
+        width:100%;
+    }
+
+    .eb-app-view-switch a{
+        flex:1;
+    }
+
+    body.eb-app-body .elite-container{
+        padding-top:16px !important;
+    }
+
+    body.eb-app-body .elite-banner{
+        padding:32px 24px 30px;
+        border-radius:22px;
+    }
+
+    body.eb-app-body .elite-banner h1{
+        font-size:42px !important;
+    }
+
+    body.eb-app-body .nasdaq-overview-panel,
+    body.eb-app-body .daily-brief-panel,
+    body.eb-app-body .scanner-panel,
+    body.eb-app-body .chart-ai-tool{
+        padding:20px !important;
+        border-radius:20px !important;
+    }
+
+    .eb-bottom-ai-inner{
+        border-radius:19px;
+    }
+
+    .eb-bottom-ai-mark{
+        display:none;
+    }
+
+}
+
+</style>
+
+<style id="edgebreak-free-light-overrides">
+
+/* =========================================================
+   EDGEBREAK FREE — LIGHT APP PREVIEW
+========================================================= */
+
+body.eb-free-body main{
+    padding-bottom:90px;
+}
+
+body.eb-free-body .eb-app-sidebar-head span{
+    color:#64748b;
+}
+
+.eb-free-pill{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:28px;
+    padding:0 10px;
+    margin-left:auto;
+    border:1px solid #bbf7d0;
+    border-radius:999px;
+    background:#f0fdf4;
+    color:#08783b;
+    font-size:10px;
+    font-weight:850;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.eb-free-sidebar-cta{
+    margin:18px 12px 0;
+    padding:15px;
+    border:1px solid #dce7df;
+    border-radius:16px;
+    background:linear-gradient(145deg,#f4faf6,#f7faff);
+}
+
+.eb-free-sidebar-cta strong{
+    display:block;
+    margin-bottom:5px;
+    color:#0b1220;
+    font-size:13px;
+}
+
+.eb-free-sidebar-cta p{
+    margin:0 0 12px;
+    color:#64748b;
+    font-size:11px;
+    line-height:1.5;
+}
+
+.eb-free-sidebar-cta a{
+    width:100%;
+    min-height:38px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:999px;
+    background:#16a34a;
+    color:#fff;
+    text-decoration:none;
+    font-size:11px;
+    font-weight:850;
+}
+
+body.eb-free-body .elite-banner p{
+    max-width:760px;
+}
+
+body.eb-free-body .scanner-selector-panel h2{
+    margin:0 0 8px;
+    color:#0b1220;
+    font-size:34px;
+    letter-spacing:-.035em;
+}
+
+body.eb-free-body .scanner-selector-panel .scanner-selector-header p{
+    margin:0;
+    color:#64748b;
+    font-size:16px;
+    line-height:1.65;
+}
+
+/* =========================================================
+   FREE RESULT LOCKS — LIGHT TRUSTED STYLE
+========================================================= */
+
+body.eb-free-body .free-lock-preview{
+    border-color:#e5eaf0;
+    background:#f8fafc;
+}
+
+body.eb-free-body .free-lock-blur{
+    opacity:.28;
+    filter:blur(5px);
+}
+
+body.eb-free-body .fake-result-line{
+    background:linear-gradient(
+        90deg,
+        #86efac 0 10%,
+        #dbe3ea 10% 25%,
+        #cbd5e1 25% 40%,
+        #dbe3ea 40% 55%,
+        #cbd5e1 55% 70%,
+        #dbe3ea 70% 100%
+    );
+}
+
+body.eb-free-body .free-lock-preview::after{
+    background:linear-gradient(180deg,rgba(255,255,255,.56),rgba(255,255,255,.94));
+}
+
+body.eb-free-body .free-lock-title,
+body.eb-free-body .free-watchlist-lock strong,
+body.eb-free-body .free-ai-upgrade-title,
+body.eb-free-body .chart-ai-free-lock-title,
+body.eb-free-body .free-member-modal-title,
+body.eb-free-body .free-email-modal-card h2{
+    color:#0b1220;
+}
+
+body.eb-free-body .free-lock-text,
+body.eb-free-body .free-watchlist-lock span,
+body.eb-free-body .free-ai-upgrade-text,
+body.eb-free-body .chart-ai-free-lock-text,
+body.eb-free-body .free-member-modal-text,
+body.eb-free-body .free-email-modal-text{
+    color:#64748b;
+}
+
+body.eb-free-body .free-lock-trial,
+body.eb-free-body .chart-ai-free-sample-note,
+body.eb-free-body .free-email-privacy{
+    color:#7b8797;
+}
+
+body.eb-free-body .free-unlock-btn,
+body.eb-free-body .free-ai-unlock-btn{
+    background:linear-gradient(135deg,#0f9f4b,#20c66b);
+    color:#fff !important;
+    border-radius:999px;
+    box-shadow:0 12px 28px rgba(22,163,74,.18);
+}
+
+body.eb-free-body .free-unlock-btn:hover,
+body.eb-free-body .free-ai-unlock-btn:hover{
+    background:#16a34a;
+    color:#fff !important;
+}
+
+body.eb-free-body .free-watchlist-unlock,
+body.eb-free-body .free-member-tool-btn{
+    border-color:#bbd8c4 !important;
+    background:#fff !important;
+    color:#08783b !important;
+}
+
+body.eb-free-body .free-watchlist-unlock:hover,
+body.eb-free-body .free-member-tool-btn:hover{
+    border-color:#16a34a !important;
+    background:#f0fdf4 !important;
+    color:#08783b !important;
+}
+
+/* =========================================================
+   FREE AI / UPGRADE MODALS
+========================================================= */
+
+body.eb-free-body .free-ai-upgrade-message,
+body.eb-free-body .chart-ai-free-lock-box,
+body.eb-free-body .free-member-modal-card,
+body.eb-free-body .free-email-modal-card{
+    border-color:#dce7df;
+    background:#fff;
+    box-shadow:0 25px 70px rgba(15,23,42,.17);
+}
+
+body.eb-free-body .free-member-modal,
+body.eb-free-body .free-email-modal-backdrop{
+    background:rgba(15,23,42,.56);
+}
+
+body.eb-free-body .free-member-modal-close{
+    color:#64748b;
+}
+
+body.eb-free-body .free-member-modal-close:hover{
+    color:#0b1220;
+}
+
+body.eb-free-body .free-email-modal-badge{
+    border-color:#bbf7d0;
+    background:#f0fdf4;
+    color:#08783b;
+}
+
+body.eb-free-body #freeScanEmail{
+    background:#fff;
+    border-color:#d8dee7;
+    color:#0b1220;
+}
+
+body.eb-free-body #freeScanEmail:focus{
+    border-color:#72c98d;
+    box-shadow:0 0 0 4px rgba(34,197,94,.10);
+}
+
+body.eb-free-body #freeScanEmailSubmit{
+    border-radius:999px;
+    background:linear-gradient(135deg,#0f9f4b,#20c66b);
+    color:#fff;
+}
+
+body.eb-free-body .free-ai-lock-overlay{
+    background:rgba(255,255,255,.86);
+    border-color:#dce7df;
+    box-shadow:0 20px 55px rgba(15,23,42,.12);
+}
+
+body.eb-free-body .chart-ai-free-lock{
+    background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,.84));
+}
+
+/* Keep the actual AI research drawer dark, matching the paid scanner. */
+body.eb-free-body .edge-ai-panel,
+body.eb-free-body .edge-ai-panel *{
+    --eb-free-ai-dark:1;
+}
+
+@media(max-width:1050px){
+    .eb-free-sidebar-cta{
+        display:none;
+    }
+}
+
+</style>
+
 </head>
-<body style="background:#020617;">
+<body class="eb-app-body eb-free-body">
 
 <!-- NAVBAR -->
 
 <div id="navbar"></div>
 
+<!-- =========================================
+EDGEBREAK FREE APP NAVIGATION
+========================================= -->
+
+<aside class="eb-app-sidebar" aria-label="EdgeBreak Free navigation">
+
+    <div class="eb-app-sidebar-head">
+        <img src="/images/logo.webp" alt="EdgeBreak">
+        <div>
+            <strong>EdgeBreak</strong>
+            <span>Free Research Preview</span>
+        </div>
+        <span class="eb-free-pill">Free</span>
+    </div>
+
+    <nav class="eb-app-nav">
+
+        <div class="eb-app-nav-group eb-app-nav-primary">
+
+            <a class="eb-app-nav-item active" href="/edgebreak-free.html" aria-current="page">
+                <span class="eb-app-nav-icon">⌁</span>
+                <span>Free Scanner Preview</span>
+            </a>
+
+            <a class="eb-app-nav-item" href="/pricing.html">
+                <span class="eb-app-nav-icon">↑</span>
+                <span>Full EdgeBreak</span>
+            </a>
+
+        </div>
+
+        <div class="eb-app-nav-group">
+
+            <div class="eb-app-nav-label">Discover</div>
+
+            <a class="eb-app-nav-item" href="#dailyBriefPanel">
+                <span class="eb-app-nav-icon">✦</span>
+                <span>Automated Scan</span>
+            </a>
+
+            <a class="eb-app-nav-item" href="#scannerDropdown">
+                <span class="eb-app-nav-icon">⌕</span>
+                <span>Manual Scanners</span>
+            </a>
+
+            <a class="eb-app-nav-item" href="#chartAITool">
+                <span class="eb-app-nav-icon">◇</span>
+                <span>AI Chart Preview</span>
+            </a>
+
+        </div>
+
+        <div class="eb-app-nav-group">
+
+            <div class="eb-app-nav-label">Research</div>
+
+            <a class="eb-app-nav-item" href="#nasdaqOverviewPanel">
+                <span class="eb-app-nav-icon">◫</span>
+                <span>NASDAQ Overview</span>
+            </a>
+
+            <a class="eb-app-nav-item" href="#watchlistPanel">
+                <span class="eb-app-nav-icon">☆</span>
+                <span>Watchlist Preview</span>
+            </a>
+
+            <a class="eb-app-nav-item" href="/academy.html">
+                <span class="eb-app-nav-icon">○</span>
+                <span>Academy</span>
+            </a>
+
+        </div>
+
+        <div class="eb-free-sidebar-cta">
+            <strong>Unlock the full workspace</strong>
+            <p>Complete scanner results, AI research and member tools.</p>
+            <a href="/pricing.html">View Plans</a>
+        </div>
+
+    </nav>
+
+</aside>
+
+
 <main>
+
+
+<!-- =========================================
+FREE PREVIEW TOP BAR
+========================================= -->
+
+<header class="eb-app-topbar">
+
+    <div class="eb-app-topbar-copy">
+        <span>EdgeBreak Free</span>
+        <strong>NASDAQ Research Preview</strong>
+    </div>
+
+    <nav class="eb-app-view-switch" aria-label="EdgeBreak access options">
+        <a class="active" href="/edgebreak-free.html" aria-current="page">
+            Free Preview
+        </a>
+        <a href="/pricing.html">
+            Full EdgeBreak
+        </a>
+    </nav>
+
+</header>
 
 
 <div class="elite-container">
@@ -8484,16 +9821,23 @@ FREE PAGE — LOCKED AI STOCK RESULTS
 
     <div>
 
+        <div class="eb-hero-kicker">
+            <span></span>
+            EDGEBREAK FREE
+        </div>
+
         <h1>
-            EDGEBREAK AI + NASDAQ STOCK SCANNER (Free Version)
+            Explore the NASDAQ.<br>
+            <em>See how EdgeBreak works.</em>
         </h1>
 
         <p>
-            Let EdgeBreak AI scan, filter and research the NASDAQ for you — or scan the market yourself.
+            Preview EdgeBreak's automated NASDAQ research, run the manual scanners
+            and explore selected AI tools before unlocking the complete research workspace.
         </p>
 
-        <a href="#breakoutScanner" class="manual-scanner-btn">
-            Use Manual Scanner ↓
+        <a href="#dailyBriefPanel" class="manual-scanner-btn">
+            Explore Free Research ↓
         </a>
 
     </div>
@@ -10156,7 +11500,7 @@ SCANNER SELECTOR
 ⭐ MY WATCHLIST
 ========================================= -->
 
-<div class="scanner-panel watchlist-panel">
+<div class="scanner-panel watchlist-panel" id="watchlistPanel">
 
     <div class="watchlist-header">
 
@@ -10254,7 +11598,7 @@ SCANNER SELECTOR
 ========================================= -->
 
 <div
-    class="scanner-panel"
+    class="scanner-panel eb-tools-panel"
     style="margin-top:25px;"
 >
 
