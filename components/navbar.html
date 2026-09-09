@@ -331,7 +331,7 @@ Existing IDs and dropdown structure preserved
     display:block !important;
 
     position:absolute;
-    top:calc(100% + 12px);
+    top:calc(100% - 3px);
     left:50%;
 
     min-width:280px;
@@ -371,11 +371,14 @@ Existing IDs and dropdown structure preserved
     content:"";
 
     position:absolute;
-    top:-13px;
-    left:0;
-    right:0;
+    top:-18px;
+    left:-10px;
+    right:-10px;
 
-    height:13px;
+    height:22px;
+
+    background:transparent;
+    pointer-events:auto;
 }
 
 .dropdown-content a{
@@ -715,23 +718,83 @@ Existing IDs and dropdown structure preserved
 
 /* =========================================================
    DESKTOP DROPDOWN SAFETY
-   Overrides legacy /css/navbar.css display rules
+   Hard override for legacy /css/navbar.css
+   No hover gap between trigger and menu
 ========================================================= */
 
 @media(min-width:769px){
 
-    .nav .dropdown-content{
+    .nav .dropdown{
+        position:relative !important;
+    }
+
+    .nav .dropdown > .dropdown-content{
         display:block !important;
+
+        top:calc(100% - 3px) !important;
+        left:50% !important;
+
+        margin:0 !important;
+
+        opacity:0 !important;
+        visibility:hidden !important;
+
+        transform:translate(-50%,6px) !important;
+
+        pointer-events:none !important;
+
+        transition:
+            opacity .16s ease,
+            visibility .16s ease,
+            transform .16s ease !important;
     }
 
     .nav .dropdown:hover > .dropdown-content,
-    .nav .dropdown:focus-within > .dropdown-content{
+    .nav .dropdown:focus-within > .dropdown-content,
+    .nav .dropdown > .dropdown-content:hover{
+        display:block !important;
+
         opacity:1 !important;
         visibility:visible !important;
+
         transform:translate(-50%,0) !important;
+
         pointer-events:auto !important;
     }
 
+    /*
+       Invisible hover bridge:
+       overlaps the nav trigger and dropdown so there
+       is no point where the mouse leaves the dropdown.
+    */
+    .nav .dropdown > .dropdown-content::before{
+        content:"" !important;
+
+        position:absolute !important;
+
+        top:-20px !important;
+        left:-14px !important;
+        right:-14px !important;
+
+        height:24px !important;
+
+        background:transparent !important;
+
+        pointer-events:auto !important;
+    }
+
+}
+
+
+/* Legacy CSS conflict protection */
+@media(min-width:769px){
+    .nav,
+    .nav-inner,
+    .nav-links-wrap,
+    .nav-links,
+    .dropdown{
+        overflow:visible !important;
+    }
 }
 
 </style>
