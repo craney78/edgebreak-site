@@ -1,948 +1,1712 @@
-<html>
-<head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<!DOCTYPE html>
+<html lang="en-AU">
 
-  gtag('config', 'AW-18373865179');
+<head>
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
+
+<script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179">
 </script>
+
+<script>
+window.dataLayer = window.dataLayer || [];
+
+function gtag(){
+    dataLayer.push(arguments);
+}
+
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
+</script>
+
+
+<!-- ===================================
+CORE META
+=================================== -->
+
 <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-<title>Market Overview | Live US Markets, News & Economic Calendar | EdgeBreak</title>
+<meta
+    name="theme-color"
+    content="#f8fafc"
+>
 
-<meta name="description"
-      content="Monitor live US market indices, stock market heatmaps, market news, economic events and financial markets before researching NASDAQ breakout opportunities with EdgeBreak.">
 
-<meta name="keywords"
-      content="market overview, US stock market, NASDAQ market, S&P 500, Dow Jones, market heatmap, stock market news, economic calendar, financial markets, market movers, EdgeBreak">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
 
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
+<title>US Market Overview | Indices, Heatmap, News & Economic Calendar | EdgeBreak</title>
 
-<meta name="author"
-      content="EdgeBreak">
+<meta
+    name="description"
+    content="Monitor major US market indices, a NASDAQ heatmap, market news and the economic calendar before continuing your NASDAQ stock research with EdgeBreak."
+>
 
-<meta name="theme-color"
-      content="#071225">
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
 
-<link rel="canonical"
-      href="https://www.edgebreak.ai/market-overview.html">
+
+<!-- ===================================
+CANONICAL
+=================================== -->
+
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/market-overview.html"
+>
+
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
 
-<meta property="og:type"
-      content="website">
+<meta
+    property="og:type"
+    content="website"
+>
 
-<meta property="og:title"
-      content="Market Overview | Live US Markets | EdgeBreak">
+<meta
+    property="og:site_name"
+    content="EdgeBreak"
+>
 
-<meta property="og:description"
-      content="Track US market indices, market heatmaps, financial news and economic events before researching NASDAQ breakout opportunities.">
+<meta
+    property="og:locale"
+    content="en_AU"
+>
 
-<meta property="og:url"
-      content="https://www.edgebreak.ai/market-overview.html">
+<meta
+    property="og:url"
+    content="https://www.edgebreak.ai/market-overview.html"
+>
 
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/logo.webp">
+<meta
+    property="og:title"
+    content="US Market Overview | Indices, Heatmap, News & Economic Calendar | EdgeBreak"
+>
 
-<meta property="og:image:alt"
-      content="EdgeBreak Market Overview">
+<meta
+    property="og:description"
+    content="Monitor major US market indices, a NASDAQ heatmap, market news and economic events before continuing your NASDAQ stock research."
+>
 
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta
+    property="og:image"
+    content="https://www.edgebreak.ai/images/logo.webp"
+>
 
-<meta property="og:locale"
-      content="en_AU">
+<meta
+    property="og:image:type"
+    content="image/webp"
+>
+
+<meta
+    property="og:image:alt"
+    content="EdgeBreak US Market Overview"
+>
+
 
 <!-- ===================================
-TWITTER CARDS
+TWITTER / X
 =================================== -->
 
-<meta name="twitter:card"
-      content="summary_large_image">
+<meta
+    name="twitter:card"
+    content="summary_large_image"
+>
 
-<meta name="twitter:title"
-      content="Market Overview | EdgeBreak">
+<meta
+    name="twitter:site"
+    content="@EdgeBreakAi"
+>
 
-<meta name="twitter:description"
-      content="Monitor live US markets, financial news, market heatmaps and economic events in one place.">
+<meta
+    name="twitter:creator"
+    content="@EdgeBreakAi"
+>
 
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/logo.webp">
+<meta
+    name="twitter:title"
+    content="US Market Overview | EdgeBreak"
+>
 
-<meta name="twitter:image:alt"
-      content="EdgeBreak Market Overview">
+<meta
+    name="twitter:description"
+    content="Monitor US indices, a NASDAQ heatmap, market news and the economic calendar before continuing your stock research."
+>
 
-<!-- ===================================
-CSS
-=================================== -->
+<meta
+    name="twitter:image"
+    content="https://www.edgebreak.ai/images/logo.webp"
+>
 
-<link rel="stylesheet" href="/css/dashboard.css">
-<link rel="stylesheet" href="/css/navbar.css">
-<link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta
+    name="twitter:image:alt"
+    content="EdgeBreak US Market Overview"
+>
 
-<link rel="stylesheet"
-      href="/css/tool-page.css">
+
 <!-- ===================================
 FAVICON
 =================================== -->
 
 <link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
+    rel="icon"
+    type="image/webp"
+    href="/images/favicon.webp"
 >
+
+
 <!-- ===================================
-SUPABASE
+PERFORMANCE / CONNECTION HINTS
 =================================== -->
 
+<link
+    rel="preconnect"
+    href="https://www.googletagmanager.com"
+>
 
+<link
+    rel="preconnect"
+    href="https://cdn.jsdelivr.net"
+    crossorigin
+>
+
+<link
+    rel="preconnect"
+    href="https://qmonyhukamuuunxxxdlk.supabase.co"
+    crossorigin
+>
+
+<link
+    rel="preconnect"
+    href="https://s3.tradingview.com"
+    crossorigin
+>
+
+<link
+    rel="dns-prefetch"
+    href="//www.googletagmanager.com"
+>
+
+<link
+    rel="dns-prefetch"
+    href="//cdn.jsdelivr.net"
+>
+
+<link
+    rel="dns-prefetch"
+    href="//qmonyhukamuuunxxxdlk.supabase.co"
+>
+
+<link
+    rel="dns-prefetch"
+    href="//s3.tradingview.com"
+>
+
+
+<!-- ===================================
+STYLES
+=================================== -->
+
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="/css/footer.css">
+
+
+<!-- ===================================
+SUPABASE LIBRARY
+=================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<!-- ===================================
+SUPABASE INITIALISATION
+=================================== -->
 
 <script>
+
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+
 );
+
 </script>
 
+
+<!-- ===================================
+ACCESS CONTROL
+=================================== -->
+
 <script>
-// =========================
-// 🔒 HARD PAGE LOCK
-// =========================
+
 document.documentElement.style.visibility = "hidden";
 
 const supabaseClient = window.supabaseClient;
 
-// =========================
-// 🔐 ACCESS CONTROL
-// =========================
-async function checkAccess() {
-  try {
-    const { data: { user } } = await supabaseClient.auth.getUser();
+async function checkAccess(){
 
-    if (!user) {
-      window.location.replace("/login.html");
-      return;
+    try{
+
+        const {
+            data: { user }
+        } = await supabaseClient.auth.getUser();
+
+        if(!user){
+
+            window.location.replace("/login.html");
+
+            return;
+
+        }
+
+
+        const {
+            data: profile,
+            error
+        } = await supabaseClient
+            .from("profiles")
+            .select("is_active")
+            .eq("id", user.id)
+            .single();
+
+
+        if(
+            error ||
+            !profile ||
+            !profile.is_active
+        ){
+
+            window.location.replace("/pricing.html");
+
+            return;
+
+        }
+
+
+        document.documentElement.style.visibility =
+            "visible";
+
     }
 
-    const { data: profile, error } = await supabaseClient
-      .from("profiles")
-      .select("is_active")
-      .eq("id", user.id)
-      .single();
+    catch(err){
 
-    if (error || !profile || !profile.is_active) {
-      window.location.replace("/pricing.html");
-      return;
+        console.error(err);
+
+        window.location.replace("/login.html");
+
     }
 
-    document.documentElement.style.visibility = "visible";
-
-  } catch (err) {
-    console.error(err);
-    window.location.replace("/login.html");
-  }
 }
 
-// 🚀 RUN
 checkAccess();
 
 </script>
 
-</head>
+
+<!-- ===================================
+STRUCTURED DATA
+=================================== -->
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+
+  "@graph": [
+
+    {
+      "@type": "Organization",
+
+      "@id": "https://www.edgebreak.ai/#organization",
+
+      "name": "EdgeBreak",
+
+      "legalName": "Crane Platform Labs",
+
+      "url": "https://www.edgebreak.ai/",
+
+      "email": "mailto:admin@edgebreak.ai",
+
+      "logo": {
+        "@type": "ImageObject",
+
+        "@id": "https://www.edgebreak.ai/#logo",
+
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+
+        "caption": "EdgeBreak"
+      },
+
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+
+      "areaServed": "Worldwide",
+
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
+    },
+
+
+    {
+      "@type": "WebSite",
+
+      "@id": "https://www.edgebreak.ai/#website",
+
+      "name": "EdgeBreak",
+
+      "url": "https://www.edgebreak.ai/",
+
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+
+      "publisher": {
+        "@id": "https://www.edgebreak.ai/#organization"
+      },
+
+      "inLanguage": "en-AU"
+    },
+
+
+    {
+      "@type": "WebPage",
+
+      "@id": "https://www.edgebreak.ai/market-overview.html#webpage",
+
+      "url": "https://www.edgebreak.ai/market-overview.html",
+
+      "name": "US Market Overview | Indices, Heatmap, News & Economic Calendar | EdgeBreak",
+
+      "description": "Monitor major US market indices, a NASDAQ heatmap, market news and the economic calendar before continuing your NASDAQ stock research with EdgeBreak.",
+
+      "isPartOf": {
+        "@id": "https://www.edgebreak.ai/#website"
+      },
+
+      "about": {
+        "@id": "https://www.edgebreak.ai/#organization"
+      },
+
+      "publisher": {
+        "@id": "https://www.edgebreak.ai/#organization"
+      },
+
+      "breadcrumb": {
+        "@id": "https://www.edgebreak.ai/market-overview.html#breadcrumb"
+      },
+
+      "inLanguage": "en-AU"
+    },
+
+
+    {
+      "@type": "BreadcrumbList",
+
+      "@id": "https://www.edgebreak.ai/market-overview.html#breadcrumb",
+
+      "itemListElement": [
+
+        {
+          "@type": "ListItem",
+
+          "position": 1,
+
+          "name": "Home",
+
+          "item": "https://www.edgebreak.ai/"
+        },
+
+        {
+          "@type": "ListItem",
+
+          "position": 2,
+
+          "name": "Market Overview",
+
+          "item": "https://www.edgebreak.ai/market-overview.html"
+        }
+
+      ]
+    }
+
+  ]
+}
+</script>
+
+
+<!-- ===================================
+PAGE CSS
+=================================== -->
+
 <style>
-/* ==========================================
-MARKET OVERVIEW
-========================================== */
 
-.market-header{
-
-    text-align:center;
-
-    max-width:850px;
-
-    margin:0 auto 50px;
-
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
 
-.market-header h1{
-
-    color:#fff;
-
-    font-size:2.8rem;
-
-    margin-bottom:20px;
-
+*{
+    box-sizing:border-box;
 }
 
-.market-header p{
-
-    color:#94a3b8;
-
-    line-height:1.8;
-
-    font-size:1.08rem;
-
+html{
+    scroll-behavior:smooth;
 }
 
-/* ==========================================
-SECTION SPACING
-========================================== */
-
-.market-section{
-
-    margin:45px 0;
-
-}
-
-.market-section h2,
-.market-section h3{
-
-    color:#fff;
-
-    margin-bottom:15px;
-
-}
-
-.market-section p{
-
-    color:#94a3b8;
-
-    line-height:1.8;
-
-    margin-bottom:25px;
-
-}
-
-/* ==========================================
-TRADINGVIEW WIDGETS
-========================================== */
-
-.tradingview-widget-container{
-
-    width:100%;
-
-}
-
-.tradingview-widget-container__widget{
-
-    overflow:hidden;
-
-    border-radius:18px;
-
-}
-
-/* ==========================================
-INFORMATION CARDS
-========================================== */
-
-.market-grid{
-
-    display:grid;
-
-    grid-template-columns:
-        repeat(auto-fit,minmax(280px,1fr));
-
-    gap:24px;
-
-    margin:50px 0;
-
-}
-
-.market-card{
-
-    background:#0b1628;
-
-    border:1px solid rgba(255,255,255,.05);
-
-    border-radius:18px;
-
-    padding:35px;
-
-    text-align:center;
-
-    transition:.25s;
-
-}
-
-.market-card:hover{
-
-    transform:translateY(-5px);
-
-    border-color:#00d084;
-
-    box-shadow:
-        0 20px 40px rgba(0,0,0,.35);
-
-}
-
-.market-card h3{
-
-    color:#fff;
-
-    margin:22px 0 15px;
-
-}
-
-.market-card p{
-
-    color:#94a3b8;
-
-    line-height:1.8;
-
+body{
     margin:0;
-
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
 }
 
-/* ==========================================
-SVG ICONS
-========================================== */
-
-.market-icon{
-
-    width:72px;
-
-    height:72px;
-
-    margin:0 auto;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    background:rgba(0,208,132,.08);
-
-    border:1px solid rgba(0,208,132,.18);
-
-    border-radius:18px;
-
-    color:#00d084;
-
+.ix-page{
+    overflow:hidden;
+    background:#ffffff;
 }
 
-.market-icon svg{
-
-    width:34px;
-
-    height:34px;
-
+.ix-page h1,
+.ix-page h2,
+.ix-page h3,
+.ix-page strong{
+    color:var(--ix-ink);
 }
 
-/* ==========================================
-ELITE PANELS
-========================================== */
-
-.elite-panel{
-
-    padding:40px;
-
-}
-
-.elite-panel h2{
-
-    text-align:center;
-
-    color:#fff;
-
-    margin-bottom:20px;
-
-}
-
-.elite-panel p{
-
-    color:#94a3b8;
-
-    line-height:1.9;
-
-    max-width:850px;
-
+.ix-shell{
+    width:min(1180px,calc(100% - 40px));
     margin:auto;
-
-    text-align:center;
-
 }
 
-/* ==========================================
-RETURN BUTTON
-========================================== */
 
-.return-section{
+/* ===================================
+COMMON
+=================================== */
 
-    text-align:center;
-
-    margin:70px 0;
-
-}
-
-.return-section h2{
-
-    color:#fff;
-
-    margin-bottom:20px;
-
-}
-
-.return-section p{
-
-    color:#94a3b8;
-
-    max-width:700px;
-
-    margin:0 auto 35px;
-
-    line-height:1.8;
-
-}
-
-.return-btn{
-
+.ix-kicker{
     display:inline-flex;
-
     align-items:center;
-
-    justify-content:center;
-
-    padding:15px 34px;
-
-    border-radius:12px;
-
-    background:#00d084;
-
-    color:#071225;
-
-    font-weight:700;
-
-    text-decoration:none;
-
-    transition:.25s;
-
-    box-shadow:
-        0 12px 30px rgba(0,208,132,.25);
-
-}
-
-.return-btn:hover{
-
-    background:#18e89a;
-
-    transform:translateY(-3px);
-
-}
-
-/* ==========================================
-MOBILE
-========================================== */
-
-@media (max-width:900px){
-
-    .elite-banner{
-
-        text-align:center;
-
-    }
-
-    .elite-badge{
-
-        margin-top:20px;
-
-    }
-
-    .market-grid{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .market-card{
-
-        padding:28px;
-
-    }
-
-    .market-icon{
-
-        width:60px;
-
-        height:60px;
-
-    }
-
-    .market-icon svg{
-
-        width:30px;
-
-        height:30px;
-
-    }
-
-    .return-btn{
-
-        width:100%;
-
-        max-width:
-
-    }
-    
-}
-
-/* ==========================================
-HERO
-========================================== */
-
-.elite-banner{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:40px;
-
-    padding:50px;
-
-    border-radius:22px;
-
-}
-
-.elite-banner h1{
-
-    font-size:3rem;
-
-    margin:15px 0 20px;
-
-    color:#fff;
-
-}
-
-.elite-banner p{
-
-    max-width:720px;
-
-    color:#94a3b8;
-
-    font-size:1.1rem;
-
-    line-height:1.8;
-
-}
-
-.featured-tag{
-
-    display:inline-block;
-
-    padding:8px 18px;
-
+    gap:9px;
+    padding:9px 15px;
+    border:1px solid #dce6df;
     border-radius:999px;
-
-    background:rgba(0,208,132,.1);
-
-    color:#00d084;
-
-    font-weight:700;
-
+    background:rgba(255,255,255,.8);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:800;
     letter-spacing:.08em;
-
     text-transform:uppercase;
-
 }
 
-.elite-badge{
+.ix-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
 
-    padding:18px 30px;
+.ix-title{
+    margin:0;
+    color:var(--ix-ink)!important;
+    font-size:clamp(42px,6.4vw,82px);
+    line-height:.99;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
 
-    border-radius:14px;
+.ix-title span{
+    color:var(--ix-green);
+}
 
-    background:#00d084;
+.ix-subtitle{
+    max-width:760px;
+    margin:26px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,23px);
+    line-height:1.55;
+}
 
-    color:#071225;
+.ix-section{
+    padding:100px 0;
+}
 
-    font-weight:700;
+.ix-section-soft{
+    background:var(--ix-soft);
+}
 
+.ix-section-head{
+    max-width:800px;
+    margin:0 auto 48px;
+    text-align:center;
+}
+
+.ix-eyebrow{
+    margin-bottom:17px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ix-h2{
+    margin:0;
+    color:var(--ix-ink)!important;
+    font-size:clamp(36px,4.5vw,60px);
+    line-height:1.05;
+    letter-spacing:-.045em;
+}
+
+.ix-lead{
+    margin:20px auto 0;
+    color:var(--ix-muted);
+    font-size:18px;
+    line-height:1.65;
+}
+
+.ix-actions{
+    display:flex;
+    justify-content:center;
+    gap:13px;
+    flex-wrap:wrap;
+    margin-top:34px;
+}
+
+.ix-btn{
+    min-height:54px;
+    padding:0 24px;
+    border-radius:999px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    text-decoration:none;
+    font-size:16px;
+    font-weight:800;
+    transition:.2s ease;
+}
+
+.ix-btn-primary{
+    color:#ffffff;
+    background:linear-gradient(135deg,#0f9f4b,#20c66b);
+    box-shadow:0 14px 34px rgba(22,163,74,.24);
+}
+
+.ix-btn-primary:hover{
+    transform:translateY(-2px);
+    box-shadow:0 18px 38px rgba(22,163,74,.3);
+}
+
+.ix-btn-secondary{
+    color:var(--ix-ink);
+    background:#ffffff;
+    border:1px solid #d8dee7;
+}
+
+.ix-btn-secondary:hover{
+    border-color:#94a3b8;
+    transform:translateY(-2px);
+}
+
+
+/* ===================================
+HERO
+=================================== */
+
+.ix-hero{
+    position:relative;
+    padding:108px 0 74px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 18% 18%,rgba(37,99,235,.10),transparent 27%),
+        radial-gradient(circle at 82% 24%,rgba(34,197,94,.13),transparent 29%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 88%);
+}
+
+.ix-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;
+    right:12%;
+    bottom:0;
+    height:1px;
+    background:linear-gradient(90deg,transparent,#d9e4dd,transparent);
+}
+
+.ix-hero .ix-kicker{
+    margin-bottom:28px;
+}
+
+.ix-trust{
+    display:flex;
+    justify-content:center;
+    gap:24px;
+    flex-wrap:wrap;
+    margin-top:28px;
+    color:#687386;
+    font-size:14px;
+    font-weight:650;
+}
+
+.ix-trust span{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.ix-trust b{
+    color:var(--ix-green);
+}
+
+
+/* ===================================
+QUICK NAV
+=================================== */
+
+.ix-quick{
+    padding:58px 0;
+}
+
+.ix-quick-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#ffffff;
+    box-shadow:var(--ix-shadow);
+    overflow:hidden;
+}
+
+.ix-quick-item{
+    padding:28px 24px;
+    text-align:center;
+    text-decoration:none;
+    border-right:1px solid var(--ix-line);
+    transition:.2s ease;
+}
+
+.ix-quick-item:last-child{
+    border-right:0;
+}
+
+.ix-quick-item:hover{
+    background:#f9fbfc;
+}
+
+.ix-quick-item strong{
+    display:block;
+    font-size:17px;
+}
+
+.ix-quick-item span{
+    display:block;
+    margin-top:7px;
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.45;
+}
+
+
+/* ===================================
+MARKET WIDGET CARDS
+=================================== */
+
+.ix-market-card{
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:#ffffff;
+    box-shadow:var(--ix-shadow);
+    overflow:hidden;
+}
+
+.ix-market-copy{
+    padding:34px 36px 26px;
+}
+
+.ix-market-copy h2,
+.ix-market-copy h3{
+    margin:0;
+    font-size:clamp(28px,3vw,40px);
+    letter-spacing:-.035em;
+}
+
+.ix-market-copy p{
+    max-width:760px;
+    margin:12px 0 0;
+    color:var(--ix-muted);
+    font-size:16px;
+    line-height:1.65;
+}
+
+.ix-widget{
+    padding:0 18px 18px;
 }
 
 .tradingview-widget-container{
-
     width:100%;
-
-    margin-top:25px;
-
 }
 
 .tradingview-widget-container__widget{
-
-    border-radius:18px;
-
     overflow:hidden;
+    border-radius:20px;
+    border:1px solid var(--ix-line);
+}
+
+.ix-market-stack{
+    display:grid;
+    gap:28px;
+}
+
+
+/* ===================================
+CONTEXT CARDS
+=================================== */
+
+.ix-context-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.ix-context-card{
+    min-height:280px;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:#ffffff;
+    box-shadow:0 14px 42px rgba(15,23,42,.055);
+}
+
+.ix-icon{
+    width:54px;
+    height:54px;
+    border-radius:17px;
+    display:grid;
+    place-items:center;
+    margin-bottom:46px;
+    background:linear-gradient(145deg,#ecfdf3,#e9f4ff);
+    color:var(--ix-green-dark);
+}
+
+.ix-icon svg{
+    width:28px;
+    height:28px;
+}
+
+.ix-context-card h3{
+    margin:0 0 12px;
+    font-size:24px;
+    letter-spacing:-.025em;
+}
+
+.ix-context-card p{
+    margin:0;
+    color:var(--ix-muted);
+    font-size:16px;
+    line-height:1.65;
+}
+
+
+/* ===================================
+TRUST PANEL
+=================================== */
+
+.ix-trust-panel{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:70px;
+    align-items:center;
+    padding:58px;
+    border-radius:30px;
+    background:#0c1728;
+    color:#ffffff;
+    box-shadow:0 30px 80px rgba(15,23,42,.18);
+}
+
+.ix-trust-panel .ix-eyebrow{
+    color:#5ee58d;
+}
+
+.ix-trust-panel .ix-h2{
+    color:#ffffff!important;
+    font-size:clamp(35px,4vw,54px);
+}
+
+.ix-trust-panel p{
+    color:#b3bfce;
+    font-size:17px;
+    line-height:1.7;
+}
+
+.ix-trust-list{
+    display:grid;
+    gap:13px;
+}
+
+.ix-trust-row{
+    display:grid;
+    grid-template-columns:38px 1fr;
+    gap:14px;
+    align-items:start;
+    padding:17px;
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:16px;
+    background:rgba(255,255,255,.045);
+}
+
+.ix-check{
+    width:30px;
+    height:30px;
+    border-radius:10px;
+    display:grid;
+    place-items:center;
+    background:rgba(34,197,94,.14);
+    color:#67e892;
+    font-weight:900;
+}
+
+.ix-trust-row strong{
+    display:block;
+    margin-bottom:3px;
+    color:#ffffff!important;
+}
+
+.ix-trust-row span{
+    color:#aebccc;
+    font-size:14px;
+    line-height:1.5;
+}
+
+
+/* ===================================
+FINAL
+=================================== */
+
+.ix-final{
+    padding:112px 20px;
+    text-align:center;
+    background:linear-gradient(145deg,#f1f8f4,#f3f7ff);
+}
+
+.ix-final .ix-h2{
+    font-size:clamp(42px,5.5vw,72px);
+}
+
+.ix-fine{
+    margin-top:16px;
+    color:#7b8797;
+    font-size:13px;
+}
+
+
+/* ===================================
+RESPONSIVE
+=================================== */
+
+@media(max-width:900px){
+
+    .ix-quick-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .ix-quick-item:nth-child(2){
+        border-right:0;
+    }
+
+    .ix-quick-item:nth-child(-n+2){
+        border-bottom:1px solid var(--ix-line);
+    }
+
+    .ix-context-grid{
+        grid-template-columns:1fr;
+    }
+
+    .ix-trust-panel{
+        grid-template-columns:1fr;
+        gap:40px;
+    }
 
 }
 
-@media (max-width:900px){
+@media(max-width:600px){
 
-    .elite-banner{
+    .ix-shell{
+        width:min(100% - 28px,1180px);
+    }
 
+    .ix-hero{
+        padding:76px 0 55px;
+    }
+
+    .ix-title{
+        font-size:46px;
+    }
+
+    .ix-subtitle{
+        font-size:18px;
+    }
+
+    .ix-actions{
         flex-direction:column;
-
-        text-align:center;
-
-        padding:35px 25px;
-
     }
 
-    .elite-banner h1{
-
-        font-size:2.3rem;
-
-    }
-
-    .elite-badge{
-
+    .ix-btn{
         width:100%;
+    }
 
-        max-width:220px;
+    .ix-quick{
+        padding:36px 0;
+    }
 
+    .ix-quick-grid{
+        grid-template-columns:1fr;
+    }
+
+    .ix-quick-item{
+        border-right:0;
+        border-bottom:1px solid var(--ix-line);
+    }
+
+    .ix-quick-item:last-child{
+        border-bottom:0;
+    }
+
+    .ix-section{
+        padding:76px 0;
+    }
+
+    .ix-section-head{
+        margin-bottom:34px;
+    }
+
+    .ix-market-copy{
+        padding:26px 24px 20px;
+    }
+
+    .ix-widget{
+        padding:0 10px 10px;
+    }
+
+    .ix-context-card{
+        min-height:0;
+        padding:27px;
+    }
+
+    .ix-icon{
+        margin-bottom:30px;
+    }
+
+    .ix-trust-panel{
+        padding:31px 23px;
+        border-radius:24px;
     }
 
 }
 
 </style>
 
+</head>
+
+
 <body>
 
-<!-- =========================================
-HEADER
-========================================= -->
+<div id="navbar"></div>
 
-<div class="elite-container">
 
-    <div class="elite-banner">
+<main class="ix-page">
 
-        <div>
 
-            <div class="featured-tag">
-                LIVE MARKET DATA
-            </div>
+<!-- ===================================
+HERO
+=================================== -->
 
-            <h1>
-                Market Overview
-            </h1>
+<section class="ix-hero">
 
-            <p>
-                Stay informed with a live snapshot of today's markets before
-                researching NASDAQ breakout opportunities using the EdgeBreak
-                platform.
-            </p>
+    <div class="ix-shell">
+
+        <div class="ix-kicker">
+            <span class="ix-dot"></span>
+            US market context
+        </div>
+
+        <h1 class="ix-title">
+            See the market first.<br>
+            <span>Then investigate the stock.</span>
+        </h1>
+
+        <p class="ix-subtitle">
+            Review major US indices, the NASDAQ heatmap, market news and upcoming economic events before moving into company-specific research.
+        </p>
+
+        <div class="ix-actions">
+
+            <a
+                class="ix-btn ix-btn-primary"
+                href="#indices"
+            >
+                View Market Overview
+                <span>↓</span>
+            </a>
+
+            <a
+                class="ix-btn ix-btn-secondary"
+                href="/nasdaq-stock-scanner.html"
+            >
+                Return to NASDAQ Scanner
+            </a>
 
         </div>
 
-        <div class="elite-badge">
-            Live Markets
+        <div class="ix-trust">
+
+            <span>
+                <b>✓</b>
+                Major US indices
+            </span>
+
+            <span>
+                <b>✓</b>
+                NASDAQ heatmap
+            </span>
+
+            <span>
+                <b>✓</b>
+                News & economic events
+            </span>
+
         </div>
 
     </div>
 
-</div>
+</section>
 
-<!-- =========================================
-MARKET OVERVIEW
-========================================= -->
 
-<div class="elite-container">
+<!-- ===================================
+QUICK NAV
+=================================== -->
 
-    <div class="scanner-panel">
+<section class="ix-quick">
 
-        <h2>
-            Market Overview
-        </h2>
-
-        <p class="intel-placeholder">
-
-            Live market information powered by trusted financial data providers.
-
-        </p>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================
-US MARKET INDICES
-========================================= -->
-
-<div class="elite-container">
-
-    <div class="scanner-panel">
-
-        <h3>
-            🇺🇸 US Market Indices
-        </h3>
-
-        <p style="
-            color:#94a3b8;
-            margin-bottom:25px;
-        ">
-            Track the performance of the major US stock market indices.
-        </p>
-
-        <!-- TradingView Widget BEGIN -->
-
-        <div class="tradingview-widget-container">
-
-            <div class="tradingview-widget-container__widget"></div>
-
-            <script
-                type="text/javascript"
-                src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js"
-                async>
-            {
-            "width":"100%",
-            "height":450,
-            "symbolsGroups":[
-              {
-                "name":"US Indices",
-                "symbols":[
-                  {
-                    "name":"FOREXCOM:SPXUSD",
-                    "displayName":"S&P 500"
-                  },
-                  {
-                    "name":"FOREXCOM:NSXUSD",
-                    "displayName":"NASDAQ 100"
-                  },
-                  {
-                    "name":"FOREXCOM:DJI",
-                    "displayName":"Dow Jones"
-                  },
-                  {
-                    "name":"CAPITALCOM:RUSSELL2000",
-                    "displayName":"Russell 2000"
-                  },
-                  {
-                    "name":"TVC:VIX",
-                    "displayName":"VIX"
-                  }
-                ]
-              }
-            ],
-            "showSymbolLogo":true,
-            "isTransparent":true,
-            "colorTheme":"dark",
-            "locale":"en"
-            }
-            </script>
-
-        </div>
-
-        <!-- TradingView Widget END -->
-
-    </div>
-
-</div>
-
-<!-- =========================================
-MARKET HEATMAP
-========================================= -->
-
-<div class="elite-container">
-
-    <div class="scanner-panel">
-
-        <h3>
-            🗺 US Stock Market Heatmap
-        </h3>
-
-        <p style="
-            color:#94a3b8;
-            margin-bottom:25px;
-        ">
-            Visualise market performance across sectors using a live stock market heatmap.
-        </p>
-
-        <!-- TradingView Widget BEGIN -->
-
-        <div class="tradingview-widget-container">
-
-            <div class="tradingview-widget-container__widget"></div>
-
-            <script
-                type="text/javascript"
-                src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js"
-                async>
-            {
-              "dataSource":"NASDAQ100",
-              "blockSize":"market_cap_basic",
-              "blockColor":"change",
-              "grouping":"sector",
-              "locale":"en",
-              "symbolUrl":"",
-              "colorTheme":"dark",
-              "hasTopBar":true,
-              "isDataSetEnabled":true,
-              "isZoomEnabled":true,
-              "hasSymbolTooltip":true,
-              "isMonoSize":false,
-              "width":"100%",
-              "height":650
-            }
-            </script>
-
-        </div>
-
-        <!-- TradingView Widget END -->
-
-    </div>
-
-</div>
-
-
-
-<!-- =========================================
-MARKET NEWS
-========================================= -->
-
-<div class="elite-container">
-
-    <div class="scanner-panel">
-
-        <h3>
-            📰 Latest Market News
-        </h3>
-
-        <p style="
-            color:#94a3b8;
-            margin-bottom:25px;
-        ">
-            Stay up to date with breaking market news, earnings announcements and major economic events affecting US markets.
-        </p>
-
-        <!-- TradingView Widget BEGIN -->
-
-        <div class="tradingview-widget-container">
-
-            <div class="tradingview-widget-container__widget"></div>
-
-            <script
-                type="text/javascript"
-                src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js"
-                async>
-            {
-              "feedMode":"market",
-              "market":"stock",
-              "colorTheme":"dark",
-              "isTransparent":true,
-              "displayMode":"regular",
-              "width":"100%",
-              "height":650,
-              "locale":"en"
-            }
-            </script>
-
-        </div>
-
-        <!-- TradingView Widget END -->
-
-    </div>
-
-</div>
-
-<!-- =========================================
-ECONOMIC CALENDAR
-========================================= -->
-
-<div class="elite-container">
-
-    <div class="scanner-panel">
-
-        <h3>
-            📅 Economic Calendar
-        </h3>
-
-        <p style="
-            color:#94a3b8;
-            margin-bottom:25px;
-        ">
-            Monitor upcoming economic events, central bank announcements and
-            key economic data releases that may impact US markets.
-        </p>
-
-        <!-- TradingView Widget BEGIN -->
-
-        <div class="tradingview-widget-container">
-
-            <div class="tradingview-widget-container__widget"></div>
-
-            <script
-                type="text/javascript"
-                src="https://s3.tradingview.com/external-embedding/embed-widget-events.js"
-                async>
-            {
-              "colorTheme":"dark",
-              "isTransparent":true,
-              "width":"100%",
-              "height":650,
-              "locale":"en",
-              "importanceFilter":"0,1"
-            }
-            </script>
-
-        </div>
-
-        <!-- TradingView Widget END -->
-
-    </div>
-
-</div>
-
-
-
-<!-- =========================================
-RETURN
-========================================= -->
-
-<div class="elite-container">
-
-    <div
-        class="elite-panel"
-        style="text-align:center;"
-    >
-
-        <h2>
-            Continue Your Research
-        </h2>
-
-        <p
-            style="
-                color:#94a3b8;
-                max-width:700px;
-                margin:15px auto 30px;
-                line-height:1.8;
-            "
-        >
-            Once you've reviewed today's market activity, continue researching
-            breakout opportunities using the EdgeBreak NASDAQ Scanner.
-        </p>
+    <div class="ix-shell ix-quick-grid">
 
         <a
-            href="/nasdaq-stock-scanner.html"
-            class="scanner-btn workspace-btn"
+            class="ix-quick-item"
+            href="#indices"
         >
-            ← Return to NASDAQ Scanner
+            <strong>
+                US Indices
+            </strong>
+
+            <span>
+                S&P 500, NASDAQ 100, Dow, Russell 2000 and VIX.
+            </span>
+        </a>
+
+        <a
+            class="ix-quick-item"
+            href="#heatmap"
+        >
+            <strong>
+                NASDAQ Heatmap
+            </strong>
+
+            <span>
+                See how performance is distributed across sectors and companies.
+            </span>
+        </a>
+
+        <a
+            class="ix-quick-item"
+            href="#news"
+        >
+            <strong>
+                Market News
+            </strong>
+
+            <span>
+                Review current financial and market headlines.
+            </span>
+        </a>
+
+        <a
+            class="ix-quick-item"
+            href="#calendar"
+        >
+            <strong>
+                Economic Calendar
+            </strong>
+
+            <span>
+                Check upcoming economic releases and scheduled events.
+            </span>
         </a>
 
     </div>
 
-</div>
+</section>
+
+
+<!-- ===================================
+CONTEXT
+=================================== -->
+
+<section class="ix-section ix-section-soft">
+
+    <div class="ix-shell">
+
+        <header class="ix-section-head">
+
+            <div class="ix-eyebrow">
+                Before the stock
+            </div>
+
+            <h2 class="ix-h2">
+                Understand the environment around the setup.
+            </h2>
+
+            <p class="ix-lead">
+                A strong chart still exists inside a broader market. Market direction, sector behaviour and scheduled events can add useful context before deeper research.
+            </p>
+
+        </header>
+
+
+        <div class="ix-context-grid">
+
+            <article class="ix-context-card">
+
+                <div class="ix-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path d="M3 17l5-5 4 3 8-9"/>
+                        <path d="M16 6h4v4"/>
+                    </svg>
+
+                </div>
+
+                <h3>
+                    Market Direction
+                </h3>
+
+                <p>
+                    Start with the major US indices to understand whether the broader market is strengthening, weakening or mixed.
+                </p>
+
+            </article>
+
+
+            <article class="ix-context-card">
+
+                <div class="ix-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                    </svg>
+
+                </div>
+
+                <h3>
+                    Market Breadth
+                </h3>
+
+                <p>
+                    Use the heatmap to see whether strength or weakness is broad, concentrated or dominated by particular areas of the NASDAQ.
+                </p>
+
+            </article>
+
+
+            <article class="ix-context-card">
+
+                <div class="ix-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path d="M5 4h14v16H5z"/>
+                        <path d="M8 8h8M8 12h8M8 16h5"/>
+                    </svg>
+
+                </div>
+
+                <h3>
+                    Event Risk
+                </h3>
+
+                <p>
+                    Review market news and the economic calendar for scheduled information that may affect volatility and market behaviour.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ===================================
+MARKET WIDGETS
+=================================== -->
+
+<section class="ix-section">
+
+    <div class="ix-shell ix-market-stack">
+
+
+        <!-- US INDICES -->
+
+        <article
+            class="ix-market-card"
+            id="indices"
+        >
+
+            <div class="ix-market-copy">
+
+                <div class="ix-eyebrow">
+                    Broad market
+                </div>
+
+                <h2>
+                    US Market Indices
+                </h2>
+
+                <p>
+                    Track the major US indices and volatility before moving into individual NASDAQ stock research.
+                </p>
+
+            </div>
+
+
+            <div class="ix-widget">
+
+                <div class="tradingview-widget-container">
+
+                    <div class="tradingview-widget-container__widget"></div>
+
+                    <script
+                        type="text/javascript"
+                        src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js"
+                        async
+                    >
+                    {
+                      "width": "100%",
+                      "height": 450,
+                      "symbolsGroups": [
+                        {
+                          "name": "US Indices",
+                          "symbols": [
+                            {
+                              "name": "FOREXCOM:SPXUSD",
+                              "displayName": "S&P 500"
+                            },
+                            {
+                              "name": "FOREXCOM:NSXUSD",
+                              "displayName": "NASDAQ 100"
+                            },
+                            {
+                              "name": "FOREXCOM:DJI",
+                              "displayName": "Dow Jones"
+                            },
+                            {
+                              "name": "CAPITALCOM:RUSSELL2000",
+                              "displayName": "Russell 2000"
+                            },
+                            {
+                              "name": "TVC:VIX",
+                              "displayName": "VIX"
+                            }
+                          ]
+                        }
+                      ],
+                      "showSymbolLogo": true,
+                      "isTransparent": false,
+                      "colorTheme": "light",
+                      "locale": "en"
+                    }
+                    </script>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- HEATMAP -->
+
+        <article
+            class="ix-market-card"
+            id="heatmap"
+        >
+
+            <div class="ix-market-copy">
+
+                <div class="ix-eyebrow">
+                    Market breadth
+                </div>
+
+                <h2>
+                    NASDAQ 100 Heatmap
+                </h2>
+
+                <p>
+                    Visualise performance across the NASDAQ 100 and see where strength and weakness are concentrated.
+                </p>
+
+            </div>
+
+
+            <div class="ix-widget">
+
+                <div class="tradingview-widget-container">
+
+                    <div class="tradingview-widget-container__widget"></div>
+
+                    <script
+                        type="text/javascript"
+                        src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js"
+                        async
+                    >
+                    {
+                      "dataSource": "NASDAQ100",
+                      "blockSize": "market_cap_basic",
+                      "blockColor": "change",
+                      "grouping": "sector",
+                      "locale": "en",
+                      "symbolUrl": "",
+                      "colorTheme": "light",
+                      "hasTopBar": true,
+                      "isDataSetEnabled": true,
+                      "isZoomEnabled": true,
+                      "hasSymbolTooltip": true,
+                      "isMonoSize": false,
+                      "width": "100%",
+                      "height": 650
+                    }
+                    </script>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- NEWS -->
+
+        <article
+            class="ix-market-card"
+            id="news"
+        >
+
+            <div class="ix-market-copy">
+
+                <div class="ix-eyebrow">
+                    Current information
+                </div>
+
+                <h2>
+                    Latest Market News
+                </h2>
+
+                <p>
+                    Review current market headlines, company developments and financial news affecting US equities.
+                </p>
+
+            </div>
+
+
+            <div class="ix-widget">
+
+                <div class="tradingview-widget-container">
+
+                    <div class="tradingview-widget-container__widget"></div>
+
+                    <script
+                        type="text/javascript"
+                        src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js"
+                        async
+                    >
+                    {
+                      "feedMode": "market",
+                      "market": "stock",
+                      "colorTheme": "light",
+                      "isTransparent": false,
+                      "displayMode": "regular",
+                      "width": "100%",
+                      "height": 650,
+                      "locale": "en"
+                    }
+                    </script>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- ECONOMIC CALENDAR -->
+
+        <article
+            class="ix-market-card"
+            id="calendar"
+        >
+
+            <div class="ix-market-copy">
+
+                <div class="ix-eyebrow">
+                    Scheduled events
+                </div>
+
+                <h2>
+                    Economic Calendar
+                </h2>
+
+                <p>
+                    Monitor upcoming economic releases, central bank announcements and other scheduled events that may affect US markets.
+                </p>
+
+            </div>
+
+
+            <div class="ix-widget">
+
+                <div class="tradingview-widget-container">
+
+                    <div class="tradingview-widget-container__widget"></div>
+
+                    <script
+                        type="text/javascript"
+                        src="https://s3.tradingview.com/external-embedding/embed-widget-events.js"
+                        async
+                    >
+                    {
+                      "colorTheme": "light",
+                      "isTransparent": false,
+                      "width": "100%",
+                      "height": 650,
+                      "locale": "en",
+                      "importanceFilter": "0,1"
+                    }
+                    </script>
+
+                </div>
+
+            </div>
+
+        </article>
+
+
+    </div>
+
+</section>
+
+
+<!-- ===================================
+TRUST / USE
+=================================== -->
+
+<section class="ix-section ix-section-soft">
+
+    <div class="ix-shell ix-trust-panel">
+
+        <div>
+
+            <div class="ix-eyebrow">
+                Market context, not a forecast
+            </div>
+
+            <h2 class="ix-h2">
+                Use the overview to orient your research.
+            </h2>
+
+            <p>
+                The Market Overview helps you understand the environment around a stock. It does not predict what the market or an individual company will do next.
+            </p>
+
+        </div>
+
+
+        <div class="ix-trust-list">
+
+            <div class="ix-trust-row">
+
+                <div class="ix-check">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Start broad
+                    </strong>
+
+                    <span>
+                        Review major indices before focusing on a single NASDAQ stock.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="ix-trust-row">
+
+                <div class="ix-check">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Check participation
+                    </strong>
+
+                    <span>
+                        Use the heatmap to see whether a move is broad or concentrated.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="ix-trust-row">
+
+                <div class="ix-check">
+                    ✓
+                </div>
+
+                <div>
+
+                    <strong>
+                        Know what is scheduled
+                    </strong>
+
+                    <span>
+                        Review news and economic events before continuing deeper stock research.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ===================================
+FINAL
+=================================== -->
+
+<section class="ix-final">
+
+    <div class="ix-shell">
+
+        <div class="ix-eyebrow">
+            Market checked
+        </div>
+
+        <h2 class="ix-h2">
+            Now continue<br>
+            with the stock.
+        </h2>
+
+        <p class="ix-lead">
+            Return to the EdgeBreak NASDAQ Scanner and continue investigating technical setups with broader market context in mind.
+        </p>
+
+        <div class="ix-actions">
+
+            <a
+                class="ix-btn ix-btn-primary"
+                href="/nasdaq-stock-scanner.html"
+            >
+                Return to NASDAQ Scanner
+                <span>→</span>
+            </a>
+
+        </div>
+
+        <div class="ix-fine">
+            Market information and research tools only • Not financial advice
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<!-- ===================================
+FOOTER
+=================================== -->
+
+<div id="footer"></div>
+
+
+<!-- ===================================
+COMPONENTS
+=================================== -->
+
+<script src="/js/components.js"></script>
+
+
 </body>
-</html>
+
+</html> 

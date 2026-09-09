@@ -1,243 +1,756 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
+
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'AW-18373865179');
-</script>  
-  <meta charset="UTF-8">
-  <title>Login | EdgeBreak</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 
-<link rel="stylesheet" href="/css/dashboard.css">
-<link rel="stylesheet" href="/css/navbar.css">
-<link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> 
-
-  <!-- CONFIG -->
-  <script>
-window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
-);
+<script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179">
 </script>
+
+<script>
+window.dataLayer = window.dataLayer || [];
+
+function gtag(){
+    dataLayer.push(arguments);
+}
+
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
+</script>
+
+
+<!-- ===================================
+CORE META
+=================================== -->
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+    name="theme-color"
+    content="#f8fafc"
+>
+
+
+<!-- ===================================
+PAGE META
+=================================== -->
+
+<title>Login | EdgeBreak</title>
+
+<meta
+    name="description"
+    content="Log in to your EdgeBreak account to access NASDAQ stock research, scanners, market activity, AI research and workspace tools."
+>
+
+<meta
+    name="robots"
+    content="noindex,follow"
+>
+
+
 <!-- ===================================
 FAVICON
 =================================== -->
 
 <link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
+    rel="icon"
+    type="image/webp"
+    href="/images/favicon.webp"
 >
+
+
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+
+<link
+    rel="preconnect"
+    href="https://www.googletagmanager.com"
+>
+
+<link
+    rel="preconnect"
+    href="https://cdn.jsdelivr.net"
+    crossorigin
+>
+
+<link
+    rel="preconnect"
+    href="https://qmonyhukamuuunxxxdlk.supabase.co"
+    crossorigin
+>
+
+<link
+    rel="dns-prefetch"
+    href="//www.googletagmanager.com"
+>
+
+<link
+    rel="dns-prefetch"
+    href="//cdn.jsdelivr.net"
+>
+
+<link
+    rel="dns-prefetch"
+    href="//qmonyhukamuuunxxxdlk.supabase.co"
+>
+
+
+<!-- ===================================
+STYLES
+=================================== -->
+
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="/css/footer.css">
+
+
+<!-- ===================================
+SUPABASE
+=================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+window.supabaseClient = supabase.createClient(
+  "https://qmonyhukamuuunxxxdlk.supabase.co",
+  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+);
+</script>
+
+
+<!-- ===================================
+LOGIN PAGE CSS
+INDEX-GROUNDED DESIGN SYSTEM
+=================================== -->
+
 <style>
 
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input{
+    font:inherit;
+}
+
+.ix-login-page{
+    min-height:calc(100vh - 80px);
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 14% 12%,rgba(37,99,235,.10),transparent 28%),
+        radial-gradient(circle at 88% 18%,rgba(34,197,94,.13),transparent 30%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 82%);
+}
+
+.ix-shell{
+    width:min(1180px,calc(100% - 40px));
+    margin:auto;
+}
+
+
 /* ===================================
-GLASS BUTTON
+INTRO
+=================================== */
+
+.ix-login-intro{
+    padding:86px 0 32px;
+    text-align:center;
+}
+
+.ix-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.82);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+
+.ix-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+
+.ix-login-intro h1{
+    max-width:780px;
+    margin:28px auto 0;
+    color:var(--ix-ink);
+    font-size:clamp(44px,6vw,72px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+
+.ix-login-intro h1 span{
+    color:var(--ix-green);
+}
+
+.ix-login-intro p{
+    max-width:660px;
+    margin:22px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,21px);
+    line-height:1.6;
+}
+
+
+/* ===================================
+LOGIN CARD
+=================================== */
+
+.ix-login-wrap{
+    padding:18px 0 92px;
+}
+
+.container{
+    width:min(560px,100%);
+    margin:auto;
+}
+
+.ix-login-card{
+    width:100%;
+    margin:auto;
+    padding:46px 44px 40px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:#ffffff;
+    box-shadow:var(--ix-shadow);
+}
+
+.ix-brand-mark{
+    width:68px;
+    height:68px;
+    margin:0 auto 28px;
+    padding:9px;
+    display:grid;
+    place-items:center;
+    border:1px solid #dce6df;
+    border-radius:20px;
+    background:#ffffff;
+    box-shadow:0 12px 30px rgba(15,23,42,.07);
+}
+
+.ix-brand-mark img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+.ix-panel-title{
+    margin:0;
+    text-align:center;
+    color:var(--ix-ink);
+    font-size:clamp(30px,4vw,40px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+
+.ix-panel-copy{
+    max-width:450px;
+    margin:14px auto 30px;
+    text-align:center;
+    color:var(--ix-muted);
+    font-size:15px;
+    line-height:1.65;
+}
+
+
+/* ===================================
+FIELDS
+=================================== */
+
+.ix-field{
+    margin-top:17px;
+}
+
+.ix-label{
+    display:block;
+    margin-bottom:8px;
+    color:#334155;
+    font-size:13px;
+    font-weight:800;
+}
+
+.input-field{
+    width:100%;
+    height:54px;
+    margin:0;
+    padding:0 15px;
+    border:1px solid #d8dee7;
+    border-radius:13px;
+    outline:none;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-size:15px;
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.input-field::placeholder{
+    color:#94a3b8;
+}
+
+.input-field:focus{
+    border-color:#72c98d;
+    box-shadow:0 0 0 4px rgba(34,197,94,.10);
+}
+
+
+/* ===================================
+PRIMARY BUTTON
+=================================== */
+
+.nav-cta.full-width{
+    width:100%;
+    min-height:56px;
+    margin-top:24px;
+    border:0;
+    border-radius:999px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    color:#ffffff;
+    background:linear-gradient(135deg,#0f9f4b,#20c66b);
+    box-shadow:0 14px 34px rgba(22,163,74,.24);
+    font-size:16px;
+    font-weight:850;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        opacity .2s ease;
+}
+
+.nav-cta.full-width:hover{
+    transform:translateY(-2px);
+    box-shadow:0 18px 38px rgba(22,163,74,.30);
+}
+
+.nav-cta.full-width:disabled{
+    cursor:not-allowed;
+    opacity:.58;
+    transform:none;
+    box-shadow:none;
+}
+
+
+/* ===================================
+SECONDARY BUTTON
 =================================== */
 
 .glass-btn{
-
+    width:100%;
+    min-height:52px;
+    padding:0 22px;
+    border:1px solid #d8dee7;
+    border-radius:999px;
     display:inline-flex;
     align-items:center;
     justify-content:center;
-
-    width:100%;
-
-    padding:14px 24px;
-
-    background:rgba(255,255,255,0.05);
-
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
-
-    border:1px solid rgba(255,255,255,0.12);
-
-    border-radius:12px;
-
-    color:#ffffff;
-    text-decoration:none;
-    font-weight:600;
-    font-size:15px;
-
     cursor:pointer;
-
-    transition:all .25s ease;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-size:15px;
+    font-weight:800;
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
 }
 
 .glass-btn:hover{
-
-    background:rgba(34,197,94,0.10);
-
-    border-color:rgba(34,197,94,0.30);
-
-    color:#22c55e;
-
     transform:translateY(-2px);
-
-    box-shadow:
-        0 10px 30px rgba(34,197,94,0.10);
+    border-color:#94a3b8;
+    box-shadow:0 12px 28px rgba(15,23,42,.07);
 }
 
-.glass-btn:active{
+.ix-forgot{
+    text-align:center;
+    margin-top:15px;
+}
 
-    transform:translateY(0);
+.ix-forgot a{
+    color:var(--ix-green-dark);
+    font-size:14px;
+    font-weight:800;
+    text-decoration:none;
+}
 
+.ix-forgot a:hover{
+    text-decoration:underline;
 }
 
 
+/* ===================================
+ERROR / DIVIDER
+=================================== */
+
+.error-text{
+    min-height:0;
+    margin-top:14px;
+    padding:0;
+    border-radius:12px;
+    color:#b42318;
+    font-size:13px;
+    font-weight:700;
+    line-height:1.5;
+}
+
+.error-text:not(:empty){
+    padding:12px 14px;
+    border:1px solid #fecaca;
+    background:#fff7f7;
+}
+
+.ix-create-divider{
+    margin-top:30px;
+    padding-top:25px;
+    border-top:1px solid var(--ix-line);
+    text-align:center;
+}
+
+.ix-create-divider p{
+    margin:0 0 14px;
+    color:var(--ix-muted);
+    font-size:14px;
+}
+
+
+/* ===================================
+TRUST
+=================================== */
+
+.ix-bottom-trust{
+    display:flex;
+    justify-content:center;
+    gap:22px;
+    flex-wrap:wrap;
+    margin:26px auto 0;
+    color:#687386;
+    font-size:13px;
+    font-weight:650;
+}
+
+.ix-bottom-trust span{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.ix-bottom-trust b{
+    color:var(--ix-green);
+}
+
+
+/* ===================================
+PAYMENT SUCCESS MESSAGE
+=================================== */
+
+.container > p:first-child{
+    margin:0 0 16px !important;
+    padding:13px 16px;
+    border:1px solid #bbf7d0;
+    border-radius:14px;
+    background:#f0fdf4;
+    color:var(--ix-green-dark) !important;
+    text-align:center;
+    font-size:14px;
+    font-weight:800 !important;
+    line-height:1.5;
+}
+
+
+/* ===================================
+RESPONSIVE
+=================================== */
+
+@media(max-width:600px){
+
+    .ix-shell{
+        width:min(100% - 28px,1180px);
+    }
+
+    .ix-login-intro{
+        padding:64px 0 24px;
+    }
+
+    .ix-login-intro h1{
+        font-size:46px;
+    }
+
+    .ix-login-intro p{
+        font-size:18px;
+    }
+
+    .ix-login-wrap{
+        padding:12px 0 70px;
+    }
+
+    .ix-login-card{
+        padding:34px 24px 28px;
+        border-radius:24px;
+    }
+
+    .ix-brand-mark{
+        width:60px;
+        height:60px;
+        border-radius:18px;
+    }
+
+}
 
 </style>
 
 </head>
 
-<body class="login-page">
+
+<body>
 
 <!-- NAVBAR -->
 
 <div id="navbar"></div>
 
-<!-- 🔥 LOGIN HERO WRAPPER -->
-<div class="login-hero" style="
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(56,189,248,0.12), transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(168,85,247,0.12), transparent 40%),
-    linear-gradient(rgba(2,6,23,0.6), rgba(2,6,23,0.6)),
-    url('images/hero-bg.png');
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-">
 
-    <div class="container">
+<main class="ix-login-page">
 
-        <div class="section" style="
-            max-width:520px;
-            margin:0 auto;
-            padding:40px;
-            border-radius:16px;
-            box-shadow:0 20px 50px rgba(0,0,0,.5);
-        ">
 
-            <!-- LOGO -->
+<!-- ===================================
+PAGE INTRO
+=================================== -->
 
-            <div class="hero-logo-wrap">
+<section class="ix-login-intro">
 
-                <img
-                    src="images/logo.png"
-                    class="hero-logo"
-                    width="90">
+    <div class="ix-shell">
 
-            </div>
+        <div class="ix-kicker">
+            <span class="ix-dot"></span>
+            EdgeBreak Member Access
+        </div>
 
-            <!-- TITLE -->
+        <h1>
+            Welcome back.<br>
+            <span>Your research is ready.</span>
+        </h1>
 
-            <h2 class="login-title">
+        <p>
+            Log in to continue your EdgeBreak NASDAQ research, scanners, market activity analysis and workspace.
+        </p>
 
-                EdgeBreak Login
+    </div>
 
-            </h2>
+</section>
 
-            <p style="margin-bottom:20px;">
 
-                Your account is ready. Log in below to access your dashboard.
+<!-- ===================================
+LOGIN
+=================================== -->
 
-            </p>
+<section class="ix-login-wrap">
 
-            <!-- EMAIL -->
+    <div class="ix-shell">
 
-            <input
-                id="email"
-                type="email"
-                placeholder="Email"
-                class="input-field">
+        <div class="container">
 
-            <!-- PASSWORD -->
+            <div class="ix-login-card">
 
-            <input
-                id="password"
-                type="password"
-                placeholder="Password"
-                class="input-field">
+                <!-- LOGO -->
 
-            <!-- LOGIN -->
+                <div class="ix-brand-mark">
 
-            <button
-                id="actionBtn"
-                class="nav-cta full-width">
+                    <img
+                        src="/images/logo.webp"
+                        alt="EdgeBreak"
+                    >
 
-                Login
+                </div>
 
-            </button>
 
-            <div style="
-                text-align:center;
-                margin-top:15px;
-            ">
+                <!-- TITLE -->
 
-                <a
-                    href="#"
-                    id="forgotPassword"
-                    style="
-                    font-size:14px;
-                    opacity:.7;
-                ">
+                <h2 class="ix-panel-title">
+                    EdgeBreak Login
+                </h2>
 
-                    Forgot your password?
-
-                </a>
-
-            </div>
-
-            <div
-                id="error"
-                class="error-text">
-            </div>
-
-            <div style="
-                margin-top:30px;
-                padding-top:25px;
-                border-top:1px solid rgba(255,255,255,.08);
-                text-align:center;
-            ">
-
-                <p style="
-                    color:#94a3b8;
-                    margin-bottom:15px;
-                ">
-
-                    Don't have an account?
-
+                <p class="ix-panel-copy">
+                    Your account is ready. Log in below to access your dashboard.
                 </p>
 
+
+                <!-- EMAIL -->
+
+                <div class="ix-field">
+
+                    <label
+                        class="ix-label"
+                        for="email"
+                    >
+                        Email address
+                    </label>
+
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="Email"
+                        class="input-field"
+                        autocomplete="email"
+                    >
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="ix-field">
+
+                    <label
+                        class="ix-label"
+                        for="password"
+                    >
+                        Password
+                    </label>
+
+                    <input
+                        id="password"
+                        type="password"
+                        placeholder="Password"
+                        class="input-field"
+                        autocomplete="current-password"
+                    >
+
+                </div>
+
+
+                <!-- LOGIN -->
+
                 <button
-                    onclick="window.location.href='pricing.html'"
-                    class="glass-btn">
-
-                    Create Account
-
+                    id="actionBtn"
+                    class="nav-cta full-width"
+                    type="button"
+                >
+                    Login
                 </button>
+
+
+                <div class="ix-forgot">
+
+                    <a
+                        href="#"
+                        id="forgotPassword"
+                    >
+                        Forgot your password?
+                    </a>
+
+                </div>
+
+
+                <div
+                    id="error"
+                    class="error-text"
+                    role="alert"
+                    aria-live="polite"
+                ></div>
+
+
+                <div class="ix-create-divider">
+
+                    <p>
+                        Don't have an account?
+                    </p>
+
+                    <button
+                        onclick="window.location.href='pricing.html'"
+                        class="glass-btn"
+                        type="button"
+                    >
+                        Create Account
+                    </button>
+
+                </div>
 
             </div>
 
         </div>
 
+
+        <div class="ix-bottom-trust">
+
+            <span><b>✓</b> Secure member login</span>
+
+            <span><b>✓</b> Password reset available</span>
+
+            <span><b>✓</b> EdgeBreak member access</span>
+
+        </div>
+
     </div>
 
-</div>
+</section>
+
+
+</main>
+
 
 <!-- FOOTER -->
 
 <div id="footer"></div>
+
+
+<!-- ===================================
+CURRENT LOGIN SYSTEM
+PRESERVED
+=================================== -->
 
 <script defer>
 
@@ -278,7 +791,7 @@ async function handleAuth() {
   window.location.href = "/nasdaq-stock-scanner.html";
 }
 
-    
+
 // =========================
 // 🔐 FORGOT PASSWORD (SUPABASE RESET)
 // =========================
@@ -293,82 +806,87 @@ document.getElementById("forgotPassword").addEventListener("click", async (e) =>
   }
 
   const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-    redirectTo: "https://www.edgebreak.ai/reset-password.html"
-  });
+    redirectTo: "https://www.edgebreak.ai/reset-password.html" 
+  }); 
 
-  if (error) {
-    alert(error.message);
-  } else {
-    alert("Password reset email sent");
-  }
-});
+  if (error) { 
+    alert(error.message); 
+  } else { 
+    alert("Password reset email sent"); 
+  } 
+}); 
 
-// =========================
-// EVENTS (FIXED)
-// =========================
-document.addEventListener("DOMContentLoaded", () => {
+// ========================= 
+// EVENTS (FIXED) 
+// ========================= 
+document.addEventListener("DOMContentLoaded", () => { 
 
-  const btn = document.getElementById("actionBtn");
+  const btn = document.getElementById("actionBtn"); 
 
-  if (!btn) {
-    console.error("Login button not found");
-    return;
-  }
+  if (!btn) { 
+    console.error("Login button not found"); 
+    return; 
+  } 
 
-  btn.addEventListener("click", handleAuth);
+  btn.addEventListener("click", handleAuth); 
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") handleAuth();
-  });
+  document.addEventListener("keydown", (e) => { 
+    if (e.key === "Enter") handleAuth(); 
+  }); 
 
-});
-
-
+}); 
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(window.location.search);
 
-  if (params.get("success") === "true") {
-    const msg = document.createElement("p");
-    msg.innerText = "Payment successful. Log in to access your account.";
-    msg.style.color = "#22c55e";
-    msg.style.marginTop = "10px";
-    msg.style.textAlign = "center";
-    msg.style.fontWeight = "600";
 
-    const container = document.querySelector(".container") || document.body;
-    container.prepend(msg);
-  }
-});
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(window.location.search);
+document.addEventListener("DOMContentLoaded", () => { 
+  const params = new URLSearchParams(window.location.search); 
 
-  if (params.get("success") === "true") {
-    const msg = document.createElement("div");
+  if (params.get("success") === "true") { 
+    const msg = document.createElement("p"); 
+    msg.innerText = "Payment successful. Log in to access your account."; 
+    msg.style.color = "#22c55e"; 
+    msg.style.marginTop = "10px"; 
+    msg.style.textAlign = "center"; 
+    msg.style.fontWeight = "600"; 
 
-    msg.innerText = "🎉 Payment successful. Your free trial has started. Log in to access your account.";
+    const container = document.querySelector(".container") || document.body; 
+    container.prepend(msg); 
+  } 
+}); 
+</script> 
 
-    msg.style.background = "#022c22";
-    msg.style.color = "#4ade80";
-    msg.style.padding = "12px";
-    msg.style.borderRadius = "8px";
-    msg.style.marginBottom = "15px";
-    msg.style.textAlign = "center";
-    msg.style.fontWeight = "600";
+<script> 
+document.addEventListener("DOMContentLoaded", () => { 
+  const params = new URLSearchParams(window.location.search); 
 
-    const form = document.querySelector("form");
+  if (params.get("success") === "true") { 
+    const msg = document.createElement("div"); 
 
-    if (form && form.parentNode) {
-      form.parentNode.insertBefore(msg, form);
-    }
-  }
-});
-</script>
-<!-- COMPONENTS -->
+    msg.innerText = "🎉 Payment successful. Your free trial has started. Log in to access your account."; 
 
-<script src="/js/components.js"></script>
-</body>
+    msg.style.background = "#022c22"; 
+    msg.style.color = "#4ade80"; 
+    msg.style.padding = "12px"; 
+    msg.style.borderRadius = "8px"; 
+    msg.style.marginBottom = "15px"; 
+    msg.style.textAlign = "center"; 
+    msg.style.fontWeight = "600"; 
+
+    const form = document.querySelector("form"); 
+
+    if (form && form.parentNode) { 
+      form.parentNode.insertBefore(msg, form); 
+    } 
+  } 
+}); 
+</script> 
+
+
+<!-- COMPONENTS --> 
+
+<script src="/js/components.js"></script> 
+
+
+</body> 
 </html>

@@ -1,325 +1,610 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
+
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
+
+<script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179">
+</script>
+
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+window.dataLayer = window.dataLayer || [];
 
-  gtag('config', 'AW-18373865179');
-</script>   
+function gtag(){
+    dataLayer.push(arguments);
+}
 
-  <meta charset="UTF-8">
-  <title>Login | EdgeBreak</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
+</script>
+
+
+<!-- ===================================
+CORE META
+=================================== -->
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+    name="theme-color"
+    content="#f8fafc"
+>
+
+
+<!-- ===================================
+PAGE META
+=================================== -->
+
+<title>Create Your EdgeBreak Account | EdgeBreak</title>
+
+<meta
+    name="description"
+    content="Complete your EdgeBreak account after checkout and activate access to the NASDAQ market intelligence and stock research platform."
+>
+
+<meta
+    name="robots"
+    content="noindex,follow"
+>
+
+
+<!-- ===================================
+FAVICON
+=================================== -->
+
+<link
+    rel="icon"
+    type="image/webp"
+    href="/images/favicon.webp"
+>
+
+
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+
+<link
+    rel="preconnect"
+    href="https://www.googletagmanager.com"
+>
+
+<link
+    rel="preconnect"
+    href="https://cdn.jsdelivr.net"
+    crossorigin
+>
+
+<link
+    rel="preconnect"
+    href="https://qmonyhukamuuunxxxdlk.supabase.co"
+    crossorigin
+>
+
+<link
+    rel="dns-prefetch"
+    href="//www.googletagmanager.com"
+>
+
+<link
+    rel="dns-prefetch"
+    href="//cdn.jsdelivr.net"
+>
+
+<link
+    rel="dns-prefetch"
+    href="//qmonyhukamuuunxxxdlk.supabase.co"
+>
+
+
+<!-- ===================================
+STYLES
+=================================== -->
 
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
+
+
+<!-- ===================================
+SUPABASE LIBRARY
+=================================== -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- CONFIG -->
-  <script>
+
+<!-- ===================================
+SUPABASE INITIALISATION
+=================================== -->
+
+<script>
+
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+
 );
+
 </script>
 
 
+<!-- ===================================
+CREATE ACCOUNT PAGE CSS
+INDEX-GROUNDED DESIGN SYSTEM
+=================================== -->
+
 <style>
 
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input{
+    font:inherit;
+}
+
+.ix-account-page{
+    min-height:calc(100vh - 80px);
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 14% 12%,rgba(37,99,235,.10),transparent 28%),
+        radial-gradient(circle at 88% 18%,rgba(34,197,94,.13),transparent 30%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 82%);
+}
+
+.ix-shell{
+    width:min(1180px,calc(100% - 40px));
+    margin:auto;
+}
+
+
 /* ===================================
-GLASS BUTTON
+INTRO
 =================================== */
 
-.glass-btn{
+.ix-account-intro{
+    padding:82px 0 32px;
+    text-align:center;
+}
 
+.ix-kicker{
     display:inline-flex;
     align-items:center;
-    justify-content:center;
-
-    width:100%;
-
-    padding:14px 24px;
-
-    background:rgba(255,255,255,0.05);
-
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
-
-    border:1px solid rgba(255,255,255,0.12);
-
-    border-radius:12px;
-
-    color:#ffffff;
-    text-decoration:none;
-    font-weight:600;
-    font-size:15px;
-
-    cursor:pointer;
-
-    transition:all .25s ease;
+    gap:9px;
+    padding:9px 15px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.82);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
 }
 
-.glass-btn:hover{
-
-    background:rgba(34,197,94,0.10);
-
-    border-color:rgba(34,197,94,0.30);
-
-    color:#22c55e;
-
-    transform:translateY(-2px);
-
-    box-shadow:
-        0 10px 30px rgba(34,197,94,0.10);
+.ix-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
 }
 
-.glass-btn:active{
-
-    transform:translateY(0);
-
+.ix-account-intro h1{
+    max-width:820px;
+    margin:28px auto 0;
+    color:var(--ix-ink);
+    font-size:clamp(44px,6vw,74px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
 }
+
+.ix-account-intro h1 span{
+    color:var(--ix-green);
+}
+
+.ix-account-intro p{
+    max-width:700px;
+    margin:23px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+
 
 /* ===================================
-   CREATE ACCOUNT PAGE
-   =================================== */
+ACCOUNT CARD
+=================================== */
 
-.login-hero{
-
-    min-height:100vh;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    padding:60px 20px;
-
-    background:
-        radial-gradient(circle at 20% 30%, rgba(56,189,248,.12), transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(168,85,247,.12), transparent 40%),
-        linear-gradient(rgba(2,6,23,.65), rgba(2,6,23,.65)),
-        url("../images/hero-bg.png");
-
-    background-size:cover;
-    background-position:center;
+.ix-account-wrap{
+    padding:18px 0 92px;
 }
 
-.login-hero .section{
-
-    max-width:560px;
-    width:100%;
-
+.ix-account-card{
+    width:min(620px,100%);
     margin:auto;
-
-    padding:50px;
-
-    border-radius:18px;
-
-    background:rgba(15,23,42,.92);
-
-    border:1px solid rgba(255,255,255,.08);
-
-    backdrop-filter:blur(18px);
-
-    box-shadow:
-        0 25px 60px rgba(0,0,0,.55);
-
+    padding:46px 44px 40px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:#ffffff;
+    box-shadow:var(--ix-shadow);
 }
 
-.hero-logo-wrap{
+.ix-brand-mark{
+    width:68px;
+    height:68px;
+    margin:0 auto 28px;
+    padding:9px;
+    display:grid;
+    place-items:center;
+    border:1px solid #dce6df;
+    border-radius:20px;
+    background:#ffffff;
+    box-shadow:0 12px 30px rgba(15,23,42,.07);
+}
 
+.ix-brand-mark img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+.ix-panel-title{
+    margin:0;
     text-align:center;
-
-    margin-bottom:28px;
-
+    color:var(--ix-ink);
+    font-size:clamp(30px,4vw,40px);
+    line-height:1.08;
+    letter-spacing:-.04em;
 }
 
-.hero-logo{
-
-    width:90px;
-    height:auto;
-
-}
-
-.login-title{
-
+.ix-panel-copy{
+    max-width:500px;
+    margin:14px auto 30px;
     text-align:center;
-
-    font-size:2rem;
-
-    margin-bottom:12px;
-
-    color:#ffffff;
-
+    color:var(--ix-muted);
+    font-size:15px;
+    line-height:1.65;
 }
 
-#signupPanel > p{
 
-    text-align:center;
+/* ===================================
+FIELDS
+=================================== */
 
-    color:#94a3b8;
+.ix-field{
+    margin-top:17px;
+}
 
-    margin-bottom:30px;
-
-    line-height:1.7;
-
+.ix-label{
+    display:block;
+    margin-bottom:8px;
+    color:#334155;
+    font-size:13px;
+    font-weight:800;
 }
 
 .input-field{
-
     width:100%;
-
-    height:58px;
-
-    margin-bottom:18px;
-
-    padding:0 18px;
-
-    font-size:16px;
-
-    border-radius:10px;
-
-    border:1px solid #334155;
-
-    background:#0f172a;
-
-    color:#ffffff;
-
-    transition:.25s;
-
+    height:54px;
+    margin:0;
+    padding:0 15px;
+    border:1px solid #d8dee7;
+    border-radius:13px;
+    outline:none;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-size:15px;
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
 }
 
 .input-field::placeholder{
-
     color:#94a3b8;
-
 }
 
 .input-field:focus{
-
-    outline:none;
-
-    border-color:#38bdf8;
-
-    box-shadow:
-        0 0 0 3px rgba(56,189,248,.15);
-
+    border-color:#72c98d;
+    box-shadow:0 0 0 4px rgba(34,197,94,.10);
 }
 
 .input-field[readonly]{
-
-    background:#111827;
-
-    color:#cbd5e1;
-
-    cursor:not-allowed;
-
+    background:#f8fafc !important;
+    color:#64748b;
+    cursor:not-allowed !important;
 }
+
+.ix-password-rules{
+    margin-top:10px;
+    padding:14px 15px;
+    border:1px solid var(--ix-line);
+    border-radius:14px;
+    background:#f8fafc;
+}
+
+.ix-password-rules strong{
+    display:block;
+    margin-bottom:7px;
+    color:#334155;
+    font-size:12px;
+    letter-spacing:.03em;
+}
+
+.ix-password-rules span{
+    display:block;
+    margin-top:4px;
+    color:#718096;
+    font-size:12px;
+    line-height:1.45;
+}
+
+
+/* ===================================
+BUTTONS
+=================================== */
 
 .nav-cta.full-width{
-
     width:100%;
-
-    height:58px;
-
-    margin-top:28px;
-
-    font-size:17px;
-
-    font-weight:700;
-
-    border-radius:10px;
-
+    min-height:56px;
+    margin-top:24px;
+    border:0;
+    border-radius:999px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    cursor:pointer;
+    color:#ffffff;
+    background:linear-gradient(135deg,#0f9f4b,#20c66b);
+    box-shadow:0 14px 34px rgba(22,163,74,.24);
+    font-size:16px;
+    font-weight:850;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        opacity .2s ease;
 }
 
-.error-text{
+.nav-cta.full-width:hover{
+    transform:translateY(-2px);
+    box-shadow:0 18px 38px rgba(22,163,74,.30);
+}
 
-    min-height:24px;
-
-    margin-top:18px;
-
-    text-align:center;
-
-    color:#ef4444;
-
+.nav-cta.full-width:disabled{
+    cursor:not-allowed;
+    opacity:.58;
+    transform:none;
+    box-shadow:none;
 }
 
 .glass-btn{
-
-    min-width:180px;
-
+    width:100%;
+    min-height:52px;
+    padding:0 22px;
+    border:1px solid #d8dee7;
+    border-radius:999px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-size:15px;
+    font-weight:800;
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
 }
+
+.glass-btn:hover{
+    transform:translateY(-2px);
+    border-color:#94a3b8;
+    box-shadow:0 12px 28px rgba(15,23,42,.07);
+}
+
+
+/* ===================================
+ERROR / DIVIDERS
+=================================== */
+
+.error-text{
+    min-height:0;
+    margin-top:14px;
+    padding:0;
+    text-align:left;
+    border-radius:12px;
+    color:#b42318;
+    font-size:13px;
+    font-weight:700;
+    line-height:1.5;
+}
+
+.error-text:not(:empty){
+    padding:12px 14px;
+    border:1px solid #fecaca;
+    background:#fff7f7;
+}
+
+.ix-login-divider{
+    margin-top:30px;
+    padding-top:25px;
+    border-top:1px solid var(--ix-line);
+    text-align:center;
+}
+
+.ix-login-divider p{
+    margin:0 0 14px;
+    color:var(--ix-muted);
+    font-size:14px;
+}
+
+
+/* ===================================
+STATE PANELS
+=================================== */
 
 #verifyPanel,
 #activatingPanel,
 #successPanel{
-
     text-align:center;
-
 }
 
-#verifyPanel p,
-#activatingPanel p,
-#successPanel p{
-
-    line-height:1.8;
-
+.ix-status-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 26px;
+    border-radius:22px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(145deg,#ecfdf3,#e9f4ff);
+    color:var(--ix-green-dark);
+    font-size:29px;
+    font-weight:900;
 }
 
 #verifyEmailAddress{
-
-    font-size:20px;
-
-    font-weight:700;
-
-    color:#22c55e;
-
+    margin:22px 0;
+    padding:13px 15px;
+    border:1px solid #dce7df;
+    border-radius:14px;
+    background:#f4faf6;
+    color:var(--ix-green-dark);
+    font-size:17px;
+    font-weight:800;
+    line-height:1.5;
     word-break:break-word;
-
-    margin:25px 0;
-
 }
 
-@media (max-width:640px){
-
-    .login-hero{
-
-        padding:30px 15px;
-
-    }
-
-    .login-hero .section{
-
-        padding:35px 25px;
-
-    }
-
-    .login-title{
-
-        font-size:1.75rem;
-
-    }
-
-    .input-field{
-
-        height:54px;
-
-    }
-
+.ix-status-copy{
+    margin:18px 0 28px;
+    color:var(--ix-muted);
+    font-size:15px;
+    line-height:1.7;
 }
 
-.hero-logo{
+.ix-spinner{
+    width:42px;
+    height:42px;
+    margin:24px auto 0;
+    border:4px solid #e5eaf0;
+    border-top-color:var(--ix-green);
+    border-radius:50%;
+    animation:ix-spin .8s linear infinite;
+}
 
-    width:110px;
-    height:auto;
+@keyframes ix-spin{
+    to{transform:rotate(360deg)}
+}
 
-    display:block;
 
-    margin:0 auto 30px;
+/* ===================================
+TRUST LINE
+=================================== */
+
+.ix-bottom-trust{
+    display:flex;
+    justify-content:center;
+    gap:22px;
+    flex-wrap:wrap;
+    margin:26px auto 0;
+    color:#687386;
+    font-size:13px;
+    font-weight:650;
+}
+
+.ix-bottom-trust span{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.ix-bottom-trust b{
+    color:var(--ix-green);
+}
+
+
+/* ===================================
+RESPONSIVE
+=================================== */
+
+@media(max-width:600px){
+
+    .ix-shell{
+        width:min(100% - 28px,1180px);
+    }
+
+    .ix-account-intro{
+        padding:64px 0 24px;
+    }
+
+    .ix-account-intro h1{
+        font-size:46px;
+    }
+
+    .ix-account-intro p{
+        font-size:18px;
+    }
+
+    .ix-account-wrap{
+        padding:12px 0 70px;
+    }
+
+    .ix-account-card{
+        padding:34px 24px 28px;
+        border-radius:24px;
+    }
+
+    .ix-brand-mark{
+        width:60px;
+        height:60px;
+        border-radius:18px;
+    }
 
 }
 
@@ -327,48 +612,59 @@ GLASS BUTTON
 
 </head>
 
-<body class="login-page">
 
-<!-- NAVBAR -->
+<body>
 
 <div id="navbar"></div>
 
-<!-- 🔥 CREATE ACCOUNT HERO WRAPPER -->
-<div class="login-hero" style="
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(56,189,248,0.12), transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(168,85,247,0.12), transparent 40%),
-    linear-gradient(rgba(2,6,23,0.6), rgba(2,6,23,0.6)),
-    url('images/hero-bg.png');
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-">
 
-    <div class="container">
+<main class="ix-account-page">
 
-        <div class="section" style="
-            max-width:520px;
-            margin:0 auto;
-            padding:40px;
-            border-radius:16px;
-            box-shadow:0 20px 50px rgba(0,0,0,.5);
-        ">
 
-            <!-- LOGO -->
+<!-- ===================================
+PAGE INTRO
+=================================== -->
 
-            <div class="hero-logo-wrap">
+<section class="ix-account-intro">
 
+    <div class="ix-shell">
+
+        <div class="ix-kicker">
+            <span class="ix-dot"></span>
+            EdgeBreak Account
+        </div>
+
+        <h1>
+            Payment complete.<br>
+            <span>Finish your account.</span>
+        </h1>
+
+        <p>
+            Create your login details, verify your email and EdgeBreak will activate your membership automatically.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ===================================
+ACCOUNT FLOW
+=================================== -->
+
+<section class="ix-account-wrap">
+
+    <div class="ix-shell">
+
+        <div class="ix-account-card">
+
+            <div class="ix-brand-mark">
                 <img
-                    src="images/logo.webp"
-                    class="hero-logo"
-                    width="90">
-
+                    src="/images/logo.webp"
+                    alt="EdgeBreak"
+                >
             </div>
+
 
             <!-- ===================================
             SIGN UP PANEL
@@ -376,95 +672,143 @@ GLASS BUTTON
 
             <div id="signupPanel">
 
-                <h2 class="login-title">
+                <h2 class="ix-panel-title">
                     Create Your EdgeBreak Account
                 </h2>
 
-                <p style="margin-bottom:20px;">
-                    Your payment has been received. Complete your account below to access EdgeBreak.
+                <p class="ix-panel-copy">
+                    Your payment has been received. Complete the details below to activate your EdgeBreak access.
                 </p>
 
-                <input
-                    id="fullName"
-                    type="text"
-                    placeholder="Full Name"
-                    class="input-field">
 
-                <input
-                    id="email"
-                    type="email"
-                    placeholder="Email Address"
-                    class="input-field">
+                <div class="ix-field">
 
-                <input
-                    id="password"
-                    type="password"
-                    placeholder="Password"
-                    class="input-field">
+                    <label
+                        class="ix-label"
+                        for="fullName"
+                    >
+                        Full name
+                    </label>
 
-                <small style="
-                    display:block;
-                    margin:-8px 0 18px;
-                    color:#94a3b8;
-                    font-size:13px;
-                    line-height:1.6;
-                ">
+                    <input
+                        id="fullName"
+                        type="text"
+                        placeholder="Full Name"
+                        class="input-field"
+                        autocomplete="name"
+                    >
 
-                    <strong style="color:#ffffff;">
-                        Password Requirements
-                    </strong>
+                </div>
 
-                    <br>• Minimum 8 characters
-                    <br>• At least 1 uppercase letter
-                    <br>• At least 1 lowercase letter
-                    <br>• At least 1 number
 
-                </small>
+                <div class="ix-field">
 
-                <input
-                    id="confirmPassword"
-                    type="password"
-                    placeholder="Confirm Password"
-                    class="input-field">
+                    <label
+                        class="ix-label"
+                        for="email"
+                    >
+                        Email address
+                    </label>
+
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="Email Address"
+                        class="input-field"
+                        autocomplete="email"
+                    >
+
+                </div>
+
+
+                <div class="ix-field">
+
+                    <label
+                        class="ix-label"
+                        for="password"
+                    >
+                        Password
+                    </label>
+
+                    <input
+                        id="password"
+                        type="password"
+                        placeholder="Password"
+                        class="input-field"
+                        autocomplete="new-password"
+                    >
+
+                    <div class="ix-password-rules">
+
+                        <strong>
+                            PASSWORD REQUIREMENTS
+                        </strong>
+
+                        <span>✓ Minimum 8 characters</span>
+                        <span>✓ At least 1 uppercase letter</span>
+                        <span>✓ At least 1 lowercase letter</span>
+                        <span>✓ At least 1 number</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ix-field">
+
+                    <label
+                        class="ix-label"
+                        for="confirmPassword"
+                    >
+                        Confirm password
+                    </label>
+
+                    <input
+                        id="confirmPassword"
+                        type="password"
+                        placeholder="Confirm Password"
+                        class="input-field"
+                        autocomplete="new-password"
+                    >
+
+                </div>
+
 
                 <button
                     id="actionBtn"
-                    class="nav-cta full-width">
-
+                    class="nav-cta full-width"
+                    type="button"
+                >
                     Create Account
-
                 </button>
+
 
                 <div
                     id="error"
-                    class="error-text">
-                </div>
+                    class="error-text"
+                    role="alert"
+                    aria-live="polite"
+                ></div>
 
-                <div style="
-                    margin-top:30px;
-                    padding-top:25px;
-                    border-top:1px solid rgba(255,255,255,.08);
-                    text-align:center;
-                ">
 
-                    <p style="
-                        color:#94a3b8;
-                        margin-bottom:15px;
-                    ">
+                <div class="ix-login-divider">
+
+                    <p>
                         Already have an account?
                     </p>
 
                     <button
                         onclick="window.location.href='login.html'"
-                        class="glass-btn">
-
+                        class="glass-btn"
+                        type="button"
+                    >
                         Login
-
                     </button>
 
                 </div>
 
             </div>
+
 
             <!-- ===================================
             VERIFY EMAIL PANEL
@@ -473,50 +817,36 @@ GLASS BUTTON
             <div
                 id="verifyPanel"
                 hidden
-                style="text-align:center;">
+            >
 
-                <h2 class="login-title">
+                <div class="ix-status-icon">
+                    @
+                </div>
+
+                <h2 class="ix-panel-title">
                     Verify Your Email
                 </h2>
 
-                <p style="margin-bottom:25px;">
-
+                <p class="ix-panel-copy">
                     We've sent a verification email to:
-
                 </p>
 
-                <p
-                    id="verifyEmailAddress"
-                    style="
-                        font-size:18px;
-                        font-weight:700;
-                        color:#22c55e;
-                        margin-bottom:25px;
-                    ">
+                <p id="verifyEmailAddress"></p>
 
-                </p>
-
-                <p style="
-                    color:#94a3b8;
-                    line-height:1.8;
-                    margin-bottom:30px;
-                ">
-
+                <p class="ix-status-copy">
                     Click the verification link in your email to activate your EdgeBreak account.
-
                 </p>
 
                 <button
                     id="resendBtn"
                     class="glass-btn"
-                    style="margin-bottom:15px;">
-
+                    type="button"
+                >
                     Resend Verification Email
-
                 </button>
 
-                
             </div>
+
 
             <!-- ===================================
             ACTIVATING PANEL
@@ -525,25 +855,27 @@ GLASS BUTTON
             <div
                 id="activatingPanel"
                 hidden
-                style="text-align:center;">
+            >
 
-                <h2 class="login-title">
+                <div class="ix-status-icon">
+                    ✓
+                </div>
 
+                <h2 class="ix-panel-title">
                     Activating Your Account
-
                 </h2>
 
-                <p style="
-                    color:#94a3b8;
-                    margin-top:25px;
-                    line-height:1.8;
-                ">
-
+                <p class="ix-status-copy">
                     Please wait while we activate your EdgeBreak membership...
-
                 </p>
 
+                <div
+                    class="ix-spinner"
+                    aria-label="Activating account"
+                ></div>
+
             </div>
+
 
             <!-- ===================================
             SUCCESS PANEL
@@ -552,45 +884,61 @@ GLASS BUTTON
             <div
                 id="successPanel"
                 hidden
-                style="text-align:center;">
+            >
 
-                <h2 class="login-title">
+                <div class="ix-status-icon">
+                    ✓
+                </div>
 
+                <h2 class="ix-panel-title">
                     Welcome to EdgeBreak
-
                 </h2>
 
-                <p style="
-                    color:#22c55e;
-                    font-size:18px;
-                    font-weight:600;
-                    margin-top:25px;
-                ">
-
-                    ✓ Your account has been activated.
-
+                <p
+                    class="ix-status-copy"
+                    style="color:var(--ix-green-dark);font-weight:800;"
+                >
+                    Your account has been activated.
                 </p>
 
-                <p style="
-                    color:#94a3b8;
-                    margin-top:20px;
-                ">
-
+                <p class="ix-status-copy">
                     Redirecting to your dashboard...
-
                 </p>
 
             </div>
 
         </div>
 
+
+        <div class="ix-bottom-trust">
+
+            <span><b>✓</b> Secure account activation</span>
+
+            <span><b>✓</b> Email verification</span>
+
+            <span><b>✓</b> EdgeBreak member access</span>
+
+        </div>
+
     </div>
 
-</div>
+</section>
 
-<!-- FOOTER -->
+
+</main>
+
+
+<!-- ===================================
+FOOTER
+=================================== -->
 
 <div id="footer"></div>
+
+
+<!-- ===================================
+CURRENT CREATE ACCOUNT SYSTEM
+PRESERVED FROM EXISTING PAGE
+=================================== -->
 
 <script defer>
 
@@ -958,13 +1306,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 </script>
 
-<!-- COMPONENTS -->
+
+<!-- ===================================
+COMPONENTS
+=================================== -->
 
 <script src="/js/components.js"></script>
 
 
-
 </body>
+
 </html>
-
-

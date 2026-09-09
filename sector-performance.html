@@ -1,535 +1,243 @@
-<html>
-<head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<!DOCTYPE html>
+<html lang="en-AU">
 
-  gtag('config', 'AW-18373865179');
+<head>
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
+
+<script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179">
 </script>
+
+<script>
+window.dataLayer = window.dataLayer || [];
+
+function gtag(){
+    dataLayer.push(arguments);
+}
+
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
+</script>
+
+
+<!-- ===================================
+CORE META
+=================================== -->
+
 <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-<title>Margin Loan Calculator | EdgeBreak Tools</title>
+<meta
+    name="theme-color"
+    content="#f8fafc"
+>
 
-<meta name="description"
-      content="Estimate your margin loan, equity contribution and Loan-to-Value Ratio (LVR) using the free EdgeBreak Margin Loan Calculator.">
 
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
 
-<meta name="author"
-      content="EdgeBreak">
+<title>Sector Performance | EdgeBreak Market Research</title>
 
-<meta name="theme-color"
-      content="#071225">
+<meta
+    name="description"
+    content="Monitor sector performance and open interactive TradingView charts inside EdgeBreak to add broader market context to NASDAQ stock research."
+>
 
-<link rel="canonical"
-      href="https://www.edgebreak.ai/margin-loan-calculator.html">
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large"
+>
+
+
+<!-- ===================================
+CANONICAL
+=================================== -->
+
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/sector-performance.html"
+>
+
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
 
-<meta property="og:type"
-      content="website">
+<meta
+    property="og:type"
+    content="website"
+>
 
-<meta property="og:title"
-      content="Margin Loan Calculator | EdgeBreak">
+<meta
+    property="og:site_name"
+    content="EdgeBreak"
+>
 
-<meta property="og:description"
-      content="Free margin loan calculator to estimate borrowing requirements, equity contribution and Loan-to-Value Ratio (LVR).">
+<meta
+    property="og:locale"
+    content="en_AU"
+>
 
-<meta property="og:url"
-      content="https://www.edgebreak.ai/margin-loan-calculator.html">
+<meta
+    property="og:url"
+    content="https://www.edgebreak.ai/sector-performance.html"
+>
 
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/logo.webp">
+<meta
+    property="og:title"
+    content="Sector Performance | EdgeBreak"
+>
 
-<meta property="og:image:alt"
-      content="EdgeBreak Margin Loan Calculator">
+<meta
+    property="og:description"
+    content="Compare sector performance and open interactive charts as part of your broader EdgeBreak market research."
+>
 
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta
+    property="og:image"
+    content="https://www.edgebreak.ai/images/logo.webp"
+>
 
-<meta property="og:locale"
-      content="en_AU">
+<meta
+    property="og:image:alt"
+    content="EdgeBreak Sector Performance"
+>
 
-<!-- ===================================
-TWITTER CARDS
-=================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Margin Loan Calculator | EdgeBreak">
-
-<meta name="twitter:description"
-      content="Estimate your margin loan, equity contribution and LVR using this free EdgeBreak calculator.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/logo.webp">
-
-<meta name="twitter:image:alt"
-      content="EdgeBreak Margin Loan Calculator">
 
 <!-- ===================================
-CSS
+TWITTER / X
 =================================== -->
-<link rel="stylesheet" href="/css/dashboard.css">
-<link rel="stylesheet" href="/css/navbar.css">
-<link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<meta
+    name="twitter:card"
+    content="summary_large_image"
+>
+
+<meta
+    name="twitter:site"
+    content="@EdgeBreakAi"
+>
+
+<meta
+    name="twitter:creator"
+    content="@EdgeBreakAi"
+>
+
+<meta
+    name="twitter:title"
+    content="Sector Performance | EdgeBreak"
+>
+
+<meta
+    name="twitter:description"
+    content="Compare sector performance and use interactive charts to add market context to NASDAQ research."
+>
+
+<meta
+    name="twitter:image"
+    content="https://www.edgebreak.ai/images/logo.webp"
+>
+
+<meta
+    name="twitter:image:alt"
+    content="EdgeBreak Sector Performance"
+>
+
+
 <!-- ===================================
 FAVICON
 =================================== -->
 
 <link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
+    rel="icon"
+    type="image/webp"
+    href="/images/favicon.webp"
 >
-<style>
-/* ==========================================
-UTILITY PAGES
-========================================== */
 
-.tool-page{
 
-    max-width:1400px;
-    margin:70px auto;
-    padding:0 20px;
-
-}
-
-.tool-page h1{
-
-    color:#ffffff;
-    text-align:center;
-    font-size:2.8rem;
-    margin-bottom:18px;
-
-}
-
-.intro{
-
-    max-width:760px;
-    margin:0 auto 45px;
-    text-align:center;
-    color:#94a3b8;
-    font-size:1.08rem;
-    line-height:1.8;
-
-}
-
-/* ==========================================
-CARD
-========================================== */
-
-.tool-card{
-
-    background:#0b1628;
-
-    border:1px solid rgba(255,255,255,.05);
-
-    border-radius:18px;
-
-    padding:0;
-
-    overflow:hidden;
-
-    margin-bottom:40px;
-
-    box-shadow:0 15px 40px rgba(0,0,0,.35);
-
-}
-
-.tool-card iframe{
-
-    border:none;
-    border-radius:16px;
-    overflow:hidden;
-
-}
-
-/* ==========================================
-FORM
-========================================== */
-
-.margin-form{
-
-    max-width:500px;
-    margin:auto;
-
-}
-
-.field{
-
-    margin-bottom:22px;
-    text-align:left;
-
-}
-
-.field label{
-
-    display:block;
-    color:#ffffff;
-    font-weight:600;
-    margin-bottom:8px;
-
-}
-
-.field input{
-
-    width:100%;
-    padding:15px;
-
-    border:none;
-    border-radius:12px;
-
-    background:#071225;
-    color:#ffffff;
-
-    font-size:16px;
-    outline:none;
-
-    transition:.25s;
-
-}
-
-.field input:focus{
-
-    box-shadow:0 0 0 2px #00d084;
-
-}
-
-/* ==========================================
-BUTTON
-========================================== */
-
-.return-btn{
-
-    display:inline-block;
-
-    margin-top:10px;
-
-    padding:15px 28px;
-
-    background:#00d084;
-    color:#071225;
-
-    border:none;
-    border-radius:12px;
-
-    font-weight:700;
-    font-size:15px;
-
-    text-decoration:none;
-    cursor:pointer;
-
-    transition:.25s;
-
-}
-
-.return-btn:hover{
-
-    transform:translateY(-2px);
-
-    background:#14e896;
-
-    box-shadow:0 12px 30px rgba(0,208,132,.30);
-
-}
-
-/* ==========================================
-RESULTS
-========================================== */
-
-.margin-results{
-
-    margin-top:35px;
-
-}
-
-.margin-results div{
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    padding:18px 20px;
-    margin-bottom:15px;
-
-    background:#071225;
-
-    border-radius:12px;
-
-}
-
-.margin-results span{
-
-    color:#94a3b8;
-
-}
-
-.margin-results strong{
-
-    color:#00d084;
-    font-size:18px;
-
-}
-
-/* ==========================================
-RETURN SECTION
-========================================== */
-
-.return-section{
-
-    margin-top:50px;
-    text-align:center;
-
-}
-
-.return-section h2{
-
-    color:#ffffff;
-    margin-bottom:15px;
-
-}
-
-.return-section p{
-
-    max-width:650px;
-    margin:0 auto 30px;
-
-    color:#94a3b8;
-    line-height:1.8;
-
-}
-
-/* ==========================================
-RESPONSIVE
-========================================== */
-
-@media(max-width:768px){
-
-    .tool-page{
-
-        margin:40px auto;
-
-    }
-
-    .tool-page h1{
-
-        font-size:2rem;
-
-    }
-
-    .tool-card{
-
-        padding:25px;
-
-    }
-
-    .margin-results div{
-
-        flex-direction:column;
-        gap:8px;
-
-        text-align:center;
-
-    }
-
-}   
-
-.sector-row{
-
-    width:100%;
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    padding:18px 22px;
-
-    background:none;
-    border:none;
-    border-bottom:1px solid #1e293b;
-
-    cursor:pointer;
-
-    transition:.25s;
-
-}
-
-.sector-row:hover{
-
-    background:#071225;
-
-}
-
-.sector-row.active{
-
-    background:#0f1f35;
-
-    border-left:4px solid #38bdf8;
-
-}
-
-.sector-header{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    padding:20px 28px;
-
-    background:#071225;
-
-    color:white;
-
-    font-weight:700;
-
-}
-
-
-
-#tvChart{
-
-    width:100%;
-    height:650px;
-
-    border-radius:12px;
-    overflow:hidden;
-
-}
-
-@media(max-width:900px){
-
-    .sector-layout{
-
-        grid-template-columns:1fr;
-
-    }
-
-    #tvChart{
-
-        height:500px;
-
-    }
-
-}
-
-.sector-row{
-
-    width:100%;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    padding:20px 28px;
-
-    background:none;
-
-    border:none;
-
-    border-bottom:1px solid #1e293b;
-
-    cursor:pointer;
-
-    transition:.2s;
-
-}
-
-#sectorChart{
-
-    padding:30px;
-
-}
-
-#chartTitle{
-
-    margin-bottom:25px;
-
-    color:white;
-
-    text-align:left;
-
-}
-
-#tvChart{
-
-    width:100%;
-
-    height:650px;
-
-}
-
-/* ==========================
-   SECTOR INFO
-========================== */
-
-.sector-info{
-
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-
-}
-
-.sector-info h3{
-
-    margin:0 0 6px;
-
-    font-size:18px;
-    font-weight:700;
-
-    color:#ffffff;
-
-}
-
-.sector-info p{
-
-    margin:0;
-
-    font-size:14px;
-    color:#94a3b8;
-
-}
-
-.sector-row strong{
-
-    min-width:90px;
-
-    text-align:right;
-
-    font-size:22px;
-    font-weight:700;
-
-}
-</style>
 <!-- ===================================
-SUPABASE
+PERFORMANCE / CONNECTION HINTS
 =================================== -->
 
+<link
+    rel="preconnect"
+    href="https://www.googletagmanager.com"
+>
 
+<link
+    rel="preconnect"
+    href="https://cdn.jsdelivr.net"
+    crossorigin
+>
+
+<link
+    rel="preconnect"
+    href="https://qmonyhukamuuunxxxdlk.supabase.co"
+    crossorigin
+>
+
+<link
+    rel="dns-prefetch"
+    href="//www.googletagmanager.com"
+>
+
+<link
+    rel="dns-prefetch"
+    href="//cdn.jsdelivr.net"
+>
+
+<link
+    rel="dns-prefetch"
+    href="//qmonyhukamuuunxxxdlk.supabase.co"
+>
+
+
+<!-- ===================================
+STYLES
+=================================== -->
+
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="/css/footer.css">
+
+
+<!-- ===================================
+SUPABASE LIBRARY
+=================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<!-- ===================================
+SUPABASE INITIALISATION
+=================================== -->
 
 <script>
+
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
+
 </script>
 
+
+<!-- ===================================
+ACCESS CONTROL
+PRESERVED FROM EXISTING PAGE
+=================================== -->
+
 <script>
+
 // =========================
 // 🔒 HARD PAGE LOCK
 // =========================
@@ -573,262 +281,900 @@ checkAccess();
 
 </script>
 
+
+<!-- ===================================
+SECTOR PERFORMANCE PAGE CSS
+INDEX-GROUNDED DESIGN SYSTEM
+=================================== -->
+
+<style>
+
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button{
+    font:inherit;
+}
+
+.ix-page{
+    overflow:hidden;
+    background:#ffffff;
+}
+
+.ix-shell{
+    width:min(1180px,calc(100% - 40px));
+    margin:auto;
+}
+
+
+/* ===================================
+HERO
+=================================== */
+
+.ix-hero{
+    position:relative;
+    padding:100px 0 70px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 18% 18%,rgba(37,99,235,.10),transparent 27%),
+        radial-gradient(circle at 82% 24%,rgba(34,197,94,.13),transparent 29%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 88%);
+}
+
+.ix-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;
+    right:12%;
+    bottom:0;
+    height:1px;
+    background:linear-gradient(90deg,transparent,#d9e4dd,transparent);
+}
+
+.ix-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.82);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+
+.ix-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+
+.ix-title{
+    margin:28px 0 0;
+    color:var(--ix-ink);
+    font-size:clamp(44px,6.4vw,78px);
+    line-height:.99;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+
+.ix-title span{
+    color:var(--ix-green);
+}
+
+.ix-subtitle{
+    max-width:760px;
+    margin:25px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+
+.ix-trust{
+    display:flex;
+    justify-content:center;
+    gap:24px;
+    flex-wrap:wrap;
+    margin-top:28px;
+    color:#687386;
+    font-size:14px;
+    font-weight:650;
+}
+
+.ix-trust span{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.ix-trust b{
+    color:var(--ix-green);
+}
+
+
+/* ===================================
+SECTOR SECTION
+=================================== */
+
+.ix-sector-section{
+    padding:76px 0 96px;
+}
+
+.ix-section-head{
+    max-width:780px;
+    margin:0 auto 46px;
+    text-align:center;
+}
+
+.ix-eyebrow{
+    margin-bottom:17px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ix-h2{
+    margin:0;
+    color:var(--ix-ink);
+    font-size:clamp(36px,4.5vw,58px);
+    line-height:1.05;
+    letter-spacing:-.045em;
+}
+
+.ix-lead{
+    margin:20px auto 0;
+    color:var(--ix-muted);
+    font-size:18px;
+    line-height:1.65;
+}
+
+.sector-layout{
+    display:grid;
+    grid-template-columns:minmax(320px,420px) minmax(0,1fr);
+    gap:22px;
+    align-items:start;
+}
+
+.ix-card{
+    overflow:hidden;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:#ffffff;
+    box-shadow:var(--ix-shadow);
+}
+
+.sector-header{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    padding:21px 23px;
+    border-bottom:1px solid var(--ix-line);
+    background:#f8fafc;
+    color:#475569;
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.sector-row{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:22px;
+    padding:19px 22px;
+    border:0;
+    border-bottom:1px solid var(--ix-line);
+    background:#ffffff;
+    text-align:left;
+    cursor:pointer;
+    transition:
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.sector-row:last-child{
+    border-bottom:0;
+}
+
+.sector-row:hover{
+    background:#f8fbf9;
+}
+
+.sector-row.active{
+    position:relative;
+    background:linear-gradient(90deg,#f1faf4,#ffffff);
+    box-shadow:inset 4px 0 0 var(--ix-green);
+}
+
+.sector-info{
+    min-width:0;
+}
+
+.sector-info h3{
+    margin:0 0 5px;
+    color:var(--ix-ink);
+    font-size:16px;
+    line-height:1.25;
+}
+
+.sector-info p{
+    margin:0;
+    color:var(--ix-muted);
+    font-size:12px;
+    line-height:1.5;
+}
+
+.sector-row strong{
+    flex:0 0 auto;
+    min-width:76px;
+    text-align:right;
+    font-size:18px;
+    font-weight:850;
+}
+
+.sector-row.positive strong{
+    color:var(--ix-green-dark);
+}
+
+.sector-row.neutral strong{
+    color:#64748b;
+}
+
+.sector-row.negative strong{
+    color:#c2413d;
+}
+
+
+/* ===================================
+CHART
+=================================== */
+
+.ix-chart-card{
+    padding:18px;
+    border-radius:26px;
+    background:#0c1728;
+    box-shadow:0 30px 80px rgba(15,23,42,.16);
+}
+
+.ix-chart-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    padding:10px 10px 20px;
+}
+
+#chartTitle{
+    margin:0;
+    color:#ffffff;
+    font-size:24px;
+    letter-spacing:-.025em;
+}
+
+.ix-chart-note{
+    color:#9fb0c4;
+    font-size:12px;
+}
+
+#tvChart{
+    width:100%;
+    height:650px;
+    border-radius:18px;
+    overflow:hidden;
+    background:#071225;
+}
+
+
+/* ===================================
+EXPLANATION
+=================================== */
+
+.ix-soft{
+    padding:96px 0;
+    background:var(--ix-soft);
+}
+
+.ix-info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.ix-info-card{
+    padding:36px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:#ffffff;
+    box-shadow:0 14px 42px rgba(15,23,42,.05);
+}
+
+.ix-info-card h2{
+    margin:0 0 16px;
+    color:var(--ix-ink);
+    font-size:32px;
+    letter-spacing:-.035em;
+}
+
+.ix-info-card p{
+    margin:0 0 16px;
+    color:var(--ix-muted);
+    font-size:16px;
+    line-height:1.7;
+}
+
+.ix-info-card p:last-child{
+    margin-bottom:0;
+}
+
+.ix-note-card{
+    padding:36px;
+    border-radius:26px;
+    background:
+        radial-gradient(circle at 90% 10%,rgba(34,197,94,.10),transparent 34%),
+        linear-gradient(145deg,#f4faf6,#f7faff);
+    border:1px solid #dce7df;
+}
+
+.ix-note-card .ix-eyebrow{
+    margin-bottom:13px;
+}
+
+.ix-note-card h2{
+    margin:0;
+    color:var(--ix-ink);
+    font-size:32px;
+    line-height:1.1;
+    letter-spacing:-.035em;
+}
+
+.ix-note-card p{
+    margin:17px 0 0;
+    color:var(--ix-muted);
+    font-size:16px;
+    line-height:1.7;
+}
+
+
+/* ===================================
+RETURN
+=================================== */
+
+.ix-return{
+    padding:96px 20px;
+    text-align:center;
+    background:linear-gradient(145deg,#f1f8f4,#f3f7ff);
+}
+
+.ix-return h2{
+    margin:0;
+    color:var(--ix-ink);
+    font-size:clamp(38px,5vw,62px);
+    line-height:1.05;
+    letter-spacing:-.045em;
+}
+
+.ix-return p{
+    max-width:660px;
+    margin:20px auto 0;
+    color:var(--ix-muted);
+    font-size:17px;
+    line-height:1.65;
+}
+
+.return-btn{
+    min-height:54px;
+    margin-top:30px;
+    padding:0 24px;
+    border-radius:999px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    background:linear-gradient(135deg,#0f9f4b,#20c66b);
+    color:#ffffff;
+    text-decoration:none;
+    font-size:16px;
+    font-weight:850;
+    box-shadow:0 14px 34px rgba(22,163,74,.24);
+    transition:.2s ease;
+}
+
+.return-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 18px 38px rgba(22,163,74,.30);
+}
+
+.ix-fine{
+    margin-top:16px;
+    color:#7b8797;
+    font-size:13px;
+}
+
+
+/* ===================================
+RESPONSIVE
+=================================== */
+
+@media(max-width:980px){
+
+    .sector-layout,
+    .ix-info-grid{
+        grid-template-columns:1fr;
+    }
+
+    #tvChart{
+        height:540px;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .ix-shell{
+        width:min(100% - 28px,1180px);
+    }
+
+    .ix-hero{
+        padding:74px 0 56px;
+    }
+
+    .ix-title{
+        font-size:46px;
+    }
+
+    .ix-subtitle{
+        font-size:18px;
+    }
+
+    .ix-sector-section,
+    .ix-soft{
+        padding:70px 0;
+    }
+
+    .sector-row{
+        padding:17px 16px;
+        gap:12px;
+    }
+
+    .sector-info h3{
+        font-size:15px;
+    }
+
+    .sector-info p{
+        font-size:11px;
+    }
+
+    .sector-row strong{
+        min-width:67px;
+        font-size:16px;
+    }
+
+    .ix-chart-card{
+        padding:10px;
+        border-radius:21px;
+    }
+
+    .ix-chart-top{
+        display:block;
+        padding:12px 10px 17px;
+    }
+
+    .ix-chart-note{
+        display:block;
+        margin-top:5px;
+    }
+
+    #tvChart{
+        height:460px;
+    }
+
+    .ix-info-card,
+    .ix-note-card{
+        padding:28px 24px;
+        border-radius:23px;
+    }
+
+    .ix-return{
+        padding:76px 20px;
+    }
+
+    .return-btn{
+        width:100%;
+        max-width:420px;
+    }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<div class="tool-page">
+<div id="navbar"></div>
 
-    <h1>Sector Performance</h1>
 
-    <p class="intro">
-        Monitor which sectors are leading and lagging the market. Strong sector momentum can help identify where institutional money may be flowing before individual stocks begin to break out.
-    </p>
+<main class="ix-page">
+
+
+<!-- ===================================
+HERO
+=================================== -->
+
+<section class="ix-hero">
+
+    <div class="ix-shell">
+
+        <div class="ix-kicker">
+            <span class="ix-dot"></span>
+            Market Context
+        </div>
+
+        <h1 class="ix-title">
+            Sector<br>
+            <span>Performance.</span>
+        </h1>
+
+        <p class="ix-subtitle">
+            Compare leading and lagging areas of the market, then open an interactive chart to investigate the broader context around individual NASDAQ stocks.
+        </p>
+
+        <div class="ix-trust">
+            <span><b>✓</b> Sector context</span>
+            <span><b>✓</b> Interactive charts</span>
+            <span><b>✓</b> Independent research</span>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ===================================
+SECTOR PERFORMANCE
+=================================== -->
+
+<section class="ix-sector-section">
+
+    <div class="ix-shell">
+
+        <header class="ix-section-head">
+
+            <div class="ix-eyebrow">
+                Compare the market
+            </div>
+
+            <h2 class="ix-h2">
+                See where relative strength is appearing.
+            </h2>
+
+            <p class="ix-lead">
+                Select a sector or market theme to open its TradingView chart and compare the broader structure before returning to individual stock research.
+            </p>
+
+        </header>
+
 
         <div class="sector-layout">
 
-            <div class="tool-card">
 
-                <div class="sector-table">
+            <!-- SECTOR LIST -->
 
-                    <div class="sector-header">
+            <div class="ix-card">
 
-                        <span>Sector</span>
-                        <span>Today's Change</span>
+                <div class="sector-header">
+                    <span>Sector</span>
+                    <span>Today's Change</span>
+                </div>
 
+
+                <button
+                    class="sector-row positive active"
+                    data-symbol="XLK"
+                    data-name="Technology"
+                >
+
+                    <div class="sector-info">
+                        <h3>Technology</h3>
+                        <p>Apple • Microsoft • Oracle • Adobe</p>
                     </div>
 
-                    <button class="sector-row positive active"
-                            data-symbol="XLK"
-                            data-name="Technology">
+                    <strong>+2.31%</strong>
 
-                        <div class="sector-info">
+                </button>
 
-                            <h3>Technology</h3>
 
-                            <p>
-                                Apple • Microsoft • Oracle • Adobe
-                            </p>
+                <button
+                    class="sector-row positive"
+                    data-symbol="AIQ"
+                    data-name="Artificial Intelligence"
+                >
 
-                        </div>
+                    <div class="sector-info">
+                        <h3>Artificial Intelligence</h3>
+                        <p>NVIDIA • Palantir • C3.ai • SoundHound</p>
+                    </div>
 
-                        <strong>+2.31%</strong>
+                    <strong>+2.08%</strong>
 
-                    </button>
+                </button>
 
-                    <button class="sector-row positive"
-                            data-symbol="AIQ"
-                            data-name="Artificial Intelligence">
 
-                        <div class="sector-info">
+                <button
+                    class="sector-row positive"
+                    data-symbol="SMH"
+                    data-name="Semiconductors"
+                >
 
-                            <h3>Artificial Intelligence</h3>
+                    <div class="sector-info">
+                        <h3>Semiconductors</h3>
+                        <p>NVIDIA • AMD • Broadcom • TSMC</p>
+                    </div>
 
-                            <p>
-                                NVIDIA • Palantir • C3.ai • SoundHound
-                            </p>
+                    <strong>+1.84%</strong>
 
-                        </div>
+                </button>
 
-                        <strong>+2.08%</strong>
 
-                    </button>
+                <button
+                    class="sector-row positive"
+                    data-symbol="CLOU"
+                    data-name="Cloud Computing"
+                >
 
-                    <button class="sector-row positive"
-                            data-symbol="SMH"
-                            data-name="Semiconductors">
+                    <div class="sector-info">
+                        <h3>Cloud Computing</h3>
+                        <p>Amazon • Microsoft • Snowflake • Cloudflare</p>
+                    </div>
 
-                        <div class="sector-info">
+                    <strong>+1.42%</strong>
 
-                            <h3>Semiconductors</h3>
+                </button>
 
-                            <p>
-                                NVIDIA • AMD • Broadcom • TSMC
-                            </p>
 
-                        </div>
+                <button
+                    class="sector-row positive"
+                    data-symbol="HACK"
+                    data-name="Cybersecurity"
+                >
 
-                        <strong>+1.84%</strong>
+                    <div class="sector-info">
+                        <h3>Cybersecurity</h3>
+                        <p>CrowdStrike • Palo Alto • Fortinet • Zscaler</p>
+                    </div>
 
-                    </button>
+                    <strong>+1.17%</strong>
 
-                    <button class="sector-row positive"
-                            data-symbol="CLOU"
-                            data-name="Cloud Computing">
+                </button>
 
-                        <div class="sector-info">
 
-                            <h3>Cloud Computing</h3>
+                <button
+                    class="sector-row neutral"
+                    data-symbol="XLF"
+                    data-name="Financials"
+                >
 
-                            <p>
-                                Amazon • Microsoft • Snowflake • Cloudflare
-                            </p>
+                    <div class="sector-info">
+                        <h3>Financials</h3>
+                        <p>JPMorgan • Visa • Mastercard • Goldman Sachs</p>
+                    </div>
 
-                        </div>
+                    <strong>+0.28%</strong>
 
-                        <strong>+1.42%</strong>
+                </button>
 
-                    </button>
 
-                    <button class="sector-row positive"
-                            data-symbol="HACK"
-                            data-name="Cybersecurity">
+                <button
+                    class="sector-row negative"
+                    data-symbol="XLE"
+                    data-name="Energy"
+                >
 
-                        <div class="sector-info">
+                    <div class="sector-info">
+                        <h3>Energy</h3>
+                        <p>ExxonMobil • Chevron • ConocoPhillips • Schlumberger</p>
+                    </div>
 
-                            <h3>Cybersecurity</h3>
+                    <strong>-0.64%</strong>
 
-                            <p>
-                                CrowdStrike • Palo Alto • Fortinet • Zscaler
-                            </p>
+                </button>
 
-                        </div>
 
-                        <strong>+1.17%</strong>
+                <button
+                    class="sector-row negative"
+                    data-symbol="XLRE"
+                    data-name="Real Estate"
+                >
 
-                    </button>
+                    <div class="sector-info">
+                        <h3>Real Estate</h3>
+                        <p>Prologis • Realty Income • Simon Property</p>
+                    </div>
 
-                    <button class="sector-row neutral"
-                            data-symbol="XLF"
-                            data-name="Financials">
+                    <strong>-0.93%</strong>
 
-                        <div class="sector-info">
+                </button>
 
-                            <h3>Financials</h3>
 
-                            <p>
-                                JPMorgan • Visa • Mastercard • Goldman Sachs
-                            </p>
+                <button
+                    class="sector-row negative"
+                    data-symbol="XLP"
+                    data-name="Consumer Staples"
+                >
 
-                        </div>
+                    <div class="sector-info">
+                        <h3>Consumer Staples</h3>
+                        <p>Coca-Cola • Costco • Procter & Gamble • Walmart</p>
+                    </div>
 
-                        <strong>+0.28%</strong>
+                    <strong>-1.11%</strong>
 
-                    </button>
+                </button>
 
-                    <button class="sector-row negative"
-                            data-symbol="XLE"
-                            data-name="Energy">
 
-                        <div class="sector-info">
+                <button
+                    class="sector-row negative"
+                    data-symbol="XLU"
+                    data-name="Utilities"
+                >
 
-                            <h3>Energy</h3>
+                    <div class="sector-info">
+                        <h3>Utilities</h3>
+                        <p>NextEra • Duke Energy • Southern Company</p>
+                    </div>
 
-                            <p>
-                                ExxonMobil • Chevron • ConocoPhillips • Schlumberger
-                            </p>
+                    <strong>-1.48%</strong>
 
-                        </div>
-
-                        <strong>-0.64%</strong>
-
-                    </button>
-
-                    <button class="sector-row negative"
-                            data-symbol="XLRE"
-                            data-name="Real Estate">
-
-                        <div class="sector-info">
-
-                            <h3>Real Estate</h3>
-
-                            <p>
-                                Prologis • Realty Income • Simon Property
-                            </p>
-
-                        </div>
-
-                        <strong>-0.93%</strong>
-
-                    </button>
-
-                    <button class="sector-row negative"
-                            data-symbol="XLP"
-                            data-name="Consumer Staples">
-
-                        <div class="sector-info">
-
-                            <h3>Consumer Staples</h3>
-
-                            <p>
-                                Coca-Cola • Costco • Procter & Gamble • Walmart
-                            </p>
-
-                        </div>
-
-                        <strong>-1.11%</strong>
-
-                    </button>
-
-                    <button class="sector-row negative"
-                            data-symbol="XLU"
-                            data-name="Utilities">
-
-                        <div class="sector-info">
-
-                            <h3>Utilities</h3>
-
-                            <p>
-                                NextEra • Duke Energy • Southern Company
-                            </p>
-
-                        </div>
-
-                        <strong>-1.48%</strong>
-
-                    </button>
-
-                </div>
+                </button>
 
             </div>
 
+
+            <!-- CHART -->
+
             <div
                 id="sectorChart"
-                class="tool-card"
-                style="margin-top:40px;">
+                class="ix-chart-card"
+            >
 
-                <h2 id="chartTitle">
+                <div class="ix-chart-top">
 
-                    Technology (XLK)
+                    <h2 id="chartTitle">
+                        Technology (XLK)
+                    </h2>
 
-                </h2>
+                    <span class="ix-chart-note">
+                        Interactive TradingView chart
+                    </span>
+
+                </div>
 
                 <div id="tvChart"></div>
 
             </div>
 
-
-    
-
-
-    <div class="elite-panel" style="margin-top:40px;">
-
-        <h2>
-            Why Sector Performance Matters
-        </h2>
-
-        <p>
-            Strong stocks are often found within strong sectors. Monitoring sector performance can help identify areas of the market attracting buying interest before individual breakout opportunities become widely recognised.
-        </p>
-
-        <p>
-            Sector strength should be considered alongside trend analysis, price structure, volume and overall market conditions. No single indicator should be used in isolation when researching investment opportunities.
-        </p>
-
-        <p>
-            EdgeBreak uses sector analysis as one component of a broader research process designed to help organise and prioritise potential opportunities.
-        </p>
+        </div>
 
     </div>
 
-    <div class="return-section">
+</section>
+
+
+<!-- ===================================
+WHY IT MATTERS
+=================================== -->
+
+<section class="ix-soft">
+
+    <div class="ix-shell">
+
+        <div class="ix-info-grid">
+
+
+            <article class="ix-info-card">
+
+                <div class="ix-eyebrow">
+                    Why sector performance matters
+                </div>
+
+                <h2>
+                    A stock does not trade in isolation.
+                </h2>
+
+                <p>
+                    Sector performance can add useful context when researching individual stocks. A technically strong company inside an improving sector may be operating in a different environment from a similar setup inside a weakening group.
+                </p>
+
+                <p>
+                    Sector strength should be considered alongside trend, price structure, volume and broader market conditions rather than used as a standalone signal.
+                </p>
+
+            </article>
+
+
+            <aside class="ix-note-card">
+
+                <div class="ix-eyebrow">
+                    How EdgeBreak uses it
+                </div>
+
+                <h2>
+                    Context, not confirmation.
+                </h2>
+
+                <p>
+                    EdgeBreak uses broader market and sector information as another research layer. It can help organise and prioritise investigation, but it does not prove institutional buying or predict what an individual stock will do next.
+                </p>
+
+            </aside>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ===================================
+RETURN
+=================================== -->
+
+<section class="ix-return">
+
+    <div class="ix-shell">
+
+        <div class="ix-eyebrow">
+            Continue your research
+        </div>
 
         <h2>
-            Continue Your Research
+            Take the context<br>
+            back to the stock.
         </h2>
 
         <p>
-            Return to the NASDAQ Scanner to discover companies within the strongest market sectors.
+            Return to the NASDAQ Scanner to investigate individual companies and technical setups alongside the broader market picture.
         </p>
 
         <a
@@ -838,15 +1184,41 @@ checkAccess();
             ← Return to NASDAQ Scanner
         </a>
 
+        <div class="ix-fine">
+            Research and educational information only • Not financial advice
+        </div>
+
     </div>
 
-</div>
+</section>
+
+
+</main>
+
+
+<!-- ===================================
+FOOTER
+=================================== -->
+
+<div id="footer"></div>
+
+
+<!-- ===================================
+TRADINGVIEW
+=================================== -->
 
 <script
     src="https://s3.tradingview.com/tv.js">
 </script>
 
+
+<!-- ===================================
+CURRENT SECTOR SYSTEM
+PRESERVED
+=================================== -->
+
 <script>
+
 // =====================================
 // SECTOR PERFORMANCE
 // =====================================
@@ -888,8 +1260,12 @@ sectorRows.forEach(row => {
     });
 
 });
+
 </script>
+
+
 <script>
+
 function loadTradingViewChart(symbol) {
 
     const chart = document.getElementById("tvChart");
@@ -929,7 +1305,17 @@ function loadTradingViewChart(symbol) {
 }
 
 loadTradingViewChart("XLK");
+
 </script>
 
+
+<!-- ===================================
+COMPONENTS
+=================================== -->
+
+<script src="/js/components.js"></script>
+
+
 </body>
+
 </html>

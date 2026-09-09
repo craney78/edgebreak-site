@@ -1,340 +1,940 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Start Free Trial | EdgeBreak</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en-AU">
 
-<link rel="stylesheet" href="/css/dashboard.css">
-<link rel="stylesheet" href="/css/navbar.css">
-<link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<head>
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
+
+<script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179">
+</script>
+
+<script>
+window.dataLayer = window.dataLayer || [];
+
+function gtag(){
+    dataLayer.push(arguments);
+}
+
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
+</script>
+
+
+<!-- ===================================
+CORE META
+=================================== -->
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+    name="theme-color"
+    content="#f8fafc"
+>
+
+
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+
+<title>Start 7-Day Free Trial | EdgeBreak</title>
+
+<meta
+    name="description"
+    content="Create your EdgeBreak account and start a 7-day free trial of the NASDAQ market intelligence and stock research platform."
+>
+
+
 <!-- ===================================
 FAVICON
 =================================== -->
 
 <link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->  
-  <script>
-    window.supabaseClient = supabase.createClient(
-      "https://qmonyhukamuuunxxxdlk.supabase.co",
-      "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
-    );
-  </script>
+    rel="icon"
+    type="image/webp"
+    href="/images/favicon.webp"
+>
+
+
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+
+<link
+    rel="preconnect"
+    href="https://www.googletagmanager.com"
+>
+
+<link
+    rel="preconnect"
+    href="https://cdn.jsdelivr.net"
+    crossorigin
+>
+
+<link
+    rel="preconnect"
+    href="https://qmonyhukamuuunxxxdlk.supabase.co"
+    crossorigin
+>
+
+<link
+    rel="dns-prefetch"
+    href="//www.googletagmanager.com"
+>
+
+<link
+    rel="dns-prefetch"
+    href="//cdn.jsdelivr.net"
+>
+
+<link
+    rel="dns-prefetch"
+    href="//qmonyhukamuuunxxxdlk.supabase.co"
+>
+
+
+<!-- ===================================
+STYLES
+=================================== -->
+
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="/css/footer.css">
+
+
+<!-- ===================================
+SUPABASE
+=================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+window.supabaseClient = supabase.createClient(
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+);
+</script>
+
+
+<!-- ===================================
+SIGNUP PAGE CSS
+INDEX-GROUNDED DESIGN SYSTEM
+=================================== -->
+
 <style>
 
-#signupBtn{
-    margin-top:20px;
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-/* =========================
-   SIGNUP PAGE
-========================= */
 
-.signup-section{
-    min-height:80vh;
-    display:flex;
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+.ix-signup-page{
+    min-height:calc(100vh - 80px);
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 14% 12%,rgba(37,99,235,.10),transparent 28%),
+        radial-gradient(circle at 88% 18%,rgba(34,197,94,.13),transparent 30%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 82%);
+}
+
+.ix-shell{
+    width:min(1180px,calc(100% - 40px));
+    margin:auto;
+}
+
+
+/* ===================================
+PAGE INTRO
+=================================== */
+
+.ix-signup-intro{
+    padding:82px 0 34px;
+    text-align:center;
+}
+
+.ix-kicker{
+    display:inline-flex;
     align-items:center;
-    justify-content:center;
-    padding:60px 20px;
+    gap:9px;
+    padding:9px 15px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.82);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
 }
 
-.signup-card{
+.ix-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
 
-    width:100%;
-    max-width:1100px;
+.ix-signup-intro h1{
+    max-width:900px;
+    margin:28px auto 0;
+    color:var(--ix-ink);
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
 
-    background:rgba(7,15,35,.75);
+.ix-signup-intro h1 span{
+    color:var(--ix-green);
+}
 
-    border:1px solid rgba(34,197,94,.15);
+.ix-signup-intro p{
+    max-width:720px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
 
-    border-radius:16px;
 
-    padding:50px;
+/* ===================================
+SIGNUP PANEL
+=================================== */
 
+.ix-signup-wrap{
+    padding:18px 0 96px;
+}
+
+.ix-signup-card{
+    max-width:1080px;
+    margin:auto;
     display:grid;
-    grid-template-columns:1fr 420px;
-    gap:60px;
-
-    backdrop-filter:blur(10px);
-
-    box-shadow:
-        0 0 30px rgba(0,0,0,.35);
+    grid-template-columns:minmax(0,1fr) minmax(360px,430px);
+    gap:0;
+    overflow:hidden;
+    border:1px solid var(--ix-line);
+    border-radius:32px;
+    background:#ffffff;
+    box-shadow:var(--ix-shadow);
 }
 
-.signup-content h1{
-
-    font-size:52px;
-    line-height:1.1;
-    margin-bottom:25px;
+.ix-signup-info{
+    position:relative;
+    padding:54px 54px 50px;
+    background:
+        radial-gradient(circle at 100% 0%,rgba(34,197,94,.12),transparent 34%),
+        linear-gradient(145deg,#f4faf6 0%,#f7faff 100%);
 }
 
-.signup-content p{
-
-    font-size:20px;
-    color:#cbd5e1;
-    margin-bottom:18px;
+.ix-brand-mark{
+    width:64px;
+    height:64px;
+    padding:9px;
+    display:grid;
+    place-items:center;
+    border:1px solid #dce6df;
+    border-radius:19px;
+    background:#ffffff;
+    box-shadow:0 12px 30px rgba(15,23,42,.07);
 }
 
-.signup-benefits{
-
-    list-style:none;
-    padding:0;
-    margin-top:35px;
-}
-
-.signup-benefits li{
-
-    margin-bottom:16px;
-    font-size:18px;
-    color:white;
-}
-
-.signup-form{
-
-    background:#081224;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    border-radius:12px;
-
-    padding:30px;
-
-    display:flex;
-    flex-direction:column;
-    gap:16px;
-}
-
-.signup-form input,
-.signup-form select{
-
+.ix-brand-mark img{
     width:100%;
+    height:100%;
+    object-fit:contain;
+}
 
-    height:50px;
+.ix-eyebrow{
+    margin:36px 0 15px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
 
-    border:none;
+.ix-signup-info h2{
+    max-width:530px;
+    margin:0;
+    color:var(--ix-ink);
+    font-size:clamp(34px,4vw,52px);
+    line-height:1.06;
+    letter-spacing:-.045em;
+}
 
-    border-radius:8px;
+.ix-signup-info > p{
+    max-width:540px;
+    margin:20px 0 0;
+    color:var(--ix-muted);
+    font-size:17px;
+    line-height:1.7;
+}
 
-    padding:0 15px;
+.ix-benefits{
+    display:grid;
+    gap:12px;
+    margin-top:34px;
+}
 
-    background:#0f172a;
+.ix-benefit{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:13px;
+    align-items:start;
+    padding:15px 0;
+    border-top:1px solid rgba(100,116,139,.16);
+}
 
-    color:white;
+.ix-benefit:first-child{
+    border-top:0;
+}
 
+.ix-benefit-check{
+    width:30px;
+    height:30px;
+    border-radius:10px;
+    display:grid;
+    place-items:center;
+    background:#eaf9ef;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:900;
+}
+
+.ix-benefit strong{
+    display:block;
+    color:var(--ix-ink);
     font-size:15px;
 }
 
-.signup-form button{
-
-    height:54px;
-
-    border:none;
-
-    border-radius:8px;
-
-    background:#22c55e;
-
-    color:white;
-
-    font-size:16px;
-
-    font-weight:700;
-
-    cursor:pointer;
-}
-
-.signup-form button:hover{
-
-    opacity:.9;
-}
-
-.signup-note{
-
-    text-align:center;
-    margin-top:15px;
-    color:#94a3b8;
+.ix-benefit span{
+    display:block;
+    margin-top:3px;
+    color:var(--ix-muted);
     font-size:14px;
+    line-height:1.5;
 }
 
-/* MOBILE */
+
+/* ===================================
+FORM
+=================================== */
+
+.ix-form-panel{
+    padding:46px 38px 38px;
+    background:#ffffff;
+}
+
+.ix-form-panel h2{
+    margin:0;
+    color:var(--ix-ink);
+    font-size:30px;
+    letter-spacing:-.035em;
+}
+
+.ix-form-intro{
+    margin:10px 0 28px;
+    color:var(--ix-muted);
+    font-size:15px;
+    line-height:1.6;
+}
+
+.ix-field{
+    margin-top:18px;
+}
+
+.ix-field:first-of-type{
+    margin-top:0;
+}
+
+.ix-label{
+    display:block;
+    margin-bottom:8px;
+    color:#334155;
+    font-size:13px;
+    font-weight:800;
+}
+
+.ix-input,
+.ix-select{
+    width:100%;
+    height:52px;
+    padding:0 15px;
+    border:1px solid #d8dee7;
+    border-radius:13px;
+    outline:none;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-size:15px;
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+.ix-input::placeholder{
+    color:#94a3b8;
+}
+
+.ix-input:focus,
+.ix-select:focus{
+    border-color:#72c98d;
+    box-shadow:0 0 0 4px rgba(34,197,94,.10);
+}
+
+.ix-password-rules{
+    margin-top:10px;
+    padding:14px 15px;
+    border:1px solid var(--ix-line);
+    border-radius:14px;
+    background:#f8fafc;
+}
+
+.ix-password-rules strong{
+    display:block;
+    margin-bottom:7px;
+    color:#334155;
+    font-size:12px;
+    letter-spacing:.03em;
+}
+
+.ix-password-rules span{
+    display:block;
+    margin-top:4px;
+    color:#718096;
+    font-size:12px;
+    line-height:1.45;
+}
+
+.ix-phone-row{
+    display:grid;
+    grid-template-columns:118px 1fr;
+    gap:10px;
+}
+
+.ix-signup-btn{
+    width:100%;
+    min-height:56px;
+    margin-top:24px;
+    border:0;
+    border-radius:999px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    cursor:pointer;
+    color:#ffffff;
+    background:linear-gradient(135deg,#0f9f4b,#20c66b);
+    box-shadow:0 14px 34px rgba(22,163,74,.24);
+    font-size:16px;
+    font-weight:850;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        opacity .2s ease;
+}
+
+.ix-signup-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 18px 38px rgba(22,163,74,.30);
+}
+
+.ix-signup-btn:disabled{
+    cursor:not-allowed;
+    opacity:.58;
+    transform:none;
+    box-shadow:none;
+}
+
+.ix-form-note{
+    margin-top:16px;
+    text-align:center;
+    color:#7b8797;
+    font-size:12px;
+    line-height:1.55;
+}
+
+.ix-form-note strong{
+    color:var(--ix-green-dark);
+}
+
+.ix-form-note a{
+    color:var(--ix-green-dark);
+    font-weight:800;
+    text-decoration:none;
+}
+
+.ix-form-note a:hover{
+    text-decoration:underline;
+}
+
+#error{
+    min-height:0;
+    margin-top:14px;
+    padding:0;
+    border-radius:12px;
+    color:#b42318;
+    font-size:13px;
+    font-weight:700;
+    line-height:1.5;
+}
+
+#error:not(:empty){
+    padding:12px 14px;
+    border:1px solid #fecaca;
+    background:#fff7f7;
+}
+
+
+/* ===================================
+BOTTOM TRUST
+=================================== */
+
+.ix-bottom-trust{
+    display:flex;
+    justify-content:center;
+    gap:24px;
+    flex-wrap:wrap;
+    margin:28px auto 0;
+    color:#687386;
+    font-size:13px;
+    font-weight:650;
+}
+
+.ix-bottom-trust span{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.ix-bottom-trust b{
+    color:var(--ix-green);
+}
+
+
+/* ===================================
+RESPONSIVE
+=================================== */
 
 @media(max-width:900px){
 
-    .signup-card{
-
+    .ix-signup-card{
         grid-template-columns:1fr;
-        gap:40px;
-        padding:30px;
+        max-width:680px;
     }
 
-    .signup-content h1{
-
-        font-size:38px;
+    .ix-signup-info{
+        padding:44px 40px;
     }
+
+    .ix-form-panel{
+        padding:40px;
+    }
+
 }
+
+@media(max-width:600px){
+
+    .ix-shell{
+        width:min(100% - 28px,1180px);
+    }
+
+    .ix-signup-intro{
+        padding:64px 0 26px;
+    }
+
+    .ix-signup-intro h1{
+        font-size:46px;
+    }
+
+    .ix-signup-intro p{
+        font-size:18px;
+    }
+
+    .ix-signup-wrap{
+        padding:12px 0 72px;
+    }
+
+    .ix-signup-card{
+        border-radius:24px;
+    }
+
+    .ix-signup-info{
+        padding:34px 25px;
+    }
+
+    .ix-brand-mark{
+        width:56px;
+        height:56px;
+        border-radius:17px;
+    }
+
+    .ix-signup-info h2{
+        font-size:34px;
+    }
+
+    .ix-form-panel{
+        padding:32px 24px 28px;
+    }
+
+    .ix-phone-row{
+        grid-template-columns:105px 1fr;
+    }
+
+    .ix-bottom-trust{
+        gap:12px 18px;
+    }
+
+}
+
 </style>
- </head>
- <body> 
-<!-- NAVBAR -->
+
+</head>
+
+
+<body>
 
 <div id="navbar"></div>
 
-<!-- LOGO -->
 
-<div class="hero-logo-wrap" style="margin-bottom:25px;">
-
-<img
-src="images/logo.webp"
-class="hero-logo"
-alt="EdgeBreak NASDAQ Stock Research Platform"
-style="
-width:140px;
-height:auto;
-"
-
->
-
-</div>
-
-<!-- HEADLINE -->
-
-<h2 class="login-title">
-  Start Your Free 1-Month Trial
-</h2>
-
-<!-- SUBTEXT -->
-
-<p class="login-subtext">
-  Access the EdgeBreak NASDAQ Scanner, Smart Money Filter, EdgeBreak Trades and My Workspace with a free 30-day trial.
-</p>
-
-<p class="login-subtext" style="margin-top:-10px;">
-  Research more than 3,000 NASDAQ-listed stocks using resistance touches, higher lows, accumulation characteristics and breakout filters.
-</p>
-
-<!-- BENEFITS -->
-
-<div style="
-  text-align:left;
-  margin:20px 0;
-  color:#cbd5e1;
-  font-size:14px;
-  line-height:1.9;
-">
-
-✓ NASDAQ Scanner<br>
-✓ Smart Money Filter<br>
-✓ EdgeBreak Trades Watchlist<br>
-✓ Personal Watchlists & Workspace<br>
-✓ Trading Guides & Educational Resources<br>
-✓ Daily Scanner Updates
-
-</div>
-
-<!-- EMAIL -->
-
-<input id="email" type="email" placeholder="Email" class="input-field">
-
-<!-- PASSWORD -->
-
-<input
-    id="password"
-    type="password"
-    placeholder="Password"
-    class="input-field">
-
-<small
-    id="passwordRules"
-    style="
-        display:block;
-        margin-top:8px;
-        margin-bottom:12px;
-        color:#94a3b8;
-        font-size:13px;
-        line-height:1.7;
-    ">
-
-    <strong style="color:#ffffff;">
-        Password Requirements
-    </strong>
-
-    <br>
-
-    • Minimum 8 characters
-
-    <br>
-
-    • One uppercase letter (A–Z)
-
-    <br>
-
-    • One lowercase letter (a–z)
-
-    <br>
-
-    • One number (0–9)
-
-</small>
-
-<!-- 📱 PHONE ROW -->
-
-<div style="margin-top:10px; display:flex; justify-content:center;">
-
-  <div style="display:flex; gap:10px; width:320px;">
+<main class="ix-signup-page">
 
 
-<select id="countryCode" class="input-field" style="width:100px;">
-  <option value="+61">🇦🇺 +61</option>
-  <option value="+1">🇺🇸 +1</option>
-  <option value="+44">🇬🇧 +44</option>
-  <option value="+64">🇳🇿 +64</option>
-</select>
+<!-- ===================================
+INTRO
+=================================== -->
 
-<input
-  id="phone"
-  type="tel"
-  placeholder="Mobile Number"
-  class="input-field"
-  style="flex:1;"
->
+<section class="ix-signup-intro">
 
+    <div class="ix-shell">
 
-  </div>
+        <div class="ix-kicker">
+            <span class="ix-dot"></span>
+            7-Day Free Trial
+        </div>
 
-</div>
+        <h1>
+            Start with the shortlist.<br>
+            <span>Investigate deeper.</span>
+        </h1>
 
-<!-- BUTTON -->
+        <p>
+            Create your EdgeBreak account and begin a structured NASDAQ research process built around technical discovery, market activity and deeper company analysis.
+        </p>
 
-<button id="signupBtn" class="nav-cta full-width">
-  Start Free Trial
-</button>
+    </div>
 
-<!-- TRUST LINE -->
-
-<p style="text-align:center; font-size:13px; opacity:0.7; margin-top:15px;">
-  1 Month Free Trial • Cancel Anytime • No Credit Card Required
-</p>
-
-<!-- ERROR -->
-
-<div id="error" class="error-text"></div>
+</section>
 
 
-</div>
+<!-- ===================================
+SIGNUP
+=================================== -->
+
+<section class="ix-signup-wrap">
+
+    <div class="ix-shell">
+
+        <div class="ix-signup-card">
 
 
-  </div>
+            <!-- LEFT / VALUE -->
 
-</div>
+            <div class="ix-signup-info">
+
+                <div class="ix-brand-mark">
+                    <img
+                        src="/images/logo.webp"
+                        alt="EdgeBreak"
+                    >
+                </div>
+
+                <div class="ix-eyebrow">
+                    Your EdgeBreak access
+                </div>
+
+                <h2>
+                    Less searching.<br>
+                    More investigation.
+                </h2>
+
+                <p>
+                    EdgeBreak scans more than 3,200 NASDAQ-listed stocks and gives you the tools to move from discovery into deeper independent research.
+                </p>
 
 
+                <div class="ix-benefits">
 
-<!-- FOOTER -->
+                    <div class="ix-benefit">
+
+                        <div class="ix-benefit-check">✓</div>
+
+                        <div>
+                            <strong>Automated Daily Scan</strong>
+                            <span>Begin with a focused group of stocks already filtered for further investigation.</span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="ix-benefit">
+
+                        <div class="ix-benefit-check">✓</div>
+
+                        <div>
+                            <strong>Breakout, Pre-Breakout & Launch Pad</strong>
+                            <span>Explore technical structures at different stages of development.</span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="ix-benefit">
+
+                        <div class="ix-benefit-check">✓</div>
+
+                        <div>
+                            <strong>Market Activity Context</strong>
+                            <span>Investigate unusual off-exchange and multi-venue behaviour alongside the chart.</span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="ix-benefit">
+
+                        <div class="ix-benefit-check">✓</div>
+
+                        <div>
+                            <strong>AI Company & Chart Research</strong>
+                            <span>Continue from stock discovery into company information and descriptive chart analysis.</span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="ix-benefit">
+
+                        <div class="ix-benefit-check">✓</div>
+
+                        <div>
+                            <strong>Watchlists, Workspace & Academy</strong>
+                            <span>Save research, monitor developing setups and build your understanding over time.</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT / FORM -->
+
+            <div class="ix-form-panel">
+
+                <h2>
+                    Create your account
+                </h2>
+
+                <p class="ix-form-intro">
+                    Enter your details below to begin your 7-day EdgeBreak trial.
+                </p>
+
+
+                <div class="ix-field">
+
+                    <label
+                        class="ix-label"
+                        for="email"
+                    >
+                        Email address
+                    </label>
+
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="you@example.com"
+                        class="ix-input"
+                        autocomplete="email"
+                    >
+
+                </div>
+
+
+                <div class="ix-field">
+
+                    <label
+                        class="ix-label"
+                        for="password"
+                    >
+                        Password
+                    </label>
+
+                    <input
+                        id="password"
+                        type="password"
+                        placeholder="Create a secure password"
+                        class="ix-input"
+                        autocomplete="new-password"
+                    >
+
+                    <div
+                        id="passwordRules"
+                        class="ix-password-rules"
+                    >
+
+                        <strong>
+                            PASSWORD REQUIREMENTS
+                        </strong>
+
+                        <span>✓ Minimum 8 characters</span>
+                        <span>✓ One uppercase letter (A–Z)</span>
+                        <span>✓ One lowercase letter (a–z)</span>
+                        <span>✓ One number (0–9)</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ix-field">
+
+                    <label
+                        class="ix-label"
+                        for="phone"
+                    >
+                        Mobile number
+                    </label>
+
+                    <div class="ix-phone-row">
+
+                        <select
+                            id="countryCode"
+                            class="ix-select"
+                            aria-label="Country calling code"
+                        >
+                            <option value="+61">🇦🇺 +61</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+64">🇳🇿 +64</option>
+                        </select>
+
+                        <input
+                            id="phone"
+                            type="tel"
+                            placeholder="Mobile number"
+                            class="ix-input"
+                            autocomplete="tel"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    id="signupBtn"
+                    class="ix-signup-btn"
+                    type="button"
+                >
+                    Start 7-Day Free Trial
+                    <span>→</span>
+                </button>
+
+
+                <div class="ix-form-note">
+                    <strong>7-Day Free Trial</strong> • Cancel anytime • Secure checkout via Stripe
+                    <br>
+                    Want to compare plans first?
+                    <a href="/pricing.html">View pricing</a>
+                </div>
+
+
+                <div
+                    id="error"
+                    role="alert"
+                    aria-live="polite"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <div class="ix-bottom-trust">
+
+            <span><b>✓</b> NASDAQ focused</span>
+
+            <span><b>✓</b> Evidence-led research</span>
+
+            <span><b>✓</b> Research and education only</span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<!-- ===================================
+FOOTER
+=================================== -->
 
 <div id="footer"></div>
+
+
+<!-- ===================================
+SIGNUP LOGIC
+PRESERVED FROM CURRENT PAGE
+=================================== -->
 
 <script>
 
@@ -541,10 +1141,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 </script>
-<!-- COMPONENTS -->
+
+
+<!-- ===================================
+COMPONENTS
+=================================== -->
 
 <script src="/js/components.js"></script>
 
 
 </body>
+
 </html>
