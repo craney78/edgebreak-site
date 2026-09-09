@@ -328,6 +328,8 @@ Existing IDs and dropdown structure preserved
 }
 
 .dropdown-content{
+    display:block !important;
+
     position:absolute;
     top:calc(100% + 12px);
     left:50%;
@@ -459,7 +461,7 @@ Existing IDs and dropdown structure preserved
    MOBILE
 ========================================================= */
 
-@media(max-width:900px){
+@media(max-width:768px){
 
     .nav-inner{
         width:min(100% - 28px,1180px);
@@ -564,7 +566,14 @@ Existing IDs and dropdown structure preserved
         font-size:19px;
     }
 
-    .dropdown-content{
+    /* =========================================
+       MOBILE SUBMENU BASE
+       Existing JS uses products-open/resources-open
+    ========================================= */
+
+    .nav .dropdown-content{
+        display:none !important;
+
         position:static;
 
         min-width:0;
@@ -584,31 +593,103 @@ Existing IDs and dropdown structure preserved
         transform:none;
 
         pointer-events:auto;
-
-        display:none;
     }
 
-    /*
-       Existing mobile dropdown JS can continue to toggle/open
-       these menus through the current productsMenu/resourcesMenu
-       structure without changing any IDs.
-    */
-
-    .dropdown:hover .dropdown-content{
-        display:none;
+    .dropdown:hover .dropdown-content,
+    .dropdown:focus-within .dropdown-content{
+        display:none !important;
     }
 
-    .dropdown.active .dropdown-content,
-    .dropdown.open .dropdown-content{
-        display:block;
+
+    /* =========================================
+       PRODUCTS / RESOURCES SUBMENU STATES
+       Matches existing components.js/nav JS
+    ========================================= */
+
+    .nav-links.products-open > .mobile-main-item:not(#productsMenu),
+    .nav-links.resources-open > .mobile-main-item:not(#resourcesMenu){
+        display:none !important;
     }
 
-    .dropdown-content a{
-        min-height:42px;
+    .nav-links.products-open #productsMenu,
+    .nav-links.resources-open #resourcesMenu{
+        width:100%;
+    }
+
+    .nav-links.products-open #productsMenu > .nav-link,
+    .nav-links.resources-open #resourcesMenu > .nav-link{
+        display:none !important;
+    }
+
+    .nav-links.products-open #productsMenu > .dropdown-content,
+    .nav-links.resources-open #resourcesMenu > .dropdown-content{
+        display:flex !important;
+
+        flex-direction:column;
+
+        width:100%;
+        min-width:100%;
+
+        padding:0;
+        margin:0;
+
+        position:static;
+
+        border:0;
+        background:transparent;
+        box-shadow:none;
+
+        opacity:1;
+        visibility:visible;
+        transform:none;
+
+        pointer-events:auto;
+    }
+
+    .nav-links.products-open .dropdown-content a,
+    .nav-links.resources-open .dropdown-content a{
+        display:flex !important;
+        align-items:center;
+
+        gap:11px;
+
+        min-height:46px;
 
         padding:8px 12px;
 
         border-radius:10px;
+
+        color:#475569;
+
+        font-size:13px;
+        font-weight:700;
+    }
+
+    .nav-links.products-open .dropdown-content a:hover,
+    .nav-links.resources-open .dropdown-content a:hover{
+        background:#f1f8f4;
+        color:var(--nav-green-dark);
+    }
+
+
+    /* Existing JS inserts this button automatically */
+
+    .mobile-back{
+        display:flex !important;
+        align-items:center;
+
+        min-height:44px;
+
+        margin-bottom:5px;
+        padding:8px 12px !important;
+
+        border-bottom:1px solid var(--nav-line);
+
+        color:var(--nav-green-dark) !important;
+
+        font-size:13px !important;
+        font-weight:850 !important;
+        text-decoration:none;
     }
 
 }
@@ -627,6 +708,28 @@ Existing IDs and dropdown structure preserved
     .nav-links{
         left:10px;
         right:10px;
+    }
+
+}
+
+
+/* =========================================================
+   DESKTOP DROPDOWN SAFETY
+   Overrides legacy /css/navbar.css display rules
+========================================================= */
+
+@media(min-width:769px){
+
+    .nav .dropdown-content{
+        display:block !important;
+    }
+
+    .nav .dropdown:hover > .dropdown-content,
+    .nav .dropdown:focus-within > .dropdown-content{
+        opacity:1 !important;
+        visibility:visible !important;
+        transform:translate(-50%,0) !important;
+        pointer-events:auto !important;
     }
 
 }
