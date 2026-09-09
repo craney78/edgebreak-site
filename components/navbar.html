@@ -1,44 +1,660 @@
-<!-- NAVBAR -->
+<!-- ===================================
+EDGEBREAK NAVBAR
+NEW OPEN / TRUSTED STYLE
+Existing IDs and dropdown structure preserved
+=================================== -->
+
+<style id="edgebreak-navbar-v3">
+
+:root{
+    --nav-ink:#0b1220;
+    --nav-text:#334155;
+    --nav-muted:#64748b;
+    --nav-line:#e5eaf0;
+    --nav-green:#16a34a;
+    --nav-green-dark:#08783b;
+    --nav-white:#ffffff;
+    --nav-soft:#f8fafc;
+}
+
+
+/* =========================================================
+   NAV SHELL
+========================================================= */
+
+.nav{
+    position:sticky;
+    top:0;
+    z-index:9999;
+
+    width:100%;
+
+    background:rgba(255,255,255,.92);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    border-bottom:1px solid rgba(229,234,240,.72);
+}
+
+.nav-inner{
+    width:min(1180px,calc(100% - 40px));
+    min-height:92px;
+
+    margin:0 auto;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:28px;
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.nav-left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    flex:0 0 auto;
+}
+
+.brand-link{
+    width:58px;
+    height:58px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:7px;
+
+    border:1px solid #e3e9e5;
+    border-radius:19px;
+
+    background:#ffffff;
+
+    box-shadow:0 8px 24px rgba(15,23,42,.06);
+
+    text-decoration:none;
+
+    transition:
+        transform .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+.brand-link:hover{
+    transform:translateY(-1px);
+
+    border-color:#cfe4d6;
+
+    box-shadow:0 12px 28px rgba(15,23,42,.08);
+}
+
+.nav-logo{
+    width:100%;
+    height:100%;
+
+    object-fit:contain;
+}
+
+.live-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+
+    padding:7px 10px;
+
+    border:1px solid #d5eadb;
+    border-radius:999px;
+
+    background:#f3faf5;
+    color:var(--nav-green-dark);
+
+    font-size:9px;
+    font-weight:850;
+    letter-spacing:.09em;
+}
+
+.live-badge::before{
+    content:"";
+
+    width:6px;
+    height:6px;
+
+    border-radius:50%;
+
+    background:#22c55e;
+
+    box-shadow:0 0 0 4px rgba(34,197,94,.10);
+}
+
+
+/* =========================================================
+   DESKTOP NAV PILL
+========================================================= */
+
+.nav-links-wrap{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+
+    min-width:0;
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+
+    gap:3px;
+
+    padding:5px;
+
+    border:1px solid var(--nav-line);
+    border-radius:999px;
+
+    background:#ffffff;
+
+    box-shadow:
+        0 8px 26px rgba(15,23,42,.055),
+        inset 0 0 0 1px rgba(255,255,255,.65);
+}
+
+.nav-link{
+    min-height:46px;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    gap:5px;
+
+    padding:0 15px;
+
+    border-radius:999px;
+
+    color:var(--nav-text);
+
+    text-decoration:none;
+
+    font-size:13px;
+    font-weight:720;
+
+    white-space:nowrap;
+
+    transition:
+        color .18s ease,
+        background .18s ease,
+        transform .18s ease;
+}
+
+.nav-link:hover{
+    background:#f5f8fb;
+    color:var(--nav-ink);
+}
+
+
+/* =========================================================
+   RESEARCH HUB
+========================================================= */
+
+.nav-hub{
+    color:var(--nav-green-dark);
+
+    font-weight:850;
+}
+
+.nav-hub::before{
+    content:"✦";
+
+    margin-right:2px;
+
+    color:var(--nav-green);
+
+    font-size:11px;
+}
+
+.nav-hub:hover{
+    background:#f0faf3;
+    color:var(--nav-green-dark);
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.nav-login{
+    min-height:46px;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:0 17px;
+
+    border-radius:999px;
+
+    color:var(--nav-ink);
+
+    text-decoration:none;
+
+    font-size:13px;
+    font-weight:800;
+
+    white-space:nowrap;
+
+    transition:
+        background .18s ease,
+        color .18s ease;
+}
+
+.nav-login:hover{
+    background:#f5f8fb;
+    color:var(--nav-green-dark);
+}
+
+
+/* =========================================================
+   BUY NOW
+========================================================= */
+
+.nav-buy{
+    min-height:48px;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:0 20px;
+
+    border:1px solid #b9dcc4;
+    border-radius:999px;
+
+    background:
+        linear-gradient(#ffffff,#ffffff) padding-box,
+        linear-gradient(135deg,#16a34a,#2563eb) border-box;
+
+    color:var(--nav-ink);
+
+    text-decoration:none;
+
+    font-size:13px;
+    font-weight:850;
+
+    white-space:nowrap;
+
+    box-shadow:0 8px 22px rgba(15,23,42,.05);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        color .18s ease;
+}
+
+.nav-buy:hover{
+    transform:translateY(-1px);
+
+    color:var(--nav-green-dark);
+
+    box-shadow:0 12px 28px rgba(15,23,42,.08);
+}
+
+
+/* =========================================================
+   DROPDOWNS
+========================================================= */
+
+.dropdown{
+    position:relative;
+}
+
+.desktop-arrow{
+    margin-left:2px;
+
+    color:#94a3b8;
+
+    font-size:8px;
+}
+
+.mobile-arrow{
+    display:none;
+}
+
+.dropdown-content{
+    position:absolute;
+    top:calc(100% + 12px);
+    left:50%;
+
+    min-width:280px;
+
+    padding:8px;
+
+    border:1px solid var(--nav-line);
+    border-radius:18px;
+
+    background:#ffffff;
+
+    box-shadow:0 22px 55px rgba(15,23,42,.13);
+
+    opacity:0;
+    visibility:hidden;
+    transform:translate(-50%,8px);
+
+    pointer-events:none;
+
+    transition:
+        opacity .18s ease,
+        visibility .18s ease,
+        transform .18s ease;
+}
+
+.dropdown:hover .dropdown-content,
+.dropdown:focus-within .dropdown-content{
+    opacity:1;
+    visibility:visible;
+
+    transform:translate(-50%,0);
+
+    pointer-events:auto;
+}
+
+.dropdown-content::before{
+    content:"";
+
+    position:absolute;
+    top:-13px;
+    left:0;
+    right:0;
+
+    height:13px;
+}
+
+.dropdown-content a{
+    display:flex;
+    align-items:center;
+
+    gap:11px;
+
+    min-height:46px;
+
+    padding:9px 12px;
+
+    border-radius:11px;
+
+    color:#475569;
+
+    text-decoration:none;
+
+    font-size:12px;
+    font-weight:680;
+
+    transition:
+        background .16s ease,
+        color .16s ease;
+}
+
+.dropdown-content a:hover{
+    background:#f5f8fb;
+    color:var(--nav-green-dark);
+}
+
+.dropdown-icon{
+    width:18px;
+    height:18px;
+
+    flex:0 0 auto;
+
+    color:var(--nav-green-dark);
+    stroke:currentColor;
+}
+
+
+/* =========================================================
+   HAMBURGER
+========================================================= */
+
+.menu-toggle{
+    display:none;
+
+    width:46px;
+    height:46px;
+
+    align-items:center;
+    justify-content:center;
+
+    border:1px solid var(--nav-line);
+    border-radius:15px;
+
+    background:#ffffff;
+    color:var(--nav-ink);
+
+    cursor:pointer;
+}
+
+.menu-icon{
+    width:22px;
+    height:22px;
+}
+
+
+/* =========================================================
+   FOCUS
+========================================================= */
+
+.nav a:focus-visible,
+.menu-toggle:focus-visible{
+    outline:2px solid #22c55e;
+    outline-offset:3px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:900px){
+
+    .nav-inner{
+        width:min(100% - 28px,1180px);
+        min-height:76px;
+    }
+
+    .brand-link{
+        width:50px;
+        height:50px;
+
+        border-radius:16px;
+    }
+
+    .live-badge{
+        display:none;
+    }
+
+    .menu-toggle{
+        display:flex;
+    }
+
+    .nav-links-wrap{
+        gap:10px;
+    }
+
+    .nav-links{
+        position:absolute;
+        top:76px;
+        left:14px;
+        right:14px;
+
+        display:none;
+        align-items:stretch;
+        flex-direction:column;
+
+        gap:4px;
+
+        padding:10px;
+
+        border:1px solid var(--nav-line);
+        border-radius:20px;
+
+        background:#ffffff;
+
+        box-shadow:0 20px 48px rgba(15,23,42,.14);
+    }
+
+    .nav-links.active{
+        display:flex;
+    }
+
+    .nav-link,
+    .nav-login,
+    .nav-buy{
+        width:100%;
+        min-height:48px;
+
+        justify-content:space-between;
+
+        padding:0 15px;
+
+        border-radius:12px;
+
+        text-align:left;
+    }
+
+    .nav-buy{
+        justify-content:center;
+
+        margin-top:4px;
+    }
+
+    .nav-hub{
+        justify-content:flex-start;
+    }
+
+    .dropdown{
+        width:100%;
+    }
+
+    .dropdown > .nav-link{
+        width:100%;
+    }
+
+    .desktop-arrow{
+        display:none;
+    }
+
+    .mobile-arrow{
+        display:inline;
+
+        margin-left:auto;
+
+        color:#94a3b8;
+
+        font-size:19px;
+    }
+
+    .dropdown-content{
+        position:static;
+
+        min-width:0;
+
+        margin:0;
+        padding:4px 0 5px 12px;
+
+        border:0;
+        border-radius:0;
+
+        background:transparent;
+
+        box-shadow:none;
+
+        opacity:1;
+        visibility:visible;
+        transform:none;
+
+        pointer-events:auto;
+
+        display:none;
+    }
+
+    /*
+       Existing mobile dropdown JS can continue to toggle/open
+       these menus through the current productsMenu/resourcesMenu
+       structure without changing any IDs.
+    */
+
+    .dropdown:hover .dropdown-content{
+        display:none;
+    }
+
+    .dropdown.active .dropdown-content,
+    .dropdown.open .dropdown-content{
+        display:block;
+    }
+
+    .dropdown-content a{
+        min-height:42px;
+
+        padding:8px 12px;
+
+        border-radius:10px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media(max-width:420px){
+
+    .nav-inner{
+        width:calc(100% - 20px);
+    }
+
+    .nav-links{
+        left:10px;
+        right:10px;
+    }
+
+}
+
+</style>
+
+
+<!-- ===================================
+NAVBAR
+=================================== -->
+
 <div class="nav">
+
     <div class="nav-inner">
 
-        <!-- LEFT -->
+
+        <!-- ===================================
+        LEFT — BRAND
+        =================================== -->
+
         <div class="nav-left">
 
             <a
-                href="index.html"
+                href="/index.html"
                 aria-label="EdgeBreak Home"
-                class="brand-link">
-
-                <!-- EdgeBreak Brand Icon -->
-                <svg
-                    class="brand-icon"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true">
-
-                    <!-- Bars -->
-                    <path d="M5 19V13"/>
-                    <path d="M10 19V9"/>
-                    <path d="M15 19V6"/>
-
-                    <!-- Growth Arrow -->
-                    <path d="M4 16l5-5 4 3 7-8"/>
-                    <path d="M17 6h3v3"/>
-
-                </svg>
+                class="brand-link"
+            >
 
                 <img
                     src="/images/logo.webp"
                     class="nav-logo"
                     alt="EdgeBreak NASDAQ Market Intelligence"
                     width="58"
-                    height="58">
+                    height="58"
+                >
 
             </a>
 
@@ -48,70 +664,85 @@
 
         </div>
 
-        <!-- RIGHT -->
+
+        <!-- ===================================
+        RIGHT — CLEAN NAV PILL
+        =================================== -->
+
         <div class="nav-links-wrap">
 
-            <div class="nav-links" id="navLinks">
+            <div
+                class="nav-links"
+                id="navLinks"
+            >
 
-                <!-- HOME -->
-                <a href="/index.html" class="nav-link mobile-main-item">
-                    Home
-                </a>
 
-                <!-- PRODUCTS -->
-                <div class="dropdown mobile-main-item" id="productsMenu">
+                <!-- ===================================
+                PRODUCTS
+                =================================== -->
 
-                    <a href="/products.html" class="nav-link">
-                        Products <span class="mobile-arrow">›</span><span class="desktop-arrow">▼</span>
+                <div
+                    class="dropdown mobile-main-item"
+                    id="productsMenu"
+                >
+
+                    <a
+                        href="/products.html"
+                        class="nav-link"
+                    >
+                        Products
+
+                        <span class="mobile-arrow">›</span>
+                        <span class="desktop-arrow">▼</span>
                     </a>
+
 
                     <div class="dropdown-content">
 
+
                         <a href="/launchpad.html">
 
-                            <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg
+                                class="dropdown-icon"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
                                 <path d="M3 17l6-6 4 4 8-8"/>
                                 <path d="M14 7h7v7"/>
                             </svg>
 
-                            Launchpad Scanner
+                            Launch Pad Scanner
 
                         </a>
 
-                        <a href="/smart-money-dashboard.html">
-
-                            <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="9"/>
-                                <path d="M12 7v10"/>
-                                <path d="M9 10c0-1.5 1.3-2.5 3-2.5s3 1 3 2.5-1.3 2.5-3 2.5-3 1-3 2.5S10.3 17.5 12 17.5s3-1 3-2.5"/>
-                            </svg>
-
-                            Smart Money Filter
-
-                        </a>
 
                         <a href="/ai-stock-research.html">
 
-                            <svg class="dropdown-icon" 
-                                xmlns="http://www.w3.org/2000/svg" 
-                                viewBox="0 0 24 24" 
-                                fill="none" 
-                                stroke="currentColor" 
-                                stroke-width="2" 
-                                stroke-linecap="round" 
-                                stroke-linejoin="round">
+                            <svg
+                                class="dropdown-icon"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
 
                                 <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/>
-
                                 <path d="M19 14l.8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8L19 14z"/>
-
-                                <path d="M5 14l.6 1.7L7.3 16.3l-1.7.6L5 18.6l-.6-1.7-1.7-.6 1.7-.6L5 14z"/>
 
                             </svg>
 
-                            EdgeBreak AI Research
+                            AI Stock Research
 
                         </a>
+
 
                         <a href="/edgebreak-free.html">
 
@@ -126,101 +757,165 @@
                                 stroke-linejoin="round"
                             >
 
-                                <!-- Scanner / search -->
                                 <circle cx="10" cy="10" r="6"/>
                                 <path d="M14.5 14.5L20 20"/>
-
-                                <!-- Breakout movement -->
                                 <path d="M5 11l3-3 2 2 4-4"/>
 
-                                <!-- Free / play -->
-                                <path d="M17 4l4 2.5-4 2.5z"/>
-
                             </svg>
 
-                            EdgeBreak Free Version
+                            Try EdgeBreak Free
 
                         </a>
 
-                        <a href="/nasdaq-stock-scanner.html" class="locked-link">
 
-                            <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
+                        <a href="/products.html">
 
-                                <circle cx="11" cy="11" r="7"/>
-                                <path d="M21 21l-4.3-4.3"/>
-
+                            <svg
+                                class="dropdown-icon"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <rect x="4" y="4" width="6" height="6" rx="1"/>
+                                <rect x="14" y="4" width="6" height="6" rx="1"/>
+                                <rect x="4" y="14" width="6" height="6" rx="1"/>
+                                <rect x="14" y="14" width="6" height="6" rx="1"/>
                             </svg>
 
-                            EdgeBreak AI Hub
-                            <span class="lock-icon">🔒</span>
+                            View All Products
 
                         </a>
+
 
                     </div>
 
                 </div>
 
-                
-                <!-- RESOURCES -->
-                <div class="dropdown mobile-main-item" id="resourcesMenu">
 
-                    <a href="#" class="nav-link">
-                        Resources <span class="mobile-arrow">›</span><span class="desktop-arrow">▼</span>
+                <!-- ===================================
+                RESOURCES
+                =================================== -->
+
+                <div
+                    class="dropdown mobile-main-item"
+                    id="resourcesMenu"
+                >
+
+                    <a
+                        href="#"
+                        class="nav-link"
+                    >
+                        Resources
+
+                        <span class="mobile-arrow">›</span>
+                        <span class="desktop-arrow">▼</span>
                     </a>
+
 
                     <div class="dropdown-content">
 
+
                         <a href="/academy.html">
 
-                            <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg
+                                class="dropdown-icon"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
                                 <path d="M22 10L12 5 2 10l10 5 10-5z"/>
                                 <path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/>
                             </svg>
 
-                            EdgeBreak Training Academy
+                            EdgeBreak Academy
 
                         </a>
 
+
                         <a href="/trading-guide.html">
 
-                            <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg
+                                class="dropdown-icon"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
                                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
                                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 0 4 19.5V4.5A2.5 2.5 0 0 1 6.5 2z"/>
                             </svg>
 
-                            EdgeBreak Trading Guide
+                            Trading Guide
 
                         </a>
 
+
                         <a href="/breakout-guide.html">
 
-                            <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg
+                                class="dropdown-icon"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                                 <path d="M7 10l5 5 5-5"/>
                                 <path d="M12 15V3"/>
                             </svg>
 
-                            Free Breakout Guide
+                            Breakout Guide
 
                         </a>
 
+
                         <a href="/blog/breakout-trading-strategy.html">
 
-                            <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg
+                                class="dropdown-icon"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
                                 <path d="M3 17l6-6 4 4 8-8"/>
                                 <path d="M14 7h7v7"/>
                             </svg>
 
-                            Strategy
+                            Breakout Strategy
 
                         </a>
 
+
                         <a href="/blog.html">
 
-                            <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg
+                                class="dropdown-icon"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
                                 <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
                                 <path d="M17 21V13H7v8"/>
                                 <path d="M7 3v5h8"/>
@@ -230,51 +925,87 @@
 
                         </a>
 
+
                     </div>
 
                 </div>
 
-                <!-- PRICING -->
-                <a href="/pricing.html" class="nav-link mobile-main-item">
-                    Pricing
+
+                <!-- ===================================
+                MAIN PLATFORM — DIRECT BUTTON
+                =================================== -->
+
+                <a
+                    href="/nasdaq-stock-scanner.html"
+                    class="nav-link nav-hub mobile-main-item"
+                >
+                    Research Hub
                 </a>
 
-                <!-- LOGIN -->
-                <a href="#" class="nav-cta mobile-main-item" id="authBtn">
+
+                <!-- ===================================
+                LOGIN
+                Keep authBtn ID for existing auth JS
+                =================================== -->
+
+                <a
+                    href="#"
+                    class="nav-login mobile-main-item"
+                    id="authBtn"
+                >
                     Login
                 </a>
 
-                </div>
 
-                <!-- HAMBURGER -->
-                <div
-                    class="menu-toggle"
-                    id="menuToggle"
-                    aria-label="Open navigation"
-                    role="button"
-                    tabindex="0">
+                <!-- ===================================
+                BUY NOW
+                =================================== -->
 
-                    <svg
-                        class="menu-icon"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2.2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        width="24"
-                        height="24">
+                <a
+                    href="/pricing.html"
+                    class="nav-buy mobile-main-item"
+                >
+                    Buy Now
+                </a>
 
-                        <line x1="3" y1="6" x2="21" y2="6"/>
-                        <line x1="3" y1="12" x2="21" y2="12"/>
-                        <line x1="3" y1="18" x2="21" y2="18"/>
 
-                    </svg>
+            </div>
 
-                </div>
+
+            <!-- ===================================
+            HAMBURGER
+            Existing ID preserved
+            =================================== -->
+
+            <div
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Open navigation"
+                role="button"
+                tabindex="0"
+            >
+
+                <svg
+                    class="menu-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+
+                </svg>
 
             </div>
 
         </div>
+
     </div>
+
+</div>

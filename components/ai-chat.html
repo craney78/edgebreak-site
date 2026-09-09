@@ -1,3 +1,1261 @@
+
+<!-- =========================================
+EDGEBREAK AI CHAT — NEW LIGHT APP STYLE
+VISUAL OVERRIDES ONLY
+Existing IDs / data attributes / behaviour preserved
+========================================= -->
+
+<style id="edge-chat-new-style-v3">
+
+:root{
+    --edge-chat-ink:#0b1220;
+    --edge-chat-muted:#64748b;
+    --edge-chat-soft:#f6f8fb;
+    --edge-chat-line:#e5eaf0;
+    --edge-chat-green:#16a34a;
+    --edge-chat-green-dark:#08783b;
+    --edge-chat-white:#ffffff;
+    --edge-chat-shadow:0 24px 70px rgba(15,23,42,.14);
+}
+
+
+/* =========================================================
+   FLOATING CHAT BUTTON
+========================================================= */
+
+.edge-chat-button{
+    position:fixed;
+    right:24px;
+    bottom:24px;
+    z-index:9990;
+
+    display:flex;
+    align-items:center;
+    gap:11px;
+
+    min-height:58px;
+    padding:9px 17px 9px 10px;
+
+    border:1px solid #dce5df;
+    border-radius:18px;
+
+    background:rgba(255,255,255,.98);
+    color:var(--edge-chat-ink);
+
+    box-shadow:
+        0 18px 45px rgba(15,23,42,.13),
+        0 0 0 1px rgba(255,255,255,.7);
+
+    cursor:pointer;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+.edge-chat-button:hover{
+    transform:translateY(-2px);
+    border-color:#b9d9c3;
+    box-shadow:
+        0 22px 50px rgba(15,23,42,.16),
+        0 0 0 4px rgba(34,197,94,.06);
+}
+
+.edge-chat-button-icon{
+    width:39px;
+    height:39px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex:0 0 auto;
+
+    border-radius:12px;
+
+    background:linear-gradient(135deg,#0f9f4b,#20c66b);
+    color:#ffffff;
+
+    box-shadow:0 8px 20px rgba(22,163,74,.20);
+
+    font-size:18px;
+    line-height:1;
+}
+
+.edge-chat-button-copy{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+
+    line-height:1.15;
+}
+
+.edge-chat-button-copy strong{
+    color:var(--edge-chat-ink);
+    font-size:13px;
+    font-weight:850;
+}
+
+.edge-chat-button-copy small{
+    margin-top:4px;
+
+    color:var(--edge-chat-muted);
+
+    font-size:10px;
+    font-weight:650;
+}
+
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+.edge-chat-overlay{
+    position:fixed;
+    inset:0;
+    z-index:9991;
+
+    background:rgba(15,23,42,.34);
+
+    backdrop-filter:blur(3px);
+    -webkit-backdrop-filter:blur(3px);
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease;
+}
+
+.edge-chat-overlay.is-open{
+    opacity:1;
+    visibility:visible;
+}
+
+
+/* =========================================================
+   MAIN PANEL
+========================================================= */
+
+.edge-chat-panel{
+    position:fixed;
+    top:0;
+    right:0;
+    bottom:0;
+
+    z-index:9992;
+
+    width:min(480px,100%);
+
+    display:flex;
+    flex-direction:column;
+
+    overflow:hidden;
+
+    border-left:1px solid var(--edge-chat-line);
+
+    background:
+        radial-gradient(circle at 82% 4%,rgba(34,197,94,.07),transparent 25%),
+        linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);
+
+    box-shadow:-28px 0 70px rgba(15,23,42,.16);
+
+    transform:translateX(105%);
+
+    transition:transform .28s ease;
+}
+
+.edge-chat-panel.is-open{
+    transform:translateX(0);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.edge-chat-header{
+    min-height:82px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:18px;
+
+    padding:18px 20px;
+
+    border-bottom:1px solid var(--edge-chat-line);
+
+    background:rgba(255,255,255,.94);
+
+    flex:0 0 auto;
+}
+
+.edge-chat-brand{
+    display:flex;
+    align-items:center;
+
+    gap:12px;
+
+    min-width:0;
+}
+
+.edge-chat-brand-icon{
+    width:43px;
+    height:43px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex:0 0 auto;
+
+    border:1px solid #cfe7d6;
+    border-radius:13px;
+
+    background:#eef9f1;
+    color:var(--edge-chat-green-dark);
+
+    font-size:18px;
+    font-weight:900;
+}
+
+.edge-chat-eyebrow{
+    display:block;
+
+    margin-bottom:3px;
+
+    color:var(--edge-chat-green-dark);
+
+    font-size:9px;
+    font-weight:850;
+    letter-spacing:.15em;
+}
+
+.edge-chat-header h2{
+    margin:0;
+
+    color:var(--edge-chat-ink);
+
+    font-size:20px;
+    font-weight:850;
+    line-height:1.15;
+    letter-spacing:-.025em;
+}
+
+.edge-chat-close{
+    width:40px;
+    height:40px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex:0 0 auto;
+
+    padding:0;
+
+    border:1px solid var(--edge-chat-line);
+    border-radius:12px;
+
+    background:#f8fafc;
+    color:#64748b;
+
+    font-size:25px;
+    font-weight:300;
+    line-height:1;
+
+    cursor:pointer;
+
+    transition:
+        background .18s ease,
+        border-color .18s ease,
+        color .18s ease;
+}
+
+.edge-chat-close:hover{
+    background:#ffffff;
+    border-color:#cbd5e1;
+    color:var(--edge-chat-ink);
+}
+
+
+/* =========================================================
+   MODE SWITCH
+========================================================= */
+
+.edge-ai-mode-switch{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    gap:5px;
+
+    margin:14px 20px 0;
+    padding:4px;
+
+    border:1px solid var(--edge-chat-line);
+    border-radius:13px;
+
+    background:#f1f4f7;
+
+    flex:0 0 auto;
+}
+
+.edge-ai-mode-btn{
+    appearance:none;
+
+    min-height:40px;
+    padding:0 12px;
+
+    border:0;
+    border-radius:10px;
+
+    background:transparent;
+    color:#64748b;
+
+    font-size:12px;
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:
+        background .18s ease,
+        color .18s ease,
+        box-shadow .18s ease;
+}
+
+.edge-ai-mode-btn:hover{
+    background:rgba(255,255,255,.72);
+    color:var(--edge-chat-ink);
+}
+
+.edge-ai-mode-btn.active{
+    background:#ffffff;
+    color:var(--edge-chat-green-dark);
+
+    box-shadow:
+        0 2px 8px rgba(15,23,42,.07),
+        inset 0 0 0 1px #d9e8de;
+}
+
+
+/* =========================================================
+   INTRO
+========================================================= */
+
+.edge-chat-intro{
+    padding:18px 20px 13px;
+
+    flex:0 0 auto;
+}
+
+.edge-chat-intro > p{
+    margin:0;
+
+    color:#64748b;
+
+    font-size:12px;
+    line-height:1.65;
+}
+
+.edge-chat-learning{
+    display:flex;
+    align-items:flex-start;
+
+    gap:10px;
+
+    margin-top:13px;
+    padding:11px 12px;
+
+    border:1px solid #dce9e0;
+    border-radius:12px;
+
+    background:
+        linear-gradient(135deg,#f1faf4,#f7faff);
+}
+
+.edge-chat-learning > span{
+    color:var(--edge-chat-green);
+    font-size:13px;
+    line-height:1.45;
+}
+
+.edge-chat-learning p{
+    margin:0;
+
+    color:#687386;
+
+    font-size:10px;
+    line-height:1.5;
+}
+
+.edge-chat-learning strong{
+    color:#334155;
+}
+
+
+/* =========================================================
+   CONVERSATION AREA
+========================================================= */
+
+.edge-chat-conversation{
+    flex:1;
+    min-height:0;
+
+    padding:7px 20px 20px;
+
+    overflow-y:auto;
+
+    scrollbar-width:thin;
+    scrollbar-color:#cbd5e1 transparent;
+}
+
+.edge-chat-conversation::-webkit-scrollbar{
+    width:6px;
+}
+
+.edge-chat-conversation::-webkit-scrollbar-track{
+    background:transparent;
+}
+
+.edge-chat-conversation::-webkit-scrollbar-thumb{
+    background:#cbd5e1;
+    border-radius:999px;
+}
+
+.edge-chat-message{
+    display:flex;
+    align-items:flex-start;
+
+    gap:10px;
+
+    margin-bottom:16px;
+}
+
+.edge-chat-message-icon{
+    width:30px;
+    height:30px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex:0 0 auto;
+
+    margin-top:2px;
+
+    border:1px solid #d1e7d7;
+    border-radius:9px;
+
+    background:#eef9f1;
+    color:var(--edge-chat-green-dark);
+
+    font-size:12px;
+}
+
+.edge-chat-message-bubble{
+    max-width:calc(100% - 40px);
+
+    padding:12px 14px;
+
+    border:1px solid var(--edge-chat-line);
+    border-radius:4px 15px 15px 15px;
+
+    background:#ffffff;
+    color:#475569;
+
+    box-shadow:0 8px 24px rgba(15,23,42,.04);
+
+    font-size:12px;
+    line-height:1.55;
+}
+
+.edge-chat-message-bubble strong{
+    color:var(--edge-chat-ink);
+    font-weight:800;
+}
+
+.edge-chat-message-bubble p{
+    margin:4px 0 0;
+    color:#64748b;
+}
+
+
+/* =========================================================
+   MAIN CATEGORIES
+========================================================= */
+
+.edge-chat-categories{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    gap:9px;
+
+    padding-bottom:4px;
+}
+
+.edge-chat-category{
+    min-width:0;
+    min-height:86px;
+
+    display:flex;
+    align-items:flex-start;
+
+    gap:10px;
+
+    padding:13px;
+
+    border:1px solid var(--edge-chat-line);
+    border-radius:14px;
+
+    background:#ffffff;
+    color:var(--edge-chat-ink);
+
+    box-shadow:0 6px 20px rgba(15,23,42,.025);
+
+    text-align:left;
+    cursor:pointer;
+
+    transition:
+        transform .18s ease,
+        border-color .18s ease,
+        background .18s ease,
+        box-shadow .18s ease;
+}
+
+.edge-chat-category:hover{
+    transform:translateY(-1px);
+
+    border-color:#bcdcc6;
+    background:#fbfefc;
+
+    box-shadow:0 10px 24px rgba(15,23,42,.05);
+}
+
+.edge-chat-category-icon{
+    width:31px;
+    height:31px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex:0 0 auto;
+
+    border:1px solid #edf0f3;
+    border-radius:9px;
+
+    background:#f6f8fb;
+
+    font-size:14px;
+}
+
+.edge-chat-category > span:last-child{
+    min-width:0;
+
+    display:flex;
+    flex-direction:column;
+}
+
+.edge-chat-category strong{
+    color:#243043;
+
+    font-size:11px;
+    font-weight:800;
+    line-height:1.35;
+}
+
+.edge-chat-category small{
+    margin-top:5px;
+
+    color:#7b8797;
+
+    font-size:9px;
+    font-weight:550;
+    line-height:1.4;
+}
+
+
+/* =========================================================
+   INTERNAL SCREENS
+========================================================= */
+
+.edge-chat-screen[hidden]{
+    display:none !important;
+}
+
+#edgeBreakChatCategories[hidden],
+#edgeBreakQuickScreen[hidden],
+#edgeBreakTechnicalScreen[hidden],
+#edgeBreakLearnScreen[hidden],
+#edgeBreakMarginScreen[hidden],
+#edgeBreakAccountScreen[hidden],
+#edgeBreakTradeScreen[hidden],
+#edgeBreakNasdaqScreen[hidden],
+#edgeBreakSectorScreen[hidden],
+#edgeBreakStockScreen[hidden]{
+    display:none !important;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.edge-chat-back{
+    min-height:34px;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    margin:0 0 14px;
+    padding:6px 10px;
+
+    border:1px solid var(--edge-chat-line);
+    border-radius:9px;
+
+    background:#ffffff;
+    color:#64748b;
+
+    font-size:10px;
+    font-weight:750;
+
+    cursor:pointer;
+
+    transition:
+        background .18s ease,
+        border-color .18s ease,
+        color .18s ease;
+}
+
+.edge-chat-back:hover{
+    background:#f1faf4;
+    border-color:#cfe4d6;
+    color:var(--edge-chat-green-dark);
+}
+
+
+/* =========================================================
+   SCREEN HEADINGS
+========================================================= */
+
+.edge-chat-screen-heading{
+    display:flex;
+    align-items:flex-start;
+
+    gap:12px;
+
+    margin-bottom:14px;
+}
+
+.edge-chat-screen-icon{
+    width:39px;
+    height:39px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex:0 0 auto;
+
+    border:1px solid #d5e8db;
+    border-radius:11px;
+
+    background:#eef9f1;
+
+    font-size:16px;
+}
+
+.edge-chat-screen-heading > div{
+    min-width:0;
+}
+
+.edge-chat-screen-label{
+    display:block;
+
+    margin-bottom:3px;
+
+    color:var(--edge-chat-green-dark);
+
+    font-size:8px;
+    font-weight:850;
+    letter-spacing:.14em;
+}
+
+.edge-chat-screen-heading h3{
+    margin:0;
+
+    color:var(--edge-chat-ink);
+
+    font-size:17px;
+    font-weight:850;
+    line-height:1.25;
+    letter-spacing:-.02em;
+}
+
+.edge-chat-screen-heading p{
+    margin:5px 0 0;
+
+    color:#718096;
+
+    font-size:10px;
+    line-height:1.5;
+}
+
+
+/* =========================================================
+   STOCK / INFO NOTICE
+========================================================= */
+
+.edge-chat-stock-notice{
+    display:flex;
+    align-items:flex-start;
+
+    gap:10px;
+
+    margin-bottom:14px;
+    padding:11px 12px;
+
+    border:1px solid var(--edge-chat-line);
+    border-radius:11px;
+
+    background:#f8fafc;
+}
+
+.edge-chat-stock-notice > span{
+    font-size:13px;
+}
+
+.edge-chat-stock-notice strong{
+    display:block;
+
+    color:#334155;
+
+    font-size:10px;
+    font-weight:800;
+}
+
+.edge-chat-stock-notice p{
+    margin:3px 0 0;
+
+    color:#718096;
+
+    font-size:9px;
+    line-height:1.45;
+}
+
+
+/* =========================================================
+   QUESTION LIST
+========================================================= */
+
+.edge-chat-question-list{
+    display:flex;
+    flex-direction:column;
+
+    gap:8px;
+}
+
+.edge-chat-question{
+    width:100%;
+    min-height:49px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:12px;
+
+    padding:11px 13px;
+
+    border:1px solid var(--edge-chat-line);
+    border-radius:12px;
+
+    background:#ffffff;
+    color:#334155;
+
+    box-shadow:0 5px 16px rgba(15,23,42,.025);
+
+    text-align:left;
+
+    font-size:10.5px;
+    font-weight:700;
+    line-height:1.4;
+
+    cursor:pointer;
+
+    transition:
+        transform .18s ease,
+        background .18s ease,
+        border-color .18s ease,
+        color .18s ease;
+}
+
+.edge-chat-question:hover{
+    transform:translateX(2px);
+
+    background:#fbfefc;
+    border-color:#c7e1cf;
+
+    color:var(--edge-chat-ink);
+}
+
+.edge-chat-question-arrow,
+.edge-chat-question > span:last-child:not(:first-child){
+    flex:0 0 auto;
+
+    color:var(--edge-chat-green-dark);
+
+    font-size:18px;
+    font-weight:400;
+    line-height:1;
+}
+
+
+/* =========================================================
+   SELECTED QUESTION
+========================================================= */
+
+.edge-chat-selected-question{
+    margin-bottom:16px;
+    padding:11px 13px;
+
+    border:1px solid #d7eadd;
+    border-radius:11px;
+
+    background:#f1faf4;
+}
+
+.edge-chat-selected-question span{
+    display:block;
+
+    margin-bottom:3px;
+
+    color:#718096;
+
+    font-size:8px;
+    font-weight:750;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+
+.edge-chat-selected-question strong{
+    color:var(--edge-chat-green-dark);
+
+    font-size:10.5px;
+    font-weight:800;
+    line-height:1.4;
+}
+
+
+/* =========================================================
+   TICKER FORM
+========================================================= */
+
+.edge-chat-ticker-form{
+    margin-bottom:20px;
+}
+
+.edge-chat-ticker-form label{
+    display:block;
+
+    margin-bottom:7px;
+
+    color:#475569;
+
+    font-size:10px;
+    font-weight:750;
+}
+
+.edge-chat-ticker-row{
+    display:flex;
+    align-items:stretch;
+
+    gap:8px;
+}
+
+.edge-chat-ticker-input{
+    flex:1;
+
+    min-width:0;
+    height:46px;
+
+    padding:0 13px;
+
+    border:1px solid #d8dee7;
+    border-radius:11px;
+
+    background:#ffffff;
+    color:var(--edge-chat-ink);
+
+    font-size:15px;
+    font-weight:800;
+
+    letter-spacing:.06em;
+    text-transform:uppercase;
+
+    outline:none;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+.edge-chat-ticker-input::placeholder{
+    color:#94a3b8;
+    font-weight:600;
+}
+
+.edge-chat-ticker-input:focus{
+    border-color:#70c889;
+    box-shadow:0 0 0 4px rgba(34,197,94,.08);
+}
+
+.edge-chat-ticker-submit{
+    min-height:46px;
+
+    padding:0 15px;
+
+    border:0;
+    border-radius:11px;
+
+    background:linear-gradient(135deg,#0f9f4b,#20c66b);
+    color:#ffffff;
+
+    font-size:10px;
+    font-weight:850;
+
+    cursor:pointer;
+    white-space:nowrap;
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+.edge-chat-ticker-submit:hover{
+    transform:translateY(-1px);
+    box-shadow:0 9px 20px rgba(22,163,74,.18);
+}
+
+.edge-chat-ticker-message{
+    min-height:16px;
+
+    margin:6px 0 0;
+
+    color:#64748b;
+
+    font-size:9px;
+    line-height:1.4;
+}
+
+
+/* =========================================================
+   FUTURE STOCK OPTIONS
+========================================================= */
+
+.edge-chat-stock-options{
+    padding-top:3px;
+}
+
+.edge-chat-stock-options-label{
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#94a3b8;
+
+    font-size:8px;
+    font-weight:850;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+}
+
+.edge-chat-stock-option-disabled{
+    display:flex;
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:8px;
+    padding:11px 12px;
+
+    border:1px solid #edf0f3;
+    border-radius:10px;
+
+    background:#f8fafc;
+
+    opacity:.56;
+}
+
+.edge-chat-stock-option-disabled > span{
+    width:26px;
+    text-align:center;
+    font-size:13px;
+}
+
+.edge-chat-stock-option-disabled div{
+    display:flex;
+    flex-direction:column;
+
+    min-width:0;
+}
+
+.edge-chat-stock-option-disabled strong{
+    color:#64748b;
+    font-size:9px;
+}
+
+.edge-chat-stock-option-disabled small{
+    margin-top:2px;
+
+    color:#94a3b8;
+
+    font-size:8px;
+    line-height:1.35;
+}
+
+
+/* =========================================================
+   DISCLAIMER
+========================================================= */
+
+.edge-chat-disclaimer{
+    flex:0 0 auto;
+
+    padding:12px 20px 15px;
+
+    border-top:1px solid var(--edge-chat-line);
+
+    background:#ffffff;
+    color:#94a3b8;
+
+    font-size:8.5px;
+    line-height:1.55;
+}
+
+
+/* =========================================================
+   AI UNLIMITED CONTENT
+   Existing Unlimited system can continue to inject/use these.
+========================================================= */
+
+#edgeAIUnlimitedContent{
+    flex:1;
+    min-height:0;
+
+    overflow-y:auto;
+    overflow-x:hidden;
+
+    background:transparent;
+}
+
+.edge-ai-unlimited-intro{
+    padding:14px 20px 24px;
+    text-align:center;
+}
+
+.edge-ai-unlimited-icon{
+    width:46px;
+    height:46px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    margin:4px auto 12px;
+
+    border:1px solid #d2e8d8;
+    border-radius:15px;
+
+    background:#eef9f1;
+    color:var(--edge-chat-green-dark);
+
+    font-size:19px;
+}
+
+.edge-ai-unlimited-intro h3{
+    margin:0 0 8px;
+
+    color:var(--edge-chat-ink);
+
+    font-size:20px;
+    font-weight:850;
+    letter-spacing:-.025em;
+}
+
+.edge-ai-unlimited-intro p{
+    max-width:340px;
+
+    margin:0 auto 18px;
+
+    color:#64748b;
+
+    font-size:12px;
+    line-height:1.6;
+}
+
+#edgeAIUnlimitedQuestion{
+    width:100%;
+    min-height:118px;
+
+    box-sizing:border-box;
+    resize:vertical;
+
+    padding:14px;
+
+    border:1px solid #d8dee7;
+    border-radius:13px;
+
+    background:#ffffff;
+    color:var(--edge-chat-ink);
+
+    font-family:inherit;
+    font-size:13px;
+    line-height:1.55;
+
+    outline:none;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+#edgeAIUnlimitedQuestion:focus{
+    border-color:#72c98d;
+    box-shadow:0 0 0 4px rgba(34,197,94,.08);
+}
+
+#edgeAIUnlimitedQuestion::placeholder{
+    color:#94a3b8;
+}
+
+.edge-ai-unlimited-ask{
+    width:100%;
+    min-height:46px;
+
+    margin-top:12px;
+    padding:0 16px;
+
+    border:0;
+    border-radius:999px;
+
+    background:linear-gradient(135deg,#0f9f4b,#20c66b);
+    color:#ffffff;
+
+    font-size:12px;
+    font-weight:850;
+
+    cursor:pointer;
+
+    box-shadow:0 12px 26px rgba(22,163,74,.18);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+.edge-ai-unlimited-ask:hover{
+    transform:translateY(-1px);
+    box-shadow:0 15px 30px rgba(22,163,74,.23);
+}
+
+
+/* =========================================================
+   FOCUS
+========================================================= */
+
+.edge-chat-button:focus-visible,
+.edge-chat-close:focus-visible,
+.edge-chat-category:focus-visible,
+.edge-chat-back:focus-visible,
+.edge-chat-question:focus-visible,
+.edge-ai-mode-btn:focus-visible,
+.edge-chat-ticker-submit:focus-visible{
+    outline:2px solid #22c55e;
+    outline-offset:2px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:640px){
+
+    .edge-chat-button{
+        right:14px;
+        bottom:14px;
+
+        min-height:54px;
+
+        padding:8px 14px 8px 9px;
+
+        border-radius:16px;
+    }
+
+    .edge-chat-button-icon{
+        width:36px;
+        height:36px;
+    }
+
+    .edge-chat-panel{
+        width:100%;
+        border-left:0;
+    }
+
+    .edge-chat-header{
+        padding:16px;
+    }
+
+    .edge-ai-mode-switch{
+        margin:13px 16px 0;
+    }
+
+    .edge-chat-intro{
+        padding:16px 16px 12px;
+    }
+
+    .edge-chat-conversation{
+        padding:7px 16px 18px;
+    }
+
+    .edge-chat-categories{
+        grid-template-columns:1fr;
+    }
+
+    .edge-chat-category{
+        min-height:68px;
+    }
+
+    .edge-chat-disclaimer{
+        padding:11px 16px 14px;
+    }
+
+    .edge-ai-unlimited-intro{
+        padding:14px 16px 22px;
+    }
+
+}
+
+@media(max-width:420px){
+
+    .edge-chat-ticker-row{
+        flex-direction:column;
+    }
+
+    .edge-chat-ticker-submit{
+        width:100%;
+    }
+
+}
+
+</style>
+
 <!-- =========================================
 ✦ EDGEBREAK AI CHAT
 ========================================= -->
