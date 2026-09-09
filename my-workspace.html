@@ -1357,71 +1357,127 @@ body.eb-app-body .workspace-mini-card{
 
 
 /* =========================================================
-   CHART STAGE
+   CHART STAGE — LIGHT EDGEBREAK STYLE
 ========================================================= */
 
 .workspace-chart-card{
+
     margin:0 0 24px;
+
     padding:17px;
-    border:1px solid #182235;
+
+    border:1px solid #e5eaf0;
+
     border-radius:24px;
-    background:#0c1728;
-    box-shadow:0 20px 60px rgba(15,23,42,.12);
+
+    background:#ffffff;
+
+    box-shadow:
+        0 20px 55px
+        rgba(15,23,42,.08);
+
 }
 
 .workspace-chart-head{
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
+
     gap:20px;
+
     padding:8px 8px 18px;
+
 }
 
 .workspace-chart-head span{
+
     display:block;
+
     margin-bottom:4px;
-    color:#7f93aa;
+
+    color:#64748b;
+
     font-size:10px;
+
     font-weight:800;
+
     letter-spacing:.12em;
+
     text-transform:uppercase;
+
 }
 
 .workspace-chart-head h2{
+
     margin:0;
-    color:#ffffff;
+
+    color:#0b1220;
+
     font-size:25px;
+
     letter-spacing:-.03em;
+
 }
 
 .workspace-live{
+
     display:inline-flex;
+
     align-items:center;
+
     gap:7px;
+
     padding:8px 12px;
-    border:1px solid rgba(34,197,94,.25);
+
+    border:1px solid #cfe7d6;
+
     border-radius:999px;
-    background:rgba(34,197,94,.08);
-    color:#4ade80;
+
+    background:#f0faf3;
+
+    color:#08783b;
+
     font-size:10px;
+
     font-weight:850;
+
     letter-spacing:.08em;
+
 }
 
 .workspace-live::before{
+
     content:"";
+
     width:7px;
+
     height:7px;
+
     border-radius:50%;
+
     background:#22c55e;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(34,197,94,.10);
+
 }
 
 #tradingview_advanced{
+
     width:100%;
+
     height:850px;
+
     overflow:hidden;
+
     border-radius:17px;
-    background:#071225;
+
+    background:#ffffff;
+
 }
 
 
@@ -2275,7 +2331,7 @@ function loadChart(symbol) {
         timezone:
             "Australia/Sydney",
 
-        theme:"dark",
+        theme:"light",
 
         style:"1",
 

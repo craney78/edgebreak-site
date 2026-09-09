@@ -566,42 +566,73 @@ SECTOR SECTION
 
 
 /* ===================================
-CHART
+CHART — LIGHT EDGEBREAK STYLE
 =================================== */
 
 .ix-chart-card{
+
     padding:18px;
+
+    border:1px solid #e5eaf0;
+
     border-radius:26px;
-    background:#0c1728;
-    box-shadow:0 30px 80px rgba(15,23,42,.16);
+
+    background:#ffffff;
+
+    box-shadow:
+        0 20px 55px
+        rgba(15,23,42,.08);
+
 }
 
 .ix-chart-top{
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
+
     gap:20px;
+
     padding:10px 10px 20px;
+
 }
 
 #chartTitle{
+
     margin:0;
-    color:#ffffff;
+
+    color:#0b1220;
+
     font-size:24px;
+
+    font-weight:800;
+
     letter-spacing:-.025em;
+
 }
 
 .ix-chart-note{
-    color:#9fb0c4;
+
+    color:#64748b;
+
     font-size:12px;
+
 }
 
 #tvChart{
+
     width:100%;
+
     height:650px;
+
     border-radius:18px;
+
     overflow:hidden;
-    background:#071225;
+
+    background:#ffffff;
+
 }
 
 
@@ -1282,7 +1313,7 @@ function loadTradingViewChart(symbol) {
 
         timezone: "Australia/Sydney",
 
-        theme: "dark",
+        theme: "light",
 
         style: "1",
 
