@@ -1,509 +1,992 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 25: Mastering the Smart Money Filter | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how to use the EdgeBreak Smart Money Filter to identify NASDAQ stocks displaying accumulation, buying pressure and structured price action for further market research.">
-
-<meta name="keywords"
-      content="Smart Money Filter, EdgeBreak Smart Money, accumulation, buying pressure, NASDAQ scanner, breakout research, price action, stock research, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/mastering-the-smart-money-filter.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Built-In Market Activity Intelligence | Module 4 Lesson 3 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn how EdgeBreak evolved its former Smart Money Filter into built-in market activity intelligence using off-exchange activity and large purchases across multiple markets within the Automated Daily Scan."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/mastering-the-smart-money-filter.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 25: Mastering the Smart Money Filter">
-
-<meta property="og:description"
-      content="Discover how the EdgeBreak Smart Money Filter helps identify stocks showing accumulation, buying pressure and improving market structure.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/mastering-the-smart-money-filter.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/mastering-the-smart-money-filter.html">
+<meta property="og:title" content="Built-In Market Activity Intelligence | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="The former Smart Money Filter has evolved into background analysis of off-exchange activity and large purchases across multiple markets inside EdgeBreak's Automated Daily Scan."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Lesson 25: Mastering the Smart Money Filter">
-
-<meta name="twitter:description"
-      content="Learn how to use the Smart Money Filter to research accumulation, buying pressure and improving price action.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Built-In Market Activity Intelligence | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Learn how unusual off-exchange activity and large cross-market purchases now contribute to EdgeBreak's top-six research process."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-CSS
+FAVICON
 =================================== -->
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
+
+<!-- ===================================
+STYLES
+=================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
 
 <!-- ===================================
 SUPABASE
 =================================== -->
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
 
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
 <!-- ===================================
-LEARNING RESOURCE
+STRUCTURED DATA
 =================================== -->
-
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "name":"Lesson 25: Mastering the Smart Money Filter",
-  "description":"Learn how to use the EdgeBreak Smart Money Filter to identify NASDAQ stocks displaying accumulation, buying pressure and improving market structure.",
-  "educationalLevel":"Beginner",
-  "learningResourceType":"Lesson",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  },
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  }
-}
-</script>
-
-<!-- ===================================
-BREADCRUMB
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "legalName": "Crane Platform Labs",
+      "url": "https://www.edgebreak.ai/",
+      "email": "mailto:admin@edgebreak.ai",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.edgebreak.ai/#logo",
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+        "caption": "EdgeBreak"
+      },
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
-      "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Lesson 25: Mastering the Smart Money Filter",
-      "item":"https://www.edgebreak.ai/mastering-the-smart-money-filter.html"
+      "@type": "Course",
+      "@id": "https://www.edgebreak.ai/academy.html#course",
+      "name": "EdgeBreak Academy",
+      "url": "https://www.edgebreak.ai/academy.html",
+      "description": "Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "LearningResource",
+      "@id": "https://www.edgebreak.ai/academy/mastering-the-smart-money-filter.html#lesson",
+      "name": "Module 4 Lesson 3: Built-In Market Activity Intelligence",
+      "url": "https://www.edgebreak.ai/academy/mastering-the-smart-money-filter.html",
+      "description": "An intermediate lesson explaining how the former Smart Money Filter evolved into built-in analysis of unusual off-exchange activity and large purchases appearing across multiple markets within EdgeBreak's Automated Daily Scan.",
+      "learningResourceType": "Lesson",
+      "educationalLevel": "Intermediate",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/academy.html#course" },
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/academy/mastering-the-smart-money-filter.html#webpage",
+      "url": "https://www.edgebreak.ai/academy/mastering-the-smart-money-filter.html",
+      "name": "Built-In Market Activity Intelligence | Module 4 Lesson 3 | EdgeBreak Academy",
+      "description": "Learn how EdgeBreak evolved its former Smart Money Filter into built-in market activity intelligence using off-exchange activity and large purchases across multiple markets within the Automated Daily Scan.",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/#website" },
+      "mainEntity": { "@id": "https://www.edgebreak.ai/academy/mastering-the-smart-money-filter.html#lesson" },
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/academy/mastering-the-smart-money-filter.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EdgeBreak Academy",
+          "item": "https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Built-In Market Activity Intelligence",
+          "item": "https://www.edgebreak.ai/academy/mastering-the-smart-money-filter.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<!-- ===================================
-WEBPAGE
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 25: Mastering the Smart Money Filter",
-  "url":"https://www.edgebreak.ai/mastering-the-smart-money-filter.html",
-  "description":"Master the EdgeBreak Smart Money Filter and learn how to research accumulation, buying pressure and improving market structure using a disciplined workflow.",
-  "isPartOf":{
-    "@type":"WebSite",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  },
-  "primaryImageOfPage":"https://www.edgebreak.ai/images/academy.webp",
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+
+.ac-section li{margin:7px 0}
+
+.ac-lesson-image{margin:34px 0 46px}
+
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#fff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-update{
+    margin:34px 0 50px;
+    padding:30px;
+    border:1px solid #cfe8d7;
+    border-radius:24px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        linear-gradient(135deg,#f2faf5,#f7fbff);
+    box-shadow:0 16px 42px rgba(15,23,42,.055);
+}
+
+.ac-update-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    margin-bottom:12px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ac-update-tag:before{
+    content:"";
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.10);
+}
+
+.ac-update h3{
+    margin:0 0 12px;
+    color:var(--ix-ink);
+    font-size:30px;
+    letter-spacing:-.035em;
+}
+
+.ac-update p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.7;
+}
+
+.ac-update p:last-child{margin-bottom:0}
+
+.ac-concept-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+
+.ac-concept-card{
+    padding:23px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#fff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+
+.ac-concept-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.ac-concept-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+
+.ac-concept-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-evidence-panel{
+    margin:36px 0 54px;
+    padding:30px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#0c1728;
+}
+
+.ac-evidence-panel h3{
+    margin:0 0 12px;
+    color:#fff;
+    font-size:29px;
+    letter-spacing:-.035em;
+}
+
+.ac-evidence-panel p{
+    margin:0 0 16px;
+    color:#b3bfce;
+    font-size:16px;
+    line-height:1.7;
+}
+
+.ac-evidence-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:20px;
+}
+
+.ac-evidence-item{
+    padding:18px;
+    border:1px solid #253249;
+    border-radius:17px;
+    background:#111f34;
+}
+
+.ac-evidence-item b{
+    display:block;
+    margin-bottom:7px;
+    color:#65e18e;
+    font-size:14px;
+}
+
+.ac-evidence-item span{
+    color:#b8c5d4;
+    font-size:13px;
+    line-height:1.55;
+}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+.ac-exercise{
+    margin:34px 0 54px;
+    padding:30px;
+    border:1px solid #dce7df;
+    border-radius:24px;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+}
+
+.ac-exercise-tag{
+    margin-bottom:9px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ac-exercise h3{
+    margin:0 0 13px;
+    color:var(--ix-ink);
+    font-size:27px;
+    letter-spacing:-.03em;
+}
+
+.ac-exercise p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.65;
+}
+
+.ac-exercise ul{
+    margin:0;
+    padding-left:22px;
+    color:#526071;
+    font-size:15px;
+    line-height:1.65;
+}
+
+@media(max-width:900px){
+    .ac-concept-grid{grid-template-columns:1fr}
+}
+
+@media(max-width:700px){
+    .ac-evidence-grid{grid-template-columns:1fr}
+    .ac-card-grid.three{grid-template-columns:1fr}
+    .ac-card-grid.three .ac-reminder{grid-column:auto}
+}
+
+</style>
 </head>
-
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
-<main>
 
-<div class="academy-container lesson-container">
-
-    <div class="lesson-tag">
-        MODULE 4 • LESSON 17
-    </div>
-
-    <h1>
-        Using the Smart Money Filter
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 10 Minutes</span>
-
-        <span>•</span>
-
-        <span>Mastering EdgeBreak</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        The Smart Money Filter is an optional filter that works with both the NASDAQ Scanner and the Breakout Scanner. It applies an additional layer of filtering to help reduce the number of research candidates, allowing you to focus on stocks that better match your preferred research criteria.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>What the Smart Money Filter does.</li>
-            <li>How to apply it.</li>
-            <li>How it works with both scanners.</li>
-            <li>How to review filtered results.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>How the Smart Money Filter Works</h2>
-
-        <p>
-
-            Start by running either the NASDAQ Scanner or the Breakout Scanner using your preferred filters.
-
-        </p>
-
-        <p>
-
-            When the Smart Money Filter is applied, EdgeBreak performs an additional layer of filtering to reduce the number of results, making it easier to focus your research.
-
-        </p>
-
-        <p>
-
-            The Smart Money Filter is designed to organise research—not replace it.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img
-                src="/images/smart-money-filter-page.webp"
-                alt="EdgeBreak Smart Money Filter applied to scanner results.">
-
-            <figcaption>
-
-                The Smart Money Filter applies an additional layer of filtering to both the NASDAQ Scanner and Breakout Scanner, helping reduce the number of research candidates.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Review the Results</h2>
-
-        <p>
-
-            After applying the filter, review the remaining stocks and compare their overall market structure.
-
-        </p>
-
-        <p>
-
-            The goal is to identify organised charts that deserve further investigation.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img
-                src="/images/edgebreak-nasdaq-scanner.webp"
-                alt="EdgeBreak NASDAQ Scanner showing filtered research results.">
-
-            <figcaption>
-
-                Use the filtered scanner results to identify research candidates before opening individual charts.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Open the Charts</h2>
-
-        <p>
-
-            Once you've narrowed the list, open each TradingView chart and review:
-
-        </p>
-
-        <ul>
-
-            <li>Market structure</li>
-            <li>Resistance</li>
-            <li>Higher lows</li>
-            <li>Volume behaviour</li>
-            <li>Overall trend</li>
-
-        </ul>
-
-        <p>
-
-            The scanner helps find opportunities. The chart helps you evaluate them.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img
-                src="/images/opening-charts.webp"
-                alt="TradingView chart opened from EdgeBreak for further research.">
-
-            <figcaption>
-
-                Every filtered result should be reviewed on the TradingView chart before being added to your research watchlist.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Save Your Research</h2>
-
-        <p>
-
-            If a stock continues to display strong market structure after your chart review, save it to My Workspace.
-
-        </p>
-
-        <p>
-
-            Building a watchlist allows you to monitor developing opportunities over time instead of repeatedly searching for the same stocks.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img
-                src="/images/watchlist-page.webp"
-                alt="EdgeBreak My Workspace watchlist used to organise research candidates.">
-
-            <figcaption>
-
-                Save promising research candidates to My Workspace so they can be monitored and reviewed as market conditions change.
-
-            </figcaption>
-
-        </figure>
-
-    </div>
-
-    <!-- SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            The Smart Money Filter is an additional research filter that works with both EdgeBreak scanners. It reduces the number of results, helping you focus on higher-quality research candidates before reviewing charts and organising them inside My Workspace.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>Works with both the NASDAQ Scanner and Breakout Scanner.</li>
-            <li>Applies an additional layer of filtering.</li>
-            <li>Helps narrow your research.</li>
-            <li>Always review charts before saving stocks.</li>
-            <li>Use My Workspace to monitor your research.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- PRACTICAL -->
-
-    <div class="lesson-card">
-
-        <h2>Practical Exercise</h2>
-
-        <ol>
-
-            <li>Open either scanner.</li>
-            <li>Apply your preferred filters.</li>
-            <li>Enable the Smart Money Filter.</li>
-            <li>Review five charts.</li>
-            <li>Save your best research candidates to My Workspace.</li>
-
-        </ol>
-
-    </div>
-
-    <!-- REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            The Smart Money Filter is designed to organise market research and help reduce the number of stocks requiring manual review. It does not predict future price movements or provide financial advice.
-
-        </p>
-
-    </div>
-
-    <!-- ===================================
-    LESSON NAVIGATION
-    =================================== -->
-
-    <div class="lesson-next">
-
-        <div class="lesson-next-tag">
-
-            Continue Learning
+<main class="ac-page">
+
+    <section class="ac-hero">
+        <div class="ac-shell">
+            <div class="ac-kicker"><span class="ac-dot"></span> Module 4 · Lesson 3</div>
+            <h1 class="ac-title">Built-In Market <span>Activity Intelligence.</span></h1>
+            <p class="ac-subtitle">
+                The old Smart Money Filter has evolved. Market activity analysis is now built directly into EdgeBreak's Automated Daily Scan and top-six research process.
+            </p>
+
+            <div class="ac-meta">
+                <span>Estimated time: 15 minutes</span>
+                <span>Mastering EdgeBreak</span>
+                <span>Intermediate</span>
+            </div>
+
+            <div class="ac-progress-wrap" aria-label="Module 4 progress">
+                <div class="ac-progress-label">
+                    <span>Module 4 progress</span>
+                    <span>Lesson 3 of 4</span>
+                </div>
+                <div class="ac-progress"><span style="width:75%"></span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ac-overview">
+        <div class="ac-shell">
+            <div class="ac-overview-card">
+                <div>
+                    <div class="ac-overview-label">What you'll learn</div>
+                    <h2>Why the old filter disappeared — and what replaced it.</h2>
+                </div>
+
+                <div class="ac-learn-list">
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why the separate Smart Money Filter is no longer used.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How off-exchange activity is now analysed in the background.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How large purchases appearing across multiple markets add context.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How this evidence contributes to the top-six research ranking.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why market activity evidence is useful without proving who is buying.</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <article class="ac-content">
+        <div class="ac-reading">
+
+            <div class="ac-update">
+                <div class="ac-update-tag">Platform update</div>
+                <h3>The Smart Money Filter is no longer a separate EdgeBreak tool.</h3>
+                <p>Earlier versions of EdgeBreak allowed members to manually apply a Smart Money Filter to scanner results. That workflow has been retired.</p>
+                <p>The underlying idea has evolved into something more useful: market activity evidence is now gathered automatically in the background and incorporated into the Automated Daily Scan's ranking process.</p>
+                <p>Members no longer need to switch a filter on or choose a separate Smart Money screen. The analysis is part of the research pipeline itself.</p>
+            </div>
+
+            <section class="ac-section">
+                <h2>Why EdgeBreak changed the approach</h2>
+                <p>A separate filter placed too much emphasis on one category of evidence.</p>
+                <p>EdgeBreak now takes a broader approach. Technical structure, price behaviour, volume, unusual market activity and company-level research can be considered together rather than forcing members to decide whether one additional filter should be enabled.</p>
+                <p>This creates a more consistent process and keeps the member focused on the final research evidence rather than the mechanics behind every individual data source.</p>
+
+                <div class="ac-pullquote">
+                    The goal is no longer “turn on Smart Money.” The goal is to combine several independent pieces of evidence before deciding which stocks deserve the most research attention.
+                </div>
+            </section>
+
+            <section class="ac-section">
+                <h2>What EdgeBreak now looks for</h2>
+                <p>The updated process studies market activity that may be difficult to recognise from a standard price chart alone.</p>
+                <p>Two important areas include unusual activity occurring away from the primary exchange and larger purchase activity appearing across multiple markets or trading venues.</p>
+                <p>When these patterns repeat alongside constructive technical structure, they can provide an additional reason for a stock to receive closer attention.</p>
+            </section>
+
+            <div class="ac-concept-grid">
+                <div class="ac-concept-card">
+                    <b>Off-exchange activity</b>
+                    <strong>Activity outside the primary exchange</strong>
+                    <span>EdgeBreak compares unusual activity away from the main exchange with the stock's own recent behaviour.</span>
+                </div>
+
+                <div class="ac-concept-card">
+                    <b>Cross-market purchases</b>
+                    <strong>Large activity across more than one market</strong>
+                    <span>Repeated larger purchases appearing across multiple markets can strengthen the case for deeper investigation.</span>
+                </div>
+
+                <div class="ac-concept-card">
+                    <b>Combined evidence</b>
+                    <strong>One layer of a larger model</strong>
+                    <span>Market activity is considered alongside technical structure, trend, volume and other research evidence.</span>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Built into the top-six process</h2>
+                <p>The most important change is where this information is used.</p>
+                <p>EdgeBreak's Automated Daily Scan narrows thousands of NASDAQ-listed stocks through multiple stages of filtering and research. Market activity evidence is now incorporated before the final research shortlist is surfaced.</p>
+                <p>This means unusual off-exchange activity and larger cross-market purchase patterns can influence how the strongest candidates are prioritised for the final <strong>top six</strong>.</p>
+                <p>Members see the outcome of the combined process rather than needing to manually reproduce each stage themselves.</p>
+            </section>
+
+            <div class="ac-evidence-panel">
+                <h3>What is happening behind the shortlist?</h3>
+                <p>The exact EdgeBreak ranking process is proprietary, but the principle is straightforward: stronger candidates should be supported by more than one form of evidence.</p>
+
+                <div class="ac-evidence-grid">
+                    <div class="ac-evidence-item">
+                        <b>Technical structure</b>
+                        <span>Trend, resistance, higher lows, base quality and distance from the underlying structure.</span>
+                    </div>
+                    <div class="ac-evidence-item">
+                        <b>Market participation</b>
+                        <span>Volume behaviour and whether participation appears unusual relative to recent history.</span>
+                    </div>
+                    <div class="ac-evidence-item">
+                        <b>Off-exchange evidence</b>
+                        <span>Activity away from the primary exchange that stands out against the stock's normal pattern.</span>
+                    </div>
+                    <div class="ac-evidence-item">
+                        <b>Cross-market evidence</b>
+                        <span>Larger purchase activity appearing across multiple markets rather than in only one isolated location.</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Why multiple markets matter</h2>
+                <p>A single unusual transaction can occur for many reasons.</p>
+                <p>When larger purchase activity appears repeatedly across different markets or venues, it provides a broader pattern for EdgeBreak to investigate.</p>
+                <p>The value comes from repetition and agreement between several sources of evidence, not from treating one large transaction as a definitive signal.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>What this does not prove</h2>
+                <p>Even strong market activity evidence does not reveal the complete identity, motive or future intentions of every participant.</p>
+                <p>EdgeBreak therefore avoids presenting these observations as confirmed institutional accumulation or guaranteed buying pressure.</p>
+                <p>Instead, they are treated as another research layer that can strengthen or weaken the case for further investigation.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>How members should use the information</h2>
+                <p>You do not need to recreate the old Smart Money Filter workflow.</p>
+                <p>Start with the Automated Daily Scan and review the top-six research candidates that survive the complete process. Then move into the chart, company research and your own watchlist.</p>
+                <p>The member-facing workflow stays simple even though more evidence is being considered in the background.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/edgebreak-nasdaq-scanner.webp" alt="EdgeBreak NASDAQ research workspace showing scanner results ready for chart and company research.">
+                <figcaption>The current workflow begins with the strongest research candidates already surfaced by EdgeBreak, then moves into chart review, company research and personal watchlist organisation.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Continue with chart research</h2>
+                <p>Once a candidate reaches your research list, open the chart and review the same technical evidence taught throughout the Academy:</p>
+                <ul>
+                    <li>Broader trend.</li>
+                    <li>Resistance and support.</li>
+                    <li>Higher lows.</li>
+                    <li>Range quality.</li>
+                    <li>Volume behaviour.</li>
+                    <li>Whether price remains close to the original structure.</li>
+                </ul>
+                <p>Market activity evidence should support chart research, not replace it.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/opening-charts.webp" alt="EdgeBreak TradingView chart opened from a scanner result for deeper technical analysis.">
+                <figcaption>After a stock is surfaced, the chart remains essential for understanding the structure behind the ranking.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Save candidates for ongoing review</h2>
+                <p>If the complete evidence still deserves attention, save the stock to My Workspace.</p>
+                <p>This allows you to revisit the candidate and compare later market behaviour with the evidence that originally caused it to stand out.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/watchlist-page.webp" alt="EdgeBreak My Workspace watchlist used to save and revisit research candidates.">
+                <figcaption>My Workspace allows promising candidates to be monitored over time after they have moved through the automated research pipeline.</figcaption>
+            </figure>
+
+            <div class="ac-process" aria-label="Built-in market activity workflow">
+                <div class="ac-process-head">
+                    <span>The new workflow</span>
+                    <h3>Gather → compare → rank → investigate.</h3>
+                </div>
+
+                <div class="ac-process-grid">
+                    <div class="ac-process-step">
+                        <b>01</b>
+                        <strong>Gather</strong>
+                        <span>EdgeBreak collects technical and market activity evidence across the research universe.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>02</b>
+                        <strong>Compare</strong>
+                        <span>Off-exchange and cross-market activity is compared with the stock's wider behaviour.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>03</b>
+                        <strong>Rank</strong>
+                        <span>The evidence contributes to prioritising the strongest candidates for the top-six shortlist.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>04</b>
+                        <strong>Investigate</strong>
+                        <span>Members review the chart, company research and wider context before saving a candidate.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ac-exercise">
+                <div class="ac-exercise-tag">Practical exercise</div>
+                <h3>Review the top six as combined evidence.</h3>
+                <p>Open the latest Automated Daily Scan and choose three of the surfaced candidates.</p>
+                <ul>
+                    <li>Review the technical structure of each stock.</li>
+                    <li>Compare resistance, higher lows and volume.</li>
+                    <li>Note any unusual market activity context presented by EdgeBreak.</li>
+                    <li>Use AI Company Research for one candidate.</li>
+                    <li>Decide which candidate has the clearest combination of evidence.</li>
+                    <li>Save that stock to My Workspace for later review.</li>
+                </ul>
+            </div>
 
         </div>
+    </article>
 
-        <h2>
+    <section class="ac-summary-area">
+        <div class="ac-shell">
+            <div class="ac-card-grid three">
 
-            Continue Your Journey
+                <div class="ac-card">
+                    <h2>Lesson summary</h2>
+                    <p>The Smart Money Filter is no longer used as a separate EdgeBreak filter. Its original purpose has evolved into built-in market activity analysis that examines unusual off-exchange activity and larger purchase patterns appearing across multiple markets as part of the Automated Daily Scan's top-six ranking process.</p>
+                </div>
 
-        </h2>
+                <div class="ac-card">
+                    <h2>Key takeaways</h2>
+                    <ul>
+                        <li>The old Smart Money Filter has been retired.</li>
+                        <li>Market activity analysis now runs automatically in the background.</li>
+                        <li>EdgeBreak studies unusual off-exchange activity.</li>
+                        <li>Large purchases across multiple markets can add supporting evidence.</li>
+                        <li>This evidence contributes to prioritising the top-six research candidates.</li>
+                        <li>No individual data point proves institutional buying or future price direction.</li>
+                    </ul>
+                </div>
 
-        <div class="lesson-nav-buttons">
+                <div class="ac-card">
+                    <h2>Common misunderstandings</h2>
+                    <ul>
+                        <li>Looking for a Smart Money toggle that no longer exists.</li>
+                        <li>Assuming one large transaction proves accumulation.</li>
+                        <li>Ignoring the technical chart because unusual activity is present.</li>
+                        <li>Treating the top six as buy recommendations.</li>
+                        <li>Assuming the ranking guarantees future performance.</li>
+                    </ul>
+                </div>
 
-            <!-- PREVIOUS -->
+                <div class="ac-card ac-reminder">
+                    <div class="ac-reminder-icon">✦</div>
+                    <div>
+                        <h2>Research reminder</h2>
+                        <p>Off-exchange activity and large cross-market purchases are used as research evidence only. They do not establish the identity or intentions of market participants and should not be interpreted as confirmed institutional buying, financial advice, investment recommendations or predictions of future market performance.</p>
+                    </div>
+                </div>
 
-            <a
-                href="/academy/using-the-breakout-scanner.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/mastering-my-workspace.html"
-                class="btn-primary"
-            >
-                Start Lesson 4.4 →
-            </a>
-
+            </div>
         </div>
+    </section>
 
-        <h3>
+    <section class="ac-next">
+        <div class="ac-shell">
+            <div class="ac-next-card">
+                <div class="ac-next-tag">Continue learning · Module 4 Lesson 4 of 4</div>
+                <h2>Mastering My Workspace.</h2>
+                <p>Learn how to organise personal watchlists, compare charts, revisit saved stocks and bring your EdgeBreak research together in one workspace.</p>
 
-            Lesson 4.4 – Mastering My Workspace
+                <div class="ac-next-actions">
+                    <a href="/academy/mastering-my-workspace.html" class="ac-btn ac-btn-primary">Start Lesson 4.4 →</a>
+                    <a href="/academy/using-the-breakout-scanner.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+                </div>
 
-        </h3>
-
-        <p>
-
-            Learn how to organise your watchlists, analyse charts, save research and build a structured workflow using My Workspace. Discover how this central hub brings together every part of the EdgeBreak platform into one efficient research environment.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 4 • Lesson 18 of 30
-
+                <div class="ac-next-foot">Module 4 · Lesson 3 of 4 completed</div>
+            </div>
         </div>
-
-    </div>
+    </section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>

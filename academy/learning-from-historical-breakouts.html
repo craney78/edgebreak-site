@@ -1,841 +1,959 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 20: Learning from Historical Breakouts | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how analysing historical NASDAQ breakouts helps identify recurring price action, accumulation, resistance, higher lows and volume characteristics before future breakouts develop.">
-
-<meta name="keywords"
-      content="historical breakouts, breakout analysis, NASDAQ breakouts, price action, resistance, higher lows, accumulation, volume analysis, breakout examples, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/learning-from-historical-breakouts.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Learning From Historical Breakouts | Module 5 Lesson 6 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn how studying historical NASDAQ breakout examples can improve pattern recognition, strengthen structured research and reveal recurring market characteristics without relying on hindsight."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/learning-from-historical-breakouts.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 20: Learning from Historical Breakouts">
-
-<meta property="og:description"
-      content="Discover why studying previous NASDAQ breakout patterns helps build a structured research process for identifying future opportunities.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/learning-from-historical-breakouts.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/learning-from-historical-breakouts.html">
+<meta property="og:title" content="Learning From Historical Breakouts | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Study completed NASDAQ breakouts to compare structure, resistance, higher lows, volume and changing market behaviour across multiple historical examples."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Learning From Historical Breakouts | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Build pattern recognition by studying successful, failed and developing historical breakout structures."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
-<meta name="twitter:card"
-      content="summary_large_image">
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
-<meta name="twitter:title"
-      content="Lesson 20: Learning from Historical Breakouts">
-
-<meta name="twitter:description"
-      content="Study historical breakout examples to recognise recurring accumulation and breakout characteristics.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<!-- ===================================
-CSS
-=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
 
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
-
-<!-- ===================================
-SUPABASE
-=================================== -->
-
-
-
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
-
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
-<!-- ===================================
-LEARNING RESOURCE
-=================================== -->
 
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "name":"Lesson 20: Learning from Historical Breakouts",
-  "description":"Learn how historical NASDAQ breakouts can be analysed to recognise recurring price action, accumulation, resistance, higher lows and volume characteristics.",
-  "educationalLevel":"Beginner",
-  "learningResourceType":"Lesson",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  },
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  }
-}
-</script>
-
-<!-- ===================================
-BREADCRUMB
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@graph":[
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type":"Organization",
+      "@id":"https://www.edgebreak.ai/#organization",
+      "name":"EdgeBreak",
+      "legalName":"Crane Platform Labs",
+      "url":"https://www.edgebreak.ai/",
+      "email":"mailto:admin@edgebreak.ai",
+      "logo":{
+        "@type":"ImageObject",
+        "@id":"https://www.edgebreak.ai/#logo",
+        "url":"https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl":"https://www.edgebreak.ai/images/logo.webp",
+        "caption":"EdgeBreak"
+      },
+      "description":"EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed":"Worldwide",
+      "sameAs":[
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
+      "@type":"WebSite",
+      "@id":"https://www.edgebreak.ai/#website",
+      "name":"EdgeBreak",
+      "url":"https://www.edgebreak.ai/",
+      "description":"NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher":{"@id":"https://www.edgebreak.ai/#organization"},
+      "inLanguage":"en-AU"
+    },
+    {
+      "@type":"Course",
+      "@id":"https://www.edgebreak.ai/academy.html#course",
       "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "url":"https://www.edgebreak.ai/academy.html",
+      "description":"Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider":{"@id":"https://www.edgebreak.ai/#organization"},
+      "inLanguage":"en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Lesson 20: Learning from Historical Breakouts",
-      "item":"https://www.edgebreak.ai/learning-from-historical-breakouts.html"
+      "@type":"LearningResource",
+      "@id":"https://www.edgebreak.ai/academy/learning-from-historical-breakouts.html#lesson",
+      "name":"Module 5 Lesson 6: Learning From Historical Breakouts",
+      "url":"https://www.edgebreak.ai/academy/learning-from-historical-breakouts.html",
+      "description":"A historical market-research lesson showing how successful, failed and developing breakout structures can be compared to improve pattern recognition and research discipline.",
+      "learningResourceType":"Lesson",
+      "educationalLevel":"Intermediate",
+      "isPartOf":{"@id":"https://www.edgebreak.ai/academy.html#course"},
+      "provider":{"@id":"https://www.edgebreak.ai/#organization"},
+      "inLanguage":"en-AU"
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://www.edgebreak.ai/academy/learning-from-historical-breakouts.html#webpage",
+      "url":"https://www.edgebreak.ai/academy/learning-from-historical-breakouts.html",
+      "name":"Learning From Historical Breakouts | Module 5 Lesson 6 | EdgeBreak Academy",
+      "description":"Learn how studying historical NASDAQ breakout examples can improve pattern recognition, strengthen structured research and reveal recurring market characteristics without relying on hindsight.",
+      "isPartOf":{"@id":"https://www.edgebreak.ai/#website"},
+      "mainEntity":{"@id":"https://www.edgebreak.ai/academy/learning-from-historical-breakouts.html#lesson"},
+      "publisher":{"@id":"https://www.edgebreak.ai/#organization"},
+      "inLanguage":"en-AU"
+    },
+    {
+      "@type":"BreadcrumbList",
+      "@id":"https://www.edgebreak.ai/academy/learning-from-historical-breakouts.html#breadcrumb",
+      "itemListElement":[
+        {
+          "@type":"ListItem",
+          "position":1,
+          "name":"Home",
+          "item":"https://www.edgebreak.ai/"
+        },
+        {
+          "@type":"ListItem",
+          "position":2,
+          "name":"EdgeBreak Academy",
+          "item":"https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type":"ListItem",
+          "position":3,
+          "name":"Learning From Historical Breakouts",
+          "item":"https://www.edgebreak.ai/academy/learning-from-historical-breakouts.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<!-- ===================================
-WEBPAGE
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 20: Learning from Historical Breakouts",
-  "url":"https://www.edgebreak.ai/learning-from-historical-breakouts.html",
-  "description":"Learn how historical breakout examples improve structured market research and pattern recognition.",
-  "isPartOf":{
-    "@type":"WebSite",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  },
-  "primaryImageOfPage":"https://www.edgebreak.ai/images/academy.webp",
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
-}
-</script>
-
-
-
 <style>
-
-.image-grid-3{
-
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-    gap:30px;
-    margin:40px 0;
-
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
 
-.lesson-image{
-
-    background:#101827;
-    border:1px solid #243247;
-    border-radius:16px;
-    overflow:hidden;
-
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
-.lesson-image img{
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
 
-    display:block;
-    width:100%;
-    height:auto;
-
-}
-
-.lesson-image figcaption{
-
-    padding:18px 22px;
-    font-size:15px;
-    line-height:1.7;
-    color:#cfd8e3;
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
     text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
 
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
 }
 
-.lesson-image strong{
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
 
-    color:#ffffff;
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
     font-size:17px;
+    line-height:1.75;
+}
+.ac-section li{margin:7px 0}
 
+.ac-lesson-image{margin:34px 0 46px}
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#fff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-image-grid-3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+    margin:34px 0 52px;
+}
+.ac-image-grid-3 figure{
+    margin:0;
+    overflow:hidden;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-image-grid-3 img{
+    width:100%;
+    display:block;
+}
+.ac-image-grid-3 figcaption{
+    padding:16px 18px 18px;
+    color:var(--ix-muted);
+    font-size:13px;
+    line-height:1.55;
+}
+.ac-image-grid-3 strong{
+    display:block;
+    margin-bottom:5px;
+    color:var(--ix-ink);
+    font-size:15px;
+}
+
+.ac-study-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+.ac-study-card{
+    padding:24px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#fff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+.ac-study-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+.ac-study-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+.ac-study-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+.ac-exercise{
+    margin:34px 0 54px;
+    padding:30px;
+    border:1px solid #dce7df;
+    border-radius:24px;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+}
+.ac-exercise-tag{
+    margin-bottom:9px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-exercise h3{
+    margin:0 0 13px;
+    color:var(--ix-ink);
+    font-size:27px;
+    letter-spacing:-.03em;
+}
+.ac-exercise p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.65;
+}
+.ac-exercise ul{
+    margin:0;
+    padding-left:22px;
+    color:#526071;
+    font-size:15px;
+    line-height:1.65;
+}
+
+@media(max-width:900px){
+    .ac-image-grid-3{grid-template-columns:1fr}
+    .ac-study-grid{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+    .ac-card-grid.three{grid-template-columns:1fr}
+    .ac-card-grid.three .ac-reminder{grid-column:auto}
 }
 
 </style>
-
-
-
 </head>
 
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
-<main>
-<!-- ==========================
-MODULE 5 · LESSON 24
-=========================== -->
+<main class="ac-page">
 
-<div class="academy-container lesson-container">
+<section class="ac-hero">
+    <div class="ac-shell">
+        <div class="ac-kicker"><span class="ac-dot"></span> Module 5 · Lesson 6</div>
+        <h1 class="ac-title">Learning From <span>Historical Breakouts.</span></h1>
+        <p class="ac-subtitle">
+            Finish Module 5 by turning completed market examples into a long-term research library for pattern recognition, comparison and continuous improvement.
+        </p>
 
-    <div class="lesson-tag">
-        MODULE 5 • LESSON 24
+        <div class="ac-meta">
+            <span>Estimated time: 30 minutes</span>
+            <span>Real market research examples</span>
+            <span>Intermediate</span>
+        </div>
+
+        <div class="ac-progress-wrap" aria-label="Module 5 progress">
+            <div class="ac-progress-label">
+                <span>Module 5 progress</span>
+                <span>Lesson 6 of 6</span>
+            </div>
+            <div class="ac-progress"><span style="width:100%"></span></div>
+        </div>
     </div>
-
-    <h1>
-        Learning from Historical Breakouts
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 30 Minutes</span>
-
-        <span>•</span>
-
-        <span>Real Market Research Examples</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        One of the fastest ways to improve your market research is by studying historical breakout examples. Every successful and unsuccessful breakout leaves behind valuable clues about market structure, accumulation, resistance and investor behaviour. This lesson demonstrates how reviewing historical charts can strengthen pattern recognition and improve your understanding of how breakout opportunities develop over time.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>Why historical chart studies are valuable.</li>
-
-            <li>How to analyse previous breakout structures.</li>
-
-            <li>Recognising recurring market patterns.</li>
-
-            <li>Applying EdgeBreak tools to historical examples.</li>
-
-            <li>Building long-term pattern recognition.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>Markets Leave Clues</h2>
-
-        <p>
-
-            Every completed breakout tells a story.
-
-        </p>
-
-        <p>
-
-            Long before price moved above resistance, the market often displayed subtle signs of strengthening demand, organised market structure and improving accumulation.
-
-        </p>
-
-        <p>
-
-            By studying historical charts without the pressure of live markets, members can focus entirely on recognising these recurring characteristics.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img
-                src="/images/historical-breakout-timeline.webp"
-                alt="Historical breakout timeline illustrating how market structure develops from base formation through resistance tests, higher lows, increasing volume and breakout confirmation."
-                loading="lazy"
-            >
-
-            <figcaption>
-
-                <strong>Figure.</strong> Studying completed breakouts helps reveal the sequence of events that often occurs before a successful move above resistance. Notice how the market gradually develops a stronger structure through repeated resistance tests, higher lows, improving volume and accumulation before the breakout is confirmed. Reviewing historical examples builds pattern recognition without the pressure of live markets.
-
-            </figcaption>
-
-        </figure>
-
-      
-
-        <h2>Start Before the Breakout</h2>
-
-        <p>
-
-            When reviewing historical charts, begin your analysis well before the breakout occurs.
-
-        </p>
-
-        <p>
-
-            Hide the future price action if possible and examine only the information that would have been available at that point in time.
-
-        </p>
-
-        <p>
-
-            This encourages objective research and prevents hindsight bias from influencing your observations.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img
-                src="/images/historical-breakout.webp"
-                alt="Historical stock chart showing a developing breakout structure with resistance touches, higher lows, increasing volume and a breakout forming above resistance."
-                loading="lazy"
-            >
-
-            <figcaption>
-
-                <strong>Figure.</strong> Historical breakout examples allow investors to study how strong market structures develop before price moves above resistance. By reviewing completed charts, members can identify recurring characteristics such as repeated resistance tests, higher lows, improving volume and accumulation without the pressure of making live market decisions.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Review the Market Structure</h2>
-
-        <p>
-
-            Ask yourself whether the overall structure appeared organised.
-
-        </p>
-
-        <ul>
-
-            <li>Were higher highs developing?</li>
-
-            <li>Were higher lows becoming more obvious?</li>
-
-            <li>Was resistance clearly defined?</li>
-
-            <li>Did the trend remain healthy?</li>
-
-        </ul>
-
-        <p>
-
-            Strong market structure is often one of the earliest characteristics visible before many successful breakouts.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img
-                src="/images/historical-breakout.webp"
-                alt="Historical stock chart showing a developing breakout structure with resistance touches, higher lows, increasing volume and a breakout forming above resistance."
-                loading="lazy"
-            >
-
-            <figcaption>
-
-                <strong>Figure.</strong> Historical breakout examples allow investors to study how strong market structures develop before price moves above resistance. By reviewing completed charts, members can identify recurring characteristics such as repeated resistance tests, higher lows, improving volume and accumulation without the pressure of making live market decisions.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Identify Accumulation</h2>
-
-        <p>
-
-            Next, study the consolidation period.
-
-        </p>
-
-        <p>
-
-            Look for signs that selling pressure was gradually being absorbed while buyers continued supporting higher prices.
-
-        </p>
-
-        <p>
-
-            Compare multiple historical examples and notice how accumulation often develops differently from one stock to another.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img
-                src="/images/accumulation-phase-real.webp"
-                alt="Real historical chart showing an accumulation phase with repeated resistance tests, developing higher lows and gradually increasing volume before a breakout."
-                loading="lazy"
-            >
-
-            <figcaption>
-
-                <strong>Figure.</strong> This real historical example highlights several characteristics commonly associated with accumulation. Price repeatedly tests resistance while buyers continue supporting progressively higher lows, and volume gradually increases as demand strengthens. Although every stock develops differently, studying completed charts like this helps build pattern recognition and provides valuable context before analysing live market opportunities.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Review Resistance Touches</h2>
-
-        <p>
-
-            Count how many times price tested resistance before eventually breaking higher.
-
-        </p>
-
-        <p>
-
-            Notice how repeated testing often demonstrated growing buying pressure without immediately producing a breakout.
-
-        </p>
-
-        <p>
-
-            This is one of the reasons EdgeBreak places significant emphasis on resistance touches during the research process.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img
-                src="/images/historical-breakout.webp"
-                alt="Historical stock chart showing a developing breakout structure with resistance touches, higher lows, increasing volume and a breakout forming above resistance."
-                loading="lazy"
-            >
-
-            <figcaption>
-
-                <strong>Figure.</strong> Historical breakout examples allow investors to study how strong market structures develop before price moves above resistance. This chart shows several touches of resistance.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Observe the Volume</h2>
-
-        <p>
-
-            Review how trading activity changed throughout the entire pattern.
-
-        </p>
-
-        <p>
-
-            Some historical breakouts displayed increasing participation as price approached resistance, while others experienced relatively quiet consolidation before expanding higher.
-
-        </p>
-
-        <p>
-
-            Volume should always be interpreted alongside price action rather than in isolation.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img
-                src="/images/volume-behaviour.webp"
-                alt="Real historical stock chart illustrating volume behaviour during accumulation, breakout and confirmation phases."
-                loading="lazy"
-            >
-
-            <figcaption>
-
-                <strong>Figure.</strong> Volume provides valuable context throughout a developing breakout. In this real historical example, relatively normal volume accompanied the initial move above resistance, while a much larger surge in volume appeared later as buyers strongly confirmed the new trend. Notice how volume gradually increased during the accumulation phase before expanding significantly as momentum accelerated. Studying these relationships helps build a better understanding of how price and volume often work together.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Would EdgeBreak Have Found It?</h2>
-
-        <p>
-
-            One of the most valuable exercises is asking whether the historical stock would have appeared within the EdgeBreak platform.
-
-        </p>
-
-        <p>
-
-            Consider whether it may have qualified for:
-
-        </p>
-
-        <ul>
-
-            <li>NASDAQ Scanner</li>
-
-            <li>Resistance Touch filters</li>
-
-            <li>Higher Lows filters</li>
-
-            <li>Smart Money Filter</li>
-
-            <li>Breakout Scanner</li>
-
-        </ul>
-
-        <p>
-
-            This exercise helps connect historical market behaviour with the modern research tools available inside EdgeBreak.
-
-        </p>
-
-        <section class="lesson-section">
-
-            <h2>Comparison of Three Real Breakouts</h2>
-
-            <p>
-                Every breakout develops differently, but many successful breakouts
-                display similar characteristics. Compare these three real examples
-                and look for recurring patterns including resistance touches,
-                higher lows, accumulation and volume behaviour.
-            </p>
-
-            <div class="image-grid-3">
-
-                <figure class="lesson-image">
-
-                    <img
-                        src="/images/ions.webp"
-                        alt="IONS breakout example"
-                        loading="lazy"
-                    >
-
-                    <figcaption>
-                        <strong>IONS</strong><br>
-                        Accumulation, higher lows and confirmation after breakout.
-                    </figcaption>
-
-                </figure>
-
-                <figure class="lesson-image">
-
-                    <img
-                        src="/images/form-example.webp"
-                        alt="FORM breakout example"
-                        loading="lazy"
-                    >
-
-                    <figcaption>
-                        <strong>FORM</strong><br>
-                        Multiple breakout phases with new resistance forming.
-                    </figcaption>
-
-                </figure>
-
-                <figure class="lesson-image">
-
-                    <img
-                        src="/images/indv-chart.webp"
-                        alt="INDV breakout example"
-                        loading="lazy"
-                    >
-
-                    <figcaption>
-                        <strong>INDV</strong><br>
-                        Resistance touches, higher lows and breakout confirmation.
-                    </figcaption>
-
-                </figure>
-
+</section>
+
+<section class="ac-overview">
+    <div class="ac-shell">
+        <div class="ac-overview-card">
+            <div>
+                <div class="ac-overview-label">What you'll learn</div>
+                <h2>Turn old charts into useful future reference points.</h2>
             </div>
 
-        </section>
+            <div class="ac-learn-list">
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why historical breakout studies improve pattern recognition.</span></div>
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to study a chart without allowing hindsight to dominate the analysis.</span></div>
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to compare successful, failed and developing structures.</span></div>
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>How resistance, higher lows and volume recur in different forms.</span></div>
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>How current EdgeBreak tools connect historical study with today's market.</span></div>
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to build your own market-example library over time.</span></div>
+            </div>
+        </div>
+    </div>
+</section>
 
-        <h2>Compare Multiple Historical Examples</h2>
+<article class="ac-content">
+<div class="ac-reading">
 
-        <p>
+    <section class="ac-section">
+        <h2>Markets leave evidence behind</h2>
+        <p>Every completed breakout leaves a record of how price behaved before, during and after the move through resistance.</p>
+        <p>Historical charts allow you to study that evidence without the pressure of a live market. You can slow the process down, compare several examples and examine which characteristics were genuinely visible before the final outcome was known.</p>
+        <p>This is one of the most effective ways to strengthen pattern recognition.</p>
 
-            Rather than studying only one successful breakout, compare several different historical charts.
+        <div class="ac-pullquote">
+            The goal is not to memorise winning charts. It is to understand how different structures developed before their outcomes were known.
+        </div>
+    </section>
 
-        </p>
+    <figure class="ac-lesson-image">
+        <img
+            src="/images/historical-breakout-timeline.webp"
+            alt="Historical breakout timeline showing base formation, resistance tests, higher lows, changing volume and eventual breakout."
+        >
+        <figcaption>A completed breakout can be separated into stages, allowing each part of the developing structure to be studied independently.</figcaption>
+    </figure>
 
-        <p>
+    <section class="ac-section">
+        <h2>Start before the breakout</h2>
+        <p>When reviewing a historical chart, begin well before the breakout occurs.</p>
+        <p>If possible, hide the right-hand side of the chart and move forward one section at a time. This helps prevent the known outcome from influencing how you interpret earlier price action.</p>
+        <p>Ask what you could reasonably have observed using only the evidence available at that point.</p>
+    </section>
 
-            Some may display textbook market structure while others develop through more complex consolidation patterns.
+    <figure class="ac-lesson-image">
+        <img
+            src="/images/historical-breakout.webp"
+            alt="Historical stock chart showing a developing breakout structure before and after a move through resistance."
+        >
+        <figcaption>Historical study becomes more useful when you focus first on the structure that existed before the breakout rather than the final percentage move.</figcaption>
+    </figure>
 
-        </p>
+    <section class="ac-section">
+        <h2>Use the same framework every time</h2>
+        <p>Historical research becomes much more valuable when each chart is reviewed using the same questions.</p>
+    </section>
 
-        <p>
+    <div class="ac-study-grid">
+        <div class="ac-study-card">
+            <b>Trend</b>
+            <strong>What was the broader structure?</strong>
+            <span>Review weekly and daily trend, higher highs, higher lows and whether the chart was improving or deteriorating.</span>
+        </div>
 
-            The more examples you study, the easier it becomes to recognise recurring characteristics in today's market.
+        <div class="ac-study-card">
+            <b>Resistance</b>
+            <strong>Was the ceiling clearly defined?</strong>
+            <span>Count meaningful interactions with resistance and review how long the area remained relevant.</span>
+        </div>
 
-        </p>
+        <div class="ac-study-card">
+            <b>Higher lows</b>
+            <strong>Was support improving?</strong>
+            <span>Compare successive pullbacks and whether the base tightened beneath resistance.</span>
+        </div>
 
-        
-        <h2>Learning Never Stops</h2>
-
-        <p>
-
-            Historical research is one of the most effective ways to improve pattern recognition.
-
-        </p>
-
-        <p>
-
-            Even experienced investors regularly review previous market leaders to better understand how organised breakout structures developed.
-
-        </p>
-
-        <p>
-
-            Every chart you study becomes another reference point for future market research.
-
-        </p>
-
+        <div class="ac-study-card">
+            <b>Volume</b>
+            <strong>How did participation change?</strong>
+            <span>Study volume during the base, near resistance and around the eventual breakout or failure.</span>
+        </div>
     </div>
 
-    <!-- LESSON SUMMARY -->
+    <section class="ac-section">
+        <h2>Study consolidation carefully</h2>
+        <p>Many historical breakout examples contain periods of consolidation beneath resistance.</p>
+        <p>These structures may display characteristics sometimes associated with accumulation-style behaviour: repeated resistance tests, higher lows, tighter ranges and changing participation.</p>
+        <p>Those observations do not identify the buyers or prove institutional accumulation. The useful part is the structure itself and how it changed over time.</p>
+    </section>
 
-    <div class="lesson-card">
+    <figure class="ac-lesson-image">
+        <img
+            src="/images/accumulation-phase-real.webp"
+            alt="Historical consolidation chart showing resistance, higher lows and changing volume before a breakout."
+        >
+        <figcaption>Historical consolidation can be studied for accumulation-style characteristics while keeping the observable chart evidence separate from assumptions about participant identity.</figcaption>
+    </figure>
 
-        <h2>Lesson Summary</h2>
+    <section class="ac-section">
+        <h2>Review resistance touches</h2>
+        <p>Repeated tests of resistance can be one of the clearest recurring features in historical breakout structures.</p>
+        <p>Rather than simply counting every touch, consider whether the tests were meaningful and whether the rest of the structure improved between them.</p>
+        <p>Resistance becomes more informative when it is studied together with higher lows, range quality and volume.</p>
+    </section>
 
-        <p>
+    <section class="ac-section">
+        <h2>Observe volume across the entire pattern</h2>
+        <p>Do not look only at breakout-day volume.</p>
+        <p>Review how trading activity behaved throughout the base, near resistance and after price moved through the level.</p>
+        <p>Some historical examples show quiet consolidation before participation expands. Others show increasing activity earlier in the structure. The point is comparison, not searching for one mandatory pattern.</p>
+    </section>
 
-            Historical breakout studies provide an opportunity to improve pattern recognition without the pressure of live markets. By reviewing market structure, resistance, higher lows, accumulation and volume across multiple historical examples, members can develop a deeper understanding of how breakout opportunities evolve over time. EdgeBreak's research tools can then be used to identify similar characteristics in today's NASDAQ market.
+    <figure class="ac-lesson-image">
+        <img
+            src="/images/volume-behaviour.webp"
+            alt="Historical breakout chart illustrating changes in trading volume during consolidation and after a move through resistance."
+        >
+        <figcaption>Volume can behave differently across successful examples. Studying many charts helps separate recurring context from rigid rules.</figcaption>
+    </figure>
 
-        </p>
+    <section class="ac-section">
+        <h2>Compare successful and failed breakouts</h2>
+        <p>Successful charts alone can create a distorted picture because the final move makes the earlier structure look more obvious than it really was.</p>
+        <p>Include failed breakouts in your historical library.</p>
+        <p>Ask what looked similar before the breakout and where the two structures began to diverge afterward. This comparison can reveal which characteristics were genuinely useful and which only appeared important because you already knew the outcome.</p>
+    </section>
 
+    <section class="ac-section">
+        <h2>Three real historical examples</h2>
+        <p>Different stocks can reach a breakout through very different paths. Compare these examples for recurring characteristics rather than expecting identical chart patterns.</p>
+    </section>
+
+    <div class="ac-image-grid-3">
+        <figure>
+            <img src="/images/ions.webp" alt="Historical IONS breakout chart.">
+            <figcaption>
+                <strong>IONS</strong>
+                Review the consolidation, higher lows and how the chart developed after resistance was cleared.
+            </figcaption>
+        </figure>
+
+        <figure>
+            <img src="/images/form-example.webp" alt="Historical FORM breakout chart.">
+            <figcaption>
+                <strong>FORM</strong>
+                Notice how new structure and resistance areas can develop after an earlier breakout phase.
+            </figcaption>
+        </figure>
+
+        <figure>
+            <img src="/images/indv-chart.webp" alt="Historical INDV breakout chart.">
+            <figcaption>
+                <strong>INDV</strong>
+                Compare resistance interaction, higher lows and the transition from consolidation into breakout.
+            </figcaption>
+        </figure>
     </div>
 
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
+    <section class="ac-section">
+        <h2>Would EdgeBreak have surfaced similar characteristics?</h2>
+        <p>A useful historical exercise is to ask which current EdgeBreak tools could have identified similar characteristics at different stages of the structure.</p>
         <ul>
-
-            <li>Study the chart before the breakout occurs.</li>
-
-            <li>Review market structure objectively.</li>
-
-            <li>Compare multiple historical examples.</li>
-
-            <li>Use historical charts to improve pattern recognition.</li>
-
-            <li>Connect historical examples with the EdgeBreak research tools.</li>
-
+            <li><strong>Launch Pad</strong> — during a longer developing base.</li>
+            <li><strong>Pre-Breakout Scanner</strong> — when repeated resistance tests and higher lows became clearer.</li>
+            <li><strong>NASDAQ Scanner</strong> — for manual filtering and comparison.</li>
+            <li><strong>Automated Daily Scan</strong> — if the combined technical, market-activity and company-research evidence ranked strongly enough.</li>
+            <li><strong>Breakout Scanner</strong> — once price moved through resistance.</li>
+            <li><strong>My Workspace</strong> — for saving and revisiting the structure over time.</li>
         </ul>
+        <p>This does not mean every historical winner would necessarily have appeared in every scanner. The exercise is about connecting observable market characteristics with the research tools used today.</p>
+    </section>
 
+    <section class="ac-section">
+        <h2>Add current market-activity thinking</h2>
+        <p>When studying present-day candidates, EdgeBreak can also consider unusual off-exchange activity and larger purchases appearing across multiple markets as supporting evidence.</p>
+        <p>Historical charts may not contain every data layer available in today's platform, so do not rewrite the past by assuming those signals were present.</p>
+        <p>Keep historical chart evidence and current platform evidence clearly separated.</p>
+    </section>
+
+    <div class="ac-process" aria-label="Historical breakout study process">
+        <div class="ac-process-head">
+            <span>A repeatable historical review</span>
+            <h3>Hide → observe → reveal → compare.</h3>
+        </div>
+
+        <div class="ac-process-grid">
+            <div class="ac-process-step">
+                <b>01</b>
+                <strong>Hide</strong>
+                <span>Cover future price action so the final result does not influence the starting analysis.</span>
+            </div>
+            <div class="ac-process-step">
+                <b>02</b>
+                <strong>Observe</strong>
+                <span>Record trend, resistance, higher lows, volume and base quality.</span>
+            </div>
+            <div class="ac-process-step">
+                <b>03</b>
+                <strong>Reveal</strong>
+                <span>Move forward through the chart and note exactly how the structure changed.</span>
+            </div>
+            <div class="ac-process-step">
+                <b>04</b>
+                <strong>Compare</strong>
+                <span>Compare the example with successful, failed and developing structures in your library.</span>
+            </div>
+        </div>
     </div>
 
-    <!-- PRACTICAL EXERCISE -->
+    <section class="ac-section">
+        <h2>Build a personal historical library</h2>
+        <p>One chart teaches very little by itself. A library of examples creates context.</p>
+        <p>Save screenshots or notes from successful breakouts, failed breakouts, reversals, long consolidations, early bases and extended moves.</p>
+        <p>As the library grows, you can compare new candidates against a much broader set of real market examples instead of relying on memory or one textbook pattern.</p>
+    </section>
 
-    <div class="lesson-card">
-
-        <h2>Practical Exercise</h2>
-
-        <p>
-
-            Select three historical NASDAQ breakout stocks and complete a structured review.
-
-        </p>
-
+    <section class="ac-section">
+        <h2>Record what you actually observed</h2>
+        <p>For each historical example, write down what was visible before the outcome:</p>
         <ul>
-
-            <li>Mark the resistance level.</li>
-
-            <li>Identify the higher lows.</li>
-
-            <li>Review the accumulation phase.</li>
-
-            <li>Study the volume behaviour.</li>
-
-            <li>Explain which EdgeBreak tools would likely have identified the stock before the breakout.</li>
-
+            <li>Weekly trend.</li>
+            <li>Resistance zone.</li>
+            <li>Number and quality of resistance tests.</li>
+            <li>Higher lows.</li>
+            <li>Range quality.</li>
+            <li>Volume behaviour.</li>
+            <li>How far price was from the underlying base.</li>
+            <li>What changed after the breakout.</li>
         </ul>
+        <p>This prevents the lesson from becoming “that stock went up.” The value comes from documenting the structure that existed before you knew the result.</p>
+    </section>
 
+    <section class="ac-section">
+        <h2>Pattern recognition develops slowly</h2>
+        <p>The more examples you study, the easier it becomes to notice similarities and differences in current market structures.</p>
+        <p>That does not mean future outcomes become predictable. It means your research vocabulary becomes richer and your comparisons become more informed.</p>
+        <p>Historical study is therefore not about finding a perfect pattern. It is about building experience.</p>
+    </section>
+
+    <div class="ac-exercise">
+        <div class="ac-exercise-tag">Module 5 final exercise</div>
+        <h3>Build a six-chart historical study.</h3>
+        <p>Create a small historical library using six NASDAQ examples.</p>
+        <ul>
+            <li>Choose two successful breakouts.</li>
+            <li>Choose two failed breakouts.</li>
+            <li>Choose two longer consolidation or pre-breakout structures.</li>
+            <li>Mark resistance and higher lows on each chart.</li>
+            <li>Review volume and weekly structure.</li>
+            <li>Write down what was visible before the final outcome.</li>
+            <li>Compare which characteristics appeared repeatedly across the six examples.</li>
+            <li>Record at least one characteristic that looked important in one example but did not repeat consistently across the others.</li>
+        </ul>
     </div>
 
-    <!-- COURSE COMPLETION -->
+</div>
+</article>
 
-    <div class="lesson-card highlight">
+<section class="ac-summary-area">
+    <div class="ac-shell">
+        <div class="ac-card-grid three">
 
-        <h2>Congratulations!</h2>
+            <div class="ac-card">
+                <h2>Lesson summary</h2>
+                <p>Historical breakout studies improve pattern recognition by allowing market structure to be examined without live-market pressure. The most useful approach is to study the evidence that existed before the outcome, compare successful and failed examples, and gradually build a personal library of real market structures.</p>
+            </div>
 
-        <p>
+            <div class="ac-card">
+                <h2>Key takeaways</h2>
+                <ul>
+                    <li>Begin before the breakout and hide future price action when possible.</li>
+                    <li>Use the same research framework for every historical chart.</li>
+                    <li>Study successful and failed examples together.</li>
+                    <li>Separate observable evidence from assumptions about who was buying.</li>
+                    <li>Connect historical characteristics with current EdgeBreak tools carefully.</li>
+                    <li>Build a long-term library rather than memorising one pattern.</li>
+                </ul>
+            </div>
 
-            You've now completed <strong>Module 5 – Real Market Research Examples</strong>.
+            <div class="ac-card">
+                <h2>Common beginner mistakes</h2>
+                <ul>
+                    <li>Studying only stocks that became large winners.</li>
+                    <li>Allowing hindsight to make the setup look obvious.</li>
+                    <li>Assuming every consolidation represents confirmed accumulation.</li>
+                    <li>Searching for one perfect breakout template.</li>
+                    <li>Mixing modern market-activity data into a historical example without evidence it was available.</li>
+                </ul>
+            </div>
 
-        </p>
-
-        <p>
-
-            By analysing both successful and unsuccessful historical breakout structures, you've strengthened your ability to recognise organised market behaviour and apply the complete EdgeBreak research framework using real-world examples.
-
-        </p>
-
-        <p>
-
-            These pattern recognition skills will continue improving as you research more charts and build experience using the EdgeBreak platform.
-
-        </p>
-
-    </div>
-
-    <!-- RESEARCH REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            Historical market examples are presented for educational purposes only. Past market behaviour should never be interpreted as an indication of future performance. EdgeBreak is designed to support independent market research through structured analysis and educational resources and does not provide financial advice or investment recommendations.
-
-        </p>
-
-    </div>
-
-    <!-- ===================================
-    LESSON NAVIGATION
-    =================================== -->
-
-    <div class="lesson-next">
-
-        <div class="lesson-next-tag">
-
-            Module Complete
+            <div class="ac-card ac-reminder">
+                <div class="ac-reminder-icon">✦</div>
+                <div>
+                    <h2>Research reminder</h2>
+                    <p>Historical market examples are provided for education and pattern-recognition practice. Past market behaviour does not predict future results. EdgeBreak scanners, market-activity data and AI-assisted research tools do not provide investment recommendations, trade signals or guarantees of future market performance.</p>
+                </div>
+            </div>
 
         </div>
-
-        <h2>
-
-            Congratulations!
-
-        </h2>
-
-        <div class="lesson-nav-buttons">
-
-            <!-- PREVIOUS -->
-
-            <a
-                href="/academy/complete-market-research-walkthrough.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/building-your-personal-research-plan.html"
-                class="btn-primary"
-            >
-                Start Module 6 →
-            </a>
-
-        </div>
-
-        <h3>
-
-            Lesson 6.1 – Building Your Personal Research Plan
-
-        </h3>
-
-        <p>
-
-            Bring everything you've learned together by creating your own structured market research plan. Learn how to build a repeatable routine, organise your workflow and continue developing as an independent market researcher using the complete EdgeBreak framework.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 6 • Lesson 25 of 30
-
-        </div>
-
     </div>
+</section>
+
+<section class="ac-next">
+    <div class="ac-shell">
+        <div class="ac-next-card">
+            <div class="ac-next-tag">Module 5 complete</div>
+            <h2>Real-market research examples complete.</h2>
+            <p>You’ve now studied successful breakouts, failed breakouts, accumulation-style structures, breakout-quality comparisons, the complete modern EdgeBreak workflow and historical pattern review. Keep applying these frameworks as you build your own research experience.</p>
+
+            <div class="ac-next-actions">
+                <a href="/academy.html" class="ac-btn ac-btn-primary">Return to EdgeBreak Academy →</a>
+                <a href="/academy/complete-market-research-walkthrough.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+            </div>
+
+            <div class="ac-next-foot">Module 5 · 6 of 6 lessons completed</div>
+        </div>
+    </div>
+</section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>

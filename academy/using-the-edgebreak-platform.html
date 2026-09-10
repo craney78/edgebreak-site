@@ -1,571 +1,772 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 36: Using the EdgeBreak Platform | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how to use the EdgeBreak platform to research NASDAQ stocks, navigate key features, organise your workflow and build a structured market research process.">
-
-<meta name="keywords"
-      content="EdgeBreak platform, EdgeBreak tutorial, NASDAQ research platform, stock research, breakout scanner, smart money filter, my workspace, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/using-the-edgebreak-platform.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Using the EdgeBreak Platform | Module 1 Lesson 2 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn how the EdgeBreak platform works, from the Automated Daily Scan and NASDAQ scanners to AI research, TradingView charts and My Workspace."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/using-the-edgebreak-platform.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 36: Using the EdgeBreak Platform">
-
-<meta property="og:description"
-      content="Discover how to navigate the EdgeBreak platform and use its research tools to analyse NASDAQ stocks through a structured workflow.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/using-the-edgebreak-platform.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/using-the-edgebreak-platform.html">
+<meta property="og:title" content="Using the EdgeBreak Platform | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Learn how EdgeBreak's daily scan, NASDAQ scanners, AI research tools, charts and workspace fit together in one structured research workflow."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Lesson 36: Using the EdgeBreak Platform">
-
-<meta name="twitter:description"
-      content="Learn how to navigate the EdgeBreak platform, organise your workflow and research NASDAQ breakout opportunities.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Using the EdgeBreak Platform | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Learn how the EdgeBreak platform brings stock discovery, market activity, AI research, chart analysis and workspace tools together."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-CSS
+FAVICON
 =================================== -->
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
+
+<!-- ===================================
+STYLES
+=================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
 
 <!-- ===================================
 SUPABASE
 =================================== -->
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
 
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
 <!-- ===================================
-LEARNING RESOURCE
+STRUCTURED DATA
 =================================== -->
-
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "name":"Lesson 36: Using the EdgeBreak Platform",
-  "description":"Learn how to navigate the EdgeBreak platform, use its research tools and build a structured workflow for analysing NASDAQ stocks.",
-  "educationalLevel":"Beginner",
-  "learningResourceType":"Lesson",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  },
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  }
-}
-</script>
-
-<!-- ===================================
-BREADCRUMB
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "legalName": "Crane Platform Labs",
+      "url": "https://www.edgebreak.ai/",
+      "email": "mailto:admin@edgebreak.ai",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.edgebreak.ai/#logo",
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+        "caption": "EdgeBreak"
+      },
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
-      "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Lesson 36: Using the EdgeBreak Platform",
-      "item":"https://www.edgebreak.ai/using-the-edgebreak-platform.html"
+      "@type": "Course",
+      "@id": "https://www.edgebreak.ai/academy.html#course",
+      "name": "EdgeBreak Academy",
+      "url": "https://www.edgebreak.ai/academy.html",
+      "description": "Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "LearningResource",
+      "@id": "https://www.edgebreak.ai/academy/using-the-edgebreak-platform.html#lesson",
+      "name": "Module 1 Lesson 2: Using the EdgeBreak Platform",
+      "url": "https://www.edgebreak.ai/academy/using-the-edgebreak-platform.html",
+      "description": "An introduction to the EdgeBreak platform and how its daily scan, NASDAQ scanners, market activity, AI research, chart analysis and workspace tools fit together.",
+      "learningResourceType": "Lesson",
+      "educationalLevel": "Beginner",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/academy.html#course" },
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/academy/using-the-edgebreak-platform.html#webpage",
+      "url": "https://www.edgebreak.ai/academy/using-the-edgebreak-platform.html",
+      "name": "Using the EdgeBreak Platform | Module 1 Lesson 2 | EdgeBreak Academy",
+      "description": "Learn how the EdgeBreak platform works, from the Automated Daily Scan and NASDAQ scanners to AI research, TradingView charts and My Workspace.",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/#website" },
+      "mainEntity": { "@id": "https://www.edgebreak.ai/academy/using-the-edgebreak-platform.html#lesson" },
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/academy/using-the-edgebreak-platform.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EdgeBreak Academy",
+          "item": "https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Using the EdgeBreak Platform",
+          "item": "https://www.edgebreak.ai/academy/using-the-edgebreak-platform.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<!-- ===================================
-WEBPAGE
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 36: Using the EdgeBreak Platform",
-  "url":"https://www.edgebreak.ai/using-the-edgebreak-platform.html",
-  "description":"Learn how to use the EdgeBreak platform to research NASDAQ stocks, navigate its tools and build a consistent market research workflow.",
-  "isPartOf":{
-    "@type":"WebSite",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  },
-  "primaryImageOfPage":"https://www.edgebreak.ai/images/academy.webp",
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+/* LESSON IMAGES */
+.ac-lesson-image{
+    margin:32px 0 44px;
+    padding:14px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#ffffff;
+    box-shadow:0 16px 44px rgba(15,23,42,.07);
+}
+.ac-lesson-image img{
+    display:block;
+    width:100%;
+    height:auto;
+    border-radius:16px;
+}
+.ac-lesson-image figcaption{
+    padding:14px 8px 3px;
+    color:#718096;
+    font-size:13px;
+    line-height:1.65;
+}
+.ac-feature-list{
+    margin:18px 0 0;
+    padding:0;
+    list-style:none;
+    display:grid;
+    gap:12px;
+}
+.ac-feature-list li{
+    position:relative;
+    padding-left:28px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.65;
+}
+.ac-feature-list li:before{
+    content:"✓";
+    position:absolute;
+    left:0;
+    top:0;
+    color:var(--ix-green);
+    font-weight:900;
+}
+</style>
 </head>
 
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
-<main>
-<!-- ==========================
-MODULE 1 · LESSON 2
-=========================== -->
-
-<div class="academy-container lesson-container">
-
-    <div class="lesson-tag">
-        MODULE 1 • LESSON 2
-    </div>
-
-    <h1>
-        Navigating the EdgeBreak Platform
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 20 Minutes</span>
-
-        <span>•</span>
-
-        <span>Getting Started</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        EdgeBreak combines educational resources with powerful NASDAQ research tools. This lesson provides an overview of every major feature within the platform and explains how they work together to support a structured breakout research process.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>How the EdgeBreak platform is organised.</li>
-
-            <li>When to use each research tool.</li>
-
-            <li>How the scanners work together.</li>
-
-            <li>How to organise your research inside My Workspace.</li>
-
-            <li>A simple daily research workflow.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>The EdgeBreak Workflow</h2>
-
-        <p>
-
-            Every feature inside EdgeBreak has been designed to support a structured research process rather than encouraging impulsive decision-making. Instead of searching hundreds of charts manually, the platform helps organise market information into a logical workflow that can be repeated each day.
-
-        </p>
-
-        <p>
-
-            While every investor develops their own research routine, the workflow taught throughout the Academy follows the same basic process:
-
-        </p>
-
-        <ol>
-
-            <li>Scan the market for developing opportunities.</li>
-
-            <li>Research market structure.</li>
-
-            <li>Review Smart Money characteristics.</li>
-
-            <li>Save promising stocks to My Workspace.</li>
-
-            <li>Continue monitoring them over time.</li>
-
-        </ol>
-
-        <h2>NASDAQ Scanner</h2>
-
-        <p>
-
-            The NASDAQ Scanner is the starting point for most research. It searches thousands of NASDAQ-listed stocks using structured market characteristics including resistance touches, higher lows, price groups and additional research filters.
-
-        </p>
-
-        <p>
-
-            Rather than searching charts one by one, the scanner helps narrow the market to stocks already displaying characteristics that may deserve further investigation.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/nasdaq-pre-scanner.webp"
-                alt="Full EdgeBreak NASDAQ Scanner interface showing the breakout scanner, research filters, breakout results, stock details and interactive TradingView chart in a single workflow.">
-
-            <figcaption>
-
-                This screenshot demonstrates how the EdgeBreak NASDAQ Scanner brings the entire research workflow together on a single page. Members can filter the market using breakout characteristics, review matching stocks, examine key research metrics and analyse charts using the integrated TradingView platform without leaving the page. By combining structured filters, breakout research and interactive chart analysis in one workspace, the EdgeBreak NASDAQ Scanner helps streamline the research process while encouraging objective market analysis and continual learning rather than providing financial advice or predicting future market outcomes.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Breakout Scanner</h2>
-
-        <p>
-
-            While the NASDAQ Scanner focuses on developing opportunities, the Breakout Scanner highlights stocks that have already broken above resistance according to the EdgeBreak breakout model.
-
-        </p>
-
-        <p>
-
-            Breakouts are grouped into Gold, Silver and Bronze categories based on the strength of their overall breakout characteristics, making it easier to organise ongoing research.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/nasdaq-scanner.webp"
-                alt="Full EdgeBreak NASDAQ Scanner interface showing the breakout scanner, research filters, breakout results, stock details and interactive TradingView chart in a single workflow.">
-
-            <figcaption>
-
-                This screenshot demonstrates how the EdgeBreak NASDAQ Scanner brings the entire research workflow together on a single page. Members can filter the market using breakout characteristics, review matching stocks, examine key research metrics and analyse charts using the integrated TradingView platform without leaving the page. By combining structured filters, breakout research and interactive chart analysis in one workspace, the EdgeBreak NASDAQ Scanner helps streamline the research process while encouraging objective market analysis and continual learning rather than providing financial advice or predicting future market outcomes.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Smart Money Filter</h2>
-
-        <p>
-
-            The Smart Money Filter allows members to narrow research candidates further by identifying stocks displaying additional accumulation characteristics. Rather than replacing your own analysis, it provides another layer of structured market research that can be combined with the scanners.
-
-        </p>
-
-        <p>
-
-            Strong research often comes from combining multiple characteristics rather than relying on a single indicator.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/smart-money-filter-page.webp"
-                alt="Full EdgeBreak Smart Money Filter page showing the Smart Money workflow, educational content, scanner integration and accumulation research process.">
-
-            <figcaption>
-
-                This screenshot demonstrates the complete EdgeBreak Smart Money Filter page and how it fits within the broader market research workflow. The page explains the purpose of the Smart Money Filter, outlines the accumulation characteristics it searches for, and shows how it integrates with the NASDAQ Scanner to help organise market research. Members can learn how the filter works, understand the underlying research concepts and apply those characteristics within the scanner to identify stocks for further investigation. The Smart Money Filter is designed as an educational research tool that supports structured analysis rather than providing financial advice or predicting future market outcomes.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>My Workspace</h2>
-
-        <p>
-
-            My Workspace is your personal research area within EdgeBreak. Here you can save stocks from the scanners, review TradingView charts, organise your watchlist and continue researching opportunities over time.
-
-        </p>
-
-        <p>
-
-            The goal is to create a repeatable workflow where interesting stocks are saved, reviewed and monitored rather than forgotten after a single scan.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/my-workspace-page.webp"
-                alt="Complete EdgeBreak My Workspace page showing stock search, interactive TradingView charts, personal watchlists and research workspace tools.">
-
-            <figcaption>
-
-                This screenshot shows the complete EdgeBreak My Workspace page, bringing together stock search, interactive TradingView charting and personal watchlists in a single research environment. Members can load any supported NASDAQ stock, analyse price action using professional charting tools, save research candidates directly from the NASDAQ Scanner and organise their watchlist for ongoing review. My Workspace is designed to centralise market research, making it easier to compare charts, monitor developing market structure and build a consistent research routine without providing financial advice or predicting future market outcomes.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Interactive Charts</h2>
-
-        <p>
-
-            Every saved stock can be analysed using interactive TradingView charts. Members can zoom through historical price action, study market structure and use TradingView drawing tools to mark important resistance levels, trend lines and areas of interest.
-
-        </p>
-
-        <p>
-
-            Charts allow investors to apply the concepts taught throughout the Academy to real market examples.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/tradingview-chart.webp"
-                alt="TradingView chart inside EdgeBreak My Workspace showing interactive chart analysis, drawing tools, market data and integrated stock information.">
-
-            <figcaption>
-
-                EdgeBreak My Workspace includes a fully integrated TradingView chart, allowing members to analyse any supported NASDAQ-listed stock using professional charting tools without leaving the platform. Users can draw trendlines, identify support and resistance levels, compare price structure, review volume behaviour and access live market information while researching potential opportunities. Combined with personal watchlists and the EdgeBreak scanners, the integrated chart helps create a structured workflow for ongoing market research, observation and learning. EdgeBreak is designed as an educational research platform and does not provide financial advice or guarantee future market outcomes.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Building a Daily Research Routine</h2>
-
-        <p>
-
-            Consistency is one of the biggest advantages EdgeBreak provides. Rather than constantly searching for new opportunities throughout the day, many investors benefit from following a structured research routine.
-
-        </p>
-
-        <ol>
-
-            <li>Review the Breakout Scanner.</li>
-
-            <li>Search the NASDAQ Scanner.</li>
-
-            <li>Apply the Smart Money Filter.</li>
-
-            <li>Open charts for interesting stocks.</li>
-
-            <li>Save promising candidates to My Workspace.</li>
-
-            <li>Review your watchlist regularly.</li>
-
-        </ol>
-
-        <p>
-
-            Over time, this routine helps build consistency while reducing unnecessary market noise.
-
-        </p>
-
-    </div>
-
-    <!-- LESSON SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            Every feature within EdgeBreak has been designed to support a structured research process. By combining the NASDAQ Scanner, Breakout Scanner, Smart Money Filter and My Workspace, members can organise their research more efficiently and develop a repeatable workflow focused on quality rather than quantity.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>Begin your research using the NASDAQ Scanner.</li>
-
-            <li>Review active opportunities with the Breakout Scanner.</li>
-
-            <li>Use the Smart Money Filter to refine research candidates.</li>
-
-            <li>Save promising stocks to My Workspace.</li>
-
-            <li>Follow a consistent daily research routine.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- RESEARCH REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            EdgeBreak provides educational content and structured market research tools designed to support independent analysis. The platform does not provide financial advice, investment recommendations or predictions of future market performance.
-
-        </p>
-
-    </div>
+<main class="ac-page">
 
     <!-- ===================================
-    LESSON NAVIGATION
+    HERO
     =================================== -->
+    <section class="ac-hero">
+        <div class="ac-shell">
+            <div class="ac-kicker"><span class="ac-dot"></span> Module 1 · Lesson 2</div>
+            <h1 class="ac-title">Using the <span>EdgeBreak platform.</span></h1>
+            <p class="ac-subtitle">
+                See how the daily scan, NASDAQ scanners, market activity, AI research, TradingView charts and My Workspace connect inside one structured research process.
+            </p>
 
-    <div class="lesson-next">
+            <div class="ac-meta">
+                <span>Estimated time: 20 minutes</span>
+                <span>Getting started</span>
+                <span>Beginner</span>
+            </div>
 
-        <div class="lesson-next-tag">
+            <div class="ac-progress-wrap" aria-label="Module 1 progress">
+                <div class="ac-progress-label">
+                    <span>Module 1 progress</span>
+                    <span>Lesson 2 of 2</span>
+                </div>
+                <div class="ac-progress"><span style="width:100%"></span></div>
+            </div>
+        </div>
+    </section>
 
-            Continue Learning
+    <!-- ===================================
+    WHAT YOU'LL LEARN
+    =================================== -->
+    <section class="ac-overview">
+        <div class="ac-shell">
+            <div class="ac-overview-card">
+                <div>
+                    <div class="ac-overview-label">What you'll learn</div>
+                    <h2>How the EdgeBreak research workflow fits together.</h2>
+                </div>
+
+                <div class="ac-learn-list">
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How the EdgeBreak platform is organised.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Where the Automated Daily Scan and manual scanners fit into your research.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How market activity and AI research add context after a stock is discovered.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How My Workspace and TradingView help you organise and revisit research.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>A simple daily research routine you can repeat consistently.</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================
+    LESSON CONTENT
+    =================================== -->
+    <article class="ac-content">
+        <div class="ac-reading">
+
+            <section class="ac-section">
+                <h2>The EdgeBreak workflow</h2>
+                <p>Every major feature inside EdgeBreak is designed to support a structured research process rather than encourage impulsive decisions. Instead of manually searching thousands of charts, the platform helps narrow the NASDAQ and organise the information that deserves a closer look.</p>
+                <p>You do not need to use every tool on every stock. The purpose of the platform is to move from broad discovery to focused investigation, then save the strongest research candidates so you can revisit them as the structure develops.</p>
+
+                <div class="ac-pullquote">
+                    A simple way to think about EdgeBreak is: discover → investigate → organise → revisit.
+                </div>
+            </section>
+
+            <div class="ac-process" aria-label="EdgeBreak platform workflow">
+                <div class="ac-process-head">
+                    <span>Your core platform flow</span>
+                    <h3>Start broad. Finish focused.</h3>
+                </div>
+                <div class="ac-process-grid">
+                    <div class="ac-process-step"><b>01</b><strong>Discover</strong><span>Begin with the Automated Daily Scan or run a manual NASDAQ scanner.</span></div>
+                    <div class="ac-process-step"><b>02</b><strong>Investigate</strong><span>Review technical structure, unusual market activity and company information.</span></div>
+                    <div class="ac-process-step"><b>03</b><strong>Organise</strong><span>Save interesting stocks to your watchlist and My Workspace.</span></div>
+                    <div class="ac-process-step"><b>04</b><strong>Revisit</strong><span>Return to the chart and research as the setup changes over time.</span></div>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Automated Daily Scan</h2>
+                <p>The Automated Daily Scan is the fastest place to begin. After the U.S. market closes, EdgeBreak scans more than 3,200 NASDAQ-listed stocks, applies its technical and research filters, assesses unusual market activity and surfaces a focused group of six stocks for further investigation.</p>
+                <p>The six stocks are not recommendations. They are a daily research starting point: a small group that has already passed through the EdgeBreak filtering process so you can spend more time investigating and less time searching.</p>
+
+                <figure class="ac-lesson-image">
+                    <img src="/images/nasdaq-AI-stock-scanner.webp" alt="EdgeBreak Automated Daily Scan showing a focused group of NASDAQ stocks for further research">
+                    <figcaption>The Automated Daily Scan narrows the NASDAQ universe to a small research shortlist after each market close.</figcaption>
+                </figure>
+            </section>
+
+            <section class="ac-section">
+                <h2>NASDAQ Scanner</h2>
+                <p>The NASDAQ Scanner is the flagship manual research workspace. It allows you to explore scanner results yourself, load stocks into the integrated chart, continue company research and move interesting candidates into your own workspace.</p>
+                <p>Rather than searching charts one by one, the scanner helps narrow the market to stocks displaying technical characteristics that may deserve further investigation.</p>
+
+                <figure class="ac-lesson-image">
+                    <img src="/images/scanner-preview.webp" alt="EdgeBreak NASDAQ Scanner showing breakout and pre-breakout research results">
+                    <figcaption>The NASDAQ Scanner brings stock discovery, research results and chart investigation together in one workspace.</figcaption>
+                </figure>
+            </section>
+
+            <section class="ac-section">
+                <h2>Breakout &amp; Pre-Breakout scanners</h2>
+                <p>The Breakout Scanner focuses on stocks that have moved through a defined resistance area according to the EdgeBreak model. The Pre-Breakout Scanner looks earlier, searching for developing structures such as repeated resistance interaction, higher lows and tightening price action.</p>
+                <p>These tools are useful for studying different stages of a setup. One helps you investigate structures that have already broken out, while the other helps you study stocks that may still be developing beneath resistance.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>Launch Pad</h2>
+                <p>Launch Pad searches for stocks building organised bases and trading ranges. It looks for support and resistance behaviour that has remained relatively contained over time, helping surface stocks that may be compressing inside a defined structure.</p>
+                <p>Launch Pad is another discovery tool, not a prediction system. A stock appearing there still needs to be investigated in context.</p>
+
+                <figure class="ac-lesson-image">
+                    <img src="/images/launchpad-preview.webp" alt="EdgeBreak Launch Pad scanner showing NASDAQ stocks forming organised bases and trading ranges">
+                    <figcaption>Launch Pad is designed to surface organised bases and ranges for further technical research.</figcaption>
+                </figure>
+            </section>
+
+            <section class="ac-section">
+                <h2>Market activity context</h2>
+                <p>After a technical setup is identified, EdgeBreak can add another layer of evidence by examining unusual off-exchange activity and behaviour across multiple FINRA reporting venues.</p>
+                <p>This information can help show where activity is unusual compared with a stock's own recent history. It does not identify whether the activity was buying or selling and it does not prove institutional accumulation. It is market context that can be considered alongside the chart and other research.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>AI Company Research</h2>
+                <p>AI Company Research helps you move beyond the chart by organising information about the company itself. Depending on the available information, research can include financial highlights, company background, recent news, institutional context and SEC filings.</p>
+                <p>AI is used to help organise research, not to replace verification. Important information should still be checked against reliable company disclosures and official sources.</p>
+
+                <figure class="ac-lesson-image">
+                    <img src="/images/ai-research-preview.webp" alt="EdgeBreak AI Company Research interface">
+                    <figcaption>AI Company Research provides a structured starting point for investigating the business behind the ticker.</figcaption>
+                </figure>
+            </section>
+
+            <section class="ac-section">
+                <h2>AI Chart Analysis</h2>
+                <p>AI Chart Analysis allows you to upload or paste a chart screenshot and receive a descriptive technical breakdown. It can help explain visible support and resistance, consolidation, trend structure and volume behaviour in straightforward language.</p>
+                <p>The analysis is educational and descriptive. It does not provide buy, sell or hold instructions and should be considered alongside your own chart work.</p>
+
+                <figure class="ac-lesson-image">
+                    <img src="/images/ai-chart-analysis-preview.webp" alt="EdgeBreak AI Chart Analysis interface">
+                    <figcaption>AI Chart Analysis can help explain the technical structure visible on a chart without turning the analysis into a trade recommendation.</figcaption>
+                </figure>
+            </section>
+
+            <section class="ac-section">
+                <h2>Guided &amp; Conversational AI</h2>
+                <p>Guided AI provides structured questions for common research topics and platform features. Conversational AI gives you more flexibility to ask your own questions and continue exploring a stock or research concept naturally.</p>
+                <p>These tools are designed to make the research process easier to understand, especially when you are still learning the language of technical analysis and market research.</p>
+
+                <figure class="ac-lesson-image">
+                    <img src="/images/ai-panel-preview.webp" alt="EdgeBreak Guided and Conversational AI research interface">
+                    <figcaption>Guided and Conversational AI provide two different ways to explore research questions inside EdgeBreak.</figcaption>
+                </figure>
+            </section>
+
+            <section class="ac-section">
+                <h2>My Workspace</h2>
+                <p>My Workspace is your personal research area. Stocks that interest you can be saved from the scanners, organised into a watchlist and reopened later for further investigation.</p>
+                <p>The idea is simple: save → organise → revisit → research. Interesting stocks do not disappear just because the daily scan changes. You can continue watching how the chart and company story develop over time.</p>
+
+                <figure class="ac-lesson-image">
+                    <img src="/images/my-workspace-page.webp" alt="EdgeBreak My Workspace with stock research, TradingView charting and personal watchlists">
+                    <figcaption>My Workspace gives you a dedicated place to save research candidates and return to them later.</figcaption>
+                </figure>
+            </section>
+
+            <section class="ac-section">
+                <h2>TradingView charts</h2>
+                <p>Integrated TradingView charts allow you to study price action without leaving the EdgeBreak research workflow. You can zoom through historical data, change timeframes and use charting tools to investigate support, resistance, trends and volume.</p>
+                <p>This is where many of the concepts taught throughout the Academy become practical. As you progress through later modules, you will use charts to recognise the structures and behaviours discussed in each lesson.</p>
+
+                <figure class="ac-lesson-image">
+                    <img src="/images/tradingview-chart.webp" alt="TradingView chart inside EdgeBreak showing interactive technical analysis tools">
+                    <figcaption>TradingView charts let you apply Academy concepts directly to real NASDAQ market examples.</figcaption>
+                </figure>
+            </section>
+
+            <section class="ac-section">
+                <h2>Building a daily research routine</h2>
+                <p>You do not need to spend all day searching the market. A short, repeatable process can help keep your research focused and consistent.</p>
+
+                <ul class="ac-feature-list">
+                    <li>Start with the Automated Daily Scan and review why the six stocks were surfaced.</li>
+                    <li>Use the manual scanners when you want to explore additional NASDAQ setups yourself.</li>
+                    <li>Open charts and investigate the technical structure.</li>
+                    <li>Review market activity and company research when deeper context is useful.</li>
+                    <li>Save interesting stocks to My Workspace.</li>
+                    <li>Revisit your watchlist and observe how the setups change over time.</li>
+                </ul>
+
+                <p style="margin-top:22px;">Over time, this routine can help reduce unnecessary market noise and make the research process easier to repeat.</p>
+            </section>
 
         </div>
+    </article>
 
-        <h2>
+    <!-- ===================================
+    SUMMARY / TAKEAWAYS
+    =================================== -->
+    <section class="ac-summary-area">
+        <div class="ac-shell">
+            <div class="ac-card-grid">
+                <div class="ac-card">
+                    <h2>Lesson summary</h2>
+                    <p>EdgeBreak brings stock discovery, technical structure, unusual market activity, AI-assisted research, TradingView charting and personal organisation into one connected workflow. The purpose is to help you move from a very large NASDAQ universe to a smaller group of stocks that you can investigate independently and revisit over time.</p>
+                </div>
 
-            Continue Your Journey
+                <div class="ac-card">
+                    <h2>Key takeaways</h2>
+                    <ul>
+                        <li>The Automated Daily Scan provides a focused daily starting point.</li>
+                        <li>Manual scanners let you explore Breakout, Pre-Breakout and Launch Pad structures yourself.</li>
+                        <li>Market activity and AI research add context after a stock has been discovered.</li>
+                        <li>My Workspace helps you save, organise and revisit research candidates.</li>
+                        <li>EdgeBreak tools support — rather than replace — independent research.</li>
+                    </ul>
+                </div>
 
-        </h2>
-
-        <div class="lesson-nav-buttons">
-
-            <!-- PREVIOUS -->
-
-            <a
-                href="/academy/welcome-to-edgebreak.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/understanding-candlesticks.html"
-                class="btn-primary"
-            >
-                Start Lesson 2.1 →
-            </a>
-
+                <div class="ac-card ac-reminder">
+                    <div class="ac-reminder-icon">✦</div>
+                    <div>
+                        <h2>Research reminder</h2>
+                        <p>EdgeBreak Academy and the EdgeBreak platform are provided for educational and research purposes. Scanner results, market activity, AI-generated research and chart analysis do not constitute financial advice, investment recommendations, stock ratings or predictions of future market performance.</p>
+                    </div>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <h3>
+    <!-- ===================================
+    NEXT LESSON
+    =================================== -->
+    <section class="ac-next">
+        <div class="ac-shell">
+            <div class="ac-next-card">
+                <div class="ac-next-tag">Module 1 complete · Continue to Module 2</div>
+                <h2>Understanding candlesticks.</h2>
+                <p>Now that you understand the EdgeBreak platform, Module 2 begins the technical foundations. Start by learning how candlesticks represent price movement and how individual candles help describe what happened during a trading period.</p>
 
-            Lesson 2.1 – Understanding Candlesticks
+                <div class="ac-next-actions">
+                    <a href="/academy/understanding-candlesticks.html" class="ac-btn ac-btn-primary">Start Lesson 2.1 →</a>
+                    <a href="/academy/welcome-to-edgebreak.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+                </div>
 
-        </h3>
-
-        <p>
-
-            Learn how candlesticks represent buying and selling pressure, identify
-            bullish and bearish market sentiment, and build the foundation needed
-            to interpret price action throughout the EdgeBreak framework.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 2 • Lesson 3 of 30
-
+                <div class="ac-next-foot">Module 1 · Lesson 2 of 2 completed</div>
+            </div>
         </div>
-
-    </div>
-
+    </section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>

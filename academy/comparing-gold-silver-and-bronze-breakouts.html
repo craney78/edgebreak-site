@@ -1,644 +1,982 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 27: Comparing Gold, Silver and Bronze Ranked Breakouts | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how to compare Gold, Silver and Bronze breakout rankings within EdgeBreak by analysing market structure, resistance, higher lows, volume behaviour and breakout quality.">
-
-<meta name="keywords"
-      content="Gold breakout, Silver breakout, Bronze breakout, breakout rankings, breakout scanner, market structure, resistance, higher lows, volume analysis, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/comparing-gold-silver-bronze-breakouts.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Comparing Breakout Quality | Module 5 Lesson 4 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn how to compare breakout quality using market structure, resistance, higher lows, volume, distance from the base, wider market context and unusual market activity."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/comparing-gold-silver-and-bronze-breakouts.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 27: Comparing Gold, Silver and Bronze Ranked Breakouts | EdgeBreak Academy">
-
-<meta property="og:description"
-      content="Discover how Gold, Silver and Bronze breakout rankings help organise breakout research and compare different market structures within EdgeBreak.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/comparing-gold-silver-bronze-breakouts.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/comparing-gold-silver-and-bronze-breakouts.html">
+<meta property="og:title" content="Comparing Breakout Quality | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Compare stronger and weaker breakout structures using the current EdgeBreak research framework instead of the retired Gold, Silver and Bronze classifications."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Comparing Breakout Quality | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Learn how to compare breakout structures using technical quality, market context and unusual market activity."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
-<meta name="twitter:card"
-      content="summary_large_image">
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
-<meta name="twitter:title"
-      content="Lesson 27: Comparing Gold, Silver and Bronze Ranked Breakouts">
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
 
-<meta name="twitter:description"
-      content="Compare Gold, Silver and Bronze ranked breakout examples while learning how breakout quality varies across different market structures.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<!-- ===================================
-CSS
-=================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
-
-<!-- ===================================
-SUPABASE
-=================================== -->
-
-
-
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
-
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
-<!-- ===================================
-STRUCTURED DATA
-=================================== -->
 
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "@id":"https://www.edgebreak.ai/comparing-gold-silver-bronze-breakouts.html",
-  "name":"Lesson 27: Comparing Gold, Silver and Bronze Ranked Breakouts",
-  "headline":"Comparing Gold, Silver and Bronze Ranked Breakouts",
-  "description":"Learn how to compare Gold, Silver and Bronze breakout rankings using market structure, resistance, higher lows, accumulation and volume behaviour.",
-  "learningResourceType":"Lesson",
-  "educationalLevel":"Beginner",
-  "teaches":[
-    "Gold Breakouts",
-    "Silver Breakouts",
-    "Bronze Breakouts",
-    "Breakout Rankings",
-    "Market Structure",
-    "Resistance",
-    "Higher Lows",
-    "Volume Analysis",
-    "Pattern Recognition"
-  ],
-  "isAccessibleForFree":true,
-  "inLanguage":"en-AU",
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai",
-    "logo":{
-      "@type":"ImageObject",
-      "url":"https://www.edgebreak.ai/images/logo.webp"
-    }
-  },
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
-}
-</script>
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@graph":[
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type":"Organization",
+      "@id":"https://www.edgebreak.ai/#organization",
+      "name":"EdgeBreak",
+      "legalName":"Crane Platform Labs",
+      "url":"https://www.edgebreak.ai/",
+      "email":"mailto:admin@edgebreak.ai",
+      "logo":{
+        "@type":"ImageObject",
+        "@id":"https://www.edgebreak.ai/#logo",
+        "url":"https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl":"https://www.edgebreak.ai/images/logo.webp",
+        "caption":"EdgeBreak"
+      },
+      "description":"EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed":"Worldwide",
+      "sameAs":[
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
+      "@type":"WebSite",
+      "@id":"https://www.edgebreak.ai/#website",
+      "name":"EdgeBreak",
+      "url":"https://www.edgebreak.ai/",
+      "description":"NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher":{"@id":"https://www.edgebreak.ai/#organization"},
+      "inLanguage":"en-AU"
+    },
+    {
+      "@type":"Course",
+      "@id":"https://www.edgebreak.ai/academy.html#course",
       "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "url":"https://www.edgebreak.ai/academy.html",
+      "description":"Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider":{"@id":"https://www.edgebreak.ai/#organization"},
+      "inLanguage":"en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Module 6"
+      "@type":"LearningResource",
+      "@id":"https://www.edgebreak.ai/academy/comparing-gold-silver-and-bronze-breakouts.html#lesson",
+      "name":"Module 5 Lesson 4: Comparing Breakout Quality",
+      "url":"https://www.edgebreak.ai/academy/comparing-gold-silver-and-bronze-breakouts.html",
+      "description":"A historical comparison lesson showing how breakout structures can be assessed using trend, resistance, higher lows, volume, distance from the base, wider market context and unusual market activity.",
+      "learningResourceType":"Lesson",
+      "educationalLevel":"Intermediate",
+      "isPartOf":{"@id":"https://www.edgebreak.ai/academy.html#course"},
+      "provider":{"@id":"https://www.edgebreak.ai/#organization"},
+      "inLanguage":"en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":4,
-      "name":"Lesson 27: Comparing Gold, Silver and Bronze Ranked Breakouts"
+      "@type":"WebPage",
+      "@id":"https://www.edgebreak.ai/academy/comparing-gold-silver-and-bronze-breakouts.html#webpage",
+      "url":"https://www.edgebreak.ai/academy/comparing-gold-silver-and-bronze-breakouts.html",
+      "name":"Comparing Breakout Quality | Module 5 Lesson 4 | EdgeBreak Academy",
+      "description":"Learn how to compare breakout quality using market structure, resistance, higher lows, volume, distance from the base, wider market context and unusual market activity.",
+      "isPartOf":{"@id":"https://www.edgebreak.ai/#website"},
+      "mainEntity":{"@id":"https://www.edgebreak.ai/academy/comparing-gold-silver-and-bronze-breakouts.html#lesson"},
+      "publisher":{"@id":"https://www.edgebreak.ai/#organization"},
+      "inLanguage":"en-AU"
+    },
+    {
+      "@type":"BreadcrumbList",
+      "@id":"https://www.edgebreak.ai/academy/comparing-gold-silver-and-bronze-breakouts.html#breadcrumb",
+      "itemListElement":[
+        {
+          "@type":"ListItem",
+          "position":1,
+          "name":"Home",
+          "item":"https://www.edgebreak.ai/"
+        },
+        {
+          "@type":"ListItem",
+          "position":2,
+          "name":"EdgeBreak Academy",
+          "item":"https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type":"ListItem",
+          "position":3,
+          "name":"Comparing Breakout Quality",
+          "item":"https://www.edgebreak.ai/academy/comparing-gold-silver-and-bronze-breakouts.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 27: Comparing Gold, Silver and Bronze Ranked Breakouts",
-  "url":"https://www.edgebreak.ai/comparing-gold-silver-bronze-breakouts.html",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+.ac-section li{margin:7px 0}
+
+.ac-lesson-image{margin:34px 0 46px}
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#fff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-update{
+    margin:34px 0 50px;
+    padding:30px;
+    border:1px solid #cfe8d7;
+    border-radius:24px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        linear-gradient(135deg,#f2faf5,#f7fbff);
+    box-shadow:0 16px 42px rgba(15,23,42,.055);
+}
+.ac-update-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    margin-bottom:12px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-update-tag:before{
+    content:"";
+    width:8px;height:8px;border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.10);
+}
+.ac-update h3{
+    margin:0 0 12px;
+    color:var(--ix-ink);
+    font-size:30px;
+    letter-spacing:-.035em;
+}
+.ac-update p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.7;
+}
+.ac-update p:last-child{margin-bottom:0}
+
+.ac-quality-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+.ac-quality-card{
+    padding:24px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#fff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+.ac-quality-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+.ac-quality-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+.ac-quality-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-compare{
+    margin:36px 0 54px;
+    padding:30px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#0c1728;
+}
+.ac-compare h3{
+    margin:0 0 12px;
+    color:#fff;
+    font-size:29px;
+    letter-spacing:-.035em;
+}
+.ac-compare p{
+    margin:0 0 16px;
+    color:#b3bfce;
+    font-size:16px;
+    line-height:1.7;
+}
+.ac-compare-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:20px;
+}
+.ac-compare-item{
+    padding:18px;
+    border:1px solid #253249;
+    border-radius:17px;
+    background:#111f34;
+}
+.ac-compare-item b{
+    display:block;
+    margin-bottom:7px;
+    color:#65e18e;
+    font-size:14px;
+}
+.ac-compare-item span{
+    color:#b8c5d4;
+    font-size:13px;
+    line-height:1.55;
+}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+.ac-exercise{
+    margin:34px 0 54px;
+    padding:30px;
+    border:1px solid #dce7df;
+    border-radius:24px;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+}
+.ac-exercise-tag{
+    margin-bottom:9px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-exercise h3{
+    margin:0 0 13px;
+    color:var(--ix-ink);
+    font-size:27px;
+    letter-spacing:-.03em;
+}
+.ac-exercise p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.65;
+}
+.ac-exercise ul{
+    margin:0;
+    padding-left:22px;
+    color:#526071;
+    font-size:15px;
+    line-height:1.65;
+}
+
+@media(max-width:900px){
+    .ac-quality-grid{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+    .ac-compare-grid{grid-template-columns:1fr}
+    .ac-card-grid.three{grid-template-columns:1fr}
+    .ac-card-grid.three .ac-reminder{grid-column:auto}
+}
+
+</style>
 </head>
-
 
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
-<main>
+<main class="ac-page">
 
+<section class="ac-hero">
+    <div class="ac-shell">
+        <div class="ac-kicker"><span class="ac-dot"></span> Module 5 · Lesson 4</div>
+        <h1 class="ac-title">Comparing <span>Breakout Quality.</span></h1>
+        <p class="ac-subtitle">
+            Not every breakout deserves the same research attention. Learn how to compare structures using the evidence EdgeBreak now considers instead of relying on the retired Gold, Silver and Bronze labels.
+        </p>
 
-</head>
+        <div class="ac-meta">
+            <span>Estimated time: 30 minutes</span>
+            <span>Real market research examples</span>
+            <span>Intermediate</span>
+        </div>
 
+        <div class="ac-progress-wrap" aria-label="Module 5 progress">
+            <div class="ac-progress-label">
+                <span>Module 5 progress</span>
+                <span>Lesson 4 of 6</span>
+            </div>
+            <div class="ac-progress"><span style="width:66.67%"></span></div>
+        </div>
+    </div>
+</section>
 
-<!-- ==========================
-MODULE 5 · LESSON 22
-=========================== -->
+<section class="ac-overview">
+    <div class="ac-shell">
+        <div class="ac-overview-card">
+            <div>
+                <div class="ac-overview-label">What you'll learn</div>
+                <h2>Compare the evidence — not a colour label.</h2>
+            </div>
 
-<div class="academy-container lesson-container">
+            <div class="ac-learn-list">
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why EdgeBreak retired Gold, Silver and Bronze breakout classifications.</span></div>
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to compare breakout structures objectively.</span></div>
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why distance from the base matters.</span></div>
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>How trend, resistance, higher lows and volume work together.</span></div>
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>How wider market context and unusual activity add another layer.</span></div>
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to prioritise research without turning a ranking into a prediction.</span></div>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <div class="lesson-tag">
-        MODULE 5 • LESSON 22
+<article class="ac-content">
+<div class="ac-reading">
+
+    <div class="ac-update">
+        <div class="ac-update-tag">Platform update</div>
+        <h3>Gold, Silver and Bronze classifications have been retired.</h3>
+        <p>Earlier versions of EdgeBreak grouped breakout results into Gold, Silver and Bronze categories. That system is no longer used.</p>
+        <p>The platform has evolved toward a broader research-ranking process that considers multiple types of technical and market activity evidence together.</p>
+        <p>The purpose of this lesson is now to teach the skill that mattered underneath the old labels: comparing the quality of one breakout structure with another.</p>
     </div>
 
-    <h1>
-        Comparing Gold, Silver & Bronze Breakouts
-    </h1>
+    <section class="ac-section">
+        <h2>Breakout quality exists on a spectrum</h2>
+        <p>Two stocks can both move through resistance and still have very different structures behind them.</p>
+        <p>One may have spent months building a well-defined base with repeated resistance tests and higher lows. Another may have moved sharply through a poorly defined level after only a short consolidation.</p>
+        <p>Both may qualify as breakouts, but they do not provide the same research picture.</p>
 
-    <div class="lesson-meta">
+        <div class="ac-pullquote">
+            “Breakout” describes what price has done. Breakout quality describes the evidence that developed around it.
+        </div>
+    </section>
 
-        <span>Estimated Time: 30 Minutes</span>
+    <div class="ac-quality-grid">
+        <div class="ac-quality-card">
+            <b>Trend quality</b>
+            <strong>What came before the breakout?</strong>
+            <span>Compare the weekly and daily trend, support behaviour and whether the stock built an orderly structure.</span>
+        </div>
 
-        <span>•</span>
+        <div class="ac-quality-card">
+            <b>Resistance quality</b>
+            <strong>Was the level meaningful?</strong>
+            <span>Repeated interaction with a clearly defined resistance area gives more context than one isolated price point.</span>
+        </div>
 
-        <span>Real Market Research Examples</span>
+        <div class="ac-quality-card">
+            <b>Higher lows</b>
+            <strong>Was the base improving?</strong>
+            <span>Progressively higher pullbacks can show the lower side of the structure tightening beneath resistance.</span>
+        </div>
 
+        <div class="ac-quality-card">
+            <b>Volume</b>
+            <strong>How did participation change?</strong>
+            <span>Study volume during the base, around resistance and as price moved through the breakout area.</span>
+        </div>
+
+        <div class="ac-quality-card">
+            <b>Price position</b>
+            <strong>Is the breakout still near its base?</strong>
+            <span>A fresh move close to the original structure is different from a stock already extended far above resistance.</span>
+        </div>
+
+        <div class="ac-quality-card">
+            <b>Market context</b>
+            <strong>What else supports the research?</strong>
+            <span>Sector direction, broader market conditions and unusual market activity can strengthen or weaken the overall picture.</span>
+        </div>
     </div>
 
-    <p class="lesson-intro">
+    <section class="ac-section">
+        <h2>Start with the weekly structure</h2>
+        <p>Before comparing individual breakout candles, step back and review the larger trend.</p>
+        <p>A stock emerging from a stable weekly uptrend or a well-developed reversal may tell a different story from one breaking out inside a long-term downtrend.</p>
+        <p>This does not make one outcome certain. It simply gives the breakout a different structural context.</p>
+    </section>
 
-        Not every breakout displays the same overall quality. Some develop after months of organised accumulation and improving market structure, while others break above resistance with fewer supporting characteristics. The EdgeBreak Breakout Scanner groups qualifying breakouts into Gold, Silver and Bronze categories to help members organise their research. This lesson explains how to compare these structures using real market examples.
+    <section class="ac-section">
+        <h2>Compare the resistance area</h2>
+        <p>Resistance should be treated as a zone, not a perfectly precise line.</p>
+        <p>Ask how often price interacted with the area, how long the level remained relevant and whether the stock repeatedly returned to it while the rest of the base improved.</p>
+        <p>A breakout through a well-established zone can provide more historical context than a move through a level that has barely been tested.</p>
+    </section>
 
-    </p>
+    <section class="ac-section">
+        <h2>Compare the higher lows</h2>
+        <p>Higher lows help show whether the structure beneath resistance is changing.</p>
+        <p>When pullbacks repeatedly form above previous lows, the trading range may become tighter. When lows remain erratic or repeatedly collapse toward the bottom of the range, the structure is less organised.</p>
+        <p>Neither pattern guarantees what comes next, but the comparison can help prioritise which chart deserves more research time.</p>
+    </section>
 
-    <!-- WHAT YOU'LL LEARN -->
+    <section class="ac-section">
+        <h2>Compare volume and participation</h2>
+        <p>Volume adds context to both the base and the breakout.</p>
+        <p>Instead of asking whether volume is simply “high” or “low”, compare it with the stock's own normal behaviour and with the structure occurring at the same time.</p>
+        <p>Look for changes in participation as price approaches resistance, moves through it and begins trading above the former ceiling.</p>
+    </section>
 
-    <div class="lesson-card">
+    <section class="ac-section">
+        <h2>Distance from the base matters</h2>
+        <p>A stock can continue rising after a breakout, but a move that is already far above resistance is no longer the same research situation as a fresh breakout close to the base.</p>
+        <p>EdgeBreak therefore pays attention to how far price has moved from the original structure.</p>
+        <p>This helps the research process stay focused on earlier technical development rather than simply highlighting stocks after a large move has already occurred.</p>
+    </section>
 
-        <h2>What You'll Learn</h2>
+    <div class="ac-compare">
+        <h3>Compare the whole picture.</h3>
+        <p>No single feature should decide which breakout is “better”. The useful comparison comes from several independent pieces of evidence lining up.</p>
 
+        <div class="ac-compare-grid">
+            <div class="ac-compare-item">
+                <b>Technical structure</b>
+                <span>Trend, base quality, resistance, higher lows and price position.</span>
+            </div>
+            <div class="ac-compare-item">
+                <b>Participation</b>
+                <span>Volume behaviour and whether trading activity is unusual relative to recent history.</span>
+            </div>
+            <div class="ac-compare-item">
+                <b>Market activity</b>
+                <span>Unusual off-exchange activity and larger purchases appearing across multiple markets can add supporting context.</span>
+            </div>
+            <div class="ac-compare-item">
+                <b>Wider context</b>
+                <span>Broad market and sector conditions can influence how the technical setup is interpreted.</span>
+            </div>
+        </div>
+    </div>
+
+    <section class="ac-section">
+        <h2>How EdgeBreak compares candidates today</h2>
+        <p>EdgeBreak no longer asks members to choose between Gold, Silver or Bronze categories.</p>
+        <p>The current platform combines several research layers and uses them to help prioritise which stocks deserve closer investigation.</p>
+        <p>The Automated Daily Scan goes further by narrowing thousands of NASDAQ-listed stocks and surfacing a final top-six research shortlist after multiple technical, market activity and research checks have been considered.</p>
+        <p>The ranking is a research-priority system — not a prediction of future price performance.</p>
+    </section>
+
+    <figure class="ac-lesson-image">
+        <img
+            src="/images/edgebreak-nasdaq-scanner.webp"
+            alt="EdgeBreak NASDAQ Scanner showing breakout research candidates, filters, charts and research tools."
+        >
+        <figcaption>The current scanner workflow allows members to compare breakout candidates using technical evidence, open TradingView charts, use AI research tools and save the strongest research candidates to My Workspace.</figcaption>
+    </figure>
+
+    <section class="ac-section">
+        <h2>Compare charts side by side</h2>
+        <p>Pattern recognition improves when several charts are compared during the same research session.</p>
+        <p>Take two or three breakout candidates and ask the same questions of each one:</p>
         <ul>
-
-            <li>What Gold, Silver and Bronze represent.</li>
-
-            <li>How breakout quality is assessed.</li>
-
-            <li>Comparing different market structures.</li>
-
-            <li>Recognising stronger research candidates.</li>
-
-            <li>Applying the EdgeBreak research framework.</li>
-
+            <li>Which has the clearest weekly trend?</li>
+            <li>Which has the most meaningful resistance area?</li>
+            <li>Which shows the clearest sequence of higher lows?</li>
+            <li>Which has the most orderly base?</li>
+            <li>How does volume differ between them?</li>
+            <li>Which remains closest to its original breakout structure?</li>
+            <li>Does unusual market activity add supporting evidence?</li>
+            <li>Which deserves deeper company research?</li>
         </ul>
+    </section>
 
+    <section class="ac-section">
+        <h2>Use AI only after understanding the chart</h2>
+        <p>Once you have compared the technical structures yourself, AI Company Research can add company-level context and AI Chart Analysis can provide a second descriptive view of the chart.</p>
+        <p>The AI tools should support the comparison, not replace it.</p>
+        <p>A strong research process should still be able to explain why one chart appears structurally stronger than another without relying on an AI-generated conclusion.</p>
+    </section>
+
+    <div class="ac-process" aria-label="Breakout quality comparison process">
+        <div class="ac-process-head">
+            <span>A repeatable comparison framework</span>
+            <h3>Structure → participation → context → priority.</h3>
+        </div>
+        <div class="ac-process-grid">
+            <div class="ac-process-step">
+                <b>01</b>
+                <strong>Structure</strong>
+                <span>Compare trend, resistance, higher lows, base quality and extension.</span>
+            </div>
+            <div class="ac-process-step">
+                <b>02</b>
+                <strong>Participation</strong>
+                <span>Review volume and how activity changed around the breakout.</span>
+            </div>
+            <div class="ac-process-step">
+                <b>03</b>
+                <strong>Context</strong>
+                <span>Add wider market, sector and unusual market activity evidence.</span>
+            </div>
+            <div class="ac-process-step">
+                <b>04</b>
+                <strong>Priority</strong>
+                <span>Decide which candidates deserve the most further research.</span>
+            </div>
+        </div>
     </div>
 
-    <!-- LESSON -->
+    <section class="ac-section">
+        <h2>Stronger research does not guarantee stronger performance</h2>
+        <p>This distinction is essential.</p>
+        <p>A breakout with excellent structure can fail. A weaker-looking breakout can continue much further than expected.</p>
+        <p>Comparing quality helps organise research attention. It does not rank future returns.</p>
+    </section>
 
-    <div class="lesson-content">
-
-        <h2>Breakout Quality Exists on a Spectrum</h2>
-
-        <p>
-
-            One of the biggest misconceptions in technical analysis is believing every breakout deserves the same level of attention.
-
-        </p>
-
-        <p>
-
-            In reality, breakout structures vary considerably. Some develop through organised accumulation over many months, while others occur after relatively weak consolidation.
-
-        </p>
-
-        <p>
-
-            EdgeBreak groups these opportunities into Gold, Silver and Bronze categories to help members prioritise their research.
-
-        </p>
-
-        
-
-        <h2>Gold Breakouts</h2>
-
-        <p>
-
-            Gold breakouts generally display the strongest overall combination of market characteristics.
-
-        </p>
-
-        <p>
-
-            Typical characteristics may include:
-
-        </p>
-
+    <div class="ac-exercise">
+        <div class="ac-exercise-tag">Practical exercise</div>
+        <h3>Compare three current breakout candidates.</h3>
+        <p>Open the Breakout Scanner and select three different stocks.</p>
         <ul>
-
-            <li>Well-defined resistance.</li>
-
-            <li>Multiple resistance touches.</li>
-
-            <li>Strong higher lows.</li>
-
-            <li>Orderly accumulation.</li>
-
-            <li>Healthy volume behaviour.</li>
-
-            <li>Strong overall market structure.</li>
-
-        </ul>
-
-        <p>
-
-            Gold classifications simply indicate that multiple positive characteristics were present during the research process.
-
-        </p>
-
-        
-
-        <h2>Silver Breakouts</h2>
-
-        <p>
-
-            Silver breakouts often display many positive characteristics but may not show the same overall strength as Gold examples.
-
-        </p>
-
-        <p>
-
-            For example, market structure may still be healthy while accumulation is shorter or resistance has been tested fewer times.
-
-        </p>
-
-        <p>
-
-            Silver classifications frequently represent excellent research opportunities that deserve careful chart analysis.
-
-        </p>
-
-        
-
-        <h2>Bronze Breakouts</h2>
-
-        <p>
-
-            Bronze breakouts satisfy the EdgeBreak breakout criteria but may display fewer supporting characteristics than Gold or Silver examples.
-
-        </p>
-
-        <p>
-
-            They remain valid research candidates and may continue strengthening over time as market structure develops.
-
-        </p>
-
-        <p>
-
-            Rather than ignoring Bronze breakouts, continue monitoring how they evolve.
-
-        </p>
-
-        
-
-        <h2>Compare the Structures</h2>
-
-        <p>
-
-            Place the three charts side by side and compare them objectively.
-
-        </p>
-
-        <p>
-
-            Ask yourself:
-
-        </p>
-
-        <ul>
-
-            <li>Which chart has the clearest resistance?</li>
-
-            <li>Which displays the strongest higher lows?</li>
-
-            <li>Which shows the best accumulation?</li>
-
-            <li>Which has the healthiest overall trend?</li>
-
-            <li>Which demonstrates the strongest volume behaviour?</li>
-
-        </ul>
-
-        <p>
-
-            Looking at several examples together improves pattern recognition far more effectively than studying individual charts in isolation.
-
-        </p>
-
-        
-
-        <h2>Every Classification Deserves Research</h2>
-
-        <p>
-
-            One important principle of EdgeBreak is that classifications help organise research—they do not determine future market performance.
-
-        </p>
-
-        <p>
-
-            A Bronze breakout may ultimately outperform a Gold breakout.
-
-        </p>
-
-        <p>
-
-            The classifications simply describe the overall quality of the breakout structure at the time it was identified.
-
-        </p>
-
-        <p>
-
-            Independent chart analysis remains essential.
-
-        </p>
-
-        <h2>Using the Breakout Scanner</h2>
-
-        <p>
-
-            The Breakout Scanner allows members to compare dozens of breakout structures every day.
-
-        </p>
-
-        <p>
-
-            Rather than focusing on only one stock, reviewing multiple Gold, Silver and Bronze examples gradually develops pattern recognition and strengthens market research skills.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/edgebreak-nasdaq-scanner.webp"
-                alt="EdgeBreak Breakout Scanner displaying Gold, Silver and Bronze breakout opportunities with breakout filters, results table and breakout details panel.">
-
-            <figcaption>
-
-                The EdgeBreak Breakout Scanner organises active breakout opportunities into Gold, Silver and Bronze categories, making it easier to compare multiple breakout structures each day. Members can filter results, review key breakout characteristics, open TradingView charts for further analysis and save promising stocks to My Workspace for ongoing research. Studying a wide range of breakout examples helps build pattern recognition and reinforces a structured, repeatable research process. EdgeBreak is an educational research platform and does not provide financial advice.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Applying the EdgeBreak Research Framework</h2>
-
-        <p>
-
-            Before adding any breakout to My Workspace, review the complete research framework.
-
-        </p>
-
-        <ul>
-
-            <li>Overall market structure.</li>
-
-            <li>Resistance quality.</li>
-
-            <li>Higher lows.</li>
-
-            <li>Accumulation characteristics.</li>
-
-            <li>Volume behaviour.</li>
-
-            <li>Weekly trend.</li>
-
-            <li>Overall chart quality.</li>
-
-        </ul>
-
-        <p>
-
-            Following the same checklist every time creates consistency and helps remove emotion from the research process.
-
-        </p>
-
-        
-
-    </div>
-
-    <!-- LESSON SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            Gold, Silver and Bronze classifications help organise breakout research by comparing the overall quality of market structure, accumulation and breakout characteristics. Rather than predicting future outcomes, these classifications encourage members to review charts objectively and continue building pattern recognition through consistent market research.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>Not all breakout structures are equal.</li>
-
-            <li>Gold, Silver and Bronze organise research—not predictions.</li>
-
-            <li>Compare multiple charts to improve pattern recognition.</li>
-
-            <li>Follow the same research checklist every time.</li>
-
-            <li>Always perform your own chart analysis.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- PRACTICAL EXERCISE -->
-
-    <div class="lesson-card">
-
-        <h2>Practical Exercise</h2>
-
-        <p>
-
-            Open the Breakout Scanner and select one Gold, one Silver and one Bronze breakout.
-
-        </p>
-
-        <ul>
-
             <li>Open each TradingView chart.</li>
-
-            <li>Compare their market structure.</li>
-
-            <li>Review resistance touches.</li>
-
-            <li>Compare higher lows.</li>
-
-            <li>Review the weekly trend.</li>
-
-            <li>Decide which chart you believe demonstrates the strongest overall research characteristics and explain why.</li>
-
+            <li>Compare weekly trend and base quality.</li>
+            <li>Review resistance touches and higher lows.</li>
+            <li>Compare volume around the breakout.</li>
+            <li>Check how far each stock is above its original resistance area.</li>
+            <li>Review any unusual market activity context presented by EdgeBreak.</li>
+            <li>Rank the three only by which deserves the most research attention — not by expected future return.</li>
+            <li>Save your strongest research candidate to My Workspace and write down why.</li>
         </ul>
-
     </div>
 
-    <!-- RESEARCH REMINDER -->
+</div>
+</article>
 
-    <div class="lesson-card reminder">
+<section class="ac-summary-area">
+    <div class="ac-shell">
+        <div class="ac-card-grid three">
 
-        <h2>Research Reminder</h2>
+            <div class="ac-card">
+                <h2>Lesson summary</h2>
+                <p>EdgeBreak no longer uses Gold, Silver and Bronze breakout classifications. Breakout quality is now better understood by comparing the complete evidence: market structure, resistance, higher lows, volume, price position, wider market context and unusual market activity.</p>
+            </div>
 
-        <p>
+            <div class="ac-card">
+                <h2>Key takeaways</h2>
+                <ul>
+                    <li>The old colour-ranking system has been retired.</li>
+                    <li>Not all breakout structures deserve equal research attention.</li>
+                    <li>Compare the complete structure, not one indicator.</li>
+                    <li>Distance above resistance can materially change the research context.</li>
+                    <li>Market activity and wider context can add supporting evidence.</li>
+                    <li>Research priority does not predict future returns.</li>
+                </ul>
+            </div>
 
-            EdgeBreak classifications are designed to organise market research using structured breakout characteristics. Gold, Silver and Bronze ratings do not predict future market performance and should never replace independent analysis. Always conduct your own research before making financial decisions.
+            <div class="ac-card">
+                <h2>Common beginner mistakes</h2>
+                <ul>
+                    <li>Ranking stocks only by percentage movement.</li>
+                    <li>Focusing on the breakout candle instead of the base.</li>
+                    <li>Ignoring weekly trend and sector context.</li>
+                    <li>Treating unusual activity as proof of future direction.</li>
+                    <li>Assuming the highest-ranked research candidate must perform best.</li>
+                </ul>
+            </div>
 
-        </p>
+            <div class="ac-card ac-reminder">
+                <div class="ac-reminder-icon">✦</div>
+                <div>
+                    <h2>Research reminder</h2>
+                    <p>EdgeBreak rankings and scanner outputs are designed to prioritise market research. They are not investment ratings, buy or sell signals, recommendations or predictions of future market performance. Always conduct your own independent research.</p>
+                </div>
+            </div>
 
+        </div>
     </div>
+</section>
 
-    <!-- ===================================
-    LESSON NAVIGATION
-    =================================== -->
+<section class="ac-next">
+    <div class="ac-shell">
+        <div class="ac-next-card">
+            <div class="ac-next-tag">Continue learning · Module 5 Lesson 5 of 6</div>
+            <h2>Complete market research walkthrough.</h2>
+            <p>Follow an EdgeBreak research session from stock discovery through chart review, market activity, AI research and My Workspace to see how the entire process fits together.</p>
 
-    <div class="lesson-next">
+            <div class="ac-next-actions">
+                <a href="/academy/complete-market-research-walkthrough.html" class="ac-btn ac-btn-primary">Start Lesson 5.5 →</a>
+                <a href="/academy/recognising-accumulation-before-breakouts.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+            </div>
 
-        <div class="lesson-next-tag">
-
-            Continue Learning
-
+            <div class="ac-next-foot">Module 5 · Lesson 4 of 6 completed</div>
         </div>
-
-        <h2>
-
-            Continue Your Journey
-
-        </h2>
-
-        <div class="lesson-nav-buttons">
-
-            <!-- PREVIOUS -->
-
-            <a
-                href="/academy/recognising-accumulation-before-breakouts.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/complete-market-research-walkthrough.html"
-                class="btn-primary"
-            >
-                Start Lesson 5.5 →
-            </a>
-
-        </div>
-
-        <h3>
-
-            Lesson 5.5 – Complete Market Research Walkthrough
-
-        </h3>
-
-        <p>
-
-            Follow a complete EdgeBreak research session from the NASDAQ Scanner through to My Workspace and discover how every tool works together as one structured, repeatable market research process.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 5 • Lesson 23 of 30
-
-        </div>
-
     </div>
+</section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>

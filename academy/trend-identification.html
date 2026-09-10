@@ -1,630 +1,830 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 32: Trade Identification | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how to identify potential trade opportunities by analysing market structure, resistance, accumulation, higher lows and breakout characteristics using the EdgeBreak research framework.">
-
-<meta name="keywords"
-      content="trade identification, breakout research, market structure, accumulation, higher lows, resistance, NASDAQ research, price action, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/trade-identification.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Trend Identification | Module 2 Lesson 4 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn how to identify uptrends, downtrends and sideways markets using higher highs, higher lows, lower highs and lower lows as part of structured NASDAQ market research."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/trend-identification.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 32: Trade Identification">
-
-<meta property="og:description"
-      content="Learn how to identify high-quality research opportunities using structured market analysis rather than emotion or prediction.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/trade-identification.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/trend-identification.html">
+<meta property="og:title" content="Trend Identification | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Learn how higher highs, higher lows, lower highs and lower lows reveal the broader direction of market structure."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Lesson 32: Trade Identification">
-
-<meta name="twitter:description"
-      content="Discover how to identify potential breakout opportunities using the EdgeBreak research methodology.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Trend Identification | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Learn how to recognise uptrends, downtrends, sideways markets and developing trend changes through market structure."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-CSS
+FAVICON
 =================================== -->
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
+
+<!-- ===================================
+STYLES
+=================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
 
 <!-- ===================================
 SUPABASE
 =================================== -->
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
 
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
 <!-- ===================================
-LEARNING RESOURCE
+STRUCTURED DATA
 =================================== -->
-
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "name":"Lesson 32: Trade Identification",
-  "description":"Learn how to identify potential trade opportunities by researching market structure, accumulation, resistance, higher lows and breakout characteristics.",
-  "educationalLevel":"Beginner",
-  "learningResourceType":"Lesson",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  },
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  }
-}
-</script>
-
-<!-- ===================================
-BREADCRUMB
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "legalName": "Crane Platform Labs",
+      "url": "https://www.edgebreak.ai/",
+      "email": "mailto:admin@edgebreak.ai",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.edgebreak.ai/#logo",
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+        "caption": "EdgeBreak"
+      },
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
-      "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Lesson 32: Trade Identification",
-      "item":"https://www.edgebreak.ai/trade-identification.html"
+      "@type": "Course",
+      "@id": "https://www.edgebreak.ai/academy.html#course",
+      "name": "EdgeBreak Academy",
+      "url": "https://www.edgebreak.ai/academy.html",
+      "description": "Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "LearningResource",
+      "@id": "https://www.edgebreak.ai/academy/trend-identification.html#lesson",
+      "name": "Module 2 Lesson 4: Trend Identification",
+      "url": "https://www.edgebreak.ai/academy/trend-identification.html",
+      "description": "A beginner lesson explaining uptrends, downtrends, sideways markets, higher highs, higher lows, lower highs, lower lows and how trend analysis supports structured breakout research.",
+      "learningResourceType": "Lesson",
+      "educationalLevel": "Beginner",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/academy.html#course" },
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/academy/trend-identification.html#webpage",
+      "url": "https://www.edgebreak.ai/academy/trend-identification.html",
+      "name": "Trend Identification | Module 2 Lesson 4 | EdgeBreak Academy",
+      "description": "Learn how to identify uptrends, downtrends and sideways markets using higher highs, higher lows, lower highs and lower lows as part of structured NASDAQ market research.",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/#website" },
+      "mainEntity": { "@id": "https://www.edgebreak.ai/academy/trend-identification.html#lesson" },
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/academy/trend-identification.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EdgeBreak Academy",
+          "item": "https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Trend Identification",
+          "item": "https://www.edgebreak.ai/academy/trend-identification.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<!-- ===================================
-WEBPAGE
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 32: Trade Identification",
-  "url":"https://www.edgebreak.ai/trade-identification.html",
-  "description":"Learn how to identify potential trade opportunities using structured market research and the EdgeBreak methodology.",
-  "isPartOf":{
-    "@type":"WebSite",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  },
-  "primaryImageOfPage":"https://www.edgebreak.ai/images/academy.webp",
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+
+.ac-section li{
+    margin:7px 0;
+}
+
+.ac-lesson-image{
+    margin:34px 0 46px;
+}
+
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#ffffff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-concept-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+
+.ac-concept-card{
+    padding:23px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#ffffff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+
+.ac-concept-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.ac-concept-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+
+.ac-concept-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+@media(max-width:900px){
+    .ac-concept-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+    .ac-card-grid.three{
+        grid-template-columns:1fr;
+    }
+
+    .ac-card-grid.three .ac-reminder{
+        grid-column:auto;
+    }
+}
+
+</style>
 </head>
-
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
-<main>
-<!-- ==========================
-MODULE 2 · LESSON 6
-=========================== -->
-
-<div class="academy-container lesson-container">
-
-    <div class="lesson-tag">
-        MODULE 2 • LESSON 6
-    </div>
-
-    <h1>
-        Trend Identification
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 20 Minutes</span>
-
-        <span>•</span>
-
-        <span>Beginner Breakout Research</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        Before researching breakout opportunities, investors first need to understand the direction of the market. Trend identification is one of the foundations of technical analysis because it helps explain whether buyers or sellers are currently in control. Throughout EdgeBreak, market structure plays a far greater role than predicting short-term price movements.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>How to identify an uptrend.</li>
-
-            <li>How to recognise a downtrend.</li>
-
-            <li>What higher highs and higher lows mean.</li>
-
-            <li>When markets move sideways.</li>
-
-            <li>How trend analysis supports breakout research.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>Why Trends Matter</h2>
-
-        <p>
-
-            Markets rarely move randomly for extended periods. Instead, prices tend to develop trends where buyers or sellers gradually gain control over time. Understanding these trends allows investors to place individual price movements into a broader context rather than reacting to every daily fluctuation.
-
-        </p>
-
-        <p>
-
-            Trend identification helps investors answer one important question:
-
-        </p>
-
-        <p>
-
-            <strong>Who currently appears to be in control — buyers or sellers?</strong>
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/uptrend-vs-downtrend.webp"
-                alt="Comparison of an uptrend and a downtrend showing higher highs and higher lows versus lower highs and lower lows.">
-
-            <figcaption>
-
-                Market trends are identified by the sequence of swing highs and swing lows. An uptrend is characterised by higher highs and higher lows, showing that buyers are gradually gaining control. A downtrend is characterised by lower highs and lower lows, indicating that sellers remain in control. Recognising the prevailing trend provides important context before analysing support, resistance and potential breakout opportunities.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Understanding an Uptrend</h2>
-
-        <p>
-
-            An uptrend develops when price continues making higher highs and higher lows.
-
-        </p>
-
-        <p>
-
-            Each pullback finds support above the previous low, while each rally pushes above the previous high. This structure indicates that buyers are gradually becoming willing to purchase shares at higher prices.
-
-        </p>
-
-        <p>
-
-            Strong breakout candidates often develop within established uptrends because the overall market structure already reflects increasing buying pressure.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/uptrend-vs-downtrend.webp"
-                alt="Comparison of an uptrend and a downtrend showing higher highs and higher lows versus lower highs and lower lows.">
-
-            <figcaption>
-
-                As above Market trends are identified by the sequence of swing highs and swing lows. An uptrend is characterised by higher highs and higher lows, showing that buyers are gradually gaining control. A downtrend is characterised by lower highs and lower lows, indicating that sellers remain in control. Recognising the prevailing trend provides important context before analysing support, resistance and potential breakout opportunities.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Understanding a Downtrend</h2>
-
-        <p>
-
-            A downtrend occurs when price continues making lower highs and lower lows.
-
-        </p>
-
-        <p>
-
-            Buyers are unable to maintain previous highs, while sellers continue pushing prices lower after each rally. This structure generally reflects weakening demand and increasing selling pressure.
-
-        </p>
-
-        <p>
-
-            Researching breakout opportunities during strong downtrends often requires additional caution because the broader market structure remains weak.
-
-        </p>
-
-        
-
-        <h2>Sideways Markets</h2>
-
-        <p>
-
-            Not every stock is trending.
-
-        </p>
-
-        <p>
-
-            Many companies spend weeks or months moving sideways within relatively well-defined trading ranges. During these periods, buyers and sellers reach a temporary balance while the market decides its next direction.
-
-        </p>
-
-        <p>
-
-            Sideways markets often become important areas for breakout research because they can contain repeated resistance tests, higher lows and accumulation characteristics.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/sideways-consolidation.webp"
-                alt="Stock chart illustrating sideways consolidation with price moving between support and resistance before a potential breakout.">
-
-            <figcaption>
-
-                Sideways consolidation occurs when price trades within a defined range between support and resistance. During this phase, buyers and sellers are relatively balanced, causing price to move sideways rather than trend higher or lower. These periods often represent market indecision and are commonly studied before investors analyse whether a breakout may eventually develop.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Trend Changes</h2>
-
-        <p>
-
-            Trends do not last forever.
-
-        </p>
-
-        <p>
-
-            One of the first signs that an uptrend may be weakening is the failure to produce another higher high or the creation of a lower low.
-
-        </p>
-
-        <p>
-
-            Likewise, a downtrend may begin improving once lower lows stop developing and buyers begin establishing higher lows.
-
-        </p>
-
-        <p>
-
-            Rather than focusing on exact turning points, many investors simply observe how market structure changes over time.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/trend-reversal.webp"
-                alt="Example of a trend reversal showing a transition from a downtrend to an uptrend as market structure changes.">
-
-            <figcaption>
-
-                A trend reversal occurs when the prevailing direction of the market changes. In this example, the downtrend of lower highs and lower lows begins to weaken before price breaks above resistance with increasing buying interest. As higher highs and higher lows start to develop, market structure shifts, indicating that buyers have gained control and a new uptrend may be forming.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Trend Strength</h2>
-
-        <p>
-
-            Not all trends are equal.
-
-        </p>
-
-        <p>
-
-            Some trends develop steadily through orderly higher highs and higher lows, while others experience large swings with inconsistent price behaviour.
-
-        </p>
-
-        <p>
-
-            EdgeBreak places greater emphasis on organised market structure than rapid price movement. A slower, well-structured trend often provides a better research candidate than a highly volatile stock with unpredictable behaviour.
-
-        </p>
-
-        <h2>Trend Identification Inside EdgeBreak</h2>
-
-        <p>
-
-            Every EdgeBreak scanner incorporates elements of market structure into the research process.
-
-        </p>
-
-        <p>
-
-            The NASDAQ Scanner searches for stocks displaying higher lows and repeated resistance touches, while the Breakout Scanner identifies stocks that have already moved above resistance. My Workspace allows members to review long-term trends using TradingView charts before deciding whether a stock deserves further research.
-
-        </p>
-
-        <p>
-
-            Trend identification works alongside volume, accumulation and resistance analysis to build a more complete picture of market behaviour.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/uptrend.webp"
-                alt="Example of a sustained stock market uptrend showing higher highs, higher lows and strengthening market structure over time.">
-
-            <figcaption>
-
-                This chart illustrates a sustained market uptrend where price continues to develop higher highs and higher lows over an extended period. Rather than focusing on short-term price movements, researchers can observe how strong market structure gradually develops through consistent buying pressure and healthy trend progression. Studying long-term uptrends helps reinforce concepts such as market structure, accumulation, trend continuation and price behaviour that are central to the EdgeBreak research methodology. Historical examples like this provide valuable educational insights but should not be interpreted as financial advice or an indication of future market performance.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Focus on the Bigger Picture</h2>
-
-        <p>
-
-            One of the biggest mistakes new investors make is concentrating on individual candles rather than the overall trend.
-
-        </p>
-
-        <p>
-
-            A single strong day or weak day rarely changes the long-term market structure. Instead, investors should step back and observe how price has behaved over weeks or months.
-
-        </p>
-
-        <p>
-
-            Understanding the broader trend helps provide context for every other concept you'll learn throughout the Academy.
-
-        </p>
-
-    </div>
-
-    <!-- LESSON SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            Trend identification provides the foundation for understanding market behaviour. By recognising higher highs, higher lows, lower highs and lower lows, investors can better understand whether buyers or sellers currently control the market. Combined with resistance, volume and accumulation, trend analysis becomes a powerful part of structured breakout research.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>Uptrends are formed by higher highs and higher lows.</li>
-
-            <li>Downtrends are formed by lower highs and lower lows.</li>
-
-            <li>Many breakout opportunities begin during sideways consolidation.</li>
-
-            <li>Trend changes occur gradually as market structure evolves.</li>
-
-            <li>Always analyse the broader trend before researching individual price movements.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- COMMON MISTAKES -->
-
-    <div class="lesson-card">
-
-        <h2>Common Beginner Mistakes</h2>
-
-        <ul>
-
-            <li>Focusing only on today's price movement.</li>
-
-            <li>Ignoring the overall trend.</li>
-
-            <li>Mistaking normal pullbacks for trend reversals.</li>
-
-            <li>Researching breakout opportunities during weak market structures.</li>
-
-            <li>Confusing short-term volatility with long-term trends.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- RESEARCH REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            Trend analysis provides valuable context for market research but should never be relied upon in isolation. EdgeBreak combines trend identification with market structure, resistance, higher lows, volume behaviour and accumulation characteristics to support independent research. The platform does not provide financial advice or investment recommendations.
-
-        </p>
-
-    </div>
+<main class="ac-page">
 
     <!-- ===================================
-    LESSON NAVIGATION
+    HERO
     =================================== -->
+    <section class="ac-hero">
+        <div class="ac-shell">
+            <div class="ac-kicker"><span class="ac-dot"></span> Module 2 · Lesson 4</div>
+            <h1 class="ac-title">Trend <span>Identification.</span></h1>
+            <p class="ac-subtitle">
+                Learn to recognise the broader direction of price so individual candles, pullbacks and breakout structures can be interpreted in context.
+            </p>
 
-    <div class="lesson-next">
+            <div class="ac-meta">
+                <span>Estimated time: 20 minutes</span>
+                <span>Market structure foundations</span>
+                <span>Beginner</span>
+            </div>
 
-        <div class="lesson-next-tag">
+            <div class="ac-progress-wrap" aria-label="Module 2 progress">
+                <div class="ac-progress-label">
+                    <span>Module 2 progress</span>
+                    <span>Lesson 4 of 5</span>
+                </div>
+                <div class="ac-progress"><span style="width:80%"></span></div>
+            </div>
+        </div>
+    </section>
 
-            Continue Learning
+    <!-- ===================================
+    WHAT YOU'LL LEARN
+    =================================== -->
+    <section class="ac-overview">
+        <div class="ac-shell">
+            <div class="ac-overview-card">
+                <div>
+                    <div class="ac-overview-label">What you'll learn</div>
+                    <h2>See the direction behind the daily price moves.</h2>
+                </div>
+
+                <div class="ac-learn-list">
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to identify an uptrend.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to recognise a downtrend.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>What higher highs and higher lows mean.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How sideways markets differ from trends.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How trend analysis supports breakout research.</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================
+    LESSON CONTENT
+    =================================== -->
+    <article class="ac-content">
+        <div class="ac-reading">
+
+            <section class="ac-section">
+                <h2>Why trends matter</h2>
+                <p>Before researching an individual breakout structure, it helps to understand the direction in which price has been developing over time.</p>
+                <p>Markets often form recognisable sequences of highs and lows. Reading those sequences can help you place short-term price moves into a much broader context rather than reacting to every daily candle.</p>
+                <p>Trend identification helps answer a useful research question:</p>
+
+                <div class="ac-pullquote">
+                    Who currently appears to have greater control of the price structure — buyers or sellers?
+                </div>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/uptrend-vs-downtrend.webp" alt="Comparison of an uptrend and a downtrend showing higher highs and higher lows versus lower highs and lower lows.">
+                <figcaption>Trend direction can be read through the sequence of swing highs and swing lows. Uptrends form higher highs and higher lows, while downtrends form lower highs and lower lows.</figcaption>
+            </figure>
+
+            <div class="ac-concept-grid" aria-label="Trend types">
+                <div class="ac-concept-card">
+                    <b>Uptrend</b>
+                    <strong>Higher highs + higher lows</strong>
+                    <span>Price is progressively advancing while pullbacks hold above earlier lows.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Downtrend</b>
+                    <strong>Lower highs + lower lows</strong>
+                    <span>Price is progressively declining while rallies fail below earlier highs.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Sideways</b>
+                    <strong>Range-bound structure</strong>
+                    <span>Price moves between support and resistance without a clear sustained direction.</span>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Understanding an uptrend</h2>
+                <p>An uptrend develops when price continues forming higher highs and higher lows.</p>
+                <p>Each pullback holds above the previous significant low, while each advance eventually pushes beyond the previous high. This structure shows that buyers have continued to support price at progressively higher levels.</p>
+                <p>Developing breakout structures can sometimes form within established uptrends because the broader price structure is already improving.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>Understanding a downtrend</h2>
+                <p>A downtrend occurs when price continues forming lower highs and lower lows.</p>
+                <p>Rallies fail beneath previous highs while subsequent declines push below earlier lows. This structure reflects persistent weakness and shows that sellers have remained influential.</p>
+                <p>A technically interesting pattern may still appear during a downtrend, but the weaker broader structure is important context when deciding whether a stock deserves further research.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>Sideways markets</h2>
+                <p>Not every stock is trending. Many spend weeks or months moving sideways within a relatively defined trading range.</p>
+                <p>During these periods, buyers and sellers are closer to balance, causing price to move between support and resistance instead of developing a clear sequence higher or lower.</p>
+                <p>Sideways structures can be important in breakout research because repeated resistance tests, tightening ranges and improving lows may begin to develop within them.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/sideways-consolidation.webp" alt="Stock chart illustrating sideways consolidation with price moving between support and resistance.">
+                <figcaption>Sideways consolidation occurs when price trades within a defined range. These periods can provide useful context when studying whether market structure is becoming tighter or beginning to improve.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Trend changes</h2>
+                <p>Trends do not continue forever. Over time, the sequence of highs and lows can begin to change.</p>
+                <p>An uptrend may weaken if price stops producing higher highs or begins breaking important higher lows. A downtrend may start improving when lower lows stop developing and price begins forming higher lows or reclaiming previous highs.</p>
+                <p>Rather than trying to predict an exact turning point, it is often more useful to observe how the structure changes gradually.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/trend-reversal.webp" alt="Example of a trend reversal showing a transition from a downtrend to an improving market structure.">
+                <figcaption>A trend reversal develops as the previous structure weakens and a new sequence begins to form. The change is usually a process rather than one single candle.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Trend strength</h2>
+                <p>Not all trends are equal.</p>
+                <p>Some develop steadily through organised higher highs and higher lows, while others contain large swings, gaps and inconsistent behaviour.</p>
+                <p>EdgeBreak generally places more emphasis on organised technical structure than on rapid price movement. A slower, cleaner trend can be easier to research than a highly volatile stock with unstable price action.</p>
+            </section>
+
+            <div class="ac-process" aria-label="Trend identification process">
+                <div class="ac-process-head">
+                    <span>Read the bigger structure</span>
+                    <h3>Highs → lows → direction → context.</h3>
+                </div>
+
+                <div class="ac-process-grid">
+                    <div class="ac-process-step">
+                        <b>01</b>
+                        <strong>Mark swing highs</strong>
+                        <span>Compare each significant high with the one that came before it.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>02</b>
+                        <strong>Mark swing lows</strong>
+                        <span>Compare pullbacks and see whether lows are rising or falling.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>03</b>
+                        <strong>Define direction</strong>
+                        <span>Decide whether the structure is trending higher, lower or sideways.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>04</b>
+                        <strong>Add context</strong>
+                        <span>Combine trend with resistance, volume and other research evidence.</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Trend identification inside EdgeBreak</h2>
+                <p>Market structure is built into the EdgeBreak research process.</p>
+                <p>The NASDAQ Scanner searches for developing structures such as higher lows and repeated resistance tests. The Breakout Scanner identifies stocks that have already moved beyond resistance, while My Workspace lets members inspect longer-term trends using integrated TradingView charts.</p>
+                <p>Trend identification works alongside volume, resistance, unusual market activity and other technical evidence to create a broader picture of market behaviour.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/uptrend.webp" alt="Example of a sustained stock market uptrend showing higher highs, higher lows and strengthening market structure over time.">
+                <figcaption>A sustained uptrend develops through a sequence of higher highs and higher lows. Historical examples are useful for learning how organised market structure evolves over time.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Focus on the bigger picture</h2>
+                <p>One of the biggest beginner mistakes is concentrating on an individual candle while ignoring the broader trend.</p>
+                <p>A single strong or weak day rarely changes an established structure on its own. Stepping back to review several weeks or months of price action can make the underlying direction much easier to see.</p>
+                <p>Understanding the broader trend gives context to support, resistance, volume and every other technical concept you will use throughout the Academy.</p>
+            </section>
 
         </div>
+    </article>
 
-        <h2>
+    <!-- ===================================
+    SUMMARY / TAKEAWAYS
+    =================================== -->
+    <section class="ac-summary-area">
+        <div class="ac-shell">
+            <div class="ac-card-grid three">
 
-            Continue Your Journey
+                <div class="ac-card">
+                    <h2>Lesson summary</h2>
+                    <p>Trend identification helps place individual price movements inside a broader structure. Higher highs and higher lows characterise an uptrend, lower highs and lower lows characterise a downtrend, while sideways markets move within a range. Trend should be combined with other evidence rather than interpreted in isolation.</p>
+                </div>
 
-        </h2>
+                <div class="ac-card">
+                    <h2>Key takeaways</h2>
+                    <ul>
+                        <li>Uptrends form higher highs and higher lows.</li>
+                        <li>Downtrends form lower highs and lower lows.</li>
+                        <li>Sideways markets trade within a broader range.</li>
+                        <li>Trend changes usually develop gradually.</li>
+                        <li>Always consider the broader structure before focusing on one price move.</li>
+                    </ul>
+                </div>
 
-        <div class="lesson-nav-buttons">
+                <div class="ac-card">
+                    <h2>Common beginner mistakes</h2>
+                    <ul>
+                        <li>Focusing only on today's price movement.</li>
+                        <li>Ignoring the overall trend.</li>
+                        <li>Mistaking a normal pullback for a complete trend reversal.</li>
+                        <li>Ignoring weak broader structure when reviewing a setup.</li>
+                        <li>Confusing short-term volatility with a longer-term trend.</li>
+                    </ul>
+                </div>
 
-            <!-- PREVIOUS -->
+                <div class="ac-card ac-reminder">
+                    <div class="ac-reminder-icon">✦</div>
+                    <div>
+                        <h2>Research reminder</h2>
+                        <p>Trend analysis provides useful context for market research but should not be relied upon in isolation. EdgeBreak combines market structure with resistance, higher lows, volume behaviour, unusual market activity and other evidence to support independent research. The platform does not provide financial advice or investment recommendations.</p>
+                    </div>
+                </div>
 
-            <a
-                href="/academy/understanding-volume.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/risk-management.html"
-                class="btn-primary"
-            >
-                Start Lesson 2.5 →
-            </a>
-
+            </div>
         </div>
+    </section>
 
-        <h3>
+    <!-- ===================================
+    NEXT LESSON
+    =================================== -->
+    <section class="ac-next">
+        <div class="ac-shell">
+            <div class="ac-next-card">
+                <div class="ac-next-tag">Continue learning · Module 2 Lesson 5</div>
+                <h2>Risk management basics.</h2>
+                <p>Learn why managing downside risk matters, how position size affects exposure and why a disciplined research process should always consider risk before reward.</p>
 
-            Lesson 2.5 – Risk Management Basics
+                <div class="ac-next-actions">
+                    <a href="/academy/risk-management.html" class="ac-btn ac-btn-primary">Start Lesson 2.5 →</a>
+                    <a href="/academy/understanding-volume.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+                </div>
 
-        </h3>
-
-        <p>
-
-            Learn the fundamentals of managing risk, including position sizing, protecting capital and why successful market research always begins with controlling downside risk.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 2 • Lesson 7 of 30
-
+                <div class="ac-next-foot">Module 2 · Lesson 4 of 5 completed</div>
+            </div>
         </div>
+    </section>
 
-    </div>
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>

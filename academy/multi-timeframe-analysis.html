@@ -1,684 +1,913 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 26: Multi Timeframe Analysis | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how to analyse NASDAQ stocks across multiple timeframes to understand trend, market structure, resistance, accumulation and breakout context before conducting further research.">
-
-<meta name="keywords"
-      content="multi timeframe analysis, multiple timeframes, stock analysis, NASDAQ research, market structure, resistance, breakout analysis, price action, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/multi-timeframe-analysis.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Multi-Timeframe Analysis | Module 3 Lesson 1 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn how weekly, daily and intraday charts work together to provide broader trend, resistance and market-structure context for structured NASDAQ research."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/multi-timeframe-analysis.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 26: Multi Timeframe Analysis">
-
-<meta property="og:description"
-      content="Discover how analysing multiple chart timeframes provides greater market context and supports structured NASDAQ breakout research.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/multi-timeframe-analysis.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/multi-timeframe-analysis.html">
+<meta property="og:title" content="Multi-Timeframe Analysis | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Learn how combining weekly, daily and shorter-term charts adds context to trend, resistance and developing market structure."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Lesson 26: Multi Timeframe Analysis">
-
-<meta name="twitter:description"
-      content="Learn how multiple timeframe analysis improves market context and structured breakout research.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Multi-Timeframe Analysis | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Learn how multiple chart timeframes can provide stronger context for trend, resistance and structured NASDAQ research."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-CSS
+FAVICON
 =================================== -->
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
+
+<!-- ===================================
+STYLES
+=================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
 
 <!-- ===================================
 SUPABASE
 =================================== -->
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
 
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
 <!-- ===================================
-LEARNING RESOURCE
+STRUCTURED DATA
 =================================== -->
-
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "name":"Lesson 26: Multi Timeframe Analysis",
-  "description":"Learn how analysing multiple chart timeframes helps build market context, identify structure and improve breakout research.",
-  "educationalLevel":"Beginner",
-  "learningResourceType":"Lesson",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  },
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  }
-}
-</script>
-
-<!-- ===================================
-BREADCRUMB
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "legalName": "Crane Platform Labs",
+      "url": "https://www.edgebreak.ai/",
+      "email": "mailto:admin@edgebreak.ai",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.edgebreak.ai/#logo",
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+        "caption": "EdgeBreak"
+      },
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
-      "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Lesson 26: Multi Timeframe Analysis",
-      "item":"https://www.edgebreak.ai/multi-timeframe-analysis.html"
+      "@type": "Course",
+      "@id": "https://www.edgebreak.ai/academy.html#course",
+      "name": "EdgeBreak Academy",
+      "url": "https://www.edgebreak.ai/academy.html",
+      "description": "Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "LearningResource",
+      "@id": "https://www.edgebreak.ai/academy/multi-timeframe-analysis.html#lesson",
+      "name": "Module 3 Lesson 1: Multi-Timeframe Analysis",
+      "url": "https://www.edgebreak.ai/academy/multi-timeframe-analysis.html",
+      "description": "An advanced lesson explaining how weekly, daily and intraday chart timeframes can be combined to understand broader trend, resistance and developing technical structure.",
+      "learningResourceType": "Lesson",
+      "educationalLevel": "Intermediate",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/academy.html#course" },
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/academy/multi-timeframe-analysis.html#webpage",
+      "url": "https://www.edgebreak.ai/academy/multi-timeframe-analysis.html",
+      "name": "Multi-Timeframe Analysis | Module 3 Lesson 1 | EdgeBreak Academy",
+      "description": "Learn how weekly, daily and intraday charts work together to provide broader trend, resistance and market-structure context for structured NASDAQ research.",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/#website" },
+      "mainEntity": { "@id": "https://www.edgebreak.ai/academy/multi-timeframe-analysis.html#lesson" },
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/academy/multi-timeframe-analysis.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EdgeBreak Academy",
+          "item": "https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Multi-Timeframe Analysis",
+          "item": "https://www.edgebreak.ai/academy/multi-timeframe-analysis.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<!-- ===================================
-WEBPAGE
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 26: Multi Timeframe Analysis",
-  "url":"https://www.edgebreak.ai/multi-timeframe-analysis.html",
-  "description":"Learn how to use multiple chart timeframes to understand trend, market structure and breakout context before researching NASDAQ stocks.",
-  "isPartOf":{
-    "@type":"WebSite",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  },
-  "primaryImageOfPage":"https://www.edgebreak.ai/images/academy.webp",
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+
+.ac-section li{
+    margin:7px 0;
+}
+
+.ac-lesson-image{
+    margin:34px 0 46px;
+}
+
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#ffffff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-concept-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+
+.ac-concept-card{
+    padding:23px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#ffffff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+
+.ac-concept-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.ac-concept-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+
+.ac-concept-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+.ac-exercise{
+    margin:34px 0 54px;
+    padding:30px;
+    border:1px solid #dce7df;
+    border-radius:24px;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+}
+
+.ac-exercise-tag{
+    margin-bottom:9px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ac-exercise h3{
+    margin:0 0 13px;
+    color:var(--ix-ink);
+    font-size:27px;
+    letter-spacing:-.03em;
+}
+
+.ac-exercise p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.65;
+}
+
+.ac-exercise ul{
+    margin:0;
+    padding-left:22px;
+    color:#526071;
+    font-size:15px;
+    line-height:1.65;
+}
+
+@media(max-width:900px){
+    .ac-concept-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+    .ac-card-grid.three{
+        grid-template-columns:1fr;
+    }
+
+    .ac-card-grid.three .ac-reminder{
+        grid-column:auto;
+    }
+}
+
+</style>
 </head>
-
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
-<main>
-<!-- ==========================
-MODULE 3 · LESSON 9
-=========================== -->
-
-<div class="academy-container lesson-container">
-
-    <div class="lesson-tag">
-        MODULE 3 • LESSON 9
-    </div>
-
-    <h1>
-        Multi-Timeframe Analysis
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 20 Minutes</span>
-
-        <span>•</span>
-
-        <span>Advanced Breakout Research</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        Looking at only one chart timeframe can provide an incomplete picture of a stock's behaviour. Multi-timeframe analysis helps investors understand the bigger trend while also identifying developing opportunities on shorter timeframes. Throughout EdgeBreak, combining multiple timeframes provides valuable context when researching breakout structures and market strength.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>What multi-timeframe analysis is.</li>
-
-            <li>Why experienced investors use more than one chart.</li>
-
-            <li>How weekly, daily and intraday charts work together.</li>
-
-            <li>How multiple timeframes support breakout research.</li>
-
-            <li>Common mistakes when analysing different timeframes.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>Why Multiple Timeframes Matter</h2>
-
-        <p>
-
-            Every chart tells part of the story.
-
-        </p>
-
-        <p>
-
-            A daily chart may show a developing breakout, while the weekly chart reveals the stock is still trading below major long-term resistance. Likewise, a stock may appear weak on a short-term chart but remain in a healthy long-term uptrend.
-
-        </p>
-
-        <p>
-
-            By viewing several timeframes together, investors gain a broader understanding of market structure before focusing on smaller price movements.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/weekly-vs-daily.webp"
-                alt="Comparison of weekly and daily stock charts showing how multiple timeframes provide different perspectives on market structure and breakout opportunities.">
-
-            <figcaption>
-
-                Weekly charts provide the broader market context, helping investors identify long-term trends, major support and resistance levels, and the overall direction of a stock. Daily charts offer a closer view of shorter-term price action, making it easier to analyse developing breakout structures and refine research. Viewing multiple timeframes together provides a more complete understanding of market structure than relying on a single chart alone.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>The Weekly Chart</h2>
-
-        <p>
-
-            The weekly chart provides the broadest perspective used by many investors.
-
-        </p>
-
-        <p>
-
-            It helps identify long-term trends, major resistance levels and significant accumulation or distribution that may not be obvious on shorter charts.
-
-        </p>
-
-        <p>
-
-            Before researching a breakout, it is often useful to understand where the stock sits within its larger market structure.
-
-        </p>
-
-        <p>
-
-            Questions to consider include:
-
-        </p>
-
-        <ul>
-
-            <li>Is the long-term trend rising or falling?</li>
-
-            <li>Is major resistance nearby?</li>
-
-            <li>Has the stock spent months consolidating?</li>
-
-        </ul>
-
-        <figure class="lesson-image">
-
-            <img src="/images/the-weekly-chart.webp"
-                alt="Weekly stock chart illustrating the long-term trend, major resistance level and broader market structure.">
-
-            <figcaption>
-
-                Weekly charts provide a broader view of market structure by highlighting long-term trends, major resistance levels and extended periods of accumulation or consolidation. Viewing the larger picture before analysing shorter timeframes helps investors better understand where a stock sits within its overall trend and provides valuable context before researching potential breakout opportunities.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>The Daily Chart</h2>
-
-        <p>
-
-            The daily chart forms the foundation of the EdgeBreak research process.
-
-        </p>
-
-        <p>
-
-            This is where investors can study resistance touches, higher lows, volume behaviour, accumulation characteristics and developing breakout structures.
-
-        </p>
-
-        <p>
-
-            Most of the scanners within EdgeBreak analyse daily market behaviour because it provides a balance between long-term trends and shorter-term price action.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/uptrend.webp"
-                alt="Daily TradingView chart showing an established uptrend with higher highs, higher lows, increasing volume and developing breakout structure used for stock market research within EdgeBreak.">
-
-            <figcaption>
-
-                The daily chart provides the foundation for the EdgeBreak research process. It allows investors to study the overall market structure by identifying higher highs, higher lows, resistance levels, support zones and volume behaviour over time. Because each daily candlestick represents an entire trading session, daily charts help filter out much of the short-term market noise while revealing broader trends and developing breakout structures. Throughout EdgeBreak, the daily timeframe is used across the scanners and research tools because it provides a balanced view of momentum, accumulation and price action that can be monitored consistently over weeks or months. Understanding how to read the daily chart is one of the most important skills when researching potential breakout opportunities. EdgeBreak is designed as an educational research platform and does not provide financial advice or predict future market performance.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Intraday Charts</h2>
-
-        <p>
-
-            Some investors also use intraday charts to observe shorter-term market activity.
-
-        </p>
-
-        <p>
-
-            These charts can provide additional context regarding price behaviour during the trading day but should always be interpreted alongside the larger daily and weekly trends.
-
-        </p>
-
-        <p>
-
-            Focusing only on intraday movements can make normal market fluctuations appear more significant than they actually are.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/daily-vs-intraday.webp"
-                alt="Comparison of daily and intraday stock charts showing how each timeframe provides different insights into market structure and price behaviour.">
-
-            <figcaption>
-
-                Daily charts help investors understand the overall market trend, key support and resistance levels, and broader price structure. Intraday charts provide a closer view of price behaviour during the trading day and can offer additional context for short-term movements. Using both timeframes together helps maintain perspective by combining long-term structure with short-term price action.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Looking for Alignment</h2>
-
-        <p>
-
-            One objective of multi-timeframe analysis is identifying alignment between different chart periods.
-
-        </p>
-
-        <p>
-
-            For example, a stock may display:
-
-        </p>
-
-        <ul>
-
-            <li>A healthy long-term uptrend on the weekly chart.</li>
-
-            <li>Higher lows developing on the daily chart.</li>
-
-            <li>Repeated resistance tests approaching a potential breakout.</li>
-
-        </ul>
-
-        <p>
-
-            When multiple timeframes tell a similar story, investors often gain greater confidence in their overall market research.
-
-        </p>
-
-        <p>
-
-            
-
-        <figure class="lesson-image">
-
-            <img src="/images/chart-alignment.webp"
-                alt="Diagram showing alignment between weekly and daily charts, illustrating how multiple timeframes work together to provide stronger market context.">
-
-            <figcaption>
-
-                Multi-timeframe alignment occurs when different chart periods tell a similar story. For example, a healthy long-term uptrend on the weekly chart, higher lows developing on the daily chart and repeated resistance tests approaching a breakout all reinforce the same market structure. When multiple timeframes align, investors gain greater confidence in their research and a clearer understanding of the broader market context.
-
-            </figcaption>
-
-        </figure>
-
-            Not every chart will point in the same direction.
-
-        </p>
-
-        <p>
-
-            A stock may appear strong on a daily chart while still facing significant long-term resistance on the weekly timeframe.
-
-        </p>
-
-        <p>
-
-            Conflicting information does not necessarily mean a stock should be ignored. Instead, it highlights the importance of considering the broader picture before reaching conclusions.
-
-        </p>
-
-        <h2>Multi-Timeframe Analysis Inside EdgeBreak</h2>
-
-        <p>
-
-            EdgeBreak encourages members to combine scanner results with chart analysis across multiple timeframes.
-
-        </p>
-
-        <p>
-
-            A typical workflow might involve:
-
-        </p>
-
-        <ol>
-
-            <li>Finding opportunities using the NASDAQ Scanner.</li>
-
-            <li>Opening the stock in TradingView.</li>
-
-            <li>Reviewing the weekly trend.</li>
-
-            <li>Studying the daily market structure.</li>
-
-            <li>Monitoring resistance, higher lows and volume behaviour.</li>
-
-            <li>Saving promising candidates to My Workspace.</li>
-
-        </ol>
-
-        <p>
-
-            This process helps ensure that research is based on a complete understanding of market structure rather than a single chart.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/multi-timeframe.webp"
-                alt="Side-by-side comparison of daily and weekly TradingView charts inside EdgeBreak showing how multiple timeframes are used to analyse trend, market structure, resistance levels and breakout opportunities.">
-
-            <figcaption>
-
-                EdgeBreak encourages investors to research stocks using multiple timeframes rather than relying on a single chart. The weekly chart provides the broader picture by highlighting the long-term trend, major support and resistance levels, and the overall direction of market structure. The daily chart then offers a closer view of recent price action, allowing investors to examine resistance tests, higher lows, volume behaviour and potential breakout opportunities with greater precision. Comparing both timeframes helps determine whether a developing breakout is supported by the broader trend or occurring against longer-term market momentum. Using multiple timeframes creates a more complete understanding of price behaviour and forms an important part of a disciplined research process. EdgeBreak is designed as an educational research platform and does not provide financial advice, trading recommendations or guarantee future market performance.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Focus on Context</h2>
-
-        <p>
-
-            Multi-timeframe analysis is not about finding perfect agreement between every chart.
-
-        </p>
-
-        <p>
-
-            Its purpose is to provide context.
-
-        </p>
-
-        <p>
-
-            Understanding the larger trend before analysing smaller price movements helps investors develop a more balanced and disciplined research process.
-
-        </p>
-
-    </div>
-
-    <!-- LESSON SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            Multi-timeframe analysis provides a broader understanding of market behaviour by combining weekly, daily and shorter-term charts. Rather than relying on a single timeframe, investors can use multiple perspectives to better understand trend direction, resistance levels and developing breakout opportunities.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>The weekly chart provides long-term context.</li>
-
-            <li>The daily chart is the foundation of EdgeBreak research.</li>
-
-            <li>Intraday charts provide additional detail but should not replace larger trends.</li>
-
-            <li>Look for alignment between multiple timeframes.</li>
-
-            <li>Always consider the bigger picture before researching a breakout.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- PRACTICAL EXERCISE -->
-
-    <div class="lesson-card">
-
-        <h2>Practical Exercise</h2>
-
-        <p>
-
-            Open three stocks from your EdgeBreak watchlist.
-
-        </p>
-
-        <ul>
-
-            <li>View each stock on the weekly chart.</li>
-
-            <li>Switch to the daily chart.</li>
-
-            <li>Identify the main trend on both timeframes.</li>
-
-            <li>Mark any major resistance levels.</li>
-
-            <li>Decide whether the daily structure supports the long-term trend.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- RESEARCH REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            Multi-timeframe analysis provides additional context for market research but should never be used as a prediction tool. EdgeBreak combines chart analysis with structured market research to support independent decision-making and does not provide financial advice or investment recommendations.
-
-        </p>
-
-    </div>
+<main class="ac-page">
 
     <!-- ===================================
-    LESSON NAVIGATION
+    HERO
     =================================== -->
+    <section class="ac-hero">
+        <div class="ac-shell">
+            <div class="ac-kicker"><span class="ac-dot"></span> Module 3 · Lesson 1</div>
+            <h1 class="ac-title">Multi-Timeframe <span>Analysis.</span></h1>
+            <p class="ac-subtitle">
+                A single chart can hide important context. Learn how weekly, daily and shorter-term timeframes work together to reveal the bigger structure.
+            </p>
 
-    <div class="lesson-next">
+            <div class="ac-meta">
+                <span>Estimated time: 20 minutes</span>
+                <span>Advanced market structure</span>
+                <span>Intermediate</span>
+            </div>
 
-        <div class="lesson-next-tag">
+            <div class="ac-progress-wrap" aria-label="Module 3 progress">
+                <div class="ac-progress-label">
+                    <span>Module 3 progress</span>
+                    <span>Lesson 1</span>
+                </div>
+                <div class="ac-progress"><span style="width:18%"></span></div>
+            </div>
+        </div>
+    </section>
 
-            Continue Learning
+    <!-- ===================================
+    WHAT YOU'LL LEARN
+    =================================== -->
+    <section class="ac-overview">
+        <div class="ac-shell">
+            <div class="ac-overview-card">
+                <div>
+                    <div class="ac-overview-label">What you'll learn</div>
+                    <h2>One stock. Several views. Better context.</h2>
+                </div>
+
+                <div class="ac-learn-list">
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>What multi-timeframe analysis is.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why experienced researchers use more than one chart.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How weekly, daily and intraday charts work together.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How multiple timeframes support breakout research.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Common mistakes when different timeframes disagree.</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================
+    LESSON CONTENT
+    =================================== -->
+    <article class="ac-content">
+        <div class="ac-reading">
+
+            <section class="ac-section">
+                <h2>Why multiple timeframes matter</h2>
+                <p>Every chart tells only part of the story.</p>
+                <p>A daily chart might show a developing breakout structure while the weekly chart reveals major long-term resistance sitting just above price. Likewise, short-term weakness may look significant on an intraday chart while the stock remains inside a healthy long-term uptrend.</p>
+                <p>Looking across several timeframes helps place short-term movements inside the broader market structure before conclusions are drawn.</p>
+
+                <div class="ac-pullquote">
+                    Multi-timeframe analysis is not about finding more signals. It is about seeing the same stock with more context.
+                </div>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/weekly-vs-daily.webp" alt="Comparison of weekly and daily stock charts showing how multiple timeframes provide different perspectives on market structure and breakout research.">
+                <figcaption>The weekly chart shows the broader trend and major structural levels, while the daily chart provides a closer view of recent price behaviour and developing technical structures.</figcaption>
+            </figure>
+
+            <div class="ac-concept-grid" aria-label="Chart timeframe roles">
+                <div class="ac-concept-card">
+                    <b>Weekly</b>
+                    <strong>The bigger picture</strong>
+                    <span>Long-term trend, major support and resistance, and extended periods of consolidation.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Daily</b>
+                    <strong>The core research view</strong>
+                    <span>Resistance tests, higher lows, volume behaviour and developing breakout structure.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Intraday</b>
+                    <strong>Short-term detail</strong>
+                    <span>Additional context about how price behaves during the trading session.</span>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>The weekly chart</h2>
+                <p>The weekly chart provides a broad view of a stock's behaviour over a longer period.</p>
+                <p>It can help identify long-term trends, major resistance zones and extended periods of consolidation that may be less obvious on a shorter chart.</p>
+                <p>Before studying a developing breakout on the daily chart, it is useful to understand where that setup sits within the larger structure.</p>
+                <p>Questions to consider include:</p>
+                <ul>
+                    <li>Is the long-term trend rising, falling or moving sideways?</li>
+                    <li>Is major resistance nearby?</li>
+                    <li>Has the stock spent months consolidating?</li>
+                    <li>Is the current structure occurring near a major historical price area?</li>
+                </ul>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/the-weekly-chart.webp" alt="Weekly stock chart illustrating the long-term trend, major resistance level and broader market structure.">
+                <figcaption>Weekly charts help highlight long-term trends, major structural zones and longer periods of consolidation before shorter-term price action is assessed.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>The daily chart</h2>
+                <p>The daily chart forms the foundation of much of the EdgeBreak research process.</p>
+                <p>It provides enough detail to study repeated resistance tests, higher lows, tightening ranges, volume behaviour and developing breakout structures without being dominated by very short-term market noise.</p>
+                <p>Many EdgeBreak scanners analyse daily market data because this timeframe offers a practical balance between the long-term picture and shorter-term price movement.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/uptrend.webp" alt="Daily stock chart showing an established uptrend with higher highs, higher lows and developing technical structure.">
+                <figcaption>The daily timeframe is useful for studying higher highs, higher lows, support, resistance, consolidation and volume behaviour over several weeks or months.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Intraday charts</h2>
+                <p>Intraday charts break the trading session into shorter periods such as five minutes, fifteen minutes or one hour.</p>
+                <p>They can provide additional detail about how price behaves during a trading day, but they should generally be interpreted alongside the larger daily and weekly structures.</p>
+                <p>When viewed alone, ordinary short-term fluctuations can appear much more important than they really are.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/daily-vs-intraday.webp" alt="Comparison of daily and intraday stock charts showing how each timeframe provides different market context.">
+                <figcaption>The daily chart preserves broader structure, while the intraday chart adds detail about shorter-term price behaviour. Both views answer different research questions.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Looking for alignment</h2>
+                <p>One useful part of multi-timeframe analysis is checking whether different chart periods are telling a similar structural story.</p>
+                <p>For example, a stock might display:</p>
+                <ul>
+                    <li>A healthy longer-term trend on the weekly chart.</li>
+                    <li>Higher lows developing on the daily chart.</li>
+                    <li>Repeated resistance tests near an important price zone.</li>
+                </ul>
+                <p>When several timeframes support the same interpretation, the broader research picture can become clearer.</p>
+                <p>Alignment still does not guarantee a future outcome. It simply means the evidence is less contradictory across the timeframes being studied.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/chart-alignment.webp" alt="Diagram showing alignment between weekly and daily charts and how multiple timeframes can reinforce the same market structure.">
+                <figcaption>Timeframe alignment occurs when broader and shorter-term charts support a similar structural interpretation, such as a healthy longer-term trend combined with improving daily structure.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>When the charts disagree</h2>
+                <p>Not every timeframe will point in the same direction.</p>
+                <p>A stock may look strong on the daily chart while still sitting beneath significant weekly resistance. An intraday chart may also look weak during a normal pullback inside a much stronger daily trend.</p>
+                <p>Conflicting information does not automatically mean a stock should be ignored. Instead, it tells you that the research needs more context and that the smaller timeframe should not be viewed in isolation.</p>
+            </section>
+
+            <div class="ac-process" aria-label="Multi-timeframe research process">
+                <div class="ac-process-head">
+                    <span>A simple top-down process</span>
+                    <h3>Weekly → daily → detail → compare.</h3>
+                </div>
+
+                <div class="ac-process-grid">
+                    <div class="ac-process-step">
+                        <b>01</b>
+                        <strong>Weekly</strong>
+                        <span>Identify the long-term trend and major support or resistance zones.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>02</b>
+                        <strong>Daily</strong>
+                        <span>Study the developing structure, resistance tests, higher lows and volume behaviour.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>03</b>
+                        <strong>Detail</strong>
+                        <span>Use shorter timeframes only when extra short-term context is useful.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>04</b>
+                        <strong>Compare</strong>
+                        <span>Look for alignment or conflicts before forming a broader interpretation.</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Multi-timeframe analysis inside EdgeBreak</h2>
+                <p>EdgeBreak encourages members to combine scanner results with direct chart research across more than one timeframe.</p>
+                <p>A typical workflow might involve:</p>
+                <ol>
+                    <li>Finding a research candidate using the Automated Daily Scan or NASDAQ Scanner.</li>
+                    <li>Opening the stock in TradingView.</li>
+                    <li>Reviewing the weekly trend and major structural zones.</li>
+                    <li>Studying the daily resistance, higher lows and volume behaviour.</li>
+                    <li>Checking shorter-term charts if additional context is useful.</li>
+                    <li>Saving the stock to My Workspace for ongoing research.</li>
+                </ol>
+                <p>This process helps keep the scanner result connected to the broader chart rather than treating one timeframe as the complete picture.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/multi-timeframe.webp" alt="Side-by-side comparison of daily and weekly TradingView charts inside EdgeBreak showing multi-timeframe market research.">
+                <figcaption>Comparing weekly and daily charts inside EdgeBreak can reveal whether a developing daily structure is supported by the broader trend or facing important longer-term resistance.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Focus on context</h2>
+                <p>Multi-timeframe analysis is not about finding perfect agreement between every chart.</p>
+                <p>Its purpose is to provide context.</p>
+                <p>Understanding the larger trend before analysing smaller price movements helps reduce the chance of giving too much weight to short-term noise and creates a more balanced research process.</p>
+            </section>
+
+            <div class="ac-exercise">
+                <div class="ac-exercise-tag">Practical exercise</div>
+                <h3>Compare three watchlist stocks.</h3>
+                <p>Open three stocks from My Workspace and compare their weekly and daily charts.</p>
+                <ul>
+                    <li>Identify the main trend on the weekly chart.</li>
+                    <li>Switch to the daily chart and identify the shorter-term structure.</li>
+                    <li>Mark major support and resistance zones.</li>
+                    <li>Note any higher lows or repeated resistance tests.</li>
+                    <li>Decide whether the daily and weekly structures are aligned or conflicting.</li>
+                </ul>
+            </div>
 
         </div>
+    </article>
 
-        <h2>
+    <!-- ===================================
+    SUMMARY / TAKEAWAYS
+    =================================== -->
+    <section class="ac-summary-area">
+        <div class="ac-shell">
+            <div class="ac-card-grid three">
 
-            Continue Your Journey
+                <div class="ac-card">
+                    <h2>Lesson summary</h2>
+                    <p>Multi-timeframe analysis combines weekly, daily and shorter-term charts to create a broader view of market behaviour. Each timeframe answers a different question, and comparing them can reveal important trend, resistance and structural context that a single chart may miss.</p>
+                </div>
 
-        </h2>
+                <div class="ac-card">
+                    <h2>Key takeaways</h2>
+                    <ul>
+                        <li>The weekly chart provides long-term context.</li>
+                        <li>The daily chart is the core EdgeBreak research timeframe.</li>
+                        <li>Intraday charts add detail but should not replace the bigger picture.</li>
+                        <li>Alignment can strengthen the clarity of a structural interpretation.</li>
+                        <li>Conflicting timeframes are useful information, not something to ignore.</li>
+                    </ul>
+                </div>
 
-        <div class="lesson-nav-buttons">
+                <div class="ac-card">
+                    <h2>Common beginner mistakes</h2>
+                    <ul>
+                        <li>Relying on one timeframe only.</li>
+                        <li>Letting intraday noise override the weekly or daily structure.</li>
+                        <li>Ignoring major weekly resistance.</li>
+                        <li>Assuming aligned charts guarantee a successful breakout.</li>
+                        <li>Switching between too many timeframes without a clear purpose.</li>
+                    </ul>
+                </div>
 
-            <!-- PREVIOUS -->
+                <div class="ac-card ac-reminder">
+                    <div class="ac-reminder-icon">✦</div>
+                    <div>
+                        <h2>Research reminder</h2>
+                        <p>Multi-timeframe analysis provides additional context for technical research but does not predict future price direction. EdgeBreak provides educational content, market information and research tools only and does not provide financial advice or investment recommendations.</p>
+                    </div>
+                </div>
 
-            <a
-                href="/academy/planning-a-trade.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/institutional-accumulation.html"
-                class="btn-primary"
-            >
-                Start Lesson 3.2 →
-            </a>
-
+            </div>
         </div>
+    </section>
 
-        <h3>
+    <!-- ===================================
+    NEXT LESSON
+    =================================== -->
+    <section class="ac-next">
+        <div class="ac-shell">
+            <div class="ac-next-card">
+                <div class="ac-next-tag">Continue learning · Module 3 Lesson 2</div>
+                <h2>Institutional activity & accumulation evidence.</h2>
+                <p>Learn how volume, price structure and off-exchange market activity can provide clues about larger market participation — while understanding why no single data point proves institutional buying or accumulation.</p>
 
-            Lesson 3.2 – Identifying Institutional Accumulation
+                <div class="ac-next-actions">
+                    <a href="/academy/institutional-accumulation.html" class="ac-btn ac-btn-primary">Start Lesson 3.2 →</a>
+                    <a href="/academy/planning-a-trade.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+                </div>
 
-        </h3>
-
-        <p>
-
-            Discover how institutional accumulation can develop before significant price movements, learn the characteristics commonly associated with professional buying activity, and understand why accumulation is an important part of the EdgeBreak research framework.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 3 • Lesson 10 of 30
-
+                <div class="ac-next-foot">Module 3 · Lesson 1 completed</div>
+            </div>
         </div>
-
-    </div>
+    </section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>

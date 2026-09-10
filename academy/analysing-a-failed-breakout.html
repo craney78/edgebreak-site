@@ -1,732 +1,946 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 22: Analysing a Failed Breakout | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how to analyse failed breakout examples by studying market structure, resistance, higher lows, accumulation and volume behaviour using historical NASDAQ charts.">
-
-<meta name="keywords"
-      content="failed breakout, breakout failure, false breakout, market structure, resistance, higher lows, accumulation, volume analysis, NASDAQ, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/analysing-a-failed-breakout.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Analysing a Failed Breakout | Module 5 Lesson 2 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Study a failed historical breakout and learn how changing market structure, resistance, higher lows, volume and post-breakout weakness can improve future market research."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/analysing-a-failed-breakout.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 22: Analysing a Failed Breakout | EdgeBreak Academy">
-
-<meta property="og:description"
-      content="Discover why some breakout structures fail by analysing historical charts, market structure, volume behaviour and warning signs before and after the breakout.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/analysing-a-failed-breakout.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/analysing-a-failed-breakout.html">
+<meta property="og:title" content="Analysing a Failed Breakout | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Learn how to review a failed breakout objectively by comparing the structure before, during and after the move through resistance."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Lesson 22: Analysing a Failed Breakout">
-
-<meta name="twitter:description"
-      content="Study real examples of failed breakouts and learn how market structure, resistance, higher lows and volume can help explain why breakouts sometimes fail.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Analysing a Failed Breakout | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Study how market structure and volume changed before, during and after a failed historical breakout."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-CSS
+FAVICON
 =================================== -->
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
+
+<!-- ===================================
+STYLES
+=================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
 
 <!-- ===================================
 SUPABASE
 =================================== -->
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
 
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
 <!-- ===================================
 STRUCTURED DATA
 =================================== -->
-
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "name":"Lesson 22: Analysing a Failed Breakout",
-  "description":"An educational lesson explaining how to analyse failed breakout structures using historical NASDAQ charts, market structure, accumulation, higher lows and volume behaviour.",
-  "educationalLevel":"Beginner",
-  "learningResourceType":"Lesson",
-  "isAccessibleForFree":true,
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  },
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "legalName": "Crane Platform Labs",
+      "url": "https://www.edgebreak.ai/",
+      "email": "mailto:admin@edgebreak.ai",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.edgebreak.ai/#logo",
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+        "caption": "EdgeBreak"
+      },
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "Course",
+      "@id": "https://www.edgebreak.ai/academy.html#course",
+      "name": "EdgeBreak Academy",
+      "url": "https://www.edgebreak.ai/academy.html",
+      "description": "Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "LearningResource",
+      "@id": "https://www.edgebreak.ai/academy/analysing-a-failed-breakout.html#lesson",
+      "name": "Module 5 Lesson 2: Analysing a Failed Breakout",
+      "url": "https://www.edgebreak.ai/academy/analysing-a-failed-breakout.html",
+      "description": "A historical case-study lesson showing how market structure, resistance, higher lows, volume and post-breakout behaviour can change when a breakout fails.",
+      "learningResourceType": "Lesson",
+      "educationalLevel": "Intermediate",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/academy.html#course" },
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/academy/analysing-a-failed-breakout.html#webpage",
+      "url": "https://www.edgebreak.ai/academy/analysing-a-failed-breakout.html",
+      "name": "Analysing a Failed Breakout | Module 5 Lesson 2 | EdgeBreak Academy",
+      "description": "Study a failed historical breakout and learn how changing market structure, resistance, higher lows, volume and post-breakout weakness can improve future market research.",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/#website" },
+      "mainEntity": { "@id": "https://www.edgebreak.ai/academy/analysing-a-failed-breakout.html#lesson" },
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/academy/analysing-a-failed-breakout.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EdgeBreak Academy",
+          "item": "https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Analysing a Failed Breakout",
+          "item": "https://www.edgebreak.ai/academy/analysing-a-failed-breakout.html"
+        }
+      ]
+    }
+  ]
 }
 </script>
 
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "@id":"https://www.edgebreak.ai/analysing-a-failed-breakout.html",
-  "name":"Lesson 22: Analysing a Failed Breakout",
-  "headline":"Analysing a Failed Breakout",
-  "description":"Learn how to analyse failed breakout structures using historical NASDAQ charts, market structure, resistance, higher lows, accumulation and volume behaviour.",
-  "learningResourceType":"Lesson",
-  "educationalLevel":"Beginner",
-  "teaches":[
-    "Market Structure",
-    "Failed Breakouts",
-    "Resistance",
-    "Higher Lows",
-    "Accumulation",
-    "Volume Analysis",
-    "Historical Chart Analysis"
-  ],
-  "isAccessibleForFree":true,
-  "inLanguage":"en-AU",
-  "publisher":{
-      "@type":"Organization",
-      "name":"EdgeBreak",
-      "url":"https://www.edgebreak.ai",
-      "logo":{
-          "@type":"ImageObject",
-          "url":"https://www.edgebreak.ai/images/logo.webp"
-      }
-  },
-  "author":{
-      "@type":"Organization",
-      "name":"EdgeBreak"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
-<script type="application/ld+json">
-{
- "@context":"https://schema.org",
- "@type":"BreadcrumbList",
- "itemListElement":[
-   {
-     "@type":"ListItem",
-     "position":1,
-     "name":"Home",
-     "item":"https://www.edgebreak.ai/"
-   },
-   {
-     "@type":"ListItem",
-     "position":2,
-     "name":"EdgeBreak Academy",
-     "item":"https://www.edgebreak.ai/academy.html"
-   },
-   {
-     "@type":"ListItem",
-     "position":3,
-     "name":"Module 5"
-   },
-   {
-     "@type":"ListItem",
-     "position":4,
-     "name":"Lesson 22: Analysing a Failed Breakout"
-   }
- ]
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
-</script>
 
-<script type="application/ld+json">
-{
- "@context":"https://schema.org",
- "@type":"WebPage",
- "name":"Lesson 22: Analysing a Failed Breakout",
- "url":"https://www.edgebreak.ai/analysing-a-failed-breakout.html",
- "isPartOf":{
-   "@type":"Course",
-   "name":"EdgeBreak Academy"
- }
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
 }
-</script>
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
 
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+
+.ac-section li{margin:7px 0}
+
+.ac-lesson-image{margin:34px 0 46px}
+
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#fff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-case-step{
+    margin:34px 0 48px;
+    padding:28px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+
+.ac-case-step b{
+    display:inline-block;
+    margin-bottom:10px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ac-case-step h3{
+    margin:0 0 12px;
+    color:var(--ix-ink);
+    font-size:29px;
+    letter-spacing:-.035em;
+}
+
+.ac-case-step p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.7;
+}
+
+.ac-case-step p:last-child{margin-bottom:0}
+
+.ac-warning-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+
+.ac-warning-card{
+    padding:23px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#fff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+
+.ac-warning-card b{
+    display:block;
+    margin-bottom:7px;
+    color:#9a6700;
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.ac-warning-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+
+.ac-warning-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+.ac-exercise{
+    margin:34px 0 54px;
+    padding:30px;
+    border:1px solid #dce7df;
+    border-radius:24px;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+}
+
+.ac-exercise-tag{
+    margin-bottom:9px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ac-exercise h3{
+    margin:0 0 13px;
+    color:var(--ix-ink);
+    font-size:27px;
+    letter-spacing:-.03em;
+}
+
+.ac-exercise p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.65;
+}
+
+.ac-exercise ul{
+    margin:0;
+    padding-left:22px;
+    color:#526071;
+    font-size:15px;
+    line-height:1.65;
+}
+
+@media(max-width:900px){
+    .ac-warning-grid{grid-template-columns:1fr}
+}
+
+@media(max-width:700px){
+    .ac-card-grid.three{grid-template-columns:1fr}
+    .ac-card-grid.three .ac-reminder{grid-column:auto}
+}
+
+</style>
 </head>
-
-
-
-
-
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
-<main>
-
-
-
-<body>
-
-
-<!-- ==========================
-MODULE 5 · LESSON 20
-=========================== -->
-
-<div class="academy-container lesson-container">
-
-    <div class="lesson-tag">
-        MODULE 5 • LESSON 20
-    </div>
-
-    <h1>
-        Analysing a Failed Breakout
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 30 Minutes</span>
-
-        <span>•</span>
-
-        <span>Real Market Research Examples</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        Not every breakout develops into a sustained trend. In fact, studying failed breakouts is one of the most valuable ways to improve your market research. This lesson examines how breakout structures can weaken after moving above resistance and demonstrates why ongoing research is just as important after the breakout as it is before it.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>Why some breakouts fail.</li>
-
-            <li>How market structure can change.</li>
-
-            <li>Recognising early warning signs.</li>
-
-            <li>Reviewing failed research objectively.</li>
-
-            <li>Improving future market analysis.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>Failure Is Part of the Market</h2>
-
-        <p>
-
-            Every experienced investor understands that not every breakout continues higher.
-
-        </p>
-
-        <p>
-
-            Markets are influenced by changing supply and demand, company announcements, broader economic conditions and investor sentiment.
-
-        </p>
-
-        <p>
-
-            A failed breakout does not necessarily mean the original research was poor. Instead, it reminds us that markets remain uncertain and that research is an ongoing process.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/failed-breakout.webp"
-                alt="Annotated stock chart illustrating a failed breakout where price initially closes above resistance on strong volume before reversing back below resistance and weakening.">
-
-            <figcaption>
-
-                Not every breakout continues higher. This example shows a failed breakout where price initially closes above resistance on strong volume but later reverses below the breakout level. Changing market conditions, company news, broader economic events or shifts in investor sentiment can all influence price behaviour. Reviewing failed breakouts objectively helps investors improve their research process while recognising that uncertainty is a normal part of financial markets.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Step 1 – Was the Structure Strong?</h2>
-
-        <p>
-
-            Begin by reviewing the chart before the breakout occurred.
-
-        </p>
-
-        <p>
-
-            Ask yourself:
-
-        </p>
-
-        <ul>
-
-            <li>Was the trend healthy?</li>
-
-            <li>Were higher lows developing?</li>
-
-            <li>Was resistance clearly defined?</li>
-
-            <li>Did the stock spend time consolidating?</li>
-
-        </ul>
-
-        <p>
-
-            Sometimes the structure was strong, but market conditions changed afterwards.
-
-        </p>
-
-        <p>
-
-            Other times, warning signs were already visible before the breakout occurred.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/Structure Before Failure.webp"
-                alt="Annotated stock chart reviewing market structure before a failed breakout, highlighting higher lows, repeated resistance tests, consolidation and the eventual breakdown below resistance.">
-
-            <figcaption>
-
-                Reviewing the chart before a failed breakout helps investors determine whether the original market structure was strong or whether warning signs were already present. By assessing the overall trend, higher lows, repeated resistance tests, consolidation and volume behaviour, investors can better understand whether changing market conditions or weaknesses in the setup contributed to the failed breakout. This type of review supports continuous learning and helps strengthen future research.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Step 2 – Examine the Breakout</h2>
-
-        <p>
-
-            Study how price moved above resistance.
-
-        </p>
-
-        <p>
-
-            Did the breakout occur with strong participation, or did price only move marginally above resistance before losing momentum?
-
-        </p>
-
-        <p>
-
-            Understanding how the breakout unfolded provides valuable context for reviewing the overall research process.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/fail-breakout-day.webp"
-                alt="Annotated stock chart illustrating a failed breakout day where price briefly moves above resistance before losing momentum and reversing back below the breakout level.">
-
-            <figcaption>
-
-                Examining the breakout day provides important context when reviewing a failed breakout. In this example, price briefly moves above resistance but is unable to sustain buying momentum before reversing lower. Studying the strength of the breakout candle, the level of volume participation and how price behaves immediately after the breakout can help investors better understand whether the move showed genuine strength or early signs of weakness.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Step 3 – What Changed?</h2>
-
-        <p>
-
-            After the breakout, review how market behaviour evolved.
-
-        </p>
-
-        <p>
-
-            Consider whether:
-
-        </p>
-
-        <ul>
-
-            <li>Market structure weakened.</li>
-
-            <li>Higher lows stopped developing.</li>
-
-            <li>Volume declined.</li>
-
-            <li>Price quickly returned below resistance.</li>
-
-            <li>Broader market conditions deteriorated.</li>
-
-        </ul>
-
-        <p>
-
-            Identifying these changes helps explain why the breakout failed.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/Breakdown After Breakout.webp"
-                alt="Annotated stock chart illustrating a failed breakout where price loses momentum, falls back below resistance and market structure weakens after the breakout.">
-
-            <figcaption>
-
-                Reviewing what changed after a breakout helps explain why some breakouts fail. In this example, price loses momentum, returns below resistance and the overall market structure begins to weaken. Higher lows stop developing, selling pressure increases and the breakout level is no longer supported. Studying these changes objectively helps investors improve future research by recognising how market conditions can evolve after a breakout.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Warning Signs</h2>
-
-        <p>
-
-            While no characteristic guarantees a failed breakout, some warning signs deserve additional attention during your research.
-
-        </p>
-
-        <ul>
-
-            <li>Poor overall market structure.</li>
-
-            <li>Very few resistance touches.</li>
-
-            <li>Large, erratic price swings.</li>
-
-            <li>Weak or inconsistent volume.</li>
-
-            <li>No evidence of accumulation.</li>
-
-            <li>Immediate rejection after breaking resistance.</li>
-
-        </ul>
-
-        <p>
-
-            These observations should be viewed collectively rather than individually.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/warning-signs.webp"
-                alt="Illustration showing common warning signs that may indicate a weak breakout, including poor market structure, limited resistance touches, erratic price swings, weak volume, lack of accumulation and immediate rejection after resistance.">
-
-            <figcaption>
-
-                Not every breakout succeeds, and no single characteristic guarantees failure. This illustration highlights several warning signs that may deserve closer attention during research, including poor overall market structure, very few resistance touches, large and erratic price swings, weak or inconsistent volume, limited evidence of accumulation and immediate rejection after breaking resistance. These observations should be considered together as part of a broader assessment rather than viewed individually. EdgeBreak encourages structured market research and does not provide financial advice or predict future market outcomes.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>What Can We Learn?</h2>
-
-        <p>
-
-            Failed breakouts often provide more valuable lessons than successful ones.
-
-        </p>
-
-        <p>
-
-            They encourage investors to review market structure more carefully, question assumptions and improve future research.
-
-        </p>
-
-        <p>
-
-            Every chart—whether successful or unsuccessful—adds to your understanding of how markets behave.
-
-        </p>
-
-        <h2>How Would EdgeBreak Handle This?</h2>
-
-        <p>
-
-            Imagine this stock appeared in the Breakout Scanner.
-
-        </p>
-
-        <p>
-
-            After reviewing the chart you might ask:
-
-        </p>
-
-        <ul>
-
-            <li>Would I still save this to My Workspace?</li>
-
-            <li>Would the Smart Money Filter strengthen the research?</li>
-
-            <li>How does this compare with today's Gold breakouts?</li>
-
-            <li>What warning signs can I identify now?</li>
-
-        </ul>
-
-        <p>
-
-            These questions help reinforce independent thinking rather than relying solely on scanner results.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/daily-research.webp"
-                alt="EdgeBreak daily research workflow showing the typical process of scanning the NASDAQ market, reviewing breakout opportunities, analysing TradingView charts and saving promising stocks to My Workspace for ongoing research.">
-
-            <figcaption>
-
-                The EdgeBreak Review Workflow demonstrates a structured approach to ongoing market research. Investors typically begin by scanning the market with the NASDAQ Scanner and Breakout Scanner, apply research filters, review selected charts in TradingView, compare multiple timeframes, evaluate market structure and save promising opportunities to My Workspace for continued monitoring. Following a consistent workflow helps organise research and develop disciplined analysis over time. EdgeBreak is an educational research platform and does not provide financial advice.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Research Never Ends</h2>
-
-        <p>
-
-            One of the biggest lessons EdgeBreak teaches is that research continues after a breakout.
-
-        </p>
-
-        <p>
-
-            Continue monitoring market structure, higher lows, resistance and volume as new market information becomes available.
-
-        </p>
-
-        <p>
-
-            The objective is not to predict every outcome—it is to continually improve your understanding of market behaviour.
-
-        </p>
-
-    </div>
-
-    <!-- LESSON SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            Failed breakouts are a normal part of financial markets. Studying these examples helps investors improve their pattern recognition, understand changing market structure and refine their research process. EdgeBreak encourages members to learn from both successful and unsuccessful examples while maintaining an objective, evidence-based approach to market analysis.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>Not every breakout succeeds.</li>
-
-            <li>Review the structure before and after the breakout.</li>
-
-            <li>Watch for changes in market structure and volume.</li>
-
-            <li>Failed examples often provide the greatest learning opportunities.</li>
-
-            <li>Research should continue long after a breakout appears.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- PRACTICAL EXERCISE -->
-
-    <div class="lesson-card">
-
-        <h2>Practical Exercise</h2>
-
-        <p>
-
-            Find a historical breakout that eventually failed.
-
-        </p>
-
-        <ul>
-
-            <li>Mark the resistance level.</li>
-
-            <li>Identify the higher lows.</li>
-
-            <li>Review the volume behaviour.</li>
-
-            <li>Determine where market structure began changing.</li>
-
-            <li>Write down three lessons you learned from the chart.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- RESEARCH REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            Historical market examples are provided for educational purposes only. A failed breakout should never be viewed as evidence that a particular research method is ineffective, just as a successful breakout should not be interpreted as proof of future performance. EdgeBreak encourages continuous learning through objective market research.
-
-        </p>
-
-    </div>
-
-    <!-- ===================================
-    LESSON NAVIGATION
-    =================================== -->
-
-    <div class="lesson-next">
-
-        <div class="lesson-next-tag">
-
-            Continue Learning
+<main class="ac-page">
+
+    <section class="ac-hero">
+        <div class="ac-shell">
+            <div class="ac-kicker"><span class="ac-dot"></span> Module 5 · Lesson 2</div>
+            <h1 class="ac-title">Analysing a <span>Failed Breakout.</span></h1>
+            <p class="ac-subtitle">
+                Not every move through resistance holds. Study a failed historical breakout from the structure before the move through to the breakdown that followed.
+            </p>
+
+            <div class="ac-meta">
+                <span>Estimated time: 30 minutes</span>
+                <span>Real market research examples</span>
+                <span>Intermediate</span>
+            </div>
+
+            <div class="ac-progress-wrap" aria-label="Module 5 progress">
+                <div class="ac-progress-label">
+                    <span>Module 5 progress</span>
+                    <span>Lesson 2 of 6</span>
+                </div>
+                <div class="ac-progress"><span style="width:33.33%"></span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ac-overview">
+        <div class="ac-shell">
+            <div class="ac-overview-card">
+                <div>
+                    <div class="ac-overview-label">What you'll learn</div>
+                    <h2>Find the point where the evidence changed.</h2>
+                </div>
+
+                <div class="ac-learn-list">
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why strong-looking breakouts can still fail.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to review the structure before the breakout objectively.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>What the breakout day itself can reveal.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to identify structural deterioration after the move.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Which warning signs deserve closer investigation.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How failed examples can improve future research.</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <article class="ac-content">
+        <div class="ac-reading">
+
+            <section class="ac-section">
+                <h2>Failure is part of the market</h2>
+                <p>Not every breakout continues higher, even when the structure looked constructive beforehand.</p>
+                <p>Market conditions change. Company news, sector weakness, broader market pressure and shifts in supply and demand can all alter a setup after it has already moved through resistance.</p>
+                <p>That means a failed breakout should not automatically be treated as proof that the original research was poor.</p>
+
+                <div class="ac-pullquote">
+                    The useful question is not simply “Why did this fail?” It is “What evidence was visible before the breakout, and what changed afterward?”
+                </div>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/failed-breakout.webp" alt="Historical failed breakout chart showing price moving above resistance before reversing back below the breakout area.">
+                <figcaption>A failed breakout provides a useful case study because the structure can be compared before, during and after the move through resistance.</figcaption>
+            </figure>
+
+            <div class="ac-case-step">
+                <b>Step 1</b>
+                <h3>Was the structure strong before the breakout?</h3>
+                <p>Start exactly where you would with a successful example: before the breakout occurred.</p>
+                <p>Review trend, resistance, higher lows, consolidation quality and volume without allowing the known failure to distort your interpretation.</p>
+                <p>Sometimes a failed breakout developed from a genuinely strong structure. Other times the warning signs were already present.</p>
+            </div>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/Structure Before Failure.webp" alt="Annotated historical chart showing market structure before a failed breakout, including resistance, higher lows and consolidation.">
+                <figcaption>Review the pre-breakout chart first. Try to judge the setup using only the information that would have been available at the time.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Questions to ask before the move</h2>
+                <ul>
+                    <li>Was the broader trend healthy?</li>
+                    <li>Were higher lows developing consistently?</li>
+                    <li>Was resistance clearly defined?</li>
+                    <li>Was the range orderly or erratic?</li>
+                    <li>Was volume behaving consistently with the structure?</li>
+                    <li>Was the stock already extended before attempting the breakout?</li>
+                </ul>
+            </section>
+
+            <div class="ac-case-step">
+                <b>Step 2</b>
+                <h3>Examine the breakout itself.</h3>
+                <p>Next, focus on how price actually moved through resistance.</p>
+                <p>Was the move decisive or only marginal? Did price remain above the level? Did volume expand? Was the stock immediately rejected?</p>
+                <p>The breakout candle does not predict the outcome, but it provides useful evidence about how the market responded at the resistance area.</p>
+            </div>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/fail-breakout-day.webp" alt="Annotated historical chart showing a failed breakout day where price briefly moves above resistance before losing momentum.">
+                <figcaption>Some failed breakouts show weakness quickly. Others appear constructive at first and deteriorate later, which is why post-breakout review matters.</figcaption>
+            </figure>
+
+            <div class="ac-case-step">
+                <b>Step 3</b>
+                <h3>Identify what changed.</h3>
+                <p>After the breakout, compare the new behaviour with the original research structure.</p>
+                <p>In a failed example, the most useful evidence often appears in the transition from strength to weakness.</p>
+                <p>Look for changes such as price moving back below former resistance, higher lows breaking down, increased volatility or broader market conditions weakening.</p>
+            </div>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/Breakdown After Breakout.webp" alt="Historical chart showing price returning below resistance and market structure weakening after a failed breakout.">
+                <figcaption>The point where price loses the breakout area and the original structure begins to deteriorate is often the most informative part of the case study.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Common warning signs</h2>
+                <p>No individual characteristic guarantees failure. Warning signs become more useful when several appear together.</p>
+            </section>
+
+            <div class="ac-warning-grid">
+                <div class="ac-warning-card">
+                    <b>Structure</b>
+                    <strong>Weak or erratic base</strong>
+                    <span>Large swings, inconsistent lows or poorly defined support can make the setup harder to interpret.</span>
+                </div>
+                <div class="ac-warning-card">
+                    <b>Resistance</b>
+                    <strong>Limited confirmation</strong>
+                    <span>Very few meaningful tests can provide less evidence that the resistance zone is well established.</span>
+                </div>
+                <div class="ac-warning-card">
+                    <b>Breakout</b>
+                    <strong>Immediate rejection</strong>
+                    <span>Price moving quickly back below resistance can show that the move failed to hold.</span>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <ul>
+                    <li>Poor or unstable market structure.</li>
+                    <li>Very few meaningful resistance tests.</li>
+                    <li>Large, erratic price swings.</li>
+                    <li>Weak or inconsistent volume behaviour.</li>
+                    <li>Little evidence of tightening or improving structure.</li>
+                    <li>Immediate rejection after moving through resistance.</li>
+                    <li>Rapid loss of the former breakout level.</li>
+                    <li>Deterioration in the wider market or sector.</li>
+                </ul>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/warning-signs.webp" alt="Illustration of common warning signs in weaker breakout structures, including erratic price action, limited resistance testing and immediate rejection.">
+                <figcaption>Warning signs should be considered as a group. No single feature proves that a breakout will fail.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Failed breakouts can begin from good setups</h2>
+                <p>One of the most important lessons is that market uncertainty never disappears.</p>
+                <p>A chart can show repeated resistance tests, higher lows, orderly volume and a strong trend — and the breakout can still fail.</p>
+                <p>This is why EdgeBreak focuses on research quality rather than promising outcomes. The platform can help organise evidence, but it cannot remove uncertainty from the market.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>How would EdgeBreak review this today?</h2>
+                <p>If a similar stock appeared in the Breakout Scanner or Automated Daily Scan, the next step would still be deeper investigation rather than assumption.</p>
+                <p>You could:</p>
+                <ul>
+                    <li>Open the TradingView chart and compare weekly and daily structure.</li>
+                    <li>Review resistance, higher lows and volume.</li>
+                    <li>Check whether unusual market activity supports or conflicts with the technical picture.</li>
+                    <li>Use AI Company Research to look for important company developments or recent news.</li>
+                    <li>Use AI Chart Analysis for a second descriptive view of the visible structure.</li>
+                    <li>Save the stock to My Workspace only if it still deserves ongoing research.</li>
+                </ul>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/daily-research.webp" alt="EdgeBreak research workflow showing stock discovery, chart analysis, deeper research and saving candidates for ongoing review.">
+                <figcaption>The current EdgeBreak workflow combines scanner discovery, chart review, market activity context, AI-assisted research and ongoing watchlist review.</figcaption>
+            </figure>
+
+            <div class="ac-process" aria-label="Failed breakout review process">
+                <div class="ac-process-head">
+                    <span>Review the failure objectively</span>
+                    <h3>Before → breakout → change → lesson.</h3>
+                </div>
+
+                <div class="ac-process-grid">
+                    <div class="ac-process-step">
+                        <b>01</b>
+                        <strong>Before</strong>
+                        <span>Judge the original structure using only the evidence available at the time.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>02</b>
+                        <strong>Breakout</strong>
+                        <span>Review how price and volume behaved as resistance was crossed.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>03</b>
+                        <strong>Change</strong>
+                        <span>Identify exactly where the original structure began to weaken.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>04</b>
+                        <strong>Lesson</strong>
+                        <span>Record what the example teaches without rewriting the past to fit the outcome.</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Avoid hindsight bias</h2>
+                <p>Once you know that a breakout failed, it can be tempting to believe the failure was obvious from the beginning.</p>
+                <p>That is hindsight bias.</p>
+                <p>A better exercise is to cover the right side of the chart and review the setup one stage at a time. Ask what you would have concluded using only the evidence available at each point.</p>
+                <p>This creates a much more realistic test of your research process.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>Research continues after the breakout</h2>
+                <p>A breakout is not the end of the analysis.</p>
+                <p>Continue monitoring price structure, former resistance, higher lows, volume, market activity and company developments as new information appears.</p>
+                <p>The objective is not to predict every failure. It is to recognise when the evidence has changed and update the research accordingly.</p>
+            </section>
+
+            <div class="ac-exercise">
+                <div class="ac-exercise-tag">Practical exercise</div>
+                <h3>Reverse-engineer a failed breakout.</h3>
+                <p>Find one historical breakout that later returned below its breakout area.</p>
+                <ul>
+                    <li>Mark the resistance zone.</li>
+                    <li>Identify the higher lows before the move.</li>
+                    <li>Review volume before and during the breakout.</li>
+                    <li>Identify the first clear sign that the original structure changed.</li>
+                    <li>Check whether the wider market or sector also changed.</li>
+                    <li>Write down three things that were genuinely knowable before the failure.</li>
+                    <li>Write down one thing you only know because you can see the outcome.</li>
+                </ul>
+            </div>
 
         </div>
+    </article>
 
-        <h2>
+    <section class="ac-summary-area">
+        <div class="ac-shell">
+            <div class="ac-card-grid three">
 
-            Continue Your Journey
+                <div class="ac-card">
+                    <h2>Lesson summary</h2>
+                    <p>Failed breakouts are valuable research examples because they show how market structure can change after price moves through resistance. Reviewing the setup before the breakout, the move itself and the later deterioration helps separate genuine warning signs from hindsight.</p>
+                </div>
 
-        </h2>
+                <div class="ac-card">
+                    <h2>Key takeaways</h2>
+                    <ul>
+                        <li>Not every strong-looking breakout continues higher.</li>
+                        <li>Review the pre-breakout structure before judging the failure.</li>
+                        <li>Look for the exact point where the evidence changed.</li>
+                        <li>Warning signs become more useful when several appear together.</li>
+                        <li>Failed examples can improve pattern recognition and research discipline.</li>
+                        <li>Research should continue after a breakout appears.</li>
+                    </ul>
+                </div>
 
-        <div class="lesson-nav-buttons">
+                <div class="ac-card">
+                    <h2>Common beginner mistakes</h2>
+                    <ul>
+                        <li>Assuming a failure means the original research was automatically poor.</li>
+                        <li>Using hindsight to make the warning signs look obvious.</li>
+                        <li>Ignoring changes in the broader market or sector.</li>
+                        <li>Focusing only on the breakout candle.</li>
+                        <li>Refusing to update the original interpretation when the evidence changes.</li>
+                    </ul>
+                </div>
 
-            <!-- PREVIOUS -->
+                <div class="ac-card ac-reminder">
+                    <div class="ac-reminder-icon">✦</div>
+                    <div>
+                        <h2>Research reminder</h2>
+                        <p>Historical failed breakouts are provided for education and pattern-recognition practice. They do not prove that any particular setup will fail in the future, and EdgeBreak does not provide financial advice, investment recommendations, trade signals or predictions of future market performance.</p>
+                    </div>
+                </div>
 
-            <a
-                href="/academy/analysing-a-successful-breakout.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/recognising-accumulation-before-breakouts.html"
-                class="btn-primary"
-            >
-                Start Lesson 5.3 →
-            </a>
-
+            </div>
         </div>
+    </section>
 
-        <h3>
+    <section class="ac-next">
+        <div class="ac-shell">
+            <div class="ac-next-card">
+                <div class="ac-next-tag">Continue learning · Module 5 Lesson 3 of 6</div>
+                <h2>Recognising accumulation before breakouts.</h2>
+                <p>Study historical consolidation structures and learn how repeated resistance tests, higher lows, volume and broader market activity can provide evidence of building pressure before a breakout.</p>
 
-            Lesson 5.3 – Recognising Accumulation Before Breakouts
+                <div class="ac-next-actions">
+                    <a href="/academy/recognising-accumulation-before-breakouts.html" class="ac-btn ac-btn-primary">Start Lesson 5.3 →</a>
+                    <a href="/academy/analysing-a-successful-breakout.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+                </div>
 
-        </h3>
-
-        <p>
-
-            Learn how accumulation develops over time by analysing real market examples and identifying the characteristics that often appear before organised breakout structures emerge.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 5 • Lesson 21 of 30
-
+                <div class="ac-next-foot">Module 5 · Lesson 2 of 6 completed</div>
+            </div>
         </div>
-
-    </div>
+    </section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>

@@ -1,627 +1,890 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 28: Position Sizing & Portfolio Management | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn the principles of position sizing and portfolio management, including diversification, risk allocation and capital preservation as part of a structured market research process.">
-
-<meta name="keywords"
-      content="position sizing, portfolio management, risk management, diversification, capital allocation, portfolio risk, NASDAQ research, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/position-sizing-and-portfolio-management.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Position Sizing & Portfolio Management | Module 3 Lesson 4 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn the principles of position sizing, diversification, concentration risk and portfolio exposure as part of a disciplined and independent market research process."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/position-sizing-portfolio-management.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 28: Position Sizing & Portfolio Management">
-
-<meta property="og:description"
-      content="Discover how thoughtful position sizing, diversification and portfolio management contribute to long-term consistency and disciplined market research.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/position-sizing-and-portfolio-management.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/position-sizing-portfolio-management.html">
+<meta property="og:title" content="Position Sizing & Portfolio Management | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Learn how position size, diversification and concentration risk affect overall portfolio exposure."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Lesson 28: Position Sizing & Portfolio Management">
-
-<meta name="twitter:description"
-      content="Learn the fundamentals of position sizing, diversification and portfolio management within a structured research framework.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Position Sizing & Portfolio Management | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Learn how position sizing, diversification and concentration risk influence overall portfolio exposure."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-CSS
+FAVICON
 =================================== -->
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
+
+<!-- ===================================
+STYLES
+=================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
 
 <!-- ===================================
 SUPABASE
 =================================== -->
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
 
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
 <!-- ===================================
-LEARNING RESOURCE
+STRUCTURED DATA
 =================================== -->
-
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "name":"Lesson 28: Position Sizing & Portfolio Management",
-  "description":"Learn the principles of position sizing, diversification, portfolio management and capital preservation as part of a structured market research process.",
-  "educationalLevel":"Beginner",
-  "learningResourceType":"Lesson",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  },
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  }
-}
-</script>
-
-<!-- ===================================
-BREADCRUMB
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "legalName": "Crane Platform Labs",
+      "url": "https://www.edgebreak.ai/",
+      "email": "mailto:admin@edgebreak.ai",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.edgebreak.ai/#logo",
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+        "caption": "EdgeBreak"
+      },
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
-      "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Lesson 28: Position Sizing & Portfolio Management",
-      "item":"https://www.edgebreak.ai/position-sizing-and-portfolio-management.html"
+      "@type": "Course",
+      "@id": "https://www.edgebreak.ai/academy.html#course",
+      "name": "EdgeBreak Academy",
+      "url": "https://www.edgebreak.ai/academy.html",
+      "description": "Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "LearningResource",
+      "@id": "https://www.edgebreak.ai/academy/position-sizing-portfolio-management.html#lesson",
+      "name": "Module 3 Lesson 4: Position Sizing & Portfolio Management",
+      "url": "https://www.edgebreak.ai/academy/position-sizing-portfolio-management.html",
+      "description": "An intermediate lesson introducing position sizing, portfolio exposure, diversification and concentration risk from an educational market-research perspective.",
+      "learningResourceType": "Lesson",
+      "educationalLevel": "Intermediate",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/academy.html#course" },
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/academy/position-sizing-portfolio-management.html#webpage",
+      "url": "https://www.edgebreak.ai/academy/position-sizing-portfolio-management.html",
+      "name": "Position Sizing & Portfolio Management | Module 3 Lesson 4 | EdgeBreak Academy",
+      "description": "Learn the principles of position sizing, diversification, concentration risk and portfolio exposure as part of a disciplined and independent market research process.",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/#website" },
+      "mainEntity": { "@id": "https://www.edgebreak.ai/academy/position-sizing-portfolio-management.html#lesson" },
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/academy/position-sizing-portfolio-management.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EdgeBreak Academy",
+          "item": "https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Position Sizing & Portfolio Management",
+          "item": "https://www.edgebreak.ai/academy/position-sizing-portfolio-management.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<!-- ===================================
-WEBPAGE
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 28: Position Sizing & Portfolio Management",
-  "url":"https://www.edgebreak.ai/position-sizing-and-portfolio-management.html",
-  "description":"Learn how position sizing, diversification and portfolio management support disciplined market research and long-term consistency.",
-  "isPartOf":{
-    "@type":"WebSite",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  },
-  "primaryImageOfPage":"https://www.edgebreak.ai/images/academy.webp",
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+
+.ac-section li{
+    margin:7px 0;
+}
+
+.ac-lesson-image{
+    margin:34px 0 46px;
+}
+
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#ffffff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-concept-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+
+.ac-concept-card{
+    padding:23px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#ffffff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+
+.ac-concept-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.ac-concept-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+
+.ac-concept-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+.ac-exercise{
+    margin:34px 0 54px;
+    padding:30px;
+    border:1px solid #dce7df;
+    border-radius:24px;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+}
+
+.ac-exercise-tag{
+    margin-bottom:9px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ac-exercise h3{
+    margin:0 0 13px;
+    color:var(--ix-ink);
+    font-size:27px;
+    letter-spacing:-.03em;
+}
+
+.ac-exercise p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.65;
+}
+
+.ac-exercise ul{
+    margin:0;
+    padding-left:22px;
+    color:#526071;
+    font-size:15px;
+    line-height:1.65;
+}
+
+@media(max-width:900px){
+    .ac-concept-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+    .ac-card-grid.three{
+        grid-template-columns:1fr;
+    }
+
+    .ac-card-grid.three .ac-reminder{
+        grid-column:auto;
+    }
+}
+
+</style>
 </head>
-
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
-<main>
-<!-- ==========================
-MODULE 3 · LESSON 12
-=========================== -->
-
-<div class="academy-container lesson-container">
-
-    <div class="lesson-tag">
-        MODULE 3 • LESSON 12
-    </div>
-
-    <h1>
-        Position Sizing & Portfolio Management
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 20 Minutes</span>
-
-        <span>•</span>
-
-        <span>Advanced Breakout Research</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        Finding quality research opportunities is only one part of investing. Equally important is understanding how each investment fits within your overall portfolio. This lesson introduces the principles of position sizing and portfolio management from an educational perspective, helping you think about diversification, consistency and long-term investing rather than focusing on individual trades.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>What position sizing means.</li>
-
-            <li>Why portfolio management matters.</li>
-
-            <li>The importance of diversification.</li>
-
-            <li>Avoiding concentration risk.</li>
-
-            <li>How EdgeBreak supports portfolio research.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>Looking Beyond Individual Stocks</h2>
-
-        <p>
-
-            One of the biggest mistakes made by newer investors is concentrating entirely on individual opportunities while overlooking their overall portfolio.
-
-        </p>
-
-        <p>
-
-            Even when researching high-quality breakout structures, it is important to remember that every investment becomes part of a larger portfolio rather than existing in isolation.
-
-        </p>
-
-        <p>
-
-            Effective portfolio management encourages investors to think about balance, diversification and long-term consistency.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/portfolio-overview.webp"
-                alt="Illustration showing a diversified investment portfolio with multiple stocks, sectors and balanced allocation to demonstrate portfolio management principles.">
-
-            <figcaption>
-
-                Individual stocks should be viewed as part of a broader investment portfolio rather than in isolation. A balanced portfolio considers diversification, position sizing and overall market exposure, helping investors manage risk while maintaining a consistent long-term research process.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>What Is Position Sizing?</h2>
-
-        <p>
-
-            Position sizing refers to the proportion of your overall portfolio allocated to a particular investment.
-
-        </p>
-
-        <p>
-
-            Different investors use different approaches depending on their objectives, experience and personal financial circumstances.
-
-        </p>
-
-        <p>
-
-            Rather than focusing on exact percentages, it is helpful to understand that every position contributes differently to the overall level of portfolio exposure.
-
-        </p>
-
-        <h2>Why Diversification Matters</h2>
-
-        <p>
-
-            Diversification involves spreading investments across multiple companies, industries or asset classes instead of relying heavily on one investment.
-
-        </p>
-
-        <p>
-
-            Diversification cannot eliminate risk, but it may reduce the impact of unexpected events affecting a single company or sector.
-
-        </p>
-
-        <p>
-
-            Many investors consider diversification an important component of long-term portfolio management.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/why-diversification-matters.webp"
-                alt="Illustration showing a diversified investment portfolio spread across multiple sectors to demonstrate how diversification helps reduce concentration risk and improve long-term portfolio stability.">
-
-            <figcaption>
-
-                Diversification involves spreading investments across multiple companies, industries or asset classes rather than relying heavily on a single investment. While diversification cannot eliminate investment risk, it may reduce the impact of unexpected events affecting one company or sector and is widely regarded as an important component of long-term portfolio management.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Understanding Concentration Risk</h2>
-
-        <p>
-
-            Concentration risk occurs when a large proportion of a portfolio is exposed to one company, one industry or one investment theme.
-
-        </p>
-
-        <p>
-
-            If unexpected events affect that area of the market, the overall portfolio may experience greater volatility than a more diversified portfolio.
-
-        </p>
-
-        <p>
-
-            Understanding concentration risk encourages investors to consider the bigger picture rather than focusing only on individual research candidates.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/concentration-risk.webp"
-                alt="Illustration comparing a highly concentrated portfolio with a diversified portfolio, demonstrating how concentration risk can increase volatility when one company or sector experiences unexpected events.">
-
-            <figcaption>
-
-                Concentration risk occurs when a large proportion of a portfolio is invested in a single company, industry or investment theme. If that area of the market experiences unexpected events, the overall portfolio may be more heavily affected than a well-diversified portfolio. Understanding concentration risk encourages investors to consider portfolio balance and the broader picture rather than focusing solely on individual investment opportunities.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Quality Over Quantity</h2>
-
-        <p>
-
-            A larger portfolio does not automatically mean a better portfolio.
-
-        </p>
-
-        <p>
-
-            Many investors prefer maintaining a manageable number of well-researched companies rather than monitoring dozens of stocks they know very little about.
-
-        </p>
-
-        <p>
-
-            Quality research and ongoing monitoring often provide greater value than simply increasing the number of investments.
-
-        </p>
-
-        <h2>Review Your Portfolio Regularly</h2>
-
-        <p>
-
-            Portfolio management is an ongoing process.
-
-        </p>
-
-        <p>
-
-            As market conditions change, investors often review whether individual holdings continue displaying the characteristics that originally attracted their attention.
-
-        </p>
-
-        <p>
-
-            Questions to ask include:
-
-        </p>
-
-        <ul>
-
-            <li>Has the market structure changed?</li>
-
-            <li>Are higher lows still developing?</li>
-
-            <li>Has resistance been broken?</li>
-
-            <li>Has volume behaviour changed?</li>
-
-            <li>Has the overall research thesis changed?</li>
-
-        </ul>
-
-        <h2>Using EdgeBreak to Organise Your Portfolio Research</h2>
-
-        <p>
-
-            EdgeBreak is designed to support organised portfolio research through structured watchlists and market scanners.
-
-        </p>
-
-        <p>
-
-            Members can monitor developing opportunities, compare breakout quality, review charts and maintain organised watchlists inside My Workspace.
-
-        </p>
-
-        <p>
-
-            This structured approach encourages ongoing research rather than reactive decision-making.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/watchlist-page.webp"
-                alt="EdgeBreak My Workspace watchlist showing how investors can organise, monitor and review their personal portfolio research using saved NASDAQ stocks.">
-
-            <figcaption>
-
-                My Watchlist helps organise your market research by bringing together stocks you wish to continue monitoring in one convenient location. Rather than repeatedly searching for the same companies, you can save research candidates directly from the EdgeBreak scanners and return to them as market structure evolves. This makes it easier to compare charts, review previous observations and monitor developing resistance levels, higher lows, accumulation characteristics and breakout behaviour over time. A well-organised watchlist supports a more consistent research routine and helps investors focus on quality opportunities instead of starting from scratch each day. EdgeBreak is designed as an educational research platform and does not provide financial advice or recommendations to buy or sell securities.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Think Long Term</h2>
-
-        <p>
-
-            Successful investing is rarely about finding one perfect opportunity.
-
-        </p>
-
-        <p>
-
-            Instead, it is often built through years of disciplined research, continuous learning and maintaining a balanced portfolio aligned with your own financial objectives.
-
-        </p>
-
-        <p>
-
-            A structured research process allows investors to make more informed decisions while avoiding unnecessary emotional reactions to short-term market fluctuations.
-
-        </p>
-
-    </div>
-
-    <!-- LESSON SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            Position sizing and portfolio management encourage investors to look beyond individual stocks and consider how each investment contributes to their overall portfolio. Diversification, consistency and regular portfolio reviews help support long-term investing. EdgeBreak assists this process by providing structured research tools that help members organise and monitor developing opportunities over time.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>Every investment forms part of a larger portfolio.</li>
-
-            <li>Diversification helps manage overall portfolio exposure.</li>
-
-            <li>Concentration risk should be considered during research.</li>
-
-            <li>Quality research is more valuable than simply owning more stocks.</li>
-
-            <li>Review your portfolio regularly as market conditions change.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- PRACTICAL EXERCISE -->
-
-    <div class="lesson-card">
-
-        <h2>Practical Exercise</h2>
-
-        <p>
-
-            Review the stocks currently saved in your EdgeBreak watchlist.
-
-        </p>
-
-        <ul>
-
-            <li>Group them by industry.</li>
-
-            <li>Identify any sectors that appear overrepresented.</li>
-
-            <li>Compare the overall quality of each breakout structure.</li>
-
-            <li>Review the weekly trend for each stock.</li>
-
-            <li>Consider whether your watchlist is balanced or concentrated in one area.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- RESEARCH REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            This lesson is intended for educational purposes only and does not recommend how much to invest or how to allocate your portfolio. Position sizing and portfolio management should always reflect your own financial circumstances, objectives and risk tolerance. EdgeBreak provides research tools and educational resources only and does not provide financial advice.
-
-        </p>
-
-    </div>
+<main class="ac-page">
 
     <!-- ===================================
-    LESSON NAVIGATION
+    HERO
     =================================== -->
+    <section class="ac-hero">
+        <div class="ac-shell">
+            <div class="ac-kicker"><span class="ac-dot"></span> Module 3 · Lesson 4</div>
+            <h1 class="ac-title">Position Sizing & <span>Portfolio Management.</span></h1>
+            <p class="ac-subtitle">
+                Finding a strong research candidate is only one part of the picture. Learn how position size, diversification and concentration can change the overall level of portfolio exposure.
+            </p>
 
-    <div class="lesson-next">
+            <div class="ac-meta">
+                <span>Estimated time: 20 minutes</span>
+                <span>Risk & portfolio foundations</span>
+                <span>Intermediate</span>
+            </div>
 
-        <div class="lesson-next-tag">
+            <div class="ac-progress-wrap" aria-label="Module 3 progress">
+                <div class="ac-progress-label">
+                    <span>Module 3 progress</span>
+                    <span>Lesson 4</span>
+                </div>
+                <div class="ac-progress"><span style="width:68%"></span></div>
+            </div>
+        </div>
+    </section>
 
-            Continue Learning
+    <!-- ===================================
+    WHAT YOU'LL LEARN
+    =================================== -->
+    <section class="ac-overview">
+        <div class="ac-shell">
+            <div class="ac-overview-card">
+                <div>
+                    <div class="ac-overview-label">What you'll learn</div>
+                    <h2>Think beyond one stock and consider total exposure.</h2>
+                </div>
+
+                <div class="ac-learn-list">
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>What position sizing means.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why portfolio-level thinking matters.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How diversification can affect overall exposure.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>What concentration risk is.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How EdgeBreak can help organise research without managing your portfolio.</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================
+    LESSON CONTENT
+    =================================== -->
+    <article class="ac-content">
+        <div class="ac-reading">
+
+            <section class="ac-section">
+                <h2>Looking beyond individual stocks</h2>
+                <p>One common beginner mistake is focusing entirely on the quality of one stock while ignoring how that idea would fit within a broader portfolio.</p>
+                <p>Even a technically strong research candidate does not exist in isolation. Exposure to several companies in the same sector, theme or market environment can create risks that are not obvious when each stock is viewed separately.</p>
+                <p>Portfolio-level thinking therefore asks a second question after the individual stock research is complete: how does this idea relate to everything else already being held or considered?</p>
+
+                <div class="ac-pullquote">
+                    A high-quality setup can still create poor portfolio balance if too much exposure is concentrated in one company, sector or theme.
+                </div>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/portfolio-overview.webp" alt="Illustration showing a diversified investment portfolio with multiple stocks and sectors to demonstrate portfolio-management principles.">
+                <figcaption>Portfolio research looks beyond one stock and considers how different holdings or research ideas may combine to create overall exposure.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>What is position sizing?</h2>
+                <p>Position sizing refers to the proportion of an overall portfolio allocated to a particular investment.</p>
+                <p>The larger the position, the greater the effect that one stock can have on the overall portfolio — positively or negatively.</p>
+                <p>There is no universal percentage that is appropriate for everyone. Position size depends on individual circumstances, objectives, time horizon and risk tolerance.</p>
+                <p>For that reason, EdgeBreak does not recommend position sizes or tell members how much capital to allocate.</p>
+            </section>
+
+            <div class="ac-concept-grid" aria-label="Portfolio risk concepts">
+                <div class="ac-concept-card">
+                    <b>Position size</b>
+                    <strong>How much exposure?</strong>
+                    <span>A larger allocation gives one stock a greater influence on total portfolio outcomes.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Diversification</b>
+                    <strong>How spread out?</strong>
+                    <span>Exposure can be distributed across different companies, sectors or asset classes.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Concentration</b>
+                    <strong>Where is risk clustered?</strong>
+                    <span>Several similar holdings can create more shared risk than the number of positions alone suggests.</span>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Why diversification matters</h2>
+                <p>Diversification involves spreading exposure across multiple companies, industries or asset classes rather than relying heavily on one investment or one market theme.</p>
+                <p>Diversification does not eliminate risk, and a diversified portfolio can still fall in value.</p>
+                <p>Its purpose is to reduce the degree to which one unexpected company or sector event dominates the entire portfolio.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/why-diversification-matters.webp" alt="Illustration showing a diversified investment portfolio spread across multiple sectors and companies.">
+                <figcaption>Diversification can reduce dependence on a single company or sector, although it cannot remove market risk or guarantee more stable returns.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Understanding concentration risk</h2>
+                <p>Concentration risk occurs when a large amount of exposure is tied to one company, sector, industry or investment theme.</p>
+                <p>A portfolio may contain several different stocks and still be highly concentrated if those companies respond to the same economic or sector forces.</p>
+                <p>This is why simply counting the number of positions does not necessarily reveal how diversified a portfolio really is.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/concentration-risk.webp" alt="Illustration comparing a concentrated portfolio with a more diversified portfolio to explain concentration risk.">
+                <figcaption>Concentration risk can arise when a large portion of overall exposure depends on one company, sector or shared market theme.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Quality over quantity</h2>
+                <p>Owning or researching more stocks does not automatically create a better process.</p>
+                <p>A large list of poorly understood companies can be harder to monitor than a smaller group that has been researched carefully.</p>
+                <p>The same principle applies to a watchlist. EdgeBreak is designed to help narrow the NASDAQ so members can spend more time investigating a manageable group of research candidates rather than collecting hundreds of names without context.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>Review exposure as conditions change</h2>
+                <p>Portfolio exposure is not static. Prices move, sectors strengthen or weaken and individual company conditions change.</p>
+                <p>Educational questions investors may consider when reviewing their own research include:</p>
+                <ul>
+                    <li>Has the broader market structure changed?</li>
+                    <li>Are several holdings or research ideas concentrated in the same sector?</li>
+                    <li>Has one position become much larger relative to the rest because of price movement?</li>
+                    <li>Have the original reasons for researching the stock changed?</li>
+                    <li>Has the sector or market environment become materially different?</li>
+                </ul>
+                <p>These are portfolio-awareness questions, not instructions to buy, sell or rebalance.</p>
+            </section>
+
+            <div class="ac-process" aria-label="Portfolio research process">
+                <div class="ac-process-head">
+                    <span>Look beyond the individual setup</span>
+                    <h3>Stock → sector → exposure → review.</h3>
+                </div>
+
+                <div class="ac-process-grid">
+                    <div class="ac-process-step">
+                        <b>01</b>
+                        <strong>Stock</strong>
+                        <span>Understand the individual company's structure and research context.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>02</b>
+                        <strong>Sector</strong>
+                        <span>Check whether several research ideas depend on the same industry or theme.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>03</b>
+                        <strong>Exposure</strong>
+                        <span>Consider how much influence one idea or group of similar ideas could have overall.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>04</b>
+                        <strong>Review</strong>
+                        <span>Reassess the research as market structure and company conditions change.</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Using EdgeBreak to organise research</h2>
+                <p>EdgeBreak does not manage portfolios, recommend allocations or track brokerage positions.</p>
+                <p>Instead, My Workspace and watchlists help members organise NASDAQ research candidates, reopen TradingView charts and revisit earlier observations as market structures develop.</p>
+                <p>This can make it easier to notice when a research list has become heavily concentrated in one sector or theme, while keeping the final portfolio decisions entirely with the user.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/watchlist-page.webp" alt="EdgeBreak My Workspace watchlist showing saved NASDAQ research candidates and access to ongoing chart research.">
+                <figcaption>My Workspace is a research-organising tool. It helps members save and revisit NASDAQ candidates but does not act as a brokerage portfolio or provide allocation recommendations.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Think long term</h2>
+                <p>Portfolio management is not about finding one perfect opportunity.</p>
+                <p>It is a broader discipline involving research, risk awareness, diversification, review and decisions that reflect an individual's own circumstances.</p>
+                <p>A structured research process can improve how information is organised, but it cannot determine the right portfolio for a particular person.</p>
+            </section>
+
+            <div class="ac-exercise">
+                <div class="ac-exercise-tag">Practical exercise</div>
+                <h3>Review your research list for concentration.</h3>
+                <p>Open the stocks currently saved in My Workspace and use them as a research exercise.</p>
+                <ul>
+                    <li>Group the stocks by sector or industry.</li>
+                    <li>Identify any sector that dominates the list.</li>
+                    <li>Compare the technical quality of the candidates within that group.</li>
+                    <li>Review the weekly trend for each stock.</li>
+                    <li>Write down whether your research list is broad or heavily concentrated in one market theme.</li>
+                </ul>
+            </div>
 
         </div>
+    </article>
 
-        <h2>
+    <!-- ===================================
+    SUMMARY / TAKEAWAYS
+    =================================== -->
+    <section class="ac-summary-area">
+        <div class="ac-shell">
+            <div class="ac-card-grid three">
 
-            Continue Your Journey
+                <div class="ac-card">
+                    <h2>Lesson summary</h2>
+                    <p>Position sizing and portfolio management encourage investors to look beyond one stock and consider total exposure. Diversification, concentration risk and regular review all provide important context, while the appropriate allocation decisions depend on each person's own circumstances.</p>
+                </div>
 
-        </h2>
+                <div class="ac-card">
+                    <h2>Key takeaways</h2>
+                    <ul>
+                        <li>Position size determines how much influence one investment can have on a portfolio.</li>
+                        <li>Diversification can reduce dependence on one company or sector.</li>
+                        <li>Diversification does not eliminate risk.</li>
+                        <li>Several different stocks can still create concentrated sector exposure.</li>
+                        <li>EdgeBreak organises research; it does not manage portfolios or allocations.</li>
+                    </ul>
+                </div>
 
-        <div class="lesson-nav-buttons">
+                <div class="ac-card">
+                    <h2>Common beginner mistakes</h2>
+                    <ul>
+                        <li>Focusing only on one stock and ignoring total exposure.</li>
+                        <li>Assuming more holdings automatically means better diversification.</li>
+                        <li>Overlooking sector concentration.</li>
+                        <li>Using a watchlist as if it were a recommendation list.</li>
+                        <li>Following generic position-size percentages without considering personal circumstances.</li>
+                    </ul>
+                </div>
 
-            <!-- PREVIOUS -->
+                <div class="ac-card ac-reminder">
+                    <div class="ac-reminder-icon">✦</div>
+                    <div>
+                        <h2>Research reminder</h2>
+                        <p>This lesson is general educational information only. EdgeBreak does not recommend how much to invest, how to allocate a portfolio or when to buy or sell securities. Position sizing and portfolio decisions should reflect your own financial circumstances, objectives and risk tolerance, and professional advice may be appropriate where needed.</p>
+                    </div>
+                </div>
 
-            <a
-                href="/academy/identifying-high-quality-breakout-setups.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/managing-winning-losing-trades.html"
-                class="btn-primary"
-            >
-                Start Lesson 3.5 →
-            </a>
-
+            </div>
         </div>
+    </section>
 
-        <h3>
+    <!-- ===================================
+    NEXT LESSON
+    =================================== -->
+    <section class="ac-next">
+        <div class="ac-shell">
+            <div class="ac-next-card">
+                <div class="ac-next-tag">Continue learning · Module 3 Lesson 5</div>
+                <h2>Managing winning & losing positions.</h2>
+                <p>Learn how changes in market structure, momentum and the original research thesis can be reviewed over time without allowing short-term emotion to replace a disciplined process.</p>
 
-            Lesson 3.5 – Managing Winning Trades
+                <div class="ac-next-actions">
+                    <a href="/academy/managing-winning-losing-trades.html" class="ac-btn ac-btn-primary">Start Lesson 3.5 →</a>
+                    <a href="/academy/identifying-high-quality-breakout-setups.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+                </div>
 
-        </h3>
-
-        <p>
-
-            Learn how to manage winning positions by monitoring market structure, evaluating changes in momentum and following a disciplined research process rather than reacting emotionally to short-term price movements.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 3 • Lesson 13 of 30
-
+                <div class="ac-next-foot">Module 3 · Lesson 4 completed</div>
+            </div>
         </div>
-
-    </div>
+    </section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
 </body>
 </html>

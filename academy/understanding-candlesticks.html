@@ -1,625 +1,783 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 33: Understanding Candlesticks | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how candlestick charts reveal market sentiment, buying and selling pressure, price action and trend behaviour to support structured NASDAQ market research.">
-
-<meta name="keywords"
-      content="candlestick patterns, candlestick charts, price action, stock charts, market structure, buying pressure, selling pressure, NASDAQ research, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/understanding-candlesticks.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Understanding Candlesticks | Module 2 Lesson 1 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn how candlestick charts show open, high, low and close prices, how bullish and bearish candles differ, and how wicks and closes support structured NASDAQ chart research."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/understanding-candlesticks.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 33: Understanding Candlesticks">
-
-<meta property="og:description"
-      content="Learn how candlesticks communicate market sentiment, buying and selling pressure, and provide valuable insight into price action.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/understanding-candlesticks.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/understanding-candlesticks.html">
+<meta property="og:title" content="Understanding Candlesticks | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Learn how candlesticks communicate price movement, buying and selling pressure, wicks, closes and market context."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Lesson 33: Understanding Candlesticks">
-
-<meta name="twitter:description"
-      content="Discover how candlestick charts help you interpret market behaviour and improve structured market research.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Understanding Candlesticks | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Learn how candlesticks show price movement, buying and selling pressure, wicks, closes and broader market context."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-CSS
+FAVICON
 =================================== -->
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
+
+<!-- ===================================
+STYLES
+=================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
 
 <!-- ===================================
 SUPABASE
 =================================== -->
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
 
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
 <!-- ===================================
-LEARNING RESOURCE
+STRUCTURED DATA
 =================================== -->
-
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "name":"Lesson 33: Understanding Candlesticks",
-  "description":"Learn how candlestick charts reveal buying pressure, selling pressure, market sentiment and price action to support structured market research.",
-  "educationalLevel":"Beginner",
-  "learningResourceType":"Lesson",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  },
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  }
-}
-</script>
-
-<!-- ===================================
-BREADCRUMB
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "legalName": "Crane Platform Labs",
+      "url": "https://www.edgebreak.ai/",
+      "email": "mailto:admin@edgebreak.ai",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.edgebreak.ai/#logo",
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+        "caption": "EdgeBreak"
+      },
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
-      "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Lesson 33: Understanding Candlesticks",
-      "item":"https://www.edgebreak.ai/understanding-candlesticks.html"
+      "@type": "Course",
+      "@id": "https://www.edgebreak.ai/academy.html#course",
+      "name": "EdgeBreak Academy",
+      "url": "https://www.edgebreak.ai/academy.html",
+      "description": "Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "LearningResource",
+      "@id": "https://www.edgebreak.ai/academy/understanding-candlesticks.html#lesson",
+      "name": "Module 2 Lesson 1: Understanding Candlesticks",
+      "url": "https://www.edgebreak.ai/academy/understanding-candlesticks.html",
+      "description": "A beginner lesson explaining candlestick anatomy, bullish and bearish candles, wicks, closing prices and how candlesticks fit into broader market-structure research.",
+      "learningResourceType": "Lesson",
+      "educationalLevel": "Beginner",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/academy.html#course" },
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/academy/understanding-candlesticks.html#webpage",
+      "url": "https://www.edgebreak.ai/academy/understanding-candlesticks.html",
+      "name": "Understanding Candlesticks | Module 2 Lesson 1 | EdgeBreak Academy",
+      "description": "Learn how candlestick charts show open, high, low and close prices, how bullish and bearish candles differ, and how wicks and closes support structured NASDAQ chart research.",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/#website" },
+      "mainEntity": { "@id": "https://www.edgebreak.ai/academy/understanding-candlesticks.html#lesson" },
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/academy/understanding-candlesticks.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EdgeBreak Academy",
+          "item": "https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Understanding Candlesticks",
+          "item": "https://www.edgebreak.ai/academy/understanding-candlesticks.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<!-- ===================================
-WEBPAGE
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 33: Understanding Candlesticks",
-  "url":"https://www.edgebreak.ai/understanding-candlesticks.html",
-  "description":"Learn how candlestick charts help interpret price action, market sentiment and buying and selling pressure using the EdgeBreak research methodology.",
-  "isPartOf":{
-    "@type":"WebSite",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  },
-  "primaryImageOfPage":"https://www.edgebreak.ai/images/academy.webp",
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* LESSON-SPECIFIC ELEMENTS */
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+.ac-section li{margin:7px 0}
+.ac-lesson-image{
+    margin:34px 0 46px;
+}
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#fff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+.ac-concept-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+.ac-concept-card{
+    padding:23px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#fff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+.ac-concept-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+.ac-concept-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+.ac-concept-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+@media(max-width:700px){
+    .ac-concept-grid{grid-template-columns:1fr}
+    .ac-card-grid.three{grid-template-columns:1fr}
+    .ac-card-grid.three .ac-reminder{grid-column:auto}
+}
+
+</style>
 </head>
-
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
-<main>
-<!-- ==========================
-MODULE 2 · LESSON 3
-=========================== -->
-
-<div class="academy-container lesson-container">
-
-    <div class="lesson-tag">
-        MODULE 2 • LESSON 3
-    </div>
-
-    <h1>
-        Understanding Candlesticks
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 15 Minutes</span>
-
-        <span>•</span>
-
-        <span>Beginner Breakout Research</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        Every price chart is built from candlesticks. Learning how to read them is one of the first steps towards understanding market behaviour. While a single candle never predicts what will happen next, groups of candlesticks provide valuable information about buying pressure, selling pressure and overall market sentiment.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>What a candlestick represents.</li>
-
-            <li>How to identify bullish and bearish candles.</li>
-
-            <li>What candle bodies and wicks tell us.</li>
-
-            <li>Why closing prices matter.</li>
-
-            <li>How candlesticks fit into breakout research.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>What Is a Candlestick?</h2>
-
-        <p>
-
-            A candlestick represents the price movement of a stock over a specific period of time. Depending on the chart you're viewing, each candlestick may represent one minute, one hour, one day or even one week of trading activity.
-
-        </p>
-
-        <p>
-
-            Every candlestick contains four important pieces of information:
-
-        </p>
-
-        <ul>
-
-            <li>Opening Price</li>
-
-            <li>Highest Price</li>
-
-            <li>Lowest Price</li>
-
-            <li>Closing Price</li>
-
-        </ul>
-
-        <p>
-
-            Together, these values provide a visual summary of how buyers and sellers interacted during that period.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/candlestick-anatomy.webp"
-                alt="Bullish and bearish candlestick anatomy showing the open, high, low, close, body and upper and lower shadows.">
-
-            <figcaption>
-
-                A candlestick shows the open, high, low and close for a specific time period. The body represents the movement between the open and close, while the shadows (wicks) show the highest and lowest prices reached.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Bullish Candles</h2>
-
-        <p>
-
-            A bullish candlestick closes above its opening price. This shows that buyers were able to push the price higher during the trading session.
-
-        </p>
-
-        <p>
-
-            Large bullish candles often indicate strong buying pressure, particularly when they occur near important resistance levels or during confirmed breakout moves.
-
-        </p>
-
-        <p>
-
-            However, one bullish candle alone does not confirm a trend. Candlesticks should always be viewed within the context of the broader market structure.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/bullish-candlestick.webp"
-                alt="Bullish candlestick showing the open, close, high, low, body and upper and lower shadows.">
-
-            <figcaption>
-
-                A bullish candlestick forms when the closing price is higher than the opening price. The green body shows buyers were in control during the trading period, while the upper and lower shadows (wicks) indicate the highest and lowest prices reached before the market closed.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Bearish Candles</h2>
-
-        <p>
-
-            A bearish candlestick closes below its opening price, indicating that sellers controlled the session.
-
-        </p>
-
-        <p>
-
-            During healthy uptrends, bearish candles are completely normal. Markets rarely move in a straight line, and temporary pullbacks often occur before trends continue.
-
-        </p>
-
-        <p>
-
-            The key is understanding whether bearish candles represent normal consolidation or genuine weakness within the broader market structure.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/bearish-candlestick.webp"
-                alt="Bearish candlestick showing the open, close, high, low, body and upper and lower shadows.">
-
-            <figcaption>
-
-                A bearish candlestick forms when the closing price is lower than the opening price. The red body shows sellers were in control during the trading period, while the upper and lower shadows (wicks) indicate the highest and lowest prices reached before the market closed.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Understanding Wicks</h2>
-
-        <p>
-
-            The thin lines extending above and below the candle body are called wicks (sometimes referred to as shadows).
-
-        </p>
-
-        <p>
-
-            Wicks show where price traded before buyers or sellers pushed it back toward the closing price.
-
-        </p>
-
-        <p>
-
-            Long upper wicks can indicate selling pressure, while long lower wicks may suggest buyers stepped in after price declined.
-
-        </p>
-
-        <p>
-
-            Neither automatically predicts future movement, but they provide useful context when combined with market structure.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/long-upper-and-lower-wicks.webp"
-                alt="Bullish and bearish candlesticks with long upper and lower wicks illustrating price rejection and market sentiment.">
-
-            <figcaption>
-
-                Long upper and lower wicks (shadows) show that price was pushed strongly in one direction before reversing prior to the close. A long upper wick suggests sellers rejected higher prices, while a long lower wick indicates buyers stepped in and rejected lower prices. These candles often provide valuable clues about changing market sentiment, especially when they form near key support or resistance levels.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Why Closing Prices Matter</h2>
-
-        <p>
-
-            Many investors pay close attention to where a candlestick closes rather than simply how far price moved during the day.
-
-        </p>
-
-        <p>
-
-            Strong closes near the session high often demonstrate continued buying interest, while weak closes near the session low may indicate sellers remained in control.
-
-        </p>
-
-        <p>
-
-            During breakout research, stronger closing prices around resistance levels can provide additional context when analysing potential opportunities.
-
-        </p>
-
-        <h2>Looking Beyond Individual Candles</h2>
-
-        <p>
-
-            Beginners often spend too much time searching for individual candlestick patterns.
-
-        </p>
-
-        <p>
-
-            While candlestick formations can provide useful information, EdgeBreak places greater emphasis on the overall market structure. One candle rarely tells the complete story.
-
-        </p>
-
-        <p>
-
-            Instead, investors should learn to observe how groups of candlesticks form higher lows, test resistance and build orderly price structures over time.
-
-        </p>
-
-        <h2>How Candlesticks Support Breakout Research</h2>
-
-        <p>
-
-            Throughout the Academy, candlesticks become one piece of a much larger research process.
-
-        </p>
-
-        <p>
-
-            Rather than analysing candles in isolation, you'll learn to combine them with:
-
-        </p>
-
-        <ul>
-
-            <li>Market Structure</li>
-
-            <li>Support and Resistance</li>
-
-            <li>Higher Lows</li>
-
-            <li>Volume Behaviour</li>
-
-            <li>Accumulation Characteristics</li>
-
-            <li>EdgeBreak Scanner Results</li>
-
-        </ul>
-
-        <p>
-
-            When these factors work together, they often provide a much clearer picture than any individual candlestick pattern.
-
-        </p>
-
-    </div>
-
-    <!-- LESSON SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            Candlesticks provide a visual representation of buying and selling activity over time. Understanding candle bodies, wicks and closing prices helps investors interpret price action, but the greatest value comes from combining candlestick analysis with broader market structure and other research tools.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>Every candlestick shows the open, high, low and close.</li>
-
-            <li>Bullish candles reflect buying pressure.</li>
-
-            <li>Bearish candles reflect selling pressure.</li>
-
-            <li>Wicks provide additional information about market behaviour.</li>
-
-            <li>Never analyse candlesticks in isolation.</li>
-
-            <li>Always combine candlesticks with market structure and price action.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- COMMON MISTAKES -->
-
-    <div class="lesson-card">
-
-        <h2>Common Beginner Mistakes</h2>
-
-        <ul>
-
-            <li>Believing one candlestick predicts the future.</li>
-
-            <li>Ignoring the overall market trend.</li>
-
-            <li>Trading purely on candlestick patterns.</li>
-
-            <li>Overlooking resistance and higher lows.</li>
-
-            <li>Ignoring volume and market context.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- RESEARCH REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            Candlestick analysis is one part of technical analysis and should always be considered alongside broader market structure and independent research. EdgeBreak provides educational content and research tools only and does not provide financial advice or investment recommendations.
-
-        </p>
-
-    </div>
+<main class="ac-page">
 
     <!-- ===================================
-    LESSON NAVIGATION
+    HERO
     =================================== -->
+    <section class="ac-hero">
+        <div class="ac-shell">
+            <div class="ac-kicker"><span class="ac-dot"></span> Module 2 · Lesson 1</div>
+            <h1 class="ac-title">Understanding <span>Candlesticks.</span></h1>
+            <p class="ac-subtitle">
+                Learn how a single candlestick summarises price movement and how groups of candles help reveal market behaviour, pressure and structure.
+            </p>
 
-    <div class="lesson-next">
+            <div class="ac-meta">
+                <span>Estimated time: 15 minutes</span>
+                <span>Price action foundations</span>
+                <span>Beginner</span>
+            </div>
 
-        <div class="lesson-next-tag">
+            <div class="ac-progress-wrap" aria-label="Module 2 progress">
+                <div class="ac-progress-label">
+                    <span>Module 2 progress</span>
+                    <span>Lesson 1 of 2</span>
+                </div>
+                <div class="ac-progress"><span></span></div>
+            </div>
+        </div>
+    </section>
 
-            Continue Learning
+    <!-- ===================================
+    WHAT YOU'LL LEARN
+    =================================== -->
+    <section class="ac-overview">
+        <div class="ac-shell">
+            <div class="ac-overview-card">
+                <div>
+                    <div class="ac-overview-label">What you'll learn</div>
+                    <h2>The building blocks of every price chart.</h2>
+                </div>
+
+                <div class="ac-learn-list">
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>What a candlestick represents.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How bullish and bearish candles differ.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>What candle bodies and wicks can tell you.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why closing prices matter.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How candlesticks fit into wider breakout research.</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================
+    LESSON CONTENT
+    =================================== -->
+    <article class="ac-content">
+        <div class="ac-reading">
+
+            <section class="ac-section">
+                <h2>What is a candlestick?</h2>
+                <p>A candlestick represents the price movement of a stock over a specific period of time. Depending on the chart you are viewing, each candle may represent one minute, one hour, one day or even one week of trading activity.</p>
+                <p>Every candlestick contains four important pieces of information:</p>
+                <ul>
+                    <li>Opening price</li>
+                    <li>Highest price</li>
+                    <li>Lowest price</li>
+                    <li>Closing price</li>
+                </ul>
+                <p>Together, those values provide a compact visual summary of how price moved during that period.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/candlestick-anatomy.webp" alt="Bullish and bearish candlestick anatomy showing the open, high, low, close, body and upper and lower shadows.">
+                <figcaption>A candlestick shows the open, high, low and close for a specific period. The body represents movement between the open and close, while the wicks show the highest and lowest prices reached.</figcaption>
+            </figure>
+
+            <div class="ac-concept-grid" aria-label="Candlestick anatomy">
+                <div class="ac-concept-card"><b>Open</b><strong>Where the period began</strong><span>The first traded price represented by that candle.</span></div>
+                <div class="ac-concept-card"><b>Close</b><strong>Where the period finished</strong><span>The final traded price represented by that candle.</span></div>
+                <div class="ac-concept-card"><b>High</b><strong>The highest price reached</strong><span>Shown by the top of the upper wick.</span></div>
+                <div class="ac-concept-card"><b>Low</b><strong>The lowest price reached</strong><span>Shown by the bottom of the lower wick.</span></div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Bullish candles</h2>
+                <p>A bullish candlestick closes above its opening price. This means price finished the period higher than where it began.</p>
+                <p>Large bullish candles can reflect stronger buying pressure during that period, particularly when they appear near an important level or as part of a broader move.</p>
+                <p>One bullish candle alone does not confirm a trend or future direction. It should always be read in the context of the surrounding price structure.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/bullish-candlestick.webp" alt="Bullish candlestick showing the open, close, high, low, body and upper and lower shadows.">
+                <figcaption>A bullish candlestick forms when the closing price is above the opening price. The body shows the move from open to close, while the wicks show the full range traded during the period.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Bearish candles</h2>
+                <p>A bearish candlestick closes below its opening price, meaning price finished the period lower than where it began.</p>
+                <p>Bearish candles are normal even inside healthy uptrends. Markets rarely move in a straight line, and pullbacks or periods of consolidation can form as price develops.</p>
+                <p>The important question is not whether one candle is red or green, but how that candle fits into the broader market structure.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/bearish-candlestick.webp" alt="Bearish candlestick showing the open, close, high, low, body and upper and lower shadows.">
+                <figcaption>A bearish candlestick forms when the closing price is below the opening price. The candle still needs to be interpreted alongside surrounding price action.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Understanding wicks</h2>
+                <p>The thin lines extending above and below the candle body are called wicks, sometimes referred to as shadows.</p>
+                <p>Wicks show where price travelled before moving back toward the closing price. A long upper wick can suggest that higher prices were rejected during the period, while a long lower wick can suggest that lower prices were rejected.</p>
+                <p>Neither automatically predicts what happens next. Their value comes from the location in which they form and the wider structure around them.</p>
+
+                <div class="ac-pullquote">
+                    A candlestick is most useful when you ask where it formed, what came before it and how it fits into the broader structure.
+                </div>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/long-upper-and-lower-wicks.webp" alt="Bullish and bearish candlesticks with long upper and lower wicks illustrating price rejection and market sentiment.">
+                <figcaption>Long wicks show that price moved strongly away from the body before reversing back toward the close. Their meaning depends on the surrounding chart context.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Why closing prices matter</h2>
+                <p>Many investors pay close attention to where a candle closes, not simply how far price moved during the session.</p>
+                <p>A close near the upper end of the candle's range can indicate that buyers maintained control into the end of the period. A close near the lower end can indicate that sellers remained stronger into the close.</p>
+                <p>During breakout research, closing behaviour around resistance can provide additional context when assessing whether price is holding above, rejecting or repeatedly testing an important level.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>Looking beyond individual candles</h2>
+                <p>Beginners often spend too much time searching for individual candlestick patterns. While those formations can provide useful clues, EdgeBreak places greater emphasis on the overall structure of the chart.</p>
+                <p>One candle rarely tells the complete story. Groups of candlesticks can reveal rising lows, repeated resistance tests, tightening ranges, volatility changes and how price behaves around support and resistance.</p>
+                <p>Those relationships become much more useful than trying to make a decision from one candle in isolation.</p>
+            </section>
+
+            <div class="ac-process" aria-label="Candlestick research process">
+                <div class="ac-process-head">
+                    <span>Read candles in context</span>
+                    <h3>Candle → location → structure → evidence.</h3>
+                </div>
+                <div class="ac-process-grid">
+                    <div class="ac-process-step"><b>01</b><strong>Read the candle</strong><span>Identify the open, high, low, close, body and wicks.</span></div>
+                    <div class="ac-process-step"><b>02</b><strong>Check the location</strong><span>Notice whether it formed near support, resistance or within a range.</span></div>
+                    <div class="ac-process-step"><b>03</b><strong>Read the structure</strong><span>Compare it with the candles and price action around it.</span></div>
+                    <div class="ac-process-step"><b>04</b><strong>Add evidence</strong><span>Use volume, market structure and other research context before drawing conclusions.</span></div>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>How candlesticks support breakout research</h2>
+                <p>Throughout the Academy, candlesticks become one piece of a much larger research process.</p>
+                <p>Rather than analysing them in isolation, you will learn to combine candlestick behaviour with:</p>
+                <ul>
+                    <li>Market structure</li>
+                    <li>Support and resistance</li>
+                    <li>Higher lows</li>
+                    <li>Volume behaviour</li>
+                    <li>Unusual market activity</li>
+                    <li>EdgeBreak scanner results</li>
+                </ul>
+                <p>When several pieces of evidence support the same interpretation, the chart can become much easier to understand than when relying on a single candlestick pattern.</p>
+            </section>
 
         </div>
+    </article>
 
-        <h2>
+    <!-- ===================================
+    SUMMARY / TAKEAWAYS
+    =================================== -->
+    <section class="ac-summary-area">
+        <div class="ac-shell">
+            <div class="ac-card-grid three">
 
-            Continue Your Journey
+                <div class="ac-card">
+                    <h2>Lesson summary</h2>
+                    <p>Candlesticks provide a visual representation of price movement over time. Understanding candle bodies, wicks and closing prices helps you interpret price action, but their greatest value comes from combining them with wider market structure and additional research evidence.</p>
+                </div>
 
-        </h2>
+                <div class="ac-card">
+                    <h2>Key takeaways</h2>
+                    <ul>
+                        <li>Every candle shows the open, high, low and close.</li>
+                        <li>Bullish candles close above their opening price.</li>
+                        <li>Bearish candles close below their opening price.</li>
+                        <li>Wicks show the full trading range and possible price rejection.</li>
+                        <li>Closing prices provide useful context.</li>
+                        <li>Candlesticks should not be analysed in isolation.</li>
+                    </ul>
+                </div>
 
-        <div class="lesson-nav-buttons">
+                <div class="ac-card">
+                    <h2>Common beginner mistakes</h2>
+                    <ul>
+                        <li>Believing one candlestick predicts what happens next.</li>
+                        <li>Ignoring the broader market structure.</li>
+                        <li>Relying only on named candlestick patterns.</li>
+                        <li>Overlooking support, resistance and higher lows.</li>
+                        <li>Ignoring volume and wider market context.</li>
+                    </ul>
+                </div>
 
-            <!-- PREVIOUS -->
+                <div class="ac-card ac-reminder">
+                    <div class="ac-reminder-icon">✦</div>
+                    <div>
+                        <h2>Research reminder</h2>
+                        <p>Candlestick analysis is one part of technical analysis and should be considered alongside broader market structure and independent research. EdgeBreak provides educational content and research tools only and does not provide financial advice, investment recommendations or predictions of future market performance.</p>
+                    </div>
+                </div>
 
-            <a
-                href="/academy/using-the-edgebreak-platform.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/support-and-resistance.html"
-                class="btn-primary"
-            >
-                Start Lesson 2.2 →
-            </a>
-
+            </div>
         </div>
+    </section>
 
-        <h3>
+    <!-- ===================================
+    NEXT LESSON
+    =================================== -->
+    <section class="ac-next">
+        <div class="ac-shell">
+            <div class="ac-next-card">
+                <div class="ac-next-tag">Continue learning · Module 2 Lesson 2</div>
+                <h2>Support vs resistance.</h2>
+                <p>Learn how support and resistance levels form, why price repeatedly reacts around these areas and why resistance is central to researching developing breakout structures.</p>
 
-            Lesson 2.2 – Support vs Resistance
+                <div class="ac-next-actions">
+                    <a href="/academy/support-and-resistance.html" class="ac-btn ac-btn-primary">Start Lesson 2.2 →</a>
+                    <a href="/academy/using-the-edgebreak-platform.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+                </div>
 
-        </h3>
-
-        <p>
-
-            Learn how support and resistance levels form, why price repeatedly reacts around these key areas, and why resistance is one of the most important concepts in researching potential breakout opportunities.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 2 • Lesson 3 of 30
-
+                <div class="ac-next-foot">Module 2 · Lesson 1 of 2 completed</div>
+            </div>
         </div>
-
-    </div>
+    </section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>

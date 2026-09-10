@@ -1,679 +1,918 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 20: Developing Your Own Market Research Style | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how to develop your own structured NASDAQ market research style using the EdgeBreak workflow, historical chart analysis, scanners and continual observation.">
-
-<meta name="keywords"
-      content="market research style, NASDAQ research, breakout research, chart analysis, market structure, TradingView, EdgeBreak Academy, independent market research">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/developing-your-own-market-research-style.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Developing Your Own Research Style | Module 6 Lesson 4 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn how to develop a personal NASDAQ research style while keeping a consistent evidence-based process using EdgeBreak scanners, TradingView, AI research and My Workspace."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/developing-your-own-research-style.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 20: Developing Your Own Market Research Style | EdgeBreak Academy">
-
-<meta property="og:description"
-      content="Discover how consistent observation, historical chart analysis and structured workflows help you develop your own independent market research style.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/developing-your-own-market-research-style.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/developing-your-own-research-style.html">
+<meta property="og:title" content="Developing Your Own Research Style | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Learn how your own market research preferences can evolve while keeping the same disciplined EdgeBreak research framework."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Developing Your Own Research Style | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Build a personal NASDAQ research style while staying structured, consistent and evidence based."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
-<meta name="twitter:card"
-      content="summary_large_image">
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
-<meta name="twitter:title"
-      content="Lesson 20: Developing Your Own Market Research Style">
-
-<meta name="twitter:description"
-      content="Learn how to build an independent research style through structured chart analysis, historical breakout studies and continual learning.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<!-- ===================================
-CSS
-=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
 
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
-
-<!-- ===================================
-SUPABASE
-=================================== -->
-
-
-
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
-
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
-<!-- ===================================
-STRUCTURED DATA
-=================================== -->
 
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "@id":"https://www.edgebreak.ai/developing-your-own-market-research-style.html",
-  "name":"Lesson 20: Developing Your Own Market Research Style",
-  "headline":"Developing Your Own Market Research Style",
-  "description":"Learn how to develop an independent market research style using historical chart analysis, structured workflows and the complete EdgeBreak platform.",
-  "learningResourceType":"Lesson",
-  "educationalLevel":"Beginner",
-  "teaches":[
-    "Independent Market Research",
-    "Market Structure",
-    "Historical Chart Analysis",
-    "Pattern Recognition",
-    "NASDAQ Scanner",
-    "TradingView Charts",
-    "Research Workflow",
-    "Continuous Learning"
-  ],
-  "isAccessibleForFree":true,
-  "inLanguage":"en-AU",
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai",
-    "logo":{
-      "@type":"ImageObject",
-      "url":"https://www.edgebreak.ai/images/logo.webp"
-    }
-  },
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
-}
-</script>
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@graph":[
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type":"Organization",
+      "@id":"https://www.edgebreak.ai/#organization",
+      "name":"EdgeBreak",
+      "legalName":"Crane Platform Labs",
+      "url":"https://www.edgebreak.ai/",
+      "email":"mailto:admin@edgebreak.ai",
+      "logo":{
+        "@type":"ImageObject",
+        "@id":"https://www.edgebreak.ai/#logo",
+        "url":"https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl":"https://www.edgebreak.ai/images/logo.webp",
+        "caption":"EdgeBreak"
+      },
+      "description":"EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed":"Worldwide",
+      "sameAs":[
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
+      "@type":"WebSite",
+      "@id":"https://www.edgebreak.ai/#website",
+      "name":"EdgeBreak",
+      "url":"https://www.edgebreak.ai/",
+      "description":"NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher":{"@id":"https://www.edgebreak.ai/#organization"},
+      "inLanguage":"en-AU"
+    },
+    {
+      "@type":"Course",
+      "@id":"https://www.edgebreak.ai/academy.html#course",
       "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "url":"https://www.edgebreak.ai/academy.html",
+      "description":"Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider":{"@id":"https://www.edgebreak.ai/#organization"},
+      "inLanguage":"en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Module 5"
+      "@type":"LearningResource",
+      "@id":"https://www.edgebreak.ai/academy/developing-your-own-research-style.html#lesson",
+      "name":"Module 6 Lesson 4: Developing Your Own Research Style",
+      "url":"https://www.edgebreak.ai/academy/developing-your-own-research-style.html",
+      "description":"An intermediate lesson explaining how members can develop personal research preferences around different market structures, timeframes and tools while maintaining a consistent evidence-based process.",
+      "learningResourceType":"Lesson",
+      "educationalLevel":"Intermediate",
+      "isPartOf":{"@id":"https://www.edgebreak.ai/academy.html#course"},
+      "provider":{"@id":"https://www.edgebreak.ai/#organization"},
+      "inLanguage":"en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":4,
-      "name":"Lesson 20: Developing Your Own Market Research Style"
+      "@type":"WebPage",
+      "@id":"https://www.edgebreak.ai/academy/developing-your-own-research-style.html#webpage",
+      "url":"https://www.edgebreak.ai/academy/developing-your-own-research-style.html",
+      "name":"Developing Your Own Research Style | Module 6 Lesson 4 | EdgeBreak Academy",
+      "description":"Learn how to develop a personal NASDAQ research style while keeping a consistent evidence-based process using EdgeBreak scanners, TradingView, AI research and My Workspace.",
+      "isPartOf":{"@id":"https://www.edgebreak.ai/#website"},
+      "mainEntity":{"@id":"https://www.edgebreak.ai/academy/developing-your-own-research-style.html#lesson"},
+      "publisher":{"@id":"https://www.edgebreak.ai/#organization"},
+      "inLanguage":"en-AU"
+    },
+    {
+      "@type":"BreadcrumbList",
+      "@id":"https://www.edgebreak.ai/academy/developing-your-own-research-style.html#breadcrumb",
+      "itemListElement":[
+        {
+          "@type":"ListItem",
+          "position":1,
+          "name":"Home",
+          "item":"https://www.edgebreak.ai/"
+        },
+        {
+          "@type":"ListItem",
+          "position":2,
+          "name":"EdgeBreak Academy",
+          "item":"https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type":"ListItem",
+          "position":3,
+          "name":"Developing Your Own Research Style",
+          "item":"https://www.edgebreak.ai/academy/developing-your-own-research-style.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 20: Developing Your Own Market Research Style",
-  "url":"https://www.edgebreak.ai/developing-your-own-market-research-style.html",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+.ac-section li{margin:7px 0}
+
+.ac-lesson-image{margin:34px 0 46px}
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#fff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-style-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+.ac-style-card{
+    padding:24px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#fff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+.ac-style-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+.ac-style-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+.ac-style-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-dark-panel{
+    margin:36px 0 54px;
+    padding:30px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#0c1728;
+}
+.ac-dark-panel h3{
+    margin:0 0 12px;
+    color:#fff;
+    font-size:29px;
+    letter-spacing:-.035em;
+}
+.ac-dark-panel p{
+    margin:0 0 15px;
+    color:#b3bfce;
+    font-size:16px;
+    line-height:1.7;
+}
+.ac-dark-panel p:last-child{margin-bottom:0}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+.ac-exercise{
+    margin:34px 0 54px;
+    padding:30px;
+    border:1px solid #dce7df;
+    border-radius:24px;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+}
+.ac-exercise-tag{
+    margin-bottom:9px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-exercise h3{
+    margin:0 0 13px;
+    color:var(--ix-ink);
+    font-size:27px;
+    letter-spacing:-.03em;
+}
+.ac-exercise p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.65;
+}
+.ac-exercise ul{
+    margin:0;
+    padding-left:22px;
+    color:#526071;
+    font-size:15px;
+    line-height:1.65;
+}
+
+@media(max-width:900px){
+    .ac-style-grid{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+    .ac-card-grid.three{grid-template-columns:1fr}
+    .ac-card-grid.three .ac-reminder{grid-column:auto}
+}
+
+</style>
 </head>
 
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
-<main>
-<!-- ==========================
-MODULE 6 · LESSON 28
-=========================== -->
 
-<div class="academy-container lesson-container">
+<main class="ac-page">
 
-    <div class="lesson-tag">
-        MODULE 6 • LESSON 28
-    </div>
-
-    <h1>
-        Developing Your Own Research Style
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 25 Minutes</span>
-
-        <span>•</span>
-
-        <span>Becoming an Independent Market Researcher</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        By this stage of the Academy you've learned how to identify market structure, recognise accumulation, analyse breakouts and use every major EdgeBreak tool. As your experience grows, you'll naturally begin developing your own research style. This lesson explains how to personalise your research while remaining disciplined, objective and consistent with the EdgeBreak methodology.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>How research styles naturally develop.</li>
-
-            <li>Why every investor notices different patterns.</li>
-
-            <li>Refining your research process.</li>
-
-            <li>Using EdgeBreak to match your preferences.</li>
-
-            <li>Remaining disciplined while evolving.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>There Is No Perfect Research Style</h2>
-
-        <p>
-
-            One of the biggest misconceptions in market research is believing there is only one correct way to analyse charts.
-
+<section class="ac-hero">
+    <div class="ac-shell">
+        <div class="ac-kicker"><span class="ac-dot"></span> Module 6 · Lesson 4</div>
+        <h1 class="ac-title">Developing Your Own <span>Research Style.</span></h1>
+        <p class="ac-subtitle">
+            As your experience grows, you will naturally become more interested in certain structures, timeframes and research tools. Learn how to personalise the process without losing discipline.
         </p>
 
-        <p>
-
-            While the core principles of market structure remain consistent, different researchers naturally become interested in different types of opportunities.
-
-        </p>
-
-        <p>
-
-            Your goal is not to copy someone else's approach, but to build a research process that suits your own interests while remaining objective and disciplined.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/research-style.webp"
-                alt="Educational infographic showing that different research styles can follow the same core market structure principles while remaining objective and disciplined.">
-
-            <figcaption>
-
-                This illustration demonstrates that there is no single correct way to research financial markets. While different researchers may naturally become interested in different types of opportunities, the core principles of market structure remain consistent. Resistance, higher lows, accumulation, volume and objective analysis can all be applied in different ways depending on an individual's research preferences. Within the EdgeBreak methodology, the goal is to help members build a structured research process that suits their own interests while remaining disciplined, organised and committed to continual learning rather than attempting to copy someone else's approach.
-
-            </figcaption>
-
-        </figure>
-
-        
-
-        <h2>Discover What Interests You</h2>
-
-        <p>
-
-            As you review more charts, you may notice that certain market structures attract your attention more than others.
-
-        </p>
-
-        <p>
-
-            For example, you may find yourself particularly interested in:
-
-        </p>
-
-        <ul>
-
-            <li>Long-term accumulation.</li>
-
-            <li>Well-defined resistance levels.</li>
-
-            <li>Strong higher lows.</li>
-
-            <li>Tight consolidation.</li>
-
-            <li>Early-stage breakout structures.</li>
-
-            <li>Completed Gold breakouts.</li>
-
-        </ul>
-
-        <p>
-
-            There is nothing wrong with developing preferences as long as your research remains balanced and evidence-based.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/interests.webp"
-                alt="Educational infographic showing different types of market structures that researchers may naturally become interested in while maintaining an objective research process.">
-
-            <figcaption>
-
-                This illustration demonstrates that, as experience grows, researchers often develop an interest in particular market structures such as long-term accumulation, well-defined resistance, higher lows, tight consolidation, early-stage breakout structures or completed breakout examples. Developing these preferences is a natural part of the learning process, provided research remains balanced and evidence-based. Within the EdgeBreak methodology, the goal is not to favour one type of opportunity over another, but to build a disciplined research process that remains objective while allowing your interests and experience to shape the areas you choose to study more deeply over time.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Use EdgeBreak to Support Your Style</h2>
-
-        <p>
-
-            One of the strengths of EdgeBreak is that the platform allows you to organise your research in different ways.
-
-        </p>
-
-        <p>
-
-            Depending on your interests, you may choose to:
-
-        </p>
-
-        <ul>
-
-            <li>Adjust NASDAQ Scanner filters.</li>
-
-            <li>Compare different Lookback periods.</li>
-
-            <li>Focus on Gold breakouts.</li>
-
-            <li>Study accumulation using the Smart Money Filter.</li>
-
-            <li>Build specialised watchlists inside My Workspace.</li>
-
-        </ul>
-
-        <p>
-
-            The platform is designed to support your research—not dictate it.
-
-        </p>
-
-        
-
-        <h2>Keep Your Process Consistent</h2>
-
-        <p>
-
-            While your research style may evolve, your process should remain structured.
-
-        </p>
-
-        <p>
-
-            Continue following the same research framework:
-
-        </p>
-
-        <ol>
-
-            <li>Search the market.</li>
-
-            <li>Apply filters.</li>
-
-            <li>Review charts.</li>
-
-            <li>Assess market structure.</li>
-
-            <li>Save quality research candidates.</li>
-
-            <li>Monitor them over time.</li>
-
-        </ol>
-
-        <p>
-
-            A consistent process makes it easier to compare opportunities objectively.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/consistant.webp"
-                alt="EdgeBreak research framework illustrating a consistent six-step process for researching and monitoring breakout opportunities.">
-
-            <figcaption>
-
-                This illustration demonstrates the importance of following a consistent research framework when analysing potential breakout opportunities. Rather than changing your approach for every chart, using the same structured process helps create more objective comparisons and reduces emotional decision-making. Searching the market, applying filters, reviewing charts, assessing market structure, saving quality research candidates and monitoring them over time all contribute to a disciplined workflow. Within the EdgeBreak methodology, consistency encourages continual learning and helps members build confidence through organised research while recognising that market outcomes always remain uncertain.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Avoid Chasing Every New Idea</h2>
-
-        <p>
-
-            Financial markets constantly introduce new indicators, strategies and opinions.
-
-        </p>
-
-        <p>
-
-            While learning is valuable, constantly changing your research process often slows your progress.
-
-        </p>
-
-        <p>
-
-            Give yourself time to master one structured methodology before making significant adjustments.
-
-        </p>
-
-        <p>
-
-            Consistency creates confidence.
-
-        </p>
-
-        
-
-        <h2>Review Your Research Regularly</h2>
-
-        <p>
-
-            Every few months, review the stocks you've researched.
-
-        </p>
-
-        <p>
-
-            Ask yourself:
-
-        </p>
-
-        <ul>
-
-            <li>Which market structures do I understand best?</li>
-
-            <li>Which research habits have improved?</li>
-
-            <li>What characteristics do I naturally notice first?</li>
-
-            <li>Where can I continue improving?</li>
-
-        </ul>
-
-        <p>
-
-            Reflection helps refine your personal research style without losing discipline.
-
-        </p>
-
-        
-
-        <h2>Your Style Will Continue to Evolve</h2>
-
-        <p>
-
-            Even experienced researchers continue refining how they analyse markets.
-
-        </p>
-
-        <p>
-
-            As you study more charts and gain more experience, your understanding of market structure will naturally deepen.
-
-        </p>
-
-        <p>
-
-            The important thing is to remain curious, organised and committed to continuous learning.
-
-        </p>
-
-        <p>
-
-            EdgeBreak is designed to support that journey.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/evolve.webp"
-                alt="Educational infographic illustrating how research skills and market understanding continue to evolve through experience, structured learning and continual improvement.">
-
-            <figcaption>
-
-                This illustration demonstrates that developing strong research skills is an ongoing process rather than a final destination. As more charts are studied and more market behaviour is observed, understanding of resistance, higher lows, accumulation and overall market structure naturally becomes more refined. Every chart reviewed provides another opportunity to strengthen pattern recognition and improve research habits. Within the EdgeBreak methodology, continual learning, curiosity and a structured research process help members build experience over time, recognising that successful market research is developed through consistent practice rather than attempting to predict future outcomes with certainty.
-
-            </figcaption>
-
-        </figure>
-
-    </div>
-
-    <!-- LESSON SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            Developing your own research style is a natural part of becoming an independent market researcher. By understanding your own preferences while continuing to follow a structured and disciplined research process, you can make better use of the EdgeBreak platform and continue improving your market analysis over time.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>Your research style will develop naturally.</li>
-
-            <li>Use EdgeBreak to support—not define—your research.</li>
-
-            <li>Maintain a consistent research framework.</li>
-
-            <li>Review your progress regularly.</li>
-
-            <li>Continue learning throughout your investing journey.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- PRACTICAL EXERCISE -->
-
-    <div class="lesson-card">
-
-        <h2>Practical Exercise</h2>
-
-        <p>
-
-            Review your current watchlist and identify the types of market structures that most frequently attract your attention.
-
-        </p>
-
-        <ul>
-
-            <li>Review your saved charts.</li>
-
-            <li>Identify recurring characteristics.</li>
-
-            <li>Write down three features you naturally look for first.</li>
-
-            <li>Adjust your scanner filters to match your preferred research style.</li>
-
-            <li>Continue using the same structured research workflow over the next month.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- RESEARCH REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            Every investor develops their own approach to researching financial markets. EdgeBreak Academy encourages members to build structured, independent research habits while recognising that no single methodology guarantees future market performance. The platform provides educational resources only and does not offer financial advice or investment recommendations.
-
-        </p>
-
-    </div>
-
-    <!-- ===================================
-    LESSON NAVIGATION
-    =================================== -->
-
-    <div class="lesson-next">
-
-        <div class="lesson-next-tag">
-
-            Continue Learning
-
+        <div class="ac-meta">
+            <span>Estimated time: 25 minutes</span>
+            <span>Independent research practice</span>
+            <span>Intermediate</span>
         </div>
 
-        <h2>
-
-            Continue Your Journey
-
-        </h2>
-
-        <div class="lesson-nav-buttons">
-
-            <!-- PREVIOUS -->
-
-            <a
-                href="/academy/building-confidence-through-research.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/continuing-your-market-education.html"
-                class="btn-primary"
-            >
-                Start Lesson 6.5 →
-            </a>
-
+        <div class="ac-progress-wrap" aria-label="Module 6 progress">
+            <div class="ac-progress-label">
+                <span>Module 6 progress</span>
+                <span>Lesson 4 of 6</span>
+            </div>
+            <div class="ac-progress"><span style="width:66.67%"></span></div>
         </div>
-
-        <h3>
-
-            Lesson 6.5 – Continuing Your Market Education
-
-        </h3>
-
-        <p>
-
-            Learn why successful market researchers never stop learning and discover practical ways to continue expanding your knowledge, refining your research process and building experience long after completing the EdgeBreak Academy.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 6 • Lesson 29 of 30
-
-        </div>
-
     </div>
+</section>
+
+<section class="ac-overview">
+    <div class="ac-shell">
+        <div class="ac-overview-card">
+            <div>
+                <div class="ac-overview-label">What you'll learn</div>
+                <h2>Make the process yours without abandoning the framework.</h2>
+            </div>
+
+            <div class="ac-learn-list">
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why personal research preferences develop naturally.</span></div>
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>How different market structures may suit different interests.</span></div>
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to use EdgeBreak tools to support your preferred research style.</span></div>
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why the underlying research process should remain consistent.</span></div>
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to experiment without constantly changing methodology.</span></div>
+                <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to review and refine your style over time.</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<article class="ac-content">
+<div class="ac-reading">
+
+    <section class="ac-section">
+        <h2>There is no perfect research style</h2>
+        <p>The core principles of market research remain consistent, but different researchers naturally notice different things first.</p>
+        <p>Some become interested in long consolidations. Others prefer clear trend reversals, tighter pre-breakout structures or fresh active breakouts.</p>
+        <p>Your goal is not to copy someone else's preferences. It is to understand what you research well while keeping the process objective and repeatable.</p>
+
+        <div class="ac-pullquote">
+            Your preferences can change. Your commitment to evidence, consistency and independent verification should not.
+        </div>
+    </section>
+
+    <figure class="ac-lesson-image">
+        <img src="/images/research-style.webp" alt="Educational illustration showing different personal research styles built on the same evidence-based market research principles.">
+        <figcaption>Different researchers can focus on different types of market structure while still applying the same core principles of trend, resistance, higher lows, volume and objective review.</figcaption>
+    </figure>
+
+    <section class="ac-section">
+        <h2>Discover what interests you</h2>
+        <p>As you review more charts, certain structures may repeatedly catch your attention.</p>
+        <p>You might naturally prefer:</p>
+    </section>
+
+    <div class="ac-style-grid">
+        <div class="ac-style-card">
+            <b>Earlier-stage research</b>
+            <strong>Longer developing bases</strong>
+            <span>You may prefer Launch Pad structures where a stock is still building support, resistance and a broader base.</span>
+        </div>
+
+        <div class="ac-style-card">
+            <b>Pre-breakout research</b>
+            <strong>Tightening beneath resistance</strong>
+            <span>You may be drawn to repeated resistance tests, higher lows and 4–6 week consolidations before a breakout occurs.</span>
+        </div>
+
+        <div class="ac-style-card">
+            <b>Active breakout research</b>
+            <strong>Fresh moves through resistance</strong>
+            <span>You may prefer stocks that have already moved through resistance but remain close to the original base.</span>
+        </div>
+
+        <div class="ac-style-card">
+            <b>Trend research</b>
+            <strong>Uptrends and reversals</strong>
+            <span>You may favour established uptrends, emerging reversals or structures where the longer-term trend is beginning to improve.</span>
+        </div>
+
+        <div class="ac-style-card">
+            <b>Market-activity research</b>
+            <strong>Unusual supporting evidence</strong>
+            <span>You may pay closer attention when unusual off-exchange activity or larger cross-market purchases appear alongside constructive technical structure.</span>
+        </div>
+
+        <div class="ac-style-card">
+            <b>Company research</b>
+            <strong>Fundamentals and catalysts</strong>
+            <span>You may prefer spending more time on financial direction, catalysts, filings, balance-sheet risks and company developments.</span>
+        </div>
+    </div>
+
+    <figure class="ac-lesson-image">
+        <img src="/images/interests.webp" alt="Educational illustration showing different market structures and research interests that may attract different researchers.">
+        <figcaption>Developing preferences is normal. The important part is understanding why a structure interests you rather than favouring it simply because it has performed well recently.</figcaption>
+    </figure>
+
+    <section class="ac-section">
+        <h2>Your preferred timeframe may differ too</h2>
+        <p>Research style is not only about the type of setup.</p>
+        <p>You may become more comfortable studying longer weekly structures, shorter daily consolidations or a combination of both.</p>
+        <p>Whatever your preference, use multiple timeframes when necessary so the immediate chart does not hide the broader context.</p>
+    </section>
+
+    <section class="ac-section">
+        <h2>Use EdgeBreak to support your style</h2>
+        <p>The platform gives you several ways to approach the same market depending on what you are trying to study.</p>
+        <ul>
+            <li><strong>Automated Daily Scan</strong> — begin with the final top-six research shortlist when you want EdgeBreak to do the first stage of narrowing.</li>
+            <li><strong>NASDAQ Scanner</strong> — build your own research list using structured filters.</li>
+            <li><strong>Launch Pad</strong> — focus on longer developing bases.</li>
+            <li><strong>Pre-Breakout Scanner</strong> — study structures tightening beneath resistance.</li>
+            <li><strong>Breakout Scanner</strong> — examine fresh active breakouts.</li>
+            <li><strong>TradingView</strong> — compare weekly and daily structure directly.</li>
+            <li><strong>AI Company Research</strong> — go deeper into the company, fundamentals, catalysts and risks.</li>
+            <li><strong>AI Chart Analysis</strong> — get a descriptive second view of the technical structure.</li>
+            <li><strong>Guided AI and AI Chat</strong> — investigate specific questions in a structured or conversational way.</li>
+            <li><strong>My Workspace</strong> — create watchlists built around the structures you want to revisit.</li>
+        </ul>
+        <p>EdgeBreak should support the way you research — not force every member into exactly the same preference.</p>
+    </section>
+
+    <section class="ac-section">
+        <h2>Keep the framework consistent</h2>
+        <p>Personalising your style does not mean inventing a completely different process for every chart.</p>
+        <p>The underlying research framework should remain recognisable.</p>
+    </section>
+
+    <div class="ac-process" aria-label="Consistent personal research process">
+        <div class="ac-process-head">
+            <span>Your style, one consistent framework</span>
+            <h3>Discover → compare → investigate → revisit.</h3>
+        </div>
+
+        <div class="ac-process-grid">
+            <div class="ac-process-step">
+                <b>01</b>
+                <strong>Discover</strong>
+                <span>Use the Daily Scan or scanner that best matches the type of structure you want to research.</span>
+            </div>
+            <div class="ac-process-step">
+                <b>02</b>
+                <strong>Compare</strong>
+                <span>Review trend, resistance, higher lows, volume, price position and wider context.</span>
+            </div>
+            <div class="ac-process-step">
+                <b>03</b>
+                <strong>Investigate</strong>
+                <span>Use company research, AI tools and source information where deeper context is useful.</span>
+            </div>
+            <div class="ac-process-step">
+                <b>04</b>
+                <strong>Revisit</strong>
+                <span>Save the strongest candidates to My Workspace and review how the evidence changes.</span>
+            </div>
+        </div>
+    </div>
+
+    <figure class="ac-lesson-image">
+        <img src="/images/consistant.webp" alt="Educational illustration showing a consistent research process that can be applied across different personal market research styles.">
+        <figcaption>Your preferences can change while the research framework remains consistent enough to compare one candidate objectively with another.</figcaption>
+    </figure>
+
+    <section class="ac-section">
+        <h2>Do not confuse preference with proof</h2>
+        <p>Preferring a certain structure does not make that structure superior in every market environment.</p>
+        <p>If you enjoy researching reversals, for example, that does not mean every reversal is strong. If you prefer tight consolidations, that does not mean every tight range will become a breakout.</p>
+        <p>Your style should decide where you spend more research time — not predetermine the conclusion.</p>
+    </section>
+
+    <div class="ac-dark-panel">
+        <h3>Research style should guide attention, not manufacture conviction.</h3>
+        <p>A useful personal style helps you recognise the situations you understand best and investigate them more efficiently.</p>
+        <p>The evidence still decides whether an individual candidate deserves further research.</p>
+    </div>
+
+    <section class="ac-section">
+        <h2>Avoid constantly chasing a new methodology</h2>
+        <p>Markets are full of new indicators, strategies, opinions and social-media ideas.</p>
+        <p>Learning is valuable, but changing the entire research process every few weeks makes it difficult to know whether your understanding is actually improving.</p>
+        <p>Give a method enough time to become familiar before making major changes. Add new ideas only when you can explain how they improve the existing process.</p>
+    </section>
+
+    <section class="ac-section">
+        <h2>Build specialised watchlists if they help</h2>
+        <p>My Workspace can reflect your personal research interests.</p>
+        <p>You might maintain a focused list of early bases, another for pre-breakout candidates, or simply one small list containing the structures you understand best.</p>
+        <p>The goal is organisation, not creating as many lists as possible.</p>
+    </section>
+
+    <section class="ac-section">
+        <h2>Review your style regularly</h2>
+        <p>Every few months, look back at the stocks you researched and ask:</p>
+        <ul>
+            <li>Which market structures do I understand most clearly?</li>
+            <li>Which types of candidates do I tend to save?</li>
+            <li>Do I prefer earlier bases or more developed structures?</li>
+            <li>Am I naturally stronger at technical research or company research?</li>
+            <li>Which AI tools actually improve my workflow?</li>
+            <li>Which habits add value and which just add more work?</li>
+            <li>Where am I still making the same mistakes?</li>
+        </ul>
+        <p>Reflection helps your style evolve without allowing the process to become random.</p>
+    </section>
+
+    <section class="ac-section">
+        <h2>Your style will continue to evolve</h2>
+        <p>Even experienced researchers refine how they analyse markets.</p>
+        <p>As you study more charts, use more of the platform and review more outcomes, you may discover that the structures you notice first change over time.</p>
+        <p>That is not inconsistency. It is development — provided the changes come from evidence and experience rather than short-term excitement.</p>
+    </section>
+
+    <figure class="ac-lesson-image">
+        <img src="/images/evolve.webp" alt="Educational illustration showing how a personal market research style evolves through experience, review and continual learning.">
+        <figcaption>A useful research style is never completely finished. It becomes more refined as your experience, knowledge and ability to compare evidence improve.</figcaption>
+    </figure>
+
+    <section class="ac-section">
+        <h2>Know what you are good at researching</h2>
+        <p>Over time, one of the biggest advantages of developing a personal research style is learning where your own understanding is strongest.</p>
+        <p>You may become particularly good at identifying tight consolidation, recognising early reversals, comparing longer bases or researching company catalysts.</p>
+        <p>That self-awareness can help you focus your time without pretending that your preferred approach predicts future outcomes.</p>
+    </section>
+
+    <div class="ac-exercise">
+        <div class="ac-exercise-tag">Practical exercise</div>
+        <h3>Write your current research-style profile.</h3>
+        <p>Review the stocks currently in My Workspace and describe the research style you are beginning to develop.</p>
+        <ul>
+            <li>Identify three market structures you naturally notice first.</li>
+            <li>Write down whether you prefer early, pre-breakout or active breakout research.</li>
+            <li>Note whether you rely more heavily on weekly or daily structure.</li>
+            <li>Identify which EdgeBreak scanners you use most often.</li>
+            <li>Write down which AI or company-research tools genuinely improve your process.</li>
+            <li>Choose one part of your routine that must remain consistent regardless of the setup.</li>
+            <li>Use this profile for one month, then review whether it still reflects the way you actually research.</li>
+        </ul>
+    </div>
+
+</div>
+</article>
+
+<section class="ac-summary-area">
+    <div class="ac-shell">
+        <div class="ac-card-grid three">
+
+            <div class="ac-card">
+                <h2>Lesson summary</h2>
+                <p>Developing a personal research style is a natural part of becoming more experienced. You may prefer certain structures, timeframes or research tools, but the underlying process should remain objective, consistent and evidence based.</p>
+            </div>
+
+            <div class="ac-card">
+                <h2>Key takeaways</h2>
+                <ul>
+                    <li>There is no single perfect research style.</li>
+                    <li>Preferences should guide attention, not determine conclusions.</li>
+                    <li>Use EdgeBreak tools that match the question you are researching.</li>
+                    <li>Keep the core research framework consistent.</li>
+                    <li>Avoid changing methodology simply because a new idea looks exciting.</li>
+                    <li>Review and refine your style as your experience grows.</li>
+                </ul>
+            </div>
+
+            <div class="ac-card">
+                <h2>Signs your style is becoming useful</h2>
+                <ul>
+                    <li>You know which structures you understand best.</li>
+                    <li>You can explain why you prefer them.</li>
+                    <li>Your watchlist is focused rather than random.</li>
+                    <li>Your process is similar even when the stocks are different.</li>
+                    <li>You can change your view when the evidence changes.</li>
+                </ul>
+            </div>
+
+            <div class="ac-card ac-reminder">
+                <div class="ac-reminder-icon">✦</div>
+                <div>
+                    <h2>Research reminder</h2>
+                    <p>A personal research style is a way of organising independent market research. No preferred setup, scanner, ranking method or AI-assisted tool guarantees future performance. EdgeBreak provides research and educational information only and does not provide investment recommendations or trade signals.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="ac-next">
+    <div class="ac-shell">
+        <div class="ac-next-card">
+            <div class="ac-next-tag">Continue learning · Module 6 Lesson 5 of 6</div>
+            <h2>Continuing your market education.</h2>
+            <p>Learn how to keep expanding your knowledge, reviewing real market examples and refining your research process after completing the core Academy lessons.</p>
+
+            <div class="ac-next-actions">
+                <a href="/academy/continuing-your-market-education.html" class="ac-btn ac-btn-primary">Start Lesson 6.5 →</a>
+                <a href="/academy/building-confidence-through-research.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+            </div>
+
+            <div class="ac-next-foot">Module 6 · Lesson 4 of 6 completed</div>
+        </div>
+    </div>
+</section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>

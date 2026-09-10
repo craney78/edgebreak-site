@@ -1,671 +1,940 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 12: Institutional Accumulation | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how institutional accumulation can appear on historical NASDAQ charts by studying market structure, higher lows, resistance and volume behaviour using the EdgeBreak research framework.">
-
-<meta name="keywords"
-      content="institutional accumulation, smart money, accumulation, market structure, higher lows, resistance, volume analysis, NASDAQ research, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/institutional-accumulation.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Institutional Activity & Accumulation Evidence | Module 3 Lesson 2 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn how price structure, volume behaviour and off-exchange market activity can provide clues about larger market participation without proving institutional buying or accumulation."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/institutional-accumulation.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 12: Institutional Accumulation | EdgeBreak Academy">
-
-<meta property="og:description"
-      content="Discover how institutional accumulation may appear through price structure, resistance testing, higher lows and volume behaviour before some breakout opportunities develop.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/institutional-accumulation.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/institutional-accumulation.html">
+<meta property="og:title" content="Institutional Activity & Accumulation Evidence | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Learn how market structure, volume and off-exchange activity can provide evidence of larger-participant involvement without confirming who is buying."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Lesson 12: Institutional Accumulation">
-
-<meta name="twitter:description"
-      content="Learn how to recognise historical accumulation characteristics using market structure, higher lows, resistance and volume analysis.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Institutional Activity & Accumulation Evidence | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Learn how to evaluate clues of larger market participation using price structure, volume and off-exchange activity."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-CSS
+FAVICON
 =================================== -->
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
+
+<!-- ===================================
+STYLES
+=================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
 
 <!-- ===================================
 SUPABASE
 =================================== -->
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
 
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
 <!-- ===================================
 STRUCTURED DATA
 =================================== -->
-
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "@id":"https://www.edgebreak.ai/institutional-accumulation.html",
-  "name":"Lesson 12: Institutional Accumulation",
-  "headline":"Institutional Accumulation",
-  "description":"Learn how institutional accumulation can be researched through historical market structure, resistance, higher lows and volume behaviour.",
-  "learningResourceType":"Lesson",
-  "educationalLevel":"Beginner",
-  "teaches":[
-    "Institutional Accumulation",
-    "Market Structure",
-    "Higher Lows",
-    "Resistance",
-    "Volume Analysis",
-    "Pattern Recognition",
-    "Historical Chart Analysis",
-    "NASDAQ Research"
-  ],
-  "isAccessibleForFree":true,
-  "inLanguage":"en-AU",
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai",
-    "logo":{
-      "@type":"ImageObject",
-      "url":"https://www.edgebreak.ai/images/logo.webp"
-    }
-  },
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
-}
-</script>
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "legalName": "Crane Platform Labs",
+      "url": "https://www.edgebreak.ai/",
+      "email": "mailto:admin@edgebreak.ai",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.edgebreak.ai/#logo",
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+        "caption": "EdgeBreak"
+      },
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
-      "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Module 3"
+      "@type": "Course",
+      "@id": "https://www.edgebreak.ai/academy.html#course",
+      "name": "EdgeBreak Academy",
+      "url": "https://www.edgebreak.ai/academy.html",
+      "description": "Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":4,
-      "name":"Lesson 12: Institutional Accumulation"
+      "@type": "LearningResource",
+      "@id": "https://www.edgebreak.ai/academy/institutional-accumulation.html#lesson",
+      "name": "Module 3 Lesson 2: Institutional Activity & Accumulation Evidence",
+      "url": "https://www.edgebreak.ai/academy/institutional-accumulation.html",
+      "description": "An intermediate lesson explaining how price structure, volume behaviour and off-exchange activity can be evaluated as evidence of larger market participation without identifying or confirming individual institutional buyers.",
+      "learningResourceType": "Lesson",
+      "educationalLevel": "Intermediate",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/academy.html#course" },
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/academy/institutional-accumulation.html#webpage",
+      "url": "https://www.edgebreak.ai/academy/institutional-accumulation.html",
+      "name": "Institutional Activity & Accumulation Evidence | Module 3 Lesson 2 | EdgeBreak Academy",
+      "description": "Learn how price structure, volume behaviour and off-exchange market activity can provide clues about larger market participation without proving institutional buying or accumulation.",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/#website" },
+      "mainEntity": { "@id": "https://www.edgebreak.ai/academy/institutional-accumulation.html#lesson" },
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/academy/institutional-accumulation.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EdgeBreak Academy",
+          "item": "https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Institutional Activity & Accumulation Evidence",
+          "item": "https://www.edgebreak.ai/academy/institutional-accumulation.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 12: Institutional Accumulation",
-  "url":"https://www.edgebreak.ai/institutional-accumulation.html",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+
+.ac-section li{
+    margin:7px 0;
+}
+
+.ac-lesson-image{
+    margin:34px 0 46px;
+}
+
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#ffffff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-concept-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+
+.ac-concept-card{
+    padding:23px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#ffffff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+
+.ac-concept-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.ac-concept-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+
+.ac-concept-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+.ac-evidence{
+    margin:34px 0 54px;
+    padding:30px;
+    border:1px solid #dbe6e0;
+    border-radius:24px;
+    background:linear-gradient(135deg,#f3faf5,#f7f9ff);
+}
+
+.ac-evidence-label{
+    margin-bottom:9px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ac-evidence h3{
+    margin:0 0 13px;
+    color:var(--ix-ink);
+    font-size:28px;
+    letter-spacing:-.03em;
+}
+
+.ac-evidence p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.7;
+}
+
+.ac-evidence p:last-child{
+    margin-bottom:0;
+}
+
+.ac-exercise{
+    margin:34px 0 54px;
+    padding:30px;
+    border:1px solid #dce7df;
+    border-radius:24px;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+}
+
+.ac-exercise-tag{
+    margin-bottom:9px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ac-exercise h3{
+    margin:0 0 13px;
+    color:var(--ix-ink);
+    font-size:27px;
+    letter-spacing:-.03em;
+}
+
+.ac-exercise p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.65;
+}
+
+.ac-exercise ul{
+    margin:0;
+    padding-left:22px;
+    color:#526071;
+    font-size:15px;
+    line-height:1.65;
+}
+
+@media(max-width:900px){
+    .ac-concept-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+    .ac-card-grid.three{
+        grid-template-columns:1fr;
+    }
+
+    .ac-card-grid.three .ac-reminder{
+        grid-column:auto;
+    }
+}
+
+</style>
 </head>
-
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
-<main>
-<!-- ==========================
-MODULE 3 · LESSON 10
-=========================== -->
-
-<div class="academy-container lesson-container">
-
-    <div class="lesson-tag">
-        MODULE 3 • LESSON 10
-    </div>
-
-    <h1>
-        Understanding Institutional Accumulation
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 25 Minutes</span>
-
-        <span>•</span>
-
-        <span>Advanced Breakout Research</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        Many of the strongest breakout opportunities begin long before price moves above resistance. During this preparation phase, investors often research whether institutional buying may be occurring through periods of accumulation. While it is impossible to know exactly who is buying or selling, studying price action and volume behaviour can provide valuable clues about how market participants are positioning themselves.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>What institutional accumulation is.</li>
-
-            <li>Why institutions buy differently from retail investors.</li>
-
-            <li>Common characteristics of accumulation.</li>
-
-            <li>How accumulation relates to breakout research.</li>
-
-            <li>How EdgeBreak identifies Smart Money characteristics.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>Who Are Institutional Investors?</h2>
-
-        <p>
-
-            Institutional investors include organisations such as mutual funds, pension funds, hedge funds, insurance companies and investment managers.
-
-        </p>
-
-        <p>
-
-            Because these organisations often manage billions of dollars, they cannot usually buy an entire position in a single transaction without significantly affecting the market price.
-
-        </p>
-
-        <p>
-
-            Instead, buying often occurs gradually over days, weeks or even months.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/retail-vs-investor.webp"
-                alt="Comparison between a retail investor and an institutional investor, showing differences in position size, buying behaviour and market impact.">
-
-            <figcaption>
-
-                Retail investors typically manage smaller amounts of personal capital and can often buy or sell an entire position in a single transaction. Institutional investors, such as mutual funds, pension funds and hedge funds, manage significantly larger pools of capital and usually build positions gradually over days, weeks or months to reduce their impact on the market. Understanding these differences helps explain why institutional buying can influence price action over extended periods.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>What Is Accumulation?</h2>
-
-        <p>
-
-            Accumulation refers to a period where buying interest gradually absorbs available selling pressure while price remains relatively stable.
-
-        </p>
-
-        <p>
-
-            During these periods, price may appear to move sideways even though demand is slowly increasing beneath the surface.
-
-        </p>
-
-        <p>
-
-            Not every consolidation represents accumulation, but many investors research these characteristics because they sometimes appear before stronger price movements.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/accumulation.webp"
-                alt="Illustration of an accumulation trading range showing price moving sideways as buying interest gradually absorbs selling pressure before a potential breakout.">
-
-            <figcaption>
-
-                Accumulation is a period where buying interest gradually absorbs available selling pressure while price remains relatively stable. During this phase, the market may trade sideways within a defined range as positions are built over time. Although not every consolidation represents accumulation, these characteristics are commonly researched because they sometimes appear before stronger price movements develop.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Characteristics of Accumulation</h2>
-
-        <p>
-
-            Although every stock behaves differently, accumulation often shares several common characteristics.
-
-        </p>
-
-        <ul>
-
-            <li>Repeated tests of resistance.</li>
-
-            <li>Higher lows developing beneath resistance.</li>
-
-            <li>Relatively tight daily price movement.</li>
-
-            <li>Orderly market structure.</li>
-
-            <li>Declining selling pressure.</li>
-
-            <li>Volume dry-ups followed by occasional expansion.</li>
-
-        </ul>
-
-        <p>
-
-            None of these characteristics guarantee future price movement, but together they can help investors identify stocks worth researching further.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/characteristics-of-accumulation.webp"
-                alt="Illustration showing the common characteristics of accumulation, including repeated resistance tests, higher lows, declining selling pressure and volume dry-ups.">
-
-            <figcaption>
-
-                Accumulation often develops through a combination of repeated resistance tests, higher lows, relatively tight daily price movement, orderly market structure, declining selling pressure and periods of reduced volume followed by occasional expansion. While none of these characteristics guarantee future price movement, they can help investors identify stocks that may be worth researching more closely.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Why Institutions Buy Slowly</h2>
-
-        <p>
-
-            Large institutions cannot usually purchase millions of shares at once without pushing prices significantly higher.
-
-        </p>
-
-        <p>
-
-            Instead, buying is often spread across multiple trading sessions, allowing positions to be built gradually while limiting market impact.
-
-        </p>
-
-        <p>
-
-            This gradual buying process is one reason why some stocks spend extended periods consolidating before eventually breaking above resistance.
-
-        </p>
-
-        <h2>Accumulation vs Distribution</h2>
-
-        <p>
-
-            Accumulation and distribution represent opposite market behaviours.
-
-        </p>
-
-        <p>
-
-            During accumulation, buying interest may gradually absorb selling pressure while market structure improves.
-
-        </p>
-
-        <p>
-
-            During distribution, sellers may gradually reduce positions while buying momentum begins weakening.
-
-        </p>
-
-        <p>
-
-            Understanding this difference helps investors better interpret changing market conditions.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/accumulation-vs-distribution-chart.webp"
-                alt="Comparison chart showing the differences between accumulation and distribution market behaviour, including price structure, volume and buying versus selling pressure.">
-
-            <figcaption>
-
-                Accumulation and distribution represent opposite phases of market behaviour. During accumulation, buying interest gradually absorbs selling pressure while price often remains within an orderly trading range and higher lows begin to develop. During distribution, selling pressure gradually increases, buying momentum weakens and market structure often deteriorates through lower highs and eventual breakdowns. Comparing these characteristics helps investors better understand changing market conditions and interpret the broader context of price action.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Smart Money Characteristics</h2>
-
-        <p>
-
-            Throughout EdgeBreak, the term <strong>Smart Money</strong> refers to a collection of market characteristics commonly associated with accumulation rather than identifying individual investors or institutions.
-
-        </p>
-
-        <p>
-
-            The Smart Money Filter searches for stocks displaying combinations of these characteristics, allowing members to narrow their research towards companies showing organised market behaviour.
-
-        </p>
-
-        <p>
-
-            The filter does not predict future price movement or identify actual institutional buying. Instead, it highlights stocks whose recent market behaviour may deserve further investigation.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/smart-money-filter-page.webp"
-                alt="EdgeBreak Smart Money Filter page showing breakout filters, scanner results, stock structure metrics and integrated research tools for analysing NASDAQ breakout opportunities.">
-
-            <figcaption>
-
-                The Smart Money Filter helps investors narrow thousands of NASDAQ-listed stocks to a smaller group displaying characteristics commonly associated with developing breakout structures. Filters can be applied for resistance touches, higher lows, volume ratio, breakout strength, price group and Smart Money appearances to refine research according to specific criteria. Matching stocks are presented alongside key structural metrics, allowing investors to quickly compare market behaviour before opening individual charts for further analysis. The Smart Money Filter is designed to support a structured research workflow by helping users identify stocks worthy of additional investigation rather than manually reviewing large numbers of charts. EdgeBreak is an educational research platform that provides market research tools only and does not provide financial advice, trading recommendations or guarantee future market performance.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Accumulation and Breakout Research</h2>
-
-        <p>
-
-            Many successful breakout structures appear after extended periods of accumulation.
-
-        </p>
-
-        <p>
-
-            As selling pressure gradually decreases and buyers continue supporting higher prices, resistance may eventually be overcome.
-
-        </p>
-
-        <p>
-
-            This is why EdgeBreak combines accumulation characteristics with resistance touches, higher lows, volume behaviour and overall market structure when identifying research candidates.
-
-        </p>
-
-        <p>
-
-            Looking at all of these characteristics together provides a more balanced understanding than focusing on any single indicator.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/accumulation-leading-to-breakout.webp"
-                alt="Illustration showing an accumulation trading range developing into a breakout, highlighting higher lows, repeated resistance tests and increasing volume.">
-
-            <figcaption>
-
-                Many high-quality breakout structures develop after extended periods of accumulation. As selling pressure gradually decreases and buyers continue supporting higher prices, resistance may eventually be overcome with expanding volume. EdgeBreak combines accumulation characteristics, repeated resistance touches, higher lows, volume behaviour and overall market structure to help identify stocks that may be worthy of further research.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Patience Is Part of the Process</h2>
-
-        <p>
-
-            One of the most important lessons investors learn is that quality research takes time.
-
-        </p>
-
-        <p>
-
-            Stocks may remain in accumulation for weeks or months before market conditions change.
-
-        </p>
-
-        <p>
-
-            Rather than becoming impatient, many investors simply continue monitoring watchlists, reviewing charts and allowing market structure to develop naturally.
-
-        </p>
-
-    </div>
-
-    <!-- LESSON SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            Institutional accumulation describes periods where buying interest may gradually absorb available selling pressure over time. While no investor can know exactly who is buying or selling, studying price structure, higher lows, resistance touches, volume behaviour and consolidation helps build a stronger understanding of developing market opportunities. EdgeBreak's Smart Money Filter combines these characteristics into a structured research tool that supports further analysis.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>Institutions often build positions gradually.</li>
-
-            <li>Accumulation frequently develops during periods of consolidation.</li>
-
-            <li>Higher lows and repeated resistance tests often accompany accumulation.</li>
-
-            <li>Smart Money characteristics provide research opportunities, not predictions.</li>
-
-            <li>Patience is one of the most valuable skills in breakout research.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- PRACTICAL EXERCISE -->
-
-    <div class="lesson-card">
-
-        <h2>Practical Exercise</h2>
-
-        <p>
-
-            Open the NASDAQ Scanner and apply the Smart Money Filter.
-
-        </p>
-
-        <ul>
-
-            <li>Select three stocks from the results.</li>
-
-            <li>Review each chart on the daily timeframe.</li>
-
-            <li>Look for higher lows and repeated resistance touches.</li>
-
-            <li>Check whether volume has remained orderly during consolidation.</li>
-
-            <li>Save your strongest example to My Workspace for future monitoring.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- RESEARCH REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            Institutional accumulation cannot be confirmed through price charts alone. EdgeBreak identifies market characteristics commonly associated with accumulation to support independent research. The platform does not provide financial advice, investment recommendations or identify actual institutional trading activity.
-
-        </p>
-
-    </div>
+<main class="ac-page">
 
     <!-- ===================================
-    LESSON NAVIGATION
+    HERO
     =================================== -->
+    <section class="ac-hero">
+        <div class="ac-shell">
+            <div class="ac-kicker"><span class="ac-dot"></span> Module 3 · Lesson 2</div>
+            <h1 class="ac-title">Institutional Activity & <span>Accumulation Evidence.</span></h1>
+            <p class="ac-subtitle">
+                Learn how larger-participant involvement may leave clues in price structure, volume and off-exchange activity — without assuming that any single data point proves who is buying.
+            </p>
 
-    <div class="lesson-next">
+            <div class="ac-meta">
+                <span>Estimated time: 25 minutes</span>
+                <span>Advanced market research</span>
+                <span>Intermediate</span>
+            </div>
 
-        <div class="lesson-next-tag">
+            <div class="ac-progress-wrap" aria-label="Module 3 progress">
+                <div class="ac-progress-label">
+                    <span>Module 3 progress</span>
+                    <span>Lesson 2</span>
+                </div>
+                <div class="ac-progress"><span style="width:35%"></span></div>
+            </div>
+        </div>
+    </section>
 
-            Continue Learning
+    <!-- ===================================
+    WHAT YOU'LL LEARN
+    =================================== -->
+    <section class="ac-overview">
+        <div class="ac-shell">
+            <div class="ac-overview-card">
+                <div>
+                    <div class="ac-overview-label">What you'll learn</div>
+                    <h2>Look for evidence without pretending to know the buyer.</h2>
+                </div>
+
+                <div class="ac-learn-list">
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why large institutions often build positions gradually.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>What accumulation means as a market concept.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Which price and volume characteristics are commonly studied.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How unusual off-exchange activity can add context.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why accumulation and institutional buying cannot be confirmed from charts alone.</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================
+    LESSON CONTENT
+    =================================== -->
+    <article class="ac-content">
+        <div class="ac-reading">
+
+            <section class="ac-section">
+                <h2>Who are institutional investors?</h2>
+                <p>Institutional investors include organisations such as mutual funds, pension funds, hedge funds, insurance companies and investment managers.</p>
+                <p>Because these organisations can manage very large pools of capital, building or reducing a substantial position may require many transactions over an extended period rather than one single order.</p>
+                <p>This is one reason market researchers pay attention to sustained changes in price structure, volume and trading activity rather than looking only at one day's movement.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/retail-vs-investor.webp" alt="Comparison between retail and institutional investors showing differences in position size and the potential need for larger positions to be built over time.">
+                <figcaption>Large market participants may need to execute activity over many sessions because of position size and liquidity. That does not mean every long consolidation is institutional accumulation.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>What does accumulation mean?</h2>
+                <p>Accumulation is a market concept used to describe a period in which buying demand may be absorbing available selling pressure while price remains relatively stable.</p>
+                <p>On a chart, this can sometimes appear as an extended trading range, improving lows or increasingly organised price behaviour.</p>
+                <p>The important word is <strong>may</strong>. A chart does not reveal the identity of every buyer or seller, and not every consolidation represents accumulation.</p>
+
+                <div class="ac-pullquote">
+                    Accumulation is an interpretation of market behaviour — not proof that a particular institution is buying a stock.
+                </div>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/accumulation.webp" alt="Illustration of an accumulation-style trading range where price remains relatively stable while buying demand may absorb selling pressure.">
+                <figcaption>An accumulation-style range can show relatively stable price behaviour while demand appears to absorb supply. Similar-looking ranges can form for many reasons, so context is essential.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Characteristics researchers often study</h2>
+                <p>No single chart pattern identifies institutional buying. Instead, researchers may look for combinations of characteristics that suggest demand is becoming more persistent.</p>
+                <ul>
+                    <li>Repeated tests of resistance.</li>
+                    <li>Higher lows forming beneath resistance.</li>
+                    <li>Relatively tight daily price movement.</li>
+                    <li>Orderly or improving market structure.</li>
+                    <li>Reduced downside volatility.</li>
+                    <li>Periods of lower volume followed by selective expansion.</li>
+                </ul>
+                <p>When several of these characteristics appear together, the stock may deserve closer investigation. They still do not confirm who is trading or what will happen next.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/characteristics-of-accumulation.webp" alt="Illustration showing characteristics commonly studied during accumulation-style market structures, including repeated resistance tests, higher lows and changing volume.">
+                <figcaption>Repeated resistance tests, improving lows, tighter price behaviour and changing volume can provide clues about the balance between supply and demand.</figcaption>
+            </figure>
+
+            <div class="ac-concept-grid" aria-label="Institutional activity evidence">
+                <div class="ac-concept-card">
+                    <b>Price structure</b>
+                    <strong>Is demand becoming more persistent?</strong>
+                    <span>Higher lows, repeated resistance tests and tighter ranges can show how the structure is changing.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Volume</b>
+                    <strong>Is participation changing?</strong>
+                    <span>Volume dry-up, expansion and relative volume can add context to the price behaviour.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Off-exchange activity</b>
+                    <strong>Is unusual activity present?</strong>
+                    <span>FINRA and other off-exchange data can show elevated activity, but not the direction, motive or identity of participants.</span>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Why larger participants may transact gradually</h2>
+                <p>Large orders can affect market price, particularly in less liquid stocks. For that reason, sizeable market participants may divide activity across multiple transactions or trading sessions.</p>
+                <p>However, gradual trading is not visible as a label on a chart. Researchers can only observe the resulting market behaviour and compare it with other evidence.</p>
+                <p>This distinction matters because a neat consolidation does not automatically mean an institution is building a position.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>Accumulation vs distribution</h2>
+                <p>Accumulation and distribution are commonly used to describe different supply-and-demand conditions.</p>
+                <p>An accumulation-style structure may show improving support, persistent demand and increasingly orderly price behaviour.</p>
+                <p>A distribution-style structure may show weakening rallies, lower highs, deterioration in support or increasing selling pressure.</p>
+                <p>Neither label should be assigned from one candle or one volume spike. The interpretation comes from the broader structure and how it changes over time.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/accumulation-vs-distribution-chart.webp" alt="Comparison of accumulation-style and distribution-style market behaviour using price structure and volume context.">
+                <figcaption>Accumulation-style and distribution-style structures describe different patterns of supply and demand. Their interpretation depends on the wider chart rather than a single indicator.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>What off-exchange activity can — and cannot — tell you</h2>
+                <p>EdgeBreak also studies unusual off-exchange trading activity as one part of its research process.</p>
+                <p>FINRA-reported off-exchange volume can help show whether a stock is experiencing unusually high activity relative to its own recent history. That can be useful when combined with technical structure and other evidence.</p>
+                <p>But off-exchange data does <strong>not</strong> tell you whether the activity was buying or selling, who placed the trades, or whether the activity represents institutional accumulation.</p>
+                <p>For that reason, EdgeBreak treats unusual market activity as context — not confirmation.</p>
+            </section>
+
+            <div class="ac-evidence">
+                <div class="ac-evidence-label">Important distinction</div>
+                <h3>Evidence is not identity.</h3>
+                <p>A stock can show elevated off-exchange activity, improving price structure and constructive volume behaviour at the same time. That combination may justify deeper research.</p>
+                <p>It still does not prove that institutions are accumulating the stock. EdgeBreak surfaces evidence so members can investigate the behaviour, not assign certainty where the underlying data cannot provide it.</p>
+            </div>
+
+            <section class="ac-section">
+                <h2>Accumulation evidence and breakout research</h2>
+                <p>Some strong historical breakout structures have developed after long periods of consolidation in which selling pressure appeared to reduce and buyers continued supporting price.</p>
+                <p>Repeated resistance tests, higher lows and improving price structure can therefore be useful characteristics to study before a breakout occurs.</p>
+                <p>EdgeBreak combines these technical characteristics with volume, unusual market activity and broader market context to help narrow the research universe.</p>
+                <p>The value comes from combining multiple pieces of evidence rather than relying on one indicator or attempting to identify a hidden buyer.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/accumulation-leading-to-breakout.webp" alt="Illustration showing a consolidation structure developing into a breakout with higher lows, repeated resistance tests and changing volume.">
+                <figcaption>Some historical breakout structures develop after extended consolidation with improving lows and repeated resistance tests. These characteristics can be studied without assuming that institutional accumulation has been confirmed.</figcaption>
+            </figure>
+
+            <div class="ac-process" aria-label="Accumulation evidence research process">
+                <div class="ac-process-head">
+                    <span>Build the evidence carefully</span>
+                    <h3>Structure → volume → activity → context.</h3>
+                </div>
+
+                <div class="ac-process-grid">
+                    <div class="ac-process-step">
+                        <b>01</b>
+                        <strong>Structure</strong>
+                        <span>Look for repeated resistance, higher lows, tighter ranges and organised price action.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>02</b>
+                        <strong>Volume</strong>
+                        <span>Compare dry-up, expansion and relative participation with the price structure.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>03</b>
+                        <strong>Activity</strong>
+                        <span>Check whether unusual off-exchange activity is present relative to recent history.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>04</b>
+                        <strong>Context</strong>
+                        <span>Combine the evidence without claiming that it identifies a particular buyer or predicts the outcome.</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Patience is part of the process</h2>
+                <p>Interesting structures can remain unresolved for weeks or months.</p>
+                <p>Rather than assuming that every consolidation must lead to a breakout, researchers can continue monitoring the chart, updating notes and observing whether the evidence strengthens or weakens.</p>
+                <p>My Workspace is useful for this because it allows promising research candidates to be saved and revisited as new market information appears.</p>
+            </section>
+
+            <div class="ac-exercise">
+                <div class="ac-exercise-tag">Practical exercise</div>
+                <h3>Separate evidence from assumptions.</h3>
+                <p>Open three developing stocks from the NASDAQ Scanner or your watchlist.</p>
+                <ul>
+                    <li>Look for repeated resistance tests and higher lows.</li>
+                    <li>Review whether the range is tightening or remaining volatile.</li>
+                    <li>Compare current volume with recent activity.</li>
+                    <li>Review any unusual off-exchange activity shown by EdgeBreak.</li>
+                    <li>Write down what the evidence shows — and separately list what it cannot prove.</li>
+                    <li>Save the clearest example to My Workspace for later review.</li>
+                </ul>
+            </div>
 
         </div>
+    </article>
 
-        <h2>
+    <!-- ===================================
+    SUMMARY / TAKEAWAYS
+    =================================== -->
+    <section class="ac-summary-area">
+        <div class="ac-shell">
+            <div class="ac-card-grid three">
 
-            Continue Your Journey
+                <div class="ac-card">
+                    <h2>Lesson summary</h2>
+                    <p>Institutional participation cannot be identified with certainty from charts or off-exchange volume alone. Researchers can, however, study combinations of price structure, volume behaviour and unusual market activity to understand whether larger-scale participation may be present and whether a stock deserves deeper investigation.</p>
+                </div>
 
-        </h2>
+                <div class="ac-card">
+                    <h2>Key takeaways</h2>
+                    <ul>
+                        <li>Large participants may need to transact over time.</li>
+                        <li>Accumulation is an interpretation of supply-and-demand behaviour, not proof of identity.</li>
+                        <li>Higher lows, repeated resistance tests and tighter ranges can provide useful context.</li>
+                        <li>Off-exchange activity shows activity level, not trade direction or participant identity.</li>
+                        <li>The strongest research combines several independent pieces of evidence.</li>
+                    </ul>
+                </div>
 
-        <div class="lesson-nav-buttons">
+                <div class="ac-card">
+                    <h2>Common beginner mistakes</h2>
+                    <ul>
+                        <li>Calling every consolidation institutional accumulation.</li>
+                        <li>Assuming high volume always means buying.</li>
+                        <li>Assuming off-exchange volume proves institutional demand.</li>
+                        <li>Ignoring broader market structure.</li>
+                        <li>Treating accumulation evidence as a prediction of a breakout.</li>
+                    </ul>
+                </div>
 
-            <!-- PREVIOUS -->
+                <div class="ac-card ac-reminder">
+                    <div class="ac-reminder-icon">✦</div>
+                    <div>
+                        <h2>Research reminder</h2>
+                        <p>EdgeBreak does not identify or confirm institutional buying. Price structure, volume and off-exchange activity are presented as research evidence only and cannot establish the direction, motive or identity of market participants. EdgeBreak provides educational content and research tools, not financial advice or investment recommendations.</p>
+                    </div>
+                </div>
 
-            <a
-                href="/academy/multi-timeframe-analysis.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/identifying-high-quality-breakout-setups.html"
-                class="btn-primary"
-            >
-                Start Lesson 3.3 →
-            </a>
-
+            </div>
         </div>
+    </section>
 
-        <h3>
+    <!-- ===================================
+    NEXT LESSON
+    =================================== -->
+    <section class="ac-next">
+        <div class="ac-shell">
+            <div class="ac-next-card">
+                <div class="ac-next-tag">Continue learning · Module 3 Lesson 3</div>
+                <h2>Ranking breakout quality.</h2>
+                <p>Learn how to compare developing breakout structures using resistance, higher lows, volume, trend quality and wider market context so stronger research candidates can be separated from weaker setups.</p>
 
-            Lesson 3.3 – Ranking Breakout Quality
+                <div class="ac-next-actions">
+                    <a href="/academy/identifying-high-quality-breakout-setups.html" class="ac-btn ac-btn-primary">Start Lesson 3.3 →</a>
+                    <a href="/academy/multi-timeframe-analysis.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+                </div>
 
-        </h3>
-
-        <p>
-
-            Learn how to evaluate breakout quality by assessing market structure, resistance levels, higher lows, accumulation characteristics and volume. Discover how combining multiple factors helps you research stronger breakout opportunities with greater confidence.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 3 • Lesson 11 of 30
-
+                <div class="ac-next-foot">Module 3 · Lesson 2 completed</div>
+            </div>
         </div>
-
-    </div>
+    </section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>

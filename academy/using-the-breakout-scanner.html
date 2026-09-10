@@ -1,668 +1,949 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 35: Using the Breakout Scanner | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how to use the EdgeBreak Breakout Scanner to identify recent NASDAQ breakout opportunities using resistance, higher lows, volume characteristics and structured market research.">
-
-<meta name="keywords"
-      content="breakout scanner, EdgeBreak Breakout Scanner, NASDAQ breakout scanner, breakout research, resistance, higher lows, volume analysis, stock scanner, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/using-the-breakout-scanner.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Using the Breakout Scanner | Module 4 Lesson 2 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn how to use the EdgeBreak Breakout Scanner to research NASDAQ stocks that have moved beyond resistance using technical structure, volume, chart analysis, AI research and watchlists."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/using-the-breakout-scanner.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 35: Using the Breakout Scanner">
-
-<meta property="og:description"
-      content="Learn how to use the EdgeBreak Breakout Scanner to research recently confirmed NASDAQ breakout opportunities using a structured workflow.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/using-the-breakout-scanner.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/using-the-breakout-scanner.html">
+<meta property="og:title" content="Using the Breakout Scanner | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Learn how to evaluate active NASDAQ breakout structures using resistance, higher lows, volume, charts, AI research and My Workspace."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Lesson 35: Using the Breakout Scanner">
-
-<meta name="twitter:description"
-      content="Discover how to filter, review and research recent breakout opportunities using the EdgeBreak Breakout Scanner.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Using the Breakout Scanner | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Learn how to research active breakout structures with EdgeBreak charts, filters, AI research and watchlists."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-CSS
+FAVICON
 =================================== -->
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
+
+<!-- ===================================
+STYLES
+=================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
 
 <!-- ===================================
 SUPABASE
 =================================== -->
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
 
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
 <!-- ===================================
-LEARNING RESOURCE
+STRUCTURED DATA
 =================================== -->
-
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "name":"Lesson 35: Using the Breakout Scanner",
-  "description":"Learn how to use the EdgeBreak Breakout Scanner to identify recent NASDAQ breakout opportunities using resistance, higher lows and volume characteristics.",
-  "educationalLevel":"Beginner",
-  "learningResourceType":"Lesson",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  },
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  }
-}
-</script>
-
-<!-- ===================================
-BREADCRUMB
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "legalName": "Crane Platform Labs",
+      "url": "https://www.edgebreak.ai/",
+      "email": "mailto:admin@edgebreak.ai",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.edgebreak.ai/#logo",
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+        "caption": "EdgeBreak"
+      },
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
-      "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Lesson 35: Using the Breakout Scanner",
-      "item":"https://www.edgebreak.ai/using-the-breakout-scanner.html"
+      "@type": "Course",
+      "@id": "https://www.edgebreak.ai/academy.html#course",
+      "name": "EdgeBreak Academy",
+      "url": "https://www.edgebreak.ai/academy.html",
+      "description": "Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "LearningResource",
+      "@id": "https://www.edgebreak.ai/academy/using-the-breakout-scanner.html#lesson",
+      "name": "Module 4 Lesson 2: Using the Breakout Scanner",
+      "url": "https://www.edgebreak.ai/academy/using-the-breakout-scanner.html",
+      "description": "An intermediate lesson explaining how to research active NASDAQ breakout structures using scanner metrics, TradingView charts, AI-assisted research and My Workspace.",
+      "learningResourceType": "Lesson",
+      "educationalLevel": "Intermediate",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/academy.html#course" },
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/academy/using-the-breakout-scanner.html#webpage",
+      "url": "https://www.edgebreak.ai/academy/using-the-breakout-scanner.html",
+      "name": "Using the Breakout Scanner | Module 4 Lesson 2 | EdgeBreak Academy",
+      "description": "Learn how to use the EdgeBreak Breakout Scanner to research NASDAQ stocks that have moved beyond resistance using technical structure, volume, chart analysis, AI research and watchlists.",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/#website" },
+      "mainEntity": { "@id": "https://www.edgebreak.ai/academy/using-the-breakout-scanner.html#lesson" },
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/academy/using-the-breakout-scanner.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EdgeBreak Academy",
+          "item": "https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Using the Breakout Scanner",
+          "item": "https://www.edgebreak.ai/academy/using-the-breakout-scanner.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<!-- ===================================
-WEBPAGE
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 35: Using the Breakout Scanner",
-  "url":"https://www.edgebreak.ai/using-the-breakout-scanner.html",
-  "description":"Learn how to use the EdgeBreak Breakout Scanner to research recently confirmed breakout opportunities through structured NASDAQ market analysis.",
-  "isPartOf":{
-    "@type":"WebSite",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  },
-  "primaryImageOfPage":"https://www.edgebreak.ai/images/academy.webp",
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+
+.ac-section li{margin:7px 0}
+
+.ac-lesson-image{margin:34px 0 46px}
+
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#fff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-concept-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+
+.ac-concept-card{
+    padding:23px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#fff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+
+.ac-concept-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.ac-concept-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+
+.ac-concept-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-ai-panel{
+    margin:36px 0 54px;
+    padding:30px;
+    border:1px solid #d9e5de;
+    border-radius:24px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.10),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.08),transparent 28%),
+        #fff;
+    box-shadow:0 14px 36px rgba(15,23,42,.055);
+}
+
+.ac-ai-panel h3{
+    margin:0 0 12px;
+    color:var(--ix-ink);
+    font-size:30px;
+    letter-spacing:-.035em;
+}
+
+.ac-ai-panel p{
+    margin:0 0 16px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.7;
+}
+
+.ac-ai-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:20px;
+}
+
+.ac-ai-action{
+    padding:18px;
+    border:1px solid var(--ix-line);
+    border-radius:17px;
+    background:#fff;
+}
+
+.ac-ai-action b{
+    display:block;
+    margin-bottom:6px;
+    color:var(--ix-green-dark);
+    font-size:15px;
+}
+
+.ac-ai-action span{
+    color:var(--ix-muted);
+    font-size:13px;
+    line-height:1.5;
+}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+.ac-exercise{
+    margin:34px 0 54px;
+    padding:30px;
+    border:1px solid #dce7df;
+    border-radius:24px;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+}
+
+.ac-exercise-tag{
+    margin-bottom:9px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ac-exercise h3{
+    margin:0 0 13px;
+    color:var(--ix-ink);
+    font-size:27px;
+    letter-spacing:-.03em;
+}
+
+.ac-exercise p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.65;
+}
+
+.ac-exercise ul{
+    margin:0;
+    padding-left:22px;
+    color:#526071;
+    font-size:15px;
+    line-height:1.65;
+}
+
+@media(max-width:900px){
+    .ac-concept-grid{grid-template-columns:1fr}
+}
+
+@media(max-width:700px){
+    .ac-ai-actions{grid-template-columns:1fr}
+    .ac-card-grid.three{grid-template-columns:1fr}
+    .ac-card-grid.three .ac-reminder{grid-column:auto}
+}
+
+</style>
 </head>
-
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
-<main>
-<!-- ==========================
-MODULE 4 · LESSON 16
-=========================== -->
+<main class="ac-page">
 
-<div class="academy-container lesson-container">
-
-    <div class="lesson-tag">
-        MODULE 4 • LESSON 16
-    </div>
-
-    <h1>
-        Using the Breakout Scanner
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 25 Minutes</span>
-
-        <span>•</span>
-
-        <span>Mastering EdgeBreak</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        The Breakout Scanner is designed to identify NASDAQ stocks that have already broken above a defined resistance level according to the EdgeBreak breakout model. Unlike the NASDAQ Scanner, which searches for developing research candidates, the Breakout Scanner focuses on stocks that have already demonstrated breakout characteristics and deserve further investigation.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>How the Breakout Scanner works.</li>
-
-            <li>Understanding Gold, Silver and Bronze breakouts.</li>
-
-            <li>Using breakout metrics effectively.</li>
-
-            <li>Researching breakout quality.</li>
-
-            <li>Building a post-breakout watchlist.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>What Is the Breakout Scanner?</h2>
-
-        <p>
-
-            The Breakout Scanner searches the market for stocks that have recently moved above an established resistance level based on the EdgeBreak breakout methodology.
-
-        </p>
-
-        <p>
-
-            Every stock displayed has already satisfied the platform's breakout criteria. Rather than searching for potential breakouts, the scanner helps members research stocks that have already demonstrated breakout behaviour.
-
-        </p>
-
-        <p>
-
-            The scanner is designed to save research time by organising breakout opportunities into one location.
-
-        </p>
-
-        <div class="academy-image">
-
-            <img
-                src="/images/edgebreak-nasdaq-scanner.webp"
-                alt="EdgeBreak Breakout Scanner displaying current breakout candidates with breakout filters, results table and market structure details."
-                loading="lazy"
-            >
-
-            <p class="image-caption">
-                <strong>Figure:</strong> The <strong>EdgeBreak Breakout Scanner</strong> identifies stocks that have already broken above established resistance and meet the selected research filters. Investors can refine results using breakout characteristics such as resistance touches, higher lows and volume expansion before opening individual TradingView charts to study market structure in greater detail. The scanner is designed to organise and prioritise research opportunities rather than provide financial advice or trading signals.
+    <section class="ac-hero">
+        <div class="ac-shell">
+            <div class="ac-kicker"><span class="ac-dot"></span> Module 4 · Lesson 2</div>
+            <h1 class="ac-title">Using the <span>Breakout Scanner.</span></h1>
+            <p class="ac-subtitle">
+                Go deeper into active breakout research and learn how to compare stocks that have already moved beyond resistance using structure, volume, charts, AI research and ongoing watchlist review.
             </p>
 
+            <div class="ac-meta">
+                <span>Estimated time: 25 minutes</span>
+                <span>Mastering EdgeBreak</span>
+                <span>Intermediate</span>
+            </div>
+
+            <div class="ac-progress-wrap" aria-label="Module 4 progress">
+                <div class="ac-progress-label">
+                    <span>Module 4 progress</span>
+                    <span>Lesson 2 of 4</span>
+                </div>
+                <div class="ac-progress"><span style="width:50%"></span></div>
+            </div>
         </div>
+    </section>
 
-        <h2>Understanding Gold, Silver & Bronze</h2>
+    <section class="ac-overview">
+        <div class="ac-shell">
+            <div class="ac-overview-card">
+                <div>
+                    <div class="ac-overview-label">What you'll learn</div>
+                    <h2>Understand what sits behind an active breakout result.</h2>
+                </div>
 
-        <p>
-
-            EdgeBreak groups breakout opportunities into three research categories based on the overall strength of their breakout characteristics.
-
-        </p>
-
-        <ul>
-
-            <li><strong>Gold</strong> – Strong overall breakout structure with multiple supporting characteristics.</li>
-
-            <li><strong>Silver</strong> – Good market structure with several positive characteristics.</li>
-
-            <li><strong>Bronze</strong> – Valid breakout structure that may deserve continued monitoring.</li>
-
-        </ul>
-
-        <p>
-
-            These categories help organise research and prioritise chart reviews. They are not predictions of future market performance.
-
-        </p>
-
-        <div class="academy-image">
-
-            <img
-                src="/images/rank.webp"
-                alt="EdgeBreak Breakout Scanner showing Gold, Silver and Bronze breakout rankings used to organise breakout research opportunities."
-                loading="lazy"
-            >
-
-            <p class="image-caption">
-                <strong>Figure:</strong> The <strong>Rank</strong> filter allows investors to focus on <strong>Gold</strong>, <strong>Silver</strong> or <strong>Bronze</strong> breakout opportunities. These rankings help organise research by grouping breakout candidates according to the EdgeBreak breakout model, making it easier to prioritise which charts to review first before conducting detailed market structure analysis.
-            </p>
-
+                <div class="ac-learn-list">
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How the Breakout Scanner works.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Which breakout metrics deserve attention.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to distinguish a fresh breakout from an extended move.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to move from scanner result to chart review.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How AI Research buttons add company and chart context.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to save breakout candidates to My Workspace.</span></div>
+                </div>
+            </div>
         </div>
-
-        <h2>Understanding the Scanner Metrics</h2>
-
-        <p>
-
-            Each breakout includes several important research metrics that provide additional context.
-
-        </p>
-
-        <ul>
-
-            <li>Current Price</li>
-
-            <li>Resistance Touches</li>
-
-            <li>Higher Lows</li>
-
-            <li>Volume Ratio</li>
-
-            <li>Distance Above Resistance</li>
-
-        </ul>
-
-        <p>
-
-            These measurements help members compare breakout structures and decide which charts deserve closer examination.
-
-        </p>
-
-        <div class="academy-image">
-
-            <img
-                src="/images/breakout-scanner-filters.webp"
-                alt="EdgeBreak Breakout Scanner filters showing rank, price group, resistance touches, higher lows, volume ratio and breakout strength used to refine breakout research."
-                loading="lazy"
-            >
-
-            <p class="image-caption">
-                <strong>Figure:</strong> The <strong>EdgeBreak Breakout Scanner</strong> allows investors to refine breakout research using a combination of filters including <strong>Rank</strong>, <strong>Price Group</strong>, <strong>Resistance Touches</strong>, <strong>Higher Lows</strong>, <strong>Volume Ratio</strong> and <strong>Breakout Strength</strong>. Applying these filters helps reduce thousands of NASDAQ-listed stocks into a smaller group of organised breakout candidates that can then be investigated further using TradingView charts and broader market structure analysis.
-            </p>
-
-        </div>
-
-        <h2>Opening the Chart</h2>
-
-        <p>
-
-            Clicking any stock immediately loads its TradingView chart.
-
-        </p>
-
-        <p>
-
-            Before adding a stock to your watchlist, take time to review:
-
-        </p>
-
-        <ul>
-
-            <li>The overall market structure.</li>
-
-            <li>The breakout itself.</li>
-
-            <li>Volume behaviour.</li>
-
-            <li>Higher lows.</li>
-
-            <li>Long-term weekly trend.</li>
-
-            <li>Nearby resistance levels.</li>
-
-        </ul>
-
-        <p>
-
-            Remember that the scanner identifies research opportunities—the chart provides the full story.
-
-        </p>
-
-        <div class="academy-image">
-
-            <img
-                src="/images/opening-charts.webp"
-                alt="Opening Charts in EdgeBreak using the integrated TradingView chart to analyse market structure, resistance, higher lows, volume and breakout opportunities."
-                loading="lazy"
-            >
-
-            <p class="image-caption">
-                <strong>Figure.</strong> Opening charts from the EdgeBreak scanner launches an interactive TradingView chart, allowing investors to examine market structure, resistance, higher lows, volume behaviour and overall trend before deciding whether a stock deserves further research.
-            </p>
-
-        </div>
-
-        <h2>Reviewing the Breakout</h2>
-
-        <p>
-
-            Not every breakout develops in exactly the same way.
-
-        </p>
-
-        <p>
-
-            Some stocks continue building momentum after breaking resistance, while others consolidate or return to test the breakout level.
-
-        </p>
-
-        <p>
-
-            Rather than focusing on short-term price movement, continue monitoring how the overall market structure evolves.
-
-        </p>
-
-        <p>
-
-            The goal is to understand how quality breakout structures behave over time.
-
-        </p>
-
-        <h2>Saving Breakouts to My Workspace</h2>
-
-        <p>
-
-            If a breakout deserves further research, save it to My Workspace.
-
-        </p>
-
-        <p>
-
-            Building a structured watchlist allows you to monitor developing market behaviour over days, weeks and months rather than making decisions based on one day's activity.
-
-        </p>
-
-        <p>
-
-            Continue reviewing saved stocks as new market data becomes available.
-
-        </p>
-
-        
-
-        <h2>Researching, Not Predicting</h2>
-
-        <p>
-
-            One of the most important principles of EdgeBreak is understanding that a breakout does not guarantee future performance.
-
-        </p>
-
-        <p>
-
-            Markets remain uncertain, and every breakout continues to evolve after appearing in the scanner.
-
-        </p>
-
-        <p>
-
-            Use the scanner to organise your research—not to predict future outcomes.
-
-        </p>
-
-        <h2>A Typical Breakout Workflow</h2>
-
-        <p>
-
-            A structured research process may include:
-
-        </p>
-
-        <ol>
-
-            <li>Review today's breakout list.</li>
-
-            <li>Prioritise Gold and Silver structures.</li>
-
-            <li>Open each TradingView chart.</li>
-
-            <li>Review weekly and daily market structure.</li>
-
-            <li>Check volume and higher lows.</li>
-
-            <li>Save quality research candidates to My Workspace.</li>
-
-            <li>Continue monitoring them over time.</li>
-
-        </ol>
-
-        <p>
-
-            Consistently following the same workflow helps build experience recognising organised breakout structures.
-
-        </p>
-
-    </div>
-
-    <!-- LESSON SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            The Breakout Scanner helps members identify stocks that have already broken above resistance according to the EdgeBreak breakout model. By combining breakout classifications, chart analysis and ongoing monitoring through My Workspace, members can build a structured process for researching active breakout opportunities.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>The Breakout Scanner identifies completed breakout structures.</li>
-
-            <li>Gold, Silver and Bronze help organise research.</li>
-
-            <li>Always review the chart before saving a stock.</li>
-
-            <li>Monitor breakout development over time.</li>
-
-            <li>Use the scanner as a research tool rather than a prediction tool.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- PRACTICAL EXERCISE -->
-
-    <div class="lesson-card">
-
-        <h2>Practical Exercise</h2>
-
-        <p>
-
-            Open today's Breakout Scanner results.
-
-        </p>
-
-        <ul>
-
-            <li>Review three Gold breakouts.</li>
-
-            <li>Review three Silver breakouts.</li>
-
-            <li>Compare their market structure.</li>
-
-            <li>Review their weekly charts.</li>
-
-            <li>Save your two favourite research candidates to My Workspace.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- RESEARCH REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            The Breakout Scanner highlights stocks that have met the EdgeBreak breakout criteria for research purposes. Scanner results do not represent financial advice, investment recommendations or guarantees of future market performance. Always complete your own independent research before making financial decisions.
-
-        </p>
-
-    </div>
-
-    <!-- ===================================
-    LESSON NAVIGATION
-    =================================== -->
-
-    <div class="lesson-next">
-
-        <div class="lesson-next-tag">
-
-            Continue Learning
+    </section>
+
+    <article class="ac-content">
+        <div class="ac-reading">
+
+            <section class="ac-section">
+                <h2>What is the Breakout Scanner?</h2>
+                <p>The Breakout Scanner searches for NASDAQ-listed stocks that have already moved beyond an established resistance area according to the EdgeBreak breakout model.</p>
+                <p>Unlike the Pre-Breakout Scanner, which focuses on developing structures beneath resistance, the Breakout Scanner is designed for studying what happens once price has moved through that level.</p>
+                <p>Every result is a research candidate. It is not a recommendation and it does not mean the move will continue.</p>
+
+                <div class="ac-pullquote">
+                    A breakout result tells you that price has moved through resistance. The chart tells you whether the structure behind that move deserves deeper research.
+                </div>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/edgebreak-nasdaq-scanner.webp" alt="EdgeBreak Breakout Scanner displaying active NASDAQ breakout research candidates.">
+                <figcaption>The Breakout Scanner brings active breakout candidates into one place so members can compare technical structure before opening deeper research.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>What to compare first</h2>
+                <p>Not every breakout develops from the same type of base. A stronger research process looks beyond the fact that price crossed resistance and asks how the move developed.</p>
+            </section>
+
+            <div class="ac-concept-grid">
+                <div class="ac-concept-card">
+                    <b>Structure</b>
+                    <strong>How did price reach resistance?</strong>
+                    <span>Repeated tests, higher lows and an orderly base can provide useful context.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Participation</b>
+                    <strong>What happened to volume?</strong>
+                    <span>Compare trading activity before, during and after the move through resistance.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Extension</b>
+                    <strong>How far has price moved?</strong>
+                    <span>A fresh breakout near its base is a different research situation from a stock already well above resistance.</span>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Understanding the scanner metrics</h2>
+                <p>The Breakout Scanner includes measurements that help compare the structure behind each result.</p>
+                <ul>
+                    <li><strong>Current Price</strong> — where the stock is trading now.</li>
+                    <li><strong>Resistance Touches</strong> — how often price tested the identified resistance area.</li>
+                    <li><strong>Higher Lows</strong> — whether pullbacks improved beneath resistance.</li>
+                    <li><strong>Volume Ratio</strong> — recent trading activity compared with normal activity.</li>
+                    <li><strong>Distance Above Resistance</strong> — how far price has moved beyond the original breakout area.</li>
+                </ul>
+                <p>These values are most useful when interpreted together rather than used as independent signals.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/breakout-scanner-filters.webp" alt="EdgeBreak Breakout Scanner filters showing technical characteristics used to refine breakout research.">
+                <figcaption>Breakout filters help narrow the list using observable market characteristics such as resistance, higher lows, volume and price position.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Fresh breakouts vs extended moves</h2>
+                <p>A stock may continue moving well above its original resistance area, but the further it travels from the base, the more different the research context becomes.</p>
+                <p>EdgeBreak is designed to focus attention on structure, not simply on stocks that have already made the largest percentage move.</p>
+                <p>When reviewing a result, ask whether price is still close enough to the original breakout area for the base to remain useful context.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>Resistance touches and higher lows</h2>
+                <p>Repeated resistance tests show that price has returned to the same area multiple times. Higher lows show that pullbacks may be occurring at progressively higher prices.</p>
+                <p>When these characteristics appear together, they can describe a more organised build-up beneath resistance.</p>
+                <p>They still do not guarantee breakout continuation, so they should always be compared with volume, trend and broader market context.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>Volume behaviour</h2>
+                <p>Volume provides another layer of context.</p>
+                <p>Compare participation during the base, the move through resistance and the sessions that follow. A change in volume can help explain how much market participation was present, but it does not prove future direction.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>Move straight into the chart</h2>
+                <p>Scanner metrics are useful for narrowing the list, but the chart remains essential.</p>
+                <p>EdgeBreak lets you quickly load or drag a breakout candidate into the integrated TradingView chart so several results can be compared without repeatedly searching for tickers.</p>
+                <p>Review:</p>
+                <ul>
+                    <li>The broader weekly trend.</li>
+                    <li>The original resistance area.</li>
+                    <li>The structure of the base.</li>
+                    <li>Higher lows.</li>
+                    <li>Volume behaviour.</li>
+                    <li>Nearby historical resistance.</li>
+                    <li>Whether the breakout remains close to the original structure.</li>
+                </ul>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/opening-charts.webp" alt="Opening an EdgeBreak breakout result in the integrated TradingView chart for technical research.">
+                <figcaption>Moving directly from the result table into the chart makes it easier to compare several breakout structures quickly and consistently.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Use the AI Research buttons</h2>
+                <p>Once the chart deserves further investigation, the AI Research buttons can add another layer of context.</p>
+
+                <div class="ac-ai-panel">
+                    <h3>From technical breakout to deeper research.</h3>
+                    <p>Use the breakout result as the starting point, then choose the type of context you need.</p>
+
+                    <div class="ac-ai-actions">
+                        <div class="ac-ai-action">
+                            <b>AI Company Research</b>
+                            <span>Review company overview, financial highlights, recent news, institutional activity context and relevant filings.</span>
+                        </div>
+                        <div class="ac-ai-action">
+                            <b>AI Chart Analysis</b>
+                            <span>Review a descriptive analysis of trend, resistance, support, volume and visible technical structure without buy, sell or hold recommendations.</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="ac-section">
+                <h2>Review what happens after the breakout</h2>
+                <p>Breakout structures continue evolving after they appear in the scanner.</p>
+                <p>Some stocks remain above the breakout area, some consolidate, and some move back below resistance. The purpose of review is to study how the structure changes rather than assume one outcome is guaranteed.</p>
+                <p>This is where ongoing observation becomes valuable.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>Save the strongest research candidates</h2>
+                <p>If a breakout deserves continued attention, save it to My Workspace.</p>
+                <p>Your watchlist allows you to revisit the same candidate over days or weeks, compare new price behaviour with the original breakout and continue company research as new information appears.</p>
+                <p>A focused watchlist is generally more useful than saving every breakout result.</p>
+            </section>
+
+            <div class="ac-process" aria-label="Breakout Scanner workflow">
+                <div class="ac-process-head">
+                    <span>A complete breakout research flow</span>
+                    <h3>Filter → chart → investigate → revisit.</h3>
+                </div>
+
+                <div class="ac-process-grid">
+                    <div class="ac-process-step">
+                        <b>01</b>
+                        <strong>Filter</strong>
+                        <span>Review active breakout results and narrow the list using structure and volume metrics.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>02</b>
+                        <strong>Chart</strong>
+                        <span>Load or drag candidates into TradingView and examine the full base and breakout.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>03</b>
+                        <strong>Investigate</strong>
+                        <span>Use AI Company Research and AI Chart Analysis for additional context.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>04</b>
+                        <strong>Revisit</strong>
+                        <span>Save the strongest candidates to My Workspace and monitor how the structure develops.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ac-exercise">
+                <div class="ac-exercise-tag">Practical exercise</div>
+                <h3>Compare five active breakouts.</h3>
+                <p>Open the Breakout Scanner and work through a small group of results.</p>
+                <ul>
+                    <li>Choose five breakout candidates.</li>
+                    <li>Compare resistance touches, higher lows and volume.</li>
+                    <li>Drag each into the chart and review the weekly and daily structure.</li>
+                    <li>Identify which candidates remain closest to their original base.</li>
+                    <li>Use AI Company Research on one candidate.</li>
+                    <li>Use AI Chart Analysis on one candidate.</li>
+                    <li>Save your strongest two research candidates to My Workspace.</li>
+                </ul>
+            </div>
 
         </div>
+    </article>
 
-        <h2>
+    <section class="ac-summary-area">
+        <div class="ac-shell">
+            <div class="ac-card-grid three">
 
-            Continue Your Journey
+                <div class="ac-card">
+                    <h2>Lesson summary</h2>
+                    <p>The Breakout Scanner focuses on NASDAQ stocks that have already moved beyond resistance. The best research comes from combining scanner metrics with direct chart review, company research, AI-assisted context and ongoing watchlist monitoring.</p>
+                </div>
 
-        </h2>
+                <div class="ac-card">
+                    <h2>Key takeaways</h2>
+                    <ul>
+                        <li>A breakout result is a research candidate, not a recommendation.</li>
+                        <li>Compare resistance touches, higher lows, volume and distance above resistance.</li>
+                        <li>Fresh and extended breakouts represent different research situations.</li>
+                        <li>Always inspect the chart behind the scanner result.</li>
+                        <li>AI Research buttons add context after the technical structure has been reviewed.</li>
+                        <li>Use My Workspace to monitor the strongest candidates over time.</li>
+                    </ul>
+                </div>
 
-        <div class="lesson-nav-buttons">
+                <div class="ac-card">
+                    <h2>Common beginner mistakes</h2>
+                    <ul>
+                        <li>Assuming every breakout is equally strong.</li>
+                        <li>Focusing only on percentage movement.</li>
+                        <li>Ignoring the structure before the breakout.</li>
+                        <li>Skipping weekly-chart context.</li>
+                        <li>Treating scanner ranking or AI analysis as a prediction.</li>
+                    </ul>
+                </div>
 
-            <!-- PREVIOUS -->
+                <div class="ac-card ac-reminder">
+                    <div class="ac-reminder-icon">✦</div>
+                    <div>
+                        <h2>Research reminder</h2>
+                        <p>The Breakout Scanner identifies stocks that meet EdgeBreak's rules-based breakout criteria for research purposes. Scanner results, charts and AI-assisted research do not represent financial advice, investment recommendations, trade signals or guarantees of future market performance.</p>
+                    </div>
+                </div>
 
-            <a
-                href="/academy/mastering-the-nasdaq-scanner.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/mastering-the-smart-money-filter.html"
-                class="btn-primary"
-            >
-                Start Lesson 4.3 →
-            </a>
-
+            </div>
         </div>
+    </section>
 
-        <h3>
+    <section class="ac-next">
+        <div class="ac-shell">
+            <div class="ac-next-card">
+                <div class="ac-next-tag">Continue learning · Module 4 Lesson 3 of 4</div>
+                <h2>Continue mastering EdgeBreak.</h2>
+                <p>Move into the next Module 4 lesson and continue building the platform workflow in greater detail.</p>
 
-            Lesson 4.3 – Mastering the Smart Money Filter
+                <div class="ac-next-actions">
+                    <a href="/academy.html" class="ac-btn ac-btn-primary">Continue to Module 4 · Lesson 3 →</a>
+                    <a href="/academy/mastering-the-nasdaq-scanner.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+                </div>
 
-        </h3>
-
-        <p>
-
-            Learn how the Smart Money Filter helps identify stocks displaying accumulation characteristics and organised market behaviour. Discover how to use these insights alongside the NASDAQ Scanner and Breakout Scanner to strengthen your research process.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 4 • Lesson 17 of 30
-
+                <div class="ac-next-foot">Module 4 · Lesson 2 of 4 completed</div>
+            </div>
         </div>
-
-    </div>
+    </section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>

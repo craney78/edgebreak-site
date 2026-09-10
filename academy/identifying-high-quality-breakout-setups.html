@@ -1,341 +1,888 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 19: Identifying High-Quality Setups | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how to identify high-quality NASDAQ breakout research setups by analysing market structure, resistance, higher lows, accumulation and volume behaviour using the EdgeBreak methodology.">
-
-<meta name="keywords"
-      content="high quality breakout setups, breakout research, market structure, resistance, higher lows, accumulation, volume analysis, NASDAQ research, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/identifying-high-quality-setups.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Identifying High-Quality Breakout Setups | Module 3 Lesson 3 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn how to evaluate breakout quality using resistance, higher lows, market structure, volume behaviour and wider market context as part of structured NASDAQ research."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/identifying-high-quality-breakout-setups.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 19: Identifying High-Quality Setups | EdgeBreak Academy">
-
-<meta property="og:description"
-      content="Discover the characteristics commonly found in high-quality breakout research setups using historical NASDAQ charts and the EdgeBreak research framework.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/identifying-high-quality-setups.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/identifying-high-quality-breakout-setups.html">
+<meta property="og:title" content="Identifying High-Quality Breakout Setups | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Learn how multiple technical and market characteristics can be combined to compare stronger and weaker breakout structures."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Lesson 19: Identifying High-Quality Setups">
-
-<meta name="twitter:description"
-      content="Learn how to recognise high-quality market research setups by studying market structure, resistance, higher lows, accumulation and volume behaviour.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Identifying High-Quality Breakout Setups | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Learn how resistance, higher lows, market structure, volume and wider market context help compare breakout quality."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-CSS
+FAVICON
 =================================== -->
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
+
+<!-- ===================================
+STYLES
+=================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
 
 <!-- ===================================
 SUPABASE
 =================================== -->
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
 
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
 <!-- ===================================
 STRUCTURED DATA
 =================================== -->
-
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "@id":"https://www.edgebreak.ai/identifying-high-quality-setups.html",
-  "name":"Lesson 19: Identifying High-Quality Setups",
-  "headline":"Identifying High-Quality Setups",
-  "description":"Learn how to identify high-quality breakout research setups using market structure, resistance, higher lows, accumulation and volume behaviour.",
-  "learningResourceType":"Lesson",
-  "educationalLevel":"Beginner",
-  "teaches":[
-    "Market Structure",
-    "Resistance",
-    "Higher Lows",
-    "Accumulation",
-    "Volume Analysis",
-    "Pattern Recognition",
-    "Breakout Research",
-    "NASDAQ Research"
-  ],
-  "isAccessibleForFree":true,
-  "inLanguage":"en-AU",
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai",
-    "logo":{
-      "@type":"ImageObject",
-      "url":"https://www.edgebreak.ai/images/logo.webp"
-    }
-  },
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
-}
-</script>
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "legalName": "Crane Platform Labs",
+      "url": "https://www.edgebreak.ai/",
+      "email": "mailto:admin@edgebreak.ai",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.edgebreak.ai/#logo",
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+        "caption": "EdgeBreak"
+      },
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
-      "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Module 4"
+      "@type": "Course",
+      "@id": "https://www.edgebreak.ai/academy.html#course",
+      "name": "EdgeBreak Academy",
+      "url": "https://www.edgebreak.ai/academy.html",
+      "description": "Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":4,
-      "name":"Lesson 19: Identifying High-Quality Setups"
+      "@type": "LearningResource",
+      "@id": "https://www.edgebreak.ai/academy/identifying-high-quality-breakout-setups.html#lesson",
+      "name": "Module 3 Lesson 3: Identifying High-Quality Breakout Setups",
+      "url": "https://www.edgebreak.ai/academy/identifying-high-quality-breakout-setups.html",
+      "description": "An intermediate lesson explaining how resistance, higher lows, market structure, volume behaviour and wider market context can be combined to compare breakout quality.",
+      "learningResourceType": "Lesson",
+      "educationalLevel": "Intermediate",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/academy.html#course" },
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/academy/identifying-high-quality-breakout-setups.html#webpage",
+      "url": "https://www.edgebreak.ai/academy/identifying-high-quality-breakout-setups.html",
+      "name": "Identifying High-Quality Breakout Setups | Module 3 Lesson 3 | EdgeBreak Academy",
+      "description": "Learn how to evaluate breakout quality using resistance, higher lows, market structure, volume behaviour and wider market context as part of structured NASDAQ research.",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/#website" },
+      "mainEntity": { "@id": "https://www.edgebreak.ai/academy/identifying-high-quality-breakout-setups.html#lesson" },
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/academy/identifying-high-quality-breakout-setups.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EdgeBreak Academy",
+          "item": "https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Identifying High-Quality Breakout Setups",
+          "item": "https://www.edgebreak.ai/academy/identifying-high-quality-breakout-setups.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 19: Identifying High-Quality Setups",
-  "url":"https://www.edgebreak.ai/identifying-high-quality-setups.html",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+
+.ac-section li{
+    margin:7px 0;
+}
+
+.ac-lesson-image{
+    margin:34px 0 46px;
+}
+
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#ffffff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-concept-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+
+.ac-concept-card{
+    padding:23px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#ffffff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+
+.ac-concept-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.ac-concept-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+
+.ac-concept-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+.ac-exercise{
+    margin:34px 0 54px;
+    padding:30px;
+    border:1px solid #dce7df;
+    border-radius:24px;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+}
+
+.ac-exercise-tag{
+    margin-bottom:9px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ac-exercise h3{
+    margin:0 0 13px;
+    color:var(--ix-ink);
+    font-size:27px;
+    letter-spacing:-.03em;
+}
+
+.ac-exercise p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.65;
+}
+
+.ac-exercise ul{
+    margin:0;
+    padding-left:22px;
+    color:#526071;
+    font-size:15px;
+    line-height:1.65;
+}
+
+@media(max-width:900px){
+    .ac-concept-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+    .ac-card-grid.three{
+        grid-template-columns:1fr;
+    }
+
+    .ac-card-grid.three .ac-reminder{
+        grid-column:auto;
+    }
+}
+
+</style>
 </head>
-
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
+<main class="ac-page">
 
-<main>
+    <!-- ===================================
+    HERO
+    =================================== -->
+    <section class="ac-hero">
+        <div class="ac-shell">
+            <div class="ac-kicker"><span class="ac-dot"></span> Module 3 · Lesson 3</div>
+            <h1 class="ac-title">Identifying High-Quality <span>Breakout Setups.</span></h1>
+            <p class="ac-subtitle">
+                A move above resistance is only one part of the story. Learn how to compare the quality of breakout structures using several pieces of evidence together.
+            </p>
 
-<div class="academy-container lesson-container">
+            <div class="ac-meta">
+                <span>Estimated time: 20 minutes</span>
+                <span>Advanced breakout research</span>
+                <span>Intermediate</span>
+            </div>
 
-<div class="lesson-tag">
-MODULE 3 • LESSON 11
-</div>
+            <div class="ac-progress-wrap" aria-label="Module 3 progress">
+                <div class="ac-progress-label">
+                    <span>Module 3 progress</span>
+                    <span>Lesson 3</span>
+                </div>
+                <div class="ac-progress"><span style="width:52%"></span></div>
+            </div>
+        </div>
+    </section>
 
-<h1>Identifying High-Quality Breakout Setups</h1>
+    <!-- ===================================
+    WHAT YOU'LL LEARN
+    =================================== -->
+    <section class="ac-overview">
+        <div class="ac-shell">
+            <div class="ac-overview-card">
+                <div>
+                    <div class="ac-overview-label">What you'll learn</div>
+                    <h2>Compare the whole structure, not one breakout candle.</h2>
+                </div>
 
-<div class="lesson-meta">
-<span>Estimated Time: 20 Minutes</span>
-<span>•</span>
-<span>Advanced Breakout Research</span>
-</div>
+                <div class="ac-learn-list">
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why price above resistance is not enough on its own.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>The main characteristics EdgeBreak compares.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How stronger and weaker breakout structures differ.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why context before the breakout matters.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to prioritise candidates for deeper research.</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<p class="lesson-intro">
-Finding a stock trading above resistance is only the beginning of the research process. Every breakout is different. Some display strong market structure and organised buying behaviour, while others show very few supporting characteristics. This lesson explains how EdgeBreak evaluates breakout quality by considering multiple characteristics together rather than relying on a single indicator.
-</p>
+    <!-- ===================================
+    LESSON CONTENT
+    =================================== -->
+    <article class="ac-content">
+        <div class="ac-reading">
 
-<div class="lesson-card">
-<h2>What You'll Learn</h2>
-<ul>
-<li>How to assess breakout quality.</li>
-<li>Why no single characteristic is enough.</li>
-<li>The five characteristics EdgeBreak researches.</li>
-<li>How Gold, Silver and Bronze breakouts differ.</li>
-<li>How to prioritise research opportunities.</li>
-</ul>
-</div>
+            <section class="ac-section">
+                <h2>Looking beyond the breakout</h2>
+                <p>A stock trading above resistance is not automatically a high-quality research candidate.</p>
+                <p>Some breakouts develop after weeks or months of orderly consolidation, repeated resistance tests and improving lows. Others occur after erratic price action, weak structure or an already extended move.</p>
+                <p>The difference is important because the price level itself tells you very little about how the setup developed.</p>
 
-<div class="lesson-content">
+                <div class="ac-pullquote">
+                    The strongest breakout research begins before the breakout — by studying how the structure developed into the move.
+                </div>
+            </section>
 
-<h2>Looking Beyond the Breakout</h2>
-<p>A breakout above resistance does not automatically make a stock a high-quality research candidate. Some breakouts develop after months of orderly consolidation while others occur after erratic price action with very little supporting evidence.</p>
+            <figure class="ac-lesson-image">
+                <img src="/images/breakout-checklist.webp" alt="Checklist showing resistance, higher lows, trend, market structure and volume as characteristics used when evaluating breakout quality.">
+                <figcaption>A breakout should be evaluated using several characteristics together. No single factor can establish quality or predict what happens next.</figcaption>
+            </figure>
 
-<figure class="lesson-image">
-<img src="/images/breakout-checklist.webp" alt="Checklist showing resistance, higher lows, trend, accumulation and volume.">
-<figcaption>High-quality breakout research combines several characteristics rather than relying on one signal alone.</figcaption>
-</figure>
+            <section class="ac-section">
+                <h2>The characteristics EdgeBreak compares</h2>
+                <p>EdgeBreak evaluates breakout structures using several observable characteristics rather than relying on one indicator.</p>
+                <ul>
+                    <li>Repeated resistance tests.</li>
+                    <li>Higher lows developing beneath resistance.</li>
+                    <li>Orderly or improving market structure.</li>
+                    <li>Constructive volume behaviour.</li>
+                    <li>Price position relative to the original base or resistance area.</li>
+                    <li>Wider market and sector context.</li>
+                    <li>Unusual market activity where relevant.</li>
+                </ul>
+                <p>Each characteristic provides context. A stronger research candidate generally has several independent pieces of evidence supporting the same structural interpretation.</p>
+            </section>
 
-<h2>The Five Characteristics</h2>
-<ul>
-<li>Repeated resistance tests.</li>
-<li>Developing higher lows.</li>
-<li>Orderly market structure.</li>
-<li>Accumulation characteristics.</li>
-<li>Healthy volume behaviour.</li>
-</ul>
+            <div class="ac-concept-grid" aria-label="Breakout quality concepts">
+                <div class="ac-concept-card">
+                    <b>Structure</b>
+                    <strong>How did price arrive here?</strong>
+                    <span>Repeated resistance, higher lows and tighter ranges can show a more organised setup.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Participation</b>
+                    <strong>What happened to volume?</strong>
+                    <span>Volume dry-up, expansion and relative activity can add context to the price move.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Context</b>
+                    <strong>Is the move still near the base?</strong>
+                    <span>A fresh move near resistance may provide different research context from a stock already far above its structure.</span>
+                </div>
+            </div>
 
-<p>Each characteristic provides useful context, but none guarantees future price movement. The strongest research candidates usually display several of these characteristics together.</p>
+            <section class="ac-section">
+                <h2>Repeated resistance tests</h2>
+                <p>Repeated tests of a similar resistance zone show that price has returned to the same area more than once.</p>
+                <p>That does not guarantee that resistance will eventually break. It does, however, provide more information than a one-off touch because it shows how buyers and sellers have interacted with the level over time.</p>
+                <p>When repeated tests occur alongside higher lows or a tightening range, the structure may deserve closer investigation.</p>
+            </section>
 
-<h2>Ranking Breakout Quality</h2>
+            <section class="ac-section">
+                <h2>Higher lows and improving structure</h2>
+                <p>Higher lows suggest that pullbacks are being supported at progressively higher prices.</p>
+                <p>Inside a developing breakout structure, this can create a pattern in which price repeatedly approaches resistance while the downside range becomes shallower.</p>
+                <p>EdgeBreak places more weight on organised structure than on a single dramatic candle because the build-up often provides the most useful research context.</p>
+            </section>
 
-<p>EdgeBreak groups opportunities into Gold, Silver and Bronze categories to help prioritise research. These categories organise opportunities based on observable characteristics and are not predictions of future performance.</p>
+            <section class="ac-section">
+                <h2>Volume behaviour</h2>
+                <p>Volume helps show how much participation was present while the setup developed and during the move through resistance.</p>
+                <p>Some constructive structures experience quieter trading during consolidation before participation expands. Others may show inconsistent or unstable volume throughout the base.</p>
+                <p>Neither pattern guarantees an outcome, but comparing volume with price behaviour can help distinguish a more orderly structure from one driven by irregular activity.</p>
+            </section>
 
-<figure class="lesson-image">
-<img src="/images/gold.webp" alt="Comparison of Gold, Silver and Bronze breakout quality.">
-<figcaption>Gold, Silver and Bronze classifications help organise research by comparing the overall quality of a breakout structure.</figcaption>
-</figure>
+            <section class="ac-section">
+                <h2>Is the stock already extended?</h2>
+                <p>A breakout can still be technically valid after price has moved well above the original resistance area, but it represents a different research situation from a stock sitting close to the base.</p>
+                <p>EdgeBreak therefore considers the distance between current price and the underlying resistance structure. Stocks that have already moved significantly beyond the base may be less useful when the goal is early-stage breakout research.</p>
+                <p>This is one reason the platform does not simply surface every stock trading above resistance.</p>
+            </section>
 
-<h2>Building a Complete Picture</h2>
+            <section class="ac-section">
+                <h2>Wider market context</h2>
+                <p>A technically strong stock does not trade in isolation.</p>
+                <p>The broader NASDAQ environment, sector behaviour and general market conditions can provide useful context when comparing otherwise similar setups.</p>
+                <p>Market context should not be treated as a prediction. It is another layer of evidence that can help explain whether a setup is developing with or against the wider environment.</p>
+            </section>
 
-<p>Experienced investors rarely make decisions using one indicator. Instead they compare trend, resistance, higher lows, accumulation, volume and broader market structure before deciding whether a stock deserves further research.</p>
+            <div class="ac-process" aria-label="Breakout quality research process">
+                <div class="ac-process-head">
+                    <span>Compare the full setup</span>
+                    <h3>Base → structure → participation → context.</h3>
+                </div>
 
-<figure class="lesson-image">
-<img src="/images/framework.webp" alt="EdgeBreak breakout research framework.">
-<figcaption>The EdgeBreak framework combines multiple observations into one repeatable research process.</figcaption>
-</figure>
+                <div class="ac-process-grid">
+                    <div class="ac-process-step">
+                        <b>01</b>
+                        <strong>Base</strong>
+                        <span>Identify the resistance area and how long the structure has been developing.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>02</b>
+                        <strong>Structure</strong>
+                        <span>Compare resistance tests, higher lows, range quality and trend behaviour.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>03</b>
+                        <strong>Participation</strong>
+                        <span>Review volume and unusual market activity as additional context.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>04</b>
+                        <strong>Context</strong>
+                        <span>Check how far price has moved and whether the wider market supports or conflicts with the setup.</span>
+                    </div>
+                </div>
+            </div>
 
-</div>
+            <section class="ac-section">
+                <h2>Building a complete picture</h2>
+                <p>Experienced market research rarely depends on one indicator or one chart pattern.</p>
+                <p>A more complete view comes from combining trend, resistance, higher lows, volume, unusual market activity and broader market context, then checking whether those pieces tell a consistent story.</p>
+                <p>The goal is not to produce certainty. It is to separate stocks with clearer supporting evidence from those with weaker or more contradictory structures.</p>
+            </section>
 
-<div class="lesson-card">
-<h2>Lesson Summary</h2>
-<p>High-quality breakout research involves much more than identifying price above resistance. Combining market structure, resistance, higher lows, accumulation and volume provides a more complete understanding of a developing opportunity.</p>
-</div>
+            <figure class="ac-lesson-image">
+                <img src="/images/framework.webp" alt="EdgeBreak breakout research framework combining multiple technical observations into a structured research process.">
+                <figcaption>The EdgeBreak framework combines several observations into one repeatable process so breakout structures can be compared consistently rather than judged from one indicator.</figcaption>
+            </figure>
 
-<div class="lesson-card">
-<h2>Key Takeaways</h2>
-<ul>
-<li>No single characteristic defines a quality breakout.</li>
-<li>Market structure develops over time.</li>
-<li>Multiple supporting characteristics improve research confidence.</li>
-<li>Gold, Silver and Bronze help prioritise research.</li>
-<li>Structured research is more valuable than relying on one indicator.</li>
-</ul>
-</div>
+            <section class="ac-section">
+                <h2>How EdgeBreak prioritises research</h2>
+                <p>EdgeBreak scanners use rules-based filtering to narrow thousands of NASDAQ-listed stocks to a smaller set of research candidates.</p>
+                <p>The purpose of ranking is not to declare a winner or predict future performance. It is to help organise the research queue so stronger combinations of structural evidence can be investigated first.</p>
+                <p>Members can then open the chart, review company research, examine market activity and save the most interesting candidates to My Workspace.</p>
+            </section>
 
-<div class="lesson-card">
-<h2>Practical Exercise</h2>
-<ul>
-<li>Open the Breakout Scanner.</li>
-<li>Select one Gold, one Silver and one Bronze breakout.</li>
-<li>Compare resistance, higher lows, volume and overall structure.</li>
-<li>Record which stock deserves the highest research priority and explain why.</li>
-</ul>
-</div>
+            <div class="ac-exercise">
+                <div class="ac-exercise-tag">Practical exercise</div>
+                <h3>Compare three breakout candidates.</h3>
+                <p>Open three stocks from the Breakout Scanner or your current research list.</p>
+                <ul>
+                    <li>Mark the main resistance area.</li>
+                    <li>Compare the number and quality of resistance tests.</li>
+                    <li>Check whether higher lows developed before the breakout.</li>
+                    <li>Review volume behaviour during the base and breakout.</li>
+                    <li>Check whether current price remains close to the original structure or is already extended.</li>
+                    <li>Choose the stock with the clearest overall evidence and write down why.</li>
+                </ul>
+            </div>
 
-<div class="lesson-card reminder">
-<h2>Research Reminder</h2>
-<p>EdgeBreak ranks opportunities using observable market characteristics to support independent research. Rankings are educational tools and should not be interpreted as predictions or financial advice.</p>
-</div>
+        </div>
+    </article>
 
-<div class="lesson-next">
-<div class="lesson-next-tag">Continue Learning</div>
-<h2>Continue Your Journey</h2>
+    <!-- ===================================
+    SUMMARY / TAKEAWAYS
+    =================================== -->
+    <section class="ac-summary-area">
+        <div class="ac-shell">
+            <div class="ac-card-grid three">
 
-<div class="lesson-nav-buttons">
-<a href="/academy/institutional-accumulation.html" class="btn">← Previous Lesson</a>
-<a href="/academy/position-sizing-portfolio-management.html" class="btn-primary">Start Lesson 3.4 →</a>
-</div>
+                <div class="ac-card">
+                    <h2>Lesson summary</h2>
+                    <p>High-quality breakout research involves much more than identifying price above resistance. Comparing the quality of the base, resistance tests, higher lows, volume behaviour, price extension and broader market context provides a more complete picture of the setup.</p>
+                </div>
 
-<h3>Lesson 3.4 – Position Sizing</h3>
+                <div class="ac-card">
+                    <h2>Key takeaways</h2>
+                    <ul>
+                        <li>No single characteristic defines a quality breakout.</li>
+                        <li>The structure before the breakout matters.</li>
+                        <li>Higher lows and repeated resistance tests add useful context.</li>
+                        <li>Volume should be compared with price behaviour.</li>
+                        <li>Ranking helps prioritise research — it does not predict performance.</li>
+                    </ul>
+                </div>
 
-<p>Learn how position sizing helps manage risk by determining how much capital to allocate to each investment.</p>
+                <div class="ac-card">
+                    <h2>Common beginner mistakes</h2>
+                    <ul>
+                        <li>Assuming every move above resistance is equally strong.</li>
+                        <li>Ignoring how far price has already moved from the base.</li>
+                        <li>Using one indicator as the entire research process.</li>
+                        <li>Ignoring wider market or sector context.</li>
+                        <li>Treating a high ranking as a buy signal or prediction.</li>
+                    </ul>
+                </div>
 
-<div class="lesson-progress">
-Module 3 • Lesson 12 of 30
-</div>
+                <div class="ac-card ac-reminder">
+                    <div class="ac-reminder-icon">✦</div>
+                    <div>
+                        <h2>Research reminder</h2>
+                        <p>EdgeBreak ranks and filters stocks using observable market characteristics to support independent research. Scanner rankings are research-priority tools only and should not be interpreted as financial advice, investment recommendations, trade signals or predictions of future market performance.</p>
+                    </div>
+                </div>
 
-</div>
+            </div>
+        </div>
+    </section>
 
-</div>
+    <!-- ===================================
+    NEXT LESSON
+    =================================== -->
+    <section class="ac-next">
+        <div class="ac-shell">
+            <div class="ac-next-card">
+                <div class="ac-next-tag">Continue learning · Module 3 Lesson 4</div>
+                <h2>Position sizing & portfolio management.</h2>
+                <p>Learn how exposure, position size and diversification affect overall risk, and why the amount allocated to any one idea can matter just as much as the quality of the research.</p>
 
+                <div class="ac-next-actions">
+                    <a href="/academy/position-sizing-portfolio-management.html" class="ac-btn ac-btn-primary">Start Lesson 3.4 →</a>
+                    <a href="/academy/institutional-accumulation.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+                </div>
 
+                <div class="ac-next-foot">Module 3 · Lesson 3 completed</div>
+            </div>
+        </div>
+    </section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>

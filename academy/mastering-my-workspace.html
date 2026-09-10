@@ -1,724 +1,952 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 23: Mastering My Workspace | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how to use My Workspace to organise your watchlist, analyse NASDAQ charts, save research and build a structured breakout research workflow with EdgeBreak.">
-
-<meta name="keywords"
-      content="EdgeBreak My Workspace, watchlist, stock research, NASDAQ charts, breakout analysis, trading workspace, chart analysis, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/mastering-my-workspace.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Mastering My Workspace | Module 4 Lesson 4 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn how to use EdgeBreak My Workspace to organise personal watchlists, review TradingView charts, revisit NASDAQ research candidates and build a consistent research routine."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/mastering-my-workspace.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 23: Mastering My Workspace">
-
-<meta property="og:description"
-      content="Discover how to get the most from My Workspace by organising your watchlist, analysing charts and managing your breakout research.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/mastering-my-workspace.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/mastering-my-workspace.html">
+<meta property="og:title" content="Mastering My Workspace | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Learn how My Workspace brings personal watchlists, TradingView charting and ongoing NASDAQ research together in one organised workspace."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Lesson 23: Mastering My Workspace">
-
-<meta name="twitter:description"
-      content="Learn how to use My Workspace to organise research, manage watchlists and analyse NASDAQ breakout opportunities.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Mastering My Workspace | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Organise watchlists, review charts and build a repeatable NASDAQ research workflow with EdgeBreak My Workspace."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-CSS
+FAVICON
 =================================== -->
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
+
+<!-- ===================================
+STYLES
+=================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
 
 <!-- ===================================
 SUPABASE
 =================================== -->
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
 
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
 <!-- ===================================
-LEARNING RESOURCE
+STRUCTURED DATA
 =================================== -->
-
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "name":"Lesson 23: Mastering My Workspace",
-  "description":"Learn how to organise your watchlist, analyse charts and build a structured NASDAQ research workflow using EdgeBreak My Workspace.",
-  "educationalLevel":"Beginner",
-  "learningResourceType":"Lesson",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  },
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  }
-}
-</script>
-
-<!-- ===================================
-BREADCRUMB
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "legalName": "Crane Platform Labs",
+      "url": "https://www.edgebreak.ai/",
+      "email": "mailto:admin@edgebreak.ai",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.edgebreak.ai/#logo",
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+        "caption": "EdgeBreak"
+      },
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
-      "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Lesson 23: Mastering My Workspace",
-      "item":"https://www.edgebreak.ai/mastering-my-workspace.html"
+      "@type": "Course",
+      "@id": "https://www.edgebreak.ai/academy.html#course",
+      "name": "EdgeBreak Academy",
+      "url": "https://www.edgebreak.ai/academy.html",
+      "description": "Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "LearningResource",
+      "@id": "https://www.edgebreak.ai/academy/mastering-my-workspace.html#lesson",
+      "name": "Module 4 Lesson 4: Mastering My Workspace",
+      "url": "https://www.edgebreak.ai/academy/mastering-my-workspace.html",
+      "description": "An intermediate lesson explaining how My Workspace can be used to organise personal watchlists, review charts and revisit NASDAQ research candidates over time.",
+      "learningResourceType": "Lesson",
+      "educationalLevel": "Intermediate",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/academy.html#course" },
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/academy/mastering-my-workspace.html#webpage",
+      "url": "https://www.edgebreak.ai/academy/mastering-my-workspace.html",
+      "name": "Mastering My Workspace | Module 4 Lesson 4 | EdgeBreak Academy",
+      "description": "Learn how to use EdgeBreak My Workspace to organise personal watchlists, review TradingView charts, revisit NASDAQ research candidates and build a consistent research routine.",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/#website" },
+      "mainEntity": { "@id": "https://www.edgebreak.ai/academy/mastering-my-workspace.html#lesson" },
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/academy/mastering-my-workspace.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EdgeBreak Academy",
+          "item": "https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Mastering My Workspace",
+          "item": "https://www.edgebreak.ai/academy/mastering-my-workspace.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<!-- ===================================
-WEBPAGE
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 23: Mastering My Workspace",
-  "url":"https://www.edgebreak.ai/mastering-my-workspace.html",
-  "description":"Learn how to maximise EdgeBreak My Workspace by managing watchlists, analysing charts and organising your market research.",
-  "isPartOf":{
-    "@type":"WebSite",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  },
-  "primaryImageOfPage":"https://www.edgebreak.ai/images/academy.webp",
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+
+.ac-section li{margin:7px 0}
+
+.ac-lesson-image{margin:34px 0 46px}
+
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#fff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-concept-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+
+.ac-concept-card{
+    padding:23px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#fff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+
+.ac-concept-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.ac-concept-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+
+.ac-concept-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-ai-panel{
+    margin:36px 0 54px;
+    padding:30px;
+    border:1px solid #d9e5de;
+    border-radius:24px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.10),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.08),transparent 28%),
+        #fff;
+    box-shadow:0 14px 36px rgba(15,23,42,.055);
+}
+
+.ac-ai-panel h3{
+    margin:0 0 12px;
+    color:var(--ix-ink);
+    font-size:30px;
+    letter-spacing:-.035em;
+}
+
+.ac-ai-panel p{
+    margin:0 0 16px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.7;
+}
+
+.ac-ai-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:20px;
+}
+
+.ac-ai-action{
+    padding:18px;
+    border:1px solid var(--ix-line);
+    border-radius:17px;
+    background:#fff;
+}
+
+.ac-ai-action b{
+    display:block;
+    margin-bottom:6px;
+    color:var(--ix-green-dark);
+    font-size:15px;
+}
+
+.ac-ai-action span{
+    color:var(--ix-muted);
+    font-size:13px;
+    line-height:1.5;
+}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+.ac-exercise{
+    margin:34px 0 54px;
+    padding:30px;
+    border:1px solid #dce7df;
+    border-radius:24px;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+}
+
+.ac-exercise-tag{
+    margin-bottom:9px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ac-exercise h3{
+    margin:0 0 13px;
+    color:var(--ix-ink);
+    font-size:27px;
+    letter-spacing:-.03em;
+}
+
+.ac-exercise p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.65;
+}
+
+.ac-exercise ul{
+    margin:0;
+    padding-left:22px;
+    color:#526071;
+    font-size:15px;
+    line-height:1.65;
+}
+
+@media(max-width:900px){
+    .ac-concept-grid{grid-template-columns:1fr}
+}
+
+@media(max-width:700px){
+    .ac-ai-actions{grid-template-columns:1fr}
+    .ac-card-grid.three{grid-template-columns:1fr}
+    .ac-card-grid.three .ac-reminder{grid-column:auto}
+}
+
+</style>
 </head>
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
-<main>
-<!-- ==========================
-MODULE 4 · LESSON 18
-=========================== -->
-
-<div class="academy-container lesson-container">
-
-    <div class="lesson-tag">
-        MODULE 4 • LESSON 18
-    </div>
-
-    <h1>
-        Mastering My Workspace
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 25 Minutes</span>
-
-        <span>•</span>
-
-        <span>Mastering EdgeBreak</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        My Workspace is your personal research hub within EdgeBreak. It allows you to organise watchlists, analyse charts, monitor developing market structures and build a consistent research routine. Rather than repeatedly searching the market for the same opportunities, My Workspace keeps your research organised in one convenient location.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>How My Workspace is organised.</li>
-
-            <li>Managing your research watchlist.</li>
-
-            <li>Using the interactive TradingView chart.</li>
-
-            <li>Developing a daily research routine.</li>
-
-            <li>Monitoring market structure over time.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>Your Personal Research Hub</h2>
-
-        <p>
-
-            My Workspace has been designed to become the centre of your EdgeBreak research process.
-
-        </p>
-
-        <p>
-
-            Every stock you save from the NASDAQ Scanner or Breakout Scanner is stored here, allowing you to monitor developing market behaviour without searching for the same companies each day.
-
-        </p>
-
-        <p>
-
-            Think of My Workspace as your own organised research library.
-
-        </p>
-
-        <figure class="lesson-image">
-
-    <img
-        src="/images/my-workspace-page.webp"
-        alt="EdgeBreak My Workspace showing an integrated TradingView chart, personal watchlist and research tools for monitoring NASDAQ stocks."
-        loading="lazy"
-    >
-
-    <figcaption>
-
-        <strong>Figure.</strong> My Workspace is your personal research hub inside EdgeBreak. It combines interactive TradingView charts, personalised watchlists and research tools into one place, making it easy to monitor market structure, review developing opportunities and organise stocks you want to continue researching over time.
-
-    </figcaption>
-
-</figure>
-
-        <h2>Managing Your Watchlist</h2>
-
-        <p>
-
-            Your watchlist should contain stocks that genuinely deserve continued research.
-
-        </p>
-
-        <p>
-
-            Rather than saving every interesting chart, aim to build a focused collection of companies displaying organised market structure, higher lows and well-defined resistance.
-
-        </p>
-
-        <p>
-
-            Review your watchlist regularly and remove stocks that no longer fit your research criteria.
-
-        </p>
-
-        <p>
-
-            A smaller, high-quality watchlist is often far more useful than one containing hundreds of symbols.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img
-                src="/images/watchlist-page.webp"
-                alt="EdgeBreak My Workspace watchlist showing saved research candidates that can be monitored and reviewed over time."
-                loading="lazy"
-            >
-
-            <figcaption>
-
-                <strong>Figure.</strong> The My Workspace watchlist allows you to save promising research candidates from the NASDAQ Scanner and Breakout Scanner. Keeping your research organised in one place makes it easier to revisit charts, compare opportunities and monitor how market structure develops over time.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Opening Charts</h2>
-
-        <p>
-
-            Selecting a stock from your watchlist automatically loads its TradingView chart.
-
-        </p>
-
-        <p>
-
-            This allows you to immediately review:
-
-        </p>
-
-        <ul>
-
-            <li>Market structure.</li>
-
-            <li>Resistance levels.</li>
-
-            <li>Higher lows.</li>
-
-            <li>Volume behaviour.</li>
-
-            <li>Weekly and daily trends.</li>
-
-            <li>Overall breakout quality.</li>
-
-        </ul>
-
-        <p>
-
-            Because the chart updates instantly, moving between research candidates becomes quick and efficient.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img
-                src="/images/tradingview-chart.webp"
-                alt="Interactive TradingView chart inside EdgeBreak My Workspace used to analyse market structure, support, resistance, higher lows and volume."
-                loading="lazy"
-            >
-
-            <figcaption>
-
-                <strong>Figure.</strong> EdgeBreak includes a fully integrated TradingView chart, allowing members to analyse any supported NASDAQ-listed stock without leaving the platform. Use the chart to draw trendlines, identify support and resistance, review higher lows, monitor volume behaviour and compare multiple timeframes as part of your daily research routine.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Using TradingView Tools</h2>
-
-        <p>
-
-            The integrated TradingView chart includes professional charting tools that allow you to perform your own technical analysis.
-
-        </p>
-
-        <p>
-
-            Members can draw support and resistance levels, identify trend lines, measure price movement and switch between different chart timeframes.
-
-        </p>
-
-        <p>
-
-            These tools encourage independent research and help visualise developing market structure.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img
-                src="/images/tradingview-chart.webp"
-                alt="TradingView drawing tools inside EdgeBreak allowing investors to draw trendlines, support and resistance levels, and annotate charts during market research."
-                loading="lazy"
-            >
-
-            <figcaption>
-
-                <strong>Figure.</strong> The integrated TradingView chart includes professional drawing tools that allow you to annotate charts as you conduct your research. Draw trendlines, mark support and resistance levels, highlight breakout zones and record important observations directly on the chart. These tools help organise your analysis and make it easier to compare market structure as stocks develop over time.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Reviewing Market Structure</h2>
-
-        <p>
-
-            Each time you open a chart, work through the same research process.
-
-        </p>
-
-        <ul>
-
-            <li>Is the long-term trend healthy?</li>
-
-            <li>Are higher lows still developing?</li>
-
-            <li>Has resistance changed?</li>
-
-            <li>Is volume supporting the price action?</li>
-
-            <li>Has the overall structure improved or weakened?</li>
-
-        </ul>
-
-        <p>
-
-            Following the same checklist every time helps build consistency and reduces emotional decision-making.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/research-checklist.webp"
-                alt="Research checklist illustrating a structured chart review process, including trend analysis, higher lows, resistance, volume behaviour and overall market structure.">
-
-            <figcaption>
-
-                Following the same research checklist each time you analyse a chart helps build consistency and reduces emotional decision-making. Reviewing the long-term trend, higher lows, resistance levels, volume behaviour and overall market structure provides a disciplined framework for evaluating research candidates and identifying high-quality opportunities.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Keeping Your Watchlist Organised</h2>
-
-        <p>
-
-            Markets change every day.
-
-        </p>
-
-        <p>
-
-            Some stocks will continue developing while others lose momentum or break their previous market structure.
-
-        </p>
-
-        <p>
-
-            Make it a habit to review your watchlist each week, removing research candidates that no longer deserve attention and replacing them with stronger opportunities identified through the scanners.
-
-        </p>
-
-        <p>
-
-            Your watchlist should evolve alongside the market.
-
-        </p>
-
-        
-        <h2>Building a Daily Routine</h2>
-
-        <p>
-
-            Many members find it helpful to follow the same sequence each day.
-
-        </p>
-
-        <ol>
-
-            <li>Review the Breakout Scanner.</li>
-
-            <li>Search the NASDAQ Scanner.</li>
-
-            <li>Apply the Smart Money Filter.</li>
-
-            <li>Save promising research candidates.</li>
-
-            <li>Review charts inside My Workspace.</li>
-
-            <li>Update your watchlist.</li>
-
-        </ol>
-
-        <p>
-
-            This routine helps transform individual tools into one organised research workflow.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/EdgeBreak-Daily-Workflow.webp"
-                alt="EdgeBreak daily workflow showing a structured research routine using the Breakout Scanner, NASDAQ Scanner, Smart Money Filter, My Workspace and Watchlist to build a consistent daily research process.">
-
-            <figcaption>
-
-                A consistent daily routine helps turn individual EdgeBreak tools into one organised research workflow. Members can begin by reviewing the Breakout Scanner, searching the NASDAQ Scanner for pre-breakout opportunities, applying the Smart Money Filter, saving promising research candidates, reviewing charts inside My Workspace and updating their watchlist. Following the same structured process each day promotes consistency, improves research efficiency and supports better long-term decision-making.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Preparing for Future Features</h2>
-
-        <p>
-
-            My Workspace will continue expanding as EdgeBreak evolves.
-
-        </p>
-
-        <p>
-
-            Future updates may include additional research tools, enhanced note-taking, performance tracking and further workflow improvements, making My Workspace an even more powerful research environment.
-
-        </p>
-
-        <p>
-
-            Your watchlist will remain the foundation of this personalised research experience.
-
-        </p>
-
-    </div>
-
-    <!-- LESSON SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            My Workspace brings together your watchlist, TradingView charts and research workflow into one organised environment. By regularly reviewing market structure, updating your watchlist and maintaining a consistent research routine, members can build a personalised research process that evolves alongside the market.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>Use My Workspace as your personal research hub.</li>
-
-            <li>Keep your watchlist focused on quality research candidates.</li>
-
-            <li>Review charts regularly using TradingView.</li>
-
-            <li>Update your watchlist as market conditions change.</li>
-
-            <li>Follow a consistent daily research routine.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- PRACTICAL EXERCISE -->
-
-    <div class="lesson-card">
-
-        <h2>Practical Exercise</h2>
-
-        <p>
-
-            Spend 30 minutes organising your research inside My Workspace.
-
-        </p>
-
-        <ul>
-
-            <li>Review every stock currently saved.</li>
-
-            <li>Open each TradingView chart.</li>
-
-            <li>Check the weekly and daily market structure.</li>
-
-            <li>Remove any stocks that no longer fit your research criteria.</li>
-
-            <li>Add two new research candidates from today's NASDAQ Scanner results.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- COURSE COMPLETION -->
-
-    <div class="lesson-card highlight">
-
-        <h2>Congratulations!</h2>
-
-        <p>
-
-            You've now completed <strong>Module 4 – Mastering EdgeBreak</strong>.
-
-        </p>
-
-        <p>
-
-            You understand how every major component of the platform works, including the NASDAQ Scanner, Breakout Scanner, Smart Money Filter and My Workspace.
-
-        </p>
-
-        <p>
-
-            You're now ready to begin applying these tools to real market examples while continuing to build a structured, repeatable research process.
-
-        </p>
-
-    </div>
-
-    <!-- RESEARCH REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            EdgeBreak is an educational research platform designed to help members organise and analyse market information. The platform does not provide financial advice, investment recommendations or guarantees of future market performance. Always conduct your own independent research before making financial decisions.
-
-        </p>
-
-    </div>
-
-    <!-- ===================================
-    LESSON NAVIGATION
-    =================================== -->
-
-    <div class="lesson-next">
-
-        <div class="lesson-next-tag">
-
-            Module Complete
+<main class="ac-page">
+
+    <section class="ac-hero">
+        <div class="ac-shell">
+            <div class="ac-kicker"><span class="ac-dot"></span> Module 4 · Lesson 4</div>
+            <h1 class="ac-title">Mastering <span>My Workspace.</span></h1>
+            <p class="ac-subtitle">
+                Bring your EdgeBreak research together in one place. Organise personal watchlists, review charts, revisit earlier candidates and build a repeatable research routine.
+            </p>
+
+            <div class="ac-meta">
+                <span>Estimated time: 25 minutes</span>
+                <span>Mastering EdgeBreak</span>
+                <span>Intermediate</span>
+            </div>
+
+            <div class="ac-progress-wrap" aria-label="Module 4 progress">
+                <div class="ac-progress-label">
+                    <span>Module 4 progress</span>
+                    <span>Lesson 4 of 4</span>
+                </div>
+                <div class="ac-progress"><span style="width:100%"></span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ac-overview">
+        <div class="ac-shell">
+            <div class="ac-overview-card">
+                <div>
+                    <div class="ac-overview-label">What you'll learn</div>
+                    <h2>Turn individual research tools into your own workspace.</h2>
+                </div>
+
+                <div class="ac-learn-list">
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How My Workspace fits into the EdgeBreak research process.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to build and maintain a focused personal watchlist.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to use integrated TradingView charts for ongoing review.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to revisit changing market structure consistently.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to connect scanners, AI research and watchlists into one daily routine.</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <article class="ac-content">
+        <div class="ac-reading">
+
+            <section class="ac-section">
+                <h2>Your personal research hub</h2>
+                <p>My Workspace is designed to become the centre of your EdgeBreak research process.</p>
+                <p>Instead of repeatedly searching for the same companies, you can save the strongest research candidates and return to them as new price, volume and company information appears.</p>
+                <p>Think of it as your own organised research library rather than a brokerage portfolio.</p>
+
+                <div class="ac-pullquote">
+                    Discovery finds the stock. My Workspace gives you somewhere to keep the research alive.
+                </div>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/my-workspace-page.webp" alt="EdgeBreak My Workspace showing integrated TradingView charting, personal watchlists and stock research tools.">
+                <figcaption>My Workspace brings saved NASDAQ research candidates, charting and ongoing review into one personalised research environment.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Managing your watchlist</h2>
+                <p>Your watchlist should contain stocks that still have a clear reason for being researched.</p>
+                <p>Rather than saving every interesting ticker, focus on a manageable group of companies with technical structure, company information or market activity that you genuinely want to follow.</p>
+                <p>Review the list regularly and remove candidates when the evidence changes or the original research reason no longer applies.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/watchlist-page.webp" alt="EdgeBreak My Workspace personal watchlist showing saved NASDAQ research candidates.">
+                <figcaption>A focused watchlist makes it easier to revisit charts and compare how previously identified structures are developing over time.</figcaption>
+            </figure>
+
+            <div class="ac-concept-grid">
+                <div class="ac-concept-card">
+                    <b>Save</b>
+                    <strong>Keep the strongest candidates</strong>
+                    <span>Add stocks when there is a clear research reason for wanting to revisit them.</span>
+                </div>
+
+                <div class="ac-concept-card">
+                    <b>Review</b>
+                    <strong>Watch the structure evolve</strong>
+                    <span>Return to saved stocks as new market and company information becomes available.</span>
+                </div>
+
+                <div class="ac-concept-card">
+                    <b>Remove</b>
+                    <strong>Keep the list relevant</strong>
+                    <span>Delete candidates when the original structure weakens or the research case is no longer useful.</span>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Opening charts from your watchlist</h2>
+                <p>Selecting a stock from My Workspace loads its integrated TradingView chart so you can move quickly between saved candidates.</p>
+                <p>Use the chart to review:</p>
+                <ul>
+                    <li>Broader market structure.</li>
+                    <li>Support and resistance.</li>
+                    <li>Higher lows and trend development.</li>
+                    <li>Volume behaviour.</li>
+                    <li>Weekly and daily timeframes.</li>
+                    <li>Whether the original setup is strengthening, weakening or changing.</li>
+                </ul>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/tradingview-chart.webp" alt="Interactive TradingView chart inside EdgeBreak My Workspace used for technical market research.">
+                <figcaption>Integrated TradingView charting allows members to revisit saved stocks without leaving the EdgeBreak research workflow.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Use TradingView tools for your own analysis</h2>
+                <p>The charting workspace includes tools for drawing trendlines, marking support and resistance and switching between different timeframes.</p>
+                <p>These tools are valuable because they keep the interpretation in your hands. The platform can narrow the market and organise information, but your own chart review remains an important part of the process.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>Review market structure the same way each time</h2>
+                <p>Consistency becomes much easier when every saved stock is reviewed using the same questions.</p>
+                <ul>
+                    <li>Is the broader trend still healthy?</li>
+                    <li>Are higher lows continuing?</li>
+                    <li>Has resistance changed?</li>
+                    <li>Has the range tightened or expanded?</li>
+                    <li>How is volume behaving?</li>
+                    <li>Has unusual market activity changed?</li>
+                    <li>Does the stock still deserve a place on the watchlist?</li>
+                </ul>
+                <p>Using a repeatable checklist helps reduce the temptation to interpret every stock differently after the fact.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/research-checklist.webp" alt="Structured EdgeBreak chart research checklist covering trend, higher lows, resistance, volume and overall market structure.">
+                <figcaption>Following the same research checklist each time helps create a more consistent review process across different stocks.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Connect My Workspace with AI research</h2>
+                <p>A saved stock can also become the starting point for deeper company or chart investigation.</p>
+
+                <div class="ac-ai-panel">
+                    <h3>Revisit the stock from more than one angle.</h3>
+                    <p>After reviewing the chart, use EdgeBreak's AI-assisted research tools when additional context is useful.</p>
+
+                    <div class="ac-ai-actions">
+                        <div class="ac-ai-action">
+                            <b>AI Company Research</b>
+                            <span>Review company overview, financial highlights, recent news, institutional activity context and relevant filings.</span>
+                        </div>
+
+                        <div class="ac-ai-action">
+                            <b>AI Chart Analysis</b>
+                            <span>Review a descriptive analysis of visible technical structure, trend, resistance, support and volume behaviour.</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="ac-section">
+                <h2>Keep your watchlist evolving</h2>
+                <p>Markets change every day, so a useful watchlist should change with them.</p>
+                <p>Some stocks will continue developing while others lose their structure, move too far from the original base or simply become less useful for your research.</p>
+                <p>A weekly clean-up keeps My Workspace focused and prevents it from turning into a permanent list of old tickers.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>A current EdgeBreak daily routine</h2>
+                <p>The most useful way to think about My Workspace is as the final stage of a larger research loop.</p>
+            </section>
+
+            <div class="ac-process" aria-label="Current EdgeBreak daily research workflow">
+                <div class="ac-process-head">
+                    <span>One connected research routine</span>
+                    <h3>Scan → chart → research → save.</h3>
+                </div>
+
+                <div class="ac-process-grid">
+                    <div class="ac-process-step">
+                        <b>01</b>
+                        <strong>Scan</strong>
+                        <span>Review the Automated Daily Scan or use Breakout, Pre-Breakout and Launch Pad scanners.</span>
+                    </div>
+
+                    <div class="ac-process-step">
+                        <b>02</b>
+                        <strong>Chart</strong>
+                        <span>Move candidates into TradingView and compare their technical structure.</span>
+                    </div>
+
+                    <div class="ac-process-step">
+                        <b>03</b>
+                        <strong>Research</strong>
+                        <span>Use AI Company Research or AI Chart Analysis when deeper context is useful.</span>
+                    </div>
+
+                    <div class="ac-process-step">
+                        <b>04</b>
+                        <strong>Save</strong>
+                        <span>Add the strongest research candidates to My Workspace and revisit them over time.</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>My Workspace is not a brokerage portfolio</h2>
+                <p>My Workspace is designed for research organisation.</p>
+                <p>It does not place orders, execute trades, manage positions or recommend portfolio allocations.</p>
+                <p>Its purpose is to help you keep independent research organised and make it easier to compare how different NASDAQ candidates develop over time.</p>
+            </section>
+
+            <div class="ac-exercise">
+                <div class="ac-exercise-tag">Practical exercise</div>
+                <h3>Clean up and rebuild your workspace.</h3>
+                <p>Spend 30 minutes reviewing the stocks currently saved in My Workspace.</p>
+                <ul>
+                    <li>Open every saved stock.</li>
+                    <li>Review the weekly and daily chart structure.</li>
+                    <li>Remove any stock that no longer has a clear research reason.</li>
+                    <li>Open the latest Automated Daily Scan or scanners.</li>
+                    <li>Add two fresh candidates that deserve ongoing review.</li>
+                    <li>Use AI Company Research or AI Chart Analysis on one saved stock.</li>
+                    <li>Finish with a focused watchlist you can realistically monitor.</li>
+                </ul>
+            </div>
 
         </div>
+    </article>
 
-        <h2>
+    <section class="ac-summary-area">
+        <div class="ac-shell">
+            <div class="ac-card-grid three">
 
-            Congratulations!
+                <div class="ac-card">
+                    <h2>Lesson summary</h2>
+                    <p>My Workspace brings personal watchlists, TradingView charting and ongoing NASDAQ research into one organised environment. It allows members to save promising candidates, revisit changing market structure and connect scanner discovery with deeper chart and company research.</p>
+                </div>
 
-        </h2>
+                <div class="ac-card">
+                    <h2>Key takeaways</h2>
+                    <ul>
+                        <li>Use My Workspace as your personal research hub.</li>
+                        <li>Keep the watchlist focused and current.</li>
+                        <li>Review saved stocks consistently using TradingView.</li>
+                        <li>Use AI research for additional context when needed.</li>
+                        <li>Remove stocks when the original research reason no longer applies.</li>
+                        <li>My Workspace organises research; it does not manage trades.</li>
+                    </ul>
+                </div>
 
-        <div class="lesson-nav-buttons">
+                <div class="ac-card">
+                    <h2>Common beginner mistakes</h2>
+                    <ul>
+                        <li>Saving too many stocks.</li>
+                        <li>Never removing outdated candidates.</li>
+                        <li>Relying on memory instead of revisiting the chart.</li>
+                        <li>Ignoring changes in the original market structure.</li>
+                        <li>Treating a watchlist as a recommendation list.</li>
+                    </ul>
+                </div>
 
-            <!-- PREVIOUS -->
+                <div class="ac-card ac-reminder">
+                    <div class="ac-reminder-icon">✦</div>
+                    <div>
+                        <h2>Research reminder</h2>
+                        <p>My Workspace, TradingView charts, scanners and AI-assisted research tools are provided to support independent market research. They do not provide investment recommendations, portfolio management, trade execution, buy or sell instructions or guarantees of future market performance.</p>
+                    </div>
+                </div>
 
-            <a
-                href="/academy/mastering-the-smart-money-filter.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/analysing-a-successful-breakout.html"
-                class="btn-primary"
-            >
-                Start Module 5 →
-            </a>
-
+            </div>
         </div>
+    </section>
 
-        <h3>
+    <section class="ac-next">
+        <div class="ac-shell">
+            <div class="ac-next-card">
+                <div class="ac-next-tag">Module 4 complete</div>
+                <h2>You now know how the EdgeBreak platform fits together.</h2>
+                <p>You’ve covered the full scanner workspace, active breakout research, built-in market activity intelligence and My Workspace. Module 5 now puts those tools into practice using complete market examples.</p>
 
-            Lesson 5.1 – Analysing a Successful Breakout
+                <div class="ac-next-actions">
+                    <a href="/academy/analysing-a-successful-breakout.html" class="ac-btn ac-btn-primary">Start Module 5 · Lesson 1 →</a>
+                    <a href="/academy/mastering-the-smart-money-filter.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+                </div>
 
-        </h3>
-
-        <p>
-
-            Put everything you've learned into practice by analysing a real breakout from start to finish. You'll see how market structure, resistance, higher lows, volume and accumulation come together in the complete EdgeBreak research process.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 5 • Lesson 19 of 30
-
+                <div class="ac-next-foot">Module 4 · 4 of 4 lessons completed</div>
+            </div>
         </div>
-
-    </div>
+    </section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
 </body>
 </html>

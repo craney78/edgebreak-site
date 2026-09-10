@@ -1,682 +1,967 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 29: Recognising Accumulation Before Breakout | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how to recognise accumulation before a breakout by analysing price structure, resistance tests, higher lows, buying pressure and volume characteristics using a structured research approach.">
-
-<meta name="keywords"
-      content="accumulation, breakout patterns, smart money accumulation, higher lows, resistance, buying pressure, price action, NASDAQ research, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/recognising-accumulation-before-breakout.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Recognising Accumulation Before Breakouts | Module 5 Lesson 3 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn how to recognise accumulation-style evidence before breakouts using resistance, higher lows, range quality, volume and unusual market activity without assuming who is buying."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/recognising-accumulation-before-breakouts.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 29: Recognising Accumulation Before Breakout">
-
-<meta property="og:description"
-      content="Discover how accumulation develops before many breakouts by studying market structure, resistance, higher lows and buying pressure.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/recognising-accumulation-before-breakout.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/recognising-accumulation-before-breakouts.html">
+<meta property="og:title" content="Recognising Accumulation Before Breakouts | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Study the market characteristics commonly associated with accumulation-style structures before breakouts while keeping evidence separate from assumptions."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Lesson 29: Recognising Accumulation Before Breakout">
-
-<meta name="twitter:description"
-      content="Learn how to identify accumulation before potential breakouts using structured price action research.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Recognising Accumulation Before Breakouts | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Learn how resistance, higher lows, volume and unusual market activity can provide accumulation-style research evidence before breakouts."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-CSS
+FAVICON
 =================================== -->
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
+
+<!-- ===================================
+STYLES
+=================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
 
 <!-- ===================================
 SUPABASE
 =================================== -->
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
 
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
 <!-- ===================================
-LEARNING RESOURCE
+STRUCTURED DATA
 =================================== -->
-
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "name":"Lesson 29: Recognising Accumulation Before Breakout",
-  "description":"Learn how to recognise accumulation before a breakout by analysing resistance tests, higher lows, buying pressure, volume characteristics and market structure.",
-  "educationalLevel":"Beginner",
-  "learningResourceType":"Lesson",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  },
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  }
-}
-</script>
-
-<!-- ===================================
-BREADCRUMB
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "legalName": "Crane Platform Labs",
+      "url": "https://www.edgebreak.ai/",
+      "email": "mailto:admin@edgebreak.ai",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.edgebreak.ai/#logo",
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+        "caption": "EdgeBreak"
+      },
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
-      "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Lesson 29: Recognising Accumulation Before Breakout",
-      "item":"https://www.edgebreak.ai/recognising-accumulation-before-breakout.html"
+      "@type": "Course",
+      "@id": "https://www.edgebreak.ai/academy.html#course",
+      "name": "EdgeBreak Academy",
+      "url": "https://www.edgebreak.ai/academy.html",
+      "description": "Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "LearningResource",
+      "@id": "https://www.edgebreak.ai/academy/recognising-accumulation-before-breakouts.html#lesson",
+      "name": "Module 5 Lesson 3: Recognising Accumulation Before Breakouts",
+      "url": "https://www.edgebreak.ai/academy/recognising-accumulation-before-breakouts.html",
+      "description": "A historical market-research lesson explaining how accumulation-style evidence may appear through resistance, higher lows, range quality, volume and unusual market activity.",
+      "learningResourceType": "Lesson",
+      "educationalLevel": "Intermediate",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/academy.html#course" },
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/academy/recognising-accumulation-before-breakouts.html#webpage",
+      "url": "https://www.edgebreak.ai/academy/recognising-accumulation-before-breakouts.html",
+      "name": "Recognising Accumulation Before Breakouts | Module 5 Lesson 3 | EdgeBreak Academy",
+      "description": "Learn how to recognise accumulation-style evidence before breakouts using resistance, higher lows, range quality, volume and unusual market activity without assuming who is buying.",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/#website" },
+      "mainEntity": { "@id": "https://www.edgebreak.ai/academy/recognising-accumulation-before-breakouts.html#lesson" },
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/academy/recognising-accumulation-before-breakouts.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EdgeBreak Academy",
+          "item": "https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Recognising Accumulation Before Breakouts",
+          "item": "https://www.edgebreak.ai/academy/recognising-accumulation-before-breakouts.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<!-- ===================================
-WEBPAGE
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 29: Recognising Accumulation Before Breakout",
-  "url":"https://www.edgebreak.ai/recognising-accumulation-before-breakout.html",
-  "description":"Learn how to identify accumulation before potential breakouts using structured analysis of market structure, resistance, higher lows and buying pressure.",
-  "isPartOf":{
-    "@type":"WebSite",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  },
-  "primaryImageOfPage":"https://www.edgebreak.ai/images/academy.webp",
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+
+.ac-section li{margin:7px 0}
+
+.ac-lesson-image{margin:34px 0 46px}
+
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#fff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-concept-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+
+.ac-concept-card{
+    padding:23px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#fff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+
+.ac-concept-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.ac-concept-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+
+.ac-concept-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-evidence-panel{
+    margin:36px 0 54px;
+    padding:30px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#0c1728;
+}
+
+.ac-evidence-panel h3{
+    margin:0 0 12px;
+    color:#fff;
+    font-size:29px;
+    letter-spacing:-.035em;
+}
+
+.ac-evidence-panel p{
+    margin:0 0 16px;
+    color:#b3bfce;
+    font-size:16px;
+    line-height:1.7;
+}
+
+.ac-evidence-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:20px;
+}
+
+.ac-evidence-item{
+    padding:18px;
+    border:1px solid #253249;
+    border-radius:17px;
+    background:#111f34;
+}
+
+.ac-evidence-item b{
+    display:block;
+    margin-bottom:7px;
+    color:#65e18e;
+    font-size:14px;
+}
+
+.ac-evidence-item span{
+    color:#b8c5d4;
+    font-size:13px;
+    line-height:1.55;
+}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+.ac-exercise{
+    margin:34px 0 54px;
+    padding:30px;
+    border:1px solid #dce7df;
+    border-radius:24px;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+}
+
+.ac-exercise-tag{
+    margin-bottom:9px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ac-exercise h3{
+    margin:0 0 13px;
+    color:var(--ix-ink);
+    font-size:27px;
+    letter-spacing:-.03em;
+}
+
+.ac-exercise p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.65;
+}
+
+.ac-exercise ul{
+    margin:0;
+    padding-left:22px;
+    color:#526071;
+    font-size:15px;
+    line-height:1.65;
+}
+
+@media(max-width:900px){
+    .ac-concept-grid{grid-template-columns:1fr}
+}
+
+@media(max-width:700px){
+    .ac-evidence-grid{grid-template-columns:1fr}
+    .ac-card-grid.three{grid-template-columns:1fr}
+    .ac-card-grid.three .ac-reminder{grid-column:auto}
+}
+
+</style>
 </head>
-
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
-<main>
-<!-- ==========================
-MODULE 5 · LESSON 21
-=========================== -->
-
-<div class="academy-container lesson-container">
-
-    <div class="lesson-tag">
-        MODULE 5 • LESSON 21
-    </div>
-
-    <h1>
-        Recognising Accumulation Before Breakouts
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 30 Minutes</span>
-
-        <span>•</span>
-
-        <span>Real Market Research Examples</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        One of the most rewarding parts of market research is recognising organised accumulation before a breakout occurs. While no investor can predict future market movements, studying how accumulation develops allows you to identify research candidates earlier in the process. This lesson uses real market examples to demonstrate how accumulation often develops long before a breakout appears.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>How accumulation develops.</li>
-
-            <li>Early signs of organised buying.</li>
-
-            <li>The difference between accumulation and random sideways movement.</li>
-
-            <li>How the Smart Money Filter supports this research.</li>
-
-            <li>Recognising accumulation using real charts.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>What Does Accumulation Look Like?</h2>
-
-        <p>
-
-            Accumulation is rarely dramatic.
-
-        </p>
-
-        <p>
-
-            Instead of large price movements, accumulation often develops quietly through weeks or months of organised price action.
-
-        </p>
-
-        <p>
-
-            During this period, buyers gradually absorb selling pressure while the stock remains within a relatively defined trading range.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/accumulation-phase-chart.webp"
-                alt="Early accumulation phase showing a stock trading within a defined range while gradually developing higher lows beneath resistance.">
-
-            <figcaption>
-
-                This illustration demonstrates an early accumulation phase, where price may remain within a relatively defined trading range while gradually developing stronger market structure. Rather than producing rapid price advances, accumulation often unfolds quietly as buyers absorb selling pressure over an extended period. The higher lows suggest improving demand, while repeated tests of resistance indicate that supply is being gradually absorbed. Within the EdgeBreak research process, recognising these characteristics can help investors identify stocks that may be transitioning from consolidation towards a potential breakout, while remembering that no single pattern guarantees future price movement.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Example One – Healthy Accumulation</h2>
-
-        <p>
-
-            In our first example, notice how price repeatedly approaches resistance but continues finding support at progressively higher prices.
-
-        </p>
-
-        <p>
-
-            The market structure remains organised, daily price swings become more controlled and higher lows continue developing beneath resistance.
-
-        </p>
-
-        <p>
-
-            Although no breakout has occurred yet, the stock is displaying several characteristics commonly associated with organised accumulation.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/accumulation-phase-chart.webp"
-                alt="Early accumulation phase showing a stock trading within a defined range while gradually developing higher lows beneath resistance.">
-
-            <figcaption>
-
-                This illustration demonstrates an early accumulation phase, where price may remain within a relatively defined trading range while gradually developing stronger market structure. Rather than producing rapid price advances, accumulation often unfolds quietly as buyers absorb selling pressure over an extended period. The higher lows suggest improving demand, while repeated tests of resistance indicate that supply is being gradually absorbed. Within the EdgeBreak research process, recognising these characteristics can help investors identify stocks that may be transitioning from consolidation towards a potential breakout, while remembering that no single pattern guarantees future price movement.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Example Two – Sideways Without Accumulation</h2>
-
-        <p>
-
-            Not every sideways market represents accumulation.
-
-        </p>
-
-        <p>
-
-            Compare the previous chart with one showing inconsistent price movement, large swings and no obvious higher lows.
-
-        </p>
-
-        <p>
-
-            While both stocks appear to be moving sideways, only one demonstrates organised market behaviour.
-
-        </p>
-
-        <p>
-
-            Learning to recognise this difference is an important research skill.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/sideways without accumulation.webp"
-                alt="Sideways market showing inconsistent price movement, large swings and no clear pattern of higher lows or accumulation.">
-
-            <figcaption>
-
-                This illustration compares a sideways market that lacks the characteristics commonly associated with accumulation. Although price remains within a broad trading range, the market structure is less organised, with larger price swings, inconsistent volume and no clear progression of higher lows. These characteristics suggest that selling pressure may not be gradually absorbed in the same way as a structured accumulation phase. Within the EdgeBreak research process, comparing charts like this with stronger accumulation examples helps develop the ability to distinguish between random consolidation and organised market behaviour before researching potential breakout opportunities.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Resistance Plays an Important Role</h2>
-
-        <p>
-
-            Accumulation often develops beneath a clearly defined resistance level.
-
-        </p>
-
-        <p>
-
-            Each unsuccessful attempt to break higher provides another opportunity to observe how buyers respond.
-
-        </p>
-
-        <p>
-
-            If higher lows continue developing after each rejection, market structure may gradually strengthen over time.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/resistance-plays-important-role.webp"
-                alt="Accumulation developing beneath a clearly defined resistance level with progressively higher lows strengthening market structure over time.">
-
-            <figcaption>
-
-                This illustration demonstrates how accumulation often develops beneath a well-defined resistance level as buyers repeatedly respond to each rejection. Rather than breaking higher immediately, price may remain below resistance while forming progressively higher lows, suggesting that demand is gradually increasing over time. Each test of resistance provides another opportunity to observe how the market reacts and whether buying pressure continues to build. Within the EdgeBreak research process, studying the relationship between resistance and higher lows helps investors evaluate market structure and identify characteristics that may support further research into potential breakout opportunities, while recognising that no pattern guarantees future price movement.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Watch the Volume</h2>
-
-        <p>
-
-            Volume behaviour often provides additional context during accumulation.
-
-        </p>
-
-        <p>
-
-            Many organised accumulation structures experience relatively quiet trading activity during consolidation before participation begins increasing as interest returns.
-
-        </p>
-
-        <p>
-
-            Volume should never be analysed on its own, but when combined with price structure it helps build a more complete research picture.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/watch-the-volume.webp"
-                alt="Accumulation chart showing volume gradually contracting during consolidation before increasing as buying interest returns near resistance.">
-
-            <figcaption>
-
-                This illustration demonstrates how volume can provide additional context when researching accumulation. During many organised accumulation phases, trading activity often becomes quieter while price continues developing higher lows beneath resistance. As buying interest gradually returns, volume may begin increasing, particularly as price approaches a potential breakout level. Volume should always be considered alongside price action and market structure rather than in isolation. Within the EdgeBreak research process, combining volume behaviour with resistance and higher lows helps build a more complete understanding of how a stock may be developing over time, while recognising that no single characteristic predicts future performance.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>How EdgeBreak Helps</h2>
-
-        <p>
-
-            EdgeBreak combines several accumulation-related characteristics into one research workflow.
-
-        </p>
-
-        <p>
-
-            Members can:
-
-        </p>
-
-        <ul>
-
-            <li>Search the NASDAQ Scanner.</li>
-
-            <li>Apply the Smart Money Filter.</li>
-
-            <li>Review higher lows.</li>
-
-            <li>Analyse resistance touches.</li>
-
-            <li>Study volume behaviour.</li>
-
-            <li>Save promising research candidates to My Workspace.</li>
-
-        </ul>
-
-        <p>
-
-            This structured process makes it easier to identify organised market behaviour without manually searching thousands of charts.
-
-        </p>
-
-        
-
-        <h2>Accumulation Requires Patience</h2>
-
-        <p>
-
-            One of the biggest challenges for newer investors is recognising that accumulation often develops slowly.
-
-        </p>
-
-        <p>
-
-            Some stocks remain within consolidation ranges for months before eventually moving above resistance.
-
-        </p>
-
-        <p>
-
-            Rather than becoming impatient, continue monitoring how the structure evolves over time.
-
-        </p>
-
-        <p>
-
-            Consistent observation is often more valuable than constantly searching for new opportunities.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/timeline-of-accumulation.webp"
-                alt="Timeline showing a prolonged accumulation phase beneath resistance before a breakout develops after months of improving market structure.">
-
-            <figcaption>
-
-                This illustration demonstrates how accumulation often develops gradually over an extended period rather than forming within a few trading sessions. Price may remain below resistance for weeks or months while higher lows, quieter volume and improving market structure slowly emerge. As time progresses, repeated testing of resistance can provide additional insight into whether buying pressure continues to build. Within the EdgeBreak research process, consistent observation helps investors understand how market structure evolves over time, reinforcing that patience and disciplined research are often more valuable than constantly searching for new opportunities or expecting immediate breakouts.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Questions to Ask</h2>
-
-        <p>
-
-            When reviewing a potential accumulation structure, ask yourself:
-
-        </p>
-
-        <ul>
-
-            <li>Is resistance clearly defined?</li>
-
-            <li>Are higher lows developing?</li>
-
-            <li>Has selling pressure reduced?</li>
-
-            <li>Is volume supporting the structure?</li>
-
-            <li>Would this stock appear in the Smart Money Filter?</li>
-
-            <li>Does it deserve a place in My Workspace?</li>
-
-        </ul>
-
-        <p>
-
-            These questions help create a repeatable research process that can be applied consistently across different market conditions.
-
-        </p>
-
-    </div>
-
-    <!-- LESSON SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            Accumulation often develops quietly through organised market structure, repeated resistance tests, higher lows and improving buying pressure. By combining these characteristics with the EdgeBreak scanners and Smart Money Filter, members can identify research candidates earlier and monitor their development over time.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>Not all sideways markets represent accumulation.</li>
-
-            <li>Look for organised market structure.</li>
-
-            <li>Higher lows often strengthen accumulation.</li>
-
-            <li>Volume provides additional context.</li>
-
-            <li>Patience is an important part of the research process.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- PRACTICAL EXERCISE -->
-
-    <div class="lesson-card">
-
-        <h2>Practical Exercise</h2>
-
-        <p>
-
-            Use the NASDAQ Scanner together with the Smart Money Filter to identify three stocks currently displaying accumulation characteristics.
-
-        </p>
-
-        <ul>
-
-            <li>Review the market structure.</li>
-
-            <li>Mark resistance.</li>
-
-            <li>Identify higher lows.</li>
-
-            <li>Review recent volume.</li>
-
-            <li>Save the strongest research candidate to My Workspace.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- RESEARCH REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            Accumulation is a market characteristic—not a guarantee of future price movement. EdgeBreak uses structured market analysis to help members identify stocks displaying organised behaviour for further research. Always complete your own independent analysis before making financial decisions.
-
-        </p>
-
-    </div>
-
-    <!-- ===================================
-    LESSON NAVIGATION
-    =================================== -->
-
-    <div class="lesson-next">
-
-        <div class="lesson-next-tag">
-
-            Continue Learning
+<main class="ac-page">
+
+    <section class="ac-hero">
+        <div class="ac-shell">
+            <div class="ac-kicker"><span class="ac-dot"></span> Module 5 · Lesson 3</div>
+            <h1 class="ac-title">Recognising Accumulation <span>Before Breakouts.</span></h1>
+            <p class="ac-subtitle">
+                Study the market characteristics commonly associated with accumulation-style structures — while keeping observable evidence separate from assumptions about who is buying.
+            </p>
+
+            <div class="ac-meta">
+                <span>Estimated time: 30 minutes</span>
+                <span>Real market research examples</span>
+                <span>Intermediate</span>
+            </div>
+
+            <div class="ac-progress-wrap" aria-label="Module 5 progress">
+                <div class="ac-progress-label">
+                    <span>Module 5 progress</span>
+                    <span>Lesson 3 of 6</span>
+                </div>
+                <div class="ac-progress"><span style="width:50%"></span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ac-overview">
+        <div class="ac-shell">
+            <div class="ac-overview-card">
+                <div>
+                    <div class="ac-overview-label">What you'll learn</div>
+                    <h2>Recognise organised pressure without pretending the chart reveals the buyer.</h2>
+                </div>
+
+                <div class="ac-learn-list">
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>What accumulation means as a market concept.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How organised structures differ from random sideways movement.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why resistance and higher lows matter together.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How volume adds context to developing pressure.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How unusual market activity can strengthen the research picture.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How EdgeBreak can surface these structures earlier.</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <article class="ac-content">
+        <div class="ac-reading">
+
+            <section class="ac-section">
+                <h2>What does accumulation mean?</h2>
+                <p>Accumulation is a market concept used to describe a period in which buying demand may gradually absorb available supply while price remains within a broader range or beneath resistance.</p>
+                <p>The important word is <strong>may</strong>. A chart cannot tell you with certainty who is buying, why they are buying or whether a future breakout will occur.</p>
+                <p>For EdgeBreak research, accumulation is best treated as an interpretation built from several observable characteristics rather than as a confirmed event.</p>
+
+                <div class="ac-pullquote">
+                    We can observe the structure. We cannot see the identity or intentions of every participant behind it.
+                </div>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/accumulation-phase-chart.webp" alt="Historical accumulation-style chart showing a defined range, repeated resistance tests and higher lows developing before a breakout.">
+                <figcaption>An accumulation-style structure may develop quietly beneath resistance as price becomes more organised and pullbacks occur at progressively higher levels.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Accumulation is rarely dramatic</h2>
+                <p>Many of the most interesting structures do not begin with a large price move.</p>
+                <p>They can spend weeks or months moving within a relatively defined range while resistance remains visible and the lower side of the structure gradually improves.</p>
+                <p>This slow development is one reason earlier-stage scanners such as Launch Pad and Pre-Breakout can be useful. They allow the structure to be studied before the move becomes obvious.</p>
+            </section>
+
+            <div class="ac-concept-grid">
+                <div class="ac-concept-card">
+                    <b>Resistance</b>
+                    <strong>A consistent ceiling</strong>
+                    <span>Repeated interaction with the same price area creates a level that can be monitored over time.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Higher lows</b>
+                    <strong>Improving support</strong>
+                    <span>Pullbacks forming at progressively higher levels can show a tightening structure beneath resistance.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Volume</b>
+                    <strong>Participation context</strong>
+                    <span>Changes in trading activity can add another layer of evidence when compared with price behaviour.</span>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Healthy structure vs random sideways movement</h2>
+                <p>Not every stock moving sideways represents accumulation-style behaviour.</p>
+                <p>A broad range with large, inconsistent swings and no progression of higher lows tells a very different story from a tightening structure beneath clearly defined resistance.</p>
+                <p>The distinction comes from organisation, not simply from the fact that price is moving sideways.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/sideways without accumulation.webp" alt="Sideways chart with erratic swings, inconsistent structure and no clear progression of higher lows.">
+                <figcaption>Sideways movement alone is not enough. Random consolidation may lack the repeated resistance tests, improving lows and orderly behaviour seen in stronger accumulation-style structures.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Resistance plays an important role</h2>
+                <p>Accumulation-style structures often develop beneath a clearly defined resistance zone.</p>
+                <p>Each test provides another opportunity to compare how price behaves after rejection. Does the stock collapse back toward the bottom of the range, or does support form at a progressively higher level?</p>
+                <p>Repeated resistance tests combined with higher lows can create a tightening pattern that deserves closer investigation.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/resistance-plays-important-role.webp" alt="Historical chart showing repeated resistance tests and progressively higher lows forming beneath a defined resistance area.">
+                <figcaption>Resistance gives the structure a reference point. Higher lows beneath that level can show how the range is changing as the market repeatedly approaches the same ceiling.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Watch the volume</h2>
+                <p>Volume helps describe how participation changes while the structure develops.</p>
+                <p>Some organised bases experience quieter trading during consolidation before activity increases as price returns toward resistance. Other structures may remain noisy and inconsistent throughout.</p>
+                <p>Neither pattern proves accumulation. Volume is most useful when it agrees with other evidence such as tighter price behaviour, higher lows and repeated resistance tests.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/watch-the-volume.webp" alt="Accumulation-style chart showing quieter volume during consolidation and increasing participation near resistance.">
+                <figcaption>Volume should be studied with price structure rather than in isolation. Changes in participation can add context as a stock moves through different stages of a base.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Add unusual market activity context</h2>
+                <p>Price and volume are not the only evidence EdgeBreak can consider.</p>
+                <p>The platform also analyses unusual activity occurring away from the primary exchange and larger purchase activity appearing across multiple markets. When that evidence appears alongside constructive technical structure, it can strengthen the case for deeper research.</p>
+                <p>It still does not prove institutional buying or identify the participants behind the activity.</p>
+            </section>
+
+            <div class="ac-evidence-panel">
+                <h3>Evidence is stronger when several pieces agree.</h3>
+                <p>Accumulation-style research becomes more useful when the conclusion does not depend on one chart feature.</p>
+
+                <div class="ac-evidence-grid">
+                    <div class="ac-evidence-item">
+                        <b>Technical structure</b>
+                        <span>Defined resistance, improving lows, organised price behaviour and a stable base.</span>
+                    </div>
+                    <div class="ac-evidence-item">
+                        <b>Volume behaviour</b>
+                        <span>Participation changing in a way that is consistent with the developing structure.</span>
+                    </div>
+                    <div class="ac-evidence-item">
+                        <b>Off-exchange activity</b>
+                        <span>Unusual activity away from the primary exchange that stands out against recent behaviour.</span>
+                    </div>
+                    <div class="ac-evidence-item">
+                        <b>Cross-market purchases</b>
+                        <span>Larger purchase activity appearing across more than one market or trading venue.</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Accumulation requires patience</h2>
+                <p>These structures often develop slowly.</p>
+                <p>A stock may remain beneath resistance for weeks or months while higher lows, range contraction and changing participation gradually become clearer.</p>
+                <p>The lesson is not to assume that time automatically creates a breakout. It is to recognise that useful market structure can require repeated observation.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/timeline-of-accumulation.webp" alt="Timeline showing an accumulation-style structure developing gradually beneath resistance over an extended period.">
+                <figcaption>Longer development can provide more observations of resistance, higher lows, volume and market activity before any breakout occurs.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>How EdgeBreak helps today</h2>
+                <p>The old Smart Money Filter is no longer part of the workflow. These characteristics are now researched through the broader EdgeBreak scanner system and built-in market activity analysis.</p>
+                <p>Members can use:</p>
+                <ul>
+                    <li><strong>Launch Pad</strong> to find longer developing bases and trading ranges.</li>
+                    <li><strong>Pre-Breakout Scanner</strong> to identify repeated resistance tests and higher lows before a confirmed move.</li>
+                    <li><strong>NASDAQ Scanner</strong> to refine candidates using structured filters.</li>
+                    <li><strong>Automated Daily Scan</strong> to review stocks that rank highly after multiple layers of technical and market activity evidence are considered.</li>
+                    <li><strong>TradingView charts</strong> to inspect the full structure directly.</li>
+                    <li><strong>My Workspace</strong> to save and revisit candidates as they develop.</li>
+                </ul>
+            </section>
+
+            <section class="ac-section">
+                <h2>Questions to ask</h2>
+                <ul>
+                    <li>Is resistance clearly defined?</li>
+                    <li>Are higher lows developing?</li>
+                    <li>Is the structure becoming tighter or more organised?</li>
+                    <li>How is volume behaving?</li>
+                    <li>Is unusual market activity adding supporting context?</li>
+                    <li>Does the stock still remain close to the underlying base?</li>
+                    <li>Does it deserve a place in My Workspace for continued research?</li>
+                </ul>
+                <p>The goal is to describe what the evidence shows — and remain equally clear about what it cannot prove.</p>
+            </section>
+
+            <div class="ac-process" aria-label="Accumulation-style research process">
+                <div class="ac-process-head">
+                    <span>Build the evidence slowly</span>
+                    <h3>Range → pressure → participation → review.</h3>
+                </div>
+
+                <div class="ac-process-grid">
+                    <div class="ac-process-step">
+                        <b>01</b>
+                        <strong>Range</strong>
+                        <span>Identify the support, resistance and overall quality of the base.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>02</b>
+                        <strong>Pressure</strong>
+                        <span>Look for higher lows and repeated tests beneath resistance.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>03</b>
+                        <strong>Participation</strong>
+                        <span>Compare volume and unusual market activity with the price structure.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>04</b>
+                        <strong>Review</strong>
+                        <span>Save promising candidates and watch whether the structure strengthens or weakens.</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Do not turn evidence into certainty</h2>
+                <p>The biggest mistake in accumulation research is taking a group of constructive characteristics and turning them into a statement about exactly who is buying.</p>
+                <p>EdgeBreak can identify unusual behaviour. It cannot know the full motive, identity or future intentions of every market participant.</p>
+                <p>That distinction keeps the analysis useful without overstating what the data can establish.</p>
+            </section>
+
+            <div class="ac-exercise">
+                <div class="ac-exercise-tag">Practical exercise</div>
+                <h3>Find three accumulation-style candidates.</h3>
+                <p>Use Launch Pad, Pre-Breakout or the NASDAQ Scanner to identify three stocks with organised structures.</p>
+                <ul>
+                    <li>Mark the main resistance area.</li>
+                    <li>Identify the higher lows.</li>
+                    <li>Compare range quality and price volatility.</li>
+                    <li>Review recent volume.</li>
+                    <li>Note any unusual market activity context provided by EdgeBreak.</li>
+                    <li>Write down what the evidence supports and what it cannot prove.</li>
+                    <li>Save the strongest research candidate to My Workspace.</li>
+                </ul>
+            </div>
 
         </div>
+    </article>
 
-        <h2>
+    <section class="ac-summary-area">
+        <div class="ac-shell">
+            <div class="ac-card-grid three">
 
-            Continue Your Journey
+                <div class="ac-card">
+                    <h2>Lesson summary</h2>
+                    <p>Accumulation-style structures can develop through repeated resistance tests, higher lows, organised price behaviour, volume changes and unusual market activity. The strongest research combines several pieces of evidence while avoiding assumptions about the identity or intentions of market participants.</p>
+                </div>
 
-        </h2>
+                <div class="ac-card">
+                    <h2>Key takeaways</h2>
+                    <ul>
+                        <li>Not all sideways markets represent accumulation-style behaviour.</li>
+                        <li>Look for organised structure rather than a label.</li>
+                        <li>Repeated resistance tests and higher lows can provide useful evidence together.</li>
+                        <li>Volume adds context but does not prove accumulation.</li>
+                        <li>Unusual off-exchange and cross-market activity can strengthen the research picture.</li>
+                        <li>EdgeBreak does not identify or confirm who is buying.</li>
+                    </ul>
+                </div>
 
-        <div class="lesson-nav-buttons">
+                <div class="ac-card">
+                    <h2>Common beginner mistakes</h2>
+                    <ul>
+                        <li>Calling every sideways range accumulation.</li>
+                        <li>Assuming higher lows prove institutional buying.</li>
+                        <li>Using volume alone.</li>
+                        <li>Ignoring erratic or weakening structure.</li>
+                        <li>Turning unusual market activity into certainty about participant identity.</li>
+                    </ul>
+                </div>
 
-            <!-- PREVIOUS -->
+                <div class="ac-card ac-reminder">
+                    <div class="ac-reminder-icon">✦</div>
+                    <div>
+                        <h2>Research reminder</h2>
+                        <p>Accumulation is an interpretation of market behaviour, not proof of who is buying. EdgeBreak uses technical structure and unusual market activity as research evidence only and does not confirm institutional buying, provide investment recommendations or predict future market performance.</p>
+                    </div>
+                </div>
 
-            <a
-                href="/academy/analysing-a-failed-breakout.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/comparing-gold-silver-and-bronze-breakouts.html"
-                class="btn-primary"
-            >
-                Start Lesson 5.4 →
-            </a>
-
+            </div>
         </div>
+    </section>
 
-        <h3>
+    <section class="ac-next">
+        <div class="ac-shell">
+            <div class="ac-next-card">
+                <div class="ac-next-tag">Continue learning · Module 5 Lesson 4 of 6</div>
+                <h2>Comparing breakout quality.</h2>
+                <p>Compare stronger and weaker historical breakout structures and learn how differences in trend, resistance, higher lows, volume and market context affect the overall research picture.</p>
 
-            Lesson 5.4 – Comparing Gold, Silver & Bronze Breakouts
+                <div class="ac-next-actions">
+                    <a href="/academy/comparing-gold-silver-and-bronze-breakouts.html" class="ac-btn ac-btn-primary">Start Lesson 5.4 →</a>
+                    <a href="/academy/analysing-a-failed-breakout.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+                </div>
 
-        </h3>
-
-        <p>
-
-            Compare real Gold, Silver and Bronze breakout examples to understand how market structure, accumulation, resistance and volume influence breakout quality and help prioritise research opportunities.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 5 • Lesson 22 of 30
-
+                <div class="ac-next-foot">Module 5 · Lesson 3 of 6 completed</div>
+            </div>
         </div>
-
-    </div>
+    </section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>

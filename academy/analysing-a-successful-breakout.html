@@ -1,735 +1,928 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 21: Analysing a Successful Breakout | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how to analyse successful breakout examples using historical NASDAQ charts. Study market structure, resistance, higher lows, accumulation and volume behaviour before and after the breakout.">
-
-<meta name="keywords"
-      content="successful breakout, breakout analysis, breakout examples, market structure, resistance, higher lows, accumulation, volume analysis, NASDAQ, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/analysing-a-successful-breakout.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Analysing a Successful Breakout | Module 5 Lesson 1 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Study a successful historical breakout from start to finish using market structure, resistance, higher lows, volume, consolidation and post-breakout review."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/analysing-a-successful-breakout.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 21: Analysing a Successful Breakout | EdgeBreak Academy">
-
-<meta property="og:description"
-      content="Study real successful breakout examples and learn how market structure, resistance, higher lows, accumulation and volume developed before and after the breakout.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/analysing-a-successful-breakout.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/analysing-a-successful-breakout.html">
+<meta property="og:title" content="Analysing a Successful Breakout | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Follow a successful historical breakout from pre-breakout structure through resistance, higher lows, volume and post-breakout development."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Lesson 21: Analysing a Successful Breakout">
-
-<meta name="twitter:description"
-      content="Learn how successful breakout structures develop by analysing real historical NASDAQ charts and identifying recurring market characteristics.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Analysing a Successful Breakout | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Study how market structure, resistance, higher lows and volume developed before a successful historical breakout."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-CSS
+FAVICON
+=================================== -->
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
+
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
+
+<!-- ===================================
+STYLES
 =================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
 
 <!-- ===================================
 SUPABASE
 =================================== -->
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
 
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
 <!-- ===================================
 STRUCTURED DATA
 =================================== -->
-
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "@id":"https://www.edgebreak.ai/analysing-a-successful-breakout.html",
-  "name":"Lesson 21: Analysing a Successful Breakout",
-  "headline":"Analysing a Successful Breakout",
-  "description":"An educational lesson explaining how successful breakout structures develop using historical NASDAQ charts, market structure, resistance, higher lows, accumulation and volume behaviour.",
-  "learningResourceType":"Lesson",
-  "educationalLevel":"Beginner",
-  "teaches":[
-    "Successful Breakouts",
-    "Market Structure",
-    "Resistance",
-    "Higher Lows",
-    "Accumulation",
-    "Volume Analysis",
-    "Historical Chart Analysis"
-  ],
-  "isAccessibleForFree":true,
-  "inLanguage":"en-AU",
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai",
-    "logo":{
-      "@type":"ImageObject",
-      "url":"https://www.edgebreak.ai/images/logo.webp"
-    }
-  },
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
-}
-</script>
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "legalName": "Crane Platform Labs",
+      "url": "https://www.edgebreak.ai/",
+      "email": "mailto:admin@edgebreak.ai",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.edgebreak.ai/#logo",
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+        "caption": "EdgeBreak"
+      },
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
-      "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Module 5"
+      "@type": "Course",
+      "@id": "https://www.edgebreak.ai/academy.html#course",
+      "name": "EdgeBreak Academy",
+      "url": "https://www.edgebreak.ai/academy.html",
+      "description": "Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":4,
-      "name":"Lesson 21: Analysing a Successful Breakout"
+      "@type": "LearningResource",
+      "@id": "https://www.edgebreak.ai/academy/analysing-a-successful-breakout.html#lesson",
+      "name": "Module 5 Lesson 1: Analysing a Successful Breakout",
+      "url": "https://www.edgebreak.ai/academy/analysing-a-successful-breakout.html",
+      "description": "A historical case-study lesson showing how market structure, resistance, higher lows, volume and consolidation developed before a successful breakout.",
+      "learningResourceType": "Lesson",
+      "educationalLevel": "Intermediate",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/academy.html#course" },
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/academy/analysing-a-successful-breakout.html#webpage",
+      "url": "https://www.edgebreak.ai/academy/analysing-a-successful-breakout.html",
+      "name": "Analysing a Successful Breakout | Module 5 Lesson 1 | EdgeBreak Academy",
+      "description": "Study a successful historical breakout from start to finish using market structure, resistance, higher lows, volume, consolidation and post-breakout review.",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/#website" },
+      "mainEntity": { "@id": "https://www.edgebreak.ai/academy/analysing-a-successful-breakout.html#lesson" },
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/academy/analysing-a-successful-breakout.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EdgeBreak Academy",
+          "item": "https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Analysing a Successful Breakout",
+          "item": "https://www.edgebreak.ai/academy/analysing-a-successful-breakout.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 21: Analysing a Successful Breakout",
-  "url":"https://www.edgebreak.ai/analysing-a-successful-breakout.html",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+
+.ac-section li{margin:7px 0}
+
+.ac-lesson-image{margin:34px 0 46px}
+
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#fff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-case-step{
+    margin:34px 0 48px;
+    padding:28px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+
+.ac-case-step b{
+    display:inline-block;
+    margin-bottom:10px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ac-case-step h3{
+    margin:0 0 12px;
+    color:var(--ix-ink);
+    font-size:29px;
+    letter-spacing:-.035em;
+}
+
+.ac-case-step p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.7;
+}
+
+.ac-case-step p:last-child{margin-bottom:0}
+
+.ac-concept-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+
+.ac-concept-card{
+    padding:23px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#fff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+
+.ac-concept-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.ac-concept-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+
+.ac-concept-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+.ac-exercise{
+    margin:34px 0 54px;
+    padding:30px;
+    border:1px solid #dce7df;
+    border-radius:24px;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+}
+
+.ac-exercise-tag{
+    margin-bottom:9px;
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.ac-exercise h3{
+    margin:0 0 13px;
+    color:var(--ix-ink);
+    font-size:27px;
+    letter-spacing:-.03em;
+}
+
+.ac-exercise p{
+    margin:0 0 14px;
+    color:#526071;
+    font-size:16px;
+    line-height:1.65;
+}
+
+.ac-exercise ul{
+    margin:0;
+    padding-left:22px;
+    color:#526071;
+    font-size:15px;
+    line-height:1.65;
+}
+
+@media(max-width:900px){
+    .ac-concept-grid{grid-template-columns:1fr}
+}
+
+@media(max-width:700px){
+    .ac-card-grid.three{grid-template-columns:1fr}
+    .ac-card-grid.three .ac-reminder{grid-column:auto}
+}
+
+</style>
 </head>
-
-
-
-
-
-
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
-<main>
-<!-- ==========================
-MODULE 5 · LESSON 19
-=========================== -->
-
-<div class="academy-container lesson-container">
-
-    <div class="lesson-tag">
-        MODULE 5 • LESSON 19
-    </div>
-
-    <h1>
-        Analysing a Successful Breakout
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 30 Minutes</span>
-
-        <span>•</span>
-
-        <span>Real Market Research Examples</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        Throughout the Academy you've learned the individual characteristics commonly associated with quality breakout structures. In this lesson we'll combine those concepts by analysing a real breakout from beginning to end. Rather than focusing only on the breakout itself, we'll study how the market structure developed over time and identify the characteristics that made the stock worthy of further research.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>How to analyse a breakout from start to finish.</li>
-
-            <li>Recognising accumulation before expansion.</li>
-
-            <li>Identifying higher-quality market structure.</li>
-
-            <li>Reviewing volume and resistance together.</li>
-
-            <li>Applying the complete EdgeBreak research process.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>Start Before the Breakout</h2>
-
-        <p>
-
-            One of the biggest mistakes newer investors make is beginning their analysis after a breakout has already occurred.
-
-        </p>
-
-        <p>
-
-            EdgeBreak encourages members to study what happened before price moved above resistance.
-
-        </p>
-
-        <p>
-
-            The preparation phase often provides more valuable information than the breakout itself.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/pre-breakout.webp"
-                alt="Illustration showing a stock chart during the pre-breakout phase with repeated resistance tests, developing higher lows, improving market structure and volume behaviour before any breakout occurs.">
-
-            <figcaption>
-
-                The pre-breakout phase often contains the most valuable research information. Before price moves above resistance, investors can study repeated resistance tests, developing higher lows, improving market structure and supportive volume behaviour. EdgeBreak encourages members to focus on these characteristics early, helping identify potential research candidates before a confirmed breakout occurs.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Step 1 – Identify the Market Structure</h2>
-
-        <p>
-
-            Begin by reviewing the overall trend.
-
-        </p>
-
-        <p>
-
-            Ask yourself:
-
-        </p>
-
-        <ul>
-
-            <li>Was the stock making higher highs?</li>
-
-            <li>Were higher lows developing?</li>
-
-            <li>Did the trend appear organised?</li>
-
-            <li>Was price respecting support?</li>
-
-        </ul>
-
-        <p>
-
-            Strong market structure creates the foundation for quality breakout research.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/market-structure-marked.webp"
-                alt="Annotated stock chart showing healthy market structure with higher highs, higher lows, rising support, resistance and a buy marker on the first high-volume candle that closes above resistance.">
-
-            <figcaption>
-
-                Healthy market structure provides the foundation for quality breakout research. This example highlights higher highs, higher lows, rising support and repeated resistance tests before a confirmed breakout. The buy marker identifies the first candle that both opens and closes above resistance on strong volume, demonstrating where many breakout traders begin researching a potential opportunity.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Step 2 – Locate Resistance</h2>
-
-        <p>
-
-            Next, identify the resistance level.
-
-        </p>
-
-        <p>
-
-            Notice how price tested the same level multiple times before finally breaking higher.
-
-        </p>
-
-        <p>
-
-            Each resistance touch demonstrates buyers continuing to challenge the same selling area.
-
-        </p>
-
-        <p>
-
-            Multiple resistance tests are one of the key characteristics used throughout the EdgeBreak research methodology.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/locate-resistance.webp"
-                alt="Annotated stock chart showing a horizontal resistance level with multiple resistance touches before a high-volume breakout above resistance.">
-
-            <figcaption>
-
-                Identifying resistance is one of the first steps in researching a potential breakout. In this example, price repeatedly tests the same resistance level before finally breaking above it on strong volume. Each resistance touch demonstrates buyers continuing to challenge the same selling area, making repeated resistance tests an important characteristic within the EdgeBreak research methodology.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Step 3 – Review Higher Lows</h2>
-
-        <p>
-
-            Between each resistance test, buyers gradually supported higher prices.
-
-        </p>
-
-        <p>
-
-            These higher lows reduced the distance sellers could push price lower after each rejection.
-
-        </p>
-
-        <p>
-
-            This combination of rising demand beneath flat resistance often creates organised breakout structures.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/locate-higher-lows.webp"
-                alt="Annotated stock chart highlighting a sequence of higher lows beneath resistance, illustrating improving market structure before a breakout.">
-
-            <figcaption>
-
-                Higher lows are an important sign of improving market structure. In this example, each pullback forms above the previous low, showing buyers are willing to step in at progressively higher price levels. This strengthening demand often develops alongside repeated resistance tests, creating one of the key characteristics researched by the EdgeBreak methodology before a potential breakout occurs.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Step 4 – Study Volume</h2>
-
-        <p>
-
-            Volume helps explain how actively the market is participating.
-
-        </p>
-
-        <p>
-
-            During this example, volume remained relatively orderly throughout consolidation before increasing as the breakout developed.
-
-        </p>
-
-        <p>
-
-            Volume alone never confirms a breakout, but it provides valuable context when considered alongside price action.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/study-volume.webp"
-                alt="Annotated stock chart showing orderly trading volume during consolidation followed by a significant increase in volume on the breakout above resistance.">
-
-            <figcaption>
-
-                Volume provides important context when analysing price action. Throughout this example, trading volume remains relatively steady during the consolidation phase before expanding significantly as price breaks above resistance. Although volume alone does not confirm a breakout, increasing participation alongside improving market structure, higher lows and repeated resistance tests can strengthen the overall research picture.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Step 5 – Look for Accumulation</h2>
-
-        <p>
-
-            Before price expanded higher, the stock spent considerable time consolidating beneath resistance.
-
-        </p>
-
-        <p>
-
-            This period displayed several characteristics commonly associated with accumulation, including organised price action, repeated resistance tests and improving market structure.
-
-        </p>
-
-        <p>
-
-            These are the types of characteristics the Smart Money Filter is designed to help identify.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/accumulation-phase.webp"
-                alt="Annotated stock chart highlighting an accumulation phase with repeated resistance tests, higher lows, organised price action and steady volume before a high-volume breakout.">
-
-            <figcaption>
-
-                Accumulation often develops as price consolidates beneath resistance while buyers gradually absorb selling pressure. In this example, the accumulation phase is characterised by repeated resistance tests, developing higher lows, organised price action and relatively steady volume before participation increases during the breakout. These are the types of characteristics the EdgeBreak Smart Money Filter is designed to help identify when researching potential breakout candidates.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Step 6 – The Breakout</h2>
-
-        <p>
-
-            Eventually price closed above resistance, completing the breakout.
-
-        </p>
-
-        <p>
-
-            At this stage the research process does not end.
-
-        </p>
-
-        <p>
-
-            Continue monitoring how price behaves after the breakout rather than assuming every breakout will continue higher.
-
-        </p>
-
-        <p>
-
-            EdgeBreak treats the breakout as another stage of research—not the conclusion.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/the-breakout.webp"
-                alt="Annotated stock chart showing the first breakout day where price opens and closes above resistance on strong volume, following an extended accumulation phase with repeated resistance tests and higher lows.">
-
-            <figcaption>
-
-                The breakout occurs when price first opens and closes above resistance on strong volume, completing the breakout structure. While this confirms that buyers have overcome the resistance level, the research process does not end here. Continuing to monitor price behaviour, volume and overall market structure after the breakout helps investors evaluate whether the move continues to strengthen or begins to weaken over time.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Would EdgeBreak Have Found This?</h2>
-
-        <p>
-
-            Looking back through the chart, ask yourself which EdgeBreak tools would have highlighted this opportunity.
-
-        </p>
-
-        <ul>
-
-            <li>NASDAQ Scanner</li>
-
-            <li>Higher Lows Filter</li>
-
-            <li>Resistance Touches</li>
-
-            <li>Smart Money Filter</li>
-
-            <li>Breakout Scanner</li>
-
-            <li>My Workspace</li>
-
-        </ul>
-
-        <p>
-
-            This exercise helps reinforce how each tool contributes to the overall research process.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img
-                src="/images/daily-research.webp"
-                alt="EdgeBreak workflow showing the NASDAQ Scanner, Higher Lows Filter, Resistance Touches, Smart Money Filter, Breakout Scanner and My Workspace working together as part of a structured market research process."
-                loading="lazy"
-            >
-
-            <figcaption>
-
-                <strong>Figure.</strong> Looking back at historical market leaders helps reinforce how the EdgeBreak platform works as a complete research system. Consider which tools may have highlighted the opportunity at different stages—from the NASDAQ Scanner and research filters, through to the Breakout Scanner and My Workspace for ongoing monitoring. This exercise builds familiarity with the overall research workflow rather than relying on any single tool.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Key Lessons</h2>
-
-        <p>
-
-            The breakout itself was only one part of the story.
-
-        </p>
-
-        <p>
-
-            The market structure, higher lows, resistance tests, orderly consolidation and volume behaviour all developed before price moved above resistance.
-
-        </p>
-
-        <p>
-
-            Understanding these earlier stages helps investors build stronger research habits and recognise similar opportunities in the future.
-
-        </p>
-
-    </div>
-
-    <!-- LESSON SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            Successful breakout research begins long before price breaks above resistance. By studying market structure, accumulation, higher lows, resistance behaviour and volume together, investors can better understand how organised breakout structures develop over time. EdgeBreak combines these characteristics into one structured research workflow designed to support independent market analysis.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>Study the chart before the breakout.</li>
-
-            <li>Strong market structure develops gradually.</li>
-
-            <li>Multiple resistance touches strengthen research.</li>
-
-            <li>Higher lows demonstrate improving demand.</li>
-
-            <li>Use every EdgeBreak tool together as one research process.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- PRACTICAL EXERCISE -->
-
-    <div class="lesson-card">
-
-        <h2>Practical Exercise</h2>
-
-        <p>
-
-            Open a recent Gold breakout from the EdgeBreak Breakout Scanner.
-
-        </p>
-
-        <ul>
-
-            <li>Mark the resistance level.</li>
-
-            <li>Count the resistance touches.</li>
-
-            <li>Identify the higher lows.</li>
-
-            <li>Review the volume behaviour.</li>
-
-            <li>Explain why the breakout qualified as a strong research candidate.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- RESEARCH REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            This lesson is intended to improve pattern recognition and market research skills. Historical examples are provided for educational purposes only and should not be interpreted as investment recommendations or evidence of future market performance.
-
-        </p>
-
-    </div>
-
-    <!-- ===================================
-    LESSON NAVIGATION
-    =================================== -->
-
-    <div class="lesson-next">
-
-        <div class="lesson-next-tag">
-
-            Continue Learning
+<main class="ac-page">
+
+    <section class="ac-hero">
+        <div class="ac-shell">
+            <div class="ac-kicker"><span class="ac-dot"></span> Module 5 · Lesson 1</div>
+            <h1 class="ac-title">Analysing a <span>Successful Breakout.</span></h1>
+            <p class="ac-subtitle">
+                Put the Academy concepts together by studying a successful historical breakout from the build-up beneath resistance through to the move above it.
+            </p>
+
+            <div class="ac-meta">
+                <span>Estimated time: 30 minutes</span>
+                <span>Real market research examples</span>
+                <span>Intermediate</span>
+            </div>
+
+            <div class="ac-progress-wrap" aria-label="Module 5 progress">
+                <div class="ac-progress-label">
+                    <span>Module 5 progress</span>
+                    <span>Lesson 1 of 6</span>
+                </div>
+                <div class="ac-progress"><span style="width:16.67%"></span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ac-overview">
+        <div class="ac-shell">
+            <div class="ac-overview-card">
+                <div>
+                    <div class="ac-overview-label">What you'll learn</div>
+                    <h2>Study the build-up, not just the breakout candle.</h2>
+                </div>
+
+                <div class="ac-learn-list">
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How to analyse a historical breakout from start to finish.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How market structure developed before the move.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How resistance and higher lows interacted.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How volume added context to the setup.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why consolidation evidence is useful without proving who was buying.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How the complete EdgeBreak research process could have surfaced the structure.</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <article class="ac-content">
+        <div class="ac-reading">
+
+            <section class="ac-section">
+                <h2>Start before the breakout</h2>
+                <p>One of the easiest mistakes to make when reviewing a successful stock is to begin the story after price has already moved above resistance.</p>
+                <p>EdgeBreak research starts earlier. The period before the breakout often contains the most useful information because it shows how the structure developed before the move became obvious.</p>
+                <p>For a historical case study, the goal is to work backwards through the evidence and identify what was visible at each stage.</p>
+
+                <div class="ac-pullquote">
+                    The breakout is the result. The research opportunity is often in the structure that developed before it.
+                </div>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/pre-breakout.webp" alt="Historical pre-breakout chart showing repeated resistance tests, higher lows and developing market structure before price moved above resistance.">
+                <figcaption>The pre-breakout phase provides the context: resistance, higher lows, trend quality and volume can all be studied before the breakout is known.</figcaption>
+            </figure>
+
+            <div class="ac-case-step">
+                <b>Step 1</b>
+                <h3>Identify the broader market structure.</h3>
+                <p>Begin with the trend. Was the stock making higher highs and higher lows? Was support improving? Did the structure look organised or erratic?</p>
+                <p>A cleaner trend does not guarantee success, but it gives the breakout a stronger structural foundation than a move emerging from unstable price action.</p>
+            </div>
+
+            <section class="ac-section">
+                <h2>Questions to ask</h2>
+                <ul>
+                    <li>Was the broader trend rising, falling or sideways?</li>
+                    <li>Were higher lows developing?</li>
+                    <li>Was price respecting a recognisable support area?</li>
+                    <li>Was the stock forming an orderly base?</li>
+                </ul>
+            </section>
+
+            <div class="ac-case-step">
+                <b>Step 2</b>
+                <h3>Locate the resistance area.</h3>
+                <p>Next, identify the level or zone that repeatedly prevented price from moving higher.</p>
+                <p>In this example, price tested a similar resistance area several times before the eventual breakout. Those repeated tests made the level increasingly important to the research process.</p>
+            </div>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/locate-resistance.webp" alt="Annotated historical chart showing repeated tests of a horizontal resistance area before a breakout.">
+                <figcaption>Repeated interaction with the same resistance zone gives researchers a clear level to monitor as the structure develops.</figcaption>
+            </figure>
+
+            <div class="ac-case-step">
+                <b>Step 3</b>
+                <h3>Review the higher lows.</h3>
+                <p>Between resistance tests, look at the pullbacks.</p>
+                <p>In this example, successive lows formed at progressively higher prices. That reduced the distance between support and resistance and created a more compressed structure beneath the ceiling.</p>
+                <p>Higher lows are useful evidence of improving structure, but they should still be considered alongside trend, resistance and volume.</p>
+            </div>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/locate-higher-lows.webp" alt="Annotated historical chart highlighting a sequence of higher lows beneath resistance.">
+                <figcaption>Higher lows can show that pullbacks are being supported at progressively higher prices while resistance remains relatively stable.</figcaption>
+            </figure>
+
+            <div class="ac-case-step">
+                <b>Step 4</b>
+                <h3>Study the volume behaviour.</h3>
+                <p>Volume helps show how participation changed while the structure developed.</p>
+                <p>In this historical example, trading activity remained relatively orderly during consolidation before increasing as price moved through resistance.</p>
+                <p>Volume by itself does not confirm a successful breakout. Its value comes from how it aligns with the price structure.</p>
+            </div>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/study-volume.webp" alt="Historical breakout chart showing orderly volume during consolidation followed by stronger participation around the move through resistance.">
+                <figcaption>Volume adds context to the structure. Increasing participation can be more meaningful when it appears alongside repeated resistance tests and improving lows.</figcaption>
+            </figure>
+
+            <div class="ac-case-step">
+                <b>Step 5</b>
+                <h3>Study the consolidation evidence.</h3>
+                <p>Before the breakout, the stock spent time trading beneath resistance while the range became more organised.</p>
+                <p>This type of structure is sometimes described as accumulation-style behaviour because demand may be absorbing available supply. The chart alone cannot identify the buyers or prove institutional accumulation.</p>
+                <p>For EdgeBreak research, the useful information is the observable evidence: repeated resistance tests, improving lows, tighter price behaviour, volume and unusual market activity context.</p>
+            </div>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/accumulation-phase.webp" alt="Historical consolidation phase showing repeated resistance tests, higher lows and organised price behaviour before a breakout.">
+                <figcaption>This consolidation displayed characteristics often studied before breakouts. They describe the structure, not the identity or intentions of market participants.</figcaption>
+            </figure>
+
+            <div class="ac-concept-grid">
+                <div class="ac-concept-card">
+                    <b>Resistance</b>
+                    <strong>Repeated challenge</strong>
+                    <span>Price returned to the same ceiling several times before the eventual move.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Higher lows</b>
+                    <strong>Improving support</strong>
+                    <span>Pullbacks became progressively shallower beneath resistance.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Volume</b>
+                    <strong>Changing participation</strong>
+                    <span>Trading activity added context as the structure moved from consolidation into breakout.</span>
+                </div>
+            </div>
+
+            <div class="ac-case-step">
+                <b>Step 6</b>
+                <h3>The breakout occurs.</h3>
+                <p>Eventually price moved above the resistance area and the historical breakout was established.</p>
+                <p>At that point the research process does not end. The breakout becomes another stage to observe: does price remain above the former resistance area, consolidate, continue higher or move back into the base?</p>
+                <p>Successful historical examples are useful because they show how the full structure unfolded, but they must not be treated as templates that guarantee the same future result.</p>
+            </div>
+
+            <section class="ac-section">
+                <h2>Would EdgeBreak have surfaced this structure?</h2>
+                <p>Looking back at the chart, several current EdgeBreak tools could have contributed at different stages.</p>
+                <ul>
+                    <li><strong>Launch Pad</strong> — while the broader base was still developing.</li>
+                    <li><strong>Pre-Breakout Scanner</strong> — as resistance tests and higher lows became more defined.</li>
+                    <li><strong>NASDAQ Scanner</strong> — for structured filtering and comparison.</li>
+                    <li><strong>Automated Daily Scan</strong> — if the combined technical and market activity evidence was strong enough to rank highly.</li>
+                    <li><strong>Breakout Scanner</strong> — once price moved beyond resistance.</li>
+                    <li><strong>My Workspace</strong> — for saving and revisiting the candidate over time.</li>
+                </ul>
+                <p>The value is not in one tool. It is in how the tools can identify different stages of the same developing structure.</p>
+            </section>
+
+            <div class="ac-process" aria-label="Successful breakout case-study process">
+                <div class="ac-process-head">
+                    <span>Case-study framework</span>
+                    <h3>Structure → resistance → pressure → breakout.</h3>
+                </div>
+
+                <div class="ac-process-grid">
+                    <div class="ac-process-step">
+                        <b>01</b>
+                        <strong>Structure</strong>
+                        <span>Start with trend quality, support and the broader base.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>02</b>
+                        <strong>Resistance</strong>
+                        <span>Identify the price area repeatedly limiting the advance.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>03</b>
+                        <strong>Pressure</strong>
+                        <span>Compare higher lows, tightening structure, volume and market activity context.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>04</b>
+                        <strong>Breakout</strong>
+                        <span>Review the move through resistance and what happened afterward.</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Why successful examples matter</h2>
+                <p>Historical winners help train pattern recognition because they show how several characteristics can develop together before a significant move.</p>
+                <p>The key is to study many examples rather than memorise one chart. Similar-looking structures can produce very different outcomes.</p>
+                <p>Use successful cases to understand recurring evidence — not to create certainty about future results.</p>
+            </section>
+
+            <div class="ac-exercise">
+                <div class="ac-exercise-tag">Practical exercise</div>
+                <h3>Reverse-engineer a recent breakout.</h3>
+                <p>Choose one recent Breakout Scanner result and work backwards through the chart.</p>
+                <ul>
+                    <li>Mark the original resistance area.</li>
+                    <li>Count the meaningful resistance tests.</li>
+                    <li>Identify the higher lows that developed before the move.</li>
+                    <li>Review volume during the base and breakout.</li>
+                    <li>Check the weekly chart for broader context.</li>
+                    <li>Note which EdgeBreak scanner may have surfaced the stock at each stage.</li>
+                    <li>Write down what made the structure worth researching before the breakout was known.</li>
+                </ul>
+            </div>
 
         </div>
+    </article>
 
-        <h2>
+    <section class="ac-summary-area">
+        <div class="ac-shell">
+            <div class="ac-card-grid three">
 
-            Continue Your Journey
+                <div class="ac-card">
+                    <h2>Lesson summary</h2>
+                    <p>A successful historical breakout is most useful when studied from the beginning. Market structure, resistance, higher lows, volume and consolidation evidence all developed before price moved through resistance. Reviewing those earlier stages helps explain why the stock became an interesting research candidate.</p>
+                </div>
 
-        </h2>
+                <div class="ac-card">
+                    <h2>Key takeaways</h2>
+                    <ul>
+                        <li>Begin the analysis before the breakout.</li>
+                        <li>Study resistance and higher lows together.</li>
+                        <li>Use volume as supporting context.</li>
+                        <li>Describe consolidation evidence without assuming who was buying.</li>
+                        <li>Different EdgeBreak scanners can surface different stages of the same structure.</li>
+                        <li>Historical success does not predict future success.</li>
+                    </ul>
+                </div>
 
-        <div class="lesson-nav-buttons">
+                <div class="ac-card">
+                    <h2>Common beginner mistakes</h2>
+                    <ul>
+                        <li>Starting the story only after price has already moved.</li>
+                        <li>Assuming one strong candle explains the breakout.</li>
+                        <li>Calling consolidation confirmed institutional accumulation.</li>
+                        <li>Ignoring weekly-chart context.</li>
+                        <li>Using a successful example as a guaranteed future template.</li>
+                    </ul>
+                </div>
 
-            <!-- PREVIOUS -->
+                <div class="ac-card ac-reminder">
+                    <div class="ac-reminder-icon">✦</div>
+                    <div>
+                        <h2>Research reminder</h2>
+                        <p>This lesson uses historical market behaviour to improve pattern recognition and research skills. Historical examples are educational only and do not represent financial advice, investment recommendations, trade signals or evidence that similar structures will produce the same future outcome.</p>
+                    </div>
+                </div>
 
-            <a
-                href="/academy/mastering-my-workspace.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/analysing-a-failed-breakout.html"
-                class="btn-primary"
-            >
-                Start Lesson 5.2 →
-            </a>
-
+            </div>
         </div>
+    </section>
 
-        <h3>
+    <section class="ac-next">
+        <div class="ac-shell">
+            <div class="ac-next-card">
+                <div class="ac-next-tag">Continue learning · Module 5 Lesson 2 of 6</div>
+                <h2>Analysing a failed breakout.</h2>
+                <p>Study the other side of breakout research: how a promising structure can fail, which warning signs may appear and what unsuccessful examples can teach you.</p>
 
-            Lesson 5.2 – Analysing a Failed Breakout
+                <div class="ac-next-actions">
+                    <a href="/academy/analysing-a-failed-breakout.html" class="ac-btn ac-btn-primary">Start Lesson 5.2 →</a>
+                    <a href="/academy/mastering-my-workspace.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+                </div>
 
-        </h3>
-
-        <p>
-
-            Learn why some breakout structures fail, recognise common warning signs and discover how reviewing unsuccessful examples can improve your future market research.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 5 • Lesson 20 of 30
-
+                <div class="ac-next-foot">Module 5 · Lesson 1 of 6 completed</div>
+            </div>
         </div>
-
-    </div>
+    </section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>

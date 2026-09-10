@@ -1,618 +1,829 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 34: Understanding Volume | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how trading volume helps reveal buying and selling activity, confirms price action and supports structured NASDAQ market research using the EdgeBreak methodology.">
-
-<meta name="keywords"
-      content="trading volume, volume analysis, stock volume, price action, buying pressure, selling pressure, breakout confirmation, NASDAQ research, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/understanding-volume.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Understanding Volume | Module 2 Lesson 3 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn what trading volume measures, how volume changes add context to price movement, what volume dry-up means and how volume supports structured NASDAQ breakout research."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/understanding-volume.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 34: Understanding Volume">
-
-<meta property="og:description"
-      content="Discover how trading volume provides insight into buying pressure, selling pressure and price action during market research.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/understanding-volume.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/understanding-volume.html">
+<meta property="og:title" content="Understanding Volume | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Learn how trading volume adds context to price movement, consolidation and breakout research."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Lesson 34: Understanding Volume">
-
-<meta name="twitter:description"
-      content="Learn how volume analysis strengthens price action research and helps identify significant market activity.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Understanding Volume | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Learn how trading volume adds context to price movement, consolidation, market participation and breakout research."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-CSS
+FAVICON
 =================================== -->
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
 
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
+
+<!-- ===================================
+STYLES
+=================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
 
 <!-- ===================================
 SUPABASE
 =================================== -->
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
 
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
 <!-- ===================================
-LEARNING RESOURCE
+STRUCTURED DATA
 =================================== -->
-
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "name":"Lesson 34: Understanding Volume",
-  "description":"Learn how trading volume reveals buying and selling activity, confirms price action and supports structured market research.",
-  "educationalLevel":"Beginner",
-  "learningResourceType":"Lesson",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  },
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  }
-}
-</script>
-
-<!-- ===================================
-BREADCRUMB
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "legalName": "Crane Platform Labs",
+      "url": "https://www.edgebreak.ai/",
+      "email": "mailto:admin@edgebreak.ai",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.edgebreak.ai/#logo",
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+        "caption": "EdgeBreak"
+      },
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
-      "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Lesson 34: Understanding Volume",
-      "item":"https://www.edgebreak.ai/understanding-volume.html"
+      "@type": "Course",
+      "@id": "https://www.edgebreak.ai/academy.html#course",
+      "name": "EdgeBreak Academy",
+      "url": "https://www.edgebreak.ai/academy.html",
+      "description": "Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "LearningResource",
+      "@id": "https://www.edgebreak.ai/academy/understanding-volume.html#lesson",
+      "name": "Module 2 Lesson 3: Understanding Volume",
+      "url": "https://www.edgebreak.ai/academy/understanding-volume.html",
+      "description": "A beginner lesson explaining trading volume, relative participation, volume dry-up, volume expansion and how volume fits into structured breakout research.",
+      "learningResourceType": "Lesson",
+      "educationalLevel": "Beginner",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/academy.html#course" },
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/academy/understanding-volume.html#webpage",
+      "url": "https://www.edgebreak.ai/academy/understanding-volume.html",
+      "name": "Understanding Volume | Module 2 Lesson 3 | EdgeBreak Academy",
+      "description": "Learn what trading volume measures, how volume changes add context to price movement, what volume dry-up means and how volume supports structured NASDAQ breakout research.",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/#website" },
+      "mainEntity": { "@id": "https://www.edgebreak.ai/academy/understanding-volume.html#lesson" },
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/academy/understanding-volume.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EdgeBreak Academy",
+          "item": "https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Understanding Volume",
+          "item": "https://www.edgebreak.ai/academy/understanding-volume.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<!-- ===================================
-WEBPAGE
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 34: Understanding Volume",
-  "url":"https://www.edgebreak.ai/understanding-volume.html",
-  "description":"Learn how volume analysis complements price action by highlighting buying and selling activity during structured NASDAQ market research.",
-  "isPartOf":{
-    "@type":"WebSite",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  },
-  "primaryImageOfPage":"https://www.edgebreak.ai/images/academy.webp",
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+
+.ac-section li{
+    margin:7px 0;
+}
+
+.ac-lesson-image{
+    margin:34px 0 46px;
+}
+
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#ffffff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-concept-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+
+.ac-concept-card{
+    padding:23px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#ffffff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+
+.ac-concept-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.ac-concept-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+
+.ac-concept-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+@media(max-width:700px){
+    .ac-concept-grid{
+        grid-template-columns:1fr;
+    }
+
+    .ac-card-grid.three{
+        grid-template-columns:1fr;
+    }
+
+    .ac-card-grid.three .ac-reminder{
+        grid-column:auto;
+    }
+}
+
+</style>
 </head>
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
-<main>
-
-<!-- ==========================
-MODULE 2 · LESSON 5
-=========================== -->
-
-<div class="academy-container lesson-container">
-
-    <div class="lesson-tag">
-        MODULE 2 • LESSON 5
-    </div>
-
-    <h1>
-        Understanding Volume
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 18 Minutes</span>
-
-        <span>•</span>
-
-        <span>Beginner Breakout Research</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        Price tells us what happened. Volume helps explain how much participation was behind that move. Understanding volume is one of the foundations of breakout research because it provides additional context about buyer and seller activity. While volume alone never predicts future price movement, it can help investors better understand the strength behind developing market structures.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>What trading volume represents.</li>
-
-            <li>Why volume matters during breakouts.</li>
-
-            <li>The difference between normal and increasing volume.</li>
-
-            <li>What volume dry-up means.</li>
-
-            <li>How EdgeBreak uses volume in market research.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>What Is Trading Volume?</h2>
-
-        <p>
-
-            Trading volume measures the number of shares exchanged during a specific period of time. Every transaction requires both a buyer and a seller, making volume a useful measure of market participation.
-
-        </p>
-
-        <p>
-
-            On a daily chart, volume shows how many shares changed hands during that trading day. Higher volume generally indicates increased market activity, while lower volume suggests fewer participants are actively buying or selling.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/price-chart-with-volume-bars.webp"
-                alt="Stock price chart with matching volume bars illustrating how trading volume confirms price movement and breakout strength.">
-
-            <figcaption>
-
-                Volume bars display the number of shares traded during each trading period and should always be analysed alongside price. Increasing volume during an uptrend or breakout suggests stronger market participation, while rising volume during a decline often reflects increased selling pressure. Volume does not predict future price movements, but it provides valuable confirmation of the strength behind a move.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Why Volume Matters</h2>
-
-        <p>
-
-            Price movements supported by strong participation are often viewed differently from price movements occurring on very low volume.
-
-        </p>
-
-        <p>
-
-            For example, if a stock breaks above resistance while trading volume increases significantly, it may suggest greater market interest than a breakout occurring with little participation.
-
-        </p>
-
-        <p>
-
-            Volume does not confirm whether a breakout will succeed, but it provides valuable context that many investors include within their research process.
-
-        </p>
-
-        <h2>Normal Volume vs Increasing Volume</h2>
-
-        <p>
-
-            Every stock has its own normal trading activity. Some large companies trade millions of shares every day, while smaller companies may trade much lower volumes.
-
-        </p>
-
-        <p>
-
-            Rather than comparing one company to another, investors often compare today's volume with the stock's own recent trading history.
-
-        </p>
-
-        <p>
-
-            An increase above normal daily volume may indicate growing interest from market participants.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/average-volume-comparison.webp"
-                alt="Comparison of below-average and above-average trading volume during breakout attempts, illustrating how higher volume reflects stronger market participation.">
-
-            <figcaption>
-
-                Comparing current trading volume with the recent average helps investors judge the level of market participation behind a price move. Breakouts occurring on above-average volume generally indicate stronger buying interest, while breakouts on below-average volume may reflect weaker participation. Volume should be used as confirmation alongside price action rather than as a trading signal on its own.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Volume During Consolidation</h2>
-
-        <p>
-
-            One characteristic often observed before some breakout opportunities is decreasing trading activity during periods of consolidation.
-
-        </p>
-
-        <p>
-
-            As price trades within a relatively tight range, daily volume may gradually decline while buyers and sellers establish a temporary balance.
-
-        </p>
-
-        <p>
-
-            This concept is commonly referred to as a <strong>volume dry-up</strong>.
-
-        </p>
-
-        <p>
-
-            A volume dry-up does not predict a breakout, but it can indicate that selling pressure has become less aggressive while investors continue monitoring the stock.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/volume-dry-up-example.webp"
-                alt="Chart showing trading volume gradually decreasing while price consolidates below resistance, illustrating a volume dry-up before a potential breakout.">
-
-            <figcaption>
-
-                A volume dry-up occurs when trading activity gradually decreases as price consolidates beneath resistance. This often indicates that selling pressure is diminishing and fewer participants are willing to sell at current prices. While a volume dry-up does not guarantee a breakout, it can be an important characteristic of developing breakout structures when combined with strong price action and increasing volume on the eventual move higher.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Volume Expansion</h2>
-
-        <p>
-
-            Following periods of quiet trading, some stocks experience noticeable increases in trading activity as price begins moving higher.
-
-        </p>
-
-        <p>
-
-            Increased participation during a breakout may indicate growing market interest and is one characteristic frequently researched alongside resistance levels and improving market structure.
-
-        </p>
-
-        <p>
-
-            Again, higher volume never guarantees success, but it often provides additional information that supports broader technical analysis.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/breakout-with-increasing-volume.webp"
-                alt="Stock chart showing a breakout above resistance accompanied by increasing trading volume, illustrating strong market participation.">
-
-            <figcaption>
-
-                A breakout supported by increasing volume indicates that more market participants are buying as price moves above resistance. Rising volume provides confirmation that the breakout has attracted stronger interest and suggests greater conviction behind the move. While higher volume does not guarantee continued price gains, it is an important characteristic of many high-quality breakout structures.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Volume Is Only One Piece of the Puzzle</h2>
-
-        <p>
-
-            One of the biggest mistakes beginners make is assuming volume alone determines whether a stock is a good research candidate.
-
-        </p>
-
-        <p>
-
-            Strong breakout research combines multiple characteristics, including:
-
-        </p>
-
-        <ul>
-
-            <li>Market Structure</li>
-
-            <li>Resistance Levels</li>
-
-            <li>Higher Lows</li>
-
-            <li>Accumulation Characteristics</li>
-
-            <li>Trading Volume</li>
-
-            <li>Overall Market Conditions</li>
-
-        </ul>
-
-        <p>
-
-            Looking at these factors together provides a much more balanced understanding of price behaviour.
-
-        </p>
-
-        <h2>How EdgeBreak Uses Volume</h2>
-
-        <p>
-
-            EdgeBreak incorporates volume into several areas of the platform to provide additional research context.
-
-        </p>
-
-        <p>
-
-            The NASDAQ Scanner includes volume-related information alongside market structure characteristics, while the Breakout Scanner measures volume participation during breakout events. Members can also study historical volume behaviour directly on TradingView charts inside My Workspace.
-
-        </p>
-
-        <p>
-
-            Rather than acting as a standalone signal, volume becomes one component of a structured research process.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/volume-ratio.webp"
-                alt="EdgeBreak NASDAQ Breakout Scanner highlighting the Volume Ratio filter used to identify breakout stocks with increased trading activity.">
-
-            <figcaption>
-
-                The Volume Ratio filter allows researchers to refine breakout results by comparing current trading volume against normal trading activity. Increased volume often indicates greater market participation during a breakout, helping users focus on stocks experiencing stronger buying interest. The filter can be combined with resistance touches, higher lows and Smart Money characteristics to narrow the scanner to higher-quality research candidates. As with all EdgeBreak tools, the Volume Ratio filter is designed to support structured market research and education and should not be interpreted as financial advice or a prediction of future market performance.
-
-            </figcaption>
-
-        </figure>
-
-    </div>
-
-    <!-- LESSON SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            Trading volume helps explain the level of market participation behind price movement. While increasing volume often attracts attention during breakout research, it should always be considered alongside market structure, resistance levels, higher lows and other technical characteristics. A balanced approach provides stronger research than relying on any single indicator.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>Volume measures market participation.</li>
-
-            <li>Higher volume often indicates increased investor interest.</li>
-
-            <li>Volume dry-ups frequently occur during consolidation.</li>
-
-            <li>Volume expansion can accompany breakout attempts.</li>
-
-            <li>Volume should always be analysed alongside other market characteristics.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- COMMON MISTAKES -->
-
-    <div class="lesson-card">
-
-        <h2>Common Beginner Mistakes</h2>
-
-        <ul>
-
-            <li>Assuming high volume guarantees a successful breakout.</li>
-
-            <li>Ignoring price action while focusing only on volume.</li>
-
-            <li>Comparing volume between completely different companies.</li>
-
-            <li>Overlooking declining volume during consolidation.</li>
-
-            <li>Using volume as a standalone trading signal.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- RESEARCH REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            Volume provides valuable context for market research but should never be interpreted as a guarantee of future price direction. EdgeBreak combines volume analysis with broader market structure, resistance levels and accumulation characteristics to support independent research. The platform does not provide financial advice or investment recommendations.
-
-        </p>
-
-    </div>
+<main class="ac-page">
 
     <!-- ===================================
-    LESSON NAVIGATION
+    HERO
     =================================== -->
+    <section class="ac-hero">
+        <div class="ac-shell">
+            <div class="ac-kicker"><span class="ac-dot"></span> Module 2 · Lesson 3</div>
+            <h1 class="ac-title">Understanding <span>Volume.</span></h1>
+            <p class="ac-subtitle">
+                Price shows what happened. Volume adds context by showing how much market participation was behind the move.
+            </p>
 
-    <div class="lesson-next">
+            <div class="ac-meta">
+                <span>Estimated time: 18 minutes</span>
+                <span>Price action foundations</span>
+                <span>Beginner</span>
+            </div>
 
-        <div class="lesson-next-tag">
+            <div class="ac-progress-wrap" aria-label="Module 2 progress">
+                <div class="ac-progress-label">
+                    <span>Module 2 progress</span>
+                    <span>Lesson 3</span>
+                </div>
+                <div class="ac-progress"><span style="width:55%"></span></div>
+            </div>
+        </div>
+    </section>
 
-            Continue Learning
+    <!-- ===================================
+    WHAT YOU'LL LEARN
+    =================================== -->
+    <section class="ac-overview">
+        <div class="ac-shell">
+            <div class="ac-overview-card">
+                <div>
+                    <div class="ac-overview-label">What you'll learn</div>
+                    <h2>See the participation behind the price move.</h2>
+                </div>
+
+                <div class="ac-learn-list">
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>What trading volume represents.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why volume matters during breakout research.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>The difference between normal and increasing volume.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>What volume dry-up means.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How EdgeBreak uses volume as part of a wider research process.</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================
+    LESSON CONTENT
+    =================================== -->
+    <article class="ac-content">
+        <div class="ac-reading">
+
+            <section class="ac-section">
+                <h2>What is trading volume?</h2>
+                <p>Trading volume measures the number of shares exchanged during a specific period of time. Every completed transaction involves both a buyer and a seller, making volume a useful measure of overall market participation.</p>
+                <p>On a daily chart, volume shows how many shares changed hands during that trading day. Higher volume generally means more participation, while lower volume means fewer shares were traded.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/price-chart-with-volume-bars.webp" alt="Stock price chart with matching volume bars illustrating how trading volume adds context to price movement.">
+                <figcaption>Volume bars show how many shares traded during each period. They are most useful when analysed alongside price rather than as a standalone indicator.</figcaption>
+            </figure>
+
+            <div class="ac-concept-grid" aria-label="Volume concepts">
+                <div class="ac-concept-card">
+                    <b>Price</b>
+                    <strong>What moved</strong>
+                    <span>Shows the direction and size of the market move.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Volume</b>
+                    <strong>How much participation</strong>
+                    <span>Shows how many shares were exchanged while that move occurred.</span>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Why volume matters</h2>
+                <p>Price movements with stronger participation are often interpreted differently from moves occurring on very low volume.</p>
+                <p>For example, if price moves above resistance while trading volume rises noticeably relative to its recent history, that can indicate greater market participation in the move.</p>
+                <p>Volume does not tell you whether a breakout will succeed. It adds another piece of evidence to the broader research picture.</p>
+
+                <div class="ac-pullquote">
+                    Volume is context, not confirmation of the future. It helps show how much participation was present while price moved.
+                </div>
+            </section>
+
+            <section class="ac-section">
+                <h2>Normal volume vs increasing volume</h2>
+                <p>Every stock has its own normal level of trading activity. Some large companies trade millions of shares each day, while smaller companies may trade far fewer.</p>
+                <p>Because of that, volume is usually more useful when compared with the stock's own recent history rather than with another company.</p>
+                <p>An increase above the stock's normal activity can indicate that more participants are becoming involved.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/average-volume-comparison.webp" alt="Comparison of below-average and above-average trading volume during price moves.">
+                <figcaption>Comparing current volume with a stock's recent average helps show whether participation is lower, normal or elevated relative to its own history.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Volume during consolidation</h2>
+                <p>One characteristic sometimes observed during developing breakout structures is a gradual reduction in trading activity while price consolidates.</p>
+                <p>As price trades within a tighter range, daily volume may decline as buyers and sellers reach a temporary balance.</p>
+                <p>This is commonly referred to as a <strong>volume dry-up</strong>.</p>
+                <p>A volume dry-up does not predict a breakout. It simply tells you that participation has reduced during the consolidation and can be studied alongside the price structure.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/volume-dry-up-example.webp" alt="Chart showing trading volume gradually decreasing while price consolidates below resistance.">
+                <figcaption>A volume dry-up describes declining trading activity during consolidation. Its meaning depends on the surrounding market structure and should not be interpreted in isolation.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Volume expansion</h2>
+                <p>After a period of quieter trading, some stocks experience a noticeable increase in activity as price begins to move.</p>
+                <p>Rising participation during a move through resistance can show that the price change is attracting broader market interest.</p>
+                <p>Higher volume still does not guarantee that the move will continue. It simply provides additional evidence about the level of participation behind the move.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/breakout-with-increasing-volume.webp" alt="Stock chart showing a move above resistance accompanied by increasing trading volume.">
+                <figcaption>Increasing volume during a move through resistance can indicate stronger participation. It should still be assessed alongside the structure, closing behaviour and wider market context.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Volume is only one piece of the puzzle</h2>
+                <p>One of the biggest beginner mistakes is assuming volume alone determines whether a stock deserves further research.</p>
+                <p>Stronger breakout research combines several characteristics, including:</p>
+                <ul>
+                    <li>Market structure</li>
+                    <li>Support and resistance</li>
+                    <li>Higher lows</li>
+                    <li>Trading volume</li>
+                    <li>Unusual market activity</li>
+                    <li>Overall market conditions</li>
+                </ul>
+                <p>Looking at these factors together creates a more balanced view than relying on any single indicator.</p>
+            </section>
+
+            <div class="ac-process" aria-label="Volume research process">
+                <div class="ac-process-head">
+                    <span>Read volume in context</span>
+                    <h3>Compare → locate → combine → interpret.</h3>
+                </div>
+
+                <div class="ac-process-grid">
+                    <div class="ac-process-step">
+                        <b>01</b>
+                        <strong>Compare</strong>
+                        <span>Compare current volume with the stock's own recent history.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>02</b>
+                        <strong>Locate</strong>
+                        <span>Notice whether the change occurs during consolidation, resistance testing or a larger move.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>03</b>
+                        <strong>Combine</strong>
+                        <span>Read volume alongside structure, support, resistance and closing behaviour.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>04</b>
+                        <strong>Interpret</strong>
+                        <span>Use the combined evidence to understand participation without treating it as a prediction.</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>How EdgeBreak uses volume</h2>
+                <p>EdgeBreak incorporates volume into several parts of the platform to provide additional research context.</p>
+                <p>The NASDAQ Scanner displays volume-related information alongside technical structure, while breakout research can compare participation during moves through resistance. Members can also study historical volume directly on TradingView charts inside My Workspace.</p>
+                <p>Rather than acting as a standalone signal, volume is treated as one component within a wider structured research process.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/volume-ratio.webp" alt="EdgeBreak NASDAQ scanner showing a volume-ratio research filter.">
+                <figcaption>Volume Ratio compares current trading activity with a stock's normal activity. It can be combined with resistance, higher lows and other research characteristics to refine scanner results.</figcaption>
+            </figure>
 
         </div>
+    </article>
 
-        <h2>
+    <!-- ===================================
+    SUMMARY / TAKEAWAYS
+    =================================== -->
+    <section class="ac-summary-area">
+        <div class="ac-shell">
+            <div class="ac-card-grid three">
 
-            Continue Your Journey
+                <div class="ac-card">
+                    <h2>Lesson summary</h2>
+                    <p>Trading volume helps explain the level of market participation behind price movement. Rising or declining volume can add useful context, but it should always be considered alongside market structure, resistance, higher lows and other evidence rather than used on its own.</p>
+                </div>
 
-        </h2>
+                <div class="ac-card">
+                    <h2>Key takeaways</h2>
+                    <ul>
+                        <li>Volume measures how many shares changed hands.</li>
+                        <li>Relative volume is often more useful than comparing different companies.</li>
+                        <li>Volume dry-up can occur during consolidation.</li>
+                        <li>Volume expansion can accompany a move through resistance.</li>
+                        <li>Volume should always be analysed alongside price and structure.</li>
+                    </ul>
+                </div>
 
-        <div class="lesson-nav-buttons">
+                <div class="ac-card">
+                    <h2>Common beginner mistakes</h2>
+                    <ul>
+                        <li>Assuming high volume guarantees a successful breakout.</li>
+                        <li>Ignoring price action while focusing only on volume.</li>
+                        <li>Comparing volume between completely different companies.</li>
+                        <li>Overlooking declining volume during consolidation.</li>
+                        <li>Using volume as a standalone trading signal.</li>
+                    </ul>
+                </div>
 
-            <!-- PREVIOUS -->
+                <div class="ac-card ac-reminder">
+                    <div class="ac-reminder-icon">✦</div>
+                    <div>
+                        <h2>Research reminder</h2>
+                        <p>Volume provides useful context for market research but should never be interpreted as a guarantee of future price direction. EdgeBreak combines volume with broader market structure and additional research evidence. The platform provides educational content and research tools only and does not provide financial advice or investment recommendations.</p>
+                    </div>
+                </div>
 
-            <a
-                href="/academy/support-and-resistance.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/trend-identification.html"
-                class="btn-primary"
-            >
-                Start Lesson 2.4 →
-            </a>
-
+            </div>
         </div>
+    </section>
 
-        <h3>
+    <!-- ===================================
+    NEXT LESSON
+    =================================== -->
+    <section class="ac-next">
+        <div class="ac-shell">
+            <div class="ac-next-card">
+                <div class="ac-next-tag">Continue learning · Module 2 Lesson 4</div>
+                <h2>Trend identification.</h2>
+                <p>Learn how to recognise uptrends, downtrends and sideways markets using higher highs, higher lows, lower highs and lower lows so you can place individual setups inside a broader market structure.</p>
 
-            Lesson 2.4 – Trend Identification
+                <div class="ac-next-actions">
+                    <a href="/academy/trend-identification.html" class="ac-btn ac-btn-primary">Start Lesson 2.4 →</a>
+                    <a href="/academy/support-and-resistance.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+                </div>
 
-        </h3>
-
-        <p>
-
-            Learn how to identify uptrends, downtrends and sideways markets by recognising higher highs, higher lows, lower highs and lower lows. Understanding market structure provides essential context before researching breakout opportunities.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 2 • Lesson 6 of 30
-
+                <div class="ac-next-foot">Module 2 · Lesson 3 completed</div>
+            </div>
         </div>
-
-    </div>
+    </section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>

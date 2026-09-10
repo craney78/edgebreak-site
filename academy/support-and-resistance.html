@@ -1,601 +1,822 @@
+<!DOCTYPE html>
+<html lang="en-AU">
 <head>
-<!-- Google tag (gtag.js) -->
+
+<!-- ===================================
+GOOGLE TAG / GOOGLE ADS
+=================================== -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18373865179');
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
 </script>
+
+<!-- ===================================
+CORE META
+=================================== -->
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Lesson 31: Support & Resistance | EdgeBreak Academy</title>
-
-<meta name="description"
-      content="Learn how to identify support and resistance levels, understand why they form, and use them as part of a structured NASDAQ market research process.">
-
-<meta name="keywords"
-      content="support and resistance, resistance levels, support levels, price action, market structure, breakout research, NASDAQ analysis, EdgeBreak Academy">
-
-<meta name="robots"
-      content="index, follow, max-image-preview:large">
-
-<meta name="author"
-      content="EdgeBreak">
-
-<meta name="theme-color"
-      content="#071225">
-
-<link rel="canonical"
-      href="https://www.edgebreak.ai/support-and-resistance.html">
+<!-- ===================================
+PRIMARY SEO
+=================================== -->
+<title>Support & Resistance | Module 2 Lesson 2 | EdgeBreak Academy</title>
+<meta
+    name="description"
+    content="Learn how support and resistance zones form, why price reacts around them, how repeated resistance tests develop and how these levels support structured NASDAQ breakout research."
+>
+<meta
+    name="robots"
+    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+>
+<link
+    rel="canonical"
+    href="https://www.edgebreak.ai/academy/support-and-resistance.html"
+>
 
 <!-- ===================================
 OPEN GRAPH
 =================================== -->
-
-<meta property="og:type"
-      content="article">
-
-<meta property="og:title"
-      content="Lesson 31: Support & Resistance">
-
-<meta property="og:description"
-      content="Understand how support and resistance levels develop and why they are fundamental to structured price action research.">
-
-<meta property="og:url"
-      content="https://www.edgebreak.ai/support-and-resistance.html">
-
-<meta property="og:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
-
-<meta property="og:site_name"
-      content="EdgeBreak">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/academy/support-and-resistance.html">
+<meta property="og:title" content="Support & Resistance | EdgeBreak Academy">
+<meta
+    property="og:description"
+    content="Learn how support and resistance zones form and why they are central to understanding market structure and developing breakout setups."
+>
+<meta property="og:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-TWITTER
+TWITTER / X
 =================================== -->
-
-<meta name="twitter:card"
-      content="summary_large_image">
-
-<meta name="twitter:title"
-      content="Lesson 31: Support & Resistance">
-
-<meta name="twitter:description"
-      content="Learn how to identify support and resistance levels using structured price action analysis.">
-
-<meta name="twitter:image"
-      content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Support & Resistance | EdgeBreak Academy">
+<meta
+    name="twitter:description"
+    content="Learn how support and resistance zones form, how repeated tests matter and how these levels fit into structured breakout research."
+>
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/academy.webp">
+<meta name="twitter:image:alt" content="EdgeBreak Academy">
 
 <!-- ===================================
-CSS
+FAVICON
+=================================== -->
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
+
+<!-- ===================================
+PERFORMANCE / CONNECTION HINTS
+=================================== -->
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://qmonyhukamuuunxxxdlk.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+<link rel="dns-prefetch" href="//qmonyhukamuuunxxxdlk.supabase.co">
+
+<!-- ===================================
+STYLES
 =================================== -->
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/navbar.css">
 <link rel="stylesheet" href="/css/footer.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<link rel="stylesheet"
-      href="/css/academy-lessons.css">
 
 <!-- ===================================
 SUPABASE
 =================================== -->
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 window.supabaseClient = supabase.createClient(
-  "https://qmonyhukamuuunxxxdlk.supabase.co",
-  "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
+    "https://qmonyhukamuuunxxxdlk.supabase.co",
+    "sb_publishable_WsyyDmOBFu7HiopALD_mJw_h05DKlw-"
 );
 </script>
-<!-- ===================================
-FAVICON
-=================================== -->
 
-<link
-rel="icon"
-type="image/png"
-href="images/favicon.webp"
->
 <!-- ===================================
-LEARNING RESOURCE
+STRUCTURED DATA
 =================================== -->
-
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"LearningResource",
-  "name":"Lesson 31: Support & Resistance",
-  "description":"Learn how support and resistance levels form and how they are used to analyse market structure and price action.",
-  "educationalLevel":"Beginner",
-  "learningResourceType":"Lesson",
-  "isPartOf":{
-    "@type":"Course",
-    "name":"EdgeBreak Academy"
-  },
-  "publisher":{
-    "@type":"Organization",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  }
-}
-</script>
-
-<!-- ===================================
-BREADCRUMB
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BreadcrumbList",
-  "itemListElement":[
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@type":"ListItem",
-      "position":1,
-      "name":"Home",
-      "item":"https://www.edgebreak.ai/"
+      "@type": "Organization",
+      "@id": "https://www.edgebreak.ai/#organization",
+      "name": "EdgeBreak",
+      "legalName": "Crane Platform Labs",
+      "url": "https://www.edgebreak.ai/",
+      "email": "mailto:admin@edgebreak.ai",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.edgebreak.ai/#logo",
+        "url": "https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl": "https://www.edgebreak.ai/images/logo.webp",
+        "caption": "EdgeBreak"
+      },
+      "description": "EdgeBreak is a NASDAQ market intelligence and stock research platform combining automated stock scanning, technical analysis, unusual market activity, AI company research, chart analysis and independent research tools.",
+      "areaServed": "Worldwide",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
     },
     {
-      "@type":"ListItem",
-      "position":2,
-      "name":"EdgeBreak Academy",
-      "item":"https://www.edgebreak.ai/academy.html"
+      "@type": "WebSite",
+      "@id": "https://www.edgebreak.ai/#website",
+      "name": "EdgeBreak",
+      "url": "https://www.edgebreak.ai/",
+      "description": "NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
     },
     {
-      "@type":"ListItem",
-      "position":3,
-      "name":"Lesson 31: Support & Resistance",
-      "item":"https://www.edgebreak.ai/support-and-resistance.html"
+      "@type": "Course",
+      "@id": "https://www.edgebreak.ai/academy.html#course",
+      "name": "EdgeBreak Academy",
+      "url": "https://www.edgebreak.ai/academy.html",
+      "description": "Structured education for understanding market structure, breakout research, volume, risk and the EdgeBreak research platform.",
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "LearningResource",
+      "@id": "https://www.edgebreak.ai/academy/support-and-resistance.html#lesson",
+      "name": "Module 2 Lesson 2: Support & Resistance",
+      "url": "https://www.edgebreak.ai/academy/support-and-resistance.html",
+      "description": "A beginner lesson explaining support, resistance, repeated resistance tests, price zones, role reversal and how these concepts support structured breakout research.",
+      "learningResourceType": "Lesson",
+      "educationalLevel": "Beginner",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/academy.html#course" },
+      "provider": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.edgebreak.ai/academy/support-and-resistance.html#webpage",
+      "url": "https://www.edgebreak.ai/academy/support-and-resistance.html",
+      "name": "Support & Resistance | Module 2 Lesson 2 | EdgeBreak Academy",
+      "description": "Learn how support and resistance zones form, why price reacts around them, how repeated resistance tests develop and how these levels support structured NASDAQ breakout research.",
+      "isPartOf": { "@id": "https://www.edgebreak.ai/#website" },
+      "mainEntity": { "@id": "https://www.edgebreak.ai/academy/support-and-resistance.html#lesson" },
+      "publisher": { "@id": "https://www.edgebreak.ai/#organization" },
+      "inLanguage": "en-AU"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.edgebreak.ai/academy/support-and-resistance.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.edgebreak.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "EdgeBreak Academy",
+          "item": "https://www.edgebreak.ai/academy.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Support & Resistance",
+          "item": "https://www.edgebreak.ai/academy/support-and-resistance.html"
+        }
+      ]
     }
   ]
 }
 </script>
 
-<!-- ===================================
-WEBPAGE
-=================================== -->
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebPage",
-  "name":"Lesson 31: Support & Resistance",
-  "url":"https://www.edgebreak.ai/support-and-resistance.html",
-  "description":"Learn how support and resistance are identified and used as part of a structured NASDAQ market research process.",
-  "isPartOf":{
-    "@type":"WebSite",
-    "name":"EdgeBreak",
-    "url":"https://www.edgebreak.ai"
-  },
-  "primaryImageOfPage":"https://www.edgebreak.ai/images/academy.webp",
-  "author":{
-    "@type":"Organization",
-    "name":"EdgeBreak"
-  }
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
 }
-</script>
 
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.ac-page{overflow:hidden;background:#fff}
+.ac-shell{width:min(1120px,calc(100% - 40px));margin:auto}
+.ac-reading{width:min(820px,calc(100% - 40px));margin:auto}
+
+/* HERO */
+.ac-hero{
+    position:relative;
+    padding:96px 0 72px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 16% 22%,rgba(37,99,235,.09),transparent 28%),
+        radial-gradient(circle at 84% 18%,rgba(34,197,94,.12),transparent 28%),
+        linear-gradient(180deg,#fbfdff 0%,#ffffff 92%);
+}
+.ac-hero:after{
+    content:"";
+    position:absolute;
+    left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#dbe5df,transparent);
+}
+.ac-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 15px;
+    margin-bottom:25px;
+    border:1px solid #dce6df;
+    border-radius:999px;
+    background:rgba(255,255,255,.84);
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.ac-dot{
+    width:8px;height:8px;border-radius:50%;background:#22c55e;
+    box-shadow:0 0 0 6px rgba(34,197,94,.11);
+}
+.ac-title{
+    max-width:900px;
+    margin:0 auto;
+    color:var(--ix-ink) !important;
+    font-size:clamp(44px,6vw,76px);
+    line-height:1;
+    letter-spacing:-.055em;
+    font-weight:850;
+}
+.ac-title span{color:var(--ix-green)}
+.ac-subtitle{
+    max-width:760px;
+    margin:24px auto 0;
+    color:#566173;
+    font-size:clamp(18px,2vw,22px);
+    line-height:1.6;
+}
+.ac-meta{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 20px;
+    margin-top:28px;
+    color:#718096;
+    font-size:14px;
+    font-weight:700;
+}
+.ac-meta span{display:inline-flex;align-items:center;gap:8px}
+.ac-meta span:before{content:"✓";color:var(--ix-green);font-weight:900}
+.ac-progress-wrap{max-width:620px;margin:32px auto 0}
+.ac-progress-label{display:flex;justify-content:space-between;gap:20px;margin-bottom:9px;color:#718096;font-size:12px;font-weight:750}
+.ac-progress{height:8px;border-radius:999px;background:#e9eef4;overflow:hidden}
+.ac-progress > span{display:block;width:50%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#2563eb,#22c55e)}
+
+/* QUICK LEARNING CARD */
+.ac-overview{padding:54px 0 14px}
+.ac-overview-card{
+    display:grid;
+    grid-template-columns:.72fr 1.28fr;
+    gap:38px;
+    align-items:start;
+    padding:34px;
+    border:1px solid var(--ix-line);
+    border-radius:28px;
+    background:#fff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-overview-label{
+    color:var(--ix-green-dark);
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+.ac-overview-card h2{
+    margin:10px 0 0;
+    color:var(--ix-ink) !important;
+    font-size:34px;
+    line-height:1.08;
+    letter-spacing:-.035em;
+}
+.ac-learn-list{display:grid;gap:13px}
+.ac-learn-item{
+    display:grid;
+    grid-template-columns:34px 1fr;
+    gap:12px;
+    align-items:start;
+    color:#526071;
+    font-size:16px;
+    line-height:1.55;
+}
+.ac-check{
+    width:28px;height:28px;border-radius:9px;display:grid;place-items:center;
+    background:#eef9f1;color:var(--ix-green-dark);font-size:13px;font-weight:900;
+}
+
+/* ARTICLE */
+.ac-content{padding:64px 0 40px}
+.ac-section{margin-bottom:54px}
+.ac-section h2{
+    margin:0 0 17px;
+    color:var(--ix-ink) !important;
+    font-size:clamp(30px,4vw,43px);
+    line-height:1.08;
+    letter-spacing:-.04em;
+}
+.ac-section p{
+    margin:0 0 18px;
+    color:#526071;
+    font-size:18px;
+    line-height:1.8;
+}
+.ac-section p:last-child{margin-bottom:0}
+.ac-pullquote{
+    margin:34px 0;
+    padding:27px 30px;
+    border-left:4px solid var(--ix-green);
+    border-radius:0 20px 20px 0;
+    background:linear-gradient(135deg,#f2faf5,#f6f9ff);
+    color:#233044;
+    font-size:20px;
+    font-weight:750;
+    line-height:1.55;
+}
+
+/* PROCESS */
+.ac-process{
+    margin:34px 0 54px;
+    padding:32px;
+    border:1px solid var(--ix-line);
+    border-radius:26px;
+    background:var(--ix-soft);
+}
+.ac-process-head{margin-bottom:22px}
+.ac-process-head span{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-process-head h3{margin:8px 0 0;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ac-process-step{padding:20px;border:1px solid var(--ix-line);border-radius:18px;background:#fff}
+.ac-process-step b{display:block;margin-bottom:7px;color:var(--ix-green-dark);font-size:13px}
+.ac-process-step strong{display:block;margin-bottom:6px;color:var(--ix-ink);font-size:16px}
+.ac-process-step span{color:var(--ix-muted);font-size:13px;line-height:1.5}
+
+/* SUMMARY CARDS */
+.ac-summary-area{padding:40px 0 92px;background:var(--ix-soft)}
+.ac-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ac-card{
+    padding:31px;
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#fff;
+    box-shadow:0 12px 34px rgba(15,23,42,.05);
+}
+.ac-card h2{margin:0 0 15px;color:var(--ix-ink) !important;font-size:28px;letter-spacing:-.03em}
+.ac-card p{margin:0;color:#5b6778;font-size:16px;line-height:1.7}
+.ac-card ul{margin:0;padding:0;list-style:none;display:grid;gap:13px}
+.ac-card li{position:relative;padding-left:29px;color:#526071;font-size:15px;line-height:1.55}
+.ac-card li:before{content:"✓";position:absolute;left:0;top:0;color:var(--ix-green);font-weight:900}
+.ac-reminder{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:18px;
+    align-items:start;
+    background:#0c1728;
+    border-color:#182235;
+}
+.ac-reminder-icon{
+    width:48px;height:48px;border-radius:15px;display:grid;place-items:center;
+    background:rgba(34,197,94,.13);color:#5ee58d;font-size:22px;
+}
+.ac-reminder h2{color:#fff !important}
+.ac-reminder p{color:#b3bfce}
+
+/* NEXT LESSON */
+.ac-next{padding:86px 0 98px;background:#fff}
+.ac-next-card{
+    position:relative;
+    overflow:hidden;
+    padding:46px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:
+        radial-gradient(circle at 92% 8%,rgba(34,197,94,.12),transparent 30%),
+        radial-gradient(circle at 8% 90%,rgba(37,99,235,.09),transparent 28%),
+        #ffffff;
+    box-shadow:var(--ix-shadow);
+}
+.ac-next-tag{color:var(--ix-green-dark);font-size:12px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+.ac-next-card h2{margin:11px 0 13px;color:var(--ix-ink) !important;font-size:clamp(34px,4.5vw,54px);line-height:1.07;letter-spacing:-.045em}
+.ac-next-card p{max-width:730px;margin:0;color:var(--ix-muted);font-size:17px;line-height:1.7}
+.ac-next-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.ac-btn{
+    min-height:52px;padding:0 22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:15px;font-weight:850;transition:.2s ease;
+}
+.ac-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 32px rgba(22,163,74,.22)}
+.ac-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7}
+.ac-btn:hover{transform:translateY(-2px)}
+.ac-next-foot{margin-top:20px;color:#8290a3;font-size:12px;font-weight:750}
+
+@media(max-width:900px){
+    .ac-overview-card{grid-template-columns:1fr}
+    .ac-process-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+    .ac-shell,.ac-reading{width:min(100% - 28px,1120px)}
+    .ac-hero{padding:72px 0 58px}
+    .ac-title{font-size:46px}
+    .ac-overview{padding-top:40px}
+    .ac-overview-card{padding:26px;border-radius:22px}
+    .ac-overview-card h2{font-size:29px}
+    .ac-content{padding-top:52px}
+    .ac-section{margin-bottom:45px}
+    .ac-section p{font-size:16px;line-height:1.75}
+    .ac-process{padding:22px}
+    .ac-process-grid{grid-template-columns:1fr}
+    .ac-card-grid{grid-template-columns:1fr}
+    .ac-reminder{grid-column:auto;grid-template-columns:1fr}
+    .ac-summary-area{padding-bottom:72px}
+    .ac-next{padding:68px 0 76px}
+    .ac-next-card{padding:30px 24px;border-radius:24px}
+    .ac-next-actions{flex-direction:column}
+    .ac-btn{width:100%}
+}
+
+
+/* =========================================================
+   LESSON-SPECIFIC ELEMENTS
+========================================================= */
+
+.ac-section ul,
+.ac-section ol{
+    margin:18px 0 22px;
+    padding-left:26px;
+    color:#526071;
+    font-size:17px;
+    line-height:1.75;
+}
+
+.ac-section li{
+    margin:7px 0;
+}
+
+.ac-lesson-image{
+    margin:34px 0 46px;
+}
+
+.ac-lesson-image img{
+    width:100%;
+    display:block;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#ffffff;
+    box-shadow:0 18px 50px rgba(15,23,42,.08);
+}
+
+.ac-lesson-image figcaption{
+    margin-top:12px;
+    color:#7a8797;
+    font-size:13px;
+    line-height:1.6;
+    text-align:center;
+}
+
+.ac-concept-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    margin:28px 0 50px;
+}
+
+.ac-concept-card{
+    padding:23px;
+    border:1px solid var(--ix-line);
+    border-radius:20px;
+    background:#ffffff;
+    box-shadow:0 10px 28px rgba(15,23,42,.045);
+}
+
+.ac-concept-card b{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-green-dark);
+    font-size:13px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.ac-concept-card strong{
+    display:block;
+    margin-bottom:7px;
+    color:var(--ix-ink);
+    font-size:18px;
+}
+
+.ac-concept-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.ac-card-grid.three{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.ac-card-grid.three .ac-reminder{
+    grid-column:1/-1;
+}
+
+@media(max-width:700px){
+    .ac-concept-grid{
+        grid-template-columns:1fr;
+    }
+
+    .ac-card-grid.three{
+        grid-template-columns:1fr;
+    }
+
+    .ac-card-grid.three .ac-reminder{
+        grid-column:auto;
+    }
+}
+
+</style>
 </head>
-
 <body>
-
-<!-- NAVBAR -->
-
 <div id="navbar"></div>
 
-<main>
-<!-- ==========================
-MODULE 2 · LESSON 4
-=========================== -->
-
-<div class="academy-container lesson-container">
-
-    <div class="lesson-tag">
-        MODULE 2 • LESSON 4
-    </div>
-
-    <h1>
-        Support & Resistance
-    </h1>
-
-    <div class="lesson-meta">
-
-        <span>Estimated Time: 18 Minutes</span>
-
-        <span>•</span>
-
-        <span>Beginner Breakout Research</span>
-
-    </div>
-
-    <p class="lesson-intro">
-
-        Support and resistance are two of the most important concepts in technical analysis and form the foundation of EdgeBreak's breakout research methodology. Understanding where buyers and sellers have historically entered the market helps investors identify important price levels and organise their research more effectively.
-
-    </p>
-
-    <!-- WHAT YOU'LL LEARN -->
-
-    <div class="lesson-card">
-
-        <h2>What You'll Learn</h2>
-
-        <ul>
-
-            <li>What support and resistance are.</li>
-
-            <li>Why price reacts around these levels.</li>
-
-            <li>How resistance develops.</li>
-
-            <li>Why repeated resistance tests matter.</li>
-
-            <li>How support and resistance fit into breakout research.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- LESSON -->
-
-    <div class="lesson-content">
-
-        <h2>What Is Support?</h2>
-
-        <p>
-
-            Support is a price area where buyers have historically shown enough demand to slow or temporarily stop a decline. When price reaches support, buying activity often increases as investors view the stock as offering value at that level.
-
-        </p>
-
-        <p>
-
-            Support does not guarantee that price will move higher. Instead, it represents an area where buyers have previously entered the market in sufficient numbers to influence price behaviour.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/support-level-example.webp"
-                alt="Example of a support level where price repeatedly finds buying interest before moving higher.">
-
-            <figcaption>
-
-                A support level is a price area where buying interest consistently prevents the market from falling further. In this example, the stock tests the same support zone multiple times before buyers step in on each occasion, demonstrating how support can act as a foundation for future price advances.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>What Is Resistance?</h2>
-
-        <p>
-
-            Resistance is the opposite of support. It represents an area where selling pressure has repeatedly prevented price from moving higher.
-
-        </p>
-
-        <p>
-
-            As a stock approaches resistance, some investors may choose to sell, while others wait to see whether buyers have enough strength to overcome that selling pressure.
-
-        </p>
-
-        <p>
-
-            Resistance is one of the key concepts used throughout the EdgeBreak platform because every breakout begins by moving above a previously established resistance level.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/resistance-level-example.webp"
-                alt="Example of a resistance level where price repeatedly meets selling pressure before moving lower.">
-
-            <figcaption>
-
-                A resistance level is a price area where selling pressure consistently prevents the market from moving higher. In this example, the stock tests the same resistance zone multiple times before sellers regain control, demonstrating how resistance can act as a ceiling that limits further price advances until enough buying pressure develops to break through.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Why Does Resistance Form?</h2>
-
-        <p>
-
-            Resistance often develops because large numbers of market participants are willing to sell at similar prices. This selling pressure may come from investors taking profits, traders exiting losing positions or institutions managing larger portfolios.
-
-        </p>
-
-        <p>
-
-            Over time, repeated selling at the same level creates a price area that the market begins to recognise as resistance.
-
-        </p>
-
-        <p>
-
-            The more often price reacts around the same level, the more attention that area typically receives from market participants.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/multiple-resistance-touches.webp"
-                alt="Chart showing multiple touches of the same resistance level before price is rejected, illustrating repeated selling pressure.">
-
-            <figcaption>
-
-                Multiple resistance touches occur when price repeatedly reaches the same resistance level but fails to break through. Each rejection confirms that sellers remain active in that price zone, reinforcing the level as a significant area of supply. The more times resistance is tested without a successful breakout, the more important that level often becomes to market participants.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Why Multiple Resistance Tests Matter</h2>
-
-        <p>
-
-            One rejection at resistance provides limited information. However, repeated tests of the same resistance level often indicate that buyers continue returning despite previous setbacks.
-
-        </p>
-
-        <p>
-
-            Rather than viewing repeated tests as weakness, many investors see them as evidence that buying pressure remains persistent.
-
-        </p>
-
-        <p>
-
-            Eventually, if buying demand becomes greater than available selling pressure, price may move above resistance.
-
-        </p>
-
-        <p>
-
-            This concept forms one of the foundations of the EdgeBreak NASDAQ Scanner.
-
-        </p>
-
-        <h2>Support and Resistance Are Zones</h2>
-
-        <p>
-
-            Beginners often draw support and resistance as exact horizontal lines. In reality, these areas are usually better viewed as price zones rather than precise numbers.
-
-        </p>
-
-        <p>
-
-            Small movements above or below support and resistance occur regularly and should always be interpreted within the context of overall market structure.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/resistance-zone-instead-of-line.webp"
-                alt="Chart illustrating a resistance zone where price is repeatedly rejected across a range of prices rather than at a single exact level.">
-
-            <figcaption>
-
-                Resistance is best viewed as a zone rather than a precise line. In real markets, selling pressure is often spread across a range of prices, causing price to reverse at slightly different levels each time. Recognising resistance as an area helps investors identify more realistic market structure and avoid expecting perfect price reactions.
-
-            </figcaption>
-
-        </figure>
-
-        <h2>Role Reversal</h2>
-
-        <p>
-
-            One interesting feature of technical analysis is that resistance can sometimes become support after a successful breakout.
-
-        </p>
-
-        <p>
-
-            Once buyers establish themselves above resistance, the same price level may attract new buying interest during future pullbacks.
-
-        </p>
-
-        <p>
-
-            Likewise, broken support can sometimes become new resistance during downtrends.
-
-        </p>
-
-        <p>
-
-            Understanding this concept helps investors better interpret changing market conditions.
-
-        </p>
-
-        <h2>Support & Resistance Inside EdgeBreak</h2>
-
-        <p>
-
-            Resistance is one of the primary research characteristics used throughout the EdgeBreak platform.
-
-        </p>
-
-        <p>
-
-            The NASDAQ Scanner identifies stocks displaying repeated resistance touches before a breakout occurs, while the Breakout Scanner highlights stocks that have already moved above resistance according to the EdgeBreak breakout model.
-
-        </p>
-
-        <p>
-
-            Rather than relying on resistance alone, EdgeBreak combines resistance analysis with higher lows, market structure, volume behaviour and Smart Money characteristics to support a more complete research process.
-
-        </p>
-
-        <figure class="lesson-image">
-
-            <img src="/images/nasdaq-pre-scanner.webp"
-                alt="Full EdgeBreak NASDAQ Scanner interface showing the breakout scanner, research filters, breakout results, stock details and interactive TradingView chart in a single workflow.">
-
-            <figcaption>
-
-                This screenshot demonstrates support and resistance on EdgeBreak NASDAQ Scanner.
-
-            </figcaption>
-
-        </figure>
-
-    </div>
-
-    <!-- LESSON SUMMARY -->
-
-    <div class="lesson-card">
-
-        <h2>Lesson Summary</h2>
-
-        <p>
-
-            Support and resistance provide important reference points for understanding market behaviour. While no level guarantees future price movement, repeated resistance testing, improving market structure and increasing buying pressure often form the basis of many breakout research strategies. Understanding these concepts is essential before progressing to more advanced lessons.
-
-        </p>
-
-    </div>
-
-    <!-- KEY TAKEAWAYS -->
-
-    <div class="lesson-card">
-
-        <h2>Key Takeaways</h2>
-
-        <ul>
-
-            <li>Support is where buyers have historically entered the market.</li>
-
-            <li>Resistance is where selling pressure has repeatedly appeared.</li>
-
-            <li>Repeated resistance tests often attract increased market attention.</li>
-
-            <li>Support and resistance should be viewed as zones rather than exact prices.</li>
-
-            <li>EdgeBreak uses resistance as one of the foundations of its research methodology.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- COMMON MISTAKES -->
-
-    <div class="lesson-card">
-
-        <h2>Common Beginner Mistakes</h2>
-
-        <ul>
-
-            <li>Drawing support and resistance as exact lines instead of price zones.</li>
-
-            <li>Assuming every resistance break will become a successful breakout.</li>
-
-            <li>Ignoring overall market structure.</li>
-
-            <li>Relying only on support and resistance without considering volume or higher lows.</li>
-
-            <li>Forcing support and resistance levels where none clearly exist.</li>
-
-        </ul>
-
-    </div>
-
-    <!-- RESEARCH REMINDER -->
-
-    <div class="lesson-card reminder">
-
-        <h2>Research Reminder</h2>
-
-        <p>
-
-            Support and resistance provide useful context for market research but should never be interpreted as guarantees of future price direction. EdgeBreak combines these concepts with other market characteristics to support structured research and does not provide financial advice or investment recommendations.
-
-        </p>
-
-    </div>
+<main class="ac-page">
 
     <!-- ===================================
-    LESSON NAVIGATION
+    HERO
     =================================== -->
+    <section class="ac-hero">
+        <div class="ac-shell">
+            <div class="ac-kicker"><span class="ac-dot"></span> Module 2 · Lesson 2</div>
+            <h1 class="ac-title">Support & <span>Resistance.</span></h1>
+            <p class="ac-subtitle">
+                Learn how important price zones form, why the market repeatedly reacts around them and why resistance is central to understanding developing breakout structures.
+            </p>
 
-    <div class="lesson-next">
+            <div class="ac-meta">
+                <span>Estimated time: 18 minutes</span>
+                <span>Price action foundations</span>
+                <span>Beginner</span>
+            </div>
 
-        <div class="lesson-next-tag">
+            <div class="ac-progress-wrap" aria-label="Module 2 progress">
+                <div class="ac-progress-label">
+                    <span>Module 2 progress</span>
+                    <span>Lesson 2</span>
+                </div>
+                <div class="ac-progress"><span style="width:40%"></span></div>
+            </div>
+        </div>
+    </section>
 
-            Continue Learning
+    <!-- ===================================
+    WHAT YOU'LL LEARN
+    =================================== -->
+    <section class="ac-overview">
+        <div class="ac-shell">
+            <div class="ac-overview-card">
+                <div>
+                    <div class="ac-overview-label">What you'll learn</div>
+                    <h2>The price zones that shape market structure.</h2>
+                </div>
+
+                <div class="ac-learn-list">
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>What support and resistance are.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why price reacts around these areas.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How resistance develops.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>Why repeated resistance tests matter.</span></div>
+                    <div class="ac-learn-item"><span class="ac-check">✓</span><span>How support and resistance fit into breakout research.</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================
+    LESSON CONTENT
+    =================================== -->
+    <article class="ac-content">
+        <div class="ac-reading">
+
+            <section class="ac-section">
+                <h2>What is support?</h2>
+                <p>Support is a price area where buying interest has historically been strong enough to slow or temporarily stop a decline. When price reaches support, some market participants may view the area as more attractive and demand can increase.</p>
+                <p>Support does not guarantee that price will move higher. It simply marks an area where buyers have previously influenced price behaviour.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/support-level-example.webp" alt="Example of a support level where price repeatedly finds buying interest before moving higher.">
+                <figcaption>A support zone is an area where price has repeatedly found enough buying interest to slow or reverse a decline. Repeated reactions can make the area more visible to market participants.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>What is resistance?</h2>
+                <p>Resistance is the opposite of support. It represents a price area where selling interest has repeatedly been strong enough to prevent price from moving higher.</p>
+                <p>As price approaches resistance, some market participants may choose to sell while others wait to see whether demand is strong enough to absorb that supply.</p>
+                <p>Resistance is an important concept throughout EdgeBreak because a breakout is defined by price moving beyond a previously established resistance area.</p>
+
+                <div class="ac-pullquote">
+                    Support and resistance are not predictions. They are reference areas that help you understand where price has repeatedly reacted.
+                </div>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/resistance-level-example.webp" alt="Example of a resistance level where price repeatedly meets selling pressure before moving lower.">
+                <figcaption>A resistance zone is an area where price has repeatedly met enough selling interest to slow or reverse an advance.</figcaption>
+            </figure>
+
+            <div class="ac-concept-grid" aria-label="Support and resistance comparison">
+                <div class="ac-concept-card">
+                    <b>Support</b>
+                    <strong>An area below price</strong>
+                    <span>Historically associated with increased buying interest or reduced selling pressure.</span>
+                </div>
+                <div class="ac-concept-card">
+                    <b>Resistance</b>
+                    <strong>An area above price</strong>
+                    <span>Historically associated with increased selling interest or reduced buying momentum.</span>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Why does resistance form?</h2>
+                <p>Resistance often develops because many market participants are willing to sell within a similar price area. That supply can come from profit-taking, previous buyers exiting positions or larger participants managing exposure.</p>
+                <p>When price repeatedly reacts around the same area, the market begins to recognise it as a meaningful reference zone.</p>
+                <p>The more often the area is tested and observed, the more attention it may attract from traders and investors.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/multiple-resistance-touches.webp" alt="Chart showing multiple touches of the same resistance level before price is rejected, illustrating repeated selling pressure.">
+                <figcaption>Repeated tests show that the same price area continues to influence market behaviour. Each test adds more information about how buyers and sellers are interacting around resistance.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Why multiple resistance tests matter</h2>
+                <p>One rejection at resistance provides limited information. Repeated tests of the same area can be more useful because they show that buyers continue returning to the zone despite earlier rejections.</p>
+                <p>That does not mean a breakout must occur. Instead, repeated testing gives you more evidence about persistence, price compression and how the balance between supply and demand may be changing.</p>
+                <p>If demand eventually becomes strong enough to absorb the available supply, price may move through the resistance area. If not, resistance can continue to hold.</p>
+                <p>This repeated-test behaviour is one of the structural characteristics considered by EdgeBreak scanners.</p>
+            </section>
+
+            <section class="ac-section">
+                <h2>Support and resistance are zones</h2>
+                <p>Beginners often draw support and resistance as exact horizontal lines. Real markets are less precise.</p>
+                <p>Buying and selling interest is usually spread across a range of prices, so support and resistance are often better treated as zones rather than one exact number.</p>
+                <p>Small movements above or below a level can occur without meaning that the entire structure has changed. Context matters.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/resistance-zone-instead-of-line.webp" alt="Chart illustrating a resistance zone where price is repeatedly rejected across a range of prices rather than at a single exact level.">
+                <figcaption>Resistance is often more realistic as a zone. Price may react at slightly different levels while still responding to the same broader area of supply.</figcaption>
+            </figure>
+
+            <section class="ac-section">
+                <h2>Role reversal</h2>
+                <p>Resistance can sometimes become support after price moves above it and begins trading on the other side of the former resistance zone.</p>
+                <p>Likewise, support that breaks can sometimes become resistance during a later recovery.</p>
+                <p>This behaviour is often called role reversal and can help explain how market structure changes over time.</p>
+                <p>It is not guaranteed to occur, but it is a useful concept to recognise when reviewing a chart.</p>
+            </section>
+
+            <div class="ac-process" aria-label="Support and resistance research process">
+                <div class="ac-process-head">
+                    <span>Read the level in context</span>
+                    <h3>Locate → test → compare → confirm.</h3>
+                </div>
+
+                <div class="ac-process-grid">
+                    <div class="ac-process-step">
+                        <b>01</b>
+                        <strong>Locate the zone</strong>
+                        <span>Find an area where price has reacted more than once.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>02</b>
+                        <strong>Count the tests</strong>
+                        <span>Look at how often price has returned to the area.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>03</b>
+                        <strong>Compare structure</strong>
+                        <span>Check higher lows, range tightening and surrounding price action.</span>
+                    </div>
+                    <div class="ac-process-step">
+                        <b>04</b>
+                        <strong>Add evidence</strong>
+                        <span>Use volume, market activity and other research context before drawing conclusions.</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="ac-section">
+                <h2>Support & resistance inside EdgeBreak</h2>
+                <p>Resistance is one of the primary technical characteristics used throughout the EdgeBreak platform.</p>
+                <p>The NASDAQ Scanner can identify developing structures with repeated resistance tests, while the Breakout Scanner highlights stocks that have already moved beyond resistance according to EdgeBreak's rules-based breakout model.</p>
+                <p>EdgeBreak does not rely on resistance alone. It combines price structure with higher lows, volume behaviour, unusual market activity and additional filtering to create a more complete research picture.</p>
+            </section>
+
+            <figure class="ac-lesson-image">
+                <img src="/images/nasdaq-pre-scanner.webp" alt="EdgeBreak NASDAQ Scanner showing developing technical structures and integrated chart research.">
+                <figcaption>The EdgeBreak NASDAQ Scanner uses resistance alongside other structural characteristics to help narrow thousands of NASDAQ-listed stocks to a more focused research list.</figcaption>
+            </figure>
 
         </div>
+    </article>
 
-        <h2>
+    <!-- ===================================
+    SUMMARY / TAKEAWAYS
+    =================================== -->
+    <section class="ac-summary-area">
+        <div class="ac-shell">
+            <div class="ac-card-grid three">
 
-            Continue Your Journey
+                <div class="ac-card">
+                    <h2>Lesson summary</h2>
+                    <p>Support and resistance provide important reference areas for understanding price behaviour. Repeated tests, changing structure and the way price reacts around those zones can all add useful context, but no level guarantees what will happen next.</p>
+                </div>
 
-        </h2>
+                <div class="ac-card">
+                    <h2>Key takeaways</h2>
+                    <ul>
+                        <li>Support marks an area where buying interest has previously influenced price.</li>
+                        <li>Resistance marks an area where selling interest has repeatedly appeared.</li>
+                        <li>Repeated resistance tests provide more context than a single test.</li>
+                        <li>Support and resistance are usually better viewed as zones.</li>
+                        <li>Resistance is a core part of EdgeBreak's technical research process.</li>
+                    </ul>
+                </div>
 
-        <div class="lesson-nav-buttons">
+                <div class="ac-card">
+                    <h2>Common beginner mistakes</h2>
+                    <ul>
+                        <li>Drawing support and resistance as exact prices rather than zones.</li>
+                        <li>Assuming every move through resistance will continue.</li>
+                        <li>Ignoring the broader market structure.</li>
+                        <li>Relying on levels without considering volume or higher lows.</li>
+                        <li>Forcing support or resistance where no clear reaction exists.</li>
+                    </ul>
+                </div>
 
-            <!-- PREVIOUS -->
+                <div class="ac-card ac-reminder">
+                    <div class="ac-reminder-icon">✦</div>
+                    <div>
+                        <h2>Research reminder</h2>
+                        <p>Support and resistance provide useful context for technical research but should never be treated as guarantees of future price direction. EdgeBreak provides educational content, market information and research tools only and does not provide financial advice or investment recommendations.</p>
+                    </div>
+                </div>
 
-            <a
-                href="/academy/understanding-candlesticks.html"
-                class="btn"
-            >
-                ← Previous Lesson
-            </a>
-
-            <!-- NEXT -->
-
-            <a
-                href="/academy/understanding-volume.html"
-                class="btn-primary"
-            >
-                Start Lesson 2.3 →
-            </a>
-
+            </div>
         </div>
+    </section>
 
-        <h3>
+    <!-- ===================================
+    NEXT LESSON
+    =================================== -->
+    <section class="ac-next">
+        <div class="ac-shell">
+            <div class="ac-next-card">
+                <div class="ac-next-tag">Continue learning · Module 2 Lesson 3</div>
+                <h2>Reading volume.</h2>
+                <p>Learn what trading volume measures, how changes in participation add context to price movement and why volume is an important part of researching developing breakout structures.</p>
 
-            Lesson 2.3 – Reading Volume
+                <div class="ac-next-actions">
+                    <a href="/academy/understanding-volume.html" class="ac-btn ac-btn-primary">Start Lesson 2.3 →</a>
+                    <a href="/academy/understanding-candlesticks.html" class="ac-btn ac-btn-secondary">← Previous Lesson</a>
+                </div>
 
-        </h3>
-
-        <p>
-
-            Learn why trading volume matters, how it helps explain buying and selling pressure, and why volume plays an important role when researching potential breakout opportunities.
-
-        </p>
-
-        <div class="lesson-progress">
-
-            Module 2 • Lesson 4 of 30
-
+                <div class="ac-next-foot">Module 2 · Lesson 2 completed</div>
+            </div>
         </div>
-
-    </div>
+    </section>
 
 </main>
-<!-- FOOTER -->
 
 <div id="footer"></div>
-
-
-
-
-<!-- COMPONENTS -->
-
 <script src="/js/components.js"></script>
-
 </body>
 </html>
