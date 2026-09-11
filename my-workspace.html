@@ -51,7 +51,7 @@ PRIMARY SEO
 
 <meta
     name="robots"
-    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+    content="noindex,follow"
 >
 
 
@@ -1742,6 +1742,387 @@ body.eb-app-body #footer{
 
 </style>
 
+
+<style id="edgebreak-my-workspace-clean-v2">
+/* =========================================================
+   MY WORKSPACE — CLEAN APPLICATION WORK AREA
+========================================================= */
+body.eb-app-body main{
+    padding-bottom:150px !important;
+}
+
+/* Marketing/continuation blocks remain in source for safety but are not part of the app work area. */
+body.eb-app-body .elite-banner,
+body.eb-app-body .workspace-secondary-grid,
+body.eb-app-body #footer{
+    display:none !important;
+}
+
+.eb-workspace-stage{
+    min-height:calc(100vh - 195px);
+    position:relative;
+    overflow:hidden;
+    border:1px solid var(--eb-line);
+    border-radius:22px;
+    background:#fff;
+    box-shadow:0 18px 55px rgba(15,23,42,.055);
+}
+
+.eb-workspace-empty[hidden],
+.eb-workspace-window[hidden]{
+    display:none !important;
+}
+
+.eb-workspace-empty{
+    min-height:calc(100vh - 195px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:50px 24px;
+    text-align:center;
+    color:#94a3b8;
+}
+
+.eb-workspace-empty-icon{
+    width:48px;
+    height:48px;
+    display:grid;
+    place-items:center;
+    margin-bottom:16px;
+    border:1px solid #dce5df;
+    border-radius:14px;
+    background:#f5faf7;
+    color:var(--eb-green-dark);
+    font-size:20px;
+    font-weight:850;
+}
+
+.eb-workspace-empty strong{
+    color:#334155;
+    font-size:16px;
+    font-weight:800;
+}
+
+.eb-workspace-empty span{
+    margin-top:6px;
+    color:#94a3b8;
+    font-size:13px;
+}
+
+.eb-workspace-window{
+    min-height:calc(100vh - 195px);
+    background:#fff;
+}
+
+.eb-workspace-window-head{
+    min-height:67px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    padding:13px 18px 13px 22px;
+    border-bottom:1px solid var(--eb-line);
+    background:#fff;
+    position:sticky;
+    top:0;
+    z-index:60;
+}
+
+.eb-workspace-window-head span{
+    display:block;
+    color:#94a3b8;
+    font-size:9px;
+    font-weight:850;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.eb-workspace-window-head strong{
+    display:block;
+    margin-top:2px;
+    color:var(--eb-ink);
+    font-size:18px;
+    letter-spacing:-.02em;
+}
+
+.eb-workspace-close{
+    width:38px;
+    height:38px;
+    display:grid;
+    place-items:center;
+    flex:0 0 38px;
+    padding:0;
+    border:1px solid #dbe2ea;
+    border-radius:11px;
+    background:#f8fafc;
+    color:#64748b;
+    font-size:24px;
+    line-height:1;
+    cursor:pointer;
+}
+
+.eb-workspace-close:hover{
+    border-color:#fecaca;
+    background:#fff1f2;
+    color:#dc2626;
+}
+
+.eb-workspace-content{
+    padding:22px;
+}
+
+/* Work tools should fill the canvas without a second decorative card. */
+#ebWorkspaceContent > #workspaceSearchTool,
+#ebWorkspaceContent > #workspaceChart,
+#ebWorkspaceContent > #watchlistPanel{
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+}
+
+body.eb-app-body #ebWorkspaceContent #workspaceSearchTool,
+body.eb-app-body #ebWorkspaceContent #watchlistPanel{
+    padding:0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+}
+
+/* Window title already tells users where they are. Keep internals practical. */
+body.eb-app-body #ebWorkspaceContent #workspaceSearchTool > .workspace-section-label,
+body.eb-app-body #ebWorkspaceContent #workspaceSearchTool > h2,
+body.eb-app-body #ebWorkspaceContent #workspaceSearchTool > p{
+    display:none !important;
+}
+
+body.eb-app-body #ebWorkspaceContent #workspaceSearchTool .workspace-search{
+    margin-top:0 !important;
+}
+
+body.eb-app-body #ebWorkspaceContent #watchlistPanel .workspace-watchlist-head > div{
+    display:none !important;
+}
+
+body.eb-app-body #ebWorkspaceContent #watchlistPanel .workspace-watchlist-head{
+    min-height:52px;
+    align-items:center;
+    justify-content:flex-end;
+    padding:0 0 16px !important;
+}
+
+body.eb-app-body #ebWorkspaceContent #workspaceChart{
+    padding:16px !important;
+    border:1px solid #e5eaf0 !important;
+    border-radius:16px !important;
+    box-shadow:none !important;
+}
+
+/* Inline chart appears below Search Stock or Saved Stocks. */
+#workspaceChart.eb-inline-chart{
+    margin-top:24px !important;
+    padding-top:18px !important;
+    border-top:1px solid #e2e8f0 !important;
+}
+
+.eb-inline-chart-toolbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin:0 0 14px;
+}
+
+.eb-inline-chart-toolbar strong{
+    color:#0f172a;
+    font-size:16px;
+    font-weight:800;
+}
+
+.eb-inline-chart-close{
+    width:34px;
+    height:34px;
+    display:grid;
+    place-items:center;
+    flex:0 0 34px;
+    padding:0;
+    border:1px solid #dbe2ea;
+    border-radius:10px;
+    background:#f8fafc;
+    color:#64748b;
+    font-size:22px;
+    line-height:1;
+    cursor:pointer;
+}
+
+.eb-inline-chart-close:hover{
+    border-color:#fecaca;
+    background:#fff1f2;
+    color:#dc2626;
+}
+
+/* Keep sidebar available above AI overlay. */
+body.eb-app-body .eb-app-sidebar{
+    z-index:10020 !important;
+    padding-bottom:120px;
+}
+
+body.eb-app-body #navbar{
+    position:relative;
+    z-index:10021;
+}
+
+/* =========================================================
+   AI UNLIMITED — BOTTOM BAR + DRAWER
+========================================================= */
+body.eb-app-body .eb-bottom-ai{
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+}
+
+.eb-unlimited-overlay{
+    position:fixed;
+    inset:0;
+    z-index:9991;
+    background:rgba(15,23,42,.34);
+    opacity:0;
+    visibility:hidden;
+    transition:.2s ease;
+}
+
+.eb-unlimited-overlay.open{
+    opacity:1;
+    visibility:visible;
+}
+
+.eb-unlimited-panel{
+    position:fixed;
+    top:78px;
+    right:0;
+    bottom:0;
+    z-index:9992;
+    width:min(520px,100vw);
+    display:flex;
+    flex-direction:column;
+    background:#07101d;
+    border-left:1px solid #1e293b;
+    box-shadow:-25px 0 70px rgba(0,0,0,.35);
+    transform:translateX(105%);
+    transition:transform .25s ease;
+}
+
+.eb-unlimited-panel.open{
+    transform:translateX(0);
+}
+
+.eb-unlimited-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    padding:18px 20px;
+    border-bottom:1px solid #1e293b;
+}
+
+.eb-unlimited-head span{
+    display:block;
+    color:#4ade80;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.12em;
+}
+
+.eb-unlimited-head h2{
+    margin:3px 0 0;
+    color:#fff;
+    font-size:21px;
+}
+
+.eb-unlimited-close{
+    width:38px;
+    height:38px;
+    border:1px solid #334155;
+    border-radius:10px;
+    background:#111827;
+    color:#cbd5e1;
+    font-size:24px;
+    cursor:pointer;
+}
+
+.eb-unlimited-allowance{
+    margin:14px 18px 0;
+    padding:10px 12px;
+    border:1px solid rgba(34,197,94,.18);
+    border-radius:10px;
+    background:rgba(34,197,94,.06);
+    color:#94a3b8;
+    text-align:center;
+    font-size:11px;
+    font-weight:700;
+}
+
+.eb-unlimited-conversation{
+    flex:1;
+    min-height:0;
+    overflow-y:auto;
+    padding:18px;
+}
+
+.eb-unlimited-message{
+    margin-bottom:13px;
+    padding:13px 14px;
+    border-radius:12px;
+    font-size:13px;
+    line-height:1.6;
+    white-space:pre-wrap;
+}
+
+.eb-unlimited-message.user{
+    margin-left:36px;
+    background:#162235;
+    color:#e2e8f0;
+}
+
+.eb-unlimited-message.ai{
+    margin-right:24px;
+    border:1px solid #1e293b;
+    background:#0b1220;
+    color:#dbe5ef;
+}
+
+.eb-unlimited-message.loading{
+    color:#94a3b8;
+}
+
+.eb-unlimited-foot{
+    padding:12px 18px 118px;
+    border-top:1px solid #1e293b;
+    color:#64748b;
+    font-size:10px;
+    line-height:1.5;
+}
+
+@media(max-width:900px){
+    .eb-workspace-stage,
+    .eb-workspace-empty,
+    .eb-workspace-window{
+        min-height:calc(100vh - 220px);
+    }
+}
+
+@media(max-width:600px){
+    .eb-workspace-content{
+        padding:14px;
+    }
+    .eb-unlimited-panel{
+        top:0;
+        width:100%;
+    }
+}
+</style>
+
 </head>
 
 
@@ -1776,69 +2157,39 @@ SAME SHELL AS NASDAQ SCANNER
 
     <nav class="eb-app-nav">
 
-
-        <!-- PRIMARY VIEWS -->
-
         <div class="eb-app-nav-group eb-app-nav-primary">
+            <button class="eb-app-nav-item active" type="button" data-eb-home>
+                <span class="eb-app-nav-icon">⌂</span>
+                <span>Workspace Home</span>
+            </button>
 
-            <a
-                class="eb-app-nav-item"
-                href="/nasdaq-stock-scanner.html"
-            >
+            <a class="eb-app-nav-item" href="/nasdaq-stock-scanner.html">
                 <span class="eb-app-nav-icon">⌁</span>
                 <span>NASDAQ Scanner</span>
             </a>
-
-            <a
-                class="eb-app-nav-item active"
-                href="/my-workspace.html"
-                aria-current="page"
-            >
-                <span class="eb-app-nav-icon">□</span>
-                <span>My Workspace</span>
-            </a>
-
         </div>
 
-
-        <!-- DISCOVER -->
-
         <div class="eb-app-nav-group">
+            <div class="eb-app-nav-label">My Workspace</div>
 
-            <div class="eb-app-nav-label">Discover</div>
-
-            <a
-                class="eb-app-nav-item"
-                href="/nasdaq-stock-scanner.html#dailyBriefPanel"
-            >
-                <span class="eb-app-nav-icon">✦</span>
-                <span>Daily Scan</span>
-            </a>
-
-            <a
-                class="eb-app-nav-item"
-                href="/nasdaq-stock-scanner.html#scannerDropdown"
-            >
+            <button class="eb-app-nav-item" type="button" data-eb-open="workspaceSearchTool" data-eb-title="Search Stock">
                 <span class="eb-app-nav-icon">⌕</span>
-                <span>Manual Scanners</span>
-            </a>
+                <span>Search Stock</span>
+            </button>
 
-            <a
-                class="eb-app-nav-item"
-                href="/nasdaq-stock-scanner.html#chartAITool"
-            >
-                <span class="eb-app-nav-icon">◇</span>
-                <span>AI Chart Analysis</span>
-            </a>
+            <button class="eb-app-nav-item" type="button" data-eb-open="workspaceChart" data-eb-title="Stock Chart">
+                <span class="eb-app-nav-icon">▥</span>
+                <span>Stock Chart</span>
+            </button>
 
+            <button class="eb-app-nav-item" type="button" data-eb-open="watchlistPanel" data-eb-title="Saved Stocks">
+                <span class="eb-app-nav-icon">☆</span>
+                <span>Saved Stocks</span>
+            </button>
         </div>
 
-
-        <!-- MARKET -->
-
         <div class="eb-app-nav-group">
-
-            <div class="eb-app-nav-label">Market</div>
+            <div class="eb-app-nav-label">Market Tools</div>
 
             <a class="eb-app-nav-item" href="/market-overview.html">
                 <span class="eb-app-nav-icon">◫</span>
@@ -1846,7 +2197,7 @@ SAME SHELL AS NASDAQ SCANNER
             </a>
 
             <a class="eb-app-nav-item" href="/market-movers.html">
-                <span class="eb-app-nav-icon">↗</span>
+                <span class="eb-app-nav-icon">↕</span>
                 <span>Market Movers</span>
             </a>
 
@@ -1855,54 +2206,29 @@ SAME SHELL AS NASDAQ SCANNER
                 <span>Sector Performance</span>
             </a>
 
-        </div>
-
-
-        <!-- RESEARCH -->
-
-        <div class="eb-app-nav-group">
-
-            <div class="eb-app-nav-label">Research</div>
-
-            <a class="eb-app-nav-item active" href="#watchlistPanel">
-                <span class="eb-app-nav-icon">☆</span>
-                <span>Saved Stocks</span>
+            <a class="eb-app-nav-item" href="/currency-converter.html">
+                <span class="eb-app-nav-icon">$</span>
+                <span>Currency Converter</span>
             </a>
 
             <a class="eb-app-nav-item" href="/academy.html">
                 <span class="eb-app-nav-icon">○</span>
                 <span>Academy</span>
             </a>
-
         </div>
 
-
-        <!-- AI
-             AI systems remain housed on the Scanner page.
-             Links keep this sidebar visually identical without
-             duplicating or rewriting the working AI JS here.
-        -->
-
         <div class="eb-app-nav-group eb-app-nav-ai">
-
             <div class="eb-app-nav-label">AI</div>
 
-            <a
-                class="eb-app-nav-item"
-                href="/nasdaq-stock-scanner.html#edgeBreakChatButton"
-            >
+            <a class="eb-app-nav-item" href="/nasdaq-stock-scanner.html">
                 <span class="eb-app-nav-icon">✦</span>
                 <span>Guided AI</span>
             </a>
 
-            <a
-                class="eb-app-nav-item"
-                href="/nasdaq-stock-scanner.html#ebBottomAI"
-            >
+            <button class="eb-app-nav-item" type="button" id="ebOpenUnlimitedAI">
                 <span class="eb-app-nav-icon">↑</span>
                 <span>AI Unlimited</span>
-            </a>
-
+            </button>
         </div>
 
     </nav>
@@ -1949,6 +2275,33 @@ SHARED APP TOP BAR
 <div class="elite-container">
 
 
+
+<!-- =========================================
+MY WORKSPACE — CLEAN WORK AREA
+========================================= -->
+<section class="eb-workspace-stage" id="ebWorkspaceStage">
+
+    <div class="eb-workspace-empty" id="ebWorkspaceEmpty">
+        <div class="eb-workspace-empty-icon">□</div>
+        <strong>Select a tool from the left</strong>
+        <span>Your saved research tools will open here.</span>
+    </div>
+
+    <div class="eb-workspace-window" id="ebWorkspaceWindow" hidden>
+        <div class="eb-workspace-window-head">
+            <div>
+                <span>My Workspace</span>
+                <strong id="ebWorkspaceTitle">Tool</strong>
+            </div>
+            <button type="button" id="ebWorkspaceClose" class="eb-workspace-close" aria-label="Close workspace tool">×</button>
+        </div>
+        <div class="eb-workspace-content" id="ebWorkspaceContent"></div>
+    </div>
+
+    <div id="ebWorkspaceStorage" hidden></div>
+
+</section>
+
 <!-- ===================================
 HERO
 =================================== -->
@@ -1988,7 +2341,7 @@ HERO
 NASDAQ STOCK SEARCH
 =================================== -->
 
-<section class="workspace-search-card">
+<section class="workspace-search-card" id="workspaceSearchTool">
 
     <span class="workspace-section-label">
         Stock Research
@@ -2206,6 +2559,44 @@ FOOTER
 
 <div id="footer"></div>
 
+
+
+<!-- =========================================
+AI UNLIMITED — BOTTOM WORKSPACE CHAT
+========================================= -->
+<div class="eb-bottom-ai" id="ebBottomAI">
+    <div class="eb-bottom-ai-inner">
+        <span class="eb-bottom-ai-mark">✦</span>
+        <textarea
+            id="ebBottomAIQuestion"
+            rows="1"
+            placeholder="Ask EdgeBreak about a NASDAQ stock, chart or market setup..."
+            aria-label="Ask EdgeBreak AI Unlimited"
+        ></textarea>
+        <button type="button" id="ebBottomAIAsk" aria-label="Send question to EdgeBreak AI Unlimited">↑</button>
+    </div>
+    <div class="eb-bottom-ai-note">AI can make mistakes. Research and educational information only.</div>
+</div>
+
+<div class="eb-unlimited-overlay" id="ebUnlimitedOverlay" aria-hidden="true"></div>
+
+<aside class="eb-unlimited-panel" id="ebUnlimitedPanel" aria-hidden="true">
+    <div class="eb-unlimited-head">
+        <div>
+            <span>EDGEBREAK AI</span>
+            <h2>AI Unlimited</h2>
+        </div>
+        <button type="button" class="eb-unlimited-close" id="ebUnlimitedClose" aria-label="Close AI Unlimited">×</button>
+    </div>
+
+    <div class="eb-unlimited-allowance" id="ebUnlimitedAllowance">Checking your AI Unlimited allowance...</div>
+
+    <div class="eb-unlimited-conversation" id="ebUnlimitedConversation" aria-live="polite">
+        <div class="eb-unlimited-message ai">Ask EdgeBreak anything about a NASDAQ stock, chart, scanner result or market question.</div>
+    </div>
+
+    <div class="eb-unlimited-foot">Use the research bar below for questions and follow-ups. Conversation memory lasts while this page remains open.</div>
+</aside>
 
 <!-- ===================================
 TRADINGVIEW
@@ -2858,6 +3249,348 @@ removeFromWatchlist(${stock.id});
 
 </script>
 
+
+
+<script id="edgebreak-my-workspace-controller-v2">
+(function(){
+    const TOOL_IDS = ["workspaceSearchTool", "workspaceChart", "watchlistPanel"];
+
+    function closeAnyTool(){
+        const storage = document.getElementById("ebWorkspaceStorage");
+        if(!storage) return;
+
+        TOOL_IDS.forEach(id => {
+            const tool = document.getElementById(id);
+            if(tool) storage.appendChild(tool);
+        });
+
+        const content = document.getElementById("ebWorkspaceContent");
+        if(content) content.innerHTML = "";
+    }
+
+    function setActive(button){
+        document.querySelectorAll(".eb-app-nav-item[data-eb-open], [data-eb-home]").forEach(item => item.classList.remove("active"));
+        if(button) button.classList.add("active");
+    }
+
+    function showHome(){
+        closeAnyTool();
+        const empty = document.getElementById("ebWorkspaceEmpty");
+        const win = document.getElementById("ebWorkspaceWindow");
+        if(empty) empty.hidden = false;
+        if(win) win.hidden = true;
+        setActive(document.querySelector("[data-eb-home]"));
+    }
+
+    function openTool(id, title, button){
+        const target = document.getElementById(id);
+        const content = document.getElementById("ebWorkspaceContent");
+        const empty = document.getElementById("ebWorkspaceEmpty");
+        const win = document.getElementById("ebWorkspaceWindow");
+        const heading = document.getElementById("ebWorkspaceTitle");
+        if(!target || !content || !win) return;
+
+        closeAnyTool();
+        content.appendChild(target);
+        target.style.display = "block";
+        if(heading) heading.textContent = title || "Tool";
+        if(empty) empty.hidden = true;
+        win.hidden = false;
+        setActive(button);
+
+        if(id === "workspaceChart" && typeof window.loadChart === "function"){
+            const current = (document.getElementById("symbolText")?.textContent || window.symbol || "AAPL").trim();
+            setTimeout(() => window.loadChart(current && current !== "Loading..." ? current : "AAPL"), 40);
+        }
+
+        requestAnimationFrame(() => window.dispatchEvent(new Event("resize")));
+    }
+
+    function init(){
+        const storage = document.getElementById("ebWorkspaceStorage");
+        if(!storage) return;
+
+        TOOL_IDS.forEach(id => {
+            const tool = document.getElementById(id);
+            if(tool) storage.appendChild(tool);
+        });
+
+        document.querySelectorAll("[data-eb-open]").forEach(button => {
+            button.addEventListener("click", () => openTool(button.dataset.ebOpen, button.dataset.ebTitle, button));
+        });
+
+        document.querySelector("[data-eb-home]")?.addEventListener("click", showHome);
+        document.getElementById("ebWorkspaceClose")?.addEventListener("click", showHome);
+        showHome();
+    }
+
+    if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+    else init();
+})();
+</script>
+
+<script id="edgebreak-my-workspace-inline-chart-v2">
+(function(){
+    function install(){
+        if(typeof window.loadChart !== "function"){
+            setTimeout(install, 50);
+            return;
+        }
+
+        if(window.__ebWorkspaceInlineChartInstalled) return;
+        window.__ebWorkspaceInlineChartInstalled = true;
+
+        const originalLoadChart = window.loadChart;
+        const INLINE_IDS = ["workspaceSearchTool", "watchlistPanel"];
+
+        function getActiveInlineTool(){
+            const host = document.getElementById("ebWorkspaceContent");
+            if(!host) return null;
+            for(const id of INLINE_IDS){
+                const tool = document.getElementById(id);
+                if(tool && tool.parentElement === host) return tool;
+            }
+            return null;
+        }
+
+        function ensureToolbar(chart){
+            let toolbar = chart.querySelector(":scope > .eb-inline-chart-toolbar");
+            if(!toolbar){
+                toolbar = document.createElement("div");
+                toolbar.className = "eb-inline-chart-toolbar";
+                toolbar.innerHTML = `<strong>Stock Chart</strong><button type="button" class="eb-inline-chart-close" aria-label="Close stock chart">×</button>`;
+                chart.insertBefore(toolbar, chart.firstChild);
+                toolbar.querySelector("button")?.addEventListener("click", () => {
+                    const storage = document.getElementById("ebWorkspaceStorage");
+                    chart.classList.remove("eb-inline-chart");
+                    chart.style.display = "none";
+                    toolbar.style.display = "none";
+                    if(storage) storage.appendChild(chart);
+                });
+            }
+            return toolbar;
+        }
+
+        window.loadChart = function(ticker){
+            const chart = document.getElementById("workspaceChart");
+            const active = getActiveInlineTool();
+
+            if(chart && active){
+                active.appendChild(chart);
+                chart.style.display = "block";
+                chart.classList.add("eb-inline-chart");
+                ensureToolbar(chart).style.display = "flex";
+            }else if(chart){
+                chart.classList.remove("eb-inline-chart");
+                const toolbar = chart.querySelector(":scope > .eb-inline-chart-toolbar");
+                if(toolbar) toolbar.style.display = "none";
+            }
+
+            originalLoadChart(ticker);
+            requestAnimationFrame(() => window.dispatchEvent(new Event("resize")));
+        };
+
+        /* Search loads in-place instead of reloading the entire workspace page. */
+        window.loadTicker = function(){
+            const input = document.getElementById("tickerInput");
+            const ticker = (input?.value || "").trim().toUpperCase();
+            if(!ticker) return;
+
+            try{
+                const url = new URL(window.location.href);
+                url.searchParams.set("symbol", ticker);
+                history.replaceState({}, "", url);
+            }catch{}
+
+            window.loadChart(ticker);
+            setTimeout(() => document.getElementById("workspaceChart")?.scrollIntoView({behavior:"smooth", block:"start"}), 120);
+        };
+    }
+
+    install();
+})();
+</script>
+
+<script id="edgebreak-my-workspace-ai-unlimited-v2">
+(function(){
+    const memory = [];
+    let indicatorHistory = null;
+
+    const panel = document.getElementById("ebUnlimitedPanel");
+    const overlay = document.getElementById("ebUnlimitedOverlay");
+    const closeBtn = document.getElementById("ebUnlimitedClose");
+    const openBtn = document.getElementById("ebOpenUnlimitedAI");
+    const input = document.getElementById("ebBottomAIQuestion");
+    const askBtn = document.getElementById("ebBottomAIAsk");
+    const conversation = document.getElementById("ebUnlimitedConversation");
+    const allowance = document.getElementById("ebUnlimitedAllowance");
+
+    if(!panel || !input || !askBtn || !conversation) return;
+
+    function openPanel(){
+        panel.classList.add("open");
+        overlay?.classList.add("open");
+        panel.setAttribute("aria-hidden", "false");
+        overlay?.setAttribute("aria-hidden", "false");
+        setTimeout(() => input.focus(), 80);
+    }
+
+    function closePanel(){
+        panel.classList.remove("open");
+        overlay?.classList.remove("open");
+        panel.setAttribute("aria-hidden", "true");
+        overlay?.setAttribute("aria-hidden", "true");
+    }
+
+    closeBtn?.addEventListener("click", closePanel);
+    overlay?.addEventListener("click", closePanel);
+    openBtn?.addEventListener("click", openPanel);
+
+    function addMessage(role, text, loading=false){
+        const div = document.createElement("div");
+        div.className = `eb-unlimited-message ${role}${loading ? " loading" : ""}`;
+        div.textContent = text;
+        conversation.appendChild(div);
+        conversation.scrollTop = conversation.scrollHeight;
+        return div;
+    }
+
+    async function getSession(){
+        const {data:{session}, error} = await window.supabaseClient.auth.getSession();
+        if(error || !session?.access_token) throw new Error("Your EdgeBreak session has expired. Please log in again.");
+        return session;
+    }
+
+    function renderAllowance(data){
+        if(!allowance || !data) return;
+        if(data.accessLevel === "unlimited"){
+            allowance.textContent = "AI Unlimited · Unlimited conversations";
+            allowance.style.color = "#4ade80";
+            input.disabled = false;
+            askBtn.disabled = false;
+            return;
+        }
+        if(data.remaining !== undefined){
+            const remaining = Math.max(0, Number(data.remaining || 0));
+            allowance.textContent = `${remaining} of ${data.monthlyLimit || 15} AI Unlimited ${remaining === 1 ? "question" : "questions"} remaining this month`;
+            allowance.style.color = remaining <= 3 ? "#fbbf24" : "#94a3b8";
+            input.disabled = remaining === 0;
+            askBtn.disabled = remaining === 0;
+        }
+    }
+
+    async function loadAllowance(){
+        try{
+            const session = await getSession();
+            const response = await fetch("/api/ai-unlimited", {method:"GET", headers:{Authorization:`Bearer ${session.access_token}`}, cache:"no-store"});
+            const data = await response.json();
+            if(!response.ok) throw new Error(data?.error || "Unable to check AI Unlimited allowance.");
+            renderAllowance(data);
+        }catch(error){
+            console.error("AI Unlimited allowance error:", error);
+            if(allowance){
+                allowance.textContent = "AI Unlimited allowance could not be checked.";
+                allowance.style.color = "#f87171";
+            }
+        }
+    }
+
+    function candidateSymbols(message){
+        const tokens = String(message || "").toUpperCase().match(/\b[A-Z]{1,5}\b/g) || [];
+        const current = (document.getElementById("symbolText")?.textContent || "").trim().toUpperCase();
+        if(current && current !== "LOADING...") tokens.unshift(current);
+        return [...new Set(tokens)];
+    }
+
+    function buildContext(message){
+        const symbols = candidateSymbols(message);
+        const find = (arr, sym) => Array.isArray(arr) ? arr.find(x => String(x?.symbol || "").toUpperCase() === sym) : null;
+        for(const sym of symbols){
+            const breakout = find(window.breakoutData, sym);
+            const preBreakout = find(window.scannerData, sym);
+            const launchPad = find(window.launchPadData, sym);
+            const smartMoney = window.smartMoneyLookup?.[sym] || null;
+            let indicator = null;
+            if(Array.isArray(indicatorHistory)) indicator = find(indicatorHistory, sym);
+            else if(indicatorHistory && typeof indicatorHistory === "object") indicator = indicatorHistory[sym] || null;
+
+            if(breakout || preBreakout || launchPad || smartMoney || indicator || sym === (document.getElementById("symbolText")?.textContent || "").trim().toUpperCase()){
+                return {symbol:sym, breakout, preBreakout, launchPad, smartMoney, indicatorHistory:indicator};
+            }
+        }
+        return null;
+    }
+
+    function trimMemory(){
+        let words = memory.reduce((n,t) => n + String(t.text || "").trim().split(/\s+/).filter(Boolean).length, 0);
+        while(words > 1500 && memory.length >= 2){
+            const removed = memory.splice(0,2);
+            words -= removed.reduce((n,t) => n + String(t.text || "").trim().split(/\s+/).filter(Boolean).length, 0);
+        }
+    }
+
+    async function sendQuestion(){
+        const message = input.value.trim();
+        if(!message || askBtn.disabled) return;
+
+        openPanel();
+        input.value = "";
+        addMessage("user", message);
+        const loading = addMessage("ai", "EdgeBreak is researching…", true);
+        askBtn.disabled = true;
+
+        try{
+            const session = await getSession();
+            const response = await fetch("/api/ai-unlimited", {
+                method:"POST",
+                headers:{"Content-Type":"application/json", Authorization:`Bearer ${session.access_token}`},
+                body:JSON.stringify({
+                    message,
+                    conversationHistory:memory.map(turn => ({role:turn.role, text:turn.text})),
+                    edgeBreakContext:buildContext(message)
+                })
+            });
+            const data = await response.json();
+            if(!response.ok) throw new Error(data?.error || "AI Unlimited request failed.");
+            if(!data?.answer) throw new Error("AI Unlimited returned no answer.");
+
+            loading.classList.remove("loading");
+            loading.textContent = data.answer;
+            memory.push({role:"user", text:message}, {role:"assistant", text:data.answer});
+            trimMemory();
+            renderAllowance(data);
+        }catch(error){
+            console.error("AI Unlimited error:", error);
+            loading.classList.remove("loading");
+            loading.textContent = error?.message || "AI Unlimited is temporarily unavailable.";
+        }finally{
+            if(!input.disabled) askBtn.disabled = false;
+            conversation.scrollTop = conversation.scrollHeight;
+        }
+    }
+
+    askBtn.addEventListener("click", sendQuestion);
+    input.addEventListener("keydown", event => {
+        if(event.key === "Enter" && !event.shiftKey){
+            event.preventDefault();
+            sendQuestion();
+        }
+    });
+
+    /* Autosize the fixed bottom textarea. */
+    input.addEventListener("input", () => {
+        input.style.height = "auto";
+        input.style.height = Math.min(input.scrollHeight, 128) + "px";
+    });
+
+    fetch("/scanner_indicator_history.json", {cache:"no-store"})
+        .then(r => r.ok ? r.json() : null)
+        .then(data => { indicatorHistory = data; })
+        .catch(() => {});
+
+    loadAllowance();
+})();
+</script>
 
 <!-- ===================================
 COMPONENTS
