@@ -797,6 +797,246 @@ Existing IDs and dropdown structure preserved
     }
 }
 
+
+
+/* =========================================================
+   MOBILE NAV FINAL FIX
+   DESKTOP IS INTENTIONALLY UNCHANGED
+========================================================= */
+
+@media(max-width:768px){
+
+    /* Remove the old blue mobile tap highlight. */
+    .nav,
+    .nav *{
+        -webkit-tap-highlight-color:transparent !important;
+    }
+
+    .nav{
+        --mobile-green:#16a34a;
+        --mobile-green-dark:#08783b;
+        --mobile-green-soft:#eef9f1;
+        --mobile-green-line:#cfe7d6;
+    }
+
+    .nav-inner{
+        position:relative;
+    }
+
+    /* Hamburger */
+    .menu-toggle{
+        display:flex !important;
+        flex:0 0 46px;
+        background:#ffffff !important;
+        border-color:#dfe6e2 !important;
+        color:var(--nav-ink) !important;
+        -webkit-appearance:none;
+        appearance:none;
+        touch-action:manipulation;
+    }
+
+    .menu-toggle:active,
+    .menu-toggle[aria-expanded="true"]{
+        background:var(--mobile-green-soft) !important;
+        border-color:#b7d9c1 !important;
+        color:var(--mobile-green-dark) !important;
+    }
+
+    /* Full mobile dropdown */
+    .nav-links{
+        top:84px !important;
+        left:10px !important;
+        right:10px !important;
+
+        width:auto !important;
+        max-width:none !important;
+        max-height:calc(100dvh - 100px) !important;
+
+        overflow-y:auto !important;
+        overflow-x:hidden !important;
+        overscroll-behavior:contain;
+
+        gap:5px !important;
+        padding:10px !important;
+
+        border:1px solid #e3e8e5 !important;
+        border-radius:18px !important;
+
+        background:#ffffff !important;
+
+        box-shadow:
+            0 20px 50px rgba(15,23,42,.16) !important;
+    }
+
+    .nav-links.active{
+        display:flex !important;
+    }
+
+    /* Main mobile rows */
+    .nav-link,
+    .nav-login,
+    .nav-buy{
+        width:100% !important;
+        min-height:48px !important;
+
+        display:flex !important;
+        align-items:center !important;
+
+        padding:0 14px !important;
+
+        border-radius:11px !important;
+
+        font-size:13px !important;
+        line-height:1.2 !important;
+
+        box-sizing:border-box !important;
+        touch-action:manipulation;
+    }
+
+    .nav-link,
+    .nav-login{
+        justify-content:space-between !important;
+        background:#ffffff !important;
+        color:#263244 !important;
+    }
+
+    .nav-link:hover,
+    .nav-login:hover,
+    .nav-link:active,
+    .nav-login:active{
+        background:var(--mobile-green-soft) !important;
+        color:var(--mobile-green-dark) !important;
+    }
+
+    /* Prevent mobile browsers leaving a blue focused state. */
+    .nav-link:focus:not(:focus-visible),
+    .nav-login:focus:not(:focus-visible),
+    .nav-buy:focus:not(:focus-visible),
+    .menu-toggle:focus:not(:focus-visible){
+        outline:none !important;
+        box-shadow:none !important;
+    }
+
+    .nav-link:focus-visible,
+    .nav-login:focus-visible,
+    .nav-buy:focus-visible,
+    .menu-toggle:focus-visible{
+        outline:2px solid var(--mobile-green) !important;
+        outline-offset:2px !important;
+    }
+
+    /* Research Hub uses the new restrained green. */
+    .nav-hub{
+        color:var(--mobile-green-dark) !important;
+    }
+
+    .nav-hub::before{
+        color:var(--mobile-green) !important;
+    }
+
+    /* LOGIN / LOGOUT */
+    .nav-login{
+        border:1px solid #dce5df !important;
+        font-weight:850 !important;
+        color:var(--mobile-green-dark) !important;
+        background:#ffffff !important;
+    }
+
+    .nav-login[data-auth-state="logged-in"]{
+        color:#334155 !important;
+        background:#f8fafc !important;
+        border-color:#e2e8f0 !important;
+    }
+
+    .nav-login[data-auth-state="logged-in"]:active{
+        color:#b91c1c !important;
+        background:#fff1f2 !important;
+        border-color:#fecaca !important;
+    }
+
+    /* BUY NOW — MOBILE ONLY
+       Remove the old green-to-blue treatment completely. */
+    .nav-buy{
+        justify-content:center !important;
+
+        margin-top:4px !important;
+
+        border:1px solid var(--mobile-green) !important;
+
+        background:var(--mobile-green) !important;
+        background-image:none !important;
+
+        color:#ffffff !important;
+
+        box-shadow:
+            0 8px 20px rgba(22,163,74,.16) !important;
+
+        transform:none !important;
+    }
+
+    .nav-buy:hover,
+    .nav-buy:active{
+        border-color:var(--mobile-green-dark) !important;
+        background:var(--mobile-green-dark) !important;
+        background-image:none !important;
+        color:#ffffff !important;
+        transform:none !important;
+    }
+
+    /* Auth state hides Buy Now on phones once logged in. */
+    .nav.mobile-user-logged-in .nav-buy{
+        display:none !important;
+    }
+
+    /* Mobile submenu arrows use green rather than blue/grey active colour. */
+    .mobile-arrow{
+        color:#7b8b82 !important;
+    }
+
+    .nav-links.products-open #productsMenu .mobile-arrow,
+    .nav-links.resources-open #resourcesMenu .mobile-arrow{
+        color:var(--mobile-green-dark) !important;
+    }
+
+    /* Mobile submenu */
+    .nav .dropdown-content{
+        padding:2px 0 4px !important;
+    }
+
+    .nav-links.products-open .dropdown-content a,
+    .nav-links.resources-open .dropdown-content a{
+        min-height:46px !important;
+        padding:8px 11px !important;
+        border-radius:10px !important;
+        color:#475569 !important;
+        background:#ffffff !important;
+    }
+
+    .nav-links.products-open .dropdown-content a:hover,
+    .nav-links.products-open .dropdown-content a:active,
+    .nav-links.resources-open .dropdown-content a:hover,
+    .nav-links.resources-open .dropdown-content a:active{
+        background:var(--mobile-green-soft) !important;
+        color:var(--mobile-green-dark) !important;
+    }
+
+    .dropdown-icon{
+        color:var(--mobile-green-dark) !important;
+        stroke:currentColor !important;
+    }
+
+    .mobile-back{
+        color:var(--mobile-green-dark) !important;
+        border-bottom-color:#e5eaf0 !important;
+    }
+
+    .mobile-back:hover,
+    .mobile-back:active{
+        background:var(--mobile-green-soft) !important;
+        color:var(--mobile-green-dark) !important;
+    }
+}
+
 </style>
 
 
@@ -1122,9 +1362,10 @@ NAVBAR
                 =================================== -->
 
                 <a
-                    href="#"
+                    href="/login.html"
                     class="nav-login mobile-main-item"
                     id="authBtn"
+                    data-auth-state="logged-out"
                 >
                     Login
                 </a>
@@ -1137,6 +1378,7 @@ NAVBAR
                 <a
                     href="/pricing.html"
                     class="nav-buy mobile-main-item"
+                    id="navBuyBtn"
                 >
                     Buy Now
                 </a>
@@ -1182,3 +1424,368 @@ NAVBAR
     </div>
 
 </div>
+
+<script id="edgebreak-mobile-nav-auth-v4">
+(function(){
+
+    const MOBILE_MAX = 768;
+
+    function isMobile(){
+        return window.innerWidth <= MOBILE_MAX;
+    }
+
+    function getNavElements(){
+        return {
+            nav:
+                document.querySelector(".nav"),
+
+            auth:
+                document.getElementById("authBtn"),
+
+            buy:
+                document.getElementById("navBuyBtn"),
+
+            links:
+                document.getElementById("navLinks")
+        };
+    }
+
+    function setMobileAuthState(user){
+
+        if(!isMobile()){
+            return;
+        }
+
+        const {
+            nav,
+            auth,
+            buy
+        } = getNavElements();
+
+        if(!nav || !auth){
+            return;
+        }
+
+        const loggedIn =
+            Boolean(user);
+
+        nav.classList.toggle(
+            "mobile-user-logged-in",
+            loggedIn
+        );
+
+        auth.dataset.authState =
+            loggedIn
+                ? "logged-in"
+                : "logged-out";
+
+        if(loggedIn){
+
+            auth.textContent =
+                "Log Out";
+
+            auth.href =
+                "#";
+
+            auth.setAttribute(
+                "aria-label",
+                "Log out of EdgeBreak"
+            );
+
+            if(buy){
+                buy.hidden = true;
+            }
+        }
+        else{
+
+            auth.textContent =
+                "Log In";
+
+            auth.href =
+                "/login.html";
+
+            auth.setAttribute(
+                "aria-label",
+                "Log in to EdgeBreak"
+            );
+
+            if(buy){
+                buy.hidden = false;
+            }
+        }
+    }
+
+    async function readSession(){
+
+        if(!isMobile()){
+            return;
+        }
+
+        /*
+           Supabase is already initialised by the EdgeBreak pages.
+           Wait briefly if components.js inserted the navbar before
+           the page's Supabase client became available.
+        */
+        if(
+            !window.supabaseClient ||
+            !window.supabaseClient.auth
+        ){
+            return false;
+        }
+
+        try{
+
+            const {
+                data,
+                error
+            } =
+                await window
+                    .supabaseClient
+                    .auth
+                    .getSession();
+
+            if(error){
+                throw error;
+            }
+
+            setMobileAuthState(
+                data?.session?.user ||
+                null
+            );
+
+            return true;
+        }
+        catch(error){
+
+            console.warn(
+                "EdgeBreak mobile navbar session check failed:",
+                error
+            );
+
+            setMobileAuthState(
+                null
+            );
+
+            return true;
+        }
+    }
+
+    function installMobileAuthClick(){
+
+        const {
+            auth
+        } = getNavElements();
+
+        if(
+            !auth ||
+            auth.dataset.mobileAuthBound ===
+                "true"
+        ){
+            return;
+        }
+
+        auth.dataset.mobileAuthBound =
+            "true";
+
+        /*
+           Capture phase means the mobile navbar gets one clear
+           Login/Logout action even if older shared auth code also
+           attached a click listener.
+        */
+        auth.addEventListener(
+            "click",
+            async function(event){
+
+                if(!isMobile()){
+                    return;
+                }
+
+                if(
+                    auth.dataset.authState !==
+                    "logged-in"
+                ){
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+
+                    window.location.href =
+                        "/login.html";
+
+                    return;
+                }
+
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                auth.textContent =
+                    "Logging Out…";
+
+                try{
+
+                    if(
+                        window.supabaseClient?.auth
+                    ){
+                        await window
+                            .supabaseClient
+                            .auth
+                            .signOut();
+                    }
+
+                }
+                catch(error){
+
+                    console.error(
+                        "EdgeBreak logout failed:",
+                        error
+                    );
+
+                }
+                finally{
+
+                    window.location.href =
+                        "/index.html";
+
+                }
+
+            },
+            true
+        );
+    }
+
+    function clearBlueTapState(){
+
+        if(!isMobile()){
+            return;
+        }
+
+        document
+            .querySelectorAll(
+                ".nav a, .nav .menu-toggle"
+            )
+            .forEach(
+                element => {
+
+                    if(
+                        element.dataset
+                            .mobileBlurBound ===
+                        "true"
+                    ){
+                        return;
+                    }
+
+                    element.dataset
+                        .mobileBlurBound =
+                        "true";
+
+                    element.addEventListener(
+                        "click",
+                        () => {
+                            setTimeout(
+                                () => {
+                                    element.blur?.();
+                                },
+                                80
+                            );
+                        }
+                    );
+
+                }
+            );
+    }
+
+    async function initialise(){
+
+        if(!isMobile()){
+            return;
+        }
+
+        installMobileAuthClick();
+        clearBlueTapState();
+
+        const loaded =
+            await readSession();
+
+        if(loaded){
+            return;
+        }
+
+        /*
+           Retry because the navbar component can load before
+           Supabase is ready on some pages.
+        */
+        let attempts = 0;
+
+        const timer =
+            setInterval(
+                async () => {
+
+                    attempts++;
+
+                    installMobileAuthClick();
+                    clearBlueTapState();
+
+                    const ready =
+                        await readSession();
+
+                    if(
+                        ready ||
+                        attempts >= 20
+                    ){
+                        clearInterval(
+                            timer
+                        );
+                    }
+
+                },
+                150
+            );
+    }
+
+    initialise();
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            if(isMobile()){
+                initialise();
+            }
+
+        }
+    );
+
+    /*
+       If Supabase is already ready, keep the navbar synced after
+       login/logout changes without refreshing the page.
+    */
+    setTimeout(
+        () => {
+
+            if(
+                window.supabaseClient?.auth
+            ){
+                window
+                    .supabaseClient
+                    .auth
+                    .onAuthStateChange(
+                        (
+                            event,
+                            session
+                        ) => {
+
+                            if(isMobile()){
+                                setMobileAuthState(
+                                    session?.user ||
+                                    null
+                                );
+                            }
+
+                        }
+                    );
+            }
+
+        },
+        500
+    );
+
+})();
+</script>

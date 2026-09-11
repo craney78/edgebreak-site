@@ -1,4 +1,3 @@
-
 <!-- =========================================
 EDGEBREAK AI CHAT — NEW LIGHT APP STYLE
 VISUAL OVERRIDES ONLY
@@ -1252,6 +1251,834 @@ Existing IDs / data attributes / behaviour preserved
         width:100%;
     }
 
+}
+
+
+
+/* =========================================================
+   EDGEBREAK AI CHAT — FINAL LIGHT / AIRY VISUAL PASS
+   CSS ONLY. Existing IDs, data attributes and behaviour stay intact.
+========================================================= */
+
+/* ---------- PANEL / OVERLAY ---------- */
+
+#edgeBreakChatOverlay.edge-chat-overlay{
+    background:rgba(15,23,42,.18) !important;
+    backdrop-filter:blur(2px) !important;
+    -webkit-backdrop-filter:blur(2px) !important;
+}
+
+#edgeBreakChatPanel.edge-chat-panel{
+    top:12px !important;
+    right:12px !important;
+    bottom:12px !important;
+
+    width:min(560px,calc(100vw - 24px)) !important;
+
+    border:1px solid #e5eaf0 !important;
+    border-radius:26px !important;
+
+    background:#ffffff !important;
+    background-image:none !important;
+
+    box-shadow:
+        0 28px 70px rgba(15,23,42,.12),
+        0 0 0 1px rgba(255,255,255,.8) inset !important;
+}
+
+/* ---------- HEADER ---------- */
+
+#edgeBreakChatPanel .edge-chat-header{
+    min-height:94px !important;
+    padding:22px 26px !important;
+
+    border-bottom:1px solid #edf1f4 !important;
+
+    background:#ffffff !important;
+}
+
+#edgeBreakChatPanel .edge-chat-brand{
+    gap:14px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-brand-icon{
+    width:46px !important;
+    height:46px !important;
+
+    border:1px solid #d7eadc !important;
+    border-radius:15px !important;
+
+    background:#f0faf3 !important;
+    color:#08783b !important;
+
+    box-shadow:none !important;
+}
+
+#edgeBreakChatPanel .edge-chat-eyebrow{
+    margin-bottom:5px !important;
+
+    color:#08783b !important;
+
+    font-size:9px !important;
+    letter-spacing:.16em !important;
+}
+
+#edgeBreakChatPanel .edge-chat-header h2{
+    color:#0b1220 !important;
+
+    font-size:22px !important;
+    font-weight:850 !important;
+    letter-spacing:-.03em !important;
+}
+
+#edgeBreakChatPanel .edge-chat-close{
+    width:42px !important;
+    height:42px !important;
+
+    border:1px solid #e5eaf0 !important;
+    border-radius:13px !important;
+
+    background:#ffffff !important;
+    color:#64748b !important;
+
+    box-shadow:none !important;
+}
+
+#edgeBreakChatPanel .edge-chat-close:hover{
+    border-color:#d3ddd6 !important;
+    background:#f7faf8 !important;
+    color:#0b1220 !important;
+}
+
+/* ---------- MODE SWITCH ---------- */
+
+#edgeBreakChatPanel .edge-ai-mode-switch{
+    gap:6px !important;
+
+    margin:18px 26px 0 !important;
+    padding:5px !important;
+
+    border:1px solid #e6ece8 !important;
+    border-radius:14px !important;
+
+    background:#f7f9f8 !important;
+}
+
+#edgeBreakChatPanel .edge-ai-mode-btn{
+    min-height:42px !important;
+
+    border-radius:10px !important;
+
+    color:#64748b !important;
+
+    font-size:12px !important;
+}
+
+#edgeBreakChatPanel .edge-ai-mode-btn:hover{
+    background:#ffffff !important;
+    color:#0b1220 !important;
+}
+
+#edgeBreakChatPanel .edge-ai-mode-btn.active{
+    background:#ffffff !important;
+    color:#08783b !important;
+
+    box-shadow:
+        0 3px 10px rgba(15,23,42,.055),
+        inset 0 0 0 1px #d8e8dc !important;
+}
+
+/* ---------- INTRO ---------- */
+
+#edgeBreakChatPanel .edge-chat-intro{
+    padding:23px 26px 18px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-intro > p{
+    max-width:460px !important;
+
+    color:#64748b !important;
+
+    font-size:13.5px !important;
+    line-height:1.75 !important;
+}
+
+#edgeBreakChatPanel .edge-chat-learning{
+    gap:11px !important;
+
+    margin-top:16px !important;
+    padding:14px 15px !important;
+
+    border:1px solid #dce9e0 !important;
+    border-radius:14px !important;
+
+    background:#f5fbf7 !important;
+    background-image:none !important;
+}
+
+#edgeBreakChatPanel .edge-chat-learning > span{
+    color:#16a34a !important;
+}
+
+#edgeBreakChatPanel .edge-chat-learning p{
+    color:#64748b !important;
+
+    font-size:11px !important;
+    line-height:1.6 !important;
+}
+
+#edgeBreakChatPanel .edge-chat-learning strong{
+    color:#243043 !important;
+}
+
+/* ---------- SCROLLING CONTENT ---------- */
+
+#edgeBreakChatPanel .edge-chat-conversation{
+    padding:9px 26px 30px !important;
+
+    background:#ffffff !important;
+
+    scrollbar-color:#d8dee7 transparent !important;
+}
+
+#edgeBreakChatPanel .edge-chat-conversation::-webkit-scrollbar-thumb{
+    background:#d8dee7 !important;
+}
+
+/* ---------- CHAT MESSAGES ---------- */
+
+#edgeBreakChatPanel .edge-chat-message{
+    gap:11px !important;
+    margin-bottom:18px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-message-icon{
+    width:32px !important;
+    height:32px !important;
+
+    border:1px solid #d8eadc !important;
+    border-radius:10px !important;
+
+    background:#f0faf3 !important;
+    color:#08783b !important;
+}
+
+#edgeBreakChatPanel .edge-chat-message-bubble{
+    max-width:calc(100% - 44px) !important;
+
+    padding:14px 16px !important;
+
+    border:1px solid #e5eaf0 !important;
+    border-radius:5px 17px 17px 17px !important;
+
+    background:#ffffff !important;
+    color:#475569 !important;
+
+    box-shadow:0 7px 20px rgba(15,23,42,.035) !important;
+
+    font-size:13px !important;
+    line-height:1.65 !important;
+}
+
+#edgeBreakChatPanel .edge-chat-message-bubble strong{
+    color:#0b1220 !important;
+}
+
+#edgeBreakChatPanel .edge-chat-message-bubble p{
+    color:#64748b !important;
+}
+
+/* User question gets a soft green card rather than a dark bubble. */
+#edgeBreakChatPanel .edge-chat-message-user{
+    justify-content:flex-end !important;
+}
+
+#edgeBreakChatPanel .edge-chat-message-user .edge-chat-message-bubble{
+    max-width:84% !important;
+
+    border-color:#d7eadc !important;
+    border-radius:17px 5px 17px 17px !important;
+
+    background:#f2faf4 !important;
+    color:#334155 !important;
+
+    box-shadow:none !important;
+}
+
+/* ---------- MAIN CATEGORY CARDS ---------- */
+
+#edgeBreakChatPanel .edge-chat-categories{
+    gap:12px !important;
+    padding-bottom:8px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-category{
+    min-height:102px !important;
+
+    gap:12px !important;
+
+    padding:16px !important;
+
+    border:1px solid #e5eaf0 !important;
+    border-radius:16px !important;
+
+    background:#ffffff !important;
+    color:#0b1220 !important;
+
+    box-shadow:0 6px 18px rgba(15,23,42,.025) !important;
+}
+
+#edgeBreakChatPanel .edge-chat-category:hover{
+    transform:translateY(-1px) !important;
+
+    border-color:#cfe4d6 !important;
+    background:#fbfefc !important;
+
+    box-shadow:0 10px 24px rgba(15,23,42,.045) !important;
+}
+
+#edgeBreakChatPanel .edge-chat-category-icon{
+    width:35px !important;
+    height:35px !important;
+
+    border:1px solid #e7ece9 !important;
+    border-radius:10px !important;
+
+    background:#f7faf8 !important;
+}
+
+#edgeBreakChatPanel .edge-chat-category strong{
+    color:#243043 !important;
+
+    font-size:12px !important;
+    line-height:1.4 !important;
+}
+
+#edgeBreakChatPanel .edge-chat-category small{
+    margin-top:6px !important;
+
+    color:#7b8797 !important;
+
+    font-size:10px !important;
+    line-height:1.5 !important;
+}
+
+/* ---------- INTERNAL SCREEN LAYOUT ---------- */
+
+#edgeBreakChatPanel .edge-chat-back{
+    min-height:38px !important;
+
+    margin-bottom:18px !important;
+    padding:7px 12px !important;
+
+    border:1px solid #e3e8e5 !important;
+    border-radius:10px !important;
+
+    background:#ffffff !important;
+    color:#64748b !important;
+
+    font-size:11px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-back:hover{
+    border-color:#cee4d5 !important;
+    background:#f2faf4 !important;
+    color:#08783b !important;
+}
+
+#edgeBreakChatPanel .edge-chat-screen-heading{
+    gap:14px !important;
+    margin-bottom:19px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-screen-icon{
+    width:43px !important;
+    height:43px !important;
+
+    border:1px solid #d8eadc !important;
+    border-radius:13px !important;
+
+    background:#f0faf3 !important;
+}
+
+#edgeBreakChatPanel .edge-chat-screen-label{
+    margin-bottom:5px !important;
+
+    color:#08783b !important;
+
+    font-size:8.5px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-screen-heading h3{
+    color:#0b1220 !important;
+
+    font-size:19px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-screen-heading p{
+    margin-top:7px !important;
+
+    color:#718096 !important;
+
+    font-size:11px !important;
+    line-height:1.6 !important;
+}
+
+#edgeBreakChatPanel .edge-chat-stock-notice{
+    gap:11px !important;
+
+    margin-bottom:18px !important;
+    padding:14px 15px !important;
+
+    border:1px solid #e5eaf0 !important;
+    border-radius:13px !important;
+
+    background:#f8faf9 !important;
+}
+
+#edgeBreakChatPanel .edge-chat-stock-notice strong{
+    color:#334155 !important;
+    font-size:11px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-stock-notice p{
+    margin-top:4px !important;
+
+    color:#718096 !important;
+
+    font-size:10px !important;
+    line-height:1.55 !important;
+}
+
+/* ---------- QUESTION ROWS ---------- */
+
+#edgeBreakChatPanel .edge-chat-question-list{
+    gap:10px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-question{
+    min-height:56px !important;
+
+    gap:14px !important;
+
+    padding:13px 15px !important;
+
+    border:1px solid #e5eaf0 !important;
+    border-radius:13px !important;
+
+    background:#ffffff !important;
+    color:#334155 !important;
+
+    box-shadow:0 4px 14px rgba(15,23,42,.02) !important;
+
+    font-size:11.5px !important;
+    line-height:1.45 !important;
+}
+
+#edgeBreakChatPanel .edge-chat-question:hover{
+    transform:translateX(2px) !important;
+
+    border-color:#cfe4d6 !important;
+    background:#fbfefc !important;
+    color:#0b1220 !important;
+}
+
+#edgeBreakChatPanel .edge-chat-question-arrow,
+#edgeBreakChatPanel .edge-chat-question > span:last-child:not(:first-child){
+    color:#08783b !important;
+}
+
+/* ---------- SELECTED QUESTION ---------- */
+
+#edgeBreakChatPanel .edge-chat-selected-question{
+    margin-bottom:19px !important;
+    padding:14px 15px !important;
+
+    border:1px solid #d8eadc !important;
+    border-radius:13px !important;
+
+    background:#f3faf5 !important;
+}
+
+#edgeBreakChatPanel .edge-chat-selected-question span{
+    color:#718096 !important;
+}
+
+#edgeBreakChatPanel .edge-chat-selected-question strong{
+    color:#08783b !important;
+    font-size:11px !important;
+}
+
+/* ---------- TICKER FORM ---------- */
+
+#edgeBreakChatPanel .edge-chat-ticker-form{
+    margin-bottom:24px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-ticker-form label{
+    margin-bottom:8px !important;
+
+    color:#475569 !important;
+
+    font-size:11px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-ticker-row{
+    gap:9px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-ticker-input{
+    height:49px !important;
+
+    padding:0 14px !important;
+
+    border:1px solid #d8dee7 !important;
+    border-radius:12px !important;
+
+    background:#ffffff !important;
+    color:#0b1220 !important;
+
+    box-shadow:none !important;
+}
+
+#edgeBreakChatPanel .edge-chat-ticker-input:focus{
+    border-color:#73c88b !important;
+    box-shadow:0 0 0 4px rgba(34,197,94,.08) !important;
+}
+
+#edgeBreakChatPanel .edge-chat-ticker-submit{
+    min-height:49px !important;
+
+    padding:0 17px !important;
+
+    border-radius:12px !important;
+
+    background:#16a34a !important;
+    background-image:none !important;
+    color:#ffffff !important;
+
+    box-shadow:none !important;
+}
+
+#edgeBreakChatPanel .edge-chat-ticker-submit:hover{
+    background:#08783b !important;
+    transform:none !important;
+    box-shadow:none !important;
+}
+
+/* ---------- DISABLED / FUTURE ITEMS ---------- */
+
+#edgeBreakChatPanel .edge-chat-stock-options{
+    padding-top:6px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-stock-options-label{
+    margin-bottom:10px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-stock-option-disabled{
+    gap:11px !important;
+
+    margin-bottom:9px !important;
+    padding:13px 14px !important;
+
+    border:1px solid #edf0f3 !important;
+    border-radius:12px !important;
+
+    background:#f8fafc !important;
+}
+
+/* ---------- DISCLAIMER ---------- */
+
+#edgeBreakChatPanel .edge-chat-disclaimer{
+    padding:14px 26px 17px !important;
+
+    border-top:1px solid #edf1f4 !important;
+
+    background:#ffffff !important;
+    color:#94a3b8 !important;
+
+    font-size:9px !important;
+    line-height:1.6 !important;
+}
+
+/* ---------- AI UNLIMITED ---------- */
+
+#edgeBreakChatPanel #edgeAIUnlimitedContent{
+    background:#ffffff !important;
+}
+
+#edgeBreakChatPanel .edge-ai-unlimited-intro{
+    padding:24px 26px 30px !important;
+}
+
+#edgeBreakChatPanel .edge-ai-unlimited-icon{
+    width:50px !important;
+    height:50px !important;
+
+    margin:6px auto 15px !important;
+
+    border:1px solid #d7eadc !important;
+    border-radius:16px !important;
+
+    background:#f0faf3 !important;
+    color:#08783b !important;
+}
+
+#edgeBreakChatPanel .edge-ai-unlimited-intro h3{
+    color:#0b1220 !important;
+
+    font-size:22px !important;
+}
+
+#edgeBreakChatPanel .edge-ai-unlimited-intro p{
+    max-width:390px !important;
+
+    margin-bottom:22px !important;
+
+    color:#64748b !important;
+
+    font-size:13px !important;
+    line-height:1.7 !important;
+}
+
+#edgeBreakChatPanel #edgeAIUnlimitedQuestion{
+    min-height:132px !important;
+
+    padding:16px !important;
+
+    border:1px solid #d8dee7 !important;
+    border-radius:14px !important;
+
+    background:#ffffff !important;
+    color:#0b1220 !important;
+
+    box-shadow:none !important;
+}
+
+#edgeBreakChatPanel #edgeAIUnlimitedQuestion:focus{
+    border-color:#73c88b !important;
+    box-shadow:0 0 0 4px rgba(34,197,94,.08) !important;
+}
+
+#edgeBreakChatPanel .edge-ai-unlimited-ask{
+    min-height:49px !important;
+
+    margin-top:14px !important;
+
+    border-radius:12px !important;
+
+    background:#16a34a !important;
+    background-image:none !important;
+    color:#ffffff !important;
+
+    box-shadow:none !important;
+}
+
+#edgeBreakChatPanel .edge-ai-unlimited-ask:hover{
+    background:#08783b !important;
+    transform:none !important;
+    box-shadow:none !important;
+}
+
+/* ---------- GENERATED ANSWERS ----------
+   Older answer builders contain inline dark-theme text colours.
+   These visual overrides keep their content/logic untouched while
+   making the rendered answers match the new light design.
+---------------------------------------------------------- */
+
+#edgeBreakChatPanel .edge-ai-rundown{
+    color:#475569 !important;
+}
+
+#edgeBreakChatPanel .edge-ai-rundown > div{
+    color:#475569 !important;
+}
+
+#edgeBreakChatPanel [style*="color:#f8fafc"],
+#edgeBreakChatPanel [style*="color: #f8fafc"]{
+    color:#0b1220 !important;
+}
+
+#edgeBreakChatPanel [style*="color:#e2e8f0"],
+#edgeBreakChatPanel [style*="color: #e2e8f0"]{
+    color:#334155 !important;
+}
+
+#edgeBreakChatPanel [style*="color:#cbd5e1"],
+#edgeBreakChatPanel [style*="color: #cbd5e1"]{
+    color:#475569 !important;
+}
+
+#edgeBreakChatPanel [style*="color:#94a3b8"],
+#edgeBreakChatPanel [style*="color: #94a3b8"]{
+    color:#718096 !important;
+}
+
+#edgeBreakChatPanel [style*="color:#64748b"],
+#edgeBreakChatPanel [style*="color: #64748b"]{
+    color:#64748b !important;
+}
+
+#edgeBreakChatPanel [style*="color:#22c55e"],
+#edgeBreakChatPanel [style*="color: #22c55e"]{
+    color:#08783b !important;
+}
+
+/* Any old generated dark cards are forced back to the light system. */
+#edgeBreakChatPanel [style*="background:#020617"],
+#edgeBreakChatPanel [style*="background: #020617"],
+#edgeBreakChatPanel [style*="background:#07101d"],
+#edgeBreakChatPanel [style*="background: #07101d"],
+#edgeBreakChatPanel [style*="background:#08111f"],
+#edgeBreakChatPanel [style*="background: #08111f"],
+#edgeBreakChatPanel [style*="background:#0b1220"],
+#edgeBreakChatPanel [style*="background: #0b1220"],
+#edgeBreakChatPanel [style*="background:#0f172a"],
+#edgeBreakChatPanel [style*="background: #0f172a"],
+#edgeBreakChatPanel [style*="background:#111827"],
+#edgeBreakChatPanel [style*="background: #111827"]{
+    background:#ffffff !important;
+    background-image:none !important;
+    color:#475569 !important;
+}
+
+/* Answer-back controls created by the existing JS. */
+#edgeBreakChatPanel .edge-chat-answer-back-row{
+    display:flex !important;
+    justify-content:flex-start !important;
+
+    margin:4px 0 18px !important;
+}
+
+#edgeBreakChatPanel .edge-chat-answer-back-row button{
+    min-height:38px !important;
+
+    padding:7px 12px !important;
+
+    border:1px solid #dfe7e2 !important;
+    border-radius:10px !important;
+
+    background:#ffffff !important;
+    color:#08783b !important;
+
+    font:inherit !important;
+    font-size:10.5px !important;
+    font-weight:800 !important;
+
+    cursor:pointer !important;
+}
+
+#edgeBreakChatPanel .edge-chat-answer-back-row button:hover{
+    background:#f2faf4 !important;
+    border-color:#cfe4d6 !important;
+}
+
+/* ---------- FLOATING BUTTON ---------- */
+
+#edgeBreakChatButton.edge-chat-button{
+    min-height:60px !important;
+
+    padding:9px 18px 9px 10px !important;
+
+    border:1px solid #dfe7e2 !important;
+    border-radius:18px !important;
+
+    background:#ffffff !important;
+    color:#0b1220 !important;
+
+    box-shadow:0 16px 42px rgba(15,23,42,.10) !important;
+}
+
+#edgeBreakChatButton .edge-chat-button-icon{
+    background:#16a34a !important;
+    background-image:none !important;
+    color:#ffffff !important;
+
+    box-shadow:none !important;
+}
+
+#edgeBreakChatButton:hover{
+    border-color:#c7dfce !important;
+
+    box-shadow:
+        0 20px 46px rgba(15,23,42,.12),
+        0 0 0 4px rgba(22,163,74,.05) !important;
+}
+
+/* ---------- MOBILE ---------- */
+
+@media(max-width:640px){
+
+    #edgeBreakChatPanel.edge-chat-panel{
+        top:0 !important;
+        right:0 !important;
+        bottom:0 !important;
+
+        width:100% !important;
+
+        border:0 !important;
+        border-radius:0 !important;
+    }
+
+    #edgeBreakChatPanel .edge-chat-header{
+        min-height:82px !important;
+        padding:17px 18px !important;
+    }
+
+    #edgeBreakChatPanel .edge-ai-mode-switch{
+        margin:14px 18px 0 !important;
+    }
+
+    #edgeBreakChatPanel .edge-chat-intro{
+        padding:19px 18px 15px !important;
+    }
+
+    #edgeBreakChatPanel .edge-chat-conversation{
+        padding:8px 18px 24px !important;
+    }
+
+    #edgeBreakChatPanel .edge-chat-categories{
+        grid-template-columns:1fr !important;
+        gap:10px !important;
+    }
+
+    #edgeBreakChatPanel .edge-chat-category{
+        min-height:74px !important;
+        padding:14px !important;
+    }
+
+    #edgeBreakChatPanel .edge-chat-disclaimer{
+        padding:12px 18px 15px !important;
+    }
+
+    #edgeBreakChatPanel .edge-ai-unlimited-intro{
+        padding:20px 18px 26px !important;
+    }
+
+    #edgeBreakChatButton.edge-chat-button{
+        right:14px !important;
+        bottom:14px !important;
+    }
+}
+
+@media(max-width:420px){
+
+    #edgeBreakChatPanel .edge-chat-header h2{
+        font-size:20px !important;
+    }
+
+    #edgeBreakChatPanel .edge-chat-intro > p{
+        font-size:13px !important;
+    }
+
+    #edgeBreakChatPanel .edge-chat-ticker-row{
+        flex-direction:column !important;
+    }
+
+    #edgeBreakChatPanel .edge-chat-ticker-submit{
+        width:100% !important;
+    }
 }
 
 </style>
