@@ -42944,5 +42944,151 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 </script>
 
+
+<!-- =========================================================
+     INLINE STOCK CHART BRIDGE
+     Auto Scan + scanner results keep the chart inside the
+     currently open work area instead of switching tools.
+========================================================= -->
+<style id="edgebreak-inline-chart-css">
+#chartSection.eb-inline-chart{
+    margin-top:24px !important;
+    padding-top:18px !important;
+    border-top:1px solid #e2e8f0 !important;
+}
+
+.eb-inline-chart-toolbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin:0 0 14px;
+}
+
+.eb-inline-chart-toolbar strong{
+    color:#0f172a;
+    font-size:16px;
+    font-weight:800;
+}
+
+.eb-inline-chart-close{
+    width:34px;
+    height:34px;
+    display:grid;
+    place-items:center;
+    flex:0 0 34px;
+    padding:0;
+    border:1px solid #dbe2ea;
+    border-radius:10px;
+    background:#f8fafc;
+    color:#64748b;
+    font-size:22px;
+    line-height:1;
+    cursor:pointer;
+}
+
+.eb-inline-chart-close:hover{
+    border-color:#fecaca;
+    background:#fff1f2;
+    color:#dc2626;
+}
+</style>
+
+<script id="edgebreak-inline-chart-js">
+(function(){
+    const originalLoadChart = window.loadChart;
+
+    if(typeof originalLoadChart !== "function"){
+        console.error("EdgeBreak inline chart bridge: loadChart() was not found.");
+        return;
+    }
+
+    const INLINE_TOOL_IDS = [
+        "dailyBriefPanel",
+        "breakoutScanner",
+        "preBreakoutScanner",
+        "launchPadScanner"
+    ];
+
+    function getActiveInlineTool(){
+        const host = document.getElementById("ebWorkspaceContent");
+        if(!host) return null;
+
+        for(const id of INLINE_TOOL_IDS){
+            const tool = document.getElementById(id);
+            if(tool && tool.parentElement === host && tool.style.display !== "none"){
+                return tool;
+            }
+        }
+
+        return null;
+    }
+
+    function ensureInlineToolbar(chart){
+        let toolbar = chart.querySelector(":scope > .eb-inline-chart-toolbar");
+
+        if(!toolbar){
+            toolbar = document.createElement("div");
+            toolbar.className = "eb-inline-chart-toolbar";
+            toolbar.innerHTML = `
+                <strong>Stock Chart</strong>
+                <button
+                    type="button"
+                    class="eb-inline-chart-close"
+                    aria-label="Close stock chart"
+                    title="Close chart"
+                >×</button>
+            `;
+
+            chart.insertBefore(toolbar, chart.firstChild);
+
+            toolbar
+                .querySelector(".eb-inline-chart-close")
+                ?.addEventListener("click", function(){
+                    const storage = document.getElementById("ebWorkspaceStorage");
+                    chart.style.display = "none";
+                    chart.classList.remove("eb-inline-chart");
+                    toolbar.style.display = "none";
+                    if(storage){
+                        storage.appendChild(chart);
+                    }
+                });
+        }
+
+        return toolbar;
+    }
+
+    window.loadChart = function(symbol){
+        const chart = document.getElementById("chartSection");
+        const activeTool = getActiveInlineTool();
+
+        if(chart && activeTool){
+            /* Put the ONE existing TradingView chart after the current results. */
+            activeTool.appendChild(chart);
+            chart.style.display = "block";
+            chart.classList.add("eb-inline-chart");
+
+            const toolbar = ensureInlineToolbar(chart);
+            toolbar.style.display = "flex";
+        }
+        else if(chart){
+            /* Sidebar Stock Chart remains a normal standalone workspace tool. */
+            chart.classList.remove("eb-inline-chart");
+            const toolbar = chart.querySelector(":scope > .eb-inline-chart-toolbar");
+            if(toolbar){
+                toolbar.style.display = "none";
+            }
+        }
+
+        originalLoadChart(symbol);
+
+        /* TradingView behaves better after its container has become visible. */
+        requestAnimationFrame(() => {
+            window.dispatchEvent(new Event("resize"));
+        });
+    };
+})();
+</script>
+
 </body>
 </html>
