@@ -2123,6 +2123,162 @@ body.eb-app-body .eb-bottom-ai{
 }
 </style>
 
+
+<style id="edgebreak-my-workspace-mobile-tools">
+/* =========================================================
+   MOBILE TOOL MENU — COLLAPSED, NOT A HORIZONTAL LINK STRIP
+========================================================= */
+
+.eb-mobile-tools-toggle{
+    display:none;
+}
+
+@media(max-width:900px){
+
+    .eb-app-sidebar{
+        position:sticky !important;
+        top:0 !important;
+        z-index:10020 !important;
+        width:100% !important;
+        height:auto !important;
+        margin:0 !important;
+        padding:8px 12px !important;
+        overflow:visible !important;
+        border-right:0 !important;
+        border-bottom:1px solid var(--eb-line) !important;
+        background:rgba(255,255,255,.98) !important;
+        box-shadow:0 8px 24px rgba(15,23,42,.06) !important;
+        box-sizing:border-box;
+    }
+
+    .eb-app-sidebar-head{
+        display:flex !important;
+        align-items:center;
+        gap:10px;
+        min-height:48px;
+        padding:0 !important;
+    }
+
+    .eb-app-sidebar-head img{
+        width:34px !important;
+        height:34px !important;
+        flex:0 0 34px;
+    }
+
+    .eb-app-sidebar-brand-copy{
+        min-width:0;
+        flex:1;
+    }
+
+    .eb-app-sidebar-brand-copy strong{
+        display:block;
+        font-size:14px !important;
+    }
+
+    .eb-app-sidebar-brand-copy span{
+        display:block;
+        margin-top:2px;
+        font-size:9px !important;
+    }
+
+    .eb-mobile-tools-toggle{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap:8px;
+        min-height:38px;
+        padding:0 13px;
+        border:1px solid #d8dee7;
+        border-radius:11px;
+        background:#fff;
+        color:#0f172a;
+        font:inherit;
+        font-size:12px;
+        font-weight:800;
+        cursor:pointer;
+    }
+
+    .eb-mobile-tools-toggle[aria-expanded="true"]{
+        border-color:#b7d9c1;
+        background:#eef9f1;
+        color:#08783b;
+    }
+
+    .eb-mobile-tools-toggle-icon{
+        font-size:15px;
+        line-height:1;
+    }
+
+    .eb-app-nav{
+        display:none !important;
+        width:100% !important;
+        max-height:calc(100vh - 150px);
+        overflow-y:auto !important;
+        overflow-x:hidden !important;
+        margin-top:8px !important;
+        padding:10px 0 6px !important;
+        gap:14px !important;
+        border-top:1px solid var(--eb-line);
+        box-sizing:border-box;
+    }
+
+    .eb-app-sidebar.mobile-open .eb-app-nav{
+        display:grid !important;
+    }
+
+    .eb-app-nav-group,
+    .eb-app-nav-group:not(.eb-app-nav-primary),
+    .eb-app-nav-primary{
+        display:grid !important;
+        width:100% !important;
+        gap:4px !important;
+        padding:0 0 10px !important;
+        border:0 !important;
+        border-bottom:1px solid #eef1f4 !important;
+    }
+
+    .eb-app-nav-group:last-child{
+        border-bottom:0 !important;
+        padding-bottom:0 !important;
+    }
+
+    .eb-app-nav-label{
+        display:block !important;
+        padding:0 8px 4px !important;
+        color:#94a3b8 !important;
+        font-size:9px !important;
+    }
+
+    .eb-app-nav-item,
+    .eb-app-nav-primary .eb-app-nav-item{
+        width:100% !important;
+        min-height:42px !important;
+        white-space:normal !important;
+        font-size:13px !important;
+    }
+
+    body.eb-app-body main{
+        margin-left:0 !important;
+    }
+
+    .eb-workspace-empty strong{
+        font-size:22px;
+        text-align:center;
+    }
+
+    .eb-workspace-empty span{
+        max-width:290px;
+        text-align:center;
+    }
+}
+
+@media(max-width:600px){
+    .eb-workspace-content{
+        padding:14px !important;
+    }
+}
+</style>
+
 </head>
 
 
@@ -2147,15 +2303,26 @@ SAME SHELL AS NASDAQ SCANNER
 
         <img src="/images/logo.webp" alt="EdgeBreak">
 
-        <div>
+        <div class="eb-app-sidebar-brand-copy">
             <strong>EdgeBreak</strong>
             <span>Research Workspace</span>
         </div>
 
+        <button
+            type="button"
+            class="eb-mobile-tools-toggle"
+            id="ebMobileToolsToggle"
+            aria-expanded="false"
+            aria-controls="ebAppNav"
+        >
+            <span>Tools</span>
+            <span class="eb-mobile-tools-toggle-icon">☰</span>
+        </button>
+
     </div>
 
 
-    <nav class="eb-app-nav">
+    <nav class="eb-app-nav" id="ebAppNav">
 
         <div class="eb-app-nav-group eb-app-nav-primary">
             <button class="eb-app-nav-item active" type="button" data-eb-home>
@@ -2283,8 +2450,8 @@ MY WORKSPACE — CLEAN WORK AREA
 
     <div class="eb-workspace-empty" id="ebWorkspaceEmpty">
         <div class="eb-workspace-empty-icon">□</div>
-        <strong>Select a tool from the left</strong>
-        <span>Your saved research tools will open here.</span>
+        <strong>Select a tool to begin</strong>
+        <span>Open Tools above to choose a research tool.</span>
     </div>
 
     <div class="eb-workspace-window" id="ebWorkspaceWindow" hidden>
@@ -3591,6 +3758,91 @@ removeFromWatchlist(${stock.id});
     loadAllowance();
 })();
 </script>
+
+
+<script id="edgebreak-my-workspace-mobile-tools-js">
+(function(){
+
+    function initMobileWorkspaceMenu(){
+
+        const sidebar = document.querySelector(".eb-app-sidebar");
+        const toggle = document.getElementById("ebMobileToolsToggle");
+
+        if(!sidebar || !toggle) return;
+
+        function setMobileMenu(open){
+            sidebar.classList.toggle("mobile-open", open);
+            toggle.setAttribute("aria-expanded", open ? "true" : "false");
+
+            const icon =
+                toggle.querySelector(
+                    ".eb-mobile-tools-toggle-icon"
+                );
+
+            if(icon){
+                icon.textContent =
+                    open ? "×" : "☰";
+            }
+        }
+
+        toggle.addEventListener(
+            "click",
+            () => {
+                setMobileMenu(
+                    !sidebar.classList.contains(
+                        "mobile-open"
+                    )
+                );
+            }
+        );
+
+        /* Close the menu after choosing any workspace tool or page. */
+        document
+            .querySelectorAll(
+                ".eb-app-nav [data-eb-open], .eb-app-nav [data-eb-home], .eb-app-nav a, #ebOpenUnlimitedAI"
+            )
+            .forEach(
+                item => {
+                    item.addEventListener(
+                        "click",
+                        () => {
+                            if(
+                                window.innerWidth <=
+                                900
+                            ){
+                                setMobileMenu(false);
+                            }
+                        }
+                    );
+                }
+            );
+
+        window.addEventListener(
+            "resize",
+            () => {
+                if(window.innerWidth > 900){
+                    setMobileMenu(false);
+                }
+            }
+        );
+    }
+
+    if(
+        document.readyState ===
+        "loading"
+    ){
+        document.addEventListener(
+            "DOMContentLoaded",
+            initMobileWorkspaceMenu
+        );
+    }
+    else{
+        initMobileWorkspaceMenu();
+    }
+
+})();
+</script>
+
 
 <!-- ===================================
 COMPONENTS
