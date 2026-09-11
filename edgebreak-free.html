@@ -10464,6 +10464,73 @@ body.eb-free-body .daily-brief-stock-card.free-ai-locked{
 }
 </style>
 
+
+<style id="edgebreak-free-result-position-labels">
+/* =========================================================
+   FREE PREVIEW — CLEARLY IDENTIFY RESULT #5 AND RESULT #6
+========================================================= */
+
+.free-preview-ticker{
+    vertical-align:middle !important;
+}
+
+.free-result-position,
+.free-daily-position{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:max-content;
+    margin:0 7px 4px 0;
+    padding:4px 7px;
+    border:1px solid #cfe7d6;
+    border-radius:999px;
+    background:#f0faf3;
+    color:#08783b;
+    font-size:8px;
+    font-weight:900;
+    line-height:1;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    white-space:nowrap;
+}
+
+.free-result-symbol{
+    color:inherit;
+    font-weight:850;
+}
+
+.free-daily-position{
+    display:flex;
+    margin:0 0 7px;
+}
+
+/* The subscription message should sit AFTER the two visible Auto Scan
+   cards, not cover them. */
+#dailyBriefStocks .free-ai-lock-overlay{
+    position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    transform:none !important;
+    width:100% !important;
+    max-width:none !important;
+    grid-column:1 / -1 !important;
+    margin-top:4px !important;
+    box-sizing:border-box !important;
+}
+
+@media(max-width:900px){
+    .free-preview-ticker{
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:flex-start !important;
+    }
+
+    .free-result-position{
+        margin:0 0 5px !important;
+    }
+}
+</style>
+
 </head>
 <body class="eb-app-body eb-free-body">
 
@@ -11524,7 +11591,7 @@ SCANNER SELECTOR
 
             <p>
                 Choose a scanner and explore real NASDAQ scanner results.
-                The first two results from each search are available in this free preview.
+                EdgeBreak Free shows result positions #5 and #6 from each search. Results #1–#4 remain reserved for members.
             </p>
 
         </div>
@@ -12552,8 +12619,7 @@ EDGEBREAK FREE — PLATFORM PREVIEW
                 Run the EdgeBreak Breakout, Pre-Breakout and Launch Pad scanners
                 across more than 3,000 NASDAQ-listed stocks. Explore real scanner
                 results using resistance touches, higher lows, volume, price action
-                and Smart Money characteristics. EdgeBreak Free displays the first
-                two results from each scan so you can experience how the platform works.
+                and Smart Money characteristics. EdgeBreak Free displays result positions #5 and #6 from each scan so you can experience how the platform works, while results #1–#4 remain reserved for members.
             </p>
 
         </div>
@@ -14261,7 +14327,7 @@ function runScanner(){
 
         });
         
-        window.currentScannerResults = results.slice(0, 2);
+        window.currentScannerResults = results.slice(4, 6);
 
         renderResults(results);
 
@@ -14298,13 +14364,13 @@ function renderResults(results){
 
 
     /* ============================================
-       FREE ACCESS — FIRST 2 RESULTS ONLY
+       FREE ACCESS — RESULT POSITIONS #5 AND #6 ONLY
     ============================================ */
 
-    const visibleResults = results.slice(0, 2);
+    const visibleResults = results.slice(4, 6);
 
     tbody.innerHTML =
-        visibleResults.map(stock => {
+        visibleResults.map((stock, visibleIndex) => {
 
             const record =
                 window.smartMoneyLookup[stock.symbol];
@@ -14321,8 +14387,13 @@ function renderResults(results){
 
             <tr onclick="selectStock('${stock.symbol}')">
 
-                <td>
-                    ${stock.symbol}
+                <td class="free-preview-ticker">
+                    <span class="free-result-position">
+                        ${visibleIndex === 0 ? "5th Result" : "6th Result"}
+                    </span>
+                    <span class="free-result-symbol">
+                        ${stock.symbol}
+                    </span>
                 </td>
 
                 <td>
@@ -14384,10 +14455,10 @@ function renderResults(results){
        LOCK REMAINING RESULTS
     ============================================ */
 
-    if(results.length > 2){
+    if(results.length > visibleResults.length){
 
         const lockedCount =
-            results.length - 2;
+            results.length - visibleResults.length;
 
         tbody.innerHTML += `
 
@@ -14412,15 +14483,14 @@ function renderResults(results){
                             </div>
 
                             <div class="free-lock-title">
-                                ${lockedCount} More Results Found
+                                ${lockedCount} Member Result${lockedCount === 1 ? '' : 's'} Locked
                             </div>
 
                             <div class="free-lock-text">
 
-                                Free access shows the first 2 scanner results.
+                                Free access shows only result positions #5 and #6.
 
-                                Unlock the complete NASDAQ scanner results,
-                                AI Research and all EdgeBreak scanners.
+                                Results #1–#4 and all other matches are reserved for members.\n                                Unlock the complete NASDAQ scanner results,\n                                AI Research and all EdgeBreak scanners.
 
                             </div>
 
@@ -14829,7 +14899,7 @@ function runBreakoutScanner(){
 
         });
 
-    window.currentBreakoutResults = results.slice(0, 2);
+    window.currentBreakoutResults = results.slice(4, 6);
 
     renderBreakoutResults(results);
 
@@ -14864,10 +14934,10 @@ function renderBreakoutResults(results){
         return;
     }
 
-    const visibleResults = results.slice(0, 2);
+    const visibleResults = results.slice(4, 6);
 
     tbody.innerHTML =
-        visibleResults.map(stock => {
+        visibleResults.map((stock, visibleIndex) => {
 
             const record =
                 window.smartMoneyLookup[stock.symbol];
@@ -14886,7 +14956,14 @@ function renderBreakoutResults(results){
 
                 <td>${stock.rank}</td>
 
-                <td>${stock.symbol}</td>
+                <td class="free-preview-ticker">
+                    <span class="free-result-position">
+                        ${visibleIndex === 0 ? "5th Result" : "6th Result"}
+                    </span>
+                    <span class="free-result-symbol">
+                        ${stock.symbol}
+                    </span>
+                </td>
 
                 <td>
                     $${Number(
@@ -14946,9 +15023,9 @@ function renderBreakoutResults(results){
        FREE ACCESS LOCK
     ============================================ */
 
-    if(results.length > 2){
+    if(results.length > visibleResults.length){
 
-        const lockedCount = results.length - 2;
+        const lockedCount = results.length - visibleResults.length;
 
         tbody.innerHTML += `
 
@@ -14973,13 +15050,12 @@ function renderBreakoutResults(results){
                             </div>
 
                             <div class="free-lock-title">
-                                ${lockedCount} More Results Found
+                                ${lockedCount} Member Result${lockedCount === 1 ? '' : 's'} Locked
                             </div>
 
                             <div class="free-lock-text">
-                                Free access shows the first 2 scanner results.
-                                Unlock the complete NASDAQ scanner results,
-                                AI Research and all EdgeBreak scanners.
+                                Free access shows only result positions #5 and #6.
+                                Results #1–#4 and all other matches are reserved for members.\n                                Unlock the complete NASDAQ scanner results,\n                                AI Research and all EdgeBreak scanners.
                             </div>
 
                             <a
@@ -15326,7 +15402,7 @@ function runLaunchPadScanner(){
 
        
 
-    window.currentLaunchPadResults = results.slice(0, 2);
+    window.currentLaunchPadResults = results.slice(4, 6);
 
     renderLaunchPadResults(results);
 
@@ -15369,13 +15445,13 @@ function renderLaunchPadResults(results){
 
 
     /* ============================================
-       FREE ACCESS — FIRST 2 RESULTS ONLY
+       FREE ACCESS — RESULT POSITIONS #5 AND #6 ONLY
     ============================================ */
 
-    const visibleResults = results.slice(0, 2);
+    const visibleResults = results.slice(4, 6);
 
     tbody.innerHTML =
-        visibleResults.map(stock => {
+        visibleResults.map((stock, visibleIndex) => {
 
             const record =
                 window.smartMoneyLookup[
@@ -15394,8 +15470,13 @@ function renderLaunchPadResults(results){
 
             <tr onclick="selectLaunchPad('${stock.symbol}')">
 
-                <td>
-                    ${stock.symbol}
+                <td class="free-preview-ticker">
+                    <span class="free-result-position">
+                        ${visibleIndex === 0 ? "5th Result" : "6th Result"}
+                    </span>
+                    <span class="free-result-symbol">
+                        ${stock.symbol}
+                    </span>
                 </td>
 
                 <td>
@@ -15453,10 +15534,10 @@ function renderLaunchPadResults(results){
        LOCK REMAINING RESULTS
     ============================================ */
 
-    if(results.length > 2){
+    if(results.length > visibleResults.length){
 
         const lockedCount =
-            results.length - 2;
+            results.length - visibleResults.length;
 
         tbody.innerHTML += `
 
@@ -15481,15 +15562,14 @@ function renderLaunchPadResults(results){
                             </div>
 
                             <div class="free-lock-title">
-                                ${lockedCount} More Results Found
+                                ${lockedCount} Member Result${lockedCount === 1 ? '' : 's'} Locked
                             </div>
 
                             <div class="free-lock-text">
 
-                                Free access shows the first 2 scanner results.
+                                Free access shows only result positions #5 and #6.
 
-                                Unlock the complete NASDAQ scanner results,
-                                AI Research and all EdgeBreak scanners.
+                                Results #1–#4 and all other matches are reserved for members.\n                                Unlock the complete NASDAQ scanner results,\n                                AI Research and all EdgeBreak scanners.
 
                             </div>
 
@@ -21456,8 +21536,8 @@ WORKING FLOW PRESERVED
 8. Display Stocks to Investigate
 
 FREE PAGE DISPLAY ONLY:
-First 2 stocks visible
-Remaining stocks blurred + locked
+Only result positions #5 and #6 are shown
+Results #1–#4 and any additional results remain locked
 ========================================= */
 
 
@@ -21652,7 +21732,9 @@ async function openDailyBrief(){
 
                             candidates,
                             previewOnly: true,
-                            previewLimit: 2
+                            previewStart: 4,
+                            previewLimit: 2,
+                            previewPositions: [5, 6]
 
                         })
 
@@ -22019,17 +22101,17 @@ function renderDailyBrief(
     RESULT CARDS
 
     FREE PAGE:
-    #1 + #2 = fully visible
-    #3 onward = blurred + locked
+    #5 + #6 = visible preview
+    #1–#4 and any additional results = member-only
     ===================================== */
 
     /*
-    SECURITY: only the two free-preview companies are ever
+    SECURITY: only result positions #5 and #6 are ever
     inserted into the DOM. Removing CSS/blur therefore cannot
     reveal company #3 onward.
     */
     const visibleResults =
-        results.slice(0, 2);
+        results.slice(4, 6);
 
     visibleResults.forEach(
         (company, index) => {
@@ -22043,24 +22125,6 @@ function renderDailyBrief(
 
             card.className =
                 "daily-brief-stock-card";
-
-
-            /* =================================
-            FREE PAGE LOCK
-
-            Do not alter result data.
-
-            Simply add the CSS class to every
-            rendered stock after the first two.
-            ================================= */
-
-            if(index >= 2){
-
-                card.classList.add(
-                    "free-ai-locked"
-                );
-
-            }
 
 
             const symbolArray =
@@ -22090,6 +22154,10 @@ function renderDailyBrief(
                 <div class="daily-brief-stock-top">
 
                     <div>
+
+                        <div class="free-daily-position">
+                            ${index === 0 ? "5th Result" : "6th Result"}
+                        </div>
 
                         <div
                             class="daily-brief-symbol"
@@ -22255,14 +22323,13 @@ function renderDailyBrief(
     FREE PAGE LOCK OVERLAY
 
     Only show the subscription message when
-    today's report actually contains more
-    than two results.
+    today's report contains member-only results.
     ===================================== */
 
-    if(results.length > 2){
+    if(results.length > visibleResults.length){
 
         const lockedCount =
-            results.length - 2;
+            results.length - visibleResults.length;
 
 
         const overlay =
@@ -22286,12 +22353,12 @@ function renderDailyBrief(
             </h4>
 
             <p>
-                You've seen 2 of today's
-                ${results.length} stocks surfaced by
-                EdgeBreak AI. Unlock the remaining
-                ${lockedCount} results, complete AI
-                research and all EdgeBreak NASDAQ
-                scanning tools.
+                EdgeBreak Free shows today's #5 and #6
+                surfaced results only. Results #1–#4
+                and any additional results are reserved
+                for members. Unlock all ${results.length}
+                surfaced stocks, complete AI research
+                and all EdgeBreak NASDAQ scanning tools.
             </p>
 
             <a
