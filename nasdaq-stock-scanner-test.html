@@ -18,7 +18,7 @@
 >
 
 <title>
-NASDAQ Stock Scanner & Breakout Scanner | Smart Money Filter | EdgeBreak
+EdgeBreak Research Workspace
 </title>
 
 <meta
@@ -31,10 +31,7 @@ NASDAQ Stock Scanner & Breakout Scanner | Smart Money Filter | EdgeBreak
     content="NASDAQ stock scanner, breakout scanner, smart money filter, NASDAQ screener, breakout stocks, resistance touches, higher lows, price action scanner, volume expansion, accumulation, stock research platform, EdgeBreak"
 >
 
-<meta
-    name="robots"
-    content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
->
+<meta name="robots" content="noindex,follow">
 
 <meta
     name="author"
@@ -10088,6 +10085,303 @@ body.eb-app-body .edge-chat-button{
 
 </style>
 
+
+<style id="edgebreak-workspace-redesign">
+/* =========================================================
+   EDGEBREAK RESEARCH WORKSPACE
+   TEST WORKSPACE REDESIGN
+   ========================================================= */
+
+body.eb-app-body main{
+    min-height:calc(100vh - 78px);
+    padding-bottom:38px !important;
+}
+
+body.eb-app-body .elite-container{
+    width:100% !important;
+    max-width:none !important;
+    padding:18px 0 38px !important;
+}
+
+/* Old marketing / selector / duplicate tool areas are retained in
+   the source for compatibility, but removed from the app surface. */
+body.eb-app-body .elite-banner,
+body.eb-app-body .scanner-label,
+body.eb-app-body #scannerDropdown,
+body.eb-app-body .eb-tools-panel,
+body.eb-app-body .scanner-seo,
+body.eb-app-body #footer{
+    display:none !important;
+}
+
+/* Sidebar is now the complete control surface. */
+.eb-app-sidebar{
+    scrollbar-width:thin;
+}
+
+.eb-app-nav{
+    gap:15px;
+}
+
+.eb-app-nav-group{
+    gap:3px;
+}
+
+.eb-app-nav-label{
+    padding-top:2px;
+}
+
+.eb-app-nav-item{
+    min-height:40px;
+}
+
+/* Minimal top work bar. */
+.eb-app-topbar{
+    min-height:64px;
+}
+
+.eb-workspace-clear{
+    min-height:38px;
+    padding:0 14px;
+    border:1px solid var(--eb-line);
+    border-radius:10px;
+    background:#ffffff;
+    color:#64748b;
+    font:inherit;
+    font-size:12px;
+    font-weight:800;
+    cursor:pointer;
+    transition:.18s ease;
+}
+
+.eb-workspace-clear:hover{
+    border-color:#b9c4cf;
+    color:var(--eb-ink);
+    background:#f8fafc;
+}
+
+/* =========================================================
+   EMPTY WORKSPACE + WINDOW
+   ========================================================= */
+
+.eb-workspace-shell{
+    width:100%;
+    min-height:calc(100vh - 178px);
+}
+
+.eb-workspace-stage{
+    position:relative;
+    width:100%;
+    min-height:calc(100vh - 178px);
+    overflow:hidden;
+    border:1px solid var(--eb-line);
+    border-radius:24px;
+    background:#ffffff;
+    box-shadow:0 18px 55px rgba(15,23,42,.06);
+}
+
+.eb-workspace-empty{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px;
+    text-align:center;
+}
+
+.eb-workspace-empty-card{
+    max-width:460px;
+}
+
+.eb-workspace-empty-mark{
+    width:58px;
+    height:58px;
+    margin:0 auto 18px;
+    display:grid;
+    place-items:center;
+    border:1px solid #dce5e0;
+    border-radius:18px;
+    background:#f4faf6;
+    color:var(--eb-green-dark);
+    font-size:22px;
+    font-weight:900;
+}
+
+.eb-workspace-empty h2{
+    margin:0 0 9px;
+    color:var(--eb-ink);
+    font-size:24px;
+    font-weight:850;
+    letter-spacing:-.025em;
+}
+
+.eb-workspace-empty p{
+    margin:0;
+    color:var(--eb-muted);
+    font-size:14px;
+    line-height:1.65;
+}
+
+.eb-workspace-empty[hidden]{
+    display:none !important;
+}
+
+.eb-workspace-frame{
+    display:none;
+    min-height:calc(100vh - 178px);
+    background:#ffffff;
+}
+
+.eb-workspace-frame.active{
+    display:block;
+}
+
+.eb-workspace-window-head{
+    position:sticky;
+    top:0;
+    z-index:80;
+    min-height:62px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    padding:0 18px 0 22px;
+    border-bottom:1px solid var(--eb-line);
+    background:rgba(255,255,255,.97);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+}
+
+.eb-workspace-window-title{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    min-width:0;
+}
+
+.eb-workspace-window-dot{
+    width:9px;
+    height:9px;
+    flex:0 0 9px;
+    border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 0 5px rgba(34,197,94,.10);
+}
+
+.eb-workspace-window-title strong{
+    overflow:hidden;
+    color:var(--eb-ink);
+    font-size:15px;
+    font-weight:850;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.eb-workspace-close{
+    width:38px;
+    height:38px;
+    display:grid;
+    place-items:center;
+    flex:0 0 38px;
+    padding:0;
+    border:1px solid #dce2e9;
+    border-radius:10px;
+    background:#ffffff;
+    color:#64748b;
+    font-size:24px;
+    font-weight:400;
+    line-height:1;
+    cursor:pointer;
+    transition:.18s ease;
+}
+
+.eb-workspace-close:hover{
+    border-color:#fecaca;
+    background:#fff7f7;
+    color:#dc2626;
+}
+
+.eb-workspace-content{
+    padding:24px;
+}
+
+/* Tool containers become content, not page-level cards. */
+.eb-workspace-content > .nasdaq-overview-panel,
+.eb-workspace-content > .daily-brief-panel,
+.eb-workspace-content > .chart-ai-tool,
+.eb-workspace-content > .scanner-chart,
+.eb-workspace-content > .watchlist-panel,
+.eb-workspace-content > #breakoutScanner,
+.eb-workspace-content > #preBreakoutScanner,
+.eb-workspace-content > #launchPadScanner{
+    width:100% !important;
+    margin:0 !important;
+}
+
+.eb-workspace-content > .nasdaq-overview-panel,
+.eb-workspace-content > .daily-brief-panel,
+.eb-workspace-content > .chart-ai-tool,
+.eb-workspace-content > .watchlist-panel{
+    box-shadow:none !important;
+}
+
+.eb-workspace-content .scanner-layout{
+    margin:0 !important;
+}
+
+/* Remove old outer card feel where the workspace already provides it. */
+.eb-workspace-content > .nasdaq-overview-panel,
+.eb-workspace-content > .daily-brief-panel,
+.eb-workspace-content > .chart-ai-tool{
+    border:0 !important;
+    border-radius:0 !important;
+    padding:6px !important;
+}
+
+/* Chart remains intentionally dark. */
+.eb-workspace-content > .scanner-chart{
+    margin:0 !important;
+}
+
+/* Bottom AI entry buttons are replaced by the left-side AI controls. */
+#ebBottomAI,
+#edgeBreakChatButton{
+    display:none !important;
+}
+
+/* =========================================================
+   RESPONSIVE WORKSPACE
+   ========================================================= */
+
+@media(max-width:1100px){
+    .eb-workspace-content{
+        padding:18px;
+    }
+}
+
+@media(max-width:768px){
+    .eb-workspace-shell,
+    .eb-workspace-stage,
+    .eb-workspace-frame{
+        min-height:620px;
+    }
+
+    .eb-workspace-window-head{
+        min-height:58px;
+        padding-left:16px;
+    }
+
+    .eb-workspace-content{
+        padding:14px;
+    }
+
+    .eb-workspace-empty{
+        padding:28px 20px;
+    }
+}
+</style>
+
 </head>
 <body class="eb-app-body">
 
@@ -10113,13 +10407,13 @@ SCANNER / WORKSPACE SHELL
 
         <div class="eb-app-nav-group eb-app-nav-primary">
 
-            <a class="eb-app-nav-item active" href="/nasdaq-stock-scanner.html" aria-current="page">
-                <span class="eb-app-nav-icon">⌁</span>
-                <span>NASDAQ Scanner</span>
-            </a>
+            <button class="eb-app-nav-item active" type="button" id="ebWorkspaceHome">
+                <span class="eb-app-nav-icon">□</span>
+                <span>Workspace</span>
+            </button>
 
             <a class="eb-app-nav-item" href="/my-workspace.html">
-                <span class="eb-app-nav-icon">□</span>
+                <span class="eb-app-nav-icon">☆</span>
                 <span>My Workspace</span>
             </a>
 
@@ -10127,36 +10421,68 @@ SCANNER / WORKSPACE SHELL
 
         <div class="eb-app-nav-group">
 
-            <div class="eb-app-nav-label">Discover</div>
+            <div class="eb-app-nav-label">Today</div>
 
-            <a class="eb-app-nav-item" href="#dailyBriefPanel">
+            <button class="eb-app-nav-item eb-workspace-open" type="button" data-workspace-target="daily">
                 <span class="eb-app-nav-icon">✦</span>
-                <span>Daily Scan</span>
-            </a>
+                <span>Daily Brief</span>
+            </button>
 
-            <a class="eb-app-nav-item" href="#scannerDropdown">
-                <span class="eb-app-nav-icon">⌕</span>
-                <span>Manual Scanners</span>
-            </a>
-
-            <a class="eb-app-nav-item" href="#chartAITool">
-                <span class="eb-app-nav-icon">◇</span>
-                <span>AI Chart Analysis</span>
-            </a>
+            <button class="eb-app-nav-item eb-workspace-open" type="button" data-workspace-target="overview">
+                <span class="eb-app-nav-icon">◫</span>
+                <span>Market Overview</span>
+            </button>
 
         </div>
 
         <div class="eb-app-nav-group">
 
-            <div class="eb-app-nav-label">Market</div>
+            <div class="eb-app-nav-label">Scanners</div>
 
-            <a class="eb-app-nav-item" href="/market-overview.html">
-                <span class="eb-app-nav-icon">◫</span>
-                <span>Market Overview</span>
-            </a>
+            <button class="eb-app-nav-item eb-workspace-open" type="button" data-workspace-target="breakout">
+                <span class="eb-app-nav-icon">↗</span>
+                <span>Breakout Scanner</span>
+            </button>
+
+            <button class="eb-app-nav-item eb-workspace-open" type="button" data-workspace-target="prebreakout">
+                <span class="eb-app-nav-icon">⌁</span>
+                <span>Pre-Breakout Scanner</span>
+            </button>
+
+            <button class="eb-app-nav-item eb-workspace-open" type="button" data-workspace-target="launchpad">
+                <span class="eb-app-nav-icon">△</span>
+                <span>Launch Pad Scanner</span>
+            </button>
+
+        </div>
+
+        <div class="eb-app-nav-group">
+
+            <div class="eb-app-nav-label">Research</div>
+
+            <button class="eb-app-nav-item eb-workspace-open" type="button" data-workspace-target="chart">
+                <span class="eb-app-nav-icon">▤</span>
+                <span>Stock Chart</span>
+            </button>
+
+            <button class="eb-app-nav-item eb-workspace-open" type="button" data-workspace-target="chartai">
+                <span class="eb-app-nav-icon">◇</span>
+                <span>AI Chart Analysis</span>
+            </button>
+
+            <button class="eb-app-nav-item eb-workspace-open" type="button" data-workspace-target="saved">
+                <span class="eb-app-nav-icon">☆</span>
+                <span>Saved Stocks</span>
+            </button>
+
+        </div>
+
+        <div class="eb-app-nav-group">
+
+            <div class="eb-app-nav-label">Market Tools</div>
 
             <a class="eb-app-nav-item" href="/market-movers.html">
-                <span class="eb-app-nav-icon">↗</span>
+                <span class="eb-app-nav-icon">↕</span>
                 <span>Market Movers</span>
             </a>
 
@@ -10165,20 +10491,9 @@ SCANNER / WORKSPACE SHELL
                 <span>Sector Performance</span>
             </a>
 
-        </div>
-
-        <div class="eb-app-nav-group">
-
-            <div class="eb-app-nav-label">Research</div>
-
-            <a class="eb-app-nav-item" href="#watchlistPanel">
-                <span class="eb-app-nav-icon">☆</span>
-                <span>Saved Stocks</span>
-            </a>
-
-            <a class="eb-app-nav-item" href="/academy.html">
-                <span class="eb-app-nav-icon">○</span>
-                <span>Academy</span>
+            <a class="eb-app-nav-item" href="/currency-converter.html">
+                <span class="eb-app-nav-icon">$</span>
+                <span>Currency Converter</span>
             </a>
 
         </div>
@@ -10199,6 +10514,17 @@ SCANNER / WORKSPACE SHELL
 
         </div>
 
+        <div class="eb-app-nav-group">
+
+            <div class="eb-app-nav-label">Learn</div>
+
+            <a class="eb-app-nav-item" href="/academy.html">
+                <span class="eb-app-nav-icon">○</span>
+                <span>Academy</span>
+            </a>
+
+        </div>
+
     </nav>
 
 </aside>
@@ -10215,17 +10541,12 @@ SHARED APP TOP BAR
 
     <div class="eb-app-topbar-copy">
         <span>Research Workspace</span>
-        <strong>NASDAQ Scanner</strong>
+        <strong id="ebWorkspaceTitle">Workspace</strong>
     </div>
 
-    <nav class="eb-app-view-switch" aria-label="Primary workspace views">
-        <a class="active" href="/nasdaq-stock-scanner.html" aria-current="page">
-            Scanner
-        </a>
-        <a href="/my-workspace.html">
-            My Workspace
-        </a>
-    </nav>
+    <button type="button" class="eb-workspace-clear" id="ebWorkspaceClear">
+        Clear workspace
+    </button>
 
 </header>
 
@@ -10934,9 +11255,9 @@ EDGEBREAK AUTOMATED AI NASDAQ SCAN
             </strong>
 
             <span>
-                Take a screenshot of the chart, then drag or paste it into
-                <b>AI Chart Analysis</b> below for an instant technical
-                breakdown.
+                Take a screenshot of the chart, then open
+                <b>AI Chart Analysis</b> from the left menu for an instant
+                technical breakdown.
             </span>
 
         </div>
@@ -42337,5 +42658,504 @@ document.addEventListener("DOMContentLoaded", () => {
 <!-- COMPONENTS -->
 
 <script src="/js/components.js"></script>
+
+<script id="edgebreak-workspace-redesign-js">
+(function(){
+
+    const toolDefinitions = [
+        {
+            key:"daily",
+            id:"dailyBriefPanel",
+            title:"Daily Brief / Automated Scan"
+        },
+        {
+            key:"overview",
+            id:"nasdaqOverviewPanel",
+            title:"NASDAQ Market Overview"
+        },
+        {
+            key:"breakout",
+            id:"breakoutScanner",
+            title:"Breakout Scanner"
+        },
+        {
+            key:"prebreakout",
+            id:"preBreakoutScanner",
+            title:"Pre-Breakout Scanner"
+        },
+        {
+            key:"launchpad",
+            id:"launchPadScanner",
+            title:"Launch Pad Scanner"
+        },
+        {
+            key:"chart",
+            id:"chartSection",
+            title:"Stock Chart"
+        },
+        {
+            key:"chartai",
+            id:"chartAITool",
+            title:"AI Chart Analysis"
+        },
+        {
+            key:"saved",
+            id:"watchlistPanel",
+            title:"Saved Stocks"
+        }
+    ];
+
+    function initialiseWorkspace(){
+
+        const container =
+            document.querySelector(
+                "body.eb-app-body .elite-container"
+            );
+
+        if(!container){
+            console.warn(
+                "EdgeBreak workspace: .elite-container not found."
+            );
+            return;
+        }
+
+        if(
+            document.getElementById(
+                "ebWorkspaceStage"
+            )
+        ){
+            return;
+        }
+
+        const shell =
+            document.createElement(
+                "section"
+            );
+
+        shell.className =
+            "eb-workspace-shell";
+
+        shell.innerHTML = `
+            <div
+                class="eb-workspace-stage"
+                id="ebWorkspaceStage"
+            >
+                <div
+                    class="eb-workspace-empty"
+                    id="ebWorkspaceEmpty"
+                >
+                    <div class="eb-workspace-empty-card">
+                        <div class="eb-workspace-empty-mark">
+                            E3
+                        </div>
+
+                        <h2>
+                            Research workspace
+                        </h2>
+
+                        <p>
+                            Choose a scanner, chart, market view or
+                            research tool from the left menu.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        container.prepend(
+            shell
+        );
+
+        const stage =
+            document.getElementById(
+                "ebWorkspaceStage"
+            );
+
+        const empty =
+            document.getElementById(
+                "ebWorkspaceEmpty"
+            );
+
+        const title =
+            document.getElementById(
+                "ebWorkspaceTitle"
+            );
+
+        const homeButton =
+            document.getElementById(
+                "ebWorkspaceHome"
+            );
+
+        const clearButton =
+            document.getElementById(
+                "ebWorkspaceClear"
+            );
+
+        const frameMap =
+            new Map();
+
+
+        /* =========================================
+           BUILD ONE WORKSPACE WINDOW PER TOOL
+        ========================================= */
+
+        toolDefinitions.forEach(
+            tool => {
+
+                const node =
+                    document.getElementById(
+                        tool.id
+                    );
+
+                if(!node){
+                    console.warn(
+                        "EdgeBreak workspace tool missing:",
+                        tool.id
+                    );
+                    return;
+                }
+
+                /*
+                Scanner panels previously depended on the old
+                dropdown to change inline display values.
+                Each scanner now owns its own workspace window.
+                */
+                if(
+                    tool.id ===
+                        "preBreakoutScanner" ||
+                    tool.id ===
+                        "launchPadScanner" ||
+                    tool.id ===
+                        "breakoutScanner"
+                ){
+                    node.style.display =
+                        "block";
+                }
+
+                const frame =
+                    document.createElement(
+                        "section"
+                    );
+
+                frame.className =
+                    "eb-workspace-frame";
+
+                frame.dataset.workspaceFrame =
+                    tool.key;
+
+                frame.setAttribute(
+                    "aria-label",
+                    tool.title
+                );
+
+                const header =
+                    document.createElement(
+                        "div"
+                    );
+
+                header.className =
+                    "eb-workspace-window-head";
+
+                header.innerHTML = `
+                    <div class="eb-workspace-window-title">
+                        <span class="eb-workspace-window-dot"></span>
+                        <strong>${tool.title}</strong>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="eb-workspace-close"
+                        aria-label="Close ${tool.title}"
+                        title="Close"
+                    >
+                        ×
+                    </button>
+                `;
+
+                const content =
+                    document.createElement(
+                        "div"
+                    );
+
+                content.className =
+                    "eb-workspace-content";
+
+                content.appendChild(
+                    node
+                );
+
+                frame.appendChild(
+                    header
+                );
+
+                frame.appendChild(
+                    content
+                );
+
+                stage.appendChild(
+                    frame
+                );
+
+                frameMap.set(
+                    tool.key,
+                    {
+                        frame,
+                        title:
+                            tool.title
+                    }
+                );
+
+                header
+                    .querySelector(
+                        ".eb-workspace-close"
+                    )
+                    .addEventListener(
+                        "click",
+                        closeWorkspace
+                    );
+            }
+        );
+
+
+        /* =========================================
+           NAV STATE
+        ========================================= */
+
+        function clearNavState(){
+
+            document
+                .querySelectorAll(
+                    ".eb-app-nav-item"
+                )
+                .forEach(
+                    item => {
+                        item.classList.remove(
+                            "active"
+                        );
+
+                        item.removeAttribute(
+                            "aria-current"
+                        );
+                    }
+                );
+        }
+
+
+        function setActiveNav(
+            key
+        ){
+
+            clearNavState();
+
+            const active =
+                document.querySelector(
+                    `.eb-workspace-open[data-workspace-target="${key}"]`
+                );
+
+            if(active){
+
+                active.classList.add(
+                    "active"
+                );
+
+                active.setAttribute(
+                    "aria-current",
+                    "page"
+                );
+            }
+        }
+
+
+        /* =========================================
+           OPEN TOOL
+        ========================================= */
+
+        function openWorkspace(
+            key
+        ){
+
+            const entry =
+                frameMap.get(
+                    key
+                );
+
+            if(!entry){
+                return;
+            }
+
+            frameMap.forEach(
+                value => {
+                    value.frame.classList.remove(
+                        "active"
+                    );
+                }
+            );
+
+            empty.hidden =
+                true;
+
+            entry.frame.classList.add(
+                "active"
+            );
+
+            if(title){
+                title.textContent =
+                    entry.title;
+            }
+
+            setActiveNav(
+                key
+            );
+
+            /*
+            TradingView can be initialised before its container
+            is opened. A resize gives it the correct workspace
+            dimensions after becoming visible.
+            */
+            if(
+                key ===
+                    "chart"
+            ){
+                setTimeout(
+                    () => {
+                        window.dispatchEvent(
+                            new Event(
+                                "resize"
+                            )
+                        );
+                    },
+                    80
+                );
+            }
+
+            window.scrollTo({
+                top:0,
+                behavior:"smooth"
+            });
+        }
+
+
+        /* =========================================
+           CLOSE / EMPTY SLATE
+        ========================================= */
+
+        function closeWorkspace(){
+
+            frameMap.forEach(
+                value => {
+                    value.frame.classList.remove(
+                        "active"
+                    );
+                }
+            );
+
+            empty.hidden =
+                false;
+
+            if(title){
+                title.textContent =
+                    "Workspace";
+            }
+
+            clearNavState();
+
+            if(homeButton){
+                homeButton.classList.add(
+                    "active"
+                );
+            }
+        }
+
+
+        document
+            .querySelectorAll(
+                ".eb-workspace-open"
+            )
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            openWorkspace(
+                                button.dataset
+                                    .workspaceTarget
+                            );
+                        }
+                    );
+                }
+            );
+
+
+        if(homeButton){
+
+            homeButton.addEventListener(
+                "click",
+                closeWorkspace
+            );
+        }
+
+
+        if(clearButton){
+
+            clearButton.addEventListener(
+                "click",
+                closeWorkspace
+            );
+        }
+
+
+        document.addEventListener(
+            "keydown",
+            event => {
+
+                if(
+                    event.key ===
+                        "Escape"
+                ){
+                    closeWorkspace();
+                }
+            }
+        );
+
+
+        /* =========================================
+           START EMPTY
+        ========================================= */
+
+        closeWorkspace();
+
+
+        /* =========================================
+           OPTIONAL GLOBAL ACCESS
+           Useful to open a panel from existing code.
+        ========================================= */
+
+        window.edgeBreakWorkspace = {
+            open:
+                openWorkspace,
+            close:
+                closeWorkspace
+        };
+    }
+
+
+    if(
+        document.readyState ===
+            "loading"
+    ){
+        document.addEventListener(
+            "DOMContentLoaded",
+            initialiseWorkspace
+        );
+    }
+    else{
+        initialiseWorkspace();
+    }
+
+})();
+</script>
+
 </body>
 </html>
