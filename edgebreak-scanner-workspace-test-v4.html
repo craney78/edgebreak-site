@@ -10476,6 +10476,20 @@ body.eb-app-body #edgeBreakChatOverlay{
 }
 </style>
 
+
+<style id="edgebreak-ai-workspace-nav-fix">
+/* Keep the workspace navigation usable even while an AI drawer/overlay is open. */
+body.eb-app-body .eb-app-sidebar{
+    z-index:10020 !important;
+}
+
+/* The navbar stays above dimming overlays as well. */
+body.eb-app-body #navbar{
+    position:relative;
+    z-index:10021;
+}
+</style>
+
 </head>
 <body class="eb-app-body">
 
@@ -10514,7 +10528,7 @@ SCANNER / WORKSPACE SHELL
         <div class="eb-app-nav-group">
             <div class="eb-app-nav-label">Daily</div>
 
-            <button class="eb-app-nav-item" type="button" data-eb-open="dailyBriefPanel" data-eb-title="Daily Brief">
+            <button class="eb-app-nav-item" type="button" data-eb-open="dailyBriefPanel" data-eb-title="NASDAQ Auto Scan">
                 <span class="eb-app-nav-icon">✦</span>
                 <span>NASDAQ Auto Scan</span>
             </button>
@@ -42833,9 +42847,36 @@ document.addEventListener("DOMContentLoaded", () => {
             setActive(home);
         }
 
+        function closeAIPanels(){
+            // Guided / Unlimited AI chat drawer.
+            const chatPanel = document.getElementById("edgeBreakChatPanel");
+            const chatOverlay = document.getElementById("edgeBreakChatOverlay");
+            const chatButton = document.getElementById("edgeBreakChatButton");
+
+            chatPanel?.classList.remove("is-open");
+            chatOverlay?.classList.remove("is-open");
+            chatPanel?.setAttribute("aria-hidden", "true");
+            chatOverlay?.setAttribute("aria-hidden", "true");
+            chatButton?.setAttribute("aria-expanded", "false");
+
+            // Stock AI research drawer opened from scanner/chart results.
+            const researchPanel = document.getElementById("edgeBreakAIPanel");
+            const researchOverlay = document.getElementById("edgeBreakAIOverlay");
+
+            researchPanel?.classList.remove("open");
+            researchOverlay?.classList.remove("active");
+            researchPanel?.setAttribute("aria-hidden", "true");
+
+            document.body.classList.remove("edge-ai-open");
+            document.body.style.overflow = "";
+        }
+
         function openTool(id, label, button){
             const node = nodes[id] || document.getElementById(id);
             if(!node) return;
+
+            // A workspace selection always takes priority over an open AI drawer.
+            closeAIPanels();
 
             parkCurrent();
             host.innerHTML = "";
@@ -42853,7 +42894,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if(id === "chartSection" && typeof loadChart === "function"){
                 const currentTitle = document.getElementById("chartTitle")?.innerText || "NASDAQ:AAPL";
                 const symbol = currentTitle.includes(":") ? currentTitle.split(":").pop() : "AAPL";
-                setTimeout(() => loadChart(symbol), 60);
+                setTimeout(() => {
+                    loadChart(symbol);
+                    window.dispatchEvent(new Event("resize"));
+                }, 100);
             }
 
             // If a scanner is opened, force that exact scanner visible without using dropdown UI.
