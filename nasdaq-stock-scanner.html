@@ -11422,6 +11422,58 @@ body.eb-app-body #ebWorkspaceContent #launchPadTable .edge-ai-research-btn span{
 }
 </style>
 
+
+<style id="edgebreak-fixed-global-nav-v2">
+/* =========================================================
+   FIXED GLOBAL NAVBAR
+   Keeps the main EdgeBreak navigation on screen at all times.
+========================================================= */
+
+:root{
+    --eb-global-nav-height:78px;
+}
+
+html{
+    scroll-padding-top:calc(var(--eb-global-nav-height) + 12px) !important;
+}
+
+body.eb-app-body{
+    padding-top:var(--eb-global-nav-height) !important;
+}
+
+/* Fix the navbar wrapper itself to the viewport. */
+#navbar{
+    position:fixed !important;
+    top:0 !important;
+    left:0 !important;
+    right:0 !important;
+    width:100% !important;
+    z-index:12000 !important;
+}
+
+/* Make sure anything rendered inside the navbar stays above page content. */
+#navbar > *{
+    position:relative;
+    z-index:12001;
+}
+
+/* Desktop sidebar begins directly below the fixed navbar. */
+@media(min-width:901px){
+    body.eb-app-body .eb-app-sidebar{
+        top:var(--eb-global-nav-height) !important;
+    }
+}
+
+/* Mobile Tools bar stays directly underneath the fixed navbar. */
+@media(max-width:900px){
+    body.eb-app-body .eb-app-sidebar{
+        position:sticky !important;
+        top:var(--eb-global-nav-height) !important;
+        z-index:11000 !important;
+    }
+}
+</style>
+
 </head>
 <body class="eb-app-body">
 
