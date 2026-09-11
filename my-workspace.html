@@ -2671,6 +2671,35 @@ body.eb-app-body #ebWorkspaceContent #watchlistTable .watchlist-remove{
 }
 </style>
 
+
+<style id="edgebreak-sticky-global-nav">
+/* =========================================================
+   KEEP THE MAIN EDGEBREAK NAVBAR VISIBLE WHILE SCROLLING
+========================================================= */
+
+#navbar{
+    position:sticky !important;
+    top:0 !important;
+    z-index:11000 !important;
+    width:100% !important;
+}
+
+/* Desktop sidebar already starts below the 78px navbar. */
+@media(min-width:901px){
+    body.eb-app-body .eb-app-sidebar{
+        top:78px !important;
+    }
+}
+
+/* On mobile the Tools bar should stick directly underneath
+   the main navbar instead of covering it. */
+@media(max-width:900px){
+    body.eb-app-body .eb-app-sidebar{
+        top:78px !important;
+    }
+}
+</style>
+
 </head>
 
 
