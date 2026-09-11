@@ -9744,6 +9744,726 @@ body.eb-free-body .edge-ai-panel *{
 
 </style>
 
+
+<style id="edgebreak-free-nav-mobile-scanner-fixes-v2">
+/* =========================================================
+   EDGEBREAK FREE — PAID SCANNER UI FIXES
+   - Fixed global navbar
+   - Mobile Tools menu
+   - Compact scanner filters
+   - Responsive scanner result cards
+   - No horizontal scanner-result scrollbar
+========================================================= */
+
+:root{
+    --eb-global-nav-height:78px;
+}
+
+html{
+    scroll-padding-top:calc(var(--eb-global-nav-height) + 12px) !important;
+}
+
+body.eb-app-body{
+    padding-top:var(--eb-global-nav-height) !important;
+}
+
+/* MAIN NAV — same confirmed fix as NASDAQ Scanner */
+#navbar{
+    position:fixed !important;
+    top:0 !important;
+    left:0 !important;
+    right:0 !important;
+    width:100% !important;
+    z-index:12000 !important;
+}
+
+#navbar > *{
+    position:relative;
+    z-index:12001;
+}
+
+/* Desktop sidebar starts below fixed global nav. */
+@media(min-width:901px){
+    body.eb-app-body .eb-app-sidebar{
+        top:var(--eb-global-nav-height) !important;
+    }
+}
+
+/* =========================================================
+   MOBILE TOOLS MENU
+========================================================= */
+
+.eb-mobile-tools-toggle{
+    display:none;
+}
+
+@media(max-width:900px){
+
+    :root{
+        --eb-sidebar:0px;
+    }
+
+    body.eb-app-body .eb-app-sidebar{
+        position:sticky !important;
+        top:var(--eb-global-nav-height) !important;
+        z-index:11000 !important;
+        width:100% !important;
+        height:auto !important;
+        margin:0 !important;
+        padding:8px 12px !important;
+        overflow:visible !important;
+        border-right:0 !important;
+        border-bottom:1px solid var(--eb-line) !important;
+        background:rgba(255,255,255,.98) !important;
+        box-shadow:0 8px 24px rgba(15,23,42,.06) !important;
+        box-sizing:border-box !important;
+    }
+
+    .eb-app-sidebar-head{
+        display:flex !important;
+        align-items:center !important;
+        gap:9px !important;
+        min-height:48px !important;
+        padding:0 !important;
+    }
+
+    .eb-app-sidebar-head img{
+        width:34px !important;
+        height:34px !important;
+        flex:0 0 34px !important;
+    }
+
+    .eb-app-sidebar-brand-copy{
+        flex:1 !important;
+        min-width:0 !important;
+    }
+
+    .eb-app-sidebar-brand-copy strong{
+        display:block !important;
+        font-size:14px !important;
+    }
+
+    .eb-app-sidebar-brand-copy span{
+        display:block !important;
+        margin-top:2px !important;
+        font-size:9px !important;
+    }
+
+    .eb-free-pill{
+        margin-left:0 !important;
+        min-height:25px !important;
+        padding:0 8px !important;
+        font-size:8px !important;
+    }
+
+    .eb-mobile-tools-toggle{
+        display:inline-flex !important;
+        align-items:center !important;
+        justify-content:center !important;
+        gap:7px !important;
+        min-height:38px !important;
+        padding:0 12px !important;
+        border:1px solid #d8dee7 !important;
+        border-radius:11px !important;
+        background:#fff !important;
+        color:#0f172a !important;
+        font:inherit !important;
+        font-size:12px !important;
+        font-weight:800 !important;
+        cursor:pointer !important;
+    }
+
+    .eb-mobile-tools-toggle[aria-expanded="true"]{
+        border-color:#b7d9c1 !important;
+        background:#eef9f1 !important;
+        color:#08783b !important;
+    }
+
+    .eb-mobile-tools-toggle-icon{
+        font-size:15px !important;
+        line-height:1 !important;
+    }
+
+    .eb-app-nav{
+        display:none !important;
+        width:100% !important;
+        max-height:calc(100vh - 155px) !important;
+        overflow-y:auto !important;
+        overflow-x:hidden !important;
+        margin-top:8px !important;
+        padding:10px 0 6px !important;
+        gap:14px !important;
+        border-top:1px solid var(--eb-line) !important;
+        box-sizing:border-box !important;
+    }
+
+    .eb-app-sidebar.mobile-open .eb-app-nav{
+        display:grid !important;
+    }
+
+    .eb-app-nav-group,
+    .eb-app-nav-group:not(.eb-app-nav-primary),
+    .eb-app-nav-primary{
+        display:grid !important;
+        width:100% !important;
+        gap:4px !important;
+        padding:0 0 10px !important;
+        border:0 !important;
+        border-bottom:1px solid #eef1f4 !important;
+    }
+
+    .eb-app-nav-group:last-child{
+        border-bottom:0 !important;
+        padding-bottom:0 !important;
+    }
+
+    .eb-app-nav-label{
+        display:block !important;
+        padding:0 8px 4px !important;
+        color:#94a3b8 !important;
+        font-size:9px !important;
+    }
+
+    .eb-app-nav-item,
+    .eb-app-nav-primary .eb-app-nav-item{
+        width:100% !important;
+        min-height:42px !important;
+        white-space:normal !important;
+        font-size:13px !important;
+    }
+
+    .eb-free-sidebar-cta{
+        display:block !important;
+        margin:2px 0 4px !important;
+    }
+
+    body.eb-app-body main{
+        margin-left:0 !important;
+        padding-left:10px !important;
+        padding-right:10px !important;
+    }
+
+    body.eb-app-body .elite-container{
+        width:100% !important;
+        max-width:100% !important;
+        min-width:0 !important;
+        box-sizing:border-box !important;
+    }
+
+    body.eb-app-body .eb-app-topbar{
+        width:100% !important;
+        min-width:0 !important;
+        box-sizing:border-box !important;
+    }
+}
+
+/* =========================================================
+   SCANNER RESULTS — DESKTOP
+========================================================= */
+
+.scanner-market-activity{
+    margin-top:22px;
+}
+
+@media(min-width:1181px){
+    body.eb-free-body .scanner-layout{
+        grid-template-columns:230px minmax(0,1fr) 230px !important;
+        gap:14px !important;
+    }
+}
+
+@media(min-width:901px) and (max-width:1180px){
+    body.eb-free-body .scanner-layout{
+        display:grid !important;
+        grid-template-columns:220px minmax(0,1fr) !important;
+        gap:14px !important;
+    }
+
+    body.eb-free-body .scanner-layout > .scanner-panel:last-child{
+        grid-column:1 / -1 !important;
+    }
+}
+
+@media(min-width:901px){
+
+    body.eb-free-body .scanner-layout > .scanner-panel{
+        min-width:0 !important;
+        padding:18px !important;
+    }
+
+    body.eb-free-body .breakout-results,
+    body.eb-free-body .scanner-results{
+        min-width:0 !important;
+        overflow-x:hidden !important;
+        overflow-y:auto !important;
+    }
+
+    body.eb-free-body #breakoutTable,
+    body.eb-free-body #scannerTable,
+    body.eb-free-body #launchPadTable{
+        width:100% !important;
+        min-width:0 !important;
+        max-width:100% !important;
+        table-layout:fixed !important;
+        border-collapse:collapse !important;
+    }
+
+    body.eb-free-body #breakoutTable th,
+    body.eb-free-body #scannerTable th,
+    body.eb-free-body #launchPadTable th{
+        padding:9px 4px !important;
+        font-size:8.5px !important;
+        line-height:1.25 !important;
+        letter-spacing:.025em !important;
+        white-space:normal !important;
+        overflow-wrap:anywhere !important;
+    }
+
+    body.eb-free-body #breakoutTable td,
+    body.eb-free-body #scannerTable td,
+    body.eb-free-body #launchPadTable td{
+        padding:10px 4px !important;
+        font-size:11px !important;
+        line-height:1.3 !important;
+        white-space:normal !important;
+        overflow-wrap:anywhere !important;
+    }
+
+    body.eb-free-body #breakoutTable .watchlist-btn,
+    body.eb-free-body #scannerTable .watchlist-btn,
+    body.eb-free-body #launchPadTable .watchlist-btn,
+    body.eb-free-body #breakoutTable .edge-ai-research-btn,
+    body.eb-free-body #scannerTable .edge-ai-research-btn,
+    body.eb-free-body #launchPadTable .edge-ai-research-btn{
+        width:100% !important;
+        min-width:0 !important;
+        max-width:100% !important;
+        min-height:32px !important;
+        padding:6px 5px !important;
+        border-radius:8px !important;
+        font-size:10px !important;
+        line-height:1.15 !important;
+        white-space:normal !important;
+    }
+
+    body.eb-free-body #breakoutTable .edge-ai-research-btn span,
+    body.eb-free-body #scannerTable .edge-ai-research-btn span,
+    body.eb-free-body #launchPadTable .edge-ai-research-btn span{
+        display:none !important;
+    }
+}
+
+/* =========================================================
+   SCANNERS — MOBILE SEARCH + RESULT CARDS
+========================================================= */
+
+@media(max-width:900px){
+
+    body.eb-free-body #breakoutScanner,
+    body.eb-free-body #preBreakoutScanner,
+    body.eb-free-body #launchPadScanner{
+        width:100% !important;
+        max-width:100% !important;
+        min-width:0 !important;
+        overflow-x:hidden !important;
+    }
+
+    body.eb-free-body .scanner-layout{
+        display:flex !important;
+        flex-direction:column !important;
+        width:100% !important;
+        max-width:100% !important;
+        min-width:0 !important;
+        gap:12px !important;
+        margin:0 !important;
+        overflow:visible !important;
+    }
+
+    body.eb-free-body .scanner-panel{
+        width:100% !important;
+        max-width:100% !important;
+        min-width:0 !important;
+        height:auto !important;
+        margin:0 !important;
+        padding:14px !important;
+        border-radius:14px !important;
+        overflow:visible !important;
+        box-sizing:border-box !important;
+    }
+
+    body.eb-free-body .scanner-panel h3{
+        margin:0 0 14px !important;
+        font-size:20px !important;
+        line-height:1.2 !important;
+    }
+
+    /* SEARCH FILTERS — compact 2-column phone layout */
+    body.eb-free-body .scanner-layout > .scanner-panel:first-child{
+        position:static !important;
+        display:grid !important;
+        grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+        gap:10px 9px !important;
+        align-items:end !important;
+    }
+
+    body.eb-free-body .scanner-layout > .scanner-panel:first-child > h3,
+    body.eb-free-body .scanner-layout > .scanner-panel:first-child > .scanner-btn{
+        grid-column:1 / -1 !important;
+    }
+
+    body.eb-free-body .scanner-layout > .scanner-panel:first-child > h3{
+        margin-bottom:2px !important;
+    }
+
+    body.eb-free-body .filter-group{
+        min-width:0 !important;
+        margin:0 !important;
+    }
+
+    body.eb-free-body .filter-group::after{
+        display:none !important;
+    }
+
+    body.eb-free-body .filter-group label{
+        min-height:22px !important;
+        display:flex !important;
+        align-items:flex-end !important;
+        margin:0 0 5px !important;
+        color:#64748b !important;
+        font-size:9px !important;
+        line-height:1.15 !important;
+        letter-spacing:.05em !important;
+    }
+
+    body.eb-free-body .filter-group select{
+        width:100% !important;
+        max-width:100% !important;
+        min-width:0 !important;
+        height:42px !important;
+        padding:0 28px 0 10px !important;
+        border-radius:10px !important;
+        font-size:12px !important;
+        text-overflow:ellipsis !important;
+        box-sizing:border-box !important;
+    }
+
+    body.eb-free-body .scanner-btn{
+        width:100% !important;
+        min-width:0 !important;
+        min-height:43px !important;
+        height:auto !important;
+        margin-top:3px !important;
+        padding:10px 12px !important;
+        border-radius:11px !important;
+        font-size:12px !important;
+        line-height:1.2 !important;
+        white-space:normal !important;
+        box-sizing:border-box !important;
+    }
+
+    /* RESULTS — remove desktop scroll box */
+    body.eb-free-body .breakout-results,
+    body.eb-free-body .scanner-results{
+        display:block !important;
+        width:100% !important;
+        min-width:0 !important;
+        height:auto !important;
+        max-height:none !important;
+        overflow:visible !important;
+    }
+
+    body.eb-free-body #breakoutTable,
+    body.eb-free-body #scannerTable,
+    body.eb-free-body #launchPadTable{
+        display:block !important;
+        width:100% !important;
+        max-width:100% !important;
+        min-width:0 !important;
+        margin:0 !important;
+        border:0 !important;
+        table-layout:auto !important;
+        overflow:visible !important;
+    }
+
+    body.eb-free-body #breakoutTable thead,
+    body.eb-free-body #scannerTable thead,
+    body.eb-free-body #launchPadTable thead{
+        display:none !important;
+    }
+
+    body.eb-free-body #breakoutTable tbody,
+    body.eb-free-body #scannerTable tbody,
+    body.eb-free-body #launchPadTable tbody{
+        display:block !important;
+        width:100% !important;
+        min-width:0 !important;
+    }
+
+    body.eb-free-body #breakoutTable tbody tr,
+    body.eb-free-body #scannerTable tbody tr,
+    body.eb-free-body #launchPadTable tbody tr{
+        display:grid !important;
+        grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+        width:100% !important;
+        max-width:100% !important;
+        min-width:0 !important;
+        gap:0 !important;
+        margin:0 0 10px !important;
+        padding:6px !important;
+        border:1px solid #e3e8ee !important;
+        border-radius:13px !important;
+        background:#fff !important;
+        box-shadow:0 5px 16px rgba(15,23,42,.045) !important;
+        box-sizing:border-box !important;
+        overflow:hidden !important;
+        transform:none !important;
+    }
+
+    body.eb-free-body #breakoutTable tbody td,
+    body.eb-free-body #scannerTable tbody td,
+    body.eb-free-body #launchPadTable tbody td{
+        display:flex !important;
+        min-width:0 !important;
+        min-height:49px !important;
+        flex-direction:column !important;
+        align-items:flex-start !important;
+        justify-content:center !important;
+        gap:3px !important;
+        padding:7px !important;
+        border:0 !important;
+        color:#334155 !important;
+        font-size:12px !important;
+        font-weight:650 !important;
+        line-height:1.25 !important;
+        text-align:left !important;
+        white-space:normal !important;
+        overflow-wrap:anywhere !important;
+        box-sizing:border-box !important;
+    }
+
+    body.eb-free-body #breakoutTable tbody td::before,
+    body.eb-free-body #scannerTable tbody td::before,
+    body.eb-free-body #launchPadTable tbody td::before{
+        display:block !important;
+        margin-bottom:3px !important;
+        color:#94a3b8 !important;
+        font-size:7.5px !important;
+        font-weight:850 !important;
+        line-height:1.1 !important;
+        letter-spacing:.07em !important;
+        text-transform:uppercase !important;
+    }
+
+    /* Breakout labels */
+    #breakoutTable tbody td:nth-child(1)::before{content:"Rank";}
+    #breakoutTable tbody td:nth-child(2)::before{content:"Ticker";}
+    #breakoutTable tbody td:nth-child(3)::before{content:"Price";}
+    #breakoutTable tbody td:nth-child(4)::before{content:"Touches";}
+    #breakoutTable tbody td:nth-child(5)::before{content:"Volume";}
+    #breakoutTable tbody td:nth-child(6)::before{content:"Activity";}
+    #breakoutTable tbody td:nth-child(7)::before{content:"Save";}
+    #breakoutTable tbody td:nth-child(8)::before{content:"AI Research";}
+
+    /* Pre-Breakout labels */
+    #scannerTable tbody td:nth-child(1)::before{content:"Ticker";}
+    #scannerTable tbody td:nth-child(2)::before{content:"Price";}
+    #scannerTable tbody td:nth-child(3)::before{content:"Resistance";}
+    #scannerTable tbody td:nth-child(4)::before{content:"Higher Lows";}
+    #scannerTable tbody td:nth-child(5)::before{content:"Activity";}
+    #scannerTable tbody td:nth-child(6)::before{content:"Save";}
+    #scannerTable tbody td:nth-child(7)::before{content:"AI Research";}
+
+    /* Launch Pad labels */
+    #launchPadTable tbody td:nth-child(1)::before{content:"Ticker";}
+    #launchPadTable tbody td:nth-child(2)::before{content:"Price";}
+    #launchPadTable tbody td:nth-child(3)::before{content:"Base Length";}
+    #launchPadTable tbody td:nth-child(4)::before{content:"Activity";}
+    #launchPadTable tbody td:nth-child(5)::before{content:"Save";}
+    #launchPadTable tbody td:nth-child(6)::before{content:"AI Research";}
+
+    #breakoutTable tbody td:nth-child(2),
+    #scannerTable tbody td:nth-child(1),
+    #launchPadTable tbody td:nth-child(1){
+        color:#08783b !important;
+        font-size:15px !important;
+        font-weight:850 !important;
+    }
+
+    body.eb-free-body #breakoutTable .watchlist-btn,
+    body.eb-free-body #scannerTable .watchlist-btn,
+    body.eb-free-body #launchPadTable .watchlist-btn,
+    body.eb-free-body #breakoutTable .edge-ai-research-btn,
+    body.eb-free-body #scannerTable .edge-ai-research-btn,
+    body.eb-free-body #launchPadTable .edge-ai-research-btn{
+        width:100% !important;
+        max-width:100% !important;
+        min-width:0 !important;
+        min-height:34px !important;
+        margin:0 !important;
+        padding:5px 6px !important;
+        border-radius:8px !important;
+        font-size:10px !important;
+        line-height:1.15 !important;
+        white-space:normal !important;
+        box-sizing:border-box !important;
+    }
+
+    body.eb-free-body #breakoutTable .edge-ai-research-btn span,
+    body.eb-free-body #scannerTable .edge-ai-research-btn span,
+    body.eb-free-body #launchPadTable .edge-ai-research-btn span{
+        display:none !important;
+    }
+
+    /* Lock/empty rows stay as one full-width row. */
+    body.eb-free-body #breakoutTable tbody tr.free-locked-preview,
+    body.eb-free-body #scannerTable tbody tr.free-locked-preview,
+    body.eb-free-body #launchPadTable tbody tr.free-locked-preview{
+        display:block !important;
+        padding:0 !important;
+        overflow:visible !important;
+        border:0 !important;
+        box-shadow:none !important;
+        background:transparent !important;
+    }
+
+    body.eb-free-body #breakoutTable tbody td[colspan],
+    body.eb-free-body #scannerTable tbody td[colspan],
+    body.eb-free-body #launchPadTable tbody td[colspan]{
+        grid-column:1 / -1 !important;
+        display:block !important;
+        width:100% !important;
+        min-height:72px !important;
+        padding:0 !important;
+        text-align:center !important;
+    }
+
+    body.eb-free-body #breakoutTable tbody td[colspan]::before,
+    body.eb-free-body #scannerTable tbody td[colspan]::before,
+    body.eb-free-body #launchPadTable tbody td[colspan]::before{
+        content:none !important;
+        display:none !important;
+    }
+
+    body.eb-free-body .free-lock-preview,
+    body.eb-free-body .free-lock-content{
+        width:100% !important;
+        max-width:100% !important;
+        box-sizing:border-box !important;
+    }
+
+    /* Activity filter under results */
+    body.eb-free-body .scanner-market-activity{
+        display:grid !important;
+        grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+        gap:10px 9px !important;
+        width:100% !important;
+        min-width:0 !important;
+        margin-top:14px !important;
+        padding-top:14px !important;
+        border-top:1px solid #e2e8f0 !important;
+    }
+
+    body.eb-free-body .scanner-market-activity > .scanner-btn{
+        grid-column:1 / -1 !important;
+    }
+
+    /* Details below results */
+    body.eb-free-body .scanner-layout > .scanner-panel:last-child{
+        width:100% !important;
+        min-width:0 !important;
+        order:3 !important;
+    }
+
+    /* Watchlist preview must never force a phone wider. */
+    body.eb-free-body #watchlistTable{
+        width:100% !important;
+        min-width:0 !important;
+        max-width:100% !important;
+    }
+
+    body.eb-free-body .scanner-table-wrap{
+        width:100% !important;
+        max-width:100% !important;
+        overflow-x:hidden !important;
+    }
+
+    /* Chart and Chart AI stay inside the phone. */
+    body.eb-free-body .scanner-chart,
+    body.eb-free-body .chart-ai-tool{
+        width:100% !important;
+        max-width:100% !important;
+        min-width:0 !important;
+        margin-left:0 !important;
+        margin-right:0 !important;
+        box-sizing:border-box !important;
+    }
+
+    body.eb-free-body #tv_chart{
+        width:100% !important;
+        max-width:100% !important;
+        min-width:0 !important;
+        height:460px !important;
+        min-height:460px !important;
+    }
+
+    body.eb-free-body .chart-ai-tool{
+        padding:16px !important;
+    }
+
+    body.eb-free-body .chart-ai-dropzone{
+        min-width:0 !important;
+    }
+
+    /* Daily scan / market overview cards stay within viewport. */
+    body.eb-free-body .daily-brief-panel,
+    body.eb-free-body .nasdaq-overview-panel{
+        width:100% !important;
+        max-width:100% !important;
+        min-width:0 !important;
+        margin-left:0 !important;
+        margin-right:0 !important;
+        box-sizing:border-box !important;
+    }
+}
+
+@media(max-width:520px){
+
+    .eb-free-pill{
+        display:none !important;
+    }
+
+    body.eb-free-body #tv_chart{
+        height:410px !important;
+        min-height:410px !important;
+    }
+}
+
+@media(max-width:390px){
+
+    body.eb-free-body .scanner-layout > .scanner-panel:first-child,
+    body.eb-free-body .scanner-market-activity{
+        grid-template-columns:1fr !important;
+    }
+
+    body.eb-free-body .scanner-layout > .scanner-panel:first-child > h3,
+    body.eb-free-body .scanner-layout > .scanner-panel:first-child > .scanner-btn,
+    body.eb-free-body .scanner-market-activity > .scanner-btn{
+        grid-column:1 !important;
+    }
+}
+
+/* =========================================================
+   FREE PREVIEW HARDENING
+   Removing blur/overlay must not reveal paid Daily Brief data.
+========================================================= */
+
+/* The old real-card blur class is retained only for compatibility,
+   but hidden paid cards are no longer inserted by renderDailyBrief(). */
+body.eb-free-body .daily-brief-stock-card.free-ai-locked{
+    display:none !important;
+}
+</style>
+
 </head>
 <body class="eb-app-body eb-free-body">
 
@@ -9759,14 +10479,27 @@ EDGEBREAK FREE APP NAVIGATION
 
     <div class="eb-app-sidebar-head">
         <img src="/images/logo.webp" alt="EdgeBreak">
-        <div>
+
+        <div class="eb-app-sidebar-brand-copy">
             <strong>EdgeBreak</strong>
             <span>Free Research Preview</span>
         </div>
+
         <span class="eb-free-pill">Free</span>
+
+        <button
+            type="button"
+            class="eb-mobile-tools-toggle"
+            id="ebMobileToolsToggle"
+            aria-expanded="false"
+            aria-controls="ebAppNav"
+        >
+            <span>Tools</span>
+            <span class="eb-mobile-tools-toggle-icon">☰</span>
+        </button>
     </div>
 
-    <nav class="eb-app-nav">
+    <nav class="eb-app-nav" id="ebAppNav">
 
         <div class="eb-app-nav-group eb-app-nav-primary">
 
@@ -11064,7 +11797,7 @@ SCANNER SELECTOR
 
         </table>
 
-<div style="margin-top:25px;">
+<div class="scanner-market-activity">
 
     <div class="filter-group">
 
@@ -11313,7 +12046,7 @@ SCANNER SELECTOR
 
         </table>
 
-        <div style="margin-top:25px;">
+        <div class="scanner-market-activity">
 
     <div class="filter-group">
 
@@ -11477,7 +12210,7 @@ SCANNER SELECTOR
         SMART MONEY FILTER
         ========================================= -->
 
-        <div style="margin-top:25px;">
+        <div class="scanner-market-activity">
 
             <div class="filter-group">
 
@@ -13528,7 +14261,7 @@ function runScanner(){
 
         });
         
-        window.currentScannerResults = results;
+        window.currentScannerResults = results.slice(0, 2);
 
         renderResults(results);
 
@@ -14096,7 +14829,7 @@ function runBreakoutScanner(){
 
         });
 
-    window.currentBreakoutResults = results;
+    window.currentBreakoutResults = results.slice(0, 2);
 
     renderBreakoutResults(results);
 
@@ -14593,7 +15326,7 @@ function runLaunchPadScanner(){
 
        
 
-    window.currentLaunchPadResults = results;
+    window.currentLaunchPadResults = results.slice(0, 2);
 
     renderLaunchPadResults(results);
 
@@ -20917,7 +21650,9 @@ async function openDailyBrief(){
                     body:
                         JSON.stringify({
 
-                            candidates
+                            candidates,
+                            previewOnly: true,
+                            previewLimit: 2
 
                         })
 
@@ -21288,7 +22023,15 @@ function renderDailyBrief(
     #3 onward = blurred + locked
     ===================================== */
 
-    results.forEach(
+    /*
+    SECURITY: only the two free-preview companies are ever
+    inserted into the DOM. Removing CSS/blur therefore cannot
+    reveal company #3 onward.
+    */
+    const visibleResults =
+        results.slice(0, 2);
+
+    visibleResults.forEach(
         (company, index) => {
 
 
@@ -23076,5 +23819,250 @@ document.addEventListener(
 );
 
 </script>
+
+<script id="edgebreak-free-mobile-and-lock-guards-v2">
+(function(){
+
+    /* =====================================================
+       MOBILE TOOLS MENU
+    ===================================================== */
+
+    function initMobileFreeMenu(){
+
+        const sidebar =
+            document.querySelector(".eb-app-sidebar");
+
+        const toggle =
+            document.getElementById("ebMobileToolsToggle");
+
+        if(!sidebar || !toggle) return;
+
+        function setMenu(open){
+
+            sidebar.classList.toggle(
+                "mobile-open",
+                open
+            );
+
+            toggle.setAttribute(
+                "aria-expanded",
+                open ? "true" : "false"
+            );
+
+            const icon =
+                toggle.querySelector(
+                    ".eb-mobile-tools-toggle-icon"
+                );
+
+            if(icon){
+                icon.textContent =
+                    open ? "×" : "☰";
+            }
+        }
+
+        toggle.addEventListener(
+            "click",
+            () => {
+                setMenu(
+                    !sidebar.classList.contains(
+                        "mobile-open"
+                    )
+                );
+            }
+        );
+
+        document
+            .querySelectorAll(
+                ".eb-app-nav a, .eb-app-nav button"
+            )
+            .forEach(
+                item => {
+                    item.addEventListener(
+                        "click",
+                        () => {
+                            if(
+                                window.innerWidth <=
+                                900
+                            ){
+                                setMenu(false);
+                            }
+                        }
+                    );
+                }
+            );
+
+        window.addEventListener(
+            "resize",
+            () => {
+                if(window.innerWidth > 900){
+                    setMenu(false);
+                }
+            }
+        );
+    }
+
+
+    /* =====================================================
+       FREE-PAGE CLIENT GUARDS
+
+       These stop the Free page UI/functions from invoking
+       paid research/watchlist actions even if someone calls
+       the page functions manually.
+
+       IMPORTANT:
+       true subscription security must ALSO be enforced by
+       the API/data source on the server. Client JavaScript
+       is defence-in-depth, not the security boundary.
+    ===================================================== */
+
+    function installFreeGuards(){
+
+        const showUpgrade = () => {
+            if(
+                typeof window.showFreeAIUpgrade ===
+                "function"
+            ){
+                window.showFreeAIUpgrade();
+            }
+            else if(
+                typeof window.showFreeMemberUpgrade ===
+                "function"
+            ){
+                window.showFreeMemberUpgrade();
+            }
+        };
+
+        const showMemberUpgrade = () => {
+            if(
+                typeof window.showFreeMemberUpgrade ===
+                "function"
+            ){
+                window.showFreeMemberUpgrade();
+            }
+        };
+
+        [
+            "loadEdgeBreakAICompanyOverview",
+            "loadEdgeBreakAIMarketAttention",
+            "loadEdgeBreakAIFinancials",
+            "loadEdgeBreakAIInstitutional",
+            "loadEdgeBreakAISecFilings"
+        ].forEach(name => {
+
+            if(typeof window[name] === "function"){
+
+                window[name] =
+                    async function(){
+                        showUpgrade();
+                        return null;
+                    };
+
+            }
+
+        });
+
+        /* Watchlist is a paid member tool on this page. */
+        window.loadWatchlist =
+            async function(){
+                showMemberUpgrade();
+                return null;
+            };
+
+        window.addToWatchlist =
+            async function(){
+                showMemberUpgrade();
+                return null;
+            };
+
+        window.removeFromWatchlist =
+            async function(){
+                showMemberUpgrade();
+                return null;
+            };
+
+        /* Block this Free page from making paid AI-research API
+           requests through its own fetch implementation. */
+        if(!window.__edgeBreakFreeFetchGuard){
+
+            window.__edgeBreakFreeFetchGuard = true;
+
+            const nativeFetch =
+                window.fetch.bind(window);
+
+            window.fetch =
+                function(input, init){
+
+                    const url =
+                        typeof input === "string"
+                            ? input
+                            : (input?.url || "");
+
+                    if(
+                        String(url)
+                            .includes(
+                                "/api/ai-research-gem"
+                            )
+                    ){
+                        showUpgrade();
+
+                        return Promise.resolve(
+                            new Response(
+                                JSON.stringify({
+                                    error:
+                                        "Paid EdgeBreak membership required."
+                                }),
+                                {
+                                    status:403,
+                                    headers:{
+                                        "Content-Type":
+                                            "application/json"
+                                    }
+                                }
+                            )
+                        );
+                    }
+
+                    return nativeFetch(
+                        input,
+                        init
+                    );
+                };
+
+        }
+    }
+
+
+    function init(){
+
+        initMobileFreeMenu();
+
+        /* Run after the page's existing scripts have defined
+           their functions, then re-run shortly afterwards in
+           case late DOM scripts initialise. */
+        installFreeGuards();
+
+        setTimeout(
+            installFreeGuards,
+            250
+        );
+    }
+
+
+    if(
+        document.readyState ===
+        "loading"
+    ){
+        document.addEventListener(
+            "DOMContentLoaded",
+            init
+        );
+    }
+    else{
+        init();
+    }
+
+})();
+</script>
+
 </body>
 </html>
