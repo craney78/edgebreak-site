@@ -1012,10 +1012,23 @@ SCANNER MINI CARDS
 }
 
 .ix-scanner-card{
+    display:block;
     padding:17px;
     border:1px solid var(--ix-line);
     border-radius:17px;
     background:#ffffff;
+    color:var(--ix-ink);
+    text-decoration:none;
+    transition:
+        transform .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+.ix-scanner-card:hover{
+    transform:translateY(-2px);
+    border-color:#cfe4d6;
+    box-shadow:0 12px 30px rgba(15,23,42,.07);
 }
 
 .ix-scanner-card strong{
@@ -1814,7 +1827,11 @@ NASDAQ SCANNERS
 
             <div class="ix-scanner-grid">
 
-                <div class="ix-scanner-card">
+                <a
+                    class="ix-scanner-card"
+                    href="/breakout-scanner.html"
+                    aria-label="Explore EdgeBreak Breakout Scanner"
+                >
 
                     <strong>
                         Breakout
@@ -1824,10 +1841,14 @@ NASDAQ SCANNERS
                         Find stocks moving through established resistance.
                     </span>
 
-                </div>
+                </a>
 
 
-                <div class="ix-scanner-card">
+                <a
+                    class="ix-scanner-card"
+                    href="/pre-breakout-scanner.html"
+                    aria-label="Explore EdgeBreak Pre-Breakout Scanner"
+                >
 
                     <strong>
                         Pre-Breakout
@@ -1837,10 +1858,14 @@ NASDAQ SCANNERS
                         Find developing structures approaching resistance.
                     </span>
 
-                </div>
+                </a>
 
 
-                <div class="ix-scanner-card">
+                <a
+                    class="ix-scanner-card"
+                    href="/launchpad.html"
+                    aria-label="Explore EdgeBreak Launch Pad Scanner"
+                >
 
                     <strong>
                         Launch Pad
@@ -1850,7 +1875,7 @@ NASDAQ SCANNERS
                         Find organised bases and established trading ranges.
                     </span>
 
-                </div>
+                </a>
 
             </div>
 
@@ -1914,7 +1939,7 @@ LAUNCH PAD
 
             <a
                 class="ix-feature-link"
-                href="/launch-pad.html"
+                href="/launchpad.html"
             >
                 Explore Launch Pad →
             </a>
@@ -2059,9 +2084,9 @@ AI CHART ANALYSIS
 
             <a
                 class="ix-feature-link"
-                href="/nasdaq-stock-scanner.html"
+                href="/ai-stock-chart-analysis.html"
             >
-                Explore AI Chart Analysis →
+                Explore AI Stock Chart Analysis →
             </a>
 
         </div>
