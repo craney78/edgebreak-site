@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'AW-18373865179');
+</script>
+
+<title>NASDAQ-Only Stock Scanner for Breakout Trading | EdgeBreak</title>
+<meta name="description" content="Why EdgeBreak built a NASDAQ-only stock scanner for breakout trading, how dedicated scanner logic differs from all-market screeners, and real scanner examples.">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<link rel="canonical" href="https://www.edgebreak.ai/blog/why-we-built-a-nasdaq-only-scanner.html">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="EdgeBreak">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="en_CA">
+<meta property="og:locale:alternate" content="en_AU">
+<meta property="og:url" content="https://www.edgebreak.ai/blog/why-we-built-a-nasdaq-only-scanner.html">
+<meta property="og:title" content="Why We Built a NASDAQ-Only Scanner for Breakout Trading | EdgeBreak">
+<meta property="og:description" content="Why EdgeBreak focuses only on NASDAQ, why exchange-specific breakout logic matters, and what real Launch Pad, Pre-Breakout and Breakout examples look like.">
+<meta property="og:image" content="https://www.edgebreak.ai/images/scanner-preview.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:alt" content="NASDAQ-only stock scanner for breakout research">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@EdgeBreakAi">
+<meta name="twitter:creator" content="@EdgeBreakAi">
+<meta name="twitter:title" content="Why We Built a NASDAQ-Only Scanner for Breakout Trading | EdgeBreak">
+<meta name="twitter:description" content="Why market-specific scanner logic can matter for breakout traders, with real EdgeBreak scanner examples.">
+<meta name="twitter:image" content="https://www.edgebreak.ai/images/scanner-preview.webp">
+<meta name="twitter:image:alt" content="NASDAQ-only stock scanner">
+
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="/css/footer.css">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"Organization",
+      "@id":"https://www.edgebreak.ai/#organization",
+      "name":"EdgeBreak",
+      "legalName":"Crane Platform Labs",
+      "url":"https://www.edgebreak.ai/",
+      "email":"mailto:admin@edgebreak.ai",
+      "logo":{
+        "@type":"ImageObject",
+        "@id":"https://www.edgebreak.ai/#logo",
+        "url":"https://www.edgebreak.ai/images/logo.webp",
+        "contentUrl":"https://www.edgebreak.ai/images/logo.webp",
+        "caption":"EdgeBreak"
+      },
+      "description":"EdgeBreak is a NASDAQ-focused market intelligence and stock research platform combining rules-based scanners, breakout research, AI-assisted company research and chart analysis.",
+      "areaServed":[
+        {"@type":"Country","name":"United States"},
+        {"@type":"Country","name":"Canada"},
+        {"@type":"Country","name":"Australia"}
+      ],
+      "sameAs":[
+        "https://www.facebook.com/profile.php?id=61592979232155",
+        "https://x.com/EdgeBreakAi"
+      ]
+    },
+    {
+      "@type":"WebSite",
+      "@id":"https://www.edgebreak.ai/#website",
+      "name":"EdgeBreak",
+      "url":"https://www.edgebreak.ai/",
+      "description":"NASDAQ stock scanner, market intelligence and AI-assisted stock research platform.",
+      "publisher":{"@id":"https://www.edgebreak.ai/#organization"},
+      "inLanguage":"en"
+    },
+    {
+      "@type":"WebPage",
+      "@id":"https://www.edgebreak.ai/blog/why-we-built-a-nasdaq-only-scanner.html#webpage",
+      "url":"https://www.edgebreak.ai/blog/why-we-built-a-nasdaq-only-scanner.html",
+      "name":"Why We Built a NASDAQ-Only Scanner | Why All-in-One Screeners Fail Breakout Traders | EdgeBreak",
+      "description":"Why EdgeBreak chose a NASDAQ-only scanner model and why broad all-market screeners can be too general for breakout-focused research.",
+      "isPartOf":{"@id":"https://www.edgebreak.ai/#website"},
+      "about":{"@id":"https://www.edgebreak.ai/blog/why-we-built-a-nasdaq-only-scanner.html#article"},
+      "mainEntity":{"@id":"https://www.edgebreak.ai/blog/why-we-built-a-nasdaq-only-scanner.html#article"},
+      "publisher":{"@id":"https://www.edgebreak.ai/#organization"},
+      "breadcrumb":{"@id":"https://www.edgebreak.ai/blog/why-we-built-a-nasdaq-only-scanner.html#breadcrumb"},
+      "inLanguage":"en"
+    },
+    {
+      "@type":"Article",
+      "@id":"https://www.edgebreak.ai/blog/why-we-built-a-nasdaq-only-scanner.html#article",
+      "headline":"Why We Built a NASDAQ-Only Scanner — and Why All-in-One Screeners Fail Breakout Traders",
+      "image":[
+        "https://www.edgebreak.ai/images/edgebreak-launch-pad-real-example.webp",
+        "https://www.edgebreak.ai/images/edgebreak-pre-breakout-real-example.webp",
+        "https://www.edgebreak.ai/images/edgebreak-breakout-real-example.webp"
+      ],
+      "description":"An educational explanation of why EdgeBreak focuses on NASDAQ-listed stocks and why market-specific breakout logic can be more useful than generic all-market screening.",
+      "author":{"@id":"https://www.edgebreak.ai/#organization"},
+      "publisher":{"@id":"https://www.edgebreak.ai/#organization"},
+      "datePublished":"2026-09-14",
+      "dateModified":"2026-09-14",
+      "articleSection":"Trading Insights",
+      "mainEntityOfPage":{"@id":"https://www.edgebreak.ai/blog/why-we-built-a-nasdaq-only-scanner.html#webpage"},
+      "inLanguage":"en",
+      "audience":{
+        "@type":"Audience",
+        "audienceType":"Investors in the United States, Canada and Australia researching NASDAQ-listed breakout stocks"
+      }
+    },
+    {
+      "@type":"BreadcrumbList",
+      "@id":"https://www.edgebreak.ai/blog/why-we-built-a-nasdaq-only-scanner.html#breadcrumb",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"Home","item":"https://www.edgebreak.ai/"},
+        {"@type":"ListItem","position":2,"name":"Trading Insights","item":"https://www.edgebreak.ai/blog.html"},
+        {"@type":"ListItem","position":3,"name":"Why We Built a NASDAQ-Only Scanner","item":"https://www.edgebreak.ai/blog/why-we-built-a-nasdaq-only-scanner.html"}
+      ]
+    },
+    {
+      "@type":"FAQPage",
+      "@id":"https://www.edgebreak.ai/blog/why-we-built-a-nasdaq-only-scanner.html#faq",
+      "mainEntity":[
+        {
+          "@type":"Question",
+          "name":"Why use a NASDAQ-only stock scanner?",
+          "acceptedAnswer":{"@type":"Answer","text":"A NASDAQ-only scanner can be designed around one defined market universe rather than applying the same broad filters across many exchanges. That can make breakout, pre-breakout and liquidity rules more focused."}
+        },
+        {
+          "@type":"Question",
+          "name":"Why can all-market stock screeners be less useful for breakout traders?",
+          "acceptedAnswer":{"@type":"Answer","text":"All-market screeners often need broad rules that work across very different securities and exchanges. Breakout traders may need more specific treatment of resistance, higher lows, consolidation, liquidity, volume and distance from the base."}
+        },
+        {
+          "@type":"Question",
+          "name":"Is NASDAQ better than every other market for breakout trading?",
+          "acceptedAnswer":{"@type":"Answer","text":"No. Different markets can produce different opportunities. EdgeBreak focuses on NASDAQ because specialising in one market allows its scanners and research workflow to be designed around a defined universe rather than trying to cover every market."}
+        },
+        {
+          "@type":"Question",
+          "name":"What does a breakout trader need from a stock scanner?",
+          "acceptedAnswer":{"@type":"Answer","text":"Useful breakout scanner features can include established resistance, higher lows, consolidation, liquidity filters, volume context, breakout confirmation and controls for stocks that are already extended."}
+        },
+        {
+          "@type":"Question",
+          "name":"Can investors in Canada and Australia use a NASDAQ-focused scanner?",
+          "acceptedAnswer":{"@type":"Answer","text":"Yes. Investors in Canada and Australia can use web-based research platforms focused on NASDAQ-listed stocks, subject to regional availability and their own brokerage, tax and local requirements."}
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<style>
+:root{
+    --ix-ink:#0b1220;
+    --ix-muted:#64748b;
+    --ix-line:#e5eaf0;
+    --ix-soft:#f5f8fb;
+    --ix-green:#16a34a;
+    --ix-green-dark:#08783b;
+    --ix-blue:#2563eb;
+    --ix-white:#ffffff;
+    --ix-shadow:0 24px 70px rgba(15,23,42,.09);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+    margin:0;
+    background:#ffffff;
+    color:var(--ix-ink);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.ix-page{overflow:hidden;background:#fff;}
+.ix-page h1,.ix-page h2,.ix-page h3,.ix-page strong{color:var(--ix-ink);}
+.ix-shell{width:min(1180px,calc(100% - 40px));margin:auto;}
+.ix-kicker{
+    display:inline-flex;align-items:center;gap:9px;padding:9px 15px;border:1px solid #dce6df;
+    border-radius:999px;background:rgba(255,255,255,.8);color:var(--ix-green-dark);
+    font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+}
+.ix-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 6px rgba(34,197,94,.11);}
+.ix-title{
+    margin:0;color:var(--ix-ink)!important;font-size:clamp(44px,6.4vw,82px);
+    line-height:.99;letter-spacing:-.055em;font-weight:850;
+}
+.ix-title span{color:var(--ix-green);}
+.ix-subtitle{max-width:860px;margin:26px auto 0;color:#566173;font-size:clamp(18px,2vw,23px);line-height:1.55;}
+.ix-eyebrow{margin-bottom:17px;color:var(--ix-green-dark);font-size:13px;font-weight:850;letter-spacing:.1em;text-transform:uppercase;}
+.ix-h2{margin:0;color:var(--ix-ink)!important;font-size:clamp(36px,4.5vw,60px);line-height:1.05;letter-spacing:-.045em;}
+.ix-lead{margin:20px auto 0;color:var(--ix-muted);font-size:18px;line-height:1.65;}
+.ix-actions{display:flex;justify-content:center;gap:13px;flex-wrap:wrap;margin-top:34px;}
+.ix-btn{
+    min-height:54px;padding:0 24px;border-radius:999px;display:inline-flex;align-items:center;
+    justify-content:center;gap:10px;text-decoration:none;font-size:16px;font-weight:800;transition:.2s ease;
+}
+.ix-btn-primary{color:#fff;background:linear-gradient(135deg,#0f9f4b,#20c66b);box-shadow:0 14px 34px rgba(22,163,74,.24);}
+.ix-btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 38px rgba(22,163,74,.3);}
+.ix-btn-secondary{color:var(--ix-ink);background:#fff;border:1px solid #d8dee7;}
+.ix-btn-secondary:hover{border-color:#94a3b8;transform:translateY(-2px);}
+.ix-article-hero{
+    position:relative;padding:108px 0 72px;text-align:center;
+    background:radial-gradient(circle at 18% 18%,rgba(37,99,235,.10),transparent 27%),
+    radial-gradient(circle at 82% 24%,rgba(34,197,94,.13),transparent 29%),
+    linear-gradient(180deg,#fbfdff 0%,#ffffff 88%);
+}
+.ix-article-hero:after{
+    content:"";position:absolute;left:12%;right:12%;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,#d9e4dd,transparent);
+}
+.ix-article-hero .ix-kicker{margin-bottom:28px;}
+.ix-meta{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-top:28px;color:#718096;font-size:14px;font-weight:650;}
+.ix-meta span{display:inline-flex;align-items:center;gap:8px;}
+.ix-meta-dot{width:4px;height:4px;border-radius:50%;background:#94a3b8;}
+.ix-callout-wrap{padding:60px 0 30px;}
+.ix-callout{
+    max-width:900px;margin:auto;padding:46px 50px;border:1px solid #dce7df;border-radius:28px;
+    background:radial-gradient(circle at 90% 10%,rgba(34,197,94,.10),transparent 34%),
+    linear-gradient(145deg,#f4faf6,#f7faff);box-shadow:0 18px 55px rgba(15,23,42,.06);
+}
+.ix-callout h2{margin:0;font-size:clamp(32px,4vw,52px);line-height:1.06;letter-spacing:-.045em;}
+.ix-callout p{margin:20px 0 0;color:var(--ix-muted);font-size:17px;line-height:1.7;}
+.ix-article-section{padding:56px 0;}
+.ix-reading{width:min(780px,calc(100% - 40px));margin:auto;}
+.ix-reading h2{margin:72px 0 20px;font-size:clamp(30px,3.6vw,46px);line-height:1.1;letter-spacing:-.04em;}
+.ix-reading h2:first-child{margin-top:0;}
+.ix-reading p{margin:0 0 24px;color:#566173;font-size:18px;line-height:1.82;}
+.ix-reading a{color:var(--ix-green-dark);font-weight:750;}
+.ix-soft-section{padding:100px 0;background:var(--ix-soft);}
+.ix-section-head{max-width:820px;margin:0 auto 48px;text-align:center;}
+.ix-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.ix-card{padding:28px;border:1px solid var(--ix-line);border-radius:24px;background:#fff;box-shadow:0 12px 35px rgba(15,23,42,.045);}
+.ix-card-number{width:38px;height:38px;display:grid;place-items:center;margin-bottom:30px;border-radius:12px;background:#eaf9ef;color:var(--ix-green-dark);font-size:13px;font-weight:900;}
+.ix-card h3{margin:0 0 10px;font-size:20px;letter-spacing:-.025em;}
+.ix-card p{margin:0;color:var(--ix-muted);font-size:14px;line-height:1.65;}
+.ix-compare-section{padding:100px 0;}
+.ix-compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.ix-compare-card{padding:38px;border:1px solid var(--ix-line);border-radius:28px;background:#fff;box-shadow:0 14px 42px rgba(15,23,42,.055);}
+.ix-compare-card h3{margin:0 0 12px;font-size:29px;letter-spacing:-.035em;}
+.ix-compare-card p{margin:0 0 22px;color:var(--ix-muted);font-size:16px;line-height:1.65;}
+.ix-compare-list{display:grid;gap:12px;}
+.ix-compare-row{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start;padding-top:12px;border-top:1px solid var(--ix-line);}
+.ix-compare-row:first-child{border-top:0;padding-top:0;}
+.ix-check{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:#eaf9ef;color:var(--ix-green-dark);font-size:13px;font-weight:900;}
+.ix-compare-row span{color:#566173;font-size:15px;line-height:1.55;}
+.ix-market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.ix-market-card{padding:32px;border:1px solid var(--ix-line);border-radius:26px;background:#fff;box-shadow:0 14px 42px rgba(15,23,42,.05);}
+.ix-market-card strong{display:block;margin-bottom:10px;font-size:22px;}
+.ix-market-card p{margin:0;color:var(--ix-muted);font-size:15px;line-height:1.65;}
+
+
+/* ===================================
+REAL SCANNER EXAMPLES
+=================================== */
+
+.ix-examples{
+    padding:110px 0;
+    background:#ffffff;
+}
+
+.ix-example-list{
+    display:grid;
+    gap:36px;
+}
+
+.ix-example-card{
+    overflow:hidden;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:#ffffff;
+    box-shadow:0 24px 70px rgba(15,23,42,.08);
+}
+
+.ix-example-image-wrap{
+    padding:16px 16px 0;
+}
+
+.ix-example-image{
+    display:block;
+    width:100%;
+    height:auto;
+    border-radius:22px;
+    border:1px solid #e7edf3;
+    background:#f8fafc;
+}
+
+.ix-example-copy{
+    display:grid;
+    grid-template-columns:160px 1fr;
+    gap:30px;
+    padding:30px 34px 34px;
+}
+
+.ix-example-label{
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+}
+
+.ix-example-copy h3{
+    margin:0 0 10px;
+    font-size:28px;
+    letter-spacing:-.035em;
+}
+
+.ix-example-copy p{
+    margin:0;
+    color:var(--ix-muted);
+    font-size:16px;
+    line-height:1.7;
+}
+
+.ix-evidence-note{
+    max-width:920px;
+    margin:42px auto 0;
+    padding:28px 30px;
+    border:1px solid #dce7df;
+    border-radius:22px;
+    background:#f4faf6;
+}
+
+.ix-evidence-note strong{
+    display:block;
+    margin-bottom:8px;
+    color:var(--ix-green-dark)!important;
+}
+
+.ix-evidence-note p{
+    margin:0;
+    color:#566173;
+    line-height:1.7;
+}
+
+
+/* ===================================
+EXCHANGE FILTER EXPLAINER
+=================================== */
+
+.ix-focus-panel{
+    max-width:980px;
+    margin:0 auto;
+    padding:44px;
+    border:1px solid var(--ix-line);
+    border-radius:30px;
+    background:#ffffff;
+    box-shadow:0 20px 55px rgba(15,23,42,.055);
+}
+
+.ix-focus-panel h3{
+    margin:0 0 14px;
+    font-size:30px;
+    letter-spacing:-.035em;
+}
+
+.ix-focus-panel p{
+    margin:0 0 18px;
+    color:var(--ix-muted);
+    font-size:17px;
+    line-height:1.75;
+}
+
+.ix-focus-panel p:last-child{
+    margin-bottom:0;
+}
+
+
+/* ===================================
+SCANNER TEST
+=================================== */
+
+.ix-test-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+    margin-top:44px;
+}
+
+.ix-test-card{
+    padding:28px;
+    border:1px solid var(--ix-line);
+    border-radius:22px;
+    background:#ffffff;
+}
+
+.ix-test-card strong{
+    display:block;
+    margin-bottom:8px;
+    font-size:17px;
+}
+
+.ix-test-card span{
+    color:var(--ix-muted);
+    font-size:14px;
+    line-height:1.6;
+}
+
+
+/* ===================================
+RELATED READING
+=================================== */
+
+.ix-related{
+    padding:100px 0;
+}
+
+.ix-related-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.ix-related-card{
+    min-height:215px;
+    padding:28px;
+    display:flex;
+    flex-direction:column;
+    text-decoration:none;
+    color:var(--ix-ink);
+    border:1px solid var(--ix-line);
+    border-radius:24px;
+    background:#ffffff;
+    box-shadow:0 14px 42px rgba(15,23,42,.05);
+    transition:.2s ease;
+}
+
+.ix-related-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 18px 48px rgba(15,23,42,.08);
+}
+
+.ix-related-tag{
+    color:var(--ix-green-dark);
+    font-size:12px;
+    font-weight:850;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+
+.ix-related-card h3{
+    margin:28px 0 10px;
+    font-size:22px;
+    line-height:1.18;
+}
+
+.ix-related-card p{
+    margin:0;
+    color:var(--ix-muted);
+    font-size:15px;
+    line-height:1.6;
+}
+
+.ix-related-arrow{
+    margin-top:auto;
+    padding-top:22px;
+    color:var(--ix-green-dark);
+    font-weight:850;
+}
+.ix-trust-section{padding:100px 0;}
+.ix-trust-panel{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;padding:58px;border-radius:30px;background:#0c1728;color:#fff;box-shadow:0 30px 80px rgba(15,23,42,.18);}
+.ix-trust-panel .ix-eyebrow{color:#5ee58d;}
+.ix-trust-panel .ix-h2{color:#fff!important;font-size:clamp(35px,4vw,54px);}
+.ix-trust-panel p{color:#b3bfce;font-size:17px;line-height:1.7;}
+.ix-trust-list{display:grid;gap:13px;}
+.ix-trust-row{display:grid;grid-template-columns:38px 1fr;gap:14px;align-items:start;padding:17px;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:rgba(255,255,255,.045);}
+.ix-trust-check{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:rgba(34,197,94,.14);color:#67e892;font-weight:900;}
+.ix-trust-row strong{display:block;margin-bottom:3px;color:#fff!important;}
+.ix-trust-row span{color:#aebccc;font-size:14px;line-height:1.5;}
+.ix-faq-section{padding:100px 0;background:var(--ix-soft);}
+.ix-faq{max-width:860px;margin:auto;}
+.ix-faq details{border-bottom:1px solid var(--ix-line);}
+.ix-faq summary{padding:23px 4px;cursor:pointer;list-style:none;font-size:18px;font-weight:800;}
+.ix-faq summary::-webkit-details-marker{display:none;}
+.ix-faq summary:after{content:"+";float:right;color:var(--ix-green);font-size:24px;}
+.ix-faq details[open] summary:after{content:"−";}
+.ix-faq p{margin:0;padding:0 35px 23px 4px;color:var(--ix-muted);font-size:16px;line-height:1.65;}
+.ix-final{padding:112px 20px;text-align:center;background:linear-gradient(145deg,#f1f8f4,#f3f7ff);}
+.ix-final .ix-h2{font-size:clamp(42px,5.5vw,72px);}
+.ix-fine{margin-top:16px;color:#7b8797;font-size:13px;}
+@media(max-width:1000px){.ix-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:900px){
+    .ix-compare-grid,.ix-trust-panel,.ix-market-grid,.ix-test-grid,.ix-related-grid{grid-template-columns:1fr;}
+    .ix-example-copy{grid-template-columns:1fr;gap:10px;}
+    .ix-trust-panel{gap:40px;}
+}
+@media(max-width:600px){
+    .ix-shell{width:min(100% - 28px,1180px);}
+    .ix-article-hero{padding:76px 0 58px;}
+    .ix-title{font-size:46px;}
+    .ix-subtitle{font-size:18px;}
+    .ix-callout{padding:32px 25px;border-radius:24px;}
+    .ix-reading{width:min(100% - 34px,780px);}
+    .ix-reading h2{margin-top:58px;font-size:32px;}
+    .ix-reading p{font-size:17px;line-height:1.75;}
+    .ix-soft-section,.ix-compare-section,.ix-trust-section,.ix-faq-section,.ix-examples,.ix-related{padding:76px 0;}
+    .ix-example-copy{padding:24px 22px 28px;}
+    .ix-example-image-wrap{padding:10px 10px 0;}
+    .ix-focus-panel{padding:30px 23px;}
+    .ix-grid{grid-template-columns:1fr;}
+    .ix-trust-panel{padding:31px 23px;border-radius:24px;}
+    .ix-actions{flex-direction:column;}
+    .ix-btn{width:100%;}
+}
+</style>
+</head>
+
+<body>
+<div id="navbar"></div>
+
+<main class="ix-page">
+
+<section class="ix-article-hero">
+    <div class="ix-shell">
+        <div class="ix-kicker">
+            <span class="ix-dot"></span>
+            Why EdgeBreak Is NASDAQ Only
+        </div>
+
+        <h1 class="ix-title">
+            Why We Built a NASDAQ-Only Scanner<br>
+            <span>and Why All-in-One Screeners Fail Breakout Traders.</span>
+        </h1>
+
+        <p class="ix-subtitle">
+            Different markets behave differently. We built EdgeBreak around one defined market universe
+            because breakout scanner logic should be designed for the stocks it is actually scanning —
+            not diluted into broad rules intended to work everywhere.
+        </p>
+
+        <div class="ix-meta">
+            <span>Trading Insights</span>
+            <span class="ix-meta-dot"></span>
+            <span>September 2026</span>
+            <span class="ix-meta-dot"></span>
+            <span>9 min read</span>
+        </div>
+    </div>
+</section>
+
+<section class="ix-callout-wrap">
+    <div class="ix-shell">
+        <div class="ix-callout">
+            <div class="ix-eyebrow">The short version</div>
+            <h2>We chose depth over coverage.</h2>
+            <p>
+                Many screeners are built to cover everything: multiple exchanges, ETFs, small caps,
+                international stocks and sometimes entirely different asset classes.
+                That makes them flexible, but it can also force the scanner to rely on broad, general rules.
+                EdgeBreak takes the opposite approach: <strong>focus on NASDAQ-listed stocks and build the scanner logic around that universe.</strong>
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="ix-soft-section">
+    <div class="ix-shell">
+
+        <header class="ix-section-head">
+            <div class="ix-eyebrow">A common question</div>
+            <h2 class="ix-h2">Isn't choosing “NASDAQ” in an all-market screener the same thing?</h2>
+        </header>
+
+        <div class="ix-focus-panel">
+
+            <h3>No — filtering the universe and designing for the universe are different jobs.</h3>
+
+            <p>
+                An all-market screener can let you choose NASDAQ as an exchange filter, and that can be useful.
+                But the underlying definitions of momentum, breakout, volume, resistance or trend may still be the same
+                general-purpose definitions used across every market the platform supports.
+            </p>
+
+            <p>
+                EdgeBreak starts from the opposite direction. NASDAQ is the universe first.
+                The scanner rules are then designed around the type of NASDAQ technical structures we want to research:
+                long bases, repeated resistance, higher lows, tightening price action, confirmed resistance breaks,
+                liquidity and whether a move has already become extended.
+            </p>
+
+            <p>
+                That does not make a NASDAQ-only scanner automatically superior.
+                It makes it <strong>more specialised</strong> — and specialisation is the point.
+            </p>
+
+        </div>
+
+    </div>
+</section>
+
+<section class="ix-article-section">
+    <article class="ix-reading">
+
+        <h2>Why not scan every market?</h2>
+
+        <p>
+            At first glance, a scanner that covers more markets sounds better. More stocks, more exchanges and more filters
+            can look like more opportunity.
+        </p>
+
+        <p>
+            The problem is that markets are not identical. Different exchanges contain different mixes of companies,
+            liquidity profiles, price behaviour and technical characteristics.
+            A rule that produces useful breakout candidates in one universe may create noise in another.
+        </p>
+
+        <p>
+            For breakout research, that matters. The scanner is not simply looking for a stock that went up today.
+            It is trying to interpret structure: resistance, support, higher lows, consolidation, liquidity,
+            breakout confirmation and how far price has already moved from the base.
+        </p>
+
+        <h2>General-purpose screeners solve a different problem</h2>
+
+        <p>
+            An all-in-one screener is often designed to be flexible. It may let a user filter by exchange,
+            market capitalisation, price, volume, valuation, sector or dozens of other variables.
+            That can be useful when the user already knows exactly which filters to build.
+        </p>
+
+        <p>
+            But breakout traders often need something more specific than a giant filter menu.
+            They need the scanner itself to understand the setup being researched.
+        </p>
+
+        <p>
+            If the underlying system treats every market in the same way, the burden shifts back to the user:
+            manually adjust filters, inspect large result lists and decide whether the technical structure is actually relevant.
+            That is the problem EdgeBreak was designed to reduce.
+        </p>
+
+    </article>
+</section>
+
+<section class="ix-soft-section">
+    <div class="ix-shell">
+
+        <header class="ix-section-head">
+            <div class="ix-eyebrow">Why market-specific scanning matters</div>
+            <h2 class="ix-h2">Breakout logic works better when the universe is defined.</h2>
+            <p class="ix-lead">
+                Narrowing the market lets the scanner rules be designed around a more consistent research universe.
+            </p>
+        </header>
+
+        <div class="ix-grid">
+
+            <article class="ix-card">
+                <div class="ix-card-number">01</div>
+                <h3>One defined universe</h3>
+                <p>
+                    EdgeBreak is built around NASDAQ-listed stocks rather than mixing many exchanges
+                    with very different market characteristics.
+                </p>
+            </article>
+
+            <article class="ix-card">
+                <div class="ix-card-number">02</div>
+                <h3>More specific structure rules</h3>
+                <p>
+                    Resistance, higher lows, consolidation and breakout confirmation can be treated as part of one
+                    dedicated breakout research process.
+                </p>
+            </article>
+
+            <article class="ix-card">
+                <div class="ix-card-number">03</div>
+                <h3>Better control of noise</h3>
+                <p>
+                    Liquidity, volume and distance-from-base filters can be applied consistently
+                    to the market EdgeBreak is actually designed to research.
+                </p>
+            </article>
+
+            <article class="ix-card">
+                <div class="ix-card-number">04</div>
+                <h3>A consistent workflow</h3>
+                <p>
+                    Discovery, pre-breakout research, confirmed breakouts, company research and chart analysis
+                    can all use the same NASDAQ-focused starting point.
+                </p>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<section class="ix-compare-section">
+    <div class="ix-shell">
+
+        <header class="ix-section-head">
+            <div class="ix-eyebrow">Different design philosophies</div>
+            <h2 class="ix-h2">All-in-one screener versus dedicated NASDAQ breakout scanner.</h2>
+        </header>
+
+        <div class="ix-compare-grid">
+
+            <article class="ix-compare-card">
+                <h3>All-in-one screener</h3>
+                <p>Built to serve many strategies, markets and user types at once.</p>
+
+                <div class="ix-compare-list">
+                    <div class="ix-compare-row"><div class="ix-check">✓</div><span>Very broad exchange and asset coverage.</span></div>
+                    <div class="ix-compare-row"><div class="ix-check">✓</div><span>Large libraries of general filters.</span></div>
+                    <div class="ix-compare-row"><div class="ix-check">✓</div><span>Useful for users who want to build their own custom screens.</span></div>
+                    <div class="ix-compare-row"><div class="ix-check">✓</div><span>Often requires more manual filtering for a specialised breakout process.</span></div>
+                </div>
+            </article>
+
+            <article class="ix-compare-card">
+                <h3>NASDAQ-only breakout scanner</h3>
+                <p>Built around one market and a narrower research objective.</p>
+
+                <div class="ix-compare-list">
+                    <div class="ix-compare-row"><div class="ix-check">✓</div><span>Scanner rules designed around NASDAQ-listed stocks.</span></div>
+                    <div class="ix-compare-row"><div class="ix-check">✓</div><span>Breakout and pre-breakout structure built into the workflow.</span></div>
+                    <div class="ix-compare-row"><div class="ix-check">✓</div><span>Liquidity and extension filters designed to reduce irrelevant results.</span></div>
+                    <div class="ix-compare-row"><div class="ix-check">✓</div><span>Designed to move directly from discovery into deeper research.</span></div>
+                </div>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<section class="ix-article-section">
+    <article class="ix-reading">
+
+        <h2>Why breakout traders need more than generic filters</h2>
+
+        <p>
+            Breakout trading is heavily dependent on context. A stock being close to its 52-week high does not automatically
+            mean it has a strong breakout structure. A volume spike does not automatically mean accumulation.
+            A stock moving above yesterday's high does not necessarily mean meaningful resistance has been broken.
+        </p>
+
+        <p>
+            A specialised breakout scanner needs to consider how the setup developed before the move.
+            That may include repeated resistance, higher lows, organised consolidation, support behaviour,
+            liquidity and whether price is still close enough to the base to remain useful for research.
+        </p>
+
+        <p>
+            This is why a simple “price above resistance” filter can produce weak results.
+            The quality of the structure underneath that breakout matters.
+        </p>
+
+        <h2>Why NASDAQ became the EdgeBreak focus</h2>
+
+        <p>
+            EdgeBreak was built around the idea that specialisation is more useful than trying to become
+            another universal market screener.
+        </p>
+
+        <p>
+            By keeping the stock universe focused on NASDAQ-listed companies, the platform can use the same defined universe
+            across its Launch Pad, Pre-Breakout and Breakout research stages.
+            That creates a more consistent path from long developing bases, to stocks approaching resistance,
+            to stocks that have actually moved through resistance.
+        </p>
+
+        <p>
+            It also means the research tools around the scanner can stay aligned.
+            AI Stock Research, chart analysis and workspace tools all begin from the same NASDAQ-focused discovery process.
+        </p>
+
+        <h2>Does this mean NASDAQ is “better” than every other market?</h2>
+
+        <p>No. That is not the claim.</p>
+
+        <p>
+            Other exchanges and markets can produce excellent companies, technical setups and trading opportunities.
+            The point is that <strong>trying to cover everything is not the same thing as specialising in something.</strong>
+        </p>
+
+        <p>
+            EdgeBreak chose NASDAQ so its scanner logic, research tools and educational material could be designed
+            around one defined market instead of applying the same general approach everywhere.
+        </p>
+
+    </article>
+</section>
+
+<section class="ix-examples">
+
+    <div class="ix-shell">
+
+        <header class="ix-section-head">
+
+            <div class="ix-eyebrow">
+                Real EdgeBreak scanner examples
+            </div>
+
+            <h2 class="ix-h2">
+                Three scanners. Three different stages of structure.
+            </h2>
+
+            <p class="ix-lead">
+                These examples show why EdgeBreak does not treat every technical setup as the same thing.
+                Launch Pad, Pre-Breakout and Breakout are designed to surface different stages of NASDAQ market structure.
+            </p>
+
+        </header>
+
+
+        <div class="ix-example-list">
+
+
+            <figure class="ix-example-card">
+
+                <div class="ix-example-image-wrap">
+                    <img
+                        class="ix-example-image"
+                        src="/images/edgebreak-launch-pad-real-example.webp"
+                        alt="Real EdgeBreak Launch Pad example showing NASDAQ stock CRCT trading in a long base before a later breakout"
+                        width="1672"
+                        height="941"
+                        loading="lazy"
+                        decoding="async">
+                </div>
+
+                <figcaption class="ix-example-copy">
+
+                    <div class="ix-example-label">
+                        Launch Pad • CRCT
+                    </div>
+
+                    <div>
+                        <h3>
+                            A long base before the move.
+                        </h3>
+
+                        <p>
+                            CRCT appeared repeatedly in the EdgeBreak Launch Pad scanner while price remained inside
+                            a broad multi-month base beneath established resistance. The later chart shows price eventually
+                            moving above that resistance area. The scanner identified the existing base structure —
+                            it did not predict that a breakout had to occur.
+                        </p>
+                    </div>
+
+                </figcaption>
+
+            </figure>
+
+
+            <figure class="ix-example-card">
+
+                <div class="ix-example-image-wrap">
+                    <img
+                        class="ix-example-image"
+                        src="/images/edgebreak-pre-breakout-real-example.webp"
+                        alt="Real EdgeBreak Pre-Breakout Scanner example showing NASDAQ stock CZFS consolidating beneath resistance with higher lows"
+                        width="1672"
+                        height="941"
+                        loading="lazy"
+                        decoding="async">
+                </div>
+
+                <figcaption class="ix-example-copy">
+
+                    <div class="ix-example-label">
+                        Pre-Breakout • CZFS
+                    </div>
+
+                    <div>
+                        <h3>
+                            Structure building beneath resistance.
+                        </h3>
+
+                        <p>
+                            CZFS is an example of the type of chart the Pre-Breakout Scanner is designed to surface:
+                            relatively flat resistance near the top of the structure, rising support and tighter price action beneath it.
+                            This is a current setup example, not a claim that a future breakout will occur.
+                        </p>
+                    </div>
+
+                </figcaption>
+
+            </figure>
+
+
+            <figure class="ix-example-card">
+
+                <div class="ix-example-image-wrap">
+                    <img
+                        class="ix-example-image"
+                        src="/images/edgebreak-breakout-real-example.webp"
+                        alt="Historical EdgeBreak Breakout Scanner example showing NASDAQ stock LITE around a breakout setup before a later move higher"
+                        width="1672"
+                        height="941"
+                        loading="lazy"
+                        decoding="async">
+                </div>
+
+                <figcaption class="ix-example-copy">
+
+                    <div class="ix-example-label">
+                        Breakout • LITE
+                    </div>
+
+                    <div>
+                        <h3>
+                            A confirmed breakout, followed by a larger move.
+                        </h3>
+
+                        <p>
+                            LITE provides a historical Breakout Scanner example. EdgeBreak surfaced the stock around
+                            a qualifying breakout structure; the later chart shows that price subsequently continued substantially higher.
+                            This is a historical illustration of scanner behaviour, not evidence that future scanner results will behave the same way.
+                        </p>
+                    </div>
+
+                </figcaption>
+
+            </figure>
+
+
+        </div>
+
+
+        <div class="ix-evidence-note">
+
+            <strong>
+                What these examples prove — and what they do not.
+            </strong>
+
+            <p>
+                They show the types of NASDAQ structures EdgeBreak's scanners are built to identify.
+                They do not prove that every Launch Pad or Pre-Breakout setup will break out, or that every confirmed breakout
+                will continue higher. Failed setups and reversals are part of real markets, which is why EdgeBreak treats scanner
+                results as research candidates rather than buy, sell or hold recommendations.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="ix-soft-section">
+    <div class="ix-shell">
+
+        <header class="ix-section-head">
+            <div class="ix-eyebrow">NASDAQ research from anywhere</div>
+            <h2 class="ix-h2">Built around U.S. stocks, used from the U.S., Canada and Australia.</h2>
+            <p class="ix-lead">
+                The scanner universe is NASDAQ-listed stocks. The investor researching that universe does not need to be located in the United States.
+            </p>
+        </header>
+
+        <div class="ix-market-grid">
+
+            <article class="ix-market-card">
+                <strong>United States</strong>
+                <p>
+                    U.S.-based users can research NASDAQ breakout and pre-breakout structures directly within their home market,
+                    whether they prefer daily research or more active workflows.
+                </p>
+            </article>
+
+            <article class="ix-market-card">
+                <strong>Canada</strong>
+                <p>
+                    Canadian investors can use the same NASDAQ-focused research process while separately considering
+                    their brokerage, currency and local account requirements.
+                </p>
+            </article>
+
+            <article class="ix-market-card">
+                <strong>Australia</strong>
+                <p>
+                    Australian users can research the same NASDAQ-listed stocks, with end-of-day and next-morning workflows
+                    often fitting naturally around U.S. market hours.
+                </p>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<section class="ix-compare-section">
+
+    <div class="ix-shell">
+
+        <header class="ix-section-head">
+
+            <div class="ix-eyebrow">
+                A practical way to compare scanners
+            </div>
+
+            <h2 class="ix-h2">
+                Six questions a breakout trader should ask.
+            </h2>
+
+            <p class="ix-lead">
+                Ignore the size of the filter menu for a moment. Ask whether the scanner actually understands the setup you are trying to research.
+            </p>
+
+        </header>
+
+
+        <div class="ix-test-grid">
+
+            <div class="ix-test-card">
+                <strong>1. What counts as resistance?</strong>
+                <span>Can you understand why the level matters, or is “resistance” simply a generic threshold?</span>
+            </div>
+
+            <div class="ix-test-card">
+                <strong>2. Does structure matter?</strong>
+                <span>Does the scanner consider higher lows, consolidation or repeated interaction beneath resistance?</span>
+            </div>
+
+            <div class="ix-test-card">
+                <strong>3. Is liquidity controlled?</strong>
+                <span>Can low-quality or thin results be filtered before they dominate the list?</span>
+            </div>
+
+            <div class="ix-test-card">
+                <strong>4. Is pre-breakout different?</strong>
+                <span>Does the platform distinguish a developing setup from a confirmed move through resistance?</span>
+            </div>
+
+            <div class="ix-test-card">
+                <strong>5. Does it control extension?</strong>
+                <span>Can it avoid surfacing stocks only after price has already travelled far beyond the original base?</span>
+            </div>
+
+            <div class="ix-test-card">
+                <strong>6. What happens after discovery?</strong>
+                <span>Can you move directly into chart, company, filing and market research without rebuilding the process elsewhere?</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="ix-trust-section">
+    <div class="ix-shell ix-trust-panel">
+
+        <div>
+            <div class="ix-eyebrow">The EdgeBreak approach</div>
+            <h2 class="ix-h2">One market.<br>Several stages of research.</h2>
+            <p>
+                EdgeBreak does not try to scan every exchange with one generic ruleset.
+                Its three NASDAQ scanners look at different stages of technical structure:
+                longer bases, developing pre-breakout formations and confirmed resistance breaks.
+                A stock does not need to pass through every scanner in sequence.
+            </p>
+        </div>
+
+        <div class="ix-trust-list">
+
+            <div class="ix-trust-row">
+                <div class="ix-trust-check">✓</div>
+                <div>
+                    <strong><a href="/launchpad.html" style="color:#fff;text-decoration:none;">Launch Pad</a></strong>
+                    <span>Research longer developing bases and established trading ranges.</span>
+                </div>
+            </div>
+
+            <div class="ix-trust-row">
+                <div class="ix-trust-check">✓</div>
+                <div>
+                    <strong><a href="/pre-breakout-scanner.html" style="color:#fff;text-decoration:none;">Pre-Breakout</a></strong>
+                    <span>Find stocks approaching resistance with developing technical structure.</span>
+                </div>
+            </div>
+
+            <div class="ix-trust-row">
+                <div class="ix-trust-check">✓</div>
+                <div>
+                    <strong><a href="/breakout-scanner.html" style="color:#fff;text-decoration:none;">Breakout</a></strong>
+                    <span>Research stocks that have moved through established resistance without assuming the breakout will succeed.</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="ix-faq-section">
+    <div class="ix-shell">
+
+        <header class="ix-section-head">
+            <div class="ix-eyebrow">NASDAQ scanner FAQ</div>
+            <h2 class="ix-h2">Common questions.</h2>
+        </header>
+
+        <div class="ix-faq">
+
+            <details>
+                <summary>Why use a NASDAQ-only stock scanner?</summary>
+                <p>
+                    A NASDAQ-only scanner can be designed around one defined stock universe rather than applying broad rules
+                    across multiple exchanges. That allows breakout, pre-breakout, liquidity and structure rules to stay more focused.
+                </p>
+            </details>
+
+            <details>
+                <summary>Why can all-market screeners be less useful for breakout traders?</summary>
+                <p>
+                    Broad screeners often need flexible, general filters that work across many types of securities.
+                    Breakout research can require more specialised treatment of resistance, higher lows, consolidation,
+                    liquidity, volume and distance from the base.
+                </p>
+            </details>
+
+            <details>
+                <summary>Is NASDAQ better than every other market for breakout trading?</summary>
+                <p>
+                    No. EdgeBreak's NASDAQ-only approach is about specialisation, not claiming other markets are inferior.
+                    Focusing on one market allows the scanner and research workflow to be designed around a defined universe.
+                </p>
+            </details>
+
+            <details>
+                <summary>What does a breakout trader need from a stock scanner?</summary>
+                <p>
+                    Useful features can include established resistance, higher lows, consolidation, liquidity filters,
+                    volume context, breakout confirmation and controls for stocks that are already extended.
+                </p>
+            </details>
+
+            <details>
+                <summary>Can investors in Canada and Australia use a NASDAQ scanner?</summary>
+                <p>
+                    Yes. Investors outside the United States can research NASDAQ-listed stocks using web-based platforms,
+                    subject to regional availability and their own brokerage, tax and local requirements.
+                </p>
+            </details>
+
+        </div>
+    </div>
+</section>
+
+<section class="ix-related">
+
+    <div class="ix-shell">
+
+        <header class="ix-section-head">
+
+            <div class="ix-eyebrow">
+                Continue learning
+            </div>
+
+            <h2 class="ix-h2">
+                Go deeper into the scanner methodology.
+            </h2>
+
+        </header>
+
+
+        <div class="ix-related-grid">
+
+            <a class="ix-related-card" href="/blog/best-stock-scanner.html">
+
+                <div class="ix-related-tag">
+                    Buyer Guide
+                </div>
+
+                <h3>
+                    What Makes a Good Stock Scanner?
+                </h3>
+
+                <p>
+                    Compare market coverage, scanner logic, data, workflow and the features that actually matter before paying for a scanner.
+                </p>
+
+                <div class="ix-related-arrow">
+                    Read guide →
+                </div>
+
+            </a>
+
+
+            <a class="ix-related-card" href="/blog/best-breakout-stock-scanner.html">
+
+                <div class="ix-related-tag">
+                    Breakout Research
+                </div>
+
+                <h3>
+                    What Should a Breakout Scanner Look For?
+                </h3>
+
+                <p>
+                    Learn why resistance, higher lows, consolidation, volume, liquidity and extension all matter.
+                </p>
+
+                <div class="ix-related-arrow">
+                    Read guide →
+                </div>
+
+            </a>
+
+
+            <a class="ix-related-card" href="/blog/why-most-breakouts-fail.html">
+
+                <div class="ix-related-tag">
+                    Breakout Education
+                </div>
+
+                <h3>
+                    Why Do Breakouts Fail?
+                </h3>
+
+                <p>
+                    Understand why moving through resistance is not enough and why breakout quality still requires context.
+                </p>
+
+                <div class="ix-related-arrow">
+                    Read article →
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="ix-final">
+    <div class="ix-shell">
+
+        <div class="ix-eyebrow">Focused by design</div>
+
+        <h2 class="ix-h2">
+            We don't scan everything.<br>
+            We scan NASDAQ with purpose.
+        </h2>
+
+        <p class="ix-lead">
+            Explore a NASDAQ-focused research platform built around Launch Pad,
+            Pre-Breakout and Breakout scanner logic rather than one generic all-market screen.
+        </p>
+
+        <div class="ix-actions">
+            <a class="ix-btn ix-btn-primary" href="/edgebreak-free.html">
+                Try EdgeBreak Free
+                <span>→</span>
+            </a>
+
+            <a class="ix-btn ix-btn-secondary" href="/nasdaq-stock-scanner.html">
+                Explore NASDAQ Scanner
+            </a>
+        </div>
+
+        <div class="ix-fine">
+            Research and educational information only • Not financial advice
+        </div>
+
+    </div>
+</section>
+
+</main>
+
+<div id="footer"></div>
+<script src="/js/components.js"></script>
+
+</body>
+</html>
