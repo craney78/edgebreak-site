@@ -3,6 +3,7 @@ import json
 import os
 import sys
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 
@@ -434,7 +435,9 @@ if not market_date:
 
     market_date = (
         datetime.now(
-            timezone.utc
+            ZoneInfo(
+                "America/New_York"
+            )
         )
         .date()
         .isoformat()
