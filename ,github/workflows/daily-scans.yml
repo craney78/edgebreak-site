@@ -1,0 +1,153 @@
+name: EdgeBreak Daily Scans
+
+on:
+  # 21:30 UTC is safely after the regular U.S. market close
+  # through both U.S. daylight-saving and standard time.
+  # Approx Sydney time:
+  #   07:30 AEST
+  #   08:30 AEDT
+  schedule:
+    - cron: "30 21 * * 1-5"
+
+  # Lets you test/run it manually from GitHub at any time.
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: edgebreak-daily-scans
+  cancel-in-progress: false
+
+jobs:
+  daily-scans:
+    name: Run EdgeBreak Daily Pipeline
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Check out EdgeBreak
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: |
+            requirements.txt
+            requirements-actions.txt
+
+      - name: Install Python dependencies
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+
+          if [ -f requirements.txt ]; then
+            echo "Installing requirements.txt"
+            python -m pip install -r requirements.txt
+
+          elif [ -f requirements-actions.txt ]; then
+            echo "Installing requirements-actions.txt"
+            python -m pip install -r requirements-actions.txt
+
+          else
+            echo "No requirements file found. Installing EdgeBreak fallback packages."
+            python -m pip install \
+              pandas \
+              numpy \
+              yfinance \
+              requests \
+              python-dotenv \
+              beautifulsoup4 \
+              lxml
+          fi
+
+      - name: Show environment
+        shell: bash
+        run: |
+          echo "Branch: ${GITHUB_REF_NAME}"
+          python --version
+          git --version
+          pwd
+          ls -la
+
+      - name: Configure Git
+        shell: bash
+        run: |
+          git config user.name "EdgeBreak Daily Scanner"
+          git config user.email "actions@users.noreply.github.com"
+
+      - name: Run daily scans
+        shell: bash
+        env:
+          # daily_scans.py will NOT push halfway through the pipeline.
+          # This workflow commits only after everything is finished.
+          EDGEBREAK_SKIP_GIT: "1"
+          PYTHONUNBUFFERED: "1"
+          TZ: "America/New_York"
+        run: |
+          set +e
+
+          attempt=1
+          max_attempts=2
+
+          while [ "$attempt" -le "$max_attempts" ]; do
+            echo "============================================================"
+            echo "EdgeBreak daily pipeline — attempt ${attempt}/${max_attempts}"
+            echo "New York time: $(date)"
+            echo "============================================================"
+
+            python daily_scans.py
+            status=$?
+
+            if [ "$status" -eq 0 ]; then
+              echo "EdgeBreak pipeline completed successfully."
+              exit 0
+            fi
+
+            if [ "$attempt" -ge "$max_attempts" ]; then
+              echo "EdgeBreak pipeline failed after ${max_attempts} attempts."
+              exit "$status"
+            fi
+
+            echo "Attempt ${attempt} failed."
+            echo "Waiting 10 minutes before one automatic retry..."
+            sleep 600
+
+            attempt=$((attempt + 1))
+          done
+
+      - name: Commit completed scan data
+        if: success()
+        shell: bash
+        run: |
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No scan changes to commit."
+            exit 0
+          fi
+
+          scan_date="$(TZ=America/New_York date +'%Y-%m-%d')"
+
+          git commit -m "Daily Scan ${scan_date}"
+
+          # Never force-push scanner data. If the repo changed while the
+          # scan was running, rebase normally and fail visibly on conflict.
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Upload daily scan log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: edgebreak-daily-scan-${{ github.run_number }}
+          path: |
+            daily_scan_run.log
+            daily_scan_history.csv
+          if-no-files-found: warn
+          retention-days: 14

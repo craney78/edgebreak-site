@@ -541,127 +541,208 @@ git_push = (
 
 
 # ============================================================
-# GIT ADD
+# CLOUD / CI GIT CONTROL
+# ============================================================
+#
+# On GitHub Actions we let the workflow commit only AFTER the
+# pipeline has written its final CSV history and log.
+#
+# Local runs keep the original Git behaviour unless this
+# environment variable is explicitly enabled.
+#
 # ============================================================
 
-if overall_status == "SUCCESS":
+SKIP_INTERNAL_GIT = (
+    os.getenv(
+        "EDGEBREAK_SKIP_GIT",
+        ""
+    )
+    .strip()
+    .lower()
+    in {
+        "1",
+        "true",
+        "yes",
+        "on"
+    }
+)
+
+
+if SKIP_INTERNAL_GIT:
+
+    git_add = "WORKFLOW"
+    git_commit = "WORKFLOW"
+    git_push = "WORKFLOW"
 
     log()
     log(
-        "▶ Updating Git Repository..."
+        "ℹ️ Internal Git disabled — "
+        "GitHub Actions will commit after the run."
     )
 
+else:
+    # ============================================================
+    # GIT ADD
+    # ============================================================
 
-    try:
+    if overall_status == "SUCCESS":
 
-        subprocess.run(
-
-            [
-                "git",
-                "add",
-                "."
-            ],
-
-            cwd=BASE_DIR,
-
-            check=True
-
-        )
-
-
-        git_add = (
-            "SUCCESS"
-        )
-
-
+        log()
         log(
-            "✅ Git Add Complete"
+            "▶ Updating Git Repository..."
         )
 
 
-    except Exception as error:
+        try:
 
-        git_add = (
-            "FAILED"
-        )
+            subprocess.run(
 
-        overall_status = (
-            "FAILED"
-        )
+                [
+                    "git",
+                    "add",
+                    "."
+                ],
 
+                cwd=BASE_DIR,
 
-        log(
-            "❌ Git Add FAILED"
-        )
+                check=True
 
-        log(
-            f"   {error}"
-        )
+            )
 
 
-# ============================================================
-# CHECK FOR GIT CHANGES
-# ============================================================
-
-if overall_status == "SUCCESS":
-
-    try:
-
-        status = subprocess.run(
-
-            [
-                "git",
-                "diff",
-                "--cached",
-                "--quiet"
-            ],
-
-            cwd=BASE_DIR
-
-        )
+            git_add = (
+                "SUCCESS"
+            )
 
 
-        # ----------------------------------------------------
-        # RETURN CODE 1 = CHANGES EXIST
-        # ----------------------------------------------------
+            log(
+                "✅ Git Add Complete"
+            )
 
-        if status.returncode == 1:
 
-            try:
+        except Exception as error:
 
-                subprocess.run(
+            git_add = (
+                "FAILED"
+            )
 
-                    [
-                        "git",
-                        "commit",
-                        "-m",
-                        (
-                            "Daily Scan "
-                            +
-                            start_dt.strftime(
-                                "%Y-%m-%d"
+            overall_status = (
+                "FAILED"
+            )
+
+
+            log(
+                "❌ Git Add FAILED"
+            )
+
+            log(
+                f"   {error}"
+            )
+
+
+    # ============================================================
+    # CHECK FOR GIT CHANGES
+    # ============================================================
+
+    if overall_status == "SUCCESS":
+
+        try:
+
+            status = subprocess.run(
+
+                [
+                    "git",
+                    "diff",
+                    "--cached",
+                    "--quiet"
+                ],
+
+                cwd=BASE_DIR
+
+            )
+
+
+            # ----------------------------------------------------
+            # RETURN CODE 1 = CHANGES EXIST
+            # ----------------------------------------------------
+
+            if status.returncode == 1:
+
+                try:
+
+                    subprocess.run(
+
+                        [
+                            "git",
+                            "commit",
+                            "-m",
+                            (
+                                "Daily Scan "
+                                +
+                                start_dt.strftime(
+                                    "%Y-%m-%d"
+                                )
                             )
-                        )
-                    ],
+                        ],
 
-                    cwd=BASE_DIR,
+                        cwd=BASE_DIR,
 
-                    check=True
+                        check=True
 
-                )
+                    )
 
+
+                    git_commit = (
+                        "SUCCESS"
+                    )
+
+
+                    log(
+                        "✅ Git Commit Complete"
+                    )
+
+
+                except Exception as error:
+
+                    git_commit = (
+                        "FAILED"
+                    )
+
+                    overall_status = (
+                        "FAILED"
+                    )
+
+
+                    log(
+                        "❌ Git Commit FAILED"
+                    )
+
+                    log(
+                        f"   {error}"
+                    )
+
+
+            # ----------------------------------------------------
+            # RETURN CODE 0 = NOTHING TO COMMIT
+            # ----------------------------------------------------
+
+            elif status.returncode == 0:
 
                 git_commit = (
-                    "SUCCESS"
+                    "NOT REQUIRED"
+                )
+
+                git_push = (
+                    "NOT REQUIRED"
                 )
 
 
                 log(
-                    "✅ Git Commit Complete"
+                    "ℹ️ No Git changes to commit."
                 )
 
 
-            except Exception as error:
+            else:
 
                 git_commit = (
                     "FAILED"
@@ -673,35 +754,11 @@ if overall_status == "SUCCESS":
 
 
                 log(
-                    "❌ Git Commit FAILED"
-                )
-
-                log(
-                    f"   {error}"
+                    "❌ Git status check FAILED"
                 )
 
 
-        # ----------------------------------------------------
-        # RETURN CODE 0 = NOTHING TO COMMIT
-        # ----------------------------------------------------
-
-        elif status.returncode == 0:
-
-            git_commit = (
-                "NOT REQUIRED"
-            )
-
-            git_push = (
-                "NOT REQUIRED"
-            )
-
-
-            log(
-                "ℹ️ No Git changes to commit."
-            )
-
-
-        else:
+        except Exception as error:
 
             git_commit = (
                 "FAILED"
@@ -716,81 +773,66 @@ if overall_status == "SUCCESS":
                 "❌ Git status check FAILED"
             )
 
-
-    except Exception as error:
-
-        git_commit = (
-            "FAILED"
-        )
-
-        overall_status = (
-            "FAILED"
-        )
+            log(
+                f"   {error}"
+            )
 
 
-        log(
-            "❌ Git status check FAILED"
-        )
+    # ============================================================
+    # GIT PUSH
+    # ============================================================
 
-        log(
-            f"   {error}"
-        )
+    if (
+        overall_status == "SUCCESS"
+        and
+        git_commit == "SUCCESS"
+    ):
 
+        try:
 
-# ============================================================
-# GIT PUSH
-# ============================================================
+            subprocess.run(
 
-if (
-    overall_status == "SUCCESS"
-    and
-    git_commit == "SUCCESS"
-):
+                [
+                    "git",
+                    "push"
+                ],
 
-    try:
+                cwd=BASE_DIR,
 
-        subprocess.run(
+                check=True
 
-            [
-                "git",
-                "push"
-            ],
-
-            cwd=BASE_DIR,
-
-            check=True
-
-        )
+            )
 
 
-        git_push = (
-            "SUCCESS"
-        )
+            git_push = (
+                "SUCCESS"
+            )
 
 
-        log(
-            "✅ Git Push Complete"
-        )
+            log(
+                "✅ Git Push Complete"
+            )
 
 
-    except Exception as error:
+        except Exception as error:
 
-        git_push = (
-            "FAILED"
-        )
+            git_push = (
+                "FAILED"
+            )
 
-        overall_status = (
-            "FAILED"
-        )
+            overall_status = (
+                "FAILED"
+            )
 
 
-        log(
-            "❌ Git Push FAILED"
-        )
+            log(
+                "❌ Git Push FAILED"
+            )
 
-        log(
-            f"   {error}"
-        )
+            log(
+                f"   {error}"
+            )
+
 
 
 # ============================================================
@@ -903,6 +945,24 @@ for row in rows:
 # ============================================================
 # ADD TODAY
 # ============================================================
+#
+# If GitHub Actions retries today's pipeline, replace the
+# earlier attempt instead of creating duplicate history rows.
+#
+# ============================================================
+
+today_key = start_dt.strftime(
+    "%Y-%m-%d"
+)
+
+filtered = [
+    row
+    for row in filtered
+    if row.get(
+        "Date"
+    ) != today_key
+]
+
 
 filtered.append({
 
