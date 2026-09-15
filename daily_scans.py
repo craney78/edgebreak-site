@@ -25,7 +25,9 @@ from datetime import datetime, timedelta
 #
 #   8. FINRA X-Factor Post-Ranking Rerank
 #
-#   9. Git Add / Commit / Push
+#   9. Save Frozen Daily Research Snapshot
+#
+#  10. Git Add / Commit / Push
 #
 #
 # IMPORTANT
@@ -130,6 +132,12 @@ FINRA_SCRIPT = (
 
 FINRA_RERANK_SCRIPT = (
     "daily_brief_finra_rerank.py"
+)
+
+
+
+SNAPSHOT_SCRIPT = (
+    "save_daily_snapshot.py"
 )
 
 
@@ -515,6 +523,52 @@ if overall_status == "SUCCESS":
     else:
 
         x_factor_status = (
+            "FAILED"
+        )
+
+        overall_status = (
+            "FAILED"
+        )
+
+
+# ============================================================
+# FROZEN DAILY RESEARCH SNAPSHOT
+# ============================================================
+#
+# Runs only after the complete scanner + Daily Brief + FINRA
+# pipeline has succeeded.
+#
+# This freezes today's scanner membership BEFORE Git commits
+# the updated repository.
+#
+# ============================================================
+
+snapshot_status = (
+    "NOT RUN"
+)
+
+
+if overall_status == "SUCCESS":
+
+    success = run_python_script(
+
+        "Daily Research Snapshot",
+
+        SNAPSHOT_SCRIPT
+
+    )
+
+
+    if success:
+
+        snapshot_status = (
+            "SUCCESS"
+        )
+
+
+    else:
+
+        snapshot_status = (
             "FAILED"
         )
 
@@ -1020,6 +1074,9 @@ filtered.append({
     "X-Factor":
         x_factor_status,
 
+    "Snapshot":
+        snapshot_status,
+
     "Git Add":
         git_add,
 
@@ -1064,6 +1121,8 @@ fieldnames = [
     "FINRA",
 
     "X-Factor",
+
+    "Snapshot",
 
     "Git Add",
 
@@ -1217,6 +1276,14 @@ log(
 
     f"{'X-Factor Rerank':<25}: "
     f"{x_factor_status}"
+
+)
+
+
+log(
+
+    f"{'Daily Snapshot':<25}: "
+    f"{snapshot_status}"
 
 )
 
