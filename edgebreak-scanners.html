@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18373865179"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag("js",new Date());
+gtag("config","AW-18373865179");
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
+<title>EdgeBreak NASDAQ Scanners | Breakout, Pre-Breakout & Launch Pad</title>
+<meta name="description" content="Scan the NASDAQ for breakouts, pre-breakouts and established bases with EdgeBreak. Includes Breakout, Pre-Breakout, Launch Pad and an automated daily scan in one membership.">
+<meta name="robots" content="noindex,follow">
+<link rel="icon" type="image/webp" href="/images/favicon.webp">
+<style>
+:root{
+  --ink:#0b1220;
+  --muted:#64748b;
+  --line:#e4eaf0;
+  --soft:#f5f8fb;
+  --white:#fff;
+  --green:#16a34a;
+  --green-dark:#15803d;
+  --green-soft:#eefbf2;
+  --blue:#2563eb;
+  --shadow:0 26px 70px rgba(15,23,42,.10);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 12% -8%,rgba(22,163,74,.08),transparent 32%),
+    radial-gradient(circle at 90% 0%,rgba(37,99,235,.05),transparent 26%),
+    #f8fafc;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+.lp-shell{width:min(1160px,calc(100% - 40px));margin:0 auto}
+.lp-top{
+  min-height:82px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+.lp-brand{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:-.03em;
+}
+.lp-brand img{width:42px;height:42px;object-fit:contain}
+.lp-top-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:43px;
+  padding:10px 15px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:#fff;
+  text-decoration:none;
+  color:#334155;
+  font-size:13px;
+  font-weight:850;
+  transition:.2s ease;
+}
+.lp-top-link:hover{transform:translateY(-1px);border-color:#bbf7d0;color:var(--green-dark)}
+
+.lp-hero{padding:72px 0 76px}
+.lp-hero-grid{
+  display:grid;
+  grid-template-columns:1.02fr .98fr;
+  gap:62px;
+  align-items:center;
+}
+.lp-kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 13px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:#fff;
+  color:#334155;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.lp-kicker-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 0 4px rgba(22,163,74,.10);
+}
+.lp-hero h1{
+  margin:21px 0 18px;
+  max-width:650px;
+  font-size:clamp(48px,6.3vw,78px);
+  line-height:.96;
+  letter-spacing:-.058em;
+  font-weight:920;
+}
+.lp-hero h1 span{color:var(--green)}
+.lp-lead{
+  margin:0;
+  max-width:650px;
+  color:var(--muted);
+  font-size:clamp(18px,2vw,21px);
+  line-height:1.62;
+}
+.lp-actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:28px}
+.lp-btn{
+  min-height:51px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  padding:13px 20px;
+  border-radius:14px;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:900;
+  transition:.2s ease;
+}
+.lp-btn-primary{
+  background:var(--green);
+  color:#fff;
+  box-shadow:0 12px 28px rgba(22,163,74,.22);
+}
+.lp-btn-primary:hover{background:var(--green-dark);transform:translateY(-1px)}
+.lp-btn-secondary{
+  background:#fff;
+  color:#334155;
+  border:1px solid var(--line);
+}
+.lp-btn-secondary:hover{border-color:#cbd5e1;transform:translateY(-1px)}
+.lp-price-note{
+  margin-top:14px;
+  color:#64748b;
+  font-size:12.5px;
+  font-weight:700;
+}
+.lp-hero-media{
+  position:relative;
+  border:1px solid #dfe6ec;
+  border-radius:30px;
+  padding:12px;
+  background:#fff;
+  box-shadow:var(--shadow);
+}
+.lp-hero-media img{
+  display:block;
+  width:100%;
+  border-radius:21px;
+}
+.lp-float{
+  position:absolute;
+  padding:9px 12px;
+  border:1px solid rgba(255,255,255,.4);
+  border-radius:999px;
+  background:rgba(11,18,32,.90);
+  color:#fff;
+  box-shadow:0 14px 30px rgba(15,23,42,.18);
+  font-size:11px;
+  font-weight:850;
+  backdrop-filter:blur(8px);
+}
+.lp-float b{color:#86efac}
+.lp-float-one{left:-20px;top:30px}
+.lp-float-two{right:-16px;bottom:28px}
+
+.lp-proof{
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.72);
+}
+.lp-proof-grid{
+  min-height:106px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  align-items:center;
+}
+.lp-proof-item{text-align:center}
+.lp-proof-item strong{
+  display:block;
+  font-size:22px;
+  letter-spacing:-.04em;
+}
+.lp-proof-item span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:12.5px;
+}
+
+.lp-section{padding:92px 0}
+.lp-section-soft{
+  padding:92px 0;
+  background:rgba(255,255,255,.62);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.lp-section-head{
+  max-width:780px;
+  margin:0 auto 40px;
+  text-align:center;
+}
+.lp-eyebrow{
+  color:var(--green-dark);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.lp-h2{
+  margin:9px 0 12px;
+  font-size:clamp(35px,4.8vw,56px);
+  line-height:1;
+  letter-spacing:-.05em;
+}
+.lp-section-head p,
+.lp-copy p{
+  color:var(--muted);
+  font-size:17px;
+  line-height:1.7;
+}
+.lp-card-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+.lp-card{
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:#fff;
+  padding:25px;
+  box-shadow:0 8px 30px rgba(15,23,42,.045);
+}
+.lp-card-number{
+  width:42px;height:42px;
+  display:grid;place-items:center;
+  border-radius:13px;
+  background:var(--green-soft);
+  color:var(--green-dark);
+  font-weight:950;
+}
+.lp-card h3{
+  margin:18px 0 8px;
+  font-size:24px;
+  line-height:1.1;
+  letter-spacing:-.035em;
+}
+.lp-card p{
+  margin:0;
+  color:var(--muted);
+  font-size:14.5px;
+  line-height:1.65;
+}
+.lp-card-link{
+  display:inline-flex;
+  margin-top:18px;
+  color:var(--green-dark);
+  text-decoration:none;
+  font-size:13px;
+  font-weight:900;
+}
+.lp-card-link:hover{text-decoration:underline}
+
+.lp-feature{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:58px;
+  align-items:center;
+}
+.lp-feature.reverse .lp-media{order:2}
+.lp-media{
+  border:1px solid #dfe6ec;
+  border-radius:27px;
+  background:#fff;
+  padding:11px;
+  box-shadow:0 20px 55px rgba(15,23,42,.08);
+}
+.lp-media img{
+  display:block;
+  width:100%;
+  border-radius:18px;
+}
+.lp-copy .lp-h2{font-size:clamp(36px,4vw,52px)}
+.lp-chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:21px}
+.lp-chip{
+  padding:8px 11px;
+  border:1px solid #dce5eb;
+  border-radius:999px;
+  background:#fff;
+  color:#475569;
+  font-size:12px;
+  font-weight:800;
+}
+.lp-mini{
+  margin-top:22px;
+  padding:18px 19px;
+  border-left:4px solid var(--green);
+  border-radius:14px;
+  background:var(--green-soft);
+}
+.lp-mini strong{
+  display:block;
+  margin-bottom:4px;
+  color:#166534;
+  font-size:14px;
+}
+.lp-mini span{
+  color:#4b6354;
+  font-size:13px;
+  line-height:1.55;
+}
+
+.lp-suite{
+  padding:75px 0;
+}
+.lp-suite-box{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:30px;
+  align-items:center;
+  padding:36px 38px;
+  border:1px solid #dbe4e9;
+  border-radius:28px;
+  background:linear-gradient(135deg,#fff,#f4fbf6);
+  box-shadow:0 18px 50px rgba(15,23,42,.06);
+}
+.lp-suite h2{
+  margin:0 0 8px;
+  font-size:clamp(30px,4vw,44px);
+  line-height:1;
+  letter-spacing:-.045em;
+}
+.lp-suite p{
+  margin:0;
+  max-width:720px;
+  color:var(--muted);
+  font-size:15.5px;
+  line-height:1.65;
+}
+.lp-suite-actions{text-align:right;white-space:nowrap}
+.lp-suite-price{
+  margin-top:9px;
+  color:#64748b;
+  font-size:11.5px;
+  font-weight:750;
+}
+
+.lp-final{
+  padding:92px 0;
+  text-align:center;
+  background:#0b1220;
+  color:#fff;
+}
+.lp-final .lp-eyebrow{color:#86efac}
+.lp-final .lp-h2{margin-top:10px}
+.lp-final p{
+  max-width:660px;
+  margin:0 auto;
+  color:#aab7c8;
+  font-size:17px;
+  line-height:1.65;
+}
+.lp-final .lp-actions{justify-content:center}
+.lp-final .lp-btn-secondary{
+  background:transparent;
+  color:#fff;
+  border-color:#334155;
+}
+.lp-final-note{
+  margin-top:14px;
+  color:#8390a3;
+  font-size:11.5px;
+}
+
+.lp-footer{
+  border-top:1px solid var(--line);
+  background:#fff;
+}
+.lp-footer-inner{
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  color:#7b8798;
+  font-size:12px;
+}
+.lp-footer-links{display:flex;gap:14px;flex-wrap:wrap}
+.lp-footer-links a{text-decoration:none}
+.lp-footer-links a:hover{color:#334155}
+
+@media(max-width:880px){
+  .lp-hero-grid,.lp-feature{grid-template-columns:1fr}
+  .lp-hero{padding-top:42px}
+  .lp-hero-media{max-width:720px}
+  .lp-feature.reverse .lp-media{order:0}
+  .lp-card-grid{grid-template-columns:1fr}
+  .lp-proof-grid{grid-template-columns:repeat(2,1fr);padding:24px 0}
+  .lp-suite-box{grid-template-columns:1fr}
+  .lp-suite-actions{text-align:left}
+}
+@media(max-width:560px){
+  .lp-shell{width:min(100% - 24px,1160px)}
+  .lp-top{min-height:68px}
+  .lp-brand{font-size:17px}
+  .lp-brand img{width:36px;height:36px}
+  .lp-top-link{font-size:12px;padding:9px 11px}
+  .lp-hero{padding:35px 0 52px}
+  .lp-hero-grid{gap:35px}
+  .lp-actions{flex-direction:column}
+  .lp-btn{width:100%}
+  .lp-float{display:none}
+  .lp-proof-grid{grid-template-columns:1fr 1fr}
+  .lp-section,.lp-section-soft{padding:68px 0}
+  .lp-suite{padding:58px 0}
+  .lp-suite-box{padding:27px 22px}
+  .lp-footer-inner{
+    padding:18px 0;
+    align-items:flex-start;
+    flex-direction:column;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="lp-shell lp-top">
+    <a class="lp-brand" href="/" aria-label="EdgeBreak home">
+      <img src="/images/logo.webp" alt="EdgeBreak">
+      <span>EdgeBreak</span>
+    </a>
+    <a class="lp-top-link" href="/edgebreak-free.html" data-track="scanner_top_free">Try EdgeBreak Free →</a>
+  </div>
+</header>
+
+<main>
+
+<section class="lp-hero">
+  <div class="lp-shell lp-hero-grid">
+    <div>
+      <div class="lp-kicker"><span class="lp-kicker-dot"></span>NASDAQ STOCK SCANNERS</div>
+
+      <h1>
+        Scan the NASDAQ for
+        <span>Breakouts, Pre-Breakouts & Bases.</span>
+      </h1>
+
+      <p class="lp-lead">
+        EdgeBreak gives you three specialised NASDAQ scanners plus an automated daily scan —
+        all inside one research membership.
+      </p>
+
+      <div class="lp-actions">
+        <a class="lp-btn lp-btn-primary" href="/pricing.html" data-track="scanner_hero_trial">
+          Start 7-Day Free Trial <span>→</span>
+        </a>
+        <a class="lp-btn lp-btn-secondary" href="/edgebreak-free.html" data-track="scanner_hero_free">
+          Try EdgeBreak Free
+        </a>
+      </div>
+
+      <div class="lp-price-note">
+        Standard $19.99 USD • AI Unlimited $29.99 USD • Cancel anytime
+      </div>
+    </div>
+
+    <div class="lp-hero-media">
+      <img src="/images/scanner-preview.webp" alt="EdgeBreak NASDAQ scanner showing stock results" loading="eager" fetchpriority="high">
+      <div class="lp-float lp-float-one"><b>Pre-Breakout</b> developing structure</div>
+      <div class="lp-float lp-float-two"><b>Breakout</b> through resistance</div>
+    </div>
+  </div>
+</section>
+
+<section class="lp-proof">
+  <div class="lp-shell lp-proof-grid">
+    <div class="lp-proof-item"><strong>3,000+</strong><span>NASDAQ-listed stocks</span></div>
+    <div class="lp-proof-item"><strong>3 Scanners</strong><span>different structure stages</span></div>
+    <div class="lp-proof-item"><strong>Daily</strong><span>automated market scan</span></div>
+    <div class="lp-proof-item"><strong>1 Membership</strong><span>scanners + research tools</span></div>
+  </div>
+</section>
+
+<section class="lp-section">
+  <div class="lp-shell">
+    <header class="lp-section-head">
+      <div class="lp-eyebrow">Choose the stage</div>
+      <h2 class="lp-h2">Three scanners. Three different market structures.</h2>
+      <p>
+        Use the scanner that matches where the stock is in its technical structure.
+      </p>
+    </header>
+
+    <div class="lp-card-grid">
+      <article class="lp-card">
+        <div class="lp-card-number">01</div>
+        <h3>Launch Pad</h3>
+        <p>
+          Find organised bases and established trading ranges with identifiable support
+          and resistance before a breakout is confirmed.
+        </p>
+        <a class="lp-card-link" href="/launchpad.html" data-track="scanner_launchpad">
+          Explore Launch Pad →
+        </a>
+      </article>
+
+      <article class="lp-card">
+        <div class="lp-card-number">02</div>
+        <h3>Pre-Breakout</h3>
+        <p>
+          Find developing structures beneath resistance, including repeated resistance
+          tests and improving lows before confirmation.
+        </p>
+        <a class="lp-card-link" href="/pre-breakout-scanner.html" data-track="scanner_prebreakout">
+          Explore Pre-Breakout →
+        </a>
+      </article>
+
+      <article class="lp-card">
+        <div class="lp-card-number">03</div>
+        <h3>Breakout</h3>
+        <p>
+          Find NASDAQ stocks that have moved above an identified resistance level after
+          forming qualifying technical structure.
+        </p>
+        <a class="lp-card-link" href="/breakout-scanner.html" data-track="scanner_breakout">
+          Explore Breakout →
+        </a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="lp-section-soft">
+  <div class="lp-shell lp-feature">
+    <div class="lp-media">
+      <img src="/images/nasdaq-AI-stock-scanner.webp" alt="EdgeBreak automated daily NASDAQ scan" loading="lazy">
+    </div>
+
+    <div class="lp-copy">
+      <div class="lp-eyebrow">Don't want to scan manually?</div>
+      <h2 class="lp-h2">EdgeBreak scans the NASDAQ for you.</h2>
+      <p>
+        After each U.S. market close, the automated process scans the NASDAQ, filters weaker
+        structures and gives you a focused shortlist for deeper research.
+      </p>
+
+      <div class="lp-chip-row">
+        <span class="lp-chip">Automated daily scan</span>
+        <span class="lp-chip">Technical filtering</span>
+        <span class="lp-chip">Focused shortlist</span>
+        <span class="lp-chip">Market-close workflow</span>
+      </div>
+
+      <div class="lp-mini">
+        <strong>Manual when you want it. Automated when you don't.</strong>
+        <span>Your membership includes both approaches.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lp-section">
+  <div class="lp-shell lp-feature reverse">
+    <div class="lp-copy">
+      <div class="lp-eyebrow">The next step</div>
+      <h2 class="lp-h2">Found a stock? Research it without leaving EdgeBreak.</h2>
+      <p>
+        Scanner results are the starting point. Your membership also includes AI-assisted
+        company research so you can investigate financial highlights, recent news, SEC filings,
+        institutional context and the chart before deciding what deserves more attention.
+      </p>
+
+      <div class="lp-chip-row">
+        <span class="lp-chip">Company overview</span>
+        <span class="lp-chip">Financial highlights</span>
+        <span class="lp-chip">Recent news</span>
+        <span class="lp-chip">SEC filings</span>
+        <span class="lp-chip">Chart analysis</span>
+      </div>
+    </div>
+
+    <div class="lp-media">
+      <img src="/images/ai-research-preview.webp" alt="EdgeBreak AI stock research after a scanner result" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section class="lp-suite">
+  <div class="lp-shell">
+    <div class="lp-suite-box">
+      <div>
+        <div class="lp-eyebrow">One EdgeBreak membership</div>
+        <h2>Scanners are only the entry point.</h2>
+        <p>
+          Standard and AI Unlimited both give you the EdgeBreak platform. Choose the membership
+          level you want — not a separate scanner product.
+        </p>
+      </div>
+      <div class="lp-suite-actions">
+        <a class="lp-btn lp-btn-primary" href="/pricing.html" data-track="scanner_suite_trial">Start 7-Day Free Trial →</a>
+        <div class="lp-suite-price">Standard $19.99 • AI Unlimited $29.99</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lp-final">
+  <div class="lp-shell">
+    <div class="lp-eyebrow">NASDAQ-focused research</div>
+    <h2 class="lp-h2">Find the structure.<br>Then investigate the stock.</h2>
+    <p>
+      Scan more than 3,000 NASDAQ-listed stocks with specialised tools, then continue your
+      research inside the same EdgeBreak platform.
+    </p>
+    <div class="lp-actions">
+      <a class="lp-btn lp-btn-primary" href="/pricing.html" data-track="scanner_final_trial">Start 7-Day Free Trial →</a>
+      <a class="lp-btn lp-btn-secondary" href="/edgebreak-free.html" data-track="scanner_final_free">Try EdgeBreak Free</a>
+    </div>
+    <div class="lp-final-note">Research and educational information only • Not financial advice</div>
+  </div>
+</section>
+
+</main>
+
+<footer class="lp-footer">
+  <div class="lp-shell lp-footer-inner">
+    <div>© EdgeBreak · Crane Platform Labs</div>
+    <nav class="lp-footer-links" aria-label="Legal">
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/disclaimer.html">Disclaimer</a>
+    </nav>
+  </div>
+</footer>
+
+
+<script>
+(function(){
+  document.querySelectorAll("[data-track]").forEach(function(link){
+    link.addEventListener("click",function(){
+      var destination = link.getAttribute("data-track") || "unknown";
+      if(typeof window.gtag === "function"){
+        window.gtag("event","landing_click",{destination:destination});
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
